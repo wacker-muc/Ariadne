@@ -7,6 +7,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWA.Ariadne.App", "SWA.Aria
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWA.Ariadne.Model", "SWA.Ariadne.Model\SWA.Ariadne.Model.csproj", "{1ECDFF25-8784-44B4-B4DA-25B20F1DF7EC}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWA.Ariadne.Logic", "SWA.Ariadne.Logic\SWA.Ariadne.Logic.csproj", "{EC6BE5F7-D763-413C-AA2E-2AF5358C5315}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,6 +29,14 @@ Global
 		{A758D7B7-1BDB-496A-A86E-34E7F8EACCAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A758D7B7-1BDB-496A-A86E-34E7F8EACCAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A758D7B7-1BDB-496A-A86E-34E7F8EACCAD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1ECDFF25-8784-44B4-B4DA-25B20F1DF7EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1ECDFF25-8784-44B4-B4DA-25B20F1DF7EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1ECDFF25-8784-44B4-B4DA-25B20F1DF7EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1ECDFF25-8784-44B4-B4DA-25B20F1DF7EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC6BE5F7-D763-413C-AA2E-2AF5358C5315}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC6BE5F7-D763-413C-AA2E-2AF5358C5315}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC6BE5F7-D763-413C-AA2E-2AF5358C5315}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC6BE5F7-D763-413C-AA2E-2AF5358C5315}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
