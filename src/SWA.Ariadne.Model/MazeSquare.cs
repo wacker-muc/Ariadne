@@ -11,24 +11,54 @@ namespace SWA.Ariadne.Model
         /// </summary>
         public enum WallPosition : int
         {
+            /// <summary>
+            /// East.
+            /// </summary>
             WP_E = 0,
+            /// <summary>
+            /// North.
+            /// </summary>
             WP_N = 1,
+            /// <summary>
+            /// West.
+            /// </summary>
             WP_W = 2,
+            /// <summary>
+            /// South.
+            /// </summary>
             WP_S = 3,
-            WP_NUM = 4,
         }
+        public const WallPosition WP_MIN = WallPosition.WP_E;
+        public const WallPosition WP_MAX = WallPosition.WP_S;
+        public const int WP_NUM = 4;
 
         /// <summary>
         /// States of a wall: Open, Closed, Not determined.
         /// </summary>
         public enum WallState : byte
         {
-            WS_OPEN = 0,
-            WS_CLOSED = 1,
-            WS_MAYBE = 2,
+            /// <summary>
+            /// Undetermined, needs to be initialized.
+            /// </summary>
+            WS_MAYBE = 0,
+            /// <summary>
+            /// Open wall, may be passed.
+            /// </summary>
+            WS_OPEN = 1,
+            /// <summary>
+            /// Closed wall, may not be passed.
+            /// </summary>
+            WS_CLOSED = 2,
         }
 
-        WallState[] wall = new WallState[(int)WallPosition.WP_NUM];
+        internal WallState[] walls = new WallState[WP_NUM];
+        #region Properties
+        public WallState this[WallPosition side]
+        {
+            get { return walls[(int)side]; }
+            set { walls[(int)side] = value; }
+        }
+        #endregion
 
         /// <summary>
         /// Used while building: Square is connected to the maze.
@@ -46,10 +76,29 @@ namespace SWA.Ariadne.Model
         internal bool isVisited = false;
 
         /// <summary>
+        /// Adjoining squares in the four directions.
+        /// </summary>
+        private MazeSquare[] neighbors = new MazeSquare[WP_NUM];
+
+        /// <summary>
         /// Constructor.
         /// </summary>
         public MazeSquare()
         {
+            for (int i = 0; i < WP_NUM; i++)
+            {
+                this.walls[i] = WallState.WS_MAYBE;
+            }
+        }
+
+        /// <summary>
+        /// Setup method: Define the adjoining sqare on the other side of a wall.
+        /// </summary>
+        /// <param name="side"></param>
+        /// <param name="neighbor"></param>
+        internal void SetNeighbor(MazeSquare.WallPosition side, MazeSquare neighbor)
+        {
+            this.neighbors[(int)side] = neighbor;
         }
 
         /// <summary>
@@ -67,6 +116,16 @@ namespace SWA.Ariadne.Model
                 case WallPosition.WP_S: return WallPosition.WP_N;
                 default: throw new ArgumentOutOfRangeException("p");
             }
+        }
+
+        /// <summary>
+        /// Returns the square on the other side of a wall.
+        /// </summary>
+        /// <param name="side"></param>
+        /// <returns></returns>
+        public MazeSquare NeighborSquare(WallPosition side)
+        {
+            return this.neighbors[(int)side];
         }
     }
 }
