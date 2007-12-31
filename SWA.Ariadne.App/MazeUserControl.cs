@@ -5,12 +5,24 @@ using System.Drawing;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
+using SWA.Ariadne.Model;
 
 namespace SWA.Ariadne.App
 {
     public partial class MazeUserControl : UserControl
     {
+        #region Constants
+
+        /// <summary>
+        /// Minimum and maximum grid width.
+        /// </summary>
+        const int MinGridWidth = 4, MaxGridWidth = 12;
+
+        #endregion
+
         #region Member variables
+
+        private Maze maze;
 
         private int squareWidth;
         private int wallWidth;
@@ -18,28 +30,13 @@ namespace SWA.Ariadne.App
         private int pathWidth;
         private int xOffset, yOffset;
 
-        Color wallColor = Color.Yellow;
-        Color forwardColor = Color.Thistle;
-        Color backwardColor = Color.Plum;
+        private Color wallColor = Color.Yellow;
+        private Color forwardColor = Color.Thistle;
+        private Color backwardColor = Color.Plum;
 
-        Pen wallPen;
-        Pen forwardPen;
-        Pen backwardPen;
-
-        private int xSize, ySize;
-        private int xCur, yCur;
-        private int xStart, yStart;
-        private int xEnd, yEnd;
-
-        private Random random;
-
-        /// <summary>
-        /// Number of times a square has been visited.
-        /// 0: not yet visited
-        /// 1: visited in forward direction, current path
-        /// 2: visited in backward direction, dead end
-        /// </summary>
-        private byte[,] visited;
+        private Pen wallPen;
+        private Pen forwardPen;
+        private Pen backwardPen;
 
         #endregion
 
@@ -48,8 +45,6 @@ namespace SWA.Ariadne.App
         public MazeUserControl()
         {
             InitializeComponent();
-
-            this.random = new Random();
         }
 
         public void Setup(int squareWidth, int wallWidth, int pathWidth)
@@ -61,7 +56,7 @@ namespace SWA.Ariadne.App
 
             CreateMaze();
             PlaceEndpoints();
-            ClearMaze();
+            Reset();
         }
 
         public void Setup(int squareWidth)
@@ -74,95 +69,27 @@ namespace SWA.Ariadne.App
         /// </summary>
         private void CreateMaze()
         {
-            // TODO: determine xSize and ySize
-            xSize = (this.Width  - this.wallWidth - 4) / this.gridWidth;
-            ySize = (this.Height - this.wallWidth - 4) / this.gridWidth;
+            // Determine dimensions of a maze that fits into the drawing area.
+            int xSize = (this.Width  - this.wallWidth - 4) / this.gridWidth;
+            int ySize = (this.Height - this.wallWidth - 4) / this.gridWidth;
 
-            xOffset = (this.Width - xSize * gridWidth) / 2;
-            yOffset = (this.Height - ySize * gridWidth) / 2;
+            // Determine offset for centering the maze in the drawing area.
+            this.xOffset = (this.Width - xSize * gridWidth) / 2;
+            this.yOffset = (this.Height - ySize * gridWidth) / 2;
 
-            // create two-dimensional data sturctures
-            visited = new byte[xSize, ySize];
+            // Create a maze.
+            this.maze = new Maze(xSize, ySize);
+            maze.CreateMaze();
         }
 
         private void PlaceEndpoints()
         {
-            // the travel direction (one of four)
-            int direction = this.random.Next(4);
-
-            // a small portion of the maze size (in trave direction)
-            int edgeWidth = 0;
-            switch (direction)
-            {
-                case 0:
-                case 2:
-                    // vertical
-                    edgeWidth = 1 + ySize * 2/100;
-                    break;
-                case 1:
-                case 3:
-                    // horizontal
-                    edgeWidth = 1 + xSize * 2/100;
-                    break;
-            }
-
-            // distance of start and end point from the maze border
-            int edgeDistStart = 0
-                + random.Next(edgeWidth)
-                + random.Next(edgeWidth)
-                + random.Next(edgeWidth)
-                ;
-            int edgeDistEnd = 0
-                + random.Next(edgeWidth)
-                + random.Next(edgeWidth)
-                + random.Next(edgeWidth)
-                ;
-
-            switch (direction)
-            {
-                case 0:
-                    // start at top, end at bottom
-                    xStart = random.Next(xSize);
-                    yStart = ySize - 1 - edgeDistStart;
-                    xEnd = random.Next(xSize);
-                    yEnd = edgeDistEnd;
-                    break;
-                case 1:
-                    // start at left, end at right
-                    xStart = edgeDistEnd;
-                    yStart = random.Next(ySize);
-                    xEnd = xSize - 1 - edgeDistStart;
-                    yEnd = random.Next(ySize);
-                    break;
-                case 2:
-                    // start at bottom, end at top
-                    xStart = random.Next(xSize);
-                    yStart = edgeDistEnd;
-                    xEnd = random.Next(xSize);
-                    yEnd = ySize - 1 - edgeDistStart;
-                    break;
-                case 3:
-                    // start at right, end at left
-                    xStart = xSize - 1 - edgeDistStart;
-                    yStart = random.Next(ySize);
-                    xEnd = edgeDistEnd;
-                    yEnd = random.Next(ySize);
-                    break;
-            }
+            maze.PlaceEndpoints();
         }
 
-        public void ClearMaze()
+        public void Reset()
         {
-            // clear the visited region
-            for (int x = 0; x < xSize; x++)
-            {
-                for (int y = 0; y < ySize; y++)
-                {
-                    visited[x,y] = 0;
-                }
-            }
-            xCur = xStart;
-            yCur = yStart;
+            maze.Reset();
 
             this.BackColor = Color.Black;
             this.wallPen = new Pen(wallColor, wallWidth);
@@ -195,40 +122,9 @@ namespace SWA.Ariadne.App
 
         private void PaintBorder(Graphics g)
         {
-            g.DrawRectangle(wallPen, new Rectangle(xOffset, yOffset, xSize * gridWidth, ySize * gridWidth));
+            g.DrawRectangle(wallPen, new Rectangle(xOffset, yOffset, maze.XSize * gridWidth, maze.YSize * gridWidth));
         }
 
         #endregion
-
-        public void Step()
-        {
-            if (Solved())
-            {
-                return;
-            }
-
-            // possible choices
-            int[] xNext = new int[4];
-            int[] yNext = new int[4];
-            int numNext = 0;
-
-            // minimum of visited count of the current square's neighbors
-            byte minVisited = 2;
-
-            // TODO: find most promising neighbor squares
-
-            // select one of the neighbor squares
-            int iNext = random.Next(numNext);
-
-            // TODO: draw a path from xyCur to xyNext[iNext]
-
-            xCur = xNext[iNext];
-            yCur = yNext[iNext];
-        }
-
-        public bool Solved()
-        {
-            return (xCur == xEnd) && (yCur == yEnd);
-        }
     }
 }

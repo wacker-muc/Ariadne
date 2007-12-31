@@ -78,6 +78,16 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SWA.Ariadne.Logic\SWA.Ariadne.Logic.csproj">
+      <Project>{EC6BE5F7-D763-413C-AA2E-2AF5358C5315}</Project>
+      <Name>SWA.Ariadne.Logic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SWA.Ariadne.Model\SWA.Ariadne.Model.csproj">
+      <Project>{1ECDFF25-8784-44B4-B4DA-25B20F1DF7EC}</Project>
+      <Name>SWA.Ariadne.Model</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
