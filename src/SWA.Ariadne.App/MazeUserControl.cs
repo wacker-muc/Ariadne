@@ -96,6 +96,10 @@ namespace SWA.Ariadne.App
             this.forwardPen = new Pen(forwardColor, pathWidth);
             this.backwardPen = new Pen(backwardColor, pathWidth);
 
+            wallPen.StartCap = wallPen.EndCap = System.Drawing.Drawing2D.LineCap.Square;
+            forwardPen.StartCap = forwardPen.EndCap = System.Drawing.Drawing2D.LineCap.Square;
+            backwardPen.StartCap = backwardPen.EndCap = System.Drawing.Drawing2D.LineCap.Square;
+
             // TODO: draw maze
             // TODO: draw start and end point
         }
@@ -116,13 +120,47 @@ namespace SWA.Ariadne.App
             Graphics g = e.Graphics;
 
             PaintBorder(g);
-            //PaintWalls(g);
+            PaintWalls(g);
             //PaintPath(g);
         }
 
+        /// <summary>
+        /// Paint a border around the maze.
+        /// </summary>
+        /// <param name="g"></param>
         private void PaintBorder(Graphics g)
         {
             g.DrawRectangle(wallPen, new Rectangle(xOffset, yOffset, maze.XSize * gridWidth, maze.YSize * gridWidth));
+        }
+
+        /// <summary>
+        /// Paint the closed inner walls.
+        /// </summary>
+        /// <param name="g"></param>
+        private void PaintWalls(Graphics g)
+        {
+            // We'll only draw the west and east walls of every square.
+            for (int x = 0; x < maze.XSize; x++)
+            {
+                int cx = xOffset + x * gridWidth;
+                for (int y = 0; y < maze.YSize; y++)
+                {
+                    int cy = yOffset + y * gridWidth;
+                    MazeSquare sq = maze[x, y];
+
+                    // Draw the west wall.
+                    if (sq[MazeSquare.WallPosition.WP_W] == MazeSquare.WallState.WS_CLOSED)
+                    {
+                        g.DrawLine(wallPen, cx, cy, cx, cy + gridWidth);
+                    }
+
+                    // Draw the north wall.
+                    if (sq[MazeSquare.WallPosition.WP_N] == MazeSquare.WallState.WS_CLOSED)
+                    {
+                        g.DrawLine(wallPen, cx, cy, cx + gridWidth, cy);
+                    }
+                }
+            }
         }
 
         #endregion
