@@ -43,6 +43,12 @@ namespace SWA.Ariadne.Model
         /// The maze is formed by a two-dimensional array of squares.
         /// </summary>
         private MazeSquare[,] squares;
+        #region Properties
+        public MazeSquare this[int x, int y]
+        {
+            get { return squares[x, y]; }
+        }
+        #endregion
 
         #endregion
 
@@ -54,15 +60,6 @@ namespace SWA.Ariadne.Model
             this.ySize = ySize;
 
             this.random = new Random();
-
-            this.squares = new MazeSquare[xSize, ySize];
-            for (int x = 0; x < xSize; x++)
-            {
-                for (int y = 0; y < ySize; y++)
-                {
-                    squares[x, y] = new MazeSquare();
-                }
-            }
         }
 
         #endregion
@@ -71,7 +68,41 @@ namespace SWA.Ariadne.Model
 
         public void CreateMaze()
         {
- 	        //throw new Exception("The method or operation is not implemented.");
+            #region Create the squares.
+            
+            this.squares = new MazeSquare[xSize, ySize];
+            for (int x = 0; x < xSize; x++)
+            {
+                for (int y = 0; y < ySize; y++)
+                {
+                    squares[x, y] = new MazeSquare();
+                }
+            }
+
+            #endregion
+
+            #region Connect the squares with their neighbors.
+            
+            for (int x0 = 0; x0 < xSize; x0++)
+            {
+                for (int y0 = 0, y1 = 1; y1 < ySize; y0++, y1++)
+                {
+                    squares[x0, y0].SetNeighbor(MazeSquare.WallPosition.WP_S, squares[x0, y1]);
+                    squares[x0, y1].SetNeighbor(MazeSquare.WallPosition.WP_N, squares[x0, y0]);
+                }
+            }
+            for (int y0 = 0; y0 < ySize; y0++)
+            {
+                for (int x0 = 0, x1 = 1; x1 < xSize; x0++, x1++)
+                {
+                    squares[x0, y0].SetNeighbor(MazeSquare.WallPosition.WP_E, squares[x1, y0]);
+                    squares[x1, y0].SetNeighbor(MazeSquare.WallPosition.WP_W, squares[x0, y0]);
+                }
+            }
+
+            #endregion
+
+            this.BuildMaze();
         }
 
         public void PlaceEndpoints()
@@ -161,6 +192,8 @@ namespace SWA.Ariadne.Model
 
         #endregion
 
+        #region Runtime methods
+
         /// <summary>
         /// Returns true if the end point has been visited.
         /// </summary>
@@ -180,5 +213,113 @@ namespace SWA.Ariadne.Model
             xStart = this.xStart;
             yStart = this.yStart;
         }
+
+        #endregion
+
+        #region Building a maze
+
+        private void BuildMaze()
+        {
+            FixBorderWalls();
+            FixReservedAreas();
+
+            // We hold a number of active squares in a stack.
+            // Make the initial capacity sufficient to hold all squares.
+            //
+            Stack<MazeSquare> stack = new Stack<MazeSquare>(xSize * ySize);
+
+            #region Start with a single random cell in the stack.
+            
+            while (true)
+            {
+                int x = random.Next(xSize);
+                int y = random.Next(ySize);
+                MazeSquare sq = this[x, y];
+                if (!sq.isReserved)
+                {
+                    sq.isConnected = true;
+                    stack.Push(sq);
+                    break;
+                }
+            }
+
+            #endregion
+
+            #region Extend the maze by visiting the cells next to those in the stack.
+            
+            while (stack.Count > 0)
+            {
+                List<MazeSquare.WallPosition> unresolvedWalls = new List<MazeSquare.WallPosition>(MazeSquare.WP_NUM);
+                MazeSquare sq0 = stack.Pop();
+
+                // Collect the unfixed walls of sq0.
+                //
+                //foreach (MazeSquare.WallPosition wp in Enum.GetValues(MazeSquare.WallPosition))
+                for (MazeSquare.WallPosition wp = MazeSquare.WP_MIN; wp <= MazeSquare.WP_MAX; wp++)
+                {
+                    if (sq0[wp] == MazeSquare.WallState.WS_MAYBE)
+                    {
+                        MazeSquare sq = sq0.NeighborSquare(wp);
+
+                        if (sq.isConnected)
+                        {
+                            sq0[wp] = sq[MazeSquare.OppositeWall(wp)] = MazeSquare.WallState.WS_CLOSED;
+                        }
+                        else
+                        {
+                            unresolvedWalls.Add(wp);
+                        }
+                    } // if WS_MAYBE
+                } // foreach wp
+
+                if (unresolvedWalls.Count == 0)
+                {
+                    continue; // no walls to choose from
+                }
+
+                // Choose one wall.
+                MazeSquare.WallPosition wp0 = unresolvedWalls[random.Next(unresolvedWalls.Count)];
+                MazeSquare sq1 = sq0.NeighborSquare(wp0);
+
+                // Open the wall.
+                sq0[wp0] = sq1[MazeSquare.OppositeWall(wp0)] = MazeSquare.WallState.WS_OPEN;
+
+                // Add the current cell to the stack.
+                if (unresolvedWalls.Count > 1)
+                {
+                    stack.Push(sq0);
+                }
+
+                // Add the new cell to the stack.
+                sq1.isConnected = true;
+                stack.Push(sq1);
+
+            } // while stack is not empty
+
+            #endregion
+        }
+
+        private void FixBorderWalls()
+        {
+            for (int x = 0; x < xSize; x++)
+            {
+                int y = ySize - 1;
+                this.squares[x, 0][MazeSquare.WallPosition.WP_N] = MazeSquare.WallState.WS_CLOSED;
+                this.squares[x, y][MazeSquare.WallPosition.WP_S] = MazeSquare.WallState.WS_CLOSED;
+            }
+            for (int y = 0; y < ySize; y++)
+            {
+                int x = xSize - 1;
+                this.squares[0, y][MazeSquare.WallPosition.WP_W] = MazeSquare.WallState.WS_CLOSED;
+                this.squares[x, y][MazeSquare.WallPosition.WP_E] = MazeSquare.WallState.WS_CLOSED;
+            }
+        }
+
+        private void FixReservedAreas()
+        {
+            // TODO
+        }
+
+        #endregion
     }
 }
