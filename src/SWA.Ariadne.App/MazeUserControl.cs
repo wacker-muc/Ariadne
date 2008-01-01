@@ -16,12 +16,16 @@ namespace SWA.Ariadne.App
         /// <summary>
         /// Minimum and maximum grid width.
         /// </summary>
-        const int MinGridWidth = 4, MaxGridWidth = 12;
+        const int MinGridWidth = 6, MaxGridWidth = 12;
 
         #endregion
 
         #region Member variables
 
+        public Maze Maze
+        {
+            get { return maze; }
+        }
         private Maze maze;
 
         private int squareWidth;
@@ -30,13 +34,18 @@ namespace SWA.Ariadne.App
         private int pathWidth;
         private int xOffset, yOffset;
 
-        private Color wallColor = Color.Yellow;
-        private Color forwardColor = Color.Thistle;
-        private Color backwardColor = Color.Plum;
+        private Color wallColor = Color.Gray;
+        private Color forwardColor = Color.GreenYellow;
+        private Color backwardColor = Color.Brown;
 
         private Pen wallPen;
         private Pen forwardPen;
         private Pen backwardPen;
+
+        public MazeForm MazeForm
+        {
+            get { return (MazeForm)this.ParentForm; }
+        }
 
         #endregion
 
@@ -45,6 +54,11 @@ namespace SWA.Ariadne.App
         public MazeUserControl()
         {
             InitializeComponent();
+
+            // Use double buffered drawing.
+            this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            this.SetStyle(ControlStyles.UserPaint, true);
+            this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
         }
 
         public void Setup(int squareWidth, int wallWidth, int pathWidth)
@@ -59,9 +73,22 @@ namespace SWA.Ariadne.App
             Reset();
         }
 
-        public void Setup(int squareWidth)
+        public void Setup(int gridWidth)
         {
-            this.Setup(squareWidth, 1, (int)(0.7 * squareWidth));
+            int wallWidth = (int)(0.3 * gridWidth);
+            if (wallWidth < 1) { wallWidth = 1; }
+            int squareWidth = gridWidth - wallWidth;
+            int pathWidth = (int)(0.7 * squareWidth);
+
+            this.Setup(squareWidth, wallWidth, pathWidth);
+        }
+
+        internal void Setup()
+        {
+            Random r = new Random();
+            int gridWidth = r.Next(MinGridWidth, MaxGridWidth);
+            
+            this.Setup(gridWidth);
         }
 
         /// <summary>
@@ -80,6 +107,11 @@ namespace SWA.Ariadne.App
             // Create a maze.
             this.maze = new Maze(xSize, ySize);
             maze.CreateMaze();
+
+            if (!DesignMode)
+            {
+                this.MazeForm.StatusLine = "Size = " + xSize + "x" + ySize;
+            }
         }
 
         private void PlaceEndpoints()
@@ -87,6 +119,9 @@ namespace SWA.Ariadne.App
             maze.PlaceEndpoints();
         }
 
+        /// <summary>
+        /// Reset to the initial state (before the maze is solved).
+        /// </summary>
         public void Reset()
         {
             maze.Reset();
@@ -112,7 +147,7 @@ namespace SWA.Ariadne.App
         {
             base.OnPaint(e);
 
-            //if (this.wallWidth == 0)
+            if (this.wallWidth == 0)
             {
                 this.Setup(12, 3, 8);
             }
@@ -121,6 +156,7 @@ namespace SWA.Ariadne.App
 
             PaintBorder(g);
             PaintWalls(g);
+            PaintEndpoints(g);
             //PaintPath(g);
         }
 
@@ -163,6 +199,39 @@ namespace SWA.Ariadne.App
             }
         }
 
+        private void PaintEndpoints(Graphics g)
+        {
+            int x, y;
+            maze.GetStartCoordinates(out x, out y);
+            PaintSquare(g, Brushes.Green, x, y);
+            maze.GetEndCoordinates(out x, out y);
+            PaintSquare(g, Brushes.Red, x, y);
+        }
+
+        private void PaintSquare(Graphics g, Brush b, int x, int y)
+        {
+            float cx = xOffset + wallWidth/2.0F + x * gridWidth;
+            float cy = yOffset + wallWidth/2.0F + y * gridWidth;
+            g.FillRectangle(b, cx, cy, squareWidth, squareWidth);
+        }
+
         #endregion
+
+        internal void PaintPath(MazeSquare sq1, MazeSquare sq2, bool forward)
+        {
+            float cx1 = xOffset + gridWidth / 2.0F + sq1.XPos * gridWidth;
+            float cy1 = yOffset + gridWidth / 2.0F + sq1.YPos * gridWidth;
+            float cx2 = xOffset + gridWidth / 2.0F + sq2.XPos * gridWidth;
+            float cy2 = yOffset + gridWidth / 2.0F + sq2.YPos * gridWidth;
+
+            Graphics g = this.CreateGraphics();
+            Pen p = (forward ? this.forwardPen : this.backwardPen);
+            g.DrawLine(p, cx1, cy1, cx2, cy2);
+
+            if (sq1 == maze.StartSquare || sq2 == maze.StartSquare || sq1 == maze.EndSquare || sq2 == maze.EndSquare)
+            {
+                this.PaintEndpoints(g);
+            }
+        }
     }
 }
