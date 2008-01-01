@@ -73,7 +73,7 @@ namespace SWA.Ariadne.Model
         /// <summary>
         /// Used while solving: Square has been visited.
         /// </summary>
-        internal bool isVisited = false;
+        public bool isVisited = false;
 
         /// <summary>
         /// Adjoining squares in the four directions.
@@ -81,10 +81,28 @@ namespace SWA.Ariadne.Model
         private MazeSquare[] neighbors = new MazeSquare[WP_NUM];
 
         /// <summary>
+        /// Maze coordinates.
+        /// </summary>
+        private int xPos, yPos;
+        #region Properties
+        public int XPos
+        {
+            get { return this.xPos; }
+        }
+        public int YPos
+        {
+            get { return this.yPos; }
+        }
+        #endregion
+
+        /// <summary>
         /// Constructor.
         /// </summary>
-        public MazeSquare()
+        public MazeSquare(int xPos, int yPos)
         {
+            this.xPos = xPos;
+            this.yPos = yPos;
+
             for (int i = 0; i < WP_NUM; i++)
             {
                 this.walls[i] = WallState.WS_MAYBE;
