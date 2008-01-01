@@ -5,6 +5,10 @@ using SWA.Ariadne.Model;
 
 namespace SWA.Ariadne.Logic
 {
+    /// <summary>
+    /// A MazeSolver with one current path and backtracking.
+    /// At a crossing in forward direction: Chooses a random open wall.
+    /// </summary>
     public class RandomSolver : SolverBase
     {
         #region Member variables
@@ -14,8 +18,14 @@ namespace SWA.Ariadne.Logic
         /// </summary>
         private Random random;
 
+        /// <summary>
+        /// All squares passed in forward directions are collected on a stack.
+        /// </summary>
         private Stack<MazeSquare> stack = new Stack<MazeSquare>();
 
+        /// <summary>
+        /// Current travel direction.
+        /// </summary>
         private bool forward = true;
 
         #endregion
@@ -31,7 +41,12 @@ namespace SWA.Ariadne.Logic
 
         #endregion
 
-        public void Reset()
+        #region Setup methods
+
+        /// <summary>
+        /// Reset to the initial state (before the maze is solved).
+        /// </summary>
+        public override void Reset()
         {
             stack.Clear();
 
@@ -43,6 +58,16 @@ namespace SWA.Ariadne.Logic
             sq.isVisited = true;
         }
 
+        #endregion
+
+        #region Runtime methods
+
+        /// <summary>
+        /// Travel from one visited square to a neighbor square (through an open all).
+        /// </summary>
+        /// <param name="sq1">first (previously visited) square</param>
+        /// <param name="sq2">next (neighbor) square</param>
+        /// <param name="forward">true if the neighbor square was not visited previously</param>
         public override void Step(out MazeSquare sq1, out MazeSquare sq2, out bool forward)
         {
             if (maze.IsSolved)
@@ -93,5 +118,7 @@ namespace SWA.Ariadne.Logic
                 forward = false;
             }
         }
+
+        #endregion
     }
 }
