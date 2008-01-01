@@ -42,6 +42,8 @@ namespace SWA.Ariadne.App
         private Pen forwardPen;
         private Pen backwardPen;
 
+        private BufferedGraphics gBuffer;
+
         public MazeForm MazeForm
         {
             get { return (MazeForm)this.ParentForm; }
@@ -55,10 +57,12 @@ namespace SWA.Ariadne.App
         {
             InitializeComponent();
 
+            /*
             // Use double buffered drawing.
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             this.SetStyle(ControlStyles.UserPaint, true);
             this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+             * */
         }
 
         public void Setup(int squareWidth, int wallWidth, int pathWidth)
@@ -108,10 +112,11 @@ namespace SWA.Ariadne.App
             this.maze = new Maze(xSize, ySize);
             maze.CreateMaze();
 
-            if (!DesignMode)
+            try
             {
                 this.MazeForm.StatusLine = "Size = " + xSize + "x" + ySize;
             }
+            catch (InvalidCastException) { }
         }
 
         private void PlaceEndpoints()
@@ -135,8 +140,14 @@ namespace SWA.Ariadne.App
             forwardPen.StartCap = forwardPen.EndCap = System.Drawing.Drawing2D.LineCap.Square;
             backwardPen.StartCap = backwardPen.EndCap = System.Drawing.Drawing2D.LineCap.Square;
 
-            // TODO: draw maze
-            // TODO: draw start and end point
+            // Destroy the current buffer; it will be re-created in the OnPaint() method.
+            if (gBuffer != null)
+            {
+                gBuffer.Dispose();
+                gBuffer = null;
+            }
+
+            this.Invalidate();
         }
 
         #endregion
@@ -147,17 +158,35 @@ namespace SWA.Ariadne.App
         {
             base.OnPaint(e);
 
+            //MazeForm.StatusLine = "called OnPaint()";
+            
+
             if (this.wallWidth == 0)
             {
                 this.Setup(12, 3, 8);
             }
 
-            Graphics g = e.Graphics;
+            // On first time, create a graphics buffer and draw the static maze.
+            //
+            if (gBuffer == null)
+            {
+                BufferedGraphicsContext currentContext = BufferedGraphicsManager.Current;
+                gBuffer = currentContext.Allocate(this.CreateGraphics(), this.DisplayRectangle);
 
-            PaintBorder(g);
-            PaintWalls(g);
-            PaintEndpoints(g);
-            //PaintPath(g);
+                Graphics g = gBuffer.Graphics;
+
+                // The PaintWalls() method fails in design mode.
+                try
+                {
+                    PaintBorder(g);
+                    PaintWalls(g);
+                    PaintEndpoints(g);
+                    //PaintPath(g);
+                }
+                catch (MissingMethodException) { }
+            }
+
+            gBuffer.Render();
         }
 
         /// <summary>
@@ -215,8 +244,6 @@ namespace SWA.Ariadne.App
             g.FillRectangle(b, cx, cy, squareWidth, squareWidth);
         }
 
-        #endregion
-
         internal void PaintPath(MazeSquare sq1, MazeSquare sq2, bool forward)
         {
             float cx1 = xOffset + gridWidth / 2.0F + sq1.XPos * gridWidth;
@@ -224,7 +251,7 @@ namespace SWA.Ariadne.App
             float cx2 = xOffset + gridWidth / 2.0F + sq2.XPos * gridWidth;
             float cy2 = yOffset + gridWidth / 2.0F + sq2.YPos * gridWidth;
 
-            Graphics g = this.CreateGraphics();
+            Graphics g = gBuffer.Graphics;
             Pen p = (forward ? this.forwardPen : this.backwardPen);
             g.DrawLine(p, cx1, cy1, cx2, cy2);
 
@@ -232,6 +259,9 @@ namespace SWA.Ariadne.App
             {
                 this.PaintEndpoints(g);
             }
+            gBuffer.Render();
         }
+
+        #endregion
     }
 }

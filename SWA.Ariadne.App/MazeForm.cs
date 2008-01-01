@@ -72,12 +72,21 @@ namespace SWA.Ariadne.App
         /// <param name="e"></param>
         private void OnReset(object sender, EventArgs e)
         {
-            stepTimer.Stop();
-            stepTimer = null;
-            solver = null;
+            if (solver != null)
+            {
+                if (stepTimer.Enabled == false)
+                {
+                    this.OnPause(sender, e);
+                }
+                stepTimer.Stop();
+                stepTimer = null;
+                solver = null;
+            }
+
+            countSteps = countForward = countBackward = 0;
+            lapSeconds = accumulatedSeconds = 0;
 
             this.mazeUserControl.Reset();
-            mazeUserControl.Invalidate();
         }
 
         /// <summary>
@@ -93,7 +102,6 @@ namespace SWA.Ariadne.App
             }
 
             mazeUserControl.Setup();
-            mazeUserControl.Invalidate();
         }
 
         /// <summary>
@@ -105,13 +113,14 @@ namespace SWA.Ariadne.App
         {
             if (solver != null)
             {
-                OnReset(sender, e);
+                //OnReset(sender, e);
+                return;
             }
 
             solver = new RandomSolver(mazeUserControl.Maze);
             countSteps = countForward = countBackward = 0;
             stepTimer = new Timer();
-            stepTimer.Interval = (1000/60); // 60 frames per second
+            stepTimer.Interval = (1000/60)/2; // 60 frames per second
             stepTimer.Tick += new EventHandler(this.OnStepTimer);
             stepTimer.Start();
 
@@ -133,9 +142,16 @@ namespace SWA.Ariadne.App
             }
             else
             {
+                int currentSteps = 0;
+                int maxStepsPerTimerEvent = 20;
                 while (this.IsBehindSchedule())
                 {
                     this.SingleStep();
+
+                    if (++currentSteps > maxStepsPerTimerEvent)
+                    {
+                        break;
+                    }
                 }
                 UpdateStatusLine();
             }
@@ -175,18 +191,90 @@ namespace SWA.Ariadne.App
                 accumulatedSeconds += lapSeconds;
                 lapSeconds = 0;
                 lapStartTime = System.DateTime.Now;
+
+                this.pauseLabel.ToolTipText = "Pause";
+                this.pauseLabel.BorderStyle = Released;
+                this.pauseLabel.Tag = "";
+            }
+            else
+            {
+                this.pauseLabel.ToolTipText = "Continue";
+                this.pauseLabel.BorderStyle = Pressed;
+                this.pauseLabel.Tag = "sunken";
             }
         }
 
         private void OnStep(object sender, EventArgs e)
         {
+            if (solver == null)
+            {
+                this.OnStart(sender, e);
+                this.OnPause(sender, e);
+            }
+
             SingleStep();
             UpdateStatusLine();
         }
 
+        #region Button pressed behavior
+
+        private ToolStripStatusLabel trackedLabel;
+        private const Border3DStyle Pressed = Border3DStyle.SunkenOuter;
+        private const Border3DStyle Released = Border3DStyle.RaisedInner;
+
+        private void OnMouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                this.trackedLabel = (ToolStripStatusLabel)sender;
+                SwitchTrackedLabel(Released, Pressed);
+            }
+        }
+
+        private void SwitchTrackedLabel(Border3DStyle regular, Border3DStyle alternate)
+        {
+            bool hasSunkenTag = false;
+            try
+            {
+                hasSunkenTag = ("sunken" == (string)trackedLabel.Tag);
+            }
+            catch (InvalidCastException) { }
+
+            trackedLabel.BorderStyle = (hasSunkenTag ? regular : alternate);
+            this.statusStrip.Refresh();
+        }
+
+        private void OnMouseUp(object sender, MouseEventArgs e)
+        {
+            if (sender == trackedLabel)
+            {
+                SwitchTrackedLabel(Pressed, Released);
+            }
+            trackedLabel = null;
+        }
+
+        private void OnMouseEnter(object sender, EventArgs e)
+        {
+            if (sender == trackedLabel)
+            {
+                SwitchTrackedLabel(Released, Pressed);
+            }
+        }
+
+        private void OnMouseLeave(object sender, EventArgs e)
+        {
+            if (sender == trackedLabel)
+            {
+                SwitchTrackedLabel(Pressed, Released);
+                trackedLabel = null;
+            }
+        }
+
+        #endregion
+
         private void SingleStep()
         {
-            if (solver == null || mazeUserControl.Maze.IsSolved)
+            if (mazeUserControl.Maze.IsSolved)
             {
                 return;
             }
@@ -233,9 +321,9 @@ namespace SWA.Ariadne.App
 
                 message.Append(" / ");
                 double totalSeconds = accumulatedSeconds + lapSeconds;
-                message.Append(totalSeconds.ToString() + " sec");
+                message.Append(totalSeconds.ToString("0.00") + " sec");
                 double sps = countSteps / totalSeconds;
-                message.Append(" = " + sps.ToString() + " steps/sec");
+                message.Append(" = " + sps.ToString("0") + " steps/sec");
             }
 
             this.StatusLine = message.ToString();
