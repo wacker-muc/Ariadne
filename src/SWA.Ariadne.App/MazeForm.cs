@@ -117,7 +117,7 @@ namespace SWA.Ariadne.App
                 return;
             }
 
-            solver = new RandomSolver(mazeUserControl.Maze);
+            solver = new RandomBacktracker(mazeUserControl.Maze);
             countSteps = countForward = countBackward = 0;
             stepTimer = new Timer();
             stepTimer.Interval = (1000/60)/2; // 60 frames per second

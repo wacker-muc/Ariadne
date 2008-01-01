@@ -9,7 +9,7 @@ namespace SWA.Ariadne.Logic
     /// A MazeSolver with one current path and backtracking.
     /// At a crossing in forward direction: Chooses a random open wall.
     /// </summary>
-    public class RandomSolver : SolverBase
+    public class RandomBacktracker : SolverBase
     {
         #region Member variables
 
@@ -32,7 +32,7 @@ namespace SWA.Ariadne.Logic
 
         #region Constructor
 
-        public RandomSolver(Maze maze)
+        public RandomBacktracker(Maze maze)
             : base(maze)
         {
             this.random = new Random();
