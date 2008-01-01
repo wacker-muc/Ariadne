@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using SWA.Ariadne.Model;
 
 namespace SWA.Ariadne.Logic
 {
-    interface IMazeSolver
+    public interface IMazeSolver
     {
-        void Step();
+        void Step(out MazeSquare sq1, out MazeSquare sq2, out bool forward);
     }
 }
