@@ -7,14 +7,14 @@ namespace SWA.Ariadne.Logic
 {
     /// <summary>
     /// A MazeSolver with one path and a local strategy.
-    /// At a crossing: Chooses the right hand open wall.
+    /// The choice of an open wall is implemented by subclasses.
     /// </summary>
-    public class DeterministicWalker : SolverBase
+    public abstract class DeterministicWalker : SolverBase
     {
         #region Member variables
 
-        MazeSquare currentSquare;
-        MazeSquare.WallPosition currentDirection;
+        protected MazeSquare currentSquare;
+        protected MazeSquare.WallPosition currentDirection;
 
         #endregion
 
@@ -80,22 +80,14 @@ namespace SWA.Ariadne.Logic
 
         /// <summary>
         /// Set a new (valid) current direction.
-        /// Turn to the valid direction closest to the right hand.
         /// </summary>
         /// <param name="sq1"></param>
-        private void Turn()
-        {
-            TurnRight();
-            while (currentSquare[currentDirection] != MazeSquare.WallState.WS_OPEN)
-            {
-                TurnLeft();
-            }
-        }
+        protected abstract void Turn();
 
         /// <summary>
         /// Turn the currentDirection one quarter to the left (counterclockwise)
         /// </summary>
-        private void TurnLeft()
+        protected void TurnLeft()
         {
             if (currentDirection == MazeSquare.WP_MAX)
             {
@@ -110,7 +102,7 @@ namespace SWA.Ariadne.Logic
         /// <summary>
         /// Turn the currentDirection one quarter to the right (clockwise)
         /// </summary>
-        private void TurnRight()
+        protected void TurnRight()
         {
             if (currentDirection == MazeSquare.WP_MIN)
             {
