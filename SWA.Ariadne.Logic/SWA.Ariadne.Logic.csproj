@@ -36,6 +36,7 @@
     <Compile Include="IMazeSolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RandomBacktracker.cs" />
+    <Compile Include="RandomWalker.cs" />
     <Compile Include="SolverBase.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -251,14 +251,20 @@ namespace SWA.Ariadne.App
             float cx2 = xOffset + gridWidth / 2.0F + sq2.XPos * gridWidth;
             float cy2 = yOffset + gridWidth / 2.0F + sq2.YPos * gridWidth;
 
+            // Draw a line from sq1 to sq2.
             Graphics g = gBuffer.Graphics;
             Pen p = (forward ? this.forwardPen : this.backwardPen);
             g.DrawLine(p, cx1, cy1, cx2, cy2);
 
+            // Maybe redraw the end point.
             if (sq1 == maze.StartSquare || sq2 == maze.StartSquare || sq1 == maze.EndSquare || sq2 == maze.EndSquare)
             {
                 this.PaintEndpoints(g);
             }
+
+            // Draw a dot at sq2.
+            g.FillRectangle(this.forwardPen.Brush, cx2 - pathWidth / 2.0F, cy2 - pathWidth / 2.0F, pathWidth, pathWidth);
+
             gBuffer.Render();
         }
 

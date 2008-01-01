@@ -31,5 +31,29 @@ namespace SWA.Ariadne.Logic
         public abstract void Step(out MazeSquare sq1, out MazeSquare sq2, out bool forward);
 
         #endregion
+
+        #region Auxiliary methods for derived classes
+
+        protected static List<MazeSquare.WallPosition> OpenWalls(MazeSquare sq, bool notVisitedOnly)
+        {
+            List<MazeSquare.WallPosition> result = new List<MazeSquare.WallPosition>(MazeSquare.WP_NUM);
+
+            for (MazeSquare.WallPosition wp = MazeSquare.WP_MIN; wp <= MazeSquare.WP_MAX; wp++)
+            {
+                if (sq[wp] == MazeSquare.WallState.WS_OPEN)
+                {
+                    MazeSquare sq2 = sq.NeighborSquare(wp);
+
+                    if (!notVisitedOnly || !sq2.isVisited)
+                    {
+                        result.Add(wp);
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        #endregion
     }
 }
