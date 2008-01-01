@@ -5,13 +5,13 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Ariadne")]
+[assembly: AssemblyTitle("SWA.Ariadne.App")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("T-Systems GEI GmbH")]
+[assembly: AssemblyCompany("Stephan Wacker")]
 [assembly: AssemblyProduct("Ariadne")]
-[assembly: AssemblyCopyright("Copyright © T-Systems GEI GmbH 2007")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCopyright("Copyright © Stephan Wacker 2008")]
+[assembly: AssemblyTrademark("SWA")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
@@ -29,5 +29,5 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("1.0.0.15")]
+[assembly: AssemblyFileVersion("1.0.0.15")]
