@@ -232,7 +232,7 @@ namespace SWA.Ariadne.App
         {
             int x, y;
             maze.GetStartCoordinates(out x, out y);
-            PaintSquare(g, Brushes.Green, x, y);
+            PaintSquare(g, Brushes.Red, x, y);
             maze.GetEndCoordinates(out x, out y);
             PaintSquare(g, Brushes.Red, x, y);
         }

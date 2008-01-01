@@ -35,7 +35,7 @@ namespace SWA.Ariadne.Model
 
         /// <summary>
         /// Position and dimensions of a reserved area.
-        /// TODO: Support more than one reserved areas.
+        /// TODO: Support more than one reserved area.
         /// </summary>
         private int logoRow, logoCol, logoWidth, logoHeight;
 
@@ -105,27 +105,31 @@ namespace SWA.Ariadne.Model
             this.BuildMaze();
         }
 
+        /// <summary>
+        /// Choose a start and end point near opposite borders.
+        /// The end point should be in a dead end (a square with three closed walls).
+        /// </summary>
         public void PlaceEndpoints()
         {
-            bool invalid = true;
-            while (invalid)
+            bool reject = true;
+            while (reject)
             {
-                // the travel direction (one of four)
+                // Choose a travel direction (one of four)
                 int direction = this.random.Next(4);
 
-                // a small portion of the maze size (in trave direction)
+                // a small portion of the maze size (in travel direction)
                 int edgeWidth = 0;
                 switch (direction)
                 {
                     case 0:
                     case 2:
                         // vertical
-                        edgeWidth = 1 + ySize * 2 / 100;
+                        edgeWidth = 2 + ySize * 2 / 100;
                         break;
                     case 1:
                     case 3:
                         // horizontal
-                        edgeWidth = 1 + xSize * 2 / 100;
+                        edgeWidth = 2 + xSize * 2 / 100;
                         break;
                 }
 
@@ -141,40 +145,64 @@ namespace SWA.Ariadne.Model
                     + random.Next(edgeWidth)
                     ;
 
+                // The two rows (or columns) that make up the (positive) travel direction.
+                int lesserRow = 0, greaterRow = 0;
+
                 switch (direction)
                 {
                     case 0:
-                        // start at top, end at bottom
+                        // start at bottom, end at top
                         xStart = random.Next(xSize);
-                        yStart = ySize - 1 - edgeDistStart;
+                        yStart = greaterRow = ySize - 1 - edgeDistStart;
                         xEnd = random.Next(xSize);
-                        yEnd = edgeDistEnd;
+                        yEnd = lesserRow = edgeDistEnd;
                         break;
                     case 1:
                         // start at left, end at right
-                        xStart = edgeDistEnd;
+                        xStart = lesserRow = edgeDistEnd;
                         yStart = random.Next(ySize);
-                        xEnd = xSize - 1 - edgeDistStart;
+                        xEnd = greaterRow = xSize - 1 - edgeDistStart;
                         yEnd = random.Next(ySize);
                         break;
                     case 2:
-                        // start at bottom, end at top
+                        // start at top, end at bottom
                         xStart = random.Next(xSize);
-                        yStart = edgeDistEnd;
+                        yStart = lesserRow = edgeDistEnd;
                         xEnd = random.Next(xSize);
-                        yEnd = ySize - 1 - edgeDistStart;
+                        yEnd = greaterRow = ySize - 1 - edgeDistStart;
                         break;
                     case 3:
                         // start at right, end at left
-                        xStart = xSize - 1 - edgeDistStart;
+                        xStart = greaterRow = xSize - 1 - edgeDistStart;
                         yStart = random.Next(ySize);
-                        xEnd = edgeDistEnd;
+                        xEnd = lesserRow = edgeDistEnd;
                         yEnd = random.Next(ySize);
                         break;
                 }
 
+                #region Reject unusable squares
+
                 // Verify that the endpoints are not in the restricted area.
-                invalid = (squares[xStart,yStart].isReserved || squares[xEnd,yEnd].isReserved);
+                //
+                reject = (squares[xStart,yStart].isReserved || squares[xEnd,yEnd].isReserved);
+
+                // Verify that the squares are not aligned against the intended travel direction.
+                // This also eliminates two other cases: same square and squares outside the maze.
+                //
+                if (lesserRow >= greaterRow)
+                {
+                    reject = true;
+                }
+
+                // Prefer real dead ends.
+                // Reject an end point with less than three walls (with probability 90%).
+                //
+                if ((this.CountClosedWalls(squares[xEnd, yEnd]) < MazeSquare.WP_NUM - 1) && (random.Next(100) < 90))
+                {
+                    reject = true;
+                }
+
+                #endregion
             }
         }
 
@@ -341,6 +369,25 @@ namespace SWA.Ariadne.Model
         private void FixReservedAreas()
         {
             // TODO
+        }
+
+        #endregion
+
+        #region Auxiliary methods
+
+        private int CountClosedWalls(MazeSquare sq)
+        {
+            int result = 0;
+
+            for (MazeSquare.WallPosition wp = MazeSquare.WP_MIN; wp <= MazeSquare.WP_MAX; wp++)
+            {
+                if (sq.walls[(int)wp] == MazeSquare.WallState.WS_CLOSED)
+                {
+                    ++result;
+                }
+            }
+
+            return result;
         }
 
         #endregion
