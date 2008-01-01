@@ -63,12 +63,8 @@ namespace SWA.Ariadne.Logic
             // Get the current position.
             sq1 = currentSquare;
 
-            // Find the open wall closest to the right hand.
-            TurnRight();
-            while (sq1[currentDirection] != MazeSquare.WallState.WS_OPEN)
-            {
-                TurnLeft();
-            }
+            // Set a new (valid) current direction.
+            Turn();
 
             sq2 = sq1.NeighborSquare(currentDirection);
             forward = (sq2.isVisited == false);
@@ -81,6 +77,20 @@ namespace SWA.Ariadne.Logic
         #endregion
 
         #region Auxiliary methods
+
+        /// <summary>
+        /// Set a new (valid) current direction.
+        /// Turn to the valid direction closest to the right hand.
+        /// </summary>
+        /// <param name="sq1"></param>
+        private void Turn()
+        {
+            TurnRight();
+            while (currentSquare[currentDirection] != MazeSquare.WallState.WS_OPEN)
+            {
+                TurnLeft();
+            }
+        }
 
         /// <summary>
         /// Turn the currentDirection one quarter to the left (counterclockwise)
