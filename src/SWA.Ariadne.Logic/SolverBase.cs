@@ -5,16 +5,11 @@ using SWA.Ariadne.Model;
 
 namespace SWA.Ariadne.Logic
 {
-    public abstract class SolverBase
+    public abstract class SolverBase : IMazeSolver
     {
         #region Member variables
 
         protected readonly Maze maze;
-
-        /// <summary>
-        /// Coordinates of current position while solving the maze.
-        /// </summary>
-        protected int xCur, yCur;
 
         #endregion
 
@@ -25,11 +20,8 @@ namespace SWA.Ariadne.Logic
             this.maze = maze;
         }
 
-        #endregion
+        public abstract void Step(out MazeSquare sq1, out MazeSquare sq2, out bool forward);
 
-        public void Reset()
-        {
-            maze.GetStartCoordinates(out xCur, out yCur);
-        }
+        #endregion
     }
 }
