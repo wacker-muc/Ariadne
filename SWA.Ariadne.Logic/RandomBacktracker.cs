@@ -58,7 +58,7 @@ namespace SWA.Ariadne.Logic
         #region Runtime methods
 
         /// <summary>
-        /// Travel from one visited square to a neighbor square (through an open all).
+        /// Travel from one visited square to a neighbor square (through an open wall).
         /// </summary>
         /// <param name="sq1">first (previously visited) square</param>
         /// <param name="sq2">next (neighbor) square</param>

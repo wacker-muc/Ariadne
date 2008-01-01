@@ -6,28 +6,23 @@ using SWA.Ariadne.Model;
 namespace SWA.Ariadne.Logic
 {
     /// <summary>
-    /// A MazeSolver with one path and no percievable strategy.
-    /// At a crossing: Chooses a random open wall.
+    /// A MazeSolver with one path and a local strategy.
+    /// At a crossing: Chooses the right hand open wall.
     /// </summary>
-    public class RandomWalker : SolverBase
+    public class DeterministicWalker : SolverBase
     {
         #region Member variables
 
-        /// <summary>
-        /// A source of random numbers.
-        /// </summary>
-        private Random random;
-
         MazeSquare currentSquare;
+        MazeSquare.WallPosition currentDirection;
 
         #endregion
 
         #region Constructor
 
-        public RandomWalker(Maze maze)
+        public DeterministicWalker(Maze maze)
             : base(maze)
         {
-            this.random = new Random();
             this.Reset();
         }
 
@@ -43,6 +38,9 @@ namespace SWA.Ariadne.Logic
             // Move to the start square.
             currentSquare = maze.StartSquare;
             currentSquare.isVisited = true;
+
+            // Start in an arbitrary direction.
+            currentDirection = MazeSquare.WP_MIN;
         }
 
         #endregion
@@ -65,18 +63,53 @@ namespace SWA.Ariadne.Logic
             // Get the current position.
             sq1 = currentSquare;
 
-            // Possible choices of open walls.
-            List<MazeSquare.WallPosition> openWalls = SolverBase.OpenWalls(sq1, false);
+            // Find the open wall closest to the right hand.
+            TurnRight();
+            while (sq1[currentDirection] != MazeSquare.WallState.WS_OPEN)
+            {
+                TurnLeft();
+            }
 
-            // Select one of the neighbor squares.
-            MazeSquare.WallPosition wp = openWalls[random.Next(openWalls.Count)];
-
-            sq2 = sq1.NeighborSquare(wp);
+            sq2 = sq1.NeighborSquare(currentDirection);
             forward = (sq2.isVisited == false);
 
             // Remember the new position.
             currentSquare = sq2;
             sq2.isVisited = true;
+        }
+
+        #endregion
+
+        #region Auxiliary methods
+
+        /// <summary>
+        /// Turn the currentDirection one quarter to the left (counterclockwise)
+        /// </summary>
+        private void TurnLeft()
+        {
+            if (currentDirection == MazeSquare.WP_MAX)
+            {
+                currentDirection = MazeSquare.WP_MIN;
+            }
+            else
+            {
+                ++currentDirection;
+            }
+        }
+
+        /// <summary>
+        /// Turn the currentDirection one quarter to the right (clockwise)
+        /// </summary>
+        private void TurnRight()
+        {
+            if (currentDirection == MazeSquare.WP_MIN)
+            {
+                currentDirection = MazeSquare.WP_MAX;
+            }
+            else
+            {
+                --currentDirection;
+            }
         }
 
         #endregion
