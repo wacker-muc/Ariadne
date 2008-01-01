@@ -75,7 +75,7 @@ namespace SWA.Ariadne.Model
             {
                 for (int y = 0; y < ySize; y++)
                 {
-                    squares[x, y] = new MazeSquare();
+                    squares[x, y] = new MazeSquare(x, y);
                 }
             }
 
@@ -178,6 +178,9 @@ namespace SWA.Ariadne.Model
             }
         }
 
+        /// <summary>
+        /// Reset to the initial state (before the maze is solved).
+        /// </summary>
         public void Reset()
         {
             // clear the visited region
@@ -198,9 +201,9 @@ namespace SWA.Ariadne.Model
         /// Returns true if the end point has been visited.
         /// </summary>
         /// <returns></returns>
-        public bool Solved()
+        public bool IsSolved
         {
-            return (squares[xEnd, yEnd].isVisited);
+            get { return (squares[xEnd, yEnd].isVisited); }
         }
 
         /// <summary>
@@ -212,6 +215,27 @@ namespace SWA.Ariadne.Model
         {
             xStart = this.xStart;
             yStart = this.yStart;
+        }
+
+        /// <summary>
+        /// Returns the coordinates of the end point.
+        /// </summary>
+        /// <param name="xEnd"></param>
+        /// <param name="yEnd"></param>
+        public void GetEndCoordinates(out int xEnd, out int yEnd)
+        {
+            xEnd = this.xEnd;
+            yEnd = this.yEnd;
+        }
+
+        public MazeSquare StartSquare
+        {
+            get { return this[xStart, yStart]; }
+        }
+
+        public MazeSquare EndSquare
+        {
+            get { return this[xEnd, yEnd]; }
         }
 
         #endregion
@@ -254,7 +278,6 @@ namespace SWA.Ariadne.Model
 
                 // Collect the unfixed walls of sq0.
                 //
-                //foreach (MazeSquare.WallPosition wp in Enum.GetValues(MazeSquare.WallPosition))
                 for (MazeSquare.WallPosition wp = MazeSquare.WP_MIN; wp <= MazeSquare.WP_MAX; wp++)
                 {
                     if (sq0[wp] == MazeSquare.WallState.WS_MAYBE)
