@@ -432,7 +432,7 @@ namespace SWA.Ariadne.App
         /// <summary>
         /// Executes one step in the solver and paints that section of the path.
         /// </summary>
-        /// <returns>the square this step travelled to</returns>
+        /// <returns>either null OR the square this step travelled to in backward direction</returns>
         private MazeSquare SingleStep()
         {
             if (mazeUserControl.Maze.IsSolved)
@@ -456,7 +456,7 @@ namespace SWA.Ariadne.App
             }
             ++countSteps;
 
-            return sq2;
+            return (forward ? null : sq2);
         }
 
         /// <summary>
