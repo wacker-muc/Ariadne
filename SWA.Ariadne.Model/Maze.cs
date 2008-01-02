@@ -11,7 +11,7 @@ namespace SWA.Ariadne.Model
         /// <summary>
         /// Maze dimension: number of squares.
         /// </summary>
-        private int xSize, ySize;
+        private readonly int xSize, ySize;
         #region Properties
         public int YSize
         {
@@ -24,6 +24,11 @@ namespace SWA.Ariadne.Model
         #endregion
 
         /// <summary>
+        /// Minimum and maximum maze dimensions: number of squares.
+        /// </summary>
+        public const int MinSize = 8, MaxXSize = 600, MaxYSize = 400;
+
+        /// <summary>
         /// Coordinates of the start and end point of the path through the maze.
         /// </summary>
         private int xStart, yStart, xEnd, yEnd;
@@ -31,7 +36,12 @@ namespace SWA.Ariadne.Model
         /// <summary>
         /// A source of random numbers.
         /// </summary>
-        private Random random;
+        private readonly Random random;
+
+        /// <summary>
+        /// The seed used to initialize this.random.
+        /// </summary>
+        private readonly int seed;
 
         /// <summary>
         /// Position and dimensions of a reserved area.
@@ -54,12 +64,113 @@ namespace SWA.Ariadne.Model
 
         #region Constructor
 
+        /// <summary>
+        /// Constructor.
+        /// Create a maze with the given dimensions.
+        /// </summary>
+        /// <param name="xSize"></param>
+        /// <param name="ySize"></param>
         public Maze(int xSize, int ySize)
         {
-            this.xSize = xSize;
-            this.ySize = ySize;
+            this.xSize = Math.Min(xSize, MaxXSize);
+            this.ySize = Math.Min(ySize, MaxYSize);
 
-            this.random = new Random();
+            // Get an initial random seed and use that to create the Random.
+            Random r = new Random();
+            this.seed = r.Next();
+            this.random = new Random(seed);
+        }
+
+        /// <summary>
+        /// Constructor.
+        /// Create a maze whose parameters are encoded in the given code (see property Code).
+        /// </summary>
+        /// <param name="code">a string of seven letters (case is ignored)</param>
+        public Maze(string code)
+        {
+            Decode(code, out this.xSize, out this.ySize, out this.seed);
+            this.random = new Random(seed);
+        }
+
+        #endregion
+
+        #region Encoding of the maze parameters
+
+        /// <summary>
+        /// A string of seven characters (A..Z) that encodes the maze parameters.
+        /// This code can be used to construct an identical maze.
+        /// </summary>
+        public string Code
+        {
+            get
+            {
+                long nCode = 0;
+
+                nCode += seed;              // < 32.768
+
+                nCode *= (MaxXSize + 1);    // < 19,693,568
+                nCode += xSize;             // < 19,694,168
+
+                nCode *= (MaxYSize + 1);    // < 7,897,361,368
+                nCode += ySize;             // < 7,897,361,768
+
+                // range = Math.Pow(26, 7); // = 8,031,810,176
+
+                StringBuilder result = new StringBuilder(7);
+
+                for (int p = 7; p-- > 0; )
+                {
+                    int digit = (int)(nCode % 26);
+                    nCode /= 26;
+                    result.Insert(0, (char)(digit + 'A'));
+                }
+
+                return result.ToString();
+            }
+        }
+
+        private static void Decode(string code, out int xSize, out int ySize, out int seed)
+        {
+            long nCode = 0;
+
+            if (!(code.Length == 7))
+            {
+                throw new ArgumentOutOfRangeException("code", code, "Must be seven characters.");
+            }
+
+            char[] a = code.ToUpper().ToCharArray();
+            for (int p = 0; p++ < code.Length; p++)
+            {
+                int digit = a[p] - 'A';
+                if (!(0 <= digit && digit < 26))
+                {
+                    throw new ArgumentOutOfRangeException("code", code, "Allowed characters are 'A'..'Z' only.");
+                }
+                nCode *= 26;
+                nCode += digit;
+            }
+
+            ySize = (int)(nCode % (MaxYSize + 1));
+            nCode /= (MaxYSize + 1);
+
+            xSize = (int)(nCode % (MaxXSize + 1));
+            nCode /= (MaxXSize + 1);
+
+            seed = (int)nCode;
+
+            if (!(seed >= 0))
+            {
+                throw new ArgumentOutOfRangeException("seed(code)", seed, "Must be a nonnegative integer.");
+            }
+            if (!(MinSize <= xSize && xSize <= MaxXSize))
+            {
+                throw new ArgumentOutOfRangeException("xSize(code)", xSize, "Must be between " + MinSize.ToString() + " and " + MaxXSize.ToString() + ".");
+            }
+            if (!(MinSize <= ySize && ySize <= MaxYSize))
+            {
+                throw new ArgumentOutOfRangeException("ySize(code)", ySize, "Must be between " + MinSize.ToString() + " and " + MaxYSize.ToString() + ".");
+            }
+
         }
 
         #endregion

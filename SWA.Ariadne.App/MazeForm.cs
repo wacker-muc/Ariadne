@@ -15,6 +15,11 @@ namespace SWA.Ariadne.App
         #region Member variables
 
         /// <summary>
+        /// The type of solver algorithm we will use.
+        /// </summary>
+        private System.Type solverType = typeof(RandomBacktracker);
+
+        /// <summary>
         /// The maze solver algorithm.
         /// This is only set (not null) while we are in a solving mode.
         /// </summary>
@@ -102,6 +107,8 @@ namespace SWA.Ariadne.App
             }
 
             mazeUserControl.Setup();
+
+            UpdateCaption();
         }
 
         /// <summary>
@@ -117,11 +124,10 @@ namespace SWA.Ariadne.App
                 return;
             }
 
-            solver = new RandomBacktracker(mazeUserControl.Maze);
-            //solver = new RandomWalker(mazeUserControl.Maze);
-            //solver = new DeterministicWalker(mazeUserControl.Maze);
-            //solver = new RightHandWalker(mazeUserControl.Maze);
-            //solver = new LeftHandWalker(mazeUserControl.Maze);
+            solver = (IMazeSolver) solverType.GetConstructor(
+                new Type[1] { typeof(Maze) }).Invoke(
+                new object[1] { mazeUserControl.Maze });
+
             countSteps = countForward = countBackward = 0;
             stepTimer = new Timer();
             stepTimer.Interval = (1000/60)/2; // 60 frames per second
@@ -339,6 +345,28 @@ namespace SWA.Ariadne.App
             }
 
             this.StatusLine = message.ToString();
+        }
+
+        #endregion
+
+        #region Auxiliary methods
+
+        /// <summary>
+        /// Write the maze ID and solver strategy name into the window's caption bar.
+        /// </summary>
+        private void UpdateCaption()
+        {
+            StringBuilder caption = new StringBuilder(80);
+
+            caption.Append("Ariadne");
+
+            caption.Append(" - ");
+            caption.Append("ID: " + mazeUserControl.Maze.Code);
+
+            caption.Append(" - ");
+            caption.Append(solverType.Name);
+
+            this.Text = caption.ToString();
         }
 
         #endregion
