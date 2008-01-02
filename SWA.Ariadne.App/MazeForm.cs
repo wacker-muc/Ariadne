@@ -468,12 +468,6 @@ namespace SWA.Ariadne.App
 
             caption.Append("Ariadne");
 
-            if (mazeUserControl != null && mazeUserControl.Maze != null)
-            {
-                caption.Append(" - ");
-                caption.Append("ID: " + mazeUserControl.Maze.Code);
-            }
-
             if (solverType != null)
             {
                 caption.Append(" - ");
@@ -484,6 +478,12 @@ namespace SWA.Ariadne.App
             {
                 caption.Append(" - ");
                 caption.Append(stepsPerSecond.ToString());
+            }
+
+            if (mazeUserControl != null && mazeUserControl.Maze != null)
+            {
+                caption.Append(" - ");
+                caption.Append("ID: " + mazeUserControl.Maze.Code);
             }
 
             this.Text = caption.ToString();
