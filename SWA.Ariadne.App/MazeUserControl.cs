@@ -154,12 +154,14 @@ namespace SWA.Ariadne.App
 
         #region Painting methods
 
+        /// <summary>
+        /// Paints the contents of this control by rendering the GraphicsBuffer.
+        /// On first time, the buffer is created and the maze (without any path) is painted.
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
-
-            //MazeForm.StatusLine = "called OnPaint()";
-            
 
             if (this.wallWidth == 0)
             {
@@ -187,10 +189,11 @@ namespace SWA.Ariadne.App
             }
 
             gBuffer.Render();
+            //gBuffer.Render(e.Graphics);
         }
 
         /// <summary>
-        /// Paint a border around the maze.
+        /// Paints a border around the maze.
         /// </summary>
         /// <param name="g"></param>
         private void PaintBorder(Graphics g)
@@ -199,7 +202,7 @@ namespace SWA.Ariadne.App
         }
 
         /// <summary>
-        /// Paint the closed inner walls.
+        /// Paints the closed inner walls.
         /// </summary>
         /// <param name="g"></param>
         private void PaintWalls(Graphics g)
@@ -228,6 +231,10 @@ namespace SWA.Ariadne.App
             }
         }
 
+        /// <summary>
+        /// Paints the start and end point.
+        /// </summary>
+        /// <param name="g"></param>
         private void PaintEndpoints(Graphics g)
         {
             int x, y;
@@ -237,6 +244,13 @@ namespace SWA.Ariadne.App
             PaintSquare(g, Brushes.Red, x, y);
         }
 
+        /// <summary>
+        /// Fills one square with the given color.
+        /// </summary>
+        /// <param name="g"></param>
+        /// <param name="b"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
         private void PaintSquare(Graphics g, Brush b, int x, int y)
         {
             float cx = xOffset + wallWidth/2.0F + x * gridWidth;
@@ -244,6 +258,12 @@ namespace SWA.Ariadne.App
             g.FillRectangle(b, cx, cy, squareWidth, squareWidth);
         }
 
+        /// <summary>
+        /// Paints a section of the path between the given (adjoining) squares.
+        /// </summary>
+        /// <param name="sq1"></param>
+        /// <param name="sq2"></param>
+        /// <param name="forward"></param>
         internal void PaintPath(MazeSquare sq1, MazeSquare sq2, bool forward)
         {
             float cx1 = xOffset + gridWidth / 2.0F + sq1.XPos * gridWidth;
@@ -261,9 +281,24 @@ namespace SWA.Ariadne.App
             {
                 this.PaintEndpoints(g);
             }
+        }
 
-            // Draw a dot at sq2.
-            g.FillRectangle(this.forwardPen.Brush, cx2 - pathWidth / 2.0F, cy2 - pathWidth / 2.0F, pathWidth, pathWidth);
+        /// <summary>
+        /// Paints a dot (in the forward color) at the given square.
+        /// Renders the GraphicsBuffer.
+        /// </summary>
+        /// <param name="sq">when null, no dot is drawn</param>
+        internal void FinishPath(MazeSquare sq)
+        {
+            if (sq != null && sq != maze.EndSquare)
+            {
+                float cx = xOffset + gridWidth / 2.0F + sq.XPos * gridWidth;
+                float cy = yOffset + gridWidth / 2.0F + sq.YPos * gridWidth;
+
+                // Draw a dot at sq2.
+                Graphics g = gBuffer.Graphics;
+                g.FillRectangle(this.forwardPen.Brush, cx - pathWidth / 2.0F, cy - pathWidth / 2.0F, pathWidth, pathWidth);
+            }
 
             gBuffer.Render();
         }
