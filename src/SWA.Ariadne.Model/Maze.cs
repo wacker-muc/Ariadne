@@ -27,7 +27,7 @@ namespace SWA.Ariadne.Model
         /// <summary>
         /// Minimum and maximum maze dimensions: number of squares.
         /// </summary>
-        public const int MinSize = 8, MaxXSize = 600, MaxYSize = 400;
+        public const int MinSize = 8, MaxXSize = 337, MaxYSize = 231;
 
         /// <summary>
         /// Coordinates of the start and end point of the path through the maze.
@@ -35,9 +35,25 @@ namespace SWA.Ariadne.Model
         private int xStart, yStart, xEnd, yEnd;
 
         /// <summary>
+        /// Travel direction: 0..3
+        /// </summary>
+        private MazeSquare.WallPosition direction;
+
+        /// <summary>
+        /// Maximum distance of start/end point from border.
+        /// </summary>
+        private const int MaxEdgeWidth = 17;
+
+        /// <summary>
         /// A source of random numbers.
         /// </summary>
         private readonly Random random;
+
+        /// <summary>
+        /// Maximum initial seed value: 2^13-1.
+        /// This value and the other Max... values are chosen so that the maze Code may be represented with 12 characters.
+        /// </summary>
+        public const int seedLimit = 8192;
 
         /// <summary>
         /// The seed used to initialize this.random.
@@ -80,7 +96,7 @@ namespace SWA.Ariadne.Model
 
             // Get an initial random seed and use that to create the Random.
             Random r = new Random();
-            this.seed = r.Next();
+            this.seed = r.Next(seedLimit);
             this.random = new Random(seed);
         }
 
@@ -100,33 +116,94 @@ namespace SWA.Ariadne.Model
         #region Encoding of the maze parameters
 
         /// <summary>
-        /// A string of seven characters (A..Z) that encodes the maze parameters.
+        /// A string of twelve characters (A..Z) that encodes the maze parameters.
         /// This code can be used to construct an identical maze.
         /// </summary>
         public string Code
         {
             get
             {
-                long nCode = 0;
+                long nCode = 0;                 //    0
 
-                nCode += seed;              // < 32.768
+                // Encode initial seed.
 
-                nCode *= (MaxXSize + 1);    // < 19,693,568
-                nCode += xSize;             // < 19,694,168
+                nCode *= seedLimit;             // <= 0
+                nCode += seed;                  // <= 8.191
 
-                nCode *= (MaxYSize + 1);    // < 7,897,361,368
-                nCode += ySize;             // < 7,897,361,768
+                // Encode maze dimension.
 
-                // range = Math.Pow(26, 7); // = 8,031,810,176
+                nCode *= (MaxXSize + 1);        // <= 2.768.558
+                nCode += xSize;                 // <= 2.768.895
+
+                nCode *= (MaxYSize + 1);        // <= 642.383.640
+                nCode += ySize;                 // <= 642.383.871
+
+                // Encode the start and end points.
+                // Instead of the direct coordinates we will use the following information:
+                // * travel direction
+                // * distance from the border (instead of coordinate)
+                // * other coordinate
+                // The scaling factor is always MaxXSize, as it is greater than MaxYSize.
+
+                nCode *= MazeSquare.WP_NUM;     // <= 2.569.535.484
+                nCode += (int)direction;        // <= 2.569.535.487
+
+                int d1 = 0, d2 = 0, c1 = 0, c2 = 0;
+
+                switch (direction)
+                {
+                    case MazeSquare.WallPosition.WP_E:
+                        d1 = xStart;
+                        d2 = xSize - xEnd;
+                        c1 = yStart;
+                        c2 = yEnd;
+                        break;
+                    case MazeSquare.WallPosition.WP_W:
+                        d1 = xEnd;
+                        d2 = xSize - xStart;
+                        c1 = yEnd;
+                        c2 = yStart;
+                        break;
+                    case MazeSquare.WallPosition.WP_S:
+                        d1 = yStart;
+                        d2 = ySize - yEnd;
+                        c1 = xStart;
+                        c2 = xEnd;
+                        break;
+                    case MazeSquare.WallPosition.WP_N:
+                        d1 = yEnd;
+                        d2 = ySize - yStart;
+                        c1 = xEnd;
+                        c2 = xStart;
+                        break;
+                }
+
+                nCode *= (MaxEdgeWidth + 1);    // <= 46.251.638.766
+                nCode += d1;                    // <= 46.251.638.783
+
+                nCode *= (MaxEdgeWidth + 1);    // <= 832.529.498.094
+                nCode += d2;                    // <= 832.529.498.111
+
+                nCode *= (MaxXSize + 1);        // <= 281.394.970.361.518
+                nCode += c1;                    // <= 281.394.970.361.855
+
+                nCode *= (MaxXSize + 1);        // <= 95.111.499.982.307.000
+                nCode += c2;                    // <= 95.111.499.982.307.300
+
+                // range = Math.Pow(26, 12);    //  = 95.428.956.661.682.200
+
 
                 StringBuilder result = new StringBuilder(7);
 
-                for (int p = 7; p-- > 0; )
+                for (int p = 12; p-- > 0; )
                 {
                     int digit = (int)(nCode % 26);
                     nCode /= 26;
                     result.Insert(0, (char)(digit + 'A'));
                 }
+
+                result.Insert(8, '.');
+                result.Insert(4, '.');
 
                 return result.ToString();
             }
@@ -136,7 +213,7 @@ namespace SWA.Ariadne.Model
         {
             long nCode = 0;
 
-            if (!(code.Length == 7))
+            if (!(code.Length == 12))
             {
                 throw new ArgumentOutOfRangeException("code", code, "Must be seven characters.");
             }
@@ -280,23 +357,25 @@ namespace SWA.Ariadne.Model
             while (reject)
             {
                 // Choose a travel direction (one of four)
-                int direction = this.random.Next(4);
+                this.direction = (MazeSquare.WallPosition) this.random.Next(4);
 
                 // a small portion of the maze size (in travel direction)
                 int edgeWidth = 0;
                 switch (direction)
                 {
-                    case 0:
-                    case 2:
+                    case MazeSquare.WallPosition.WP_N:
+                    case MazeSquare.WallPosition.WP_S:
                         // vertical
                         edgeWidth = 2 + ySize * 2 / 100;
                         break;
-                    case 1:
-                    case 3:
+                    case MazeSquare.WallPosition.WP_E:
+                    case MazeSquare.WallPosition.WP_W:
                         // horizontal
                         edgeWidth = 2 + xSize * 2 / 100;
                         break;
                 }
+
+                edgeWidth = Math.Min(edgeWidth, MaxEdgeWidth);
 
                 // distance of start and end point from the maze border
                 int edgeDistStart = 0
@@ -315,28 +394,28 @@ namespace SWA.Ariadne.Model
 
                 switch (direction)
                 {
-                    case 0:
+                    case MazeSquare.WallPosition.WP_N:
                         // start at bottom, end at top
                         xStart = random.Next(xSize);
                         yStart = greaterRow = ySize - 1 - edgeDistStart;
                         xEnd = random.Next(xSize);
                         yEnd = lesserRow = edgeDistEnd;
                         break;
-                    case 1:
+                    case MazeSquare.WallPosition.WP_E:
                         // start at left, end at right
                         xStart = lesserRow = edgeDistEnd;
                         yStart = random.Next(ySize);
                         xEnd = greaterRow = xSize - 1 - edgeDistStart;
                         yEnd = random.Next(ySize);
                         break;
-                    case 2:
+                    case MazeSquare.WallPosition.WP_S:
                         // start at top, end at bottom
                         xStart = random.Next(xSize);
                         yStart = lesserRow = edgeDistEnd;
                         xEnd = random.Next(xSize);
                         yEnd = greaterRow = ySize - 1 - edgeDistStart;
                         break;
-                    case 3:
+                    case MazeSquare.WallPosition.WP_W:
                         // start at right, end at left
                         xStart = greaterRow = xSize - 1 - edgeDistStart;
                         yStart = random.Next(ySize);
