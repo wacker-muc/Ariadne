@@ -39,8 +39,15 @@ namespace SWA.Ariadne.Logic
             currentSquare = maze.StartSquare;
             currentSquare.isVisited = true;
 
-            // Start in an arbitrary direction.
-            currentDirection = MazeSquare.WP_MIN;
+            // Start in an arbitrary direction (with a wall in the back).
+            for (currentDirection = MazeSquare.WP_MIN; currentDirection < MazeSquare.WP_MAX; currentDirection++)
+            {
+                if (currentSquare[currentDirection] == MazeSquare.WallState.WS_CLOSED)
+                {
+                    currentDirection = MazeSquare.OppositeWall(currentDirection);
+                    break;
+                }
+            }
         }
 
         #endregion

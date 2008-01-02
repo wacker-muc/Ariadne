@@ -124,7 +124,7 @@ namespace SWA.Ariadne.Model
         /// </summary>
         /// <param name="p"></param>
         /// <returns></returns>
-        internal static WallPosition OppositeWall(WallPosition p)
+        public static WallPosition OppositeWall(WallPosition p)
         {
             switch (p)
             {
