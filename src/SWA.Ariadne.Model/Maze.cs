@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Drawing;
 
 namespace SWA.Ariadne.Model
 {
@@ -48,6 +49,8 @@ namespace SWA.Ariadne.Model
         /// TODO: Support more than one reserved area.
         /// </summary>
         private int logoRow, logoCol, logoWidth, logoHeight;
+
+        private List<Rectangle> reservedAreas = new List<Rectangle>();
 
         /// <summary>
         /// The maze is formed by a two-dimensional array of squares.
@@ -176,6 +179,57 @@ namespace SWA.Ariadne.Model
         #endregion
 
         #region Setup methods
+
+        /// <summary>
+        /// Reserve a rectanglurar region of the given dimensions.
+        /// The area must not touch any other reserved ares.
+        /// </summary>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <returns>true if the reservation was successful</returns>
+        public bool ReserveRectangle(int width, int height)
+        {
+            // Reject very large areas.
+            if (width < 2 || height < 2 || width > xSize-4 || height > ySize-4)
+            {
+                return false;
+            }
+
+            Random r = new Random();
+            
+            for (int nTries = 0; nTries < 100; nTries++)
+            {
+                // Choose a random location.
+                // The resulting rectangle may touch the borders.
+                int x = r.Next(0, xSize - width);
+                int y = r.Next(0, ySize - width);
+
+                // A candiadte rectangle.
+                Rectangle candidate = new Rectangle(x, y, width, height);
+
+                // The candidate, extended with one square around all four edges.
+                Rectangle extendedCandidate = new Rectangle(x - 1, y - 1, width + 2, height + 2);
+
+                bool reject = false;
+                foreach (Rectangle rect in this.reservedAreas)
+                {
+                    // Reject the candidate if its extension would intersect with another reserved area.
+                    if (extendedCandidate.IntersectsWith(rect))
+                    {
+                        reject = true;
+                        break; // foreach rect
+                    }
+                }
+
+                if (!reject)
+                {
+                    reservedAreas.Add(candidate);
+                    return true;
+                }
+            }
+
+            return false;
+        }
 
         public void CreateMaze()
         {
@@ -423,7 +477,7 @@ namespace SWA.Ariadne.Model
                     {
                         MazeSquare sq = sq0.NeighborSquare(wp);
 
-                        if (sq.isConnected)
+                        if (sq.isConnected || sq.isReserved)
                         {
                             sq0[wp] = sq[MazeSquare.OppositeWall(wp)] = MazeSquare.WallState.WS_CLOSED;
                         }
@@ -461,25 +515,56 @@ namespace SWA.Ariadne.Model
             #endregion
         }
 
+        /// <summary>
+        /// Put closed walls around the maze.
+        /// </summary>
         private void FixBorderWalls()
         {
-            for (int x = 0; x < xSize; x++)
+            CloseWalls(0, xSize, 0, ySize);
+        }
+
+        /// <summary>
+        /// Mark the squares inside the reserved areas and put walls around them.
+        /// </summary>
+        private void FixReservedAreas()
+        {
+            foreach (Rectangle rect in this.reservedAreas)
             {
-                int y = ySize - 1;
-                this.squares[x, 0][MazeSquare.WallPosition.WP_N] = MazeSquare.WallState.WS_CLOSED;
-                this.squares[x, y][MazeSquare.WallPosition.WP_S] = MazeSquare.WallState.WS_CLOSED;
-            }
-            for (int y = 0; y < ySize; y++)
-            {
-                int x = xSize - 1;
-                this.squares[0, y][MazeSquare.WallPosition.WP_W] = MazeSquare.WallState.WS_CLOSED;
-                this.squares[x, y][MazeSquare.WallPosition.WP_E] = MazeSquare.WallState.WS_CLOSED;
+                for (int x = rect.Left; x < rect.Right; x++)
+                {
+                    for (int y = rect.Top; y < rect.Bottom; y++)
+                    {
+                        this[x, y].isReserved = true;
+                    }
+                }
+
+                CloseWalls(rect.Left, rect.Right, rect.Top, rect.Bottom);
             }
         }
 
-        private void FixReservedAreas()
+        /// <summary>
+        /// Put closed walls around the given rectangle.
+        /// </summary>
+        /// <param name="left">left border x coordinate (inside)</param>
+        /// <param name="right">right border x coordinate (outside)</param>
+        /// <param name="top">top border y coordinate (inside)</param>
+        /// <param name="bottom">bottom border y coordinate (outside)</param>
+        private void CloseWalls(int left, int right, int top, int bottom)
         {
-            // TODO
+            for (int x = left; x < right; x++)
+            {
+                int y1 = top;
+                int y2 = bottom - 1;
+                this.squares[x, y1][MazeSquare.WallPosition.WP_N] = MazeSquare.WallState.WS_CLOSED;
+                this.squares[x, y2][MazeSquare.WallPosition.WP_S] = MazeSquare.WallState.WS_CLOSED;
+            }
+            for (int y = top; y < bottom; y++)
+            {
+                int x1 = left;
+                int x2 = right - 1;
+                this.squares[x1, y][MazeSquare.WallPosition.WP_W] = MazeSquare.WallState.WS_CLOSED;
+                this.squares[x2, y][MazeSquare.WallPosition.WP_E] = MazeSquare.WallState.WS_CLOSED;
+            }
         }
 
         #endregion

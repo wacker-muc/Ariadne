@@ -110,6 +110,11 @@ namespace SWA.Ariadne.App
 
             // Create a maze.
             this.maze = new Maze(xSize, ySize);
+            try
+            {
+                this.MazeForm.MakeReservedAreas(maze);
+            }
+            catch (InvalidCastException) { }
             maze.CreateMaze();
 
             try
