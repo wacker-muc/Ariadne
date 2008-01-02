@@ -20,6 +20,11 @@ namespace SWA.Ariadne.App
         private System.Type solverType = typeof(RandomBacktracker);
 
         /// <summary>
+        /// A dictionary used by the strategyComboBox.
+        /// </summary>
+        private readonly Dictionary<string, System.Type> knownSolvers;
+
+        /// <summary>
         /// The maze solver algorithm.
         /// This is only set (not null) while we are in a solving mode.
         /// </summary>
@@ -63,12 +68,51 @@ namespace SWA.Ariadne.App
         {
             InitializeComponent();
 
+            #region Initialize the stepsPerSecTextBox
+
+            stepsPerSecTextBox.Text = stepsPerSecond.ToString();
+            stepsPerSecTextBox.CausesValidation = true;
+
+            #endregion
+
+            #region Fill the strategyComboBox with all known MazeSolvers
+
+            knownSolvers = new Dictionary<string, System.Type>();
+
+            strategyComboBox.Items.Clear();
+
+            foreach (System.Type t in new System.Type[] {
+                typeof(Logic.RandomBacktracker),
+                typeof(Logic.RightHandWalker),
+                typeof(Logic.LeftHandWalker),
+                typeof(Logic.RandomWalker),
+            })
+            {
+                // Add the solver's name to the combo box.
+                strategyComboBox.Items.Add(t.Name);
+
+                // Add the solver's type and name to a Dictionary -- see strategy_Validated().
+                knownSolvers.Add(t.Name, t);
+
+                // Pre-select the default solver strategy.
+                if (t == solverType)
+                {
+                    strategyComboBox.SelectedIndex = strategyComboBox.Items.Count - 1;
+                }
+            }
+
+            strategyComboBox.CausesValidation = true;
+
+            #endregion
+
             this.OnNew(null, null);
         }
 
         #endregion
 
         #region Event handlers
+
+        #region Maze controls
 
         /// <summary>
         /// Stop the solver and return the maze to its original (unsolved) state.
@@ -86,6 +130,7 @@ namespace SWA.Ariadne.App
                 stepTimer.Stop();
                 stepTimer = null;
                 solver = null;
+                strategyComboBox.Enabled = true;
             }
 
             countSteps = countForward = countBackward = 0;
@@ -111,6 +156,10 @@ namespace SWA.Ariadne.App
             UpdateCaption();
         }
 
+        #endregion
+
+        #region Solver controls
+
         /// <summary>
         /// Start a solver.
         /// </summary>
@@ -124,6 +173,7 @@ namespace SWA.Ariadne.App
                 return;
             }
 
+            strategyComboBox.Enabled = false;
             solver = (IMazeSolver) solverType.GetConstructor(
                 new Type[1] { typeof(Maze) }).Invoke(
                 new object[1] { mazeUserControl.Maze });
@@ -170,20 +220,6 @@ namespace SWA.Ariadne.App
             stepTimer.Enabled = true;
         }
 
-        private bool IsBehindSchedule()
-        {
-            if (mazeUserControl.Maze.IsSolved)
-            {
-                return false;
-            }
-
-            TimeSpan lap = System.DateTime.Now - lapStartTime;
-            lapSeconds = lap.TotalSeconds;
-            double scheduledSteps = (accumulatedSeconds + lapSeconds) * stepsPerSecond;
-            
-            return (countSteps < 1 + scheduledSteps);
-        }
-
         /// <summary>
         /// Halt or continue the solver.
         /// </summary>
@@ -227,6 +263,8 @@ namespace SWA.Ariadne.App
             mazeUserControl.FinishPath(SingleStep());
             UpdateStatusLine();
         }
+
+        #endregion
 
         #region Button pressed behavior
 
@@ -284,35 +322,42 @@ namespace SWA.Ariadne.App
 
         #endregion
 
-        /// <summary>
-        /// Executes one step in the solver and paints that section of the path.
-        /// </summary>
-        /// <returns>the square this step travelled to</returns>
-        private MazeSquare SingleStep()
+        #region Parameter settings
+
+        private void stepsPerSec_TextChanged(object sender, EventArgs e)
         {
-            if (mazeUserControl.Maze.IsSolved)
+            int value = this.stepsPerSecond;
+
+            try
             {
-                return null;
+                value = Int32.Parse(stepsPerSecTextBox.Text);
+            }
+            catch (Exception) { }
+
+            if (value < 1)
+            {
+                value = 1;
+            }
+            if (value > 9999)
+            {
+                value = 9999;
+            }
+            if (stepsPerSecTextBox.Text != value.ToString())
+            {
+                //stepsPerSecTextBox.Text = value.ToString();
             }
 
-            MazeSquare sq1, sq2;
-            bool forward;
-
-            solver.Step(out sq1, out sq2, out forward);
-            mazeUserControl.PaintPath(sq1, sq2, forward);
-
-            if (forward)
-            {
-                ++countForward;
-            }
-            else
-            {
-                ++countBackward;
-            }
-            ++countSteps;
-
-            return sq2;
+            this.stepsPerSecond = value;
+            UpdateCaption();
         }
+
+        private void strategy_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.solverType = knownSolvers[(string)strategyComboBox.SelectedItem];
+            UpdateCaption();
+        }
+
+        #endregion
 
         #endregion
 
@@ -351,6 +396,50 @@ namespace SWA.Ariadne.App
 
         #region Auxiliary methods
 
+        private bool IsBehindSchedule()
+        {
+            if (mazeUserControl.Maze.IsSolved)
+            {
+                return false;
+            }
+
+            TimeSpan lap = System.DateTime.Now - lapStartTime;
+            lapSeconds = lap.TotalSeconds;
+            double scheduledSteps = (accumulatedSeconds + lapSeconds) * stepsPerSecond;
+
+            return (countSteps < 1 + scheduledSteps);
+        }
+
+        /// <summary>
+        /// Executes one step in the solver and paints that section of the path.
+        /// </summary>
+        /// <returns>the square this step travelled to</returns>
+        private MazeSquare SingleStep()
+        {
+            if (mazeUserControl.Maze.IsSolved)
+            {
+                return null;
+            }
+
+            MazeSquare sq1, sq2;
+            bool forward;
+
+            solver.Step(out sq1, out sq2, out forward);
+            mazeUserControl.PaintPath(sq1, sq2, forward);
+
+            if (forward)
+            {
+                ++countForward;
+            }
+            else
+            {
+                ++countBackward;
+            }
+            ++countSteps;
+
+            return sq2;
+        }
+
         /// <summary>
         /// Write the maze ID and solver strategy name into the window's caption bar.
         /// </summary>
@@ -360,11 +449,23 @@ namespace SWA.Ariadne.App
 
             caption.Append("Ariadne");
 
-            caption.Append(" - ");
-            caption.Append("ID: " + mazeUserControl.Maze.Code);
+            if (mazeUserControl != null && mazeUserControl.Maze != null)
+            {
+                caption.Append(" - ");
+                caption.Append("ID: " + mazeUserControl.Maze.Code);
+            }
 
-            caption.Append(" - ");
-            caption.Append(solverType.Name);
+            if (solverType != null)
+            {
+                caption.Append(" - ");
+                caption.Append(solverType.Name);
+            }
+
+            if (true)
+            {
+                caption.Append(" - ");
+                caption.Append(stepsPerSecond.ToString());
+            }
 
             this.Text = caption.ToString();
         }
