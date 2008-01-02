@@ -71,7 +71,6 @@ namespace SWA.Ariadne.App
             #region Initialize the stepsPerSecTextBox
 
             stepsPerSecTextBox.Text = stepsPerSecond.ToString();
-            stepsPerSecTextBox.CausesValidation = true;
 
             #endregion
 
@@ -94,6 +93,9 @@ namespace SWA.Ariadne.App
                 // Add the solver's type and name to a Dictionary -- see strategy_Validated().
                 knownSolvers.Add(t.Name, t);
 
+                // Note: Instead of a string we could add the Type object directly.
+                // But the Type's ToString() method returns the FullName instead of the short Name.
+
                 // Pre-select the default solver strategy.
                 if (t == solverType)
                 {
@@ -101,11 +103,28 @@ namespace SWA.Ariadne.App
                 }
             }
 
-            strategyComboBox.CausesValidation = true;
-
             #endregion
 
             this.OnNew(null, null);
+        }
+
+        #endregion
+
+        #region MazeUserControl Setup support
+
+        /// <summary>
+        /// Place reserved areas into the maze.
+        /// This method is called from the MazeUserControl before actually building the maze.
+        /// </summary>
+        /// <param name="maze"></param>
+        internal void MakeReservedAreas(Maze maze)
+        {
+#if false
+            Random r = new Random();
+            while (maze.ReserveRectangle(r.Next(2, 8), r.Next(2, 8)))
+            {
+            }
+#endif
         }
 
         #endregion
