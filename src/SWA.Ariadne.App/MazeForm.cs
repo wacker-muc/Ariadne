@@ -118,6 +118,10 @@ namespace SWA.Ariadne.App
             }
 
             solver = new RandomBacktracker(mazeUserControl.Maze);
+            //solver = new RandomWalker(mazeUserControl.Maze);
+            //solver = new DeterministicWalker(mazeUserControl.Maze);
+            //solver = new RightHandWalker(mazeUserControl.Maze);
+            //solver = new LeftHandWalker(mazeUserControl.Maze);
             countSteps = countForward = countBackward = 0;
             stepTimer = new Timer();
             stepTimer.Interval = (1000/60)/2; // 60 frames per second
@@ -142,17 +146,19 @@ namespace SWA.Ariadne.App
             }
             else
             {
+                MazeSquare sq = null;
                 int currentSteps = 0;
                 int maxStepsPerTimerEvent = 20;
                 while (this.IsBehindSchedule())
                 {
-                    this.SingleStep();
+                    sq = SingleStep();
 
                     if (++currentSteps > maxStepsPerTimerEvent)
                     {
                         break;
                     }
                 }
+                mazeUserControl.FinishPath(sq);
                 UpdateStatusLine();
             }
             stepTimer.Enabled = true;
@@ -212,7 +218,7 @@ namespace SWA.Ariadne.App
                 this.OnPause(sender, e);
             }
 
-            SingleStep();
+            mazeUserControl.FinishPath(SingleStep());
             UpdateStatusLine();
         }
 
@@ -272,11 +278,15 @@ namespace SWA.Ariadne.App
 
         #endregion
 
-        private void SingleStep()
+        /// <summary>
+        /// Executes one step in the solver and paints that section of the path.
+        /// </summary>
+        /// <returns>the square this step travelled to</returns>
+        private MazeSquare SingleStep()
         {
             if (mazeUserControl.Maze.IsSolved)
             {
-                return;
+                return null;
             }
 
             MazeSquare sq1, sq2;
@@ -294,6 +304,8 @@ namespace SWA.Ariadne.App
                 ++countBackward;
             }
             ++countSteps;
+
+            return sq2;
         }
 
         #endregion
