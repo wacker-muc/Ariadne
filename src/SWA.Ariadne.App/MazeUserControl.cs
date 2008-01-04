@@ -74,6 +74,7 @@ namespace SWA.Ariadne.App
             this.gridWidth = squareWidth + wallWidth;
             this.pathWidth = pathWidth;
 
+            AdjustPathWidth();
             CreateMaze();
             PlaceEndpoints();
             Reset();
@@ -97,19 +98,20 @@ namespace SWA.Ariadne.App
             this.Setup(gridWidth);
         }
 
-        internal void Setup(AriadneSettingsData data)
+        /// <summary>
+        /// Make (squareWidth - pathWidth) an even number.
+        /// That will make sure that the path is centered nicely between the walls.
+        /// </summary>
+        /// <returns></returns>
+        private void AdjustPathWidth()
         {
-            if (!data.AutoGridWidth)
+            if ((squareWidth - pathWidth) % 2 != 0)
             {
-                this.Setup(data.GridWidth);
+                pathWidth -= 1;
             }
-            else if (!data.AutoSquareWidth || !data.AutoSquareWidth || !data.AutoWallWidth)
+            if (pathWidth < 2)
             {
-                this.Setup(data.SquareWidth, data.WallWidth, data.PathWidth);
-            }
-            else
-            {
-                this.Setup();
+                pathWidth = squareWidth;
             }
         }
 
@@ -137,7 +139,7 @@ namespace SWA.Ariadne.App
 
             try
             {
-                this.MazeForm.StatusLine = "Size = " + xSize + "x" + ySize;
+                this.MazeForm.UpdateStatusLine();
             }
             catch (InvalidCastException) { }
         }
@@ -361,7 +363,19 @@ namespace SWA.Ariadne.App
 
             result &= this.maze.TakeParametersFrom(data);
 
-            this.Setup(data);
+            #region Do the equivalent of Setup() with the modified parameters.
+
+            // CreateMaze()
+            AdjustPathWidth();
+            MazeForm.MakeReservedAreas(maze);
+            maze.CreateMaze();
+            MazeForm.UpdateStatusLine();
+
+            PlaceEndpoints();
+
+            Reset();
+
+            #endregion
 
             return result;
         }
