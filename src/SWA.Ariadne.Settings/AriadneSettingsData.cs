@@ -11,6 +11,88 @@ namespace SWA.Ariadne.Settings
         private const int M = 0; // modifyable value
         private const int S = 1; // shadow value
 
+        #region Shape tab
+
+        public int MazeWidth
+        {
+            get { return mazeWidth[M]; }
+            set { mazeWidth[M] = value; }
+        }
+        public bool MazeWidthModified
+        {
+            get { return (mazeWidth[M] != mazeWidth[S]); }
+        }
+        private int[] mazeWidth = new int[2];
+
+        public int MazeHeight
+        {
+            get { return mazeHeight[M]; }
+            set { mazeHeight[M] = value; }
+        }
+        public bool MazeHeightModified
+        {
+            get { return (mazeHeight[M] != mazeHeight[S]); }
+        }
+        private int[] mazeHeight = new int[2];
+
+        public int Seed
+        {
+            get { return seed[M]; }
+            set { seed[M] = value; }
+        }
+        public bool SeedModified
+        {
+            get { return (seed[M] != seed[S]); }
+        }
+        private int[] seed = new int[2];
+
+        public bool AutoMazeWidth
+        {
+            get { return autoMazeWidth[M]; }
+            set { autoMazeWidth[M] = value; }
+        }
+        public bool AutoMazeWidthModified
+        {
+            get { return (autoMazeWidth[M] != autoMazeWidth[S]); }
+        }
+        private bool[] autoMazeWidth = new bool[2];
+
+        public bool AutoMazeHeight
+        {
+            get { return autoMazeHeight[M]; }
+            set { autoMazeHeight[M] = value; }
+        }
+        public bool AutoMazeHeightModified
+        {
+            get { return (autoMazeHeight[M] != autoMazeHeight[S]); }
+        }
+        private bool[] autoMazeHeight = new bool[2];
+
+        public bool AutoSeed
+        {
+            get { return autoSeed[M]; }
+            set { autoSeed[M] = value; }
+        }
+        public bool AutoSeedModified
+        {
+            get { return (autoSeed[M] != autoSeed[S]); }
+        }
+        private bool[] autoSeed = new bool[2];
+
+        public string Code
+        {
+            get { return code[M]; }
+            set { code[M] = value; }
+        }
+        public bool CodeModified
+        {
+            get { return (code[M] != code[S]); }
+        }
+        private string[] code = new string[2];
+        
+
+        #endregion
+
         #region Layout tab
 
         public int SquareWidth
@@ -143,15 +225,6 @@ namespace SWA.Ariadne.Settings
 
         public AriadneSettingsData()
         {
-        }
-
-        #endregion
-
-        #region IAriadneSettingsSource support
-
-        public void FillFrom(IAriadneSettingsSource target)
-        {
-            target.FillParametersInto(this);
         }
 
         #endregion
