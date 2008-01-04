@@ -177,8 +177,11 @@ namespace SWA.Ariadne.App
 
         private void OnDetails(object sender, EventArgs e)
         {
-            DetailsDialog form = new DetailsDialog(this.mazeUserControl);
-            form.ShowDialog(this);
+            if (solver == null)
+            {
+                DetailsDialog form = new DetailsDialog(this.mazeUserControl);
+                form.ShowDialog(this);
+            }
         }
 
         #endregion
