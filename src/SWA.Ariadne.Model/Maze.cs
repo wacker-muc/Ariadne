@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
+using SWA.Ariadne.Settings;
 
 namespace SWA.Ariadne.Model
 {
     public class Maze
+        : IAriadneSettingsSource
     {
         #region Static properties, derived from MazeDimensions
 
@@ -815,6 +817,31 @@ namespace SWA.Ariadne.Model
             }
 
             return result;
+        }
+
+        #endregion
+
+        #region IAriadneSettingsSource implementation
+
+        /// <summary>
+        /// Fill all modifyable parameters into the given data object.
+        /// </summary>
+        /// <param name="data"></param>
+        public void FillParametersInto(AriadneSettingsData data)
+        {
+            // TODO
+        }
+
+        /// <summary>
+        /// Take all modifyable parameters from the given data object.
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns>false if some parameters were rejected as invalid</returns>
+        public bool TakeParametersFrom(AriadneSettingsData data)
+        {
+            // TODO
+
+            return true;
         }
 
         #endregion

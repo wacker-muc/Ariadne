@@ -36,6 +36,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DetailsDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DetailsDialog.Designer.cs">
+      <DependentUpon>DetailsDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="MazeForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -50,6 +56,10 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="DetailsDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DetailsDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MazeForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>MazeForm.cs</DependentUpon>
@@ -68,6 +78,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="Properties\DataSources\AriadneSettingsData.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -86,6 +97,10 @@
     <ProjectReference Include="..\SWA.Ariadne.Model\SWA.Ariadne.Model.csproj">
       <Project>{1ECDFF25-8784-44B4-B4DA-25B20F1DF7EC}</Project>
       <Name>SWA.Ariadne.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SWA.Ariadne.Settings\SWA.Ariadne.Settings.csproj">
+      <Project>{30293912-CD50-4ECE-B51A-CD89890186F8}</Project>
+      <Name>SWA.Ariadne.Settings</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

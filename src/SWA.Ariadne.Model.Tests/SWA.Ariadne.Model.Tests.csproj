@@ -45,6 +45,10 @@
       <Project>{1ECDFF25-8784-44B4-B4DA-25B20F1DF7EC}</Project>
       <Name>SWA.Ariadne.Model</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SWA.Ariadne.Settings\SWA.Ariadne.Settings.csproj">
+      <Project>{30293912-CD50-4ECE-B51A-CD89890186F8}</Project>
+      <Name>SWA.Ariadne.Settings</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
 </Project>
