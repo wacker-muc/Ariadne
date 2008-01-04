@@ -4,11 +4,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{1ECDFF25-8784-44B4-B4DA-25B20F1DF7EC}</ProjectGuid>
+    <ProjectGuid>{30293912-CD50-4ECE-B51A-CD89890186F8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SWA.Ariadne.Model</RootNamespace>
-    <AssemblyName>SWA.Ariadne.Model</AssemblyName>
+    <RootNamespace>SWA.Ariadne.Settings</RootNamespace>
+    <AssemblyName>SWA.Ariadne.Settings</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -34,15 +34,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Maze.cs" />
-    <Compile Include="MazeSquare.cs" />
+    <Compile Include="AriadneSettingsData.cs" />
+    <Compile Include="IAriadneSettingsSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SWA.Ariadne.Settings\SWA.Ariadne.Settings.csproj">
-      <Project>{30293912-CD50-4ECE-B51A-CD89890186F8}</Project>
-      <Name>SWA.Ariadne.Settings</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

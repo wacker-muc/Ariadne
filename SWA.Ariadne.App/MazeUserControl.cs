@@ -6,10 +6,12 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 using SWA.Ariadne.Model;
+using SWA.Ariadne.Settings;
 
 namespace SWA.Ariadne.App
 {
     public partial class MazeUserControl : UserControl
+        , IAriadneSettingsSource
     {
         #region Constants
 
@@ -93,6 +95,22 @@ namespace SWA.Ariadne.App
             int gridWidth = r.Next(MinGridWidth, MaxGridWidth);
             
             this.Setup(gridWidth);
+        }
+
+        internal void Setup(AriadneSettingsData data)
+        {
+            if (!data.AutoGridWidth)
+            {
+                this.Setup(data.GridWidth);
+            }
+            else if (!data.AutoSquareWidth || !data.AutoSquareWidth || !data.AutoWallWidth)
+            {
+                this.Setup(data.SquareWidth, data.WallWidth, data.PathWidth);
+            }
+            else
+            {
+                this.Setup();
+            }
         }
 
         /// <summary>
@@ -306,6 +324,46 @@ namespace SWA.Ariadne.App
             }
 
             gBuffer.Render();
+        }
+
+        #endregion
+
+        #region IAriadneSettingsSource implementation
+
+        /// <summary>
+        /// Fill all modifyable parameters into the given data object.
+        /// </summary>
+        /// <param name="data"></param>
+        public void FillParametersInto(AriadneSettingsData data)
+        {
+            data.GridWidth = this.gridWidth;
+            data.PathCapStyle = System.Drawing.Drawing2D.LineCap.Square;
+            data.PathWidth = this.pathWidth;
+            data.SquareWidth = this.squareWidth;
+            data.WallWidth = this.wallWidth;
+
+            this.maze.FillParametersInto(data);
+        }
+
+        /// <summary>
+        /// Take all modifyable parameters from the given data object.
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns>false if some parameters were rejected as invalid</returns>
+        public bool TakeParametersFrom(AriadneSettingsData data)
+        {
+            bool result = true;
+
+            this.gridWidth = data.GridWidth;
+            this.pathWidth = data.PathWidth;
+            this.squareWidth = data.SquareWidth;
+            this.wallWidth = data.WallWidth;
+
+            result &= this.maze.TakeParametersFrom(data);
+
+            this.Setup(data);
+
+            return result;
         }
 
         #endregion

@@ -175,6 +175,12 @@ namespace SWA.Ariadne.App
             UpdateCaption();
         }
 
+        private void OnDetails(object sender, EventArgs e)
+        {
+            DetailsDialog form = new DetailsDialog(this.mazeUserControl);
+            form.ShowDialog(this);
+        }
+
         #endregion
 
         #region Solver controls
