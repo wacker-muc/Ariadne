@@ -34,7 +34,7 @@ namespace SWA.Ariadne.App
 
             // Create a data object, fill its contents from the target and add it to the BindingSource.
             this.data = new AriadneSettingsData();
-            data.FillFrom(target);
+            target.FillParametersInto(data);
             CalculateResultingArea();
             dataBindingSource.Add(data);
         }
@@ -48,10 +48,15 @@ namespace SWA.Ariadne.App
         /// <param name="sender"></param>
         /// <param name="e"></param>
         /// TODO: Should only draw the current maze with different attributes.
-        private void OnLayoutSet(object sender, EventArgs e)
+        private void OnSet(object sender, EventArgs e)
         {
             // Pass the modified data to the target.
             target.TakeParametersFrom(data);
+
+            // Reread the parameters, in case the target has not accepted every setting.
+            target.FillParametersInto(data);
+            CalculateResultingArea();
+            dataBindingSource.ResetCurrentItem();
         }
 
         /// <summary>
@@ -74,14 +79,14 @@ namespace SWA.Ariadne.App
         private void OnLayoutDataChanged(object sender, EventArgs e)
         {
             // Avoid an infinite recursion
-            if (_runningOnLayoutDataChanged)
+            if (_busyOnLayoutDataChanged)
             {
                 return;
             }
 
             try
             {
-                _runningOnLayoutDataChanged = true;
+                _busyOnLayoutDataChanged = true;
 
                 if (data.AutoGridWidthModified)
                 {
@@ -126,7 +131,7 @@ namespace SWA.Ariadne.App
                     data.PathWidth = Math.Min(data.PathWidth, data.SquareWidth);
                 }
 
-                if (!data.AutoGridWidth)
+                if (data.AutoGridWidthModified && !data.AutoGridWidth)
                 {
                     data.AutoSquareWidth = true;
                     data.AutoPathWidth = true;
@@ -143,10 +148,10 @@ namespace SWA.Ariadne.App
             }
             finally
             {
-                _runningOnLayoutDataChanged = false;
+                _busyOnLayoutDataChanged = false;
             }
         }
-        private bool _runningOnLayoutDataChanged = false;
+        private bool _busyOnLayoutDataChanged = false;
 
         private void CalculateResultingArea()
         {

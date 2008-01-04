@@ -62,7 +62,7 @@ namespace SWA.Ariadne.Model
         /// <summary>
         /// Maze dimension: number of squares.
         /// </summary>
-        private readonly int xSize, ySize;
+        private int xSize, ySize;
         #region Properties
         public int YSize
         {
@@ -87,7 +87,7 @@ namespace SWA.Ariadne.Model
         /// <summary>
         /// A source of random numbers.
         /// </summary>
-        private readonly Random random;
+        private Random random;
 
         /// <summary>
         /// Maximum initial seed value: 2^13-1.
@@ -98,7 +98,7 @@ namespace SWA.Ariadne.Model
         /// <summary>
         /// The seed used to initialize this.random.
         /// </summary>
-        private readonly int seed;
+        private int seed;
 
         /// <summary>
         /// Position and dimensions of some reserved areas.
@@ -829,7 +829,10 @@ namespace SWA.Ariadne.Model
         /// <param name="data"></param>
         public void FillParametersInto(AriadneSettingsData data)
         {
-            // TODO
+            data.MazeWidth = this.xSize;
+            data.MazeHeight = this.ySize;
+            data.Seed = this.seed;
+            data.Code = this.Code;
         }
 
         /// <summary>
@@ -839,7 +842,11 @@ namespace SWA.Ariadne.Model
         /// <returns>false if some parameters were rejected as invalid</returns>
         public bool TakeParametersFrom(AriadneSettingsData data)
         {
-            // TODO
+            this.xSize = Math.Max(MinSize, Math.Min(MaxXSize, data.MazeWidth));
+            this.ySize = Math.Max(MinSize, Math.Min(MaxYSize, data.MazeHeight));
+            this.seed = Math.Max(0, Math.Min(SeedLimit-1, data.Seed));
+            this.random = new Random(seed);
+            // Decode(data.Code);
 
             return true;
         }

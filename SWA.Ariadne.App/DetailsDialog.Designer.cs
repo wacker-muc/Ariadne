@@ -30,15 +30,15 @@ namespace SWA.Ariadne.App
         {
             this.components = new System.ComponentModel.Container();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.shapePage = new System.Windows.Forms.TabPage();
             this.layoutPage = new System.Windows.Forms.TabPage();
             this.autoGridWidthCheckBox = new System.Windows.Forms.CheckBox();
+            this.dataBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.autoWallWidthCheckBox = new System.Windows.Forms.CheckBox();
             this.autoPathWidthCheckBox = new System.Windows.Forms.CheckBox();
             this.label6 = new System.Windows.Forms.Label();
             this.autoSquareWidthCheckbox = new System.Windows.Forms.CheckBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.resultingAreaTextBox = new System.Windows.Forms.TextBox();
+            this.resultingAreaTextBox2 = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -51,32 +51,38 @@ namespace SWA.Ariadne.App
             this.squareWidthTextBox = new System.Windows.Forms.TextBox();
             this.setLayoutButton = new System.Windows.Forms.Button();
             this.colorsPage = new System.Windows.Forms.TabPage();
-            this.dataBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.shapePage = new System.Windows.Forms.TabPage();
+            this.resultingAreaTextBox1 = new System.Windows.Forms.TextBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.setShapeButton = new System.Windows.Forms.Button();
+            this.CodeLabel = new System.Windows.Forms.Label();
+            this.codeTextBox = new System.Windows.Forms.TextBox();
+            this.autoSeedCheckBox = new System.Windows.Forms.CheckBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.seedTextBox = new System.Windows.Forms.TextBox();
+            this.autoMazeHeightCheckBox = new System.Windows.Forms.CheckBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.mazeHeightTextBox = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.autoMazeWidthCheckBox = new System.Windows.Forms.CheckBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.mazeWidthBox = new System.Windows.Forms.TextBox();
             this.tabControl1.SuspendLayout();
             this.layoutPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataBindingSource)).BeginInit();
+            this.shapePage.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
             // 
-            this.tabControl1.Controls.Add(this.shapePage);
             this.tabControl1.Controls.Add(this.layoutPage);
             this.tabControl1.Controls.Add(this.colorsPage);
+            this.tabControl1.Controls.Add(this.shapePage);
             this.tabControl1.Location = new System.Drawing.Point(12, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(268, 249);
             this.tabControl1.TabIndex = 0;
-            // 
-            // shapePage
-            // 
-            this.shapePage.Location = new System.Drawing.Point(4, 22);
-            this.shapePage.Name = "shapePage";
-            this.shapePage.Padding = new System.Windows.Forms.Padding(3);
-            this.shapePage.Size = new System.Drawing.Size(260, 223);
-            this.shapePage.TabIndex = 0;
-            this.shapePage.Text = "Shape";
-            this.shapePage.UseVisualStyleBackColor = true;
             // 
             // layoutPage
             // 
@@ -86,7 +92,7 @@ namespace SWA.Ariadne.App
             this.layoutPage.Controls.Add(this.label6);
             this.layoutPage.Controls.Add(this.autoSquareWidthCheckbox);
             this.layoutPage.Controls.Add(this.label5);
-            this.layoutPage.Controls.Add(this.resultingAreaTextBox);
+            this.layoutPage.Controls.Add(this.resultingAreaTextBox2);
             this.layoutPage.Controls.Add(this.label4);
             this.layoutPage.Controls.Add(this.label3);
             this.layoutPage.Controls.Add(this.label2);
@@ -116,6 +122,11 @@ namespace SWA.Ariadne.App
             this.autoGridWidthCheckBox.TabIndex = 14;
             this.autoGridWidthCheckBox.UseVisualStyleBackColor = true;
             this.autoGridWidthCheckBox.Click += new System.EventHandler(this.OnClickAutoCheckbox);
+            // 
+            // dataBindingSource
+            // 
+            this.dataBindingSource.DataSource = typeof(SWA.Ariadne.Settings.AriadneSettingsData);
+            this.dataBindingSource.CurrentItemChanged += new System.EventHandler(this.OnLayoutDataChanged);
             // 
             // autoWallWidthCheckBox
             // 
@@ -169,24 +180,24 @@ namespace SWA.Ariadne.App
             this.label5.Text = "Path cap style";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // resultingAreaTextBox
+            // resultingAreaTextBox2
             // 
-            this.resultingAreaTextBox.BackColor = System.Drawing.SystemColors.Control;
-            this.resultingAreaTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.resultingAreaTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.dataBindingSource, "ResultingArea", true));
-            this.resultingAreaTextBox.Enabled = false;
-            this.resultingAreaTextBox.Location = new System.Drawing.Point(173, 113);
-            this.resultingAreaTextBox.MaxLength = 12;
-            this.resultingAreaTextBox.Name = "resultingAreaTextBox";
-            this.resultingAreaTextBox.Size = new System.Drawing.Size(72, 20);
-            this.resultingAreaTextBox.TabIndex = 10;
-            this.resultingAreaTextBox.TabStop = false;
-            this.resultingAreaTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.resultingAreaTextBox2.BackColor = System.Drawing.SystemColors.Control;
+            this.resultingAreaTextBox2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.resultingAreaTextBox2.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.dataBindingSource, "ResultingArea", true));
+            this.resultingAreaTextBox2.Enabled = false;
+            this.resultingAreaTextBox2.Location = new System.Drawing.Point(173, 56);
+            this.resultingAreaTextBox2.MaxLength = 12;
+            this.resultingAreaTextBox2.Name = "resultingAreaTextBox2";
+            this.resultingAreaTextBox2.Size = new System.Drawing.Size(72, 20);
+            this.resultingAreaTextBox2.TabIndex = 10;
+            this.resultingAreaTextBox2.TabStop = false;
+            this.resultingAreaTextBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(170, 97);
+            this.label4.Location = new System.Drawing.Point(170, 40);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(75, 13);
             this.label4.TabIndex = 9;
@@ -290,7 +301,7 @@ namespace SWA.Ariadne.App
             this.setLayoutButton.TabIndex = 99;
             this.setLayoutButton.Text = "Set";
             this.setLayoutButton.UseVisualStyleBackColor = true;
-            this.setLayoutButton.Click += new System.EventHandler(this.OnLayoutSet);
+            this.setLayoutButton.Click += new System.EventHandler(this.OnSet);
             // 
             // colorsPage
             // 
@@ -302,10 +313,184 @@ namespace SWA.Ariadne.App
             this.colorsPage.Text = "Colors";
             this.colorsPage.UseVisualStyleBackColor = true;
             // 
-            // dataBindingSource
+            // shapePage
             // 
-            this.dataBindingSource.DataSource = typeof(SWA.Ariadne.Settings.AriadneSettingsData);
-            this.dataBindingSource.CurrentItemChanged += new System.EventHandler(this.OnLayoutDataChanged);
+            this.shapePage.Controls.Add(this.resultingAreaTextBox1);
+            this.shapePage.Controls.Add(this.label12);
+            this.shapePage.Controls.Add(this.setShapeButton);
+            this.shapePage.Controls.Add(this.CodeLabel);
+            this.shapePage.Controls.Add(this.codeTextBox);
+            this.shapePage.Controls.Add(this.autoSeedCheckBox);
+            this.shapePage.Controls.Add(this.label10);
+            this.shapePage.Controls.Add(this.seedTextBox);
+            this.shapePage.Controls.Add(this.autoMazeHeightCheckBox);
+            this.shapePage.Controls.Add(this.label9);
+            this.shapePage.Controls.Add(this.mazeHeightTextBox);
+            this.shapePage.Controls.Add(this.label7);
+            this.shapePage.Controls.Add(this.autoMazeWidthCheckBox);
+            this.shapePage.Controls.Add(this.label8);
+            this.shapePage.Controls.Add(this.mazeWidthBox);
+            this.shapePage.Location = new System.Drawing.Point(4, 22);
+            this.shapePage.Name = "shapePage";
+            this.shapePage.Padding = new System.Windows.Forms.Padding(3);
+            this.shapePage.Size = new System.Drawing.Size(260, 223);
+            this.shapePage.TabIndex = 0;
+            this.shapePage.Text = "Shape";
+            this.shapePage.UseVisualStyleBackColor = true;
+            // 
+            // resultingAreaTextBox1
+            // 
+            this.resultingAreaTextBox1.BackColor = System.Drawing.SystemColors.Control;
+            this.resultingAreaTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.resultingAreaTextBox1.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.dataBindingSource, "ResultingArea", true));
+            this.resultingAreaTextBox1.Enabled = false;
+            this.resultingAreaTextBox1.Location = new System.Drawing.Point(173, 56);
+            this.resultingAreaTextBox1.MaxLength = 12;
+            this.resultingAreaTextBox1.Name = "resultingAreaTextBox1";
+            this.resultingAreaTextBox1.Size = new System.Drawing.Size(72, 20);
+            this.resultingAreaTextBox1.TabIndex = 102;
+            this.resultingAreaTextBox1.TabStop = false;
+            this.resultingAreaTextBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(170, 40);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(75, 13);
+            this.label12.TabIndex = 101;
+            this.label12.Text = "Resulting area";
+            this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // setShapeButton
+            // 
+            this.setShapeButton.Location = new System.Drawing.Point(91, 194);
+            this.setShapeButton.Name = "setShapeButton";
+            this.setShapeButton.Size = new System.Drawing.Size(75, 23);
+            this.setShapeButton.TabIndex = 100;
+            this.setShapeButton.Text = "Set";
+            this.setShapeButton.UseVisualStyleBackColor = true;
+            this.setShapeButton.Click += new System.EventHandler(this.OnSet);
+            // 
+            // CodeLabel
+            // 
+            this.CodeLabel.AutoSize = true;
+            this.CodeLabel.Location = new System.Drawing.Point(16, 116);
+            this.CodeLabel.Name = "CodeLabel";
+            this.CodeLabel.Size = new System.Drawing.Size(32, 13);
+            this.CodeLabel.TabIndex = 25;
+            this.CodeLabel.Text = "Code";
+            this.CodeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // codeTextBox
+            // 
+            this.codeTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.dataBindingSource, "Code", true));
+            this.codeTextBox.Location = new System.Drawing.Point(91, 113);
+            this.codeTextBox.MaxLength = 14;
+            this.codeTextBox.Name = "codeTextBox";
+            this.codeTextBox.Size = new System.Drawing.Size(154, 20);
+            this.codeTextBox.TabIndex = 4;
+            this.codeTextBox.Text = "WWWW-WWWW-WWWW";
+            this.codeTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // autoSeedCheckBox
+            // 
+            this.autoSeedCheckBox.AutoSize = true;
+            this.autoSeedCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.dataBindingSource, "AutoSeed", true));
+            this.autoSeedCheckBox.Location = new System.Drawing.Point(134, 84);
+            this.autoSeedCheckBox.Name = "autoSeedCheckBox";
+            this.autoSeedCheckBox.Size = new System.Drawing.Size(15, 14);
+            this.autoSeedCheckBox.TabIndex = 13;
+            this.autoSeedCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(16, 84);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(32, 13);
+            this.label10.TabIndex = 22;
+            this.label10.Text = "Seed";
+            this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // seedTextBox
+            // 
+            this.seedTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.dataBindingSource, "Seed", true));
+            this.seedTextBox.Location = new System.Drawing.Point(91, 81);
+            this.seedTextBox.MaxLength = 5;
+            this.seedTextBox.Name = "seedTextBox";
+            this.seedTextBox.Size = new System.Drawing.Size(36, 20);
+            this.seedTextBox.TabIndex = 3;
+            this.seedTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // autoMazeHeightCheckBox
+            // 
+            this.autoMazeHeightCheckBox.AutoSize = true;
+            this.autoMazeHeightCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.dataBindingSource, "AutoMazeHeight", true));
+            this.autoMazeHeightCheckBox.Location = new System.Drawing.Point(134, 58);
+            this.autoMazeHeightCheckBox.Name = "autoMazeHeightCheckBox";
+            this.autoMazeHeightCheckBox.Size = new System.Drawing.Size(15, 14);
+            this.autoMazeHeightCheckBox.TabIndex = 12;
+            this.autoMazeHeightCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(16, 58);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(65, 13);
+            this.label9.TabIndex = 19;
+            this.label9.Text = "Maze height";
+            this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // mazeHeightTextBox
+            // 
+            this.mazeHeightTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.dataBindingSource, "MazeHeight", true));
+            this.mazeHeightTextBox.Location = new System.Drawing.Point(91, 55);
+            this.mazeHeightTextBox.MaxLength = 3;
+            this.mazeHeightTextBox.Name = "mazeHeightTextBox";
+            this.mazeHeightTextBox.Size = new System.Drawing.Size(36, 20);
+            this.mazeHeightTextBox.TabIndex = 2;
+            this.mazeHeightTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(131, 11);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(54, 13);
+            this.label7.TabIndex = 17;
+            this.label7.Text = "Automatic";
+            // 
+            // autoMazeWidthCheckBox
+            // 
+            this.autoMazeWidthCheckBox.AutoSize = true;
+            this.autoMazeWidthCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.dataBindingSource, "AutoMazeWidth", true));
+            this.autoMazeWidthCheckBox.Location = new System.Drawing.Point(134, 32);
+            this.autoMazeWidthCheckBox.Name = "autoMazeWidthCheckBox";
+            this.autoMazeWidthCheckBox.Size = new System.Drawing.Size(15, 14);
+            this.autoMazeWidthCheckBox.TabIndex = 11;
+            this.autoMazeWidthCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(16, 32);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(61, 13);
+            this.label8.TabIndex = 15;
+            this.label8.Text = "Maze width";
+            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // mazeWidthBox
+            // 
+            this.mazeWidthBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.dataBindingSource, "MazeWidth", true));
+            this.mazeWidthBox.Location = new System.Drawing.Point(91, 29);
+            this.mazeWidthBox.MaxLength = 3;
+            this.mazeWidthBox.Name = "mazeWidthBox";
+            this.mazeWidthBox.Size = new System.Drawing.Size(36, 20);
+            this.mazeWidthBox.TabIndex = 1;
+            this.mazeWidthBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // DetailsDialog
             // 
@@ -323,6 +508,8 @@ namespace SWA.Ariadne.App
             this.layoutPage.ResumeLayout(false);
             this.layoutPage.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataBindingSource)).EndInit();
+            this.shapePage.ResumeLayout(false);
+            this.shapePage.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -344,7 +531,7 @@ namespace SWA.Ariadne.App
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox resultingAreaTextBox;
+        private System.Windows.Forms.TextBox resultingAreaTextBox2;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.CheckBox autoGridWidthCheckBox;
         private System.Windows.Forms.CheckBox autoWallWidthCheckBox;
@@ -352,5 +539,20 @@ namespace SWA.Ariadne.App
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.CheckBox autoSquareWidthCheckbox;
         private System.Windows.Forms.BindingSource dataBindingSource;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.CheckBox autoMazeWidthCheckBox;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.TextBox mazeWidthBox;
+        private System.Windows.Forms.Label CodeLabel;
+        private System.Windows.Forms.TextBox codeTextBox;
+        private System.Windows.Forms.CheckBox autoSeedCheckBox;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.TextBox seedTextBox;
+        private System.Windows.Forms.CheckBox autoMazeHeightCheckBox;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.TextBox mazeHeightTextBox;
+        private System.Windows.Forms.TextBox resultingAreaTextBox1;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Button setShapeButton;
     }
 }
