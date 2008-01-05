@@ -413,7 +413,7 @@ namespace SWA.Ariadne.Model
         #region Setup methods
 
         /// <summary>
-        /// Reserve a rectanglurar region of the given dimensions.
+        /// Reserves a rectanglurar region of the given dimensions at a random location.
         /// The area must not touch any other reserved ares.
         /// </summary>
         /// <param name="width"></param>
@@ -422,7 +422,7 @@ namespace SWA.Ariadne.Model
         public bool ReserveRectangle(int width, int height)
         {
             // Reject very large areas.
-            if (width < 2 || height < 2 || width > xSize-4 || height > ySize-4)
+            if (width < 2 || height < 2 || width > xSize - 4 || height > ySize - 4)
             {
                 return false;
             }
@@ -434,28 +434,66 @@ namespace SWA.Ariadne.Model
                 int x = random.Next(0, xSize - width);
                 int y = random.Next(0, ySize - width);
 
-                // A candiadte rectangle.
-                Rectangle candidate = new Rectangle(x, y, width, height);
-
-                // The candidate, extended with one square around all four edges.
-                Rectangle extendedCandidate = new Rectangle(x - 1, y - 1, width + 2, height + 2);
-
-                bool reject = false;
-                foreach (Rectangle rect in this.reservedAreas)
+                if (ReserveRectangle(x, y, width, height))
                 {
-                    // Reject the candidate if its extension would intersect with another reserved area.
-                    if (extendedCandidate.IntersectsWith(rect))
-                    {
-                        reject = true;
-                        break; // foreach rect
-                    }
-                }
-
-                if (!reject)
-                {
-                    reservedAreas.Add(candidate);
                     return true;
                 }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Reserves a rectanglurar region of the given dimensions.
+        /// The area must not touch any other reserved ares.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <returns>true if the reservation was successful</returns>
+        public bool ReserveRectangle(int x, int y, int width, int height)
+        {
+            // Restrict to the actual maze area.
+            if (x < 0)
+            {
+                width += x;
+                x = 0;
+            }
+            if (y < 0)
+            {
+                height += y;
+                y = 0;
+            }
+            width = Math.Min(xSize - x, width);
+            height = Math.Min(ySize - y, height);
+
+            // Reject very large areas.
+            if (width < 1 || height < 1 || width > xSize - 4 || height > ySize - 4)
+            {
+                return false;
+            }
+
+            // The candiadte rectangle.
+            Rectangle candidate = new Rectangle(x, y, width, height);
+
+            // The candidate, extended with one square around all four edges.
+            Rectangle extendedCandidate = new Rectangle(x - 1, y - 1, width + 2, height + 2);
+
+            bool reject = false;
+            foreach (Rectangle rect in this.reservedAreas)
+            {
+                // Reject the candidate if its extension would intersect with another reserved area.
+                if (extendedCandidate.IntersectsWith(rect))
+                {
+                    reject = true;
+                }
+            }
+
+            if (!reject)
+            {
+                reservedAreas.Add(candidate);
+                return true;
             }
 
             return false;
@@ -753,7 +791,7 @@ namespace SWA.Ariadne.Model
         /// </summary>
         private void FixBorderWalls()
         {
-            CloseWalls(0, xSize, 0, ySize);
+            CloseWalls(0, xSize, 0, ySize, MazeSquare.WallState.WS_CLOSED);
         }
 
         /// <summary>
@@ -771,7 +809,8 @@ namespace SWA.Ariadne.Model
                     }
                 }
 
-                CloseWalls(rect.Left, rect.Right, rect.Top, rect.Bottom);
+                // Close the walls around the area but open the walls on the border.
+                CloseWalls(rect.Left, rect.Right, rect.Top, rect.Bottom, MazeSquare.WallState.WS_OPEN);
             }
         }
 
@@ -782,21 +821,22 @@ namespace SWA.Ariadne.Model
         /// <param name="right">right border x coordinate (outside)</param>
         /// <param name="top">top border y coordinate (inside)</param>
         /// <param name="bottom">bottom border y coordinate (outside)</param>
-        private void CloseWalls(int left, int right, int top, int bottom)
+        /// <param name="borderState">WallState to be applied to walls on the border of the maze</param>
+        private void CloseWalls(int left, int right, int top, int bottom, MazeSquare.WallState borderState)
         {
             for (int x = left; x < right; x++)
             {
                 int y1 = top;
                 int y2 = bottom - 1;
-                this.squares[x, y1][MazeSquare.WallPosition.WP_N] = MazeSquare.WallState.WS_CLOSED;
-                this.squares[x, y2][MazeSquare.WallPosition.WP_S] = MazeSquare.WallState.WS_CLOSED;
+                this.squares[x, y1][MazeSquare.WallPosition.WP_N] = (y1 == 0 ? borderState : MazeSquare.WallState.WS_CLOSED);
+                this.squares[x, y2][MazeSquare.WallPosition.WP_S] = (y2+1 == ySize ? borderState : MazeSquare.WallState.WS_CLOSED);
             }
             for (int y = top; y < bottom; y++)
             {
                 int x1 = left;
                 int x2 = right - 1;
-                this.squares[x1, y][MazeSquare.WallPosition.WP_W] = MazeSquare.WallState.WS_CLOSED;
-                this.squares[x2, y][MazeSquare.WallPosition.WP_E] = MazeSquare.WallState.WS_CLOSED;
+                this.squares[x1, y][MazeSquare.WallPosition.WP_W] = (x1 == 0 ? borderState : MazeSquare.WallState.WS_CLOSED);
+                this.squares[x2, y][MazeSquare.WallPosition.WP_E] = (x2+1 == xSize ? borderState : MazeSquare.WallState.WS_CLOSED);
             }
         }
 
