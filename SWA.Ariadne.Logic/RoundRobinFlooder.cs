@@ -14,7 +14,7 @@ namespace SWA.Ariadne.Logic
         #region Member variables
 
         /// <summary>
-        /// All squares passed in forward directions are collected in a queue.
+        /// All squares passed in forward direction are collected in a queue.
         /// </summary>
         private Queue<MazeSquare> queue = new Queue<MazeSquare>();
 
