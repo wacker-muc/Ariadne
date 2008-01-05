@@ -46,9 +46,9 @@ namespace SWA.Ariadne.App
 
         private BufferedGraphics gBuffer;
 
-        public MazeForm MazeForm
+        internal IMazeForm MazeForm
         {
-            get { return (MazeForm)this.ParentForm; }
+            get { return (IMazeForm)this.ParentForm; }
         }
 
         #endregion
@@ -144,6 +144,69 @@ namespace SWA.Ariadne.App
             catch (InvalidCastException) { }
         }
 
+        /// <summary>
+        /// Reserves a region of the maze covered by the coveringControl.
+        /// This MazeUserControl and the coveringControl must have the same Parent, i.e. a common coordinate system.
+        /// </summary>
+        /// <param name="coveringControl"></param>
+        /// <exception cref="ArgumentException">The given Control has a differnent Parent.</exception>
+        internal bool ReserveArea(Control coveringControl)
+        {
+            if (coveringControl.Parent != this.Parent)
+            {
+                throw new ArgumentException("Must have the same Parent.", "coveringControl");
+            }
+
+            // Dimensions of the control in square coordinates.
+            int x, y, w, h;
+            x = XCoordinate(coveringControl.Left);
+            y = YCoordinate(coveringControl.Top);
+            w = 1 + XCoordinate(coveringControl.Right) - x;
+            h = 1 + XCoordinate(coveringControl.Bottom) - y;
+
+            bool result = maze.ReserveRectangle(x, y, w, h);
+
+            // Move the control into the center of the reserved area.
+            if (result)
+            {
+                int cx = coveringControl.Location.X;
+                int cy = coveringControl.Location.Y;
+
+                if (0 < x && x + w < maze.XSize - 1)
+                {
+                    cx = this.Location.X + xOffset + x * gridWidth;
+                    cx += (w * gridWidth - coveringControl.Width) / 2;
+                }
+                if (0 < y && x + w < maze.XSize - 1)
+                {
+                    cy = this.Location.Y + yOffset + y * gridWidth;
+                    cy += (h * gridWidth - coveringControl.Height) / 2;
+                }
+                
+                coveringControl.Location = new Point(cx, cy);
+            }
+
+            return result;
+        }
+
+        private int XCoordinate(int xLocation)
+        {
+            int result = (xLocation - this.Location.X);
+            result -= xOffset;
+            result /= gridWidth;
+            
+            return result;
+        }
+
+        private int YCoordinate(int yLocation)
+        {
+            int result = (yLocation - this.Location.Y);
+            result -= yOffset;
+            result /= gridWidth;
+
+            return result;
+        }
+
         private void PlaceEndpoints()
         {
             maze.PlaceEndpoints();
@@ -197,24 +260,32 @@ namespace SWA.Ariadne.App
             //
             if (gBuffer == null)
             {
-                BufferedGraphicsContext currentContext = BufferedGraphicsManager.Current;
-                gBuffer = currentContext.Allocate(this.CreateGraphics(), this.DisplayRectangle);
-
-                Graphics g = gBuffer.Graphics;
-
-                // The PaintWalls() method fails in design mode.
-                try
-                {
-                    PaintBorder(g);
-                    PaintWalls(g);
-                    PaintEndpoints(g);
-                    //PaintPath(g);
-                }
-                catch (MissingMethodException) { }
+                PaintMaze();
             }
 
             gBuffer.Render();
             //gBuffer.Render(e.Graphics);
+        }
+
+        /// <summary>
+        /// Creates the GraphicsBuffer and draws the static maze.
+        /// </summary>
+        internal void PaintMaze()
+        {
+            BufferedGraphicsContext currentContext = BufferedGraphicsManager.Current;
+            gBuffer = currentContext.Allocate(this.CreateGraphics(), this.DisplayRectangle);
+
+            Graphics g = gBuffer.Graphics;
+
+            // The PaintWalls() method fails in design mode.
+            try
+            {
+                PaintBorder(g);
+                PaintWalls(g);
+                PaintEndpoints(g);
+                //PaintPath(g);
+            }
+            catch (MissingMethodException) { }
         }
 
         /// <summary>
@@ -223,7 +294,38 @@ namespace SWA.Ariadne.App
         /// <param name="g"></param>
         private void PaintBorder(Graphics g)
         {
-            g.DrawRectangle(wallPen, new Rectangle(xOffset, yOffset, maze.XSize * gridWidth, maze.YSize * gridWidth));
+            /* Actually, we only paint the east and south wall of every
+             * square on the respective border.
+             * We don't optimize by drawing long lines or a rectangle
+             * because there may be reserved areas on the border
+             * and the walls may be open instead of closed.
+             */
+
+            // Draw the south walls of every square on the southern border.
+            for (int x = 0; x < maze.XSize; x++)
+            {
+                int cx = xOffset + x * gridWidth;
+                int cy = yOffset + maze.YSize * gridWidth;
+                MazeSquare sq = maze[x, maze.YSize-1];
+
+                if (sq[MazeSquare.WallPosition.WP_S] == MazeSquare.WallState.WS_CLOSED)
+                {
+                    g.DrawLine(wallPen, cx, cy, cx + gridWidth, cy);
+                }
+            }
+
+            // Draw the east walls of every square on the eastern border.
+            for (int y = 0; y < maze.YSize; y++)
+            {
+                int cy = yOffset + y * gridWidth;
+                int cx = xOffset + maze.XSize * gridWidth;
+                MazeSquare sq = maze[maze.XSize-1, y];
+
+                if (sq[MazeSquare.WallPosition.WP_E] == MazeSquare.WallState.WS_CLOSED)
+                {
+                    g.DrawLine(wallPen, cx, cy, cx, cy + gridWidth);
+                }
+            }
         }
 
         /// <summary>
@@ -232,7 +334,7 @@ namespace SWA.Ariadne.App
         /// <param name="g"></param>
         private void PaintWalls(Graphics g)
         {
-            // We'll only draw the west and east walls of every square.
+            // We'll only draw the west and north walls of every square.
             for (int x = 0; x < maze.XSize; x++)
             {
                 int cx = xOffset + x * gridWidth;

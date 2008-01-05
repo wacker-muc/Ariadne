@@ -11,6 +11,7 @@ using SWA.Ariadne.Logic;
 namespace SWA.Ariadne.App
 {
     public partial class MazeForm : Form
+        , IMazeForm
     {
         #region Member variables
 
@@ -110,25 +111,6 @@ namespace SWA.Ariadne.App
 
         #endregion
 
-        #region MazeUserControl Setup support
-
-        /// <summary>
-        /// Place reserved areas into the maze.
-        /// This method is called from the MazeUserControl before actually building the maze.
-        /// </summary>
-        /// <param name="maze"></param>
-        internal void MakeReservedAreas(Maze maze)
-        {
-#if false
-            Random r = new Random();
-            while (maze.ReserveRectangle(r.Next(2, 8), r.Next(2, 8)))
-            {
-            }
-#endif
-        }
-
-        #endregion
-
         #region Event handlers
 
         #region Maze controls
@@ -182,6 +164,12 @@ namespace SWA.Ariadne.App
                 DetailsDialog form = new DetailsDialog(this.mazeUserControl);
                 form.ShowDialog(this);
             }
+        }
+
+        private void OnAbout(object sender, EventArgs e)
+        {
+            AboutBox form = new AboutBox();
+            form.ShowDialog(this);
         }
 
         #endregion
@@ -389,16 +377,26 @@ namespace SWA.Ariadne.App
 
         #endregion
 
-        #region Access to the form's controls
+        #region IMazeForm implementation
 
-        public string StatusLine
+        /// <summary>
+        /// Place reserved areas into the maze.
+        /// This method is called from the MazeUserControl before actually building the maze.
+        /// </summary>
+        /// <param name="maze"></param>
+        public void MakeReservedAreas(Maze maze)
         {
-            set
+#if false
+            Random r = new Random();
+            while (maze.ReserveRectangle(r.Next(2, 8), r.Next(2, 8)))
             {
-                this.statusLabel.Text = value;
             }
+#endif
         }
 
+        /// <summary>
+        /// Display information about the running MazeSolver in the status line.
+        /// </summary>
         public void UpdateStatusLine()
         {
             StringBuilder message = new StringBuilder(200);
@@ -417,7 +415,7 @@ namespace SWA.Ariadne.App
                 message.Append(" = " + sps.ToString("0") + " steps/sec");
             }
 
-            this.StatusLine = message.ToString();
+            this.statusLabel.Text = message.ToString();
         }
 
         #endregion
