@@ -9,8 +9,6 @@ using SWA.Ariadne.Settings;
 
 namespace SWA.Ariadne.App
 {
-    #region class DetailsDialog
-
     public partial class DetailsDialog : Form
     {
         #region Member variables
@@ -36,6 +34,9 @@ namespace SWA.Ariadne.App
             this.data = new AriadneSettingsData();
             target.FillParametersInto(data);
             CalculateResultingArea();
+            data.AutoSquareWidth = data.AutoPathWidth = data.AutoWallWidth = data.AutoGridWidth = true;
+            data.AutoMazeWidth = data.AutoMazeHeight = data.AutoSeed = true;
+            data.ClearModifedFlags();
             dataBindingSource.Add(data);
         }
 
@@ -56,6 +57,7 @@ namespace SWA.Ariadne.App
             // Reread the parameters, in case the target has not accepted every setting.
             target.FillParametersInto(data);
             CalculateResultingArea();
+            data.ClearModifedFlags();
             dataBindingSource.ResetCurrentItem();
         }
 
@@ -76,17 +78,19 @@ namespace SWA.Ariadne.App
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OnLayoutDataChanged(object sender, EventArgs e)
+        private void OnDataChanged(object sender, EventArgs e)
         {
             // Avoid an infinite recursion
-            if (_busyOnLayoutDataChanged)
+            if (_busyOnDataChanged)
             {
                 return;
             }
 
             try
             {
-                _busyOnLayoutDataChanged = true;
+                _busyOnDataChanged = true;
+
+                #region Layout data
 
                 if (data.AutoGridWidthModified)
                 {
@@ -142,30 +146,41 @@ namespace SWA.Ariadne.App
                     data.AutoGridWidth = true;
                 }
 
+                #endregion
+
+                #region Shape data
+
+                if (data.MazeWidthModified)
+                {
+                    data.AutoMazeWidth = false;
+                }
+                if (data.MazeHeightModified)
+                {
+                    data.AutoMazeHeight = false;
+                }
+                if (data.SeedModified)
+                {
+                    data.AutoSeed = false;
+                }
+
+                #endregion
+
                 CalculateResultingArea();
                 data.ClearModifedFlags();
                 dataBindingSource.ResetCurrentItem();
             }
             finally
             {
-                _busyOnLayoutDataChanged = false;
+                _busyOnDataChanged = false;
             }
         }
-        private bool _busyOnLayoutDataChanged = false;
+        private bool _busyOnDataChanged = false;
 
         private void CalculateResultingArea()
         {
-            // TODO: xSize and ySize
-            int width = 1 * data.SquareWidth + data.WallWidth;
-            int height = 1 * data.SquareWidth + data.WallWidth;
+            int width = data.MazeWidth * data.GridWidth + data.WallWidth;
+            int height = data.MazeHeight * data.GridWidth + data.WallWidth;
             data.ResultingArea = width.ToString() + " x " + height.ToString();
         }
     }
-
-    #endregion
-
-    #region class AriadneSettingsData
-
-
-    #endregion
 }

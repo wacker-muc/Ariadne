@@ -126,7 +126,7 @@ namespace SWA.Ariadne.App
             // dataBindingSource
             // 
             this.dataBindingSource.DataSource = typeof(SWA.Ariadne.Settings.AriadneSettingsData);
-            this.dataBindingSource.CurrentItemChanged += new System.EventHandler(this.OnLayoutDataChanged);
+            this.dataBindingSource.CurrentItemChanged += new System.EventHandler(this.OnDataChanged);
             // 
             // autoWallWidthCheckBox
             // 
@@ -402,6 +402,7 @@ namespace SWA.Ariadne.App
             this.autoSeedCheckBox.Size = new System.Drawing.Size(15, 14);
             this.autoSeedCheckBox.TabIndex = 13;
             this.autoSeedCheckBox.UseVisualStyleBackColor = true;
+            this.autoSeedCheckBox.Click += new System.EventHandler(this.OnClickAutoCheckbox);
             // 
             // label10
             // 
@@ -432,6 +433,7 @@ namespace SWA.Ariadne.App
             this.autoMazeHeightCheckBox.Size = new System.Drawing.Size(15, 14);
             this.autoMazeHeightCheckBox.TabIndex = 12;
             this.autoMazeHeightCheckBox.UseVisualStyleBackColor = true;
+            this.autoMazeHeightCheckBox.Click += new System.EventHandler(this.OnClickAutoCheckbox);
             // 
             // label9
             // 
@@ -471,6 +473,7 @@ namespace SWA.Ariadne.App
             this.autoMazeWidthCheckBox.Size = new System.Drawing.Size(15, 14);
             this.autoMazeWidthCheckBox.TabIndex = 11;
             this.autoMazeWidthCheckBox.UseVisualStyleBackColor = true;
+            this.autoMazeWidthCheckBox.Click += new System.EventHandler(this.OnClickAutoCheckbox);
             // 
             // label8
             // 
@@ -496,8 +499,9 @@ namespace SWA.Ariadne.App
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(292, 273);
+            this.ClientSize = new System.Drawing.Size(294, 278);
             this.Controls.Add(this.tabControl1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.MaximumSize = new System.Drawing.Size(300, 300);
             this.MinimumSize = new System.Drawing.Size(300, 300);
             this.Name = "DetailsDialog";

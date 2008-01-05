@@ -82,12 +82,20 @@ namespace SWA.Ariadne.App
 
         public void Setup(int gridWidth)
         {
-            int wallWidth = (int)(0.3 * gridWidth);
-            if (wallWidth < 1) { wallWidth = 1; }
-            int squareWidth = gridWidth - wallWidth;
-            int pathWidth = (int)(0.7 * squareWidth);
+            int wallWidth;
+            int squareWidth;
+            int pathWidth;
+            SuggestWidths(gridWidth, out wallWidth, out squareWidth, out pathWidth);
 
             this.Setup(squareWidth, wallWidth, pathWidth);
+        }
+
+        private static void SuggestWidths(int gridWidth, out int wallWidth, out int squareWidth, out int pathWidth)
+        {
+            wallWidth = (int)(0.3 * gridWidth);
+            if (wallWidth < 1) { wallWidth = 1; }
+            squareWidth = gridWidth - wallWidth;
+            pathWidth = (int)(0.7 * squareWidth);
         }
 
         internal void Setup()
@@ -121,12 +129,9 @@ namespace SWA.Ariadne.App
         private void CreateMaze()
         {
             // Determine dimensions of a maze that fits into the drawing area.
-            int xSize = (this.Width  - this.wallWidth - 4) / this.gridWidth;
-            int ySize = (this.Height - this.wallWidth - 4) / this.gridWidth;
-
-            // Determine offset for centering the maze in the drawing area.
-            this.xOffset = (this.Width - xSize * gridWidth) / 2;
-            this.yOffset = (this.Height - ySize * gridWidth) / 2;
+            int xSize, ySize;
+            FitMazeWidth(out xSize, out this.xOffset);
+            FitMazeHeight(out ySize, out this.yOffset);
 
             // Create a maze.
             this.maze = new Maze(xSize, ySize);
@@ -142,6 +147,18 @@ namespace SWA.Ariadne.App
                 this.MazeForm.UpdateStatusLine();
             }
             catch (InvalidCastException) { }
+        }
+
+        private void FitMazeWidth(out int width, out int offset)
+        {
+            width = (this.Width - this.wallWidth - 4) / this.gridWidth;
+            offset = (this.Width - width * this.gridWidth) / 2;
+        }
+
+        private void FitMazeHeight(out int height, out int offset)
+        {
+            height = (this.Height - this.wallWidth - 4) / this.gridWidth;
+            offset = (this.Height - height * this.gridWidth) / 2;
         }
 
         /// <summary>
@@ -453,17 +470,54 @@ namespace SWA.Ariadne.App
         /// Take all modifyable parameters from the given data object.
         /// </summary>
         /// <param name="data"></param>
-        /// <returns>false if some parameters were rejected as invalid</returns>
-        public bool TakeParametersFrom(AriadneSettingsData data)
+        public void TakeParametersFrom(AriadneSettingsData data)
         {
-            bool result = true;
+            #region Take parameters concerning this MazeUserControl
 
-            this.gridWidth = data.GridWidth;
-            this.pathWidth = data.PathWidth;
-            this.squareWidth = data.SquareWidth;
-            this.wallWidth = data.WallWidth;
+            int maxAcceptedGridWidth = MaxGridWidth * 3;
+            int maxAcceptedWallWidth = maxAcceptedGridWidth / 2;
 
-            result &= this.maze.TakeParametersFrom(data);
+            if (!data.AutoGridWidth)
+            {
+                this.gridWidth = Math.Max(2, Math.Min(maxAcceptedGridWidth, data.GridWidth));
+
+                SuggestWidths(gridWidth, out wallWidth, out squareWidth, out pathWidth);
+            }
+            else if (!data.AutoSquareWidth || !data.AutoPathWidth || !data.AutoWallWidth)
+            {
+                this.wallWidth = Math.Max(1, Math.Min(maxAcceptedWallWidth, data.WallWidth));
+                this.squareWidth = Math.Max(1, Math.Min(maxAcceptedGridWidth - wallWidth, data.SquareWidth));
+                this.pathWidth = Math.Max(1, Math.Min(squareWidth, data.PathWidth));
+
+                this.gridWidth = squareWidth + wallWidth;
+            }
+            else
+            {
+                Random r = new Random();
+                this.gridWidth = r.Next(MinGridWidth, MaxGridWidth);
+                SuggestWidths(gridWidth, out wallWidth, out squareWidth, out pathWidth);
+            }
+
+            #endregion
+
+            #region Adjust automatic parameters of the underlying Maze
+
+            if (data.AutoMazeWidth)
+            {
+                int width;
+                FitMazeWidth(out width, out this.xOffset);
+                data.MazeWidth = width;
+            }
+            if (data.AutoMazeHeight)
+            {
+                int height;
+                FitMazeHeight(out height, out this.yOffset);
+                data.MazeHeight = height;
+            }
+
+            #endregion
+
+            maze.TakeParametersFrom(data);
 
             #region Do the equivalent of Setup() with the modified parameters.
 
@@ -478,8 +532,6 @@ namespace SWA.Ariadne.App
             Reset();
 
             #endregion
-
-            return result;
         }
 
         #endregion
