@@ -6,31 +6,30 @@ using SWA.Ariadne.Model;
 namespace SWA.Ariadne.Logic
 {
     /// <summary>
-    /// A MazeSolver with one current path and backtracking.
-    /// At a crossing in forward direction: Chooses a random open wall.
+    /// A MazeSolver with many concurrent paths.
+    /// Visits all neighbor squares of the current path's end before advancing to the next path.
     /// </summary>
-    public class RandomBacktracker : SolverBase
+    public class RandomFlooder : SolverBase
     {
         #region Member variables
 
         /// <summary>
         /// A source of random numbers.
         /// </summary>
-        private Random random;
+        private Random random = new Random();
 
         /// <summary>
-        /// All squares passed in forward direction are collected on a stack.
+        /// All squares passed in forward direction are collected in a list.
         /// </summary>
-        private Stack<MazeSquare> stack = new Stack<MazeSquare>();
+        private List<MazeSquare> list = new List<MazeSquare>();
 
         #endregion
 
         #region Constructor
 
-        public RandomBacktracker(Maze maze)
+        public RandomFlooder(Maze maze)
             : base(maze)
         {
-            this.random = new Random();
             this.Reset();
         }
 
@@ -43,13 +42,13 @@ namespace SWA.Ariadne.Logic
         /// </summary>
         public override void Reset()
         {
-            stack.Clear();
+            list.Clear();
 
             // Move to the start square.
             MazeSquare sq = maze.StartSquare;
 
-            // Push the start square onto the stack.
-            stack.Push(sq);
+            // Add the start square to the queue.
+            list.Add(sq);
             sq.isVisited = true;
         }
 
@@ -70,32 +69,36 @@ namespace SWA.Ariadne.Logic
                 throw new Exception("Maze is already solved.");
             }
 
-            // Get the current square.
-            sq1 = stack.Peek();
+            List<MazeSquare.WallPosition> openWalls;
 
-            // Possible choices of open walls (not visited).
-            List<MazeSquare.WallPosition> openWalls = SolverBase.OpenWalls(sq1, true);
-
-            if (openWalls.Count > 0)
+            while (true)
             {
-                // Select one of the neighbor squares.
-                MazeSquare.WallPosition wp = openWalls[random.Next(openWalls.Count)];
+                // Get a current square but leave it in the queue.
+                int p = random.Next(list.Count);
+                sq1 = list[p];
 
-                sq2 = sq1.NeighborSquare(wp);
-                forward = true;
+                // Possible choices of open walls (not visited).
+                openWalls = SolverBase.OpenWalls(sq1, true);
 
-                // Push the next square onto the stack.
-                stack.Push(sq2);
-                sq2.isVisited = true;
+                if (openWalls.Count == 0)
+                {
+                    list.RemoveAt(p);
+                }
+                else
+                {
+                    break;
+                }
             }
-            else
-            {
-                // Pop the current square from the stack.
-                stack.Pop();
 
-                sq2 = stack.Peek();
-                forward = false;
-            }
+            // Select one (any) of the neighbor squares.
+            MazeSquare.WallPosition wp = openWalls[random.Next(openWalls.Count)];
+
+            sq2 = sq1.NeighborSquare(wp);
+            forward = true;
+
+            // Add the next square to the list.
+            list.Add(sq2);
+            sq2.isVisited = true;
         }
 
         #endregion
