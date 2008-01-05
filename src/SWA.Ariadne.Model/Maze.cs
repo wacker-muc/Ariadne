@@ -879,16 +879,24 @@ namespace SWA.Ariadne.Model
         /// Take all modifyable parameters from the given data object.
         /// </summary>
         /// <param name="data"></param>
-        /// <returns>false if some parameters were rejected as invalid</returns>
-        public bool TakeParametersFrom(AriadneSettingsData data)
+        public void TakeParametersFrom(AriadneSettingsData data)
         {
+            // The Auto... flags for Width and Height have already been checked by the MazeUserControl.
             this.xSize = Math.Max(MinSize, Math.Min(MaxXSize, data.MazeWidth));
             this.ySize = Math.Max(MinSize, Math.Min(MaxYSize, data.MazeHeight));
-            this.seed = Math.Max(0, Math.Min(SeedLimit-1, data.Seed));
-            this.random = new Random(seed);
-            // Decode(data.Code);
 
-            return true;
+            if (!data.AutoSeed)
+            {
+                this.seed = Math.Max(0, Math.Min(SeedLimit - 1, data.Seed));
+            }
+            else
+            {
+                Random r = new Random();
+                this.seed = r.Next(SeedLimit);
+            }
+            this.random = new Random(seed);
+
+            // Decode(data.Code);
         }
 
         #endregion
