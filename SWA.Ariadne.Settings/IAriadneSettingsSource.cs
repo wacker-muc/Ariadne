@@ -8,6 +8,6 @@ namespace SWA.Ariadne.Settings
     public interface IAriadneSettingsSource
     {
         void FillParametersInto(AriadneSettingsData data);
-        bool TakeParametersFrom(AriadneSettingsData data);
+        void TakeParametersFrom(AriadneSettingsData data);
     }
 }

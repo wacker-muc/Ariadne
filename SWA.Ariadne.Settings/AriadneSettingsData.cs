@@ -231,6 +231,18 @@ namespace SWA.Ariadne.Settings
 
         public void ClearModifedFlags()
         {
+            #region Shape data
+
+            mazeWidth[S] = mazeWidth[M];
+            mazeHeight[S] = mazeHeight[M];
+            seed[S] = seed[M];
+
+            code[S] = code[M];
+
+            #endregion
+
+            #region Layout data
+
             squareWidth[S] = squareWidth[M];
             pathWidth[S] = pathWidth[M];
             wallWidth[S] = wallWidth[M];
@@ -242,6 +254,8 @@ namespace SWA.Ariadne.Settings
             autoGridWidth[S] = autoGridWidth[M];
             
             pathCapStyle[S] = pathCapStyle[M];
+
+            #endregion
         }
     }
 }
