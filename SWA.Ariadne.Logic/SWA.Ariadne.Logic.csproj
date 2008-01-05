@@ -40,6 +40,7 @@
     <Compile Include="RandomBacktracker.cs" />
     <Compile Include="RandomWalker.cs" />
     <Compile Include="RightHandWalker.cs" />
+    <Compile Include="RoundRobinFlooder.cs" />
     <Compile Include="SolverBase.cs" />
   </ItemGroup>
   <ItemGroup>

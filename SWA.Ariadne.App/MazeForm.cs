@@ -89,6 +89,7 @@ namespace SWA.Ariadne.App
                 typeof(Logic.RightHandWalker),
                 typeof(Logic.LeftHandWalker),
                 typeof(Logic.RandomWalker),
+                typeof(Logic.RoundRobinFlooder),
             })
             {
                 // Add the solver's name to the combo box.
