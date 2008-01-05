@@ -10,6 +10,9 @@ using SWA.Ariadne.Logic;
 
 namespace SWA.Ariadne.App
 {
+    /// <summary>
+    /// A Windows Form that displays a Maze in a MazeUserControl.
+    /// </summary>
     public partial class MazeForm : Form
         , IMazeForm
     {
@@ -116,19 +119,22 @@ namespace SWA.Ariadne.App
         #region Maze controls
 
         /// <summary>
-        /// Stop the solver and return the maze to its original (unsolved) state.
+        /// Stops the solver and returns the maze to its original (unsolved) state.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void OnReset(object sender, EventArgs e)
         {
-            if (solver != null)
+            if (State != SolverState.Ready)
             {
-                if (stepTimer.Enabled == false)
+                if (State == SolverState.Paused)
                 {
                     this.OnPause(sender, e);
                 }
-                stepTimer.Stop();
+                if (State == SolverState.Running)
+                {
+                    stepTimer.Stop();
+                }
                 stepTimer = null;
                 solver = null;
                 strategyComboBox.Enabled = true;
@@ -141,13 +147,13 @@ namespace SWA.Ariadne.App
         }
 
         /// <summary>
-        /// Create a new (different) maze.
+        /// Creates a new (different) maze.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void OnNew(object sender, EventArgs e)
         {
-            if (solver != null)
+            if (State != SolverState.Ready)
             {
                 OnReset(sender, e);
             }
@@ -157,15 +163,28 @@ namespace SWA.Ariadne.App
             UpdateCaption();
         }
 
+        /// <summary>
+        /// Opens a Details dialog.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnDetails(object sender, EventArgs e)
         {
-            if (solver == null)
+            // This is not allowed while the Solver is busy.
+            if (State == SolverState.Running || State == SolverState.Paused)
             {
-                DetailsDialog form = new DetailsDialog(this.mazeUserControl);
-                form.ShowDialog(this);
+                return;
             }
+
+            DetailsDialog form = new DetailsDialog(this.mazeUserControl);
+            form.ShowDialog(this);
         }
 
+        /// <summary>
+        /// Opens an About box.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnAbout(object sender, EventArgs e)
         {
             AboutBox form = new AboutBox();
@@ -183,7 +202,7 @@ namespace SWA.Ariadne.App
         /// <param name="e"></param>
         private void OnStart(object sender, EventArgs e)
         {
-            if (solver != null)
+            if (State != SolverState.Ready)
             {
                 //OnReset(sender, e);
                 return;
@@ -205,35 +224,55 @@ namespace SWA.Ariadne.App
         }
 
         /// <summary>
-        /// Let the solver make one step.
+        /// Let the solver make enough steps to stay in schedule.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void OnStepTimer(object sender, EventArgs e)
         {
-            stepTimer.Enabled = false;
-            if (mazeUserControl.Maze.IsSolved)
+            if (State != SolverState.Running)
             {
-                stepTimer.Stop();
+                return;
             }
-            else
-            {
-                MazeSquare sq = null;
-                int currentSteps = 0;
-                int maxStepsPerTimerEvent = 20;
-                while (this.IsBehindSchedule())
-                {
-                    sq = SingleStep();
 
-                    if (++currentSteps > maxStepsPerTimerEvent)
+            try
+            {
+                // Stop the timer to prevent additional events while the solver is busy.
+                stepTimer.Enabled = false;
+                // State looks like Paused but this will be changed back at the end.
+
+                if (!mazeUserControl.Maze.IsSolved)
+                {
+                    MazeSquare sq = null;
+                    int currentSteps = 0;
+                    int maxStepsPerTimerEvent = 20;
+                    while (this.IsBehindSchedule())
                     {
-                        break;
+                        sq = SingleStep();
+
+                        if (++currentSteps > maxStepsPerTimerEvent)
+                        {
+                            break;
+                        }
                     }
+                    mazeUserControl.FinishPath(sq);
+                    UpdateStatusLine();
                 }
-                mazeUserControl.FinishPath(sq);
-                UpdateStatusLine();
             }
-            stepTimer.Enabled = true;
+            finally
+            {
+                // Either restart or delete the timer.
+                if (!mazeUserControl.Maze.IsSolved)
+                {
+                    stepTimer.Enabled = true;
+                    // State is Running.
+                }
+                else
+                {
+                    stepTimer = null;
+                    // State is Finished and may become Ready if someone creates a new Maze.
+                }
+            }
         }
 
         /// <summary>
@@ -243,14 +282,15 @@ namespace SWA.Ariadne.App
         /// <param name="e"></param>
         private void OnPause(object sender, EventArgs e)
         {
-            if (solver == null || mazeUserControl.Maze.IsSolved)
+            if (State != SolverState.Running && State != SolverState.Paused)
             {
                 return;
             }
 
+            // Switch between Running and Paused.
             stepTimer.Enabled = !stepTimer.Enabled;
 
-            if (stepTimer.Enabled == true)
+            if (State == SolverState.Running)
             {
                 accumulatedSeconds += lapSeconds;
                 lapSeconds = 0;
@@ -268,12 +308,22 @@ namespace SWA.Ariadne.App
             }
         }
 
+        /// <summary>
+        /// Execute a single solver step.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnStep(object sender, EventArgs e)
         {
-            if (solver == null)
+            if (State == SolverState.Ready)
             {
                 this.OnStart(sender, e);
                 this.OnPause(sender, e);
+            }
+
+            if (State != SolverState.Paused)
+            {
+                return;
             }
 
             mazeUserControl.FinishPath(SingleStep());
@@ -422,9 +472,13 @@ namespace SWA.Ariadne.App
 
         #region Auxiliary methods
 
+        /// <summary>
+        /// Returns true while we have not executed enough steps to achieve the desired step rate.
+        /// </summary>
+        /// <returns></returns>
         private bool IsBehindSchedule()
         {
-            if (mazeUserControl.Maze.IsSolved)
+            if (State == SolverState.Finished)
             {
                 return false;
             }
@@ -436,13 +490,59 @@ namespace SWA.Ariadne.App
             return (countSteps < 1 + scheduledSteps);
         }
 
+        private enum SolverState
+        {
+            Ready,
+            Running,
+            Paused,
+            Finished,
+        }
+
+        private SolverState State
+        {
+            get
+            {
+                // While there is no solver, we are Ready to create one and start it.
+                if (solver == null)
+                {
+                    return SolverState.Ready;
+                }
+
+                // If the maze is solved, we are Finished.
+                if (mazeUserControl.Maze.IsSolved)
+                {
+                    return SolverState.Finished;
+                }
+
+                // If there is no timer, we should be either Ready or Finished.  But "Finished" was checked above.
+                //
+                // Explanation:
+                // The DetailsDialog can be opened in the Finished state and may create a new, unsolved Maze.
+                //
+                if (stepTimer == null)
+                {
+                    return SolverState.Ready;
+                }
+
+                // So we are either running or paused.
+                if (stepTimer.Enabled)
+                {
+                    return SolverState.Running;
+                }
+                else
+                {
+                    return SolverState.Paused;
+                }
+            }
+        }
+
         /// <summary>
         /// Executes one step in the solver and paints that section of the path.
         /// </summary>
         /// <returns>either null OR the square this step travelled to in backward direction</returns>
         private MazeSquare SingleStep()
         {
-            if (mazeUserControl.Maze.IsSolved)
+            if (State == SolverState.Finished)
             {
                 return null;
             }
@@ -467,7 +567,7 @@ namespace SWA.Ariadne.App
         }
 
         /// <summary>
-        /// Write the maze ID and solver strategy name into the window's caption bar.
+        /// Writes the maze ID and solver strategy name into the window's caption bar.
         /// </summary>
         private void UpdateCaption()
         {
