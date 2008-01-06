@@ -40,7 +40,7 @@ namespace SWA.Ariadne.App
             mazeUserControl.PaintMaze();
 
             // Solve the maze.
-            IMazeSolver solver = new RandomBacktracker(mazeUserControl.Maze);
+            IMazeSolver solver = SolverFactory.CreateDefaultSolver(mazeUserControl.Maze);
             MazeSquare sq1, sq2 = null;
             bool forward;
             while (!mazeUserControl.Maze.IsSolved)

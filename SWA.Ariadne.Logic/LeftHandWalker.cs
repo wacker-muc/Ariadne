@@ -9,7 +9,7 @@ namespace SWA.Ariadne.Logic
     /// A MazeSolver with one path and a local strategy.
     /// At a crossing: Chooses the open wall closest to the left hand.
     /// </summary>
-    public class LeftHandWalker : DeterministicWalker
+    internal class LeftHandWalker : DeterministicWalker
     {
         #region Constructor
 
