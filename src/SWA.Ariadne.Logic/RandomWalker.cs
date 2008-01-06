@@ -9,7 +9,7 @@ namespace SWA.Ariadne.Logic
     /// A MazeSolver with one path and no percievable strategy.
     /// At a crossing: Chooses a random open wall.
     /// </summary>
-    public class RandomWalker : SolverBase
+    internal class RandomWalker : SolverBase
     {
         #region Member variables
 

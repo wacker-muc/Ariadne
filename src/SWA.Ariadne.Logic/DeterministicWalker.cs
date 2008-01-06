@@ -9,7 +9,7 @@ namespace SWA.Ariadne.Logic
     /// A MazeSolver with one path and a local strategy.
     /// The choice of an open wall is implemented by subclasses.
     /// </summary>
-    public abstract class DeterministicWalker : SolverBase
+    internal abstract class DeterministicWalker : SolverBase
     {
         #region Member variables
 

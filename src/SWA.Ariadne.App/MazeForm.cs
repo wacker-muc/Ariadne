@@ -21,12 +21,12 @@ namespace SWA.Ariadne.App
         /// <summary>
         /// The type of solver algorithm we will use.
         /// </summary>
-        private System.Type solverType = typeof(RandomBacktracker);
+        private System.Type strategy = SolverFactory.DefaultStrategy;
 
         /// <summary>
         /// A dictionary used by the strategyComboBox.
         /// </summary>
-        private readonly Dictionary<string, System.Type> knownSolvers;
+        private readonly Dictionary<string, System.Type> strategies;
 
         /// <summary>
         /// The maze solver algorithm.
@@ -80,30 +80,23 @@ namespace SWA.Ariadne.App
 
             #region Fill the strategyComboBox with all known MazeSolvers
 
-            knownSolvers = new Dictionary<string, System.Type>();
+            strategies = new Dictionary<string, System.Type>();
 
             strategyComboBox.Items.Clear();
 
-            foreach (System.Type t in new System.Type[] {
-                typeof(Logic.RandomBacktracker),
-                typeof(Logic.RightHandWalker),
-                typeof(Logic.LeftHandWalker),
-                typeof(Logic.RandomWalker),
-                typeof(Logic.RoundRobinFlooder),
-                typeof(Logic.RandomFlooder),
-            })
+            foreach (System.Type t in SolverFactory.SolverTypes)
             {
                 // Add the solver's name to the combo box.
                 strategyComboBox.Items.Add(t.Name);
 
                 // Add the solver's type and name to a Dictionary -- see strategy_Validated().
-                knownSolvers.Add(t.Name, t);
+                strategies.Add(t.Name, t);
 
                 // Note: Instead of a string we could add the Type object directly.
                 // But the Type's ToString() method returns the FullName instead of the short Name.
 
                 // Pre-select the default solver strategy.
-                if (t == solverType)
+                if (t == strategy)
                 {
                     strategyComboBox.SelectedIndex = strategyComboBox.Items.Count - 1;
                 }
@@ -211,9 +204,7 @@ namespace SWA.Ariadne.App
             }
 
             strategyComboBox.Enabled = false;
-            solver = (IMazeSolver) solverType.GetConstructor(
-                new Type[1] { typeof(Maze) }).Invoke(
-                new object[1] { mazeUserControl.Maze });
+            solver = SolverFactory.CreateSolver(strategy, mazeUserControl.Maze);
 
             countSteps = countForward = countBackward = 0;
             stepTimer = new Timer();
@@ -421,7 +412,7 @@ namespace SWA.Ariadne.App
 
         private void strategy_SelectedIndexChanged(object sender, EventArgs e)
         {
-            this.solverType = knownSolvers[(string)strategyComboBox.SelectedItem];
+            this.strategy = strategies[(string)strategyComboBox.SelectedItem];
             UpdateCaption();
         }
 
@@ -577,10 +568,10 @@ namespace SWA.Ariadne.App
 
             caption.Append("Ariadne");
 
-            if (solverType != null)
+            if (strategy != null)
             {
                 caption.Append(" - ");
-                caption.Append(solverType.Name);
+                caption.Append(strategy.Name);
             }
 
             if (true)

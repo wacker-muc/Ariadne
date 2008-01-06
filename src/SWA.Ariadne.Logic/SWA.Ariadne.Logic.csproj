@@ -43,6 +43,7 @@
     <Compile Include="RightHandWalker.cs" />
     <Compile Include="RoundRobinFlooder.cs" />
     <Compile Include="SolverBase.cs" />
+    <Compile Include="SolverFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SWA.Ariadne.Model\SWA.Ariadne.Model.csproj">

@@ -8,7 +8,7 @@ namespace SWA.Ariadne.Logic
     /// <summary>
     /// Base class of all MazeSolver classes.
     /// </summary>
-    public abstract class SolverBase : IMazeSolver
+    internal abstract class SolverBase : IMazeSolver
     {
         #region Member variables
 

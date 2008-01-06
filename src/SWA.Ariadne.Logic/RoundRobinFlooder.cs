@@ -9,7 +9,7 @@ namespace SWA.Ariadne.Logic
     /// A MazeSolver with many concurrent paths.
     /// Visits all neighbor squares of the current path's end before advancing to the next path.
     /// </summary>
-    public class RoundRobinFlooder : SolverBase
+    internal class RoundRobinFlooder : SolverBase
     {
         #region Member variables
 
