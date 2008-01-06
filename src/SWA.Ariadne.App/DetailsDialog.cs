@@ -48,7 +48,6 @@ namespace SWA.Ariadne.App
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        /// TODO: Should only draw the current maze with different attributes.
         private void OnSet(object sender, EventArgs e)
         {
             // Pass the modified data to the target.
