@@ -39,7 +39,12 @@ namespace SWA.Ariadne.App
         /// </summary>
         private Timer stepTimer;
 
+        /// <summary>
+        /// Counters for the number of executed steps: total, in forward and backward direction.
+        /// </summary>
         private long countSteps, countForward, countBackward;
+
+        #region Timing and step rate
 
         /// <summary>
         /// Desired step rate.
@@ -60,6 +65,18 @@ namespace SWA.Ariadne.App
         /// Duration of previous laps (Start .. Pause).
         /// </summary>
         private double accumulatedSeconds;
+
+        /// <summary>
+        /// Number of steps that don't count in the current rate calculation.
+        /// </summary>
+        private long stepsBeforeRateChange;
+
+        /// <summary>
+        /// Duration that doesn't count in the current rate calculation.
+        /// </summary>
+        private double secondsBeforeRateChange;
+
+        #endregion
 
         #endregion
 
@@ -135,8 +152,7 @@ namespace SWA.Ariadne.App
                 FixStateDependantControls();
             }
 
-            countSteps = countForward = countBackward = 0;
-            lapSeconds = accumulatedSeconds = 0;
+            ResetCounters();
 
             this.mazeUserControl.Reset();
         }
@@ -208,16 +224,15 @@ namespace SWA.Ariadne.App
 
             solver = SolverFactory.CreateSolver(strategy, mazeUserControl.Maze);
 
-            countSteps = countForward = countBackward = 0;
             stepTimer = new Timer();
             stepTimer.Interval = (1000/60)/2; // 60 frames per second
             stepTimer.Tick += new EventHandler(this.OnStepTimer);
             stepTimer.Start();
 
-            lapStartTime = System.DateTime.Now;
-            lapSeconds = accumulatedSeconds = 0;
-
             FixStateDependantControls();
+            ResetCounters();
+
+            lapStartTime = System.DateTime.Now;
         }
 
         /// <summary>
@@ -412,6 +427,10 @@ namespace SWA.Ariadne.App
 
             this.stepsPerSecond = value;
             UpdateCaption();
+
+            // Adjust scheduling parameters.
+            secondsBeforeRateChange = accumulatedSeconds + lapSeconds;
+            stepsBeforeRateChange = countSteps;
         }
 
         private void strategy_SelectedIndexChanged(object sender, EventArgs e)
@@ -458,8 +477,16 @@ namespace SWA.Ariadne.App
                 message.Append(" / ");
                 double totalSeconds = accumulatedSeconds + lapSeconds;
                 message.Append(totalSeconds.ToString("0.00") + " sec");
-                double sps = countSteps / totalSeconds;
-                message.Append(" = " + sps.ToString("0") + " steps/sec");
+
+                double sps = (countSteps-stepsBeforeRateChange) / (totalSeconds-secondsBeforeRateChange);
+                if (stepsBeforeRateChange > 0)
+                {
+                    message.Append(" = [" + sps.ToString("0") + "] steps/sec");
+                }
+                else
+                {
+                    message.Append(" = " + sps.ToString("0") + " steps/sec");
+                }
             }
 
             this.statusLabel.Text = message.ToString();
@@ -468,6 +495,17 @@ namespace SWA.Ariadne.App
         #endregion
 
         #region Auxiliary methods
+
+        /// <summary>
+        /// Reset step and runtime counters.
+        /// </summary>
+        private void ResetCounters()
+        {
+            countSteps = countForward = countBackward = 0;
+            lapSeconds = accumulatedSeconds = 0;
+            stepsBeforeRateChange = 0;
+            secondsBeforeRateChange = 0;
+        }
 
         /// <summary>
         /// Returns true while we have not executed enough steps to achieve the desired step rate.
@@ -480,9 +518,15 @@ namespace SWA.Ariadne.App
                 return false;
             }
 
+            // TimeSpan since last Start or Continue.
             TimeSpan lap = System.DateTime.Now - lapStartTime;
-            lapSeconds = lap.TotalSeconds;
-            double scheduledSteps = (accumulatedSeconds + lapSeconds) * stepsPerSecond;
+            this.lapSeconds = lap.TotalSeconds;
+
+            // Duration for which the desired step rate should be achieved.
+            double relevantSeconds = (accumulatedSeconds + lapSeconds) - secondsBeforeRateChange;
+
+            // Number of steps that should have been achieved.
+            double scheduledSteps = (relevantSeconds * stepsPerSecond) + stepsBeforeRateChange;
 
             return (countSteps < 1 + scheduledSteps);
         }
