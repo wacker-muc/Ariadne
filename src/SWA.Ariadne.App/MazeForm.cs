@@ -170,8 +170,6 @@ namespace SWA.Ariadne.App
             }
 
             mazeUserControl.Setup();
-
-            UpdateCaption();
         }
 
         /// <summary>
@@ -461,7 +459,7 @@ namespace SWA.Ariadne.App
         }
 
         /// <summary>
-        /// Display information about the running MazeSolver in the status line.
+        /// Displays information about the running MazeSolver in the status line.
         /// </summary>
         public void UpdateStatusLine()
         {
@@ -490,6 +488,37 @@ namespace SWA.Ariadne.App
             }
 
             this.statusLabel.Text = message.ToString();
+        }
+
+        /// <summary>
+        /// Displays Maze and Solver characteristics in the window's caption bar.
+        /// The maze ID, step rate and solver strategy name.
+        /// </summary>
+        public void UpdateCaption()
+        {
+            StringBuilder caption = new StringBuilder(80);
+
+            caption.Append("Ariadne");
+
+            if (strategy != null)
+            {
+                caption.Append(" - ");
+                caption.Append(strategy.Name);
+            }
+
+            if (true)
+            {
+                caption.Append(" - ");
+                caption.Append(stepsPerSecond.ToString());
+            }
+
+            if (mazeUserControl != null && mazeUserControl.Maze != null)
+            {
+                caption.Append(" - ");
+                caption.Append("ID: " + mazeUserControl.Maze.Code);
+            }
+
+            this.Text = caption.ToString();
         }
 
         #endregion
@@ -615,36 +644,6 @@ namespace SWA.Ariadne.App
             ++countSteps;
 
             return (forward ? null : sq2);
-        }
-
-        /// <summary>
-        /// Writes the maze ID and solver strategy name into the window's caption bar.
-        /// </summary>
-        private void UpdateCaption()
-        {
-            StringBuilder caption = new StringBuilder(80);
-
-            caption.Append("Ariadne");
-
-            if (strategy != null)
-            {
-                caption.Append(" - ");
-                caption.Append(strategy.Name);
-            }
-
-            if (true)
-            {
-                caption.Append(" - ");
-                caption.Append(stepsPerSecond.ToString());
-            }
-
-            if (mazeUserControl != null && mazeUserControl.Maze != null)
-            {
-                caption.Append(" - ");
-                caption.Append("ID: " + mazeUserControl.Maze.Code);
-            }
-
-            this.Text = caption.ToString();
         }
 
         #endregion
