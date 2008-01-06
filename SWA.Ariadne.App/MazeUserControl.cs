@@ -145,6 +145,7 @@ namespace SWA.Ariadne.App
             try
             {
                 this.MazeForm.UpdateStatusLine();
+                this.MazeForm.UpdateCaption();
             }
             catch (InvalidCastException) { }
         }
@@ -526,6 +527,7 @@ namespace SWA.Ariadne.App
             MazeForm.MakeReservedAreas(maze);
             maze.CreateMaze();
             MazeForm.UpdateStatusLine();
+            MazeForm.UpdateCaption();
 
             PlaceEndpoints();
 

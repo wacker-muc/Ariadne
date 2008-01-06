@@ -56,7 +56,7 @@ namespace SWA.Ariadne.App
         #region IMazeForm implementation
 
         /// <summary>
-        /// Place reserved areas into the maze.
+        /// Places reserved areas into the maze.
         /// This method is called from the MazeUserControl before actually building the maze.
         /// </summary>
         /// <param name="maze"></param>
@@ -67,9 +67,17 @@ namespace SWA.Ariadne.App
         }
 
         /// <summary>
-        /// Display information about the running MazeSolver in the status line.
+        /// Displays information about the running MazeSolver in the status line.
         /// </summary>
         public void UpdateStatusLine()
+        {
+            // no action
+        }
+
+        /// <summary>
+        /// Displays Maze and Solver characteristics in the window's caption bar.
+        /// </summary>
+        public void UpdateCaption()
         {
             // no action
         }

@@ -9,5 +9,6 @@ namespace SWA.Ariadne.App
     {
         void MakeReservedAreas(SWA.Ariadne.Model.Maze maze);
         void UpdateStatusLine();
+        void UpdateCaption();
     }
 }
