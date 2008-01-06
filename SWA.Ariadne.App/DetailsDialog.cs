@@ -30,7 +30,18 @@ namespace SWA.Ariadne.App
         {
             this.target = target;
 
-            // Create a data object, fill its contents from the target and add it to the BindingSource.
+            // Set the minimum and maximum values of NumericUpDownControls.
+            this.squareWidthNumericUpDown.Minimum = MazeUserControl.MinSquareWidth;
+            this.squareWidthNumericUpDown.Maximum = MazeUserControl.MaxSquareWidth;
+            this.pathWidthNumericUpDown.Minimum = MazeUserControl.MinPathWidth;
+            this.pathWidthNumericUpDown.Maximum = MazeUserControl.MaxPathWidth;
+            this.wallWidthNumericUpDown.Minimum = MazeUserControl.MinWallWidth;
+            this.wallWidthNumericUpDown.Maximum = MazeUserControl.MaxWallWidth;
+            this.gridWidthNumericUpDown.Minimum = MazeUserControl.MinGridWidth;
+            this.gridWidthNumericUpDown.Maximum = MazeUserControl.MaxGridWidth;
+
+            // Create a data object, fill its contents from the target
+            // and add it to the BindingSource.
             this.data = new AriadneSettingsData();
             target.FillParametersInto(data);
             CalculateResultingArea();
@@ -65,7 +76,7 @@ namespace SWA.Ariadne.App
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OnClickAutoCheckbox(object sender, EventArgs e)
+        private void OnClickImmediateUpdate(object sender, EventArgs e)
         {
             // temporarily change the focus to another control
             this.setLayoutButton.Select();
@@ -108,33 +119,39 @@ namespace SWA.Ariadne.App
                     }
                 }
 
+                bool gridWithModifiedManually = data.GridWidthModified;
+
                 if (data.GridWidthModified)
                 {
                     data.AutoGridWidth = false;
-                    data.WallWidth = Math.Max(1, (int)(0.3 * data.GridWidth));
-                    data.SquareWidth = data.GridWidth - data.WallWidth;
+                    
+                    int squareWidth, pathWidth, wallWidth;
+                    MazeUserControl.SuggestWidths(data.GridWidth, out squareWidth, out pathWidth, out wallWidth);
+
+                    data.WallWidth = wallWidth;
+                    data.SquareWidth = squareWidth;
+                    data.PathWidth = pathWidth;
                 }
                 if (data.PathWidthModified)
                 {
-                    data.AutoPathWidth = false;
+                    data.AutoPathWidth = gridWithModifiedManually;
                     data.SquareWidth = Math.Max(data.PathWidth, data.SquareWidth);
                 }
                 if (data.SquareWidthModified)
                 {
-                    data.AutoSquareWidth = false;
-                    data.GridWidth = data.SquareWidth + data.WallWidth;
+                    data.AutoSquareWidth = gridWithModifiedManually;
+                    data.PathWidth = Math.Min(data.PathWidth, data.SquareWidth);
+                    data.GridWidth = Math.Min(data.SquareWidth + data.WallWidth, MazeUserControl.MaxGridWidth);
+                    data.WallWidth = data.GridWidth - data.SquareWidth;
                 }
                 if (data.WallWidthModified)
                 {
-                    data.AutoWallWidth = false;
-                    data.GridWidth = data.SquareWidth + data.WallWidth;
-                }
-                if (data.SquareWidthModified)
-                {
-                    data.PathWidth = Math.Min(data.PathWidth, data.SquareWidth);
+                    data.AutoWallWidth = gridWithModifiedManually;
+                    data.GridWidth = Math.Min(data.SquareWidth + data.WallWidth, MazeUserControl.MaxGridWidth);
+                    data.SquareWidth = data.GridWidth - data.WallWidth;
                 }
 
-                if (data.AutoGridWidthModified && !data.AutoGridWidth)
+                if (gridWithModifiedManually || (data.AutoGridWidthModified && !data.AutoGridWidth))
                 {
                     data.AutoSquareWidth = true;
                     data.AutoPathWidth = true;
@@ -175,6 +192,9 @@ namespace SWA.Ariadne.App
         }
         private bool _busyOnDataChanged = false;
 
+        /// <summary>
+        /// Updates the maze dimensions (pixels) value.
+        /// </summary>
         private void CalculateResultingArea()
         {
             int width = data.MazeWidth * data.GridWidth + data.WallWidth;
