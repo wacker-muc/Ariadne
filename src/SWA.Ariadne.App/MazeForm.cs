@@ -223,7 +223,7 @@ namespace SWA.Ariadne.App
             solver = SolverFactory.CreateSolver(strategy, mazeUserControl.Maze);
 
             stepTimer = new Timer();
-            stepTimer.Interval = (1000/60)/2; // 60 frames per second
+            stepTimer.Interval = (1000/60); // 60 frames per second
             stepTimer.Tick += new EventHandler(this.OnStepTimer);
             stepTimer.Start();
 
@@ -253,20 +253,39 @@ namespace SWA.Ariadne.App
 
                 if (!mazeUserControl.Maze.IsSolved)
                 {
-                    MazeSquare sq = null;
-                    int currentSteps = 0;
-                    int maxStepsPerTimerEvent = 20;
-                    while (this.IsBehindSchedule())
-                    {
-                        sq = SingleStep();
+                    /* On a small maze or at low step rate, a few steps will be sufficient.
+                     * 
+                     * On a large maze, painting is slower; therefore, we render the GraphicsBuffer
+                     * only every 20 steps: maxStepsBetweenRedraw.
+                     * 
+                     * The timer ticks only every few milliseconds.  That causes a small idle delay
+                     * between the end of one OnStepTimer() event and the start of the next one.
+                     * 
+                     * For balancing between low responsiveness and high idle times, we keep looping
+                     * for up to 1/2 second: maxMillisecondsPerTimerEvent.
+                     */
 
-                        if (++currentSteps > maxStepsPerTimerEvent)
+                    // Repetition restrictions.
+                    int maxStepsBetweenRedraw = Math.Max(20, stepsPerSecond / 60); // approx. 60Hz
+                    int maxMillisecondsPerTimerEvent = 400;
+
+                    DateTime currentStartTime = DateTime.Now;
+                    TimeSpan elapsed = new TimeSpan(0);
+
+                    while (elapsed.TotalMilliseconds < maxMillisecondsPerTimerEvent && this.IsBehindSchedule())
+                    {
+                        MazeSquare sq = null;
+
+                        for (int steps = 0; steps < maxStepsBetweenRedraw && this.IsBehindSchedule(); ++steps)
                         {
-                            break;
+                            sq = SingleStep();
                         }
+
+                        // Render the executed steps.
+                        mazeUserControl.FinishPath(sq);
+
+                        elapsed = DateTime.Now - currentStartTime;
                     }
-                    mazeUserControl.FinishPath(sq);
-                    UpdateStatusLine();
                 }
             }
             finally
@@ -282,6 +301,8 @@ namespace SWA.Ariadne.App
                     stepTimer = null;
                     // State is Finished and may become Ready if someone creates a new Maze.
                 }
+
+                UpdateStatusLine();
             }
         }
 
@@ -410,14 +431,8 @@ namespace SWA.Ariadne.App
             }
             catch (Exception) { }
 
-            if (value < 1)
-            {
-                value = 1;
-            }
-            if (value > 9999)
-            {
-                value = 9999;
-            }
+            value = Math.Max(1, Math.Min(40000,value));
+
             if (stepsPerSecTextBox.Text != value.ToString())
             {
                 //stepsPerSecTextBox.Text = value.ToString();
@@ -470,20 +485,23 @@ namespace SWA.Ariadne.App
             if(countSteps > 0)
             {
                 message.Append(" / ");
-                message.Append(countSteps.ToString() + " steps, " + countForward + " forward, " + countBackward + " backward");
+                message.Append(countSteps.ToString("#,##0") + " steps, "
+                    + countForward.ToString("#,##0") + " forward, "
+                    + countBackward.ToString("#,##0") + " backward"
+                    );
 
                 message.Append(" / ");
                 double totalSeconds = accumulatedSeconds + lapSeconds;
-                message.Append(totalSeconds.ToString("0.00") + " sec");
+                message.Append(totalSeconds.ToString("#,##0.00") + " sec");
 
                 double sps = (countSteps-stepsBeforeRateChange) / (totalSeconds-secondsBeforeRateChange);
                 if (stepsBeforeRateChange > 0)
                 {
-                    message.Append(" = [" + sps.ToString("0") + "] steps/sec");
+                    message.Append(" = [" + sps.ToString("#,##0") + "] steps/sec");
                 }
                 else
                 {
-                    message.Append(" = " + sps.ToString("0") + " steps/sec");
+                    message.Append(" = " + sps.ToString("#,##0") + " steps/sec");
                 }
             }
 
