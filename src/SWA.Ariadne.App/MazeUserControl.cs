@@ -18,7 +18,27 @@ namespace SWA.Ariadne.App
         /// <summary>
         /// Minimum and maximum grid width.
         /// </summary>
-        const int MinGridWidth = 6, MaxGridWidth = 12;
+        public const int MinGridWidth = 2, MaxGridWidth = 40;
+
+        /// <summary>
+        /// Minimum and maximum grid width when using automatic settings.
+        /// </summary>
+        public const int MinAutoGridWidth = 6, MaxAutoGridWidth = 12;
+
+        /// <summary>
+        /// Miniumum and maximum square width.
+        /// </summary>
+        public const int MinSquareWidth = 1, MaxSquareWidth = MaxGridWidth - 1;
+
+        /// <summary>
+        /// Miniumum and maximum square width.
+        /// </summary>
+        public const int MinPathWidth = 1, MaxPathWidth = MaxSquareWidth;
+
+        /// <summary>
+        /// Miniumum and maximum wall width.
+        /// </summary>
+        public const int MinWallWidth = 1, MaxWallWidth = MaxGridWidth / 2;
 
         #endregion
 
@@ -74,7 +94,7 @@ namespace SWA.Ariadne.App
             this.gridWidth = squareWidth + wallWidth;
             this.pathWidth = pathWidth;
 
-            AdjustPathWidth();
+            AdjustPathWidth(squareWidth, ref pathWidth);
             CreateMaze();
             PlaceEndpoints();
             Reset();
@@ -85,23 +105,24 @@ namespace SWA.Ariadne.App
             int wallWidth;
             int squareWidth;
             int pathWidth;
-            SuggestWidths(gridWidth, out wallWidth, out squareWidth, out pathWidth);
+            SuggestWidths(gridWidth, out squareWidth, out pathWidth, out wallWidth);
 
             this.Setup(squareWidth, wallWidth, pathWidth);
         }
 
-        private static void SuggestWidths(int gridWidth, out int wallWidth, out int squareWidth, out int pathWidth)
+        internal static void SuggestWidths(int gridWidth, out int squareWidth, out int pathWidth, out int wallWidth)
         {
-            wallWidth = (int)(0.3 * gridWidth);
-            if (wallWidth < 1) { wallWidth = 1; }
+            wallWidth = Math.Max(MinWallWidth, Math.Min(MaxWallWidth, (int)(0.3 * gridWidth)));
             squareWidth = gridWidth - wallWidth;
             pathWidth = (int)(0.7 * squareWidth);
+            
+            AdjustPathWidth(squareWidth, ref pathWidth);
         }
 
         internal void Setup()
         {
             Random r = new Random();
-            int gridWidth = r.Next(MinGridWidth, MaxGridWidth);
+            int gridWidth = r.Next(MinAutoGridWidth, MaxAutoGridWidth);
             
             this.Setup(gridWidth);
         }
@@ -111,7 +132,7 @@ namespace SWA.Ariadne.App
         /// That will make sure that the path is centered nicely between the walls.
         /// </summary>
         /// <returns></returns>
-        private void AdjustPathWidth()
+        private static void AdjustPathWidth(int squareWidth, ref int pathWidth)
         {
             if ((squareWidth - pathWidth) % 2 != 0)
             {
@@ -475,28 +496,25 @@ namespace SWA.Ariadne.App
         {
             #region Take parameters concerning this MazeUserControl
 
-            int maxAcceptedGridWidth = MaxGridWidth * 3;
-            int maxAcceptedWallWidth = maxAcceptedGridWidth / 2;
-
             if (!data.AutoGridWidth)
             {
-                this.gridWidth = Math.Max(2, Math.Min(maxAcceptedGridWidth, data.GridWidth));
+                this.gridWidth = Math.Max(2, Math.Min(MaxGridWidth, data.GridWidth));
 
-                SuggestWidths(gridWidth, out wallWidth, out squareWidth, out pathWidth);
+                SuggestWidths(gridWidth, out squareWidth, out pathWidth, out wallWidth);
             }
             else if (!data.AutoSquareWidth || !data.AutoPathWidth || !data.AutoWallWidth)
             {
-                this.wallWidth = Math.Max(1, Math.Min(maxAcceptedWallWidth, data.WallWidth));
-                this.squareWidth = Math.Max(1, Math.Min(maxAcceptedGridWidth - wallWidth, data.SquareWidth));
-                this.pathWidth = Math.Max(1, Math.Min(squareWidth, data.PathWidth));
+                this.wallWidth = Math.Max(MinWallWidth, Math.Min(MaxWallWidth, data.WallWidth));
+                this.squareWidth = Math.Max(MinSquareWidth, Math.Min(MaxGridWidth - wallWidth, data.SquareWidth));
+                this.pathWidth = Math.Max(MinPathWidth, Math.Min(squareWidth, data.PathWidth));
 
                 this.gridWidth = squareWidth + wallWidth;
             }
             else
             {
                 Random r = new Random();
-                this.gridWidth = r.Next(MinGridWidth, MaxGridWidth);
-                SuggestWidths(gridWidth, out wallWidth, out squareWidth, out pathWidth);
+                this.gridWidth = r.Next(MinAutoGridWidth, MaxAutoGridWidth);
+                SuggestWidths(gridWidth, out squareWidth, out pathWidth, out wallWidth);
             }
 
             #endregion
@@ -523,7 +541,7 @@ namespace SWA.Ariadne.App
             #region Do the equivalent of Setup() with the modified parameters.
 
             // CreateMaze()
-            AdjustPathWidth();
+            AdjustPathWidth(squareWidth, ref pathWidth);
             MazeForm.MakeReservedAreas(maze);
             maze.CreateMaze();
             MazeForm.UpdateStatusLine();

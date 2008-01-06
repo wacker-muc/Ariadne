@@ -31,6 +31,11 @@ namespace SWA.Ariadne.App
             this.components = new System.ComponentModel.Container();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.layoutPage = new System.Windows.Forms.TabPage();
+            this.squareWidthNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.dataBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.pathWidthNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.wallWidthNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.gridWidthNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.autoGridWidthCheckBox = new System.Windows.Forms.CheckBox();
             this.autoWallWidthCheckBox = new System.Windows.Forms.CheckBox();
             this.autoPathWidthCheckBox = new System.Windows.Forms.CheckBox();
@@ -62,19 +67,14 @@ namespace SWA.Ariadne.App
             this.autoMazeWidthCheckBox = new System.Windows.Forms.CheckBox();
             this.label8 = new System.Windows.Forms.Label();
             this.mazeWidthBox = new System.Windows.Forms.TextBox();
-            this.dataBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.gridWidthNumericUpDown = new System.Windows.Forms.NumericUpDown();
-            this.wallWidthNumericUpDown = new System.Windows.Forms.NumericUpDown();
-            this.pathWidthNumericUpDown = new System.Windows.Forms.NumericUpDown();
-            this.squareWidthNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.tabControl1.SuspendLayout();
             this.layoutPage.SuspendLayout();
-            this.shapePage.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataBindingSource)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gridWidthNumericUpDown)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.wallWidthNumericUpDown)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pathWidthNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.squareWidthNumericUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pathWidthNumericUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.wallWidthNumericUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridWidthNumericUpDown)).BeginInit();
+            this.shapePage.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -116,6 +116,111 @@ namespace SWA.Ariadne.App
             this.layoutPage.Text = "Layout";
             this.layoutPage.UseVisualStyleBackColor = true;
             // 
+            // squareWidthNumericUpDown
+            // 
+            this.squareWidthNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.dataBindingSource, "SquareWidth", true));
+            this.squareWidthNumericUpDown.Location = new System.Drawing.Point(91, 29);
+            this.squareWidthNumericUpDown.Maximum = new decimal(new int[] {
+            40,
+            0,
+            0,
+            0});
+            this.squareWidthNumericUpDown.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.squareWidthNumericUpDown.Name = "squareWidthNumericUpDown";
+            this.squareWidthNumericUpDown.Size = new System.Drawing.Size(46, 20);
+            this.squareWidthNumericUpDown.TabIndex = 1;
+            this.squareWidthNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.squareWidthNumericUpDown.Value = new decimal(new int[] {
+            25,
+            0,
+            0,
+            0});
+            this.squareWidthNumericUpDown.Click += new System.EventHandler(this.OnClickImmediateUpdate);
+            // 
+            // dataBindingSource
+            // 
+            this.dataBindingSource.DataSource = typeof(SWA.Ariadne.Settings.AriadneSettingsData);
+            this.dataBindingSource.CurrentItemChanged += new System.EventHandler(this.OnDataChanged);
+            // 
+            // pathWidthNumericUpDown
+            // 
+            this.pathWidthNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.dataBindingSource, "PathWidth", true));
+            this.pathWidthNumericUpDown.Location = new System.Drawing.Point(91, 55);
+            this.pathWidthNumericUpDown.Maximum = new decimal(new int[] {
+            40,
+            0,
+            0,
+            0});
+            this.pathWidthNumericUpDown.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.pathWidthNumericUpDown.Name = "pathWidthNumericUpDown";
+            this.pathWidthNumericUpDown.Size = new System.Drawing.Size(46, 20);
+            this.pathWidthNumericUpDown.TabIndex = 2;
+            this.pathWidthNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.pathWidthNumericUpDown.Value = new decimal(new int[] {
+            25,
+            0,
+            0,
+            0});
+            this.pathWidthNumericUpDown.Click += new System.EventHandler(this.OnClickImmediateUpdate);
+            // 
+            // wallWidthNumericUpDown
+            // 
+            this.wallWidthNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.dataBindingSource, "WallWidth", true));
+            this.wallWidthNumericUpDown.Location = new System.Drawing.Point(91, 81);
+            this.wallWidthNumericUpDown.Maximum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.wallWidthNumericUpDown.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.wallWidthNumericUpDown.Name = "wallWidthNumericUpDown";
+            this.wallWidthNumericUpDown.Size = new System.Drawing.Size(46, 20);
+            this.wallWidthNumericUpDown.TabIndex = 3;
+            this.wallWidthNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.wallWidthNumericUpDown.Value = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.wallWidthNumericUpDown.Click += new System.EventHandler(this.OnClickImmediateUpdate);
+            // 
+            // gridWidthNumericUpDown
+            // 
+            this.gridWidthNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.dataBindingSource, "GridWidth", true));
+            this.gridWidthNumericUpDown.Location = new System.Drawing.Point(91, 113);
+            this.gridWidthNumericUpDown.Maximum = new decimal(new int[] {
+            40,
+            0,
+            0,
+            0});
+            this.gridWidthNumericUpDown.Minimum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.gridWidthNumericUpDown.Name = "gridWidthNumericUpDown";
+            this.gridWidthNumericUpDown.Size = new System.Drawing.Size(46, 20);
+            this.gridWidthNumericUpDown.TabIndex = 4;
+            this.gridWidthNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.gridWidthNumericUpDown.Value = new decimal(new int[] {
+            25,
+            0,
+            0,
+            0});
+            this.gridWidthNumericUpDown.Click += new System.EventHandler(this.OnClickImmediateUpdate);
+            // 
             // autoGridWidthCheckBox
             // 
             this.autoGridWidthCheckBox.AutoSize = true;
@@ -125,7 +230,7 @@ namespace SWA.Ariadne.App
             this.autoGridWidthCheckBox.Size = new System.Drawing.Size(15, 14);
             this.autoGridWidthCheckBox.TabIndex = 14;
             this.autoGridWidthCheckBox.UseVisualStyleBackColor = true;
-            this.autoGridWidthCheckBox.Click += new System.EventHandler(this.OnClickAutoCheckbox);
+            this.autoGridWidthCheckBox.Click += new System.EventHandler(this.OnClickImmediateUpdate);
             // 
             // autoWallWidthCheckBox
             // 
@@ -136,7 +241,7 @@ namespace SWA.Ariadne.App
             this.autoWallWidthCheckBox.Size = new System.Drawing.Size(15, 14);
             this.autoWallWidthCheckBox.TabIndex = 13;
             this.autoWallWidthCheckBox.UseVisualStyleBackColor = true;
-            this.autoWallWidthCheckBox.Click += new System.EventHandler(this.OnClickAutoCheckbox);
+            this.autoWallWidthCheckBox.Click += new System.EventHandler(this.OnClickImmediateUpdate);
             // 
             // autoPathWidthCheckBox
             // 
@@ -147,7 +252,7 @@ namespace SWA.Ariadne.App
             this.autoPathWidthCheckBox.Size = new System.Drawing.Size(15, 14);
             this.autoPathWidthCheckBox.TabIndex = 12;
             this.autoPathWidthCheckBox.UseVisualStyleBackColor = true;
-            this.autoPathWidthCheckBox.Click += new System.EventHandler(this.OnClickAutoCheckbox);
+            this.autoPathWidthCheckBox.Click += new System.EventHandler(this.OnClickImmediateUpdate);
             // 
             // label6
             // 
@@ -167,7 +272,7 @@ namespace SWA.Ariadne.App
             this.autoSquareWidthCheckbox.Size = new System.Drawing.Size(15, 14);
             this.autoSquareWidthCheckbox.TabIndex = 11;
             this.autoSquareWidthCheckbox.UseVisualStyleBackColor = true;
-            this.autoSquareWidthCheckbox.Click += new System.EventHandler(this.OnClickAutoCheckbox);
+            this.autoSquareWidthCheckbox.Click += new System.EventHandler(this.OnClickImmediateUpdate);
             // 
             // label5
             // 
@@ -365,7 +470,7 @@ namespace SWA.Ariadne.App
             this.autoSeedCheckBox.Size = new System.Drawing.Size(15, 14);
             this.autoSeedCheckBox.TabIndex = 13;
             this.autoSeedCheckBox.UseVisualStyleBackColor = true;
-            this.autoSeedCheckBox.Click += new System.EventHandler(this.OnClickAutoCheckbox);
+            this.autoSeedCheckBox.Click += new System.EventHandler(this.OnClickImmediateUpdate);
             // 
             // label10
             // 
@@ -396,7 +501,7 @@ namespace SWA.Ariadne.App
             this.autoMazeHeightCheckBox.Size = new System.Drawing.Size(15, 14);
             this.autoMazeHeightCheckBox.TabIndex = 12;
             this.autoMazeHeightCheckBox.UseVisualStyleBackColor = true;
-            this.autoMazeHeightCheckBox.Click += new System.EventHandler(this.OnClickAutoCheckbox);
+            this.autoMazeHeightCheckBox.Click += new System.EventHandler(this.OnClickImmediateUpdate);
             // 
             // label9
             // 
@@ -436,7 +541,7 @@ namespace SWA.Ariadne.App
             this.autoMazeWidthCheckBox.Size = new System.Drawing.Size(15, 14);
             this.autoMazeWidthCheckBox.TabIndex = 11;
             this.autoMazeWidthCheckBox.UseVisualStyleBackColor = true;
-            this.autoMazeWidthCheckBox.Click += new System.EventHandler(this.OnClickAutoCheckbox);
+            this.autoMazeWidthCheckBox.Click += new System.EventHandler(this.OnClickImmediateUpdate);
             // 
             // label8
             // 
@@ -458,107 +563,6 @@ namespace SWA.Ariadne.App
             this.mazeWidthBox.TabIndex = 1;
             this.mazeWidthBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // dataBindingSource
-            // 
-            this.dataBindingSource.DataSource = typeof(SWA.Ariadne.Settings.AriadneSettingsData);
-            this.dataBindingSource.CurrentItemChanged += new System.EventHandler(this.OnDataChanged);
-            // 
-            // gridWidthNumericUpDown
-            // 
-            this.gridWidthNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.dataBindingSource, "GridWidth", true));
-            this.gridWidthNumericUpDown.Location = new System.Drawing.Point(91, 113);
-            this.gridWidthNumericUpDown.Maximum = new decimal(new int[] {
-            40,
-            0,
-            0,
-            0});
-            this.gridWidthNumericUpDown.Minimum = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
-            this.gridWidthNumericUpDown.Name = "gridWidthNumericUpDown";
-            this.gridWidthNumericUpDown.Size = new System.Drawing.Size(46, 20);
-            this.gridWidthNumericUpDown.TabIndex = 4;
-            this.gridWidthNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.gridWidthNumericUpDown.Value = new decimal(new int[] {
-            25,
-            0,
-            0,
-            0});
-            // 
-            // wallWidthNumericUpDown
-            // 
-            this.wallWidthNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.dataBindingSource, "WallWidth", true));
-            this.wallWidthNumericUpDown.Location = new System.Drawing.Point(91, 81);
-            this.wallWidthNumericUpDown.Maximum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.wallWidthNumericUpDown.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.wallWidthNumericUpDown.Name = "wallWidthNumericUpDown";
-            this.wallWidthNumericUpDown.Size = new System.Drawing.Size(46, 20);
-            this.wallWidthNumericUpDown.TabIndex = 3;
-            this.wallWidthNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.wallWidthNumericUpDown.Value = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            // 
-            // pathWidthNumericUpDown
-            // 
-            this.pathWidthNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.dataBindingSource, "PathWidth", true));
-            this.pathWidthNumericUpDown.Location = new System.Drawing.Point(91, 55);
-            this.pathWidthNumericUpDown.Maximum = new decimal(new int[] {
-            40,
-            0,
-            0,
-            0});
-            this.pathWidthNumericUpDown.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.pathWidthNumericUpDown.Name = "pathWidthNumericUpDown";
-            this.pathWidthNumericUpDown.Size = new System.Drawing.Size(46, 20);
-            this.pathWidthNumericUpDown.TabIndex = 2;
-            this.pathWidthNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.pathWidthNumericUpDown.Value = new decimal(new int[] {
-            25,
-            0,
-            0,
-            0});
-            // 
-            // squareWidthNumericUpDown
-            // 
-            this.squareWidthNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.dataBindingSource, "SquareWidth", true));
-            this.squareWidthNumericUpDown.Location = new System.Drawing.Point(91, 29);
-            this.squareWidthNumericUpDown.Maximum = new decimal(new int[] {
-            40,
-            0,
-            0,
-            0});
-            this.squareWidthNumericUpDown.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.squareWidthNumericUpDown.Name = "squareWidthNumericUpDown";
-            this.squareWidthNumericUpDown.Size = new System.Drawing.Size(46, 20);
-            this.squareWidthNumericUpDown.TabIndex = 1;
-            this.squareWidthNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.squareWidthNumericUpDown.Value = new decimal(new int[] {
-            25,
-            0,
-            0,
-            0});
-            // 
             // DetailsDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -575,13 +579,13 @@ namespace SWA.Ariadne.App
             this.tabControl1.ResumeLayout(false);
             this.layoutPage.ResumeLayout(false);
             this.layoutPage.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.squareWidthNumericUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pathWidthNumericUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.wallWidthNumericUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridWidthNumericUpDown)).EndInit();
             this.shapePage.ResumeLayout(false);
             this.shapePage.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataBindingSource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gridWidthNumericUpDown)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.wallWidthNumericUpDown)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pathWidthNumericUpDown)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.squareWidthNumericUpDown)).EndInit();
             this.ResumeLayout(false);
 
         }
