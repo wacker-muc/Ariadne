@@ -132,7 +132,7 @@ namespace SWA.Ariadne.App
                 }
                 stepTimer = null;
                 solver = null;
-                strategyComboBox.Enabled = true;
+                FixStateDependantControls();
             }
 
             countSteps = countForward = countBackward = 0;
@@ -173,6 +173,9 @@ namespace SWA.Ariadne.App
 
             DetailsDialog form = new DetailsDialog(this.mazeUserControl);
             form.ShowDialog(this);
+
+            // What needs to be done if the dialog has caused a State change?
+            FixStateDependantControls();
         }
 
         /// <summary>
@@ -203,7 +206,6 @@ namespace SWA.Ariadne.App
                 return;
             }
 
-            strategyComboBox.Enabled = false;
             solver = SolverFactory.CreateSolver(strategy, mazeUserControl.Maze);
 
             countSteps = countForward = countBackward = 0;
@@ -214,6 +216,8 @@ namespace SWA.Ariadne.App
 
             lapStartTime = System.DateTime.Now;
             lapSeconds = accumulatedSeconds = 0;
+
+            FixStateDependantControls();
         }
 
         /// <summary>
@@ -527,6 +531,16 @@ namespace SWA.Ariadne.App
                     return SolverState.Paused;
                 }
             }
+        }
+
+        /// <summary>
+        /// Enables or disables some controls depending on whether we are Ready or not.
+        /// </summary>
+        private void FixStateDependantControls()
+        {
+            bool enabled = (State == SolverState.Ready);
+
+            strategyComboBox.Enabled = enabled;
         }
 
         /// <summary>
