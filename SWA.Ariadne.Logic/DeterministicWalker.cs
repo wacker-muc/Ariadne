@@ -23,7 +23,6 @@ namespace SWA.Ariadne.Logic
         public DeterministicWalker(Maze maze)
             : base(maze)
         {
-            this.Reset();
         }
 
         #endregion

@@ -25,7 +25,6 @@ namespace SWA.Ariadne.Logic
         public RoundRobinFlooder(Maze maze)
             : base(maze)
         {
-            this.Reset();
         }
 
         #endregion

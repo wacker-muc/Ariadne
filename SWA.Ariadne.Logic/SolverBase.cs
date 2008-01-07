@@ -21,6 +21,7 @@ namespace SWA.Ariadne.Logic
         protected SolverBase(Maze maze)
         {
             this.maze = maze;
+            this.Reset();
         }
 
         #endregion

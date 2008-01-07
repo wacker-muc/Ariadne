@@ -30,7 +30,6 @@ namespace SWA.Ariadne.Logic
         public RandomFlooder(Maze maze)
             : base(maze)
         {
-            this.Reset();
         }
 
         #endregion
