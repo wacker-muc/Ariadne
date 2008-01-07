@@ -51,6 +51,16 @@ namespace SWA.Ariadne.App
             this.capStyleComboBox = new System.Windows.Forms.ComboBox();
             this.setLayoutButton = new System.Windows.Forms.Button();
             this.colorsPage = new System.Windows.Forms.TabPage();
+            this.setColorsButton = new System.Windows.Forms.Button();
+            this.backwardColorLabel = new SWA.Ariadne.Settings.ColorLabel();
+            this.forwardColorLabel = new SWA.Ariadne.Settings.ColorLabel();
+            this.refBColorLabel = new SWA.Ariadne.Settings.ColorLabel();
+            this.refAColorLabel = new SWA.Ariadne.Settings.ColorLabel();
+            this.button1 = new System.Windows.Forms.Button();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
             this.shapePage = new System.Windows.Forms.TabPage();
             this.resultingAreaTextBox1 = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
@@ -67,6 +77,7 @@ namespace SWA.Ariadne.App
             this.autoMazeWidthCheckBox = new System.Windows.Forms.CheckBox();
             this.label8 = new System.Windows.Forms.Label();
             this.mazeWidthBox = new System.Windows.Forms.TextBox();
+            this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.tabControl1.SuspendLayout();
             this.layoutPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.squareWidthNumericUpDown)).BeginInit();
@@ -74,6 +85,7 @@ namespace SWA.Ariadne.App
             ((System.ComponentModel.ISupportInitialize)(this.pathWidthNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.wallWidthNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridWidthNumericUpDown)).BeginInit();
+            this.colorsPage.SuspendLayout();
             this.shapePage.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -371,6 +383,16 @@ namespace SWA.Ariadne.App
             // 
             // colorsPage
             // 
+            this.colorsPage.Controls.Add(this.setColorsButton);
+            this.colorsPage.Controls.Add(this.backwardColorLabel);
+            this.colorsPage.Controls.Add(this.forwardColorLabel);
+            this.colorsPage.Controls.Add(this.refBColorLabel);
+            this.colorsPage.Controls.Add(this.refAColorLabel);
+            this.colorsPage.Controls.Add(this.button1);
+            this.colorsPage.Controls.Add(this.label15);
+            this.colorsPage.Controls.Add(this.label14);
+            this.colorsPage.Controls.Add(this.label13);
+            this.colorsPage.Controls.Add(this.label11);
             this.colorsPage.Location = new System.Drawing.Point(4, 22);
             this.colorsPage.Name = "colorsPage";
             this.colorsPage.Padding = new System.Windows.Forms.Padding(3);
@@ -378,6 +400,110 @@ namespace SWA.Ariadne.App
             this.colorsPage.TabIndex = 2;
             this.colorsPage.Text = "Colors";
             this.colorsPage.UseVisualStyleBackColor = true;
+            // 
+            // setColorsButton
+            // 
+            this.setColorsButton.Location = new System.Drawing.Point(91, 194);
+            this.setColorsButton.Name = "setColorsButton";
+            this.setColorsButton.Size = new System.Drawing.Size(75, 23);
+            this.setColorsButton.TabIndex = 100;
+            this.setColorsButton.Text = "Set";
+            this.setColorsButton.UseVisualStyleBackColor = true;
+            this.setColorsButton.Click += new System.EventHandler(this.OnSet);
+            // 
+            // backwardColorLabel
+            // 
+            this.backwardColorLabel.BackColor = System.Drawing.SystemColors.Window;
+            this.backwardColorLabel.DataBindings.Add(new System.Windows.Forms.Binding("BackColor", this.dataBindingSource, "BackwardColor", true));
+            this.backwardColorLabel.ForeColor = System.Drawing.Color.Black;
+            this.backwardColorLabel.Location = new System.Drawing.Point(91, 113);
+            this.backwardColorLabel.Name = "backwardColorLabel";
+            this.backwardColorLabel.Size = new System.Drawing.Size(134, 20);
+            this.backwardColorLabel.TabIndex = 11;
+            this.backwardColorLabel.Text = "h = 000, s = 0,00, b = 1,00";
+            this.backwardColorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // forwardColorLabel
+            // 
+            this.forwardColorLabel.BackColor = System.Drawing.SystemColors.Window;
+            this.forwardColorLabel.DataBindings.Add(new System.Windows.Forms.Binding("BackColor", this.dataBindingSource, "ForwardColor", true));
+            this.forwardColorLabel.ForeColor = System.Drawing.Color.Black;
+            this.forwardColorLabel.Location = new System.Drawing.Point(91, 87);
+            this.forwardColorLabel.Name = "forwardColorLabel";
+            this.forwardColorLabel.Size = new System.Drawing.Size(134, 20);
+            this.forwardColorLabel.TabIndex = 10;
+            this.forwardColorLabel.Text = "h = 000, s = 0,00, b = 1,00";
+            this.forwardColorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // refBColorLabel
+            // 
+            this.refBColorLabel.BackColor = System.Drawing.Color.DarkSlateBlue;
+            this.refBColorLabel.DataBindings.Add(new System.Windows.Forms.Binding("BackColor", this.dataBindingSource, "ReferenceColor2", true));
+            this.refBColorLabel.ForeColor = System.Drawing.Color.White;
+            this.refBColorLabel.Location = new System.Drawing.Point(91, 55);
+            this.refBColorLabel.Name = "refBColorLabel";
+            this.refBColorLabel.Size = new System.Drawing.Size(134, 20);
+            this.refBColorLabel.TabIndex = 9;
+            this.refBColorLabel.Text = "h = 248, s = 0,39, b = 0,39";
+            this.refBColorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // refAColorLabel
+            // 
+            this.refAColorLabel.BackColor = System.Drawing.Color.Gold;
+            this.refAColorLabel.DataBindings.Add(new System.Windows.Forms.Binding("BackColor", this.dataBindingSource, "ReferenceColor1", true));
+            this.refAColorLabel.ForeColor = System.Drawing.Color.Black;
+            this.refAColorLabel.Location = new System.Drawing.Point(91, 29);
+            this.refAColorLabel.Name = "refAColorLabel";
+            this.refAColorLabel.Size = new System.Drawing.Size(134, 20);
+            this.refAColorLabel.TabIndex = 8;
+            this.refAColorLabel.Text = "h = 051, s = 1,00, b = 0,50";
+            this.refAColorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(91, 146);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 7;
+            this.button1.Text = "Suggest";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.OnSuggestColors);
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(16, 116);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(55, 13);
+            this.label15.TabIndex = 6;
+            this.label15.Text = "Backward";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(16, 90);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(45, 13);
+            this.label14.TabIndex = 6;
+            this.label14.Text = "Forward";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(16, 58);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(67, 13);
+            this.label13.TabIndex = 5;
+            this.label13.Text = "Reference B";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(16, 32);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(67, 13);
+            this.label11.TabIndex = 4;
+            this.label11.Text = "Reference A";
             // 
             // shapePage
             // 
@@ -584,6 +710,8 @@ namespace SWA.Ariadne.App
             ((System.ComponentModel.ISupportInitialize)(this.pathWidthNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.wallWidthNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridWidthNumericUpDown)).EndInit();
+            this.colorsPage.ResumeLayout(false);
+            this.colorsPage.PerformLayout();
             this.shapePage.ResumeLayout(false);
             this.shapePage.PerformLayout();
             this.ResumeLayout(false);
@@ -630,5 +758,16 @@ namespace SWA.Ariadne.App
         private System.Windows.Forms.NumericUpDown squareWidthNumericUpDown;
         private System.Windows.Forms.NumericUpDown pathWidthNumericUpDown;
         private System.Windows.Forms.NumericUpDown wallWidthNumericUpDown;
+        private System.Windows.Forms.ColorDialog colorDialog1;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label label13;
+        private SWA.Ariadne.Settings.ColorLabel refAColorLabel;
+        private SWA.Ariadne.Settings.ColorLabel backwardColorLabel;
+        private SWA.Ariadne.Settings.ColorLabel forwardColorLabel;
+        private SWA.Ariadne.Settings.ColorLabel refBColorLabel;
+        private System.Windows.Forms.Button setColorsButton;
     }
 }

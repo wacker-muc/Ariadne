@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Drawing;
 
 namespace SWA.Ariadne.Settings
 {
@@ -90,6 +91,46 @@ namespace SWA.Ariadne.Settings
         }
         private string[] code = new string[2];
         
+
+        #endregion
+
+        #region Colors tab
+
+        public Color ReferenceColor1
+        {
+            get { return referenceColor1; }
+            set { referenceColor1 = value; }
+        }
+        private Color referenceColor1 = new Color();
+        
+        public Color ReferenceColor2
+        {
+            get { return referenceColor2; }
+            set { referenceColor2 = value; }
+        }
+        private Color referenceColor2 = new Color();
+
+        public Color ForwardColor
+        {
+            get { return forwardColor[M]; }
+            set { forwardColor[M] = value; }
+        }
+        public bool ForwardColorModified
+        {
+            get { return (forwardColor[M] != forwardColor[S]); }
+        }
+        private Color[] forwardColor = new Color[2];
+
+        public Color BackwardColor
+        {
+            get { return backwardColor[M]; }
+            set { backwardColor[M] = value; }
+        }
+        public bool BackwardColorModified
+        {
+            get { return (backwardColor[M] != backwardColor[S]); }
+        }
+        private Color[] backwardColor = new Color[2];
 
         #endregion
 
@@ -238,6 +279,13 @@ namespace SWA.Ariadne.Settings
             seed[S] = seed[M];
 
             code[S] = code[M];
+
+            #endregion
+
+            #region Colors data
+
+            forwardColor[S] = forwardColor[M];
+            backwardColor[S] = backwardColor[M];
 
             #endregion
 

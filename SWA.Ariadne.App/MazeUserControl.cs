@@ -40,6 +40,11 @@ namespace SWA.Ariadne.App
         /// </summary>
         public const int MinWallWidth = 1, MaxWallWidth = MaxGridWidth / 2;
 
+        /// <summary>
+        /// Two reference Colors for deriving forward and backward path colors.
+        /// </summary>
+        private static readonly Color MinColor = Color.DarkSlateBlue, MaxColor = Color.Gold;
+
         #endregion
 
         #region Member variables
@@ -78,13 +83,6 @@ namespace SWA.Ariadne.App
         public MazeUserControl()
         {
             InitializeComponent();
-
-            /*
-            // Use double buffered drawing.
-            this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-            this.SetStyle(ControlStyles.UserPaint, true);
-            this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
-             * */
         }
 
         public void Setup(int squareWidth, int wallWidth, int pathWidth)
@@ -95,6 +93,7 @@ namespace SWA.Ariadne.App
             this.pathWidth = pathWidth;
 
             AdjustPathWidth(squareWidth, ref pathWidth);
+            ColorBuilder.SuggestColors(MinColor, MaxColor, out forwardColor, out backwardColor);
             CreateMaze();
             PlaceEndpoints();
             Reset();
@@ -485,6 +484,11 @@ namespace SWA.Ariadne.App
             data.SquareWidth = this.squareWidth;
             data.WallWidth = this.wallWidth;
 
+            data.ReferenceColor1 = MaxColor;
+            data.ReferenceColor2 = MinColor;
+            data.ForwardColor = this.forwardColor;
+            data.BackwardColor = this.backwardColor;
+
             this.maze.FillParametersInto(data);
         }
 
@@ -495,6 +499,8 @@ namespace SWA.Ariadne.App
         public void TakeParametersFrom(AriadneSettingsData data)
         {
             #region Take parameters concerning this MazeUserControl
+
+            #region Layout
 
             if (!data.AutoGridWidth)
             {
@@ -516,6 +522,15 @@ namespace SWA.Ariadne.App
                 this.gridWidth = r.Next(MinAutoGridWidth, MaxAutoGridWidth);
                 SuggestWidths(gridWidth, out squareWidth, out pathWidth, out wallWidth);
             }
+
+            #endregion
+
+            #region Colors
+
+            this.forwardColor = data.ForwardColor;
+            this.backwardColor = data.BackwardColor;
+
+            #endregion
 
             #endregion
 

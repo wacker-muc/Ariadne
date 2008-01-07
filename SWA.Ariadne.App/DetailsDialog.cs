@@ -53,6 +53,8 @@ namespace SWA.Ariadne.App
 
         #endregion
 
+        #region Event handlers
+
         /// <summary>
         /// Activates the modified settings.
         /// Will generate a new maze with the modified settings.
@@ -68,6 +70,23 @@ namespace SWA.Ariadne.App
             target.FillParametersInto(data);
             CalculateResultingArea();
             data.ClearModifedFlags();
+            
+            dataBindingSource.ResetCurrentItem();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnSuggestColors(object sender, EventArgs e)
+        {
+            Color forwardColor, backwardColor;
+            ColorBuilder.SuggestColors(data.ReferenceColor1, data.ReferenceColor2, out forwardColor, out backwardColor);
+            
+            data.ForwardColor = forwardColor;
+            data.BackwardColor = backwardColor;
+
             dataBindingSource.ResetCurrentItem();
         }
 
@@ -192,6 +211,10 @@ namespace SWA.Ariadne.App
         }
         private bool _busyOnDataChanged = false;
 
+        #endregion
+
+        #region Auxiliary methods
+
         /// <summary>
         /// Updates the maze dimensions (pixels) value.
         /// </summary>
@@ -201,5 +224,7 @@ namespace SWA.Ariadne.App
             int height = data.MazeHeight * data.GridWidth + data.WallWidth;
             data.ResultingArea = width.ToString() + " x " + height.ToString();
         }
+
+        #endregion
     }
 }
