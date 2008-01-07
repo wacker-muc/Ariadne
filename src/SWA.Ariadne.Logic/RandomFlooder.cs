@@ -38,9 +38,12 @@ namespace SWA.Ariadne.Logic
 
         /// <summary>
         /// Reset to the initial state (before the maze is solved).
+        /// Subclasses should call their base class' method first.
         /// </summary>
         public override void Reset()
         {
+            base.Reset();
+
             list.Clear();
 
             // Move to the start square.
