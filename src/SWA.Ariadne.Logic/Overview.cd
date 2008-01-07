@@ -5,7 +5,7 @@
     <Position X="3.75" Y="3.25" Width="1.75" />
     <TypeIdentifier>
       <FileName>DeterministicWalker.cs</FileName>
-      <HashCode>AAAAAAAAAAACBAgAAAACAgAAAAAAAEAAIAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAACBAgAAAACAgAAAAAEAEAAAAAAAAAAAAA=</HashCode>
     </TypeIdentifier>
   </Class>
   <Class Name="SWA.Ariadne.Logic.LeftHandWalker">
@@ -26,7 +26,7 @@
     <Position X="0.5" Y="3.25" Width="1.75" />
     <TypeIdentifier>
       <FileName>RandomWalker.cs</FileName>
-      <HashCode>AAAAAAAAAAAABAgAAAAAAAAAAAAAAAAAIAQAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAABAgAAAAAAAAAAAAEAAAAAAQAAAAAAAA=</HashCode>
     </TypeIdentifier>
   </Class>
   <Class Name="SWA.Ariadne.Logic.RightHandWalker">
@@ -40,9 +40,30 @@
     <Position X="3.75" Y="0.5" Width="1.75" />
     <TypeIdentifier>
       <FileName>SolverBase.cs</FileName>
-      <HashCode>AgAAAABAAAAABAAAAAAAAAAAAAAAAAAAIAAAAAAAAAA=</HashCode>
+      <HashCode>AgAAAABAAAAABAAAAAAAAAAAAAAEAAAAIAAAAAAAAAA=</HashCode>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="SWA.Ariadne.Logic.RandomFlooder">
+    <Position X="11.75" Y="6.25" Width="1.75" />
+    <TypeIdentifier>
+      <FileName>RandomFlooder.cs</FileName>
+      <HashCode>AAAAAgAAAAAABAAAAAAAAAAAAAAEAAAAAAQAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SWA.Ariadne.Logic.RoundRobinFlooder">
+    <Position X="9.75" Y="6.25" Width="1.75" />
+    <TypeIdentifier>
+      <FileName>RoundRobinFlooder.cs</FileName>
+      <HashCode>AAAAAAAAAAAABAAAAABAAAAAAAAEAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SWA.Ariadne.Logic.SolverFactory">
+    <Position X="9.5" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <FileName>SolverFactory.cs</FileName>
+      <HashCode>AABAAAAAQAAAAAIAAAQAAAAAAAAAAAAAAAAAIAAAAAA=</HashCode>
+    </TypeIdentifier>
   </Class>
   <Interface Name="SWA.Ariadne.Logic.IMazeSolver">
     <Position X="6" Y="0.5" Width="1.5" />

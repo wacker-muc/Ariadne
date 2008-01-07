@@ -38,15 +38,26 @@ namespace SWA.Ariadne.Logic
         }
 
         /// <summary>
-        /// Call the implementing method StepI().
+        /// Travel from one visited square to a neighbor square (through an open wall).
+        /// Wrapper. Calls the implementing method StepI().
         /// Subclasses may do additional bookkeeping.
         /// </summary>
+        /// <param name="sq1">first (previously visited) square</param>
+        /// <param name="sq2">next (neighbor) square</param>
+        /// <param name="forward">true if the neighbor square was not visited previously</param>
         public virtual void Step(out MazeSquare sq1, out MazeSquare sq2, out bool forward)
         {
             StepI(out sq1, out sq2, out forward);
         }
 
-        public abstract void StepI(out MazeSquare sq1, out MazeSquare sq2, out bool forward);
+        /// <summary>
+        /// Travel from one visited square to a neighbor square (through an open wall).
+        /// Implementation of Step().
+        /// </summary>
+        /// <param name="sq1">first (previously visited) square</param>
+        /// <param name="sq2">next (neighbor) square</param>
+        /// <param name="forward">true if the neighbor square was not visited previously</param>
+        protected abstract void StepI(out MazeSquare sq1, out MazeSquare sq2, out bool forward);
 
         #endregion
 
