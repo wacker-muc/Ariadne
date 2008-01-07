@@ -31,12 +31,26 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AriadneSettingsData.cs" />
+    <Compile Include="ColorBuilder.cs" />
+    <Compile Include="ColorLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ColorLabel.Designer.cs">
+      <DependentUpon>ColorLabel.cs</DependentUpon>
+    </Compile>
     <Compile Include="IAriadneSettingsSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ColorLabel.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ColorLabel.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
