@@ -28,7 +28,6 @@ namespace SWA.Ariadne.Logic
             : base(maze)
         {
             this.random = new Random();
-            this.Reset();
         }
 
         #endregion
