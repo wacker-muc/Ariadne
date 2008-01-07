@@ -59,7 +59,7 @@ namespace SWA.Ariadne.Logic
         /// <param name="sq1">first (previously visited) square</param>
         /// <param name="sq2">next (neighbor) square</param>
         /// <param name="forward">true if the neighbor square was not visited previously</param>
-        public override void Step(out MazeSquare sq1, out MazeSquare sq2, out bool forward)
+        public override void StepI(out MazeSquare sq1, out MazeSquare sq2, out bool forward)
         {
             if (maze.IsSolved)
             {

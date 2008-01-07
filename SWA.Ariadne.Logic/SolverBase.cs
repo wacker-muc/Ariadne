@@ -37,7 +37,16 @@ namespace SWA.Ariadne.Logic
             // no action
         }
 
-        public abstract void Step(out MazeSquare sq1, out MazeSquare sq2, out bool forward);
+        /// <summary>
+        /// Call the implementing method StepI().
+        /// Subclasses may do additional bookkeeping.
+        /// </summary>
+        public virtual void Step(out MazeSquare sq1, out MazeSquare sq2, out bool forward)
+        {
+            StepI(out sq1, out sq2, out forward);
+        }
+
+        public abstract void StepI(out MazeSquare sq1, out MazeSquare sq2, out bool forward);
 
         #endregion
 
