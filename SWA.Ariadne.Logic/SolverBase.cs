@@ -28,7 +28,15 @@ namespace SWA.Ariadne.Logic
 
         #region IMazeSolver methods
 
-        public abstract void Reset();
+        /// <summary>
+        /// Reset to the initial state (before the maze is solved).
+        /// Subclasses should call their base class' method first.
+        /// </summary>
+        public virtual void Reset()
+        {
+            // no action
+        }
+
         public abstract void Step(out MazeSquare sq1, out MazeSquare sq2, out bool forward);
 
         #endregion
