@@ -34,10 +34,13 @@ namespace SWA.Ariadne.Logic
         /// <returns></returns>
         public static IMazeSolver CreateSolver(Type solverType, Maze maze)
         {
-            return (IMazeSolver)solverType.GetConstructor(
+            IMazeSolver result = (IMazeSolver)solverType.GetConstructor(
                 new Type[1] { typeof(Maze) }).Invoke(
                 new object[1] { maze }
                 );
+            result.Reset();
+
+            return result;
         }
 
         /// <summary>
