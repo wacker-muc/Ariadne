@@ -221,6 +221,7 @@ namespace SWA.Ariadne.App
             }
 
             solver = SolverFactory.CreateSolver(strategy, mazeUserControl.Maze);
+            solver.MarkDeadBranchDelegate = this.mazeUserControl.PaintDeadBranch;
 
             stepTimer = new Timer();
             stepTimer.Interval = (1000/60); // 60 frames per second

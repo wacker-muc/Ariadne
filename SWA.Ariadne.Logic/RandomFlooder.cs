@@ -9,7 +9,7 @@ namespace SWA.Ariadne.Logic
     /// A MazeSolver with many concurrent paths.
     /// Visits all neighbor squares of the current path's end before advancing to the next path.
     /// </summary>
-    internal class RandomFlooder : SolverBase
+    internal class RandomFlooder : Flooder
     {
         #region Member variables
 
@@ -85,6 +85,7 @@ namespace SWA.Ariadne.Logic
                 if (openWalls.Count == 0)
                 {
                     list.RemoveAt(p);
+                    MarkDeadBranch(sq1);
                 }
                 else
                 {

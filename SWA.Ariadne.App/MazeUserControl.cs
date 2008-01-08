@@ -457,15 +457,48 @@ namespace SWA.Ariadne.App
         {
             if (sq != null && sq != maze.EndSquare)
             {
-                float cx = xOffset + gridWidth / 2.0F + sq.XPos * gridWidth;
-                float cy = yOffset + gridWidth / 2.0F + sq.YPos * gridWidth;
-
-                // Draw a dot at sq2.
-                Graphics g = gBuffer.Graphics;
-                g.FillRectangle(this.forwardPen.Brush, cx - pathWidth / 2.0F, cy - pathWidth / 2.0F, pathWidth, pathWidth);
+                this.PaintPathDot(sq);
             }
 
             gBuffer.Render();
+        }
+
+        /// <summary>
+        /// Paints a dot in forward direction at the square.
+        /// Covers up for drawing a backward path into a square on the forward path.
+        /// </summary>
+        /// <param name="sq"></param>
+        private void PaintPathDot(MazeSquare sq)
+        {
+            float cx = xOffset + gridWidth / 2.0F + sq.XPos * gridWidth;
+            float cy = yOffset + gridWidth / 2.0F + sq.YPos * gridWidth;
+
+            // Draw a dot at sq2.
+            Graphics g = gBuffer.Graphics;
+            g.FillRectangle(this.forwardPen.Brush, cx - pathWidth / 2.0F, cy - pathWidth / 2.0F, pathWidth, pathWidth);
+        }
+
+        /// <summary>
+        /// Paints the path between all MazeSquares in the given list in the backward color.
+        /// </summary>
+        /// <param name="path">List of MazeSquares starting at a dead end and ending at a branching square (not dead)</param>
+        internal void PaintDeadBranch(List<MazeSquare> path)
+        {
+            for (int i = 1; i < path.Count; i++)
+            {
+                this.PaintPath(path[i - 1], path[i], false);
+            }
+            
+            // Redraw the square where the branching occurred.
+            MazeSquare sq = path[path.Count - 1];
+            if (sq == maze.StartSquare)
+            {
+                this.PaintEndpoints(gBuffer.Graphics);
+            }
+            else
+            {
+                this.PaintPathDot(sq);
+            }
         }
 
         #endregion

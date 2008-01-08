@@ -6,6 +6,8 @@ namespace SWA.Ariadne.Model
 {
     sealed public class MazeSquare
     {
+        #region Enumeration types
+
         /// <summary>
         /// Positions of the walls around a square: East, North, West, South.
         /// </summary>
@@ -51,7 +53,12 @@ namespace SWA.Ariadne.Model
             WS_CLOSED = 2,
         }
 
+        #endregion
+
+        #region Member variables and Properties
+
         internal WallState[] walls = new WallState[WP_NUM];
+
         #region Properties
         public WallState this[WallPosition side]
         {
@@ -84,6 +91,7 @@ namespace SWA.Ariadne.Model
         /// Maze coordinates.
         /// </summary>
         private int xPos, yPos;
+        
         #region Properties
         public int XPos
         {
@@ -94,6 +102,10 @@ namespace SWA.Ariadne.Model
             get { return this.yPos; }
         }
         #endregion
+
+        #endregion
+
+        #region Constructor
 
         /// <summary>
         /// Constructor.
@@ -108,6 +120,10 @@ namespace SWA.Ariadne.Model
                 this.walls[i] = WallState.WS_MAYBE;
             }
         }
+
+        #endregion
+
+        #region Methods
 
         /// <summary>
         /// Setup method: Define the adjoining sqare on the other side of a wall.
@@ -145,5 +161,16 @@ namespace SWA.Ariadne.Model
         {
             return this.neighbors[(int)side];
         }
+
+        #endregion
+
+        #region ToString customization
+
+        public override string ToString()
+        {
+            return XPos.ToString() + "/" + YPos.ToString();
+        }
+
+        #endregion 
     }
 }

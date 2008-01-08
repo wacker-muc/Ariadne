@@ -10,9 +10,18 @@ namespace SWA.Ariadne.Logic
     /// </summary>
     internal abstract class SolverBase : IMazeSolver
     {
-        #region Member variables
+        #region Member variables and properties
 
         protected readonly Maze maze;
+
+        /// <summary>
+        /// A delegate for marking dead branches.  The caller should paint the path between the given squares.
+        /// </summary>
+        public MarkDeadBranchDelegate MarkDeadBranchDelegate
+        {
+            set { markDeadBranchDelegate = value; }
+        }
+        protected MarkDeadBranchDelegate markDeadBranchDelegate = null;
 
         #endregion
 
