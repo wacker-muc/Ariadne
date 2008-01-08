@@ -6,6 +6,13 @@ using SWA.Ariadne.Model;
 namespace SWA.Ariadne.Logic
 {
     /// <summary>
+    /// Delegate method that paints dead branches.
+    /// Only used by flooding strategies that only travel in forward direction.
+    /// </summary>
+    /// <param name="path">List of MazeSquares starting at the dead end and ending at the branching square (not dead)</param>
+    public delegate void MarkDeadBranchDelegate(List<MazeSquare> path);
+
+    /// <summary>
     /// The public methods a MazeSolver must offer.
     /// </summary>
     public interface IMazeSolver
@@ -22,5 +29,10 @@ namespace SWA.Ariadne.Logic
         /// <param name="sq2">next (neighbor) square</param>
         /// <param name="forward">true if the neighbor square was not visited previously</param>
         void Step(out MazeSquare sq1, out MazeSquare sq2, out bool forward);
+
+        /// <summary>
+        /// A delegate for marking dead branches.  The caller should paint the path between the given squares.
+        /// </summary>
+        MarkDeadBranchDelegate MarkDeadBranchDelegate { set; }
     }
 }
