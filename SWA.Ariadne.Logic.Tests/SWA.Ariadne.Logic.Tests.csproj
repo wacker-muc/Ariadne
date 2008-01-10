@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D15590E9-E1E2-4B57-ACE9-9993283A17C7}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>SWA.Ariadne.Logic.Tests</RootNamespace>
+    <AssemblyName>SWA.Ariadne.Logic.Tests</AssemblyName>
+    <WarningLevel>4</WarningLevel>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>.\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>false</DebugSymbols>
+    <Optimize>true</Optimize>
+    <OutputPath>.\bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\WINDOWS\assembly\GAC_MSIL\Microsoft.VisualStudio.QualityTools.UnitTestFramework\8.0.0.0__b03f5f7f11d50a3a\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SolverBaseTest.cs" />
+    <Compile Include="SolverFactoryTest.cs" />
+    <Compile Include="VSCodeGenAccessors.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SWA.Ariadne.Logic\SWA.Ariadne.Logic.csproj">
+      <Project>{EC6BE5F7-D763-413C-AA2E-2AF5358C5315}</Project>
+      <Name>SWA.Ariadne.Logic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SWA.Ariadne.Model\SWA.Ariadne.Model.csproj">
+      <Project>{1ECDFF25-8784-44B4-B4DA-25B20F1DF7EC}</Project>
+      <Name>SWA.Ariadne.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SWA.Ariadne.Settings\SWA.Ariadne.Settings.csproj">
+      <Project>{30293912-CD50-4ECE-B51A-CD89890186F8}</Project>
+      <Name>SWA.Ariadne.Settings</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
+</Project>
