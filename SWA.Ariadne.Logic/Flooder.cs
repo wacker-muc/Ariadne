@@ -10,6 +10,8 @@ namespace SWA.Ariadne.Logic
     /// </summary>
     abstract class Flooder : SolverBase
     {
+        #region Member variables
+
         private struct MazeSquareExtension
         {
             /// <summary>
@@ -28,14 +30,17 @@ namespace SWA.Ariadne.Logic
         /// A path is considered "open" if its end point is in the list of active squares.
         private MazeSquareExtension[,] mazeExtension;
 
+        #endregion
+
         #region Constructor
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="maze"></param>
-        public Flooder(Maze maze)
-            : base(maze)
+        /// <param name="mazeDrawer"></param>
+        public Flooder(Maze maze, IMazeDrawer mazeDrawer)
+            : base(maze, mazeDrawer)
         {
             this.mazeExtension = new MazeSquareExtension[maze.XSize, maze.YSize];
         }
@@ -83,7 +88,7 @@ namespace SWA.Ariadne.Logic
         }
 
         /// <summary>
-        /// Calls the MarkDeadBranchDelegate with the branch ending in the given square.
+        /// Lets the mazeDrawer draw the dead branch ending in the given square.
         /// </summary>
         /// <param name="sq">a MazeSquare in a dead end of the Maze</param>
         protected void MarkDeadBranch(MazeSquare sq)
@@ -98,19 +103,20 @@ namespace SWA.Ariadne.Logic
             }
             List<MazeSquare> deadBranch = new List<MazeSquare>();
 
-            deadBranch.Add(sq);
-
-            do {
-                sq = mazeExtension[sq.XPos, sq.YPos].previousSquare;
-                deadBranch.Add(sq);
-            } while(
-                --mazeExtension[sq.XPos, sq.YPos].openPathCount == 0 // no more open paths
-             && SolverBase.OpenWalls(sq, true).Count == 0            // no more unvisited open walls
-                );
-
-            if (this.markDeadBranchDelegate != null)
+            while (mazeExtension[sq.XPos, sq.YPos].openPathCount == 0   // no more open paths
+                && SolverBase.OpenWalls(sq, true).Count == 0            // no more unvisited neighbors
+                )
             {
-                this.markDeadBranchDelegate(deadBranch);
+                deadBranch.Add(sq);                                     // this square is dead
+                sq = mazeExtension[sq.XPos, sq.YPos].previousSquare;    // go to previous square
+                mazeExtension[sq.XPos, sq.YPos].openPathCount -= 1;     // subtract the dead neighbor
+            }
+
+            deadBranch.Add(sq);                                         // last (living) square of the dead branch
+
+            if (deadBranch.Count > 1 && mazeDrawer != null)
+            {
+                mazeDrawer.DrawPath(deadBranch, false);
             }
         }
 

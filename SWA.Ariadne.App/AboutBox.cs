@@ -40,17 +40,8 @@ namespace SWA.Ariadne.App
             mazeUserControl.PaintMaze();
 
             // Solve the maze.
-            IMazeSolver solver = SolverFactory.CreateDefaultSolver(mazeUserControl.Maze);
-            MazeSquare sq1, sq2 = null;
-            bool forward;
-            while (!mazeUserControl.Maze.IsSolved)
-            {
-                solver.Step(out sq1, out sq2, out forward);
-                mazeUserControl.PaintPath(sq1, sq2, forward);
-            }
-
-            // Finish drawing the maze path.
-            mazeUserControl.FinishPath(sq2);
+            IMazeSolver solver = SolverFactory.CreateDefaultSolver(mazeUserControl.Maze, mazeUserControl);
+            solver.Solve();
         }
 
         #region IMazeForm implementation

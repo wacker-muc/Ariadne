@@ -35,6 +35,7 @@
   <ItemGroup>
     <Compile Include="DeterministicWalker.cs" />
     <Compile Include="Flooder.cs" />
+    <Compile Include="IMazeDrawer.cs" />
     <Compile Include="IMazeSolver.cs" />
     <Compile Include="LeftHandWalker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

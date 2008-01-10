@@ -13,8 +13,13 @@ namespace SWA.Ariadne.Logic
     {
         #region Constructor
 
-        public RightHandWalker(Maze maze)
-            : base(maze)
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="maze"></param>
+        /// <param name="mazeDrawer"></param>
+        public RightHandWalker(Maze maze, IMazeDrawer mazeDrawer)
+            : base(maze, mazeDrawer)
         {
         }
 

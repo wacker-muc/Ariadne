@@ -32,11 +32,11 @@ namespace SWA.Ariadne.Logic
         /// <param name="solverType"></param>
         /// <param name="maze"></param>
         /// <returns></returns>
-        public static IMazeSolver CreateSolver(Type solverType, Maze maze)
+        public static IMazeSolver CreateSolver(Type solverType, Maze maze, IMazeDrawer mazeDrawer)
         {
             IMazeSolver result = (IMazeSolver)solverType.GetConstructor(
-                new Type[1] { typeof(Maze) }).Invoke(
-                new object[1] { maze }
+                new Type[2] { typeof(Maze), typeof(IMazeDrawer) }).Invoke(
+                new object[2] { maze, mazeDrawer }
                 );
             result.Reset();
 
@@ -49,7 +49,7 @@ namespace SWA.Ariadne.Logic
         /// </summary>
         /// <param name="maze"></param>
         /// <returns></returns>
-        public static IMazeSolver CreateSolver(Maze maze)
+        public static IMazeSolver CreateSolver(Maze maze, IMazeDrawer mazeDrawer)
         {
             Random r = new Random();
 
@@ -69,7 +69,7 @@ namespace SWA.Ariadne.Logic
                     continue;
                 }
 #endif
-                return CreateSolver(t, maze);
+                return CreateSolver(t, maze, mazeDrawer);
             }
         }
 
@@ -87,9 +87,9 @@ namespace SWA.Ariadne.Logic
         /// </summary>
         /// <param name="maze"></param>
         /// <returns></returns>
-        public static IMazeSolver CreateDefaultSolver(Maze maze)
+        public static IMazeSolver CreateDefaultSolver(Maze maze, IMazeDrawer mazeDrawer)
         {
-            return CreateSolver(DefaultStrategy, maze);
+            return CreateSolver(DefaultStrategy, maze, mazeDrawer);
         }
     }
 }
