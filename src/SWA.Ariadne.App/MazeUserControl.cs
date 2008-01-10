@@ -6,12 +6,13 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 using SWA.Ariadne.Model;
+using SWA.Ariadne.Logic;
 using SWA.Ariadne.Settings;
 
 namespace SWA.Ariadne.App
 {
     public partial class MazeUserControl : UserControl
-        , IAriadneSettingsSource
+        , IMazeDrawer, IAriadneSettingsSource
     {
         #region Constants
 
@@ -429,7 +430,7 @@ namespace SWA.Ariadne.App
         /// <param name="sq1"></param>
         /// <param name="sq2"></param>
         /// <param name="forward"></param>
-        internal void PaintPath(MazeSquare sq1, MazeSquare sq2, bool forward)
+        public void DrawStep(MazeSquare sq1, MazeSquare sq2, bool forward)
         {
             float cx1 = xOffset + gridWidth / 2.0F + sq1.XPos * gridWidth;
             float cy1 = yOffset + gridWidth / 2.0F + sq1.YPos * gridWidth;
@@ -482,11 +483,12 @@ namespace SWA.Ariadne.App
         /// Paints the path between all MazeSquares in the given list in the backward color.
         /// </summary>
         /// <param name="path">List of MazeSquares starting at a dead end and ending at a branching square (not dead)</param>
-        internal void PaintDeadBranch(List<MazeSquare> path)
+        /// <param name="forward"></param>
+        public void DrawPath(List<MazeSquare> path, bool forward)
         {
             for (int i = 1; i < path.Count; i++)
             {
-                this.PaintPath(path[i - 1], path[i], false);
+                this.DrawStep(path[i - 1], path[i], forward);
             }
             
             // Redraw the square where the branching occurred.

@@ -12,24 +12,29 @@ namespace SWA.Ariadne.Logic
     {
         #region Member variables and properties
 
+        /// <summary>
+        /// The problem to be solved.
+        /// </summary>
         protected readonly Maze maze;
 
         /// <summary>
-        /// A delegate for marking dead branches.  The caller should paint the path between the given squares.
+        /// An object that will draw the path while we are solving it.
         /// </summary>
-        public MarkDeadBranchDelegate MarkDeadBranchDelegate
-        {
-            set { markDeadBranchDelegate = value; }
-        }
-        protected MarkDeadBranchDelegate markDeadBranchDelegate = null;
+        protected IMazeDrawer mazeDrawer;
 
         #endregion
 
         #region Constructor
 
-        protected SolverBase(Maze maze)
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="maze"></param>
+        /// <param name="mazeDrawer"></param>
+        protected SolverBase(Maze maze, IMazeDrawer mazeDrawer)
         {
             this.maze = maze;
+            this.mazeDrawer = mazeDrawer;
         }
 
         #endregion
@@ -66,6 +71,24 @@ namespace SWA.Ariadne.Logic
         /// <param name="sq2">next (neighbor) square</param>
         /// <param name="forward">true if the neighbor square was not visited previously</param>
         protected abstract void StepI(out MazeSquare sq1, out MazeSquare sq2, out bool forward);
+
+        /// <summary>
+        /// Find a path in the maze from the start to the end point.
+        /// </summary>
+        public void Solve()
+        {
+            MazeSquare sq1, sq2 = null;
+            bool forward;
+
+            while (!maze.IsSolved)
+            {
+                this.Step(out sq1, out sq2, out forward);
+                if (mazeDrawer != null)
+                {
+                    mazeDrawer.DrawStep(sq1, sq2, forward);
+                }
+            }
+        }
 
         #endregion
 

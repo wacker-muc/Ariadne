@@ -27,8 +27,13 @@ namespace SWA.Ariadne.Logic
 
         #region Constructor
 
-        public RandomBacktracker(Maze maze)
-            : base(maze)
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="maze"></param>
+        /// <param name="mazeDrawer"></param>
+        public RandomBacktracker(Maze maze, IMazeDrawer mazeDrawer)
+            : base(maze, mazeDrawer)
         {
             this.random = new Random();
         }

@@ -220,8 +220,7 @@ namespace SWA.Ariadne.App
                 return;
             }
 
-            solver = SolverFactory.CreateSolver(strategy, mazeUserControl.Maze);
-            solver.MarkDeadBranchDelegate = this.mazeUserControl.PaintDeadBranch;
+            solver = SolverFactory.CreateSolver(strategy, mazeUserControl.Maze, mazeUserControl);
 
             stepTimer = new Timer();
             stepTimer.Interval = (1000/60); // 60 frames per second
@@ -650,7 +649,7 @@ namespace SWA.Ariadne.App
             bool forward;
 
             solver.Step(out sq1, out sq2, out forward);
-            mazeUserControl.PaintPath(sq1, sq2, forward);
+            mazeUserControl.DrawStep(sq1, sq2, forward);
 
             if (forward)
             {

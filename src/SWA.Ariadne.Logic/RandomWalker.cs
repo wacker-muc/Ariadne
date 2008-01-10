@@ -24,8 +24,13 @@ namespace SWA.Ariadne.Logic
 
         #region Constructor
 
-        public RandomWalker(Maze maze)
-            : base(maze)
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="maze"></param>
+        /// <param name="mazeDrawer"></param>
+        public RandomWalker(Maze maze, IMazeDrawer mazeDrawer)
+            : base(maze, mazeDrawer)
         {
             this.random = new Random();
         }

@@ -27,8 +27,13 @@ namespace SWA.Ariadne.Logic
 
         #region Constructor
 
-        public RandomFlooder(Maze maze)
-            : base(maze)
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="maze"></param>
+        /// <param name="mazeDrawer"></param>
+        public RandomFlooder(Maze maze, IMazeDrawer mazeDrawer)
+            : base(maze, mazeDrawer)
         {
         }
 
