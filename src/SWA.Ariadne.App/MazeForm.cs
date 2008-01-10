@@ -150,6 +150,7 @@ namespace SWA.Ariadne.App
                 stepTimer = null;
                 solver = null;
                 FixStateDependantControls();
+                visitedProgressBar.Value = 0;
             }
 
             ResetCounters();
@@ -170,6 +171,11 @@ namespace SWA.Ariadne.App
             }
 
             mazeUserControl.Setup();
+
+            // Adapt the progress bar to the maze area
+            visitedProgressBar.Minimum = 0;
+            visitedProgressBar.Maximum = mazeUserControl.Maze.XSize * mazeUserControl.Maze.YSize;
+            visitedProgressBar.Step = 1;
         }
 
         /// <summary>
@@ -229,6 +235,7 @@ namespace SWA.Ariadne.App
 
             FixStateDependantControls();
             ResetCounters();
+            visitedProgressBar.PerformStep(); // start square
 
             lapStartTime = System.DateTime.Now;
         }
@@ -480,11 +487,8 @@ namespace SWA.Ariadne.App
         {
             StringBuilder message = new StringBuilder(200);
 
-            message.Append("Size = " + mazeUserControl.Maze.XSize.ToString() + "x" + mazeUserControl.Maze.YSize.ToString());
-            
             if(countSteps > 0)
             {
-                message.Append(" / ");
                 message.Append(countSteps.ToString("#,##0") + " steps, "
                     + countForward.ToString("#,##0") + " forward, "
                     + countBackward.ToString("#,##0") + " backward"
@@ -522,6 +526,12 @@ namespace SWA.Ariadne.App
             {
                 caption.Append(" - ");
                 caption.Append(strategy.Name);
+            }
+
+            if (mazeUserControl != null && mazeUserControl.Maze != null)
+            {
+                caption.Append(" - ");
+                caption.Append(mazeUserControl.Maze.XSize.ToString() + "x" + mazeUserControl.Maze.YSize.ToString());
             }
 
             if (true)
@@ -654,6 +664,7 @@ namespace SWA.Ariadne.App
             if (forward)
             {
                 ++countForward;
+                visitedProgressBar.PerformStep(); // next visited square
             }
             else
             {
