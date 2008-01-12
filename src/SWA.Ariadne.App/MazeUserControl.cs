@@ -156,21 +156,23 @@ namespace SWA.Ariadne.App
 
             // Create a maze.
             this.maze = new Maze(xSize, ySize);
+
             try
             {
+                // Note: In the designer, the MazeForm property is not valid.
                 this.MazeForm.MakeReservedAreas(maze);
             }
-            catch (InvalidCastException) { }
-            catch (NullReferenceException) { }
+            catch { }
+
             maze.CreateMaze();
 
             try
             {
+                // Note: In the designer, the MazeForm property is not valid.
                 this.MazeForm.UpdateStatusLine();
                 this.MazeForm.UpdateCaption();
             }
-            catch (InvalidCastException) { }
-            catch (NullReferenceException) { }
+            catch { }
         }
 
         private void FitMazeWidth(out int width, out int offset)
