@@ -13,10 +13,18 @@ namespace SWA.Ariadne.App
     /// <summary>
     /// A Windows Form that displays a Maze in a MazeUserControl.
     /// </summary>
-    public partial class MazeForm : Form
+    public partial class MazeForm : AriadneFormBase
         , IMazeForm
     {
         #region Member variables
+
+        /// <summary>
+        /// The object that accepts the MazeControl commands.
+        /// </summary>
+        protected override IMazeControl Control
+        {
+            get { return this.mazeUserControl as IMazeControl; }
+        }
 
         /// <summary>
         /// The type of solver algorithm we will use.
@@ -35,48 +43,9 @@ namespace SWA.Ariadne.App
         private IMazeSolver solver;
 
         /// <summary>
-        /// A timer that causes single solver steps.
+        /// Number of executed steps: in forward and backward direction.
         /// </summary>
-        private Timer stepTimer;
-
-        /// <summary>
-        /// Counters for the number of executed steps: total, in forward and backward direction.
-        /// </summary>
-        private long countSteps, countForward, countBackward;
-
-        #region Timing and step rate
-
-        /// <summary>
-        /// Desired step rate.
-        /// </summary>
-        private int stepsPerSecond = 200;
-
-        /// <summary>
-        /// Time when start or pause button was pressed.
-        /// </summary>
-        private DateTime lapStartTime;
-
-        /// <summary>
-        /// Duration since lapStartTime.
-        /// </summary>
-        private double lapSeconds;
-
-        /// <summary>
-        /// Duration of previous laps (Start .. Pause).
-        /// </summary>
-        private double accumulatedSeconds;
-
-        /// <summary>
-        /// Number of steps that don't count in the current rate calculation.
-        /// </summary>
-        private long stepsBeforeRateChange;
-
-        /// <summary>
-        /// Duration that doesn't count in the current rate calculation.
-        /// </summary>
-        private double secondsBeforeRateChange;
-
-        #endregion
+        private long countForward, countBackward;
 
         #endregion
 
@@ -89,9 +58,10 @@ namespace SWA.Ariadne.App
         {
             InitializeComponent();
 
-            #region Initialize the stepsPerSecTextBox
+            #region Unhide the non-common controls of AriadneFormBase we want to use
 
-            stepsPerSecTextBox.Text = stepsPerSecond.ToString();
+            strategyComboBox.Visible = true;
+            visitedProgressBar.Visible = true;
 
             #endregion
 
@@ -135,21 +105,13 @@ namespace SWA.Ariadne.App
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OnReset(object sender, EventArgs e)
+        protected override void OnReset(object sender, EventArgs e)
         {
             if (State != SolverState.Ready)
             {
-                if (State == SolverState.Paused)
-                {
-                    this.OnPause(sender, e);
-                }
-                if (State == SolverState.Running)
-                {
-                    stepTimer.Stop();
-                }
-                stepTimer = null;
+                base.OnReset(sender, e);
+
                 solver = null;
-                FixStateDependantControls();
                 visitedProgressBar.Value = 0;
             }
 
@@ -163,7 +125,7 @@ namespace SWA.Ariadne.App
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OnNew(object sender, EventArgs e)
+        protected override void OnNew(object sender, EventArgs e)
         {
             if (State != SolverState.Ready)
             {
@@ -178,37 +140,6 @@ namespace SWA.Ariadne.App
             visitedProgressBar.Step = 1;
         }
 
-        /// <summary>
-        /// Opens a Details dialog.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void OnDetails(object sender, EventArgs e)
-        {
-            // This is not allowed while the Solver is busy.
-            if (State == SolverState.Running || State == SolverState.Paused)
-            {
-                return;
-            }
-
-            DetailsDialog form = new DetailsDialog(this.mazeUserControl);
-            form.ShowDialog(this);
-
-            // What needs to be done if the dialog has caused a State change?
-            FixStateDependantControls();
-        }
-
-        /// <summary>
-        /// Opens an About box.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void OnAbout(object sender, EventArgs e)
-        {
-            AboutBox form = new AboutBox();
-            form.ShowDialog(this);
-        }
-
         #endregion
 
         #region Solver controls
@@ -218,7 +149,7 @@ namespace SWA.Ariadne.App
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OnStart(object sender, EventArgs e)
+        protected override void OnStart(object sender, EventArgs e)
         {
             if (State != SolverState.Ready)
             {
@@ -228,232 +159,14 @@ namespace SWA.Ariadne.App
 
             solver = SolverFactory.CreateSolver(strategy, mazeUserControl.Maze, mazeUserControl);
 
-            stepTimer = new Timer();
-            stepTimer.Interval = (1000/60); // 60 frames per second
-            stepTimer.Tick += new EventHandler(this.OnStepTimer);
-            stepTimer.Start();
-
-            FixStateDependantControls();
-            ResetCounters();
-            visitedProgressBar.PerformStep(); // start square
-
-            lapStartTime = System.DateTime.Now;
-        }
-
-        /// <summary>
-        /// Let the solver make enough steps to stay in schedule.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void OnStepTimer(object sender, EventArgs e)
-        {
-            if (State != SolverState.Running)
-            {
-                return;
-            }
-
-            try
-            {
-                // Stop the timer to prevent additional events while the solver is busy.
-                stepTimer.Enabled = false;
-                // State looks like Paused but this will be changed back at the end.
-
-                if (!mazeUserControl.Maze.IsSolved)
-                {
-                    /* On a small maze or at low step rate, a few steps will be sufficient.
-                     * 
-                     * On a large maze, painting is slower; therefore, we render the GraphicsBuffer
-                     * only every 20 steps: maxStepsBetweenRedraw.
-                     * 
-                     * The timer ticks only every few milliseconds.  That causes a small idle delay
-                     * between the end of one OnStepTimer() event and the start of the next one.
-                     * 
-                     * For balancing between low responsiveness and high idle times, we keep looping
-                     * for up to 1/2 second: maxMillisecondsPerTimerEvent.
-                     */
-
-                    // Repetition restrictions.
-                    int maxStepsBetweenRedraw = Math.Max(20, stepsPerSecond / 60); // approx. 60Hz
-                    int maxMillisecondsPerTimerEvent = 400;
-
-                    DateTime currentStartTime = DateTime.Now;
-                    TimeSpan elapsed = new TimeSpan(0);
-
-                    while (elapsed.TotalMilliseconds < maxMillisecondsPerTimerEvent && this.IsBehindSchedule())
-                    {
-                        MazeSquare sq = null;
-
-                        for (int steps = 0; steps < maxStepsBetweenRedraw && this.IsBehindSchedule(); ++steps)
-                        {
-                            sq = SingleStep();
-                        }
-
-                        // Render the executed steps.
-                        mazeUserControl.FinishPath(sq);
-
-                        elapsed = DateTime.Now - currentStartTime;
-                    }
-                }
-            }
-            finally
-            {
-                // Either restart or delete the timer.
-                if (!mazeUserControl.Maze.IsSolved)
-                {
-                    stepTimer.Enabled = true;
-                    // State is Running.
-                }
-                else
-                {
-                    stepTimer = null;
-                    // State is Finished and may become Ready if someone creates a new Maze.
-                }
-
-                UpdateStatusLine();
-            }
-        }
-
-        /// <summary>
-        /// Halt or continue the solver.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void OnPause(object sender, EventArgs e)
-        {
-            if (State != SolverState.Running && State != SolverState.Paused)
-            {
-                return;
-            }
-
-            // Switch between Running and Paused.
-            stepTimer.Enabled = !stepTimer.Enabled;
-
-            if (State == SolverState.Running)
-            {
-                accumulatedSeconds += lapSeconds;
-                lapSeconds = 0;
-                lapStartTime = System.DateTime.Now;
-
-                this.pauseLabel.ToolTipText = "Pause";
-                this.pauseLabel.BorderStyle = Released;
-                this.pauseLabel.Tag = "";
-            }
-            else
-            {
-                this.pauseLabel.ToolTipText = "Continue";
-                this.pauseLabel.BorderStyle = Pressed;
-                this.pauseLabel.Tag = "sunken";
-            }
-        }
-
-        /// <summary>
-        /// Execute a single solver step.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void OnStep(object sender, EventArgs e)
-        {
-            if (State == SolverState.Ready)
-            {
-                this.OnStart(sender, e);
-                this.OnPause(sender, e);
-            }
-
-            if (State != SolverState.Paused)
-            {
-                return;
-            }
-
-            mazeUserControl.FinishPath(SingleStep());
-            UpdateStatusLine();
-        }
-
-        #endregion
-
-        #region Button pressed behavior
-
-        private ToolStripStatusLabel trackedLabel;
-        private const Border3DStyle Pressed = Border3DStyle.SunkenOuter;
-        private const Border3DStyle Released = Border3DStyle.RaisedInner;
-
-        private void OnMouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                this.trackedLabel = (ToolStripStatusLabel)sender;
-                SwitchTrackedLabel(Released, Pressed);
-            }
-        }
-
-        private void SwitchTrackedLabel(Border3DStyle regular, Border3DStyle alternate)
-        {
-            bool hasSunkenTag = false;
-            try
-            {
-                hasSunkenTag = ("sunken" == (string)trackedLabel.Tag);
-            }
-            catch (InvalidCastException) { }
-
-            trackedLabel.BorderStyle = (hasSunkenTag ? regular : alternate);
-            this.statusStrip.Refresh();
-        }
-
-        private void OnMouseUp(object sender, MouseEventArgs e)
-        {
-            if (sender == trackedLabel)
-            {
-                SwitchTrackedLabel(Pressed, Released);
-            }
-            trackedLabel = null;
-        }
-
-        private void OnMouseEnter(object sender, EventArgs e)
-        {
-            if (sender == trackedLabel)
-            {
-                SwitchTrackedLabel(Released, Pressed);
-            }
-        }
-
-        private void OnMouseLeave(object sender, EventArgs e)
-        {
-            if (sender == trackedLabel)
-            {
-                SwitchTrackedLabel(Pressed, Released);
-                trackedLabel = null;
-            }
+            base.OnStart(sender, e);
         }
 
         #endregion
 
         #region Parameter settings
 
-        private void stepsPerSec_TextChanged(object sender, EventArgs e)
-        {
-            int value = this.stepsPerSecond;
-
-            try
-            {
-                value = Int32.Parse(stepsPerSecTextBox.Text);
-            }
-            catch (Exception) { }
-
-            value = Math.Max(1, Math.Min(40000,value));
-
-            if (stepsPerSecTextBox.Text != value.ToString())
-            {
-                //stepsPerSecTextBox.Text = value.ToString();
-            }
-
-            this.stepsPerSecond = value;
-            UpdateCaption();
-
-            // Adjust scheduling parameters.
-            secondsBeforeRateChange = accumulatedSeconds + lapSeconds;
-            stepsBeforeRateChange = countSteps;
-        }
-
-        private void strategy_SelectedIndexChanged(object sender, EventArgs e)
+        protected override void strategy_SelectedIndexChanged(object sender, EventArgs e)
         {
             this.strategy = strategies[(string)strategyComboBox.SelectedItem];
             UpdateCaption();
@@ -470,7 +183,7 @@ namespace SWA.Ariadne.App
         /// This method is called from the MazeUserControl before actually building the maze.
         /// </summary>
         /// <param name="maze"></param>
-        public void MakeReservedAreas(Maze maze)
+        public override void MakeReservedAreas(Maze maze)
         {
 #if false
             Random r = new Random();
@@ -480,73 +193,51 @@ namespace SWA.Ariadne.App
 #endif
         }
 
-        /// <summary>
-        /// Displays information about the running MazeSolver in the status line.
-        /// </summary>
-        public void UpdateStatusLine()
-        {
-            StringBuilder message = new StringBuilder(200);
+        #endregion
 
-            if(countSteps > 0)
+        #region AriadneFormBase implementation
+
+
+        /// <summary>
+        /// Advance a single step.
+        /// The travelled steps are not rendered until FinishPath() is called.
+        /// </summary>
+        protected override void DoStep()
+        {
+            _currentSquare = SingleStep();
+        }
+
+        /// <summary>
+        /// Used by DoStep() and FinishPath().
+        /// </summary>
+        private MazeSquare _currentSquare = null;
+
+        /// <summary>
+        /// Renders the path travelled so far.
+        /// </summary>
+        protected override void FinishPath()
+        {
+            mazeUserControl.FinishPath(_currentSquare);
+            _currentSquare = null;
+        }
+
+        /// <summary>
+        /// Write state information to the given StringBuilder.
+        /// Derived classes should call their base class' method.
+        /// </summary>
+        /// <param name="message"></param>
+        protected override void FillStatusMessage(StringBuilder message)
+        {
+            if (countSteps > 0)
             {
                 message.Append(countSteps.ToString("#,##0") + " steps, "
                     + countForward.ToString("#,##0") + " forward, "
                     + countBackward.ToString("#,##0") + " backward"
                     );
-
-                message.Append(" / ");
-                double totalSeconds = accumulatedSeconds + lapSeconds;
-                message.Append(totalSeconds.ToString("#,##0.00") + " sec");
-
-                double sps = (countSteps-stepsBeforeRateChange) / (totalSeconds-secondsBeforeRateChange);
-                if (stepsBeforeRateChange > 0)
-                {
-                    message.Append(" = [" + sps.ToString("#,##0") + "] steps/sec");
-                }
-                else
-                {
-                    message.Append(" = " + sps.ToString("#,##0") + " steps/sec");
-                }
             }
 
-            this.statusLabel.Text = message.ToString();
-        }
-
-        /// <summary>
-        /// Displays Maze and Solver characteristics in the window's caption bar.
-        /// The maze ID, step rate and solver strategy name.
-        /// </summary>
-        public void UpdateCaption()
-        {
-            StringBuilder caption = new StringBuilder(80);
-
-            caption.Append("Ariadne");
-
-            if (strategy != null)
-            {
-                caption.Append(" - ");
-                caption.Append(strategy.Name);
-            }
-
-            if (mazeUserControl != null && mazeUserControl.Maze != null)
-            {
-                caption.Append(" - ");
-                caption.Append(mazeUserControl.Maze.XSize.ToString() + "x" + mazeUserControl.Maze.YSize.ToString());
-            }
-
-            if (true)
-            {
-                caption.Append(" - ");
-                caption.Append(stepsPerSecond.ToString());
-            }
-
-            if (mazeUserControl != null && mazeUserControl.Maze != null)
-            {
-                caption.Append(" - ");
-                caption.Append("ID: " + mazeUserControl.Maze.Code);
-            }
-
-            this.Text = caption.ToString();
+            // Add text from the base class.
+            base.FillStatusMessage(message);
         }
 
         #endregion
@@ -558,45 +249,14 @@ namespace SWA.Ariadne.App
         /// </summary>
         private void ResetCounters()
         {
-            countSteps = countForward = countBackward = 0;
-            lapSeconds = accumulatedSeconds = 0;
-            stepsBeforeRateChange = 0;
-            secondsBeforeRateChange = 0;
+            countForward = countBackward = 0;
+            visitedProgressBar.PerformStep(); // start square
         }
 
         /// <summary>
-        /// Returns true while we have not executed enough steps to achieve the desired step rate.
+        /// Gets the current SolverState.
         /// </summary>
-        /// <returns></returns>
-        private bool IsBehindSchedule()
-        {
-            if (State == SolverState.Finished)
-            {
-                return false;
-            }
-
-            // TimeSpan since last Start or Continue.
-            TimeSpan lap = System.DateTime.Now - lapStartTime;
-            this.lapSeconds = lap.TotalSeconds;
-
-            // Duration for which the desired step rate should be achieved.
-            double relevantSeconds = (accumulatedSeconds + lapSeconds) - secondsBeforeRateChange;
-
-            // Number of steps that should have been achieved.
-            double scheduledSteps = (relevantSeconds * stepsPerSecond) + stepsBeforeRateChange;
-
-            return (countSteps < 1 + scheduledSteps);
-        }
-
-        private enum SolverState
-        {
-            Ready,
-            Running,
-            Paused,
-            Finished,
-        }
-
-        private SolverState State
+        protected override SolverState State
         {
             get
             {
