@@ -254,47 +254,6 @@ namespace SWA.Ariadne.App
         }
 
         /// <summary>
-        /// Gets the current SolverState.
-        /// </summary>
-        protected override SolverState State
-        {
-            get
-            {
-                // While there is no solver, we are Ready to create one and start it.
-                if (solver == null)
-                {
-                    return SolverState.Ready;
-                }
-
-                // If the maze is solved, we are Finished.
-                if (mazeUserControl.Maze.IsSolved)
-                {
-                    return SolverState.Finished;
-                }
-
-                // If there is no timer, we should be either Ready or Finished.  But "Finished" was checked above.
-                //
-                // Explanation:
-                // The DetailsDialog can be opened in the Finished state and may create a new, unsolved Maze.
-                //
-                if (stepTimer == null)
-                {
-                    return SolverState.Ready;
-                }
-
-                // So we are either running or paused.
-                if (stepTimer.Enabled)
-                {
-                    return SolverState.Running;
-                }
-                else
-                {
-                    return SolverState.Paused;
-                }
-            }
-        }
-
-        /// <summary>
         /// Enables or disables some controls depending on whether we are Ready or not.
         /// </summary>
         private void FixStateDependantControls()
