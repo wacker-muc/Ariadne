@@ -12,7 +12,7 @@ using SWA.Ariadne.Settings;
 namespace SWA.Ariadne.App
 {
     public partial class MazeUserControl : UserControl
-        , IMazeDrawer, IAriadneSettingsSource
+        , IMazeDrawer, IAriadneSettingsSource, SWA.Ariadne.App.IMazeControl
     {
         #region Constants
 
@@ -161,6 +161,7 @@ namespace SWA.Ariadne.App
                 this.MazeForm.MakeReservedAreas(maze);
             }
             catch (InvalidCastException) { }
+            catch (NullReferenceException) { }
             maze.CreateMaze();
 
             try
@@ -169,6 +170,7 @@ namespace SWA.Ariadne.App
                 this.MazeForm.UpdateCaption();
             }
             catch (InvalidCastException) { }
+            catch (NullReferenceException) { }
         }
 
         private void FitMazeWidth(out int width, out int offset)
@@ -602,6 +604,35 @@ namespace SWA.Ariadne.App
             Reset();
 
             #endregion
+        }
+
+        #endregion
+
+        #region IMazeControl implementation
+
+        public bool IsSolved
+        {
+            get { return maze.IsSolved; }
+        }
+
+        public int XSize
+        {
+            get { return (maze == null ? -1 : maze.XSize); }
+        }
+
+        public int YSize
+        {
+            get { return (maze == null ? -1 : maze.YSize); }
+        }
+
+        public string Code
+        {
+            get { return (maze == null ? "---" : maze.Code); }
+        }
+
+        public string StrategyName
+        {
+            get { return "???"; }
         }
 
         #endregion

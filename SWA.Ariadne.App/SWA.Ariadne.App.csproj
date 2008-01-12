@@ -42,12 +42,19 @@
     <Compile Include="AboutBox.Designer.cs">
       <DependentUpon>AboutBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="AriadneFormBase.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AriadneFormBase.designer.cs">
+      <DependentUpon>AriadneFormBase.cs</DependentUpon>
+    </Compile>
     <Compile Include="DetailsDialog.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="DetailsDialog.Designer.cs">
       <DependentUpon>DetailsDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="IMazeControl.cs" />
     <Compile Include="IMazeForm.cs" />
     <Compile Include="MazeForm.cs">
       <SubType>Form</SubType>
@@ -67,13 +74,13 @@
       <SubType>Designer</SubType>
       <DependentUpon>AboutBox.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="AriadneFormBase.resx">
+      <DependentUpon>AriadneFormBase.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="DetailsDialog.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DetailsDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MazeForm.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>MazeForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MazeUserControl.resx">
       <SubType>Designer</SubType>
