@@ -578,11 +578,31 @@ namespace SWA.Ariadne.App
         /// <summary>
         /// Gets the current SolverState.
         /// </summary>
-        protected virtual SolverState State
+        protected SolverState State
         {
             get
             {
-                throw new Exception("The method or operation is not implemented.");
+                // While there is no timer, we are Ready to create one and start it.
+                if (stepTimer == null)
+                {
+                    return SolverState.Ready;
+                }
+
+                // If the maze is solved, we are Finished.
+                if (Control.IsSolved)
+                {
+                    return SolverState.Finished;
+                }
+
+                // So we are either running or paused.
+                if (stepTimer.Enabled)
+                {
+                    return SolverState.Running;
+                }
+                else
+                {
+                    return SolverState.Paused;
+                }
             }
         }
 
