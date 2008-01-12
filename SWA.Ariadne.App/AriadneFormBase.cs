@@ -13,7 +13,7 @@ namespace SWA.Ariadne.App
     /// <summary>
     /// Base class for Ariadne Form windows.
     /// </summary>
-    public abstract partial class AriadneFormBase : Form
+    public partial class AriadneFormBase : Form
         , IMazeForm
     {
         #region Member variables
@@ -21,7 +21,13 @@ namespace SWA.Ariadne.App
         /// <summary>
         /// The object that accepts the MazeControl commands.
         /// </summary>
-        protected abstract IMazeControl Control { get; }
+        protected virtual IMazeControl Control
+        {
+            get
+            {
+                throw new Exception("The method or operation is not implemented.");
+            }
+        }
 
         /// <summary>
         /// A timer that causes single solver steps.
@@ -127,7 +133,10 @@ namespace SWA.Ariadne.App
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        protected abstract void OnNew(object sender, EventArgs e);
+        protected virtual void OnNew(object sender, EventArgs e)
+        {
+            throw new Exception("The method or operation is not implemented.");
+        }
 
         /// <summary>
         /// Opens a Details dialog.
@@ -316,8 +325,15 @@ namespace SWA.Ariadne.App
             UpdateStatusLine();
         }
 
-        protected abstract void DoStep();
-        protected abstract void FinishPath();
+        protected virtual void DoStep()
+        {
+            throw new Exception("The method or operation is not implemented.");
+        }
+
+        protected virtual void FinishPath()
+        {
+            throw new Exception("The method or operation is not implemented.");
+        }
 
         #endregion
 
@@ -420,7 +436,10 @@ namespace SWA.Ariadne.App
         /// This method is called from the MazeUserControl before actually building the maze.
         /// </summary>
         /// <param name="maze"></param>
-        public abstract void MakeReservedAreas(Maze maze);
+        public virtual void MakeReservedAreas(Maze maze)
+        {
+            throw new Exception("The method or operation is not implemented.");
+        }
 
         /// <summary>
         /// Displays information about the running MazeSolver in the status line.
@@ -559,7 +578,13 @@ namespace SWA.Ariadne.App
         /// <summary>
         /// Gets the current SolverState.
         /// </summary>
-        protected abstract SolverState State { get; }
+        protected virtual SolverState State
+        {
+            get
+            {
+                throw new Exception("The method or operation is not implemented.");
+            }
+        }
 
         /// <summary>
         /// Enables or disables some controls depending on whether we are Ready or not.
