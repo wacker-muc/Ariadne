@@ -503,7 +503,7 @@ namespace SWA.Ariadne.App
             if (Control != null)
             {
                 caption.Append(" - ");
-                caption.Append(Control.StrategyName);
+                caption.Append((string)strategyComboBox.SelectedItem);
             }
 
             if (Control != null)

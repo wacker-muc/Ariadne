@@ -12,7 +12,7 @@ using SWA.Ariadne.Settings;
 namespace SWA.Ariadne.App
 {
     public partial class MazeUserControl : UserControl
-        , IMazeDrawer, IAriadneSettingsSource, SWA.Ariadne.App.IMazeControl
+        , IMazeDrawer, IAriadneSettingsSource, IMazeControl
     {
         #region Constants
 
@@ -630,11 +630,6 @@ namespace SWA.Ariadne.App
         public string Code
         {
             get { return (maze == null ? "---" : maze.Code); }
-        }
-
-        public string StrategyName
-        {
-            get { return "???"; }
         }
 
         #endregion

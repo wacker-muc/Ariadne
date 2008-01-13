@@ -8,7 +8,6 @@ namespace SWA.Ariadne.App
     {
         string Code { get; }
         bool IsSolved { get; }
-        string StrategyName { get; }
         int XSize { get; }
         int YSize { get; }
     }
