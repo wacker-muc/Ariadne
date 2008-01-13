@@ -12,7 +12,7 @@ using SWA.Ariadne.Settings;
 namespace SWA.Ariadne.App
 {
     public partial class MazeUserControl : UserControl
-        , IMazeDrawer, IAriadneSettingsSource, IMazeControl
+        , IMazeControl
     {
         #region Constants
 
@@ -458,7 +458,7 @@ namespace SWA.Ariadne.App
         /// Renders the GraphicsBuffer.
         /// </summary>
         /// <param name="sq">when null, no dot is drawn</param>
-        internal void FinishPath(MazeSquare sq)
+        public void FinishPath(MazeSquare sq)
         {
             if (sq != null && sq != maze.EndSquare)
             {

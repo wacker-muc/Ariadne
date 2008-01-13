@@ -21,7 +21,18 @@ namespace SWA.Ariadne.App
         /// <summary>
         /// The object that accepts the MazeControl commands.
         /// </summary>
-        protected virtual IMazeControl Control
+        protected virtual IMazeControl MazeControl
+        {
+            get
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// The object that accepts the SolverController commands.
+        /// </summary>
+        protected virtual SolverController SolverController
         {
             get
             {
@@ -37,7 +48,10 @@ namespace SWA.Ariadne.App
         /// <summary>
         /// Number of executed steps.
         /// </summary>
-        protected long countSteps;
+        protected long countSteps
+        {
+            get { return (SolverController == null ? -1 : SolverController.CountSteps); }
+        }
 
         #region Timing and step rate
 
@@ -122,9 +136,9 @@ namespace SWA.Ariadne.App
                     stepTimer.Stop();
                 }
                 stepTimer = null;
-                FixStateDependantControls();
             }
 
+            FixStateDependantControls();
             ResetCounters();
         }
 
@@ -151,7 +165,7 @@ namespace SWA.Ariadne.App
                 return;
             }
 
-            DetailsDialog form = new DetailsDialog(this.Control);
+            DetailsDialog form = new DetailsDialog(this.MazeControl);
             form.ShowDialog(this);
 
             // What needs to be done if the dialog has caused a State change?
@@ -166,7 +180,7 @@ namespace SWA.Ariadne.App
         private void OnAbout(object sender, EventArgs e)
         {
             AboutBox form = new AboutBox();
-            form.ShowDialog(this);
+            form.ShowDialog();
         }
 
         #endregion
@@ -215,7 +229,7 @@ namespace SWA.Ariadne.App
                 stepTimer.Enabled = false;
                 // State looks like Paused but this will be changed back at the end.
 
-                if (!Control.IsSolved)
+                if (!MazeControl.IsSolved)
                 {
                     /* On a small maze or at low step rate, a few steps will be sufficient.
                      * 
@@ -240,11 +254,11 @@ namespace SWA.Ariadne.App
                     {
                         for (int steps = 0; steps < maxStepsBetweenRedraw && this.IsBehindSchedule(); ++steps)
                         {
-                            DoStep();
+                            SolverController.DoStep();
                         }
 
                         // Render the executed steps.
-                        this.FinishPath();
+                        SolverController.FinishPath();
 
                         elapsed = DateTime.Now - currentStartTime;
                     }
@@ -253,7 +267,7 @@ namespace SWA.Ariadne.App
             finally
             {
                 // Either restart or delete the timer.
-                if (!Control.IsSolved)
+                if (!MazeControl.IsSolved)
                 {
                     stepTimer.Enabled = true;
                     // State is Running.
@@ -319,20 +333,10 @@ namespace SWA.Ariadne.App
                 return;
             }
 
-            DoStep();
-            FinishPath();
+            SolverController.DoStep();
+            SolverController.FinishPath();
 
             UpdateStatusLine();
-        }
-
-        protected virtual void DoStep()
-        {
-            throw new Exception("The method or operation is not implemented.");
-        }
-
-        protected virtual void FinishPath()
-        {
-            throw new Exception("The method or operation is not implemented.");
         }
 
         #endregion
@@ -438,7 +442,7 @@ namespace SWA.Ariadne.App
         /// <param name="maze"></param>
         public virtual void MakeReservedAreas(Maze maze)
         {
-            throw new Exception("The method or operation is not implemented.");
+            // subclasses might add code here
         }
 
         /// <summary>
@@ -500,16 +504,16 @@ namespace SWA.Ariadne.App
         {
             caption.Append("Ariadne");
 
-            if (Control != null)
+            if (MazeControl != null)
             {
                 caption.Append(" - ");
                 caption.Append((string)strategyComboBox.SelectedItem);
             }
 
-            if (Control != null)
+            if (MazeControl != null)
             {
                 caption.Append(" - ");
-                caption.Append(Control.XSize.ToString() + "x" + Control.YSize.ToString());
+                caption.Append(MazeControl.XSize.ToString() + "x" + MazeControl.YSize.ToString());
             }
 
             if (true)
@@ -518,10 +522,10 @@ namespace SWA.Ariadne.App
                 caption.Append(stepsPerSecond.ToString());
             }
 
-            if (Control != null)
+            if (MazeControl != null)
             {
                 caption.Append(" - ");
-                caption.Append("ID: " + Control.Code);
+                caption.Append("ID: " + MazeControl.Code);
             }
         }
 
@@ -534,7 +538,8 @@ namespace SWA.Ariadne.App
         /// </summary>
         private void ResetCounters()
         {
-            countSteps = 0;
+            SolverController.ResetCounters();
+
             lapSeconds = accumulatedSeconds = 0;
             stepsBeforeRateChange = 0;
             secondsBeforeRateChange = 0;
@@ -589,7 +594,7 @@ namespace SWA.Ariadne.App
                 }
 
                 // If the maze is solved, we are Finished.
-                if (Control.IsSolved)
+                if (MazeControl.IsSolved)
                 {
                     return SolverState.Finished;
                 }

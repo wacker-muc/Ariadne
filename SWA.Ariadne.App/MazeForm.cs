@@ -20,21 +20,23 @@ namespace SWA.Ariadne.App
         /// <summary>
         /// The object that accepts the MazeControl commands.
         /// </summary>
-        protected override IMazeControl Control
+        protected override IMazeControl MazeControl
         {
             get { return this.mazeUserControl as IMazeControl; }
         }
 
         /// <summary>
-        /// The maze solver algorithm.
-        /// This is only set (not null) while we are in a solving mode.
+        /// The object that accepts the SolverController commands.
         /// </summary>
-        private IMazeSolver solver;
+        protected override SolverController SolverController
+        {
+            get { return this.solverController; }
+        }
 
         /// <summary>
-        /// Number of executed steps: in forward and backward direction.
+        /// The SolverController.
         /// </summary>
-        private long countForward, countBackward;
+        private SolverController solverController;
 
         #endregion
 
@@ -67,6 +69,9 @@ namespace SWA.Ariadne.App
 
             #endregion
 
+            // Create a SolverController.
+            this.solverController = new SolverController(this.MazeControl, (ProgressBar)this.visitedProgressBar.Control);
+
             this.OnNew(null, null);
         }
 
@@ -83,17 +88,9 @@ namespace SWA.Ariadne.App
         /// <param name="e"></param>
         protected override void OnReset(object sender, EventArgs e)
         {
-            if (State != SolverState.Ready)
-            {
-                base.OnReset(sender, e);
-
-                solver = null;
-                visitedProgressBar.Value = 0;
-            }
-
-            ResetCounters();
-
-            this.mazeUserControl.Reset();
+            base.OnReset(sender, e);
+            solverController.Reset();
+            mazeUserControl.Reset();
         }
 
         /// <summary>
@@ -133,8 +130,7 @@ namespace SWA.Ariadne.App
                 return;
             }
 
-            Type strategy = SolverFactory.SolverType((string)strategyComboBox.SelectedItem);
-            solver = SolverFactory.CreateSolver(strategy, mazeUserControl.Maze, mazeUserControl);
+            solverController.Start((string)strategyComboBox.SelectedItem);
 
             base.OnStart(sender, e);
         }
@@ -152,50 +148,7 @@ namespace SWA.Ariadne.App
 
         #endregion
 
-        #region IMazeForm implementation
-
-        /// <summary>
-        /// Place reserved areas into the maze.
-        /// This method is called from the MazeUserControl before actually building the maze.
-        /// </summary>
-        /// <param name="maze"></param>
-        public override void MakeReservedAreas(Maze maze)
-        {
-#if false
-            Random r = new Random();
-            while (maze.ReserveRectangle(r.Next(2, 8), r.Next(2, 8)))
-            {
-            }
-#endif
-        }
-
-        #endregion
-
         #region AriadneFormBase implementation
-
-
-        /// <summary>
-        /// Advance a single step.
-        /// The travelled steps are not rendered until FinishPath() is called.
-        /// </summary>
-        protected override void DoStep()
-        {
-            _currentSquare = SingleStep();
-        }
-
-        /// <summary>
-        /// Used by DoStep() and FinishPath().
-        /// </summary>
-        private MazeSquare _currentSquare = null;
-
-        /// <summary>
-        /// Renders the path travelled so far.
-        /// </summary>
-        protected override void FinishPath()
-        {
-            mazeUserControl.FinishPath(_currentSquare);
-            _currentSquare = null;
-        }
 
         /// <summary>
         /// Write state information to the given StringBuilder.
@@ -204,13 +157,7 @@ namespace SWA.Ariadne.App
         /// <param name="message"></param>
         protected override void FillStatusMessage(StringBuilder message)
         {
-            if (countSteps > 0)
-            {
-                message.Append(countSteps.ToString("#,##0") + " steps, "
-                    + countForward.ToString("#,##0") + " forward, "
-                    + countBackward.ToString("#,##0") + " backward"
-                    );
-            }
+            SolverController.FillStatusMessage(message);
 
             // Add text from the base class.
             base.FillStatusMessage(message);
@@ -225,8 +172,7 @@ namespace SWA.Ariadne.App
         /// </summary>
         private void ResetCounters()
         {
-            countForward = countBackward = 0;
-            visitedProgressBar.PerformStep(); // start square
+            SolverController.ResetCounters();
         }
 
         /// <summary>
@@ -237,37 +183,6 @@ namespace SWA.Ariadne.App
             bool enabled = (State == SolverState.Ready);
 
             strategyComboBox.Enabled = enabled;
-        }
-
-        /// <summary>
-        /// Executes one step in the solver and paints that section of the path.
-        /// </summary>
-        /// <returns>either null OR the square this step travelled to in backward direction</returns>
-        private MazeSquare SingleStep()
-        {
-            if (State == SolverState.Finished)
-            {
-                return null;
-            }
-
-            MazeSquare sq1, sq2;
-            bool forward;
-
-            solver.Step(out sq1, out sq2, out forward);
-            mazeUserControl.DrawStep(sq1, sq2, forward);
-
-            if (forward)
-            {
-                ++countForward;
-                visitedProgressBar.PerformStep(); // next visited square
-            }
-            else
-            {
-                ++countBackward;
-            }
-            ++countSteps;
-
-            return (forward ? null : sq2);
         }
 
         #endregion

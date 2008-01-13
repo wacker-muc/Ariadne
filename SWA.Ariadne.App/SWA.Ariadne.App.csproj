@@ -55,6 +55,7 @@
       <DependentUpon>DetailsDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="IMazeControl.cs" />
+    <Compile Include="IMazeControlProperties.cs" />
     <Compile Include="IMazeForm.cs" />
     <Compile Include="MazeForm.cs">
       <SubType>Form</SubType>
@@ -96,6 +97,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="Overview.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -104,6 +106,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="SolverController.cs">
+      <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>

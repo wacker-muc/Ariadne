@@ -1,14 +1,13 @@
 ﻿using System;
-using SWA.Ariadne.Model;
+using SWA.Ariadne.Logic;
+using SWA.Ariadne.Settings;
 
 namespace SWA.Ariadne.App
 {
     public interface IMazeControl
-        : SWA.Ariadne.Settings.IAriadneSettingsSource
+        : IMazeControlProperties
+        , IMazeDrawer
+        , IAriadneSettingsSource
     {
-        string Code { get; }
-        bool IsSolved { get; }
-        int XSize { get; }
-        int YSize { get; }
     }
 }

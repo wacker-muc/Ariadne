@@ -1,0 +1,195 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Font Name="Tahoma" Size="8.25" />
+  <Class Name="SWA.Ariadne.App.AriadneFormBase">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>AriadneFormBase.cs</FileName>
+      <HashCode>gQgIABCJAaIEAEACsAjAAghCIAigYAENKRAAJTI2ASk=</HashCode>
+    </TypeIdentifier>
+    <Members>
+      <Field Name="aboutMenuItem" Hidden="true" />
+      <Field Name="accumulatedSeconds" Hidden="true" />
+      <Method Name="AriadneFormBase" Hidden="true" />
+      <Field Name="components" Hidden="true" />
+      <Property Name="countSteps" Hidden="true" />
+      <Field Name="detailsMenuItem" Hidden="true" />
+      <Method Name="Dispose" Hidden="true" />
+      <Method Name="FillCaption" Hidden="true" />
+      <Method Name="FillStatusMessage" Hidden="true" />
+      <Method Name="FixStateDependantControls" Hidden="true" />
+      <Method Name="InitializeComponent" Hidden="true" />
+      <Field Name="lapSeconds" Hidden="true" />
+      <Field Name="lapStartTime" Hidden="true" />
+      <Field Name="menuButton" Hidden="true" />
+      <Field Name="newMenuItem" Hidden="true" />
+      <Method Name="OnAbout" Hidden="true" />
+      <Method Name="OnMouseDown" Hidden="true" />
+      <Method Name="OnMouseEnter" Hidden="true" />
+      <Method Name="OnMouseLeave" Hidden="true" />
+      <Method Name="OnMouseUp" Hidden="true" />
+      <Method Name="OnNew" Hidden="true" />
+      <Method Name="OnReset" Hidden="true" />
+      <Method Name="OnStart" Hidden="true" />
+      <Field Name="openArenaMenuItem" Hidden="true" />
+      <Field Name="pauseLabel" Hidden="true" />
+      <Field Name="Pressed" Hidden="true" />
+      <Field Name="Released" Hidden="true" />
+      <Field Name="resetLabel" Hidden="true" />
+      <Field Name="resetMenuItem" Hidden="true" />
+      <Field Name="secondsBeforeRateChange" Hidden="true" />
+      <Field Name="startLabel" Hidden="true" />
+      <Field Name="startMenuItem" Hidden="true" />
+      <Field Name="statusLabel" Hidden="true" />
+      <Field Name="statusStrip" Hidden="true" />
+      <Field Name="stepLabel" Hidden="true" />
+      <Field Name="stepsBeforeRateChange" Hidden="true" />
+      <Method Name="stepsPerSec_TextChanged" Hidden="true" />
+      <Field Name="stepsPerSecond" Hidden="true" />
+      <Field Name="stepsPerSecTextBox" Hidden="true" />
+      <Field Name="stepTimer" Hidden="true" />
+      <Method Name="strategy_SelectedIndexChanged" Hidden="true" />
+      <Field Name="strategyComboBox" Hidden="true" />
+      <Method Name="SwitchTrackedLabel" Hidden="true" />
+      <Field Name="trackedLabel" Hidden="true" />
+      <Method Name="UpdateCaption" Hidden="true" />
+      <Method Name="UpdateStatusLine" Hidden="true" />
+      <Field Name="visitedProgressBar" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="SWA.Ariadne.App.AriadneFormBase.SolverState" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>AriadneFormBase.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="SWA.Ariadne.App.MazeForm">
+    <Position X="2.5" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>MazeForm.cs</FileName>
+      <HashCode>AAAAAAAAAaIAAAAAEACAAgACAAgAQAAAAAAAACIgAAA=</HashCode>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="SolverController" />
+      <Property Name="MazeControl" />
+    </ShowAsAssociation>
+    <Members>
+      <Field Name="components" Hidden="true" />
+      <Method Name="Dispose" Hidden="true" />
+      <Method Name="FixStateDependantControls" Hidden="true" />
+      <Method Name="InitializeComponent" Hidden="true" />
+      <Method Name="MazeForm" Hidden="true" />
+      <Field Name="mazeUserControl" Hidden="true" />
+      <Field Name="solverController" Hidden="true" />
+      <Method Name="strategy_SelectedIndexChanged" Hidden="true" />
+    </Members>
+  </Class>
+  <Class Name="SWA.Ariadne.App.MazeUserControl" BaseTypeListCollapsed="true">
+    <Position X="8.75" Y="3" Width="1.75" />
+    <TypeIdentifier>
+      <FileName>MazeUserControl.cs</FileName>
+      <HashCode>AgTgIAEACKAAPAAUAAegAhIGEBHDCKAICVMwJDICEAw=</HashCode>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="MazeForm" />
+    </ShowAsAssociation>
+    <Members>
+      <Method Name="AdjustPathWidth" Hidden="true" />
+      <Field Name="backwardColor" Hidden="true" />
+      <Field Name="backwardPen" Hidden="true" />
+      <Field Name="components" Hidden="true" />
+      <Method Name="Dispose" Hidden="true" />
+      <Method Name="FitMazeHeight" Hidden="true" />
+      <Method Name="FitMazeWidth" Hidden="true" />
+      <Field Name="forwardColor" Hidden="true" />
+      <Field Name="forwardPen" Hidden="true" />
+      <Field Name="gBuffer" Hidden="true" />
+      <Field Name="gridWidth" Hidden="true" />
+      <Method Name="InitializeComponent" Hidden="true" />
+      <Field Name="MaxAutoGridWidth" Hidden="true" />
+      <Field Name="MaxColor" Hidden="true" />
+      <Field Name="MaxGridWidth" Hidden="true" />
+      <Field Name="MaxPathWidth" Hidden="true" />
+      <Field Name="MaxSquareWidth" Hidden="true" />
+      <Field Name="MaxWallWidth" Hidden="true" />
+      <Field Name="maze" Hidden="true" />
+      <Field Name="MinAutoGridWidth" Hidden="true" />
+      <Field Name="MinColor" Hidden="true" />
+      <Field Name="MinGridWidth" Hidden="true" />
+      <Field Name="MinPathWidth" Hidden="true" />
+      <Field Name="MinSquareWidth" Hidden="true" />
+      <Field Name="MinWallWidth" Hidden="true" />
+      <Method Name="PaintBorder" Hidden="true" />
+      <Method Name="PaintEndpoints" Hidden="true" />
+      <Method Name="PaintMaze" Hidden="true" />
+      <Method Name="PaintPathDot" Hidden="true" />
+      <Method Name="PaintSquare" Hidden="true" />
+      <Method Name="PaintWalls" Hidden="true" />
+      <Field Name="pathWidth" Hidden="true" />
+      <Method Name="PlaceEndpoints" Hidden="true" />
+      <Field Name="squareWidth" Hidden="true" />
+      <Method Name="SuggestWidths" Hidden="true" />
+      <Field Name="wallColor" Hidden="true" />
+      <Field Name="wallPen" Hidden="true" />
+      <Field Name="wallWidth" Hidden="true" />
+      <Method Name="XCoordinate" Hidden="true" />
+      <Field Name="xOffset" Hidden="true" />
+      <Method Name="YCoordinate" Hidden="true" />
+      <Field Name="yOffset" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Properties" Collapsed="true" />
+    </Compartments>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="SWA.Ariadne.App.SolverController">
+    <Position X="4.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>SolverController.cs</FileName>
+      <HashCode>AAAAAAAAQCIBBEACAAAAAEAAAACASAAAAAEAAACAABA=</HashCode>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="mazeControl" />
+    </ShowAsAssociation>
+    <Members>
+      <Field Name="currentBackwardSquare" Hidden="true" />
+      <Field Name="countBackward" Hidden="true" />
+      <Field Name="countForward" Hidden="true" />
+      <Field Name="countSteps" Hidden="true" />
+      <Field Name="solver" Hidden="true" />
+      <Method Name="SolverController" Hidden="true" />
+      <Field Name="visitedProgressBar" Hidden="true" />
+    </Members>
+  </Class>
+  <Interface Name="SWA.Ariadne.App.IMazeForm">
+    <Position X="2.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>IMazeForm.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAIAAgAAAAAAAAAAAQAAA=</HashCode>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="SWA.Ariadne.App.IMazeControlProperties">
+    <Position X="6" Y="0.75" Width="2" />
+    <TypeIdentifier>
+      <FileName>IMazeControlProperties.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAIAAAABBIAAAA=</HashCode>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="SWA.Ariadne.App.IMazeControl" Collapsed="true">
+    <Position X="7" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>IMazeControl.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="SWA.Ariadne.Logic.IMazeDrawer">
+    <Position X="8.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+</ClassDiagram>
