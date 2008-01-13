@@ -14,7 +14,6 @@ namespace SWA.Ariadne.App
     /// A Windows Form that displays a Maze in a MazeUserControl.
     /// </summary>
     public partial class MazeForm : AriadneFormBase
-        , IMazeForm
     {
         #region Member variables
 
@@ -25,16 +24,6 @@ namespace SWA.Ariadne.App
         {
             get { return this.mazeUserControl as IMazeControl; }
         }
-
-        /// <summary>
-        /// The type of solver algorithm we will use.
-        /// </summary>
-        private System.Type strategy = SolverFactory.DefaultStrategy;
-
-        /// <summary>
-        /// A dictionary used by the strategyComboBox.
-        /// </summary>
-        private readonly Dictionary<string, System.Type> strategies;
 
         /// <summary>
         /// The maze solver algorithm.
@@ -67,27 +56,14 @@ namespace SWA.Ariadne.App
 
             #region Fill the strategyComboBox with all known MazeSolvers
 
-            strategies = new Dictionary<string, System.Type>();
-
             strategyComboBox.Items.Clear();
 
             foreach (System.Type t in SolverFactory.SolverTypes)
             {
                 // Add the solver's name to the combo box.
                 strategyComboBox.Items.Add(t.Name);
-
-                // Add the solver's type and name to a Dictionary -- see strategy_Validated().
-                strategies.Add(t.Name, t);
-
-                // Note: Instead of a string we could add the Type object directly.
-                // But the Type's ToString() method returns the FullName instead of the short Name.
-
-                // Pre-select the default solver strategy.
-                if (t == strategy)
-                {
-                    strategyComboBox.SelectedIndex = strategyComboBox.Items.Count - 1;
-                }
             }
+            strategyComboBox.SelectedItem = SolverFactory.DefaultStrategy.Name;
 
             #endregion
 
@@ -157,6 +133,7 @@ namespace SWA.Ariadne.App
                 return;
             }
 
+            Type strategy = SolverFactory.SolverType((string)strategyComboBox.SelectedItem);
             solver = SolverFactory.CreateSolver(strategy, mazeUserControl.Maze, mazeUserControl);
 
             base.OnStart(sender, e);
@@ -168,7 +145,6 @@ namespace SWA.Ariadne.App
 
         protected override void strategy_SelectedIndexChanged(object sender, EventArgs e)
         {
-            this.strategy = strategies[(string)strategyComboBox.SelectedItem];
             UpdateCaption();
         }
 
