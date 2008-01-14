@@ -24,5 +24,12 @@ namespace SWA.Ariadne.Logic
         /// <param name="path"></param>
         /// <param name="forward"></param>
         void DrawPath(List<MazeSquare> path, bool forward);
+
+        /// <summary>
+        /// Paints a dot (in the forward color) at the given square.
+        /// Renders the GraphicsBuffer.
+        /// </summary>
+        /// <param name="sq">when null, no dot is drawn</param>
+        void FinishPath(MazeSquare sq);
     }
 }

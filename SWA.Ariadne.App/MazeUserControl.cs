@@ -74,16 +74,19 @@ namespace SWA.Ariadne.App
 
         internal IMazeForm MazeForm
         {
-            get { return (IMazeForm)this.ParentForm; }
+            get { return this.mazeForm; }
         }
+        IMazeForm mazeForm;
 
         #endregion
 
         #region Constructor and Initialization
 
-        public MazeUserControl()
+        public MazeUserControl(IMazeForm mazeForm)
         {
             InitializeComponent();
+
+            this.mazeForm = mazeForm;
         }
 
         public void Setup(int squareWidth, int wallWidth, int pathWidth)
@@ -119,7 +122,7 @@ namespace SWA.Ariadne.App
             AdjustPathWidth(squareWidth, ref pathWidth);
         }
 
-        internal void Setup()
+        public void Setup()
         {
             Random r = new Random();
             int gridWidth = r.Next(MinAutoGridWidth, MaxAutoGridWidth);

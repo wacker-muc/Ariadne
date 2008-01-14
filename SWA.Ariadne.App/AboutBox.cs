@@ -73,6 +73,11 @@ namespace SWA.Ariadne.App
             // no action
         }
 
+        public string StrategyName
+        {
+            get { return SolverFactory.DefaultStrategy.Name; }
+        }
+
         #endregion
 
         #region Assembly Attribute Accessors
