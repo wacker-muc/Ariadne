@@ -26,6 +26,18 @@ namespace SWA.Ariadne.Logic
             typeof(RandomFlooder),
         };
 
+        public static Type SolverType(string name)
+        {
+            foreach (Type t in SolverTypes)
+            {
+                if (t.Name == name)
+                {
+                    return t;
+                }
+            }
+            throw new ArgumentOutOfRangeException("name", name, "No such Solver type.");
+        }
+
         /// <summary>
         /// Returns a new MazeSolver of the given Type.
         /// </summary>

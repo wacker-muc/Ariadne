@@ -56,7 +56,9 @@
     </Compile>
     <Compile Include="IMazeControl.cs" />
     <Compile Include="IMazeControlProperties.cs" />
+    <Compile Include="IMazeControlSetup.cs" />
     <Compile Include="IMazeForm.cs" />
+    <Compile Include="ISolverController.cs" />
     <Compile Include="MazeForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -72,8 +74,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="AboutBox.resx">
-      <SubType>Designer</SubType>
       <DependentUpon>AboutBox.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="AriadneFormBase.resx">
       <DependentUpon>AriadneFormBase.cs</DependentUpon>

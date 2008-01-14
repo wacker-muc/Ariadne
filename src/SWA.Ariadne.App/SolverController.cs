@@ -13,8 +13,14 @@ namespace SWA.Ariadne.App
     /// A controller for a MazeSolver and a MazeControl.
     /// </summary>
     public class SolverController
+        : ISolverController
     {
         #region Member variables
+
+        /// <summary>
+        /// The object knowing the selected solver strategy.
+        /// </summary>
+        private IMazeForm mazeForm;
 
         /// <summary>
         /// The control displaying the maze.
@@ -57,8 +63,9 @@ namespace SWA.Ariadne.App
         /// <summary>
         /// Constructor.
         /// </summary>
-        public SolverController(IMazeControl mazeControl, ProgressBar visitedProgressBar)
+        public SolverController(IMazeForm mazeForm, IMazeControl mazeControl, ProgressBar visitedProgressBar)
         {
+            this.mazeForm = mazeForm;
             this.mazeControl = mazeControl;
             this.visitedProgressBar = visitedProgressBar;
         }
@@ -82,8 +89,9 @@ namespace SWA.Ariadne.App
             visitedProgressBar.PerformStep(); // start square
         }
 
-        public void Start(string strategyName)
+        public void Start()
         {
+            string strategyName = mazeForm.StrategyName;
             Type strategy = SolverFactory.SolverType(strategyName);
             solver = SolverFactory.CreateSolver(strategy, mazeControl.Maze, mazeControl);
         }
@@ -135,6 +143,11 @@ namespace SWA.Ariadne.App
         #endregion
 
         #region Status methods
+
+        public void UpdateStatusLine()
+        {
+            mazeForm.UpdateStatusLine();
+        }
 
         /// <summary>
         /// Write state information to the given StringBuilder.

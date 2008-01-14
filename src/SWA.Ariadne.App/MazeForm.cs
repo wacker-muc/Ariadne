@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using SWA.Ariadne.Model;
 using SWA.Ariadne.Logic;
+using SWA.Ariadne.Settings;
 
 namespace SWA.Ariadne.App
 {
@@ -18,19 +19,27 @@ namespace SWA.Ariadne.App
         #region Member variables
 
         /// <summary>
-        /// The object that accepts the MazeControl commands.
+        /// The object that accepts the MazeControlProperties commands.
         /// </summary>
-        protected override IMazeControl MazeControl
+        protected override IMazeControlProperties MazeControlProperties
         {
-            get { return this.mazeUserControl as IMazeControl; }
+            get { return this.mazeUserControl as IMazeControlProperties; }
         }
 
         /// <summary>
         /// The object that accepts the SolverController commands.
         /// </summary>
-        protected override SolverController SolverController
+        protected override ISolverController SolverController
         {
             get { return this.solverController; }
+        }
+
+        /// <summary>
+        /// The object that accepts the AriadneSettingsSource commands.
+        /// </summary>
+        protected override IAriadneSettingsSource AriadneSettingsSource
+        {
+            get { return (this.mazeUserControl as IAriadneSettingsSource); }
         }
 
         /// <summary>
@@ -70,7 +79,11 @@ namespace SWA.Ariadne.App
             #endregion
 
             // Create a SolverController.
-            this.solverController = new SolverController(this.MazeControl, (ProgressBar)this.visitedProgressBar.Control);
+            this.solverController = new SolverController(
+                this as IMazeForm,
+                this.mazeUserControl as IMazeControl,
+                this.visitedProgressBar.Control as ProgressBar
+            );
 
             this.OnNew(null, null);
         }
@@ -117,8 +130,9 @@ namespace SWA.Ariadne.App
 
         #region Solver controls
 
+#if false
         /// <summary>
-        /// Start a solver.
+        /// Start the solver.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -134,6 +148,7 @@ namespace SWA.Ariadne.App
 
             base.OnStart(sender, e);
         }
+#endif
 
         #endregion
 
@@ -166,14 +181,6 @@ namespace SWA.Ariadne.App
         #endregion
 
         #region Auxiliary methods
-
-        /// <summary>
-        /// Reset step and runtime counters.
-        /// </summary>
-        private void ResetCounters()
-        {
-            SolverController.ResetCounters();
-        }
 
         /// <summary>
         /// Enables or disables some controls depending on whether we are Ready or not.
