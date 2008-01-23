@@ -57,6 +57,24 @@ namespace SWA.Ariadne.App
         public MazeForm()
         {
             InitializeComponent();
+            InitializeComponent2();
+
+            // Create a SolverController.
+            this.solverController = new SolverController(
+                this as IMazeForm,
+                this.mazeUserControl as IMazeControl,
+                this.visitedProgressBar.Control as ProgressBar
+            );
+
+            this.OnNew(null, null);
+        }
+
+        /// <summary>
+        /// Continue after the designer generated code.
+        /// </summary>
+        private void InitializeComponent2()
+        {
+            this.mazeUserControl.MazeForm = this as IMazeForm;
 
             #region Unhide the non-common controls of AriadneFormBase we want to use
 
@@ -77,15 +95,6 @@ namespace SWA.Ariadne.App
             strategyComboBox.SelectedItem = SolverFactory.DefaultStrategy.Name;
 
             #endregion
-
-            // Create a SolverController.
-            this.solverController = new SolverController(
-                this as IMazeForm,
-                this.mazeUserControl as IMazeControl,
-                this.visitedProgressBar.Control as ProgressBar
-            );
-
-            this.OnNew(null, null);
         }
 
         #endregion
