@@ -40,7 +40,7 @@ namespace SWA.Ariadne.App
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.statusLabel.Location = new System.Drawing.Point(127, 158);
             this.statusLabel.Name = "statusLabel";
-            this.statusLabel.Size = new System.Drawing.Size(55, 23);
+            this.statusLabel.Size = new System.Drawing.Size(55, 21);
             this.statusLabel.TabIndex = 1;
             this.statusLabel.Text = "Status";
             this.statusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -50,7 +50,7 @@ namespace SWA.Ariadne.App
             this.visitedProgressBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.visitedProgressBar.Location = new System.Drawing.Point(188, 158);
             this.visitedProgressBar.Name = "visitedProgressBar";
-            this.visitedProgressBar.Size = new System.Drawing.Size(80, 23);
+            this.visitedProgressBar.Size = new System.Drawing.Size(80, 21);
             this.visitedProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.visitedProgressBar.TabIndex = 2;
             // 
@@ -84,7 +84,7 @@ namespace SWA.Ariadne.App
             this.Controls.Add(this.mazeUserControl);
             this.Name = "ArenaItem";
             this.Padding = new System.Windows.Forms.Padding(2);
-            this.Size = new System.Drawing.Size(268, 181);
+            this.Size = new System.Drawing.Size(268, 179);
             this.ResumeLayout(false);
 
         }

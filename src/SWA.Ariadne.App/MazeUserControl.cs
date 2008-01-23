@@ -177,16 +177,26 @@ namespace SWA.Ariadne.App
             catch { }
         }
 
-        private void FitMazeWidth(out int width, out int offset)
+        /// <summary>
+        /// Calculate width and xOffset.
+        /// </summary>
+        /// <param name="width"></param>
+        /// <param name="yOffset"></param>
+        private void FitMazeWidth(out int width, out int xOffset)
         {
             width = (this.Width - this.wallWidth - 4) / this.gridWidth;
-            offset = (this.Width - width * this.gridWidth) / 2;
+            xOffset = (this.Width - width * this.gridWidth) / 2;
         }
 
-        private void FitMazeHeight(out int height, out int offset)
+        /// <summary>
+        /// Calculate height and yOffset.
+        /// </summary>
+        /// <param name="height"></param>
+        /// <param name="xOffset"></param>
+        private void FitMazeHeight(out int height, out int yOffset)
         {
             height = (this.Height - this.wallWidth - 4) / this.gridWidth;
-            offset = (this.Height - height * this.gridWidth) / 2;
+            yOffset = (this.Height - height * this.gridWidth) / 2;
         }
 
         /// <summary>

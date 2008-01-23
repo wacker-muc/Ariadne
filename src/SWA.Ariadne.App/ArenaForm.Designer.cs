@@ -35,7 +35,6 @@ namespace SWA.Ariadne.App
             // 
             this.arenaItem1.Location = new System.Drawing.Point(6, 6);
             this.arenaItem1.Name = "arenaItem1";
-            this.arenaItem1.Padding = new System.Windows.Forms.Padding(2);
             this.arenaItem1.Size = new System.Drawing.Size(269, 179);
             this.arenaItem1.TabIndex = 2;
             // 
