@@ -187,6 +187,12 @@ namespace SWA.Ariadne.App
             form.ShowDialog();
         }
 
+        private void OnOpenArena(object sender, EventArgs e)
+        {
+            ArenaForm arena = new ArenaForm();
+            arena.Show();
+        }
+
         #endregion
 
         #region Solver controls
