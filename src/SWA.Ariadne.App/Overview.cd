@@ -24,6 +24,7 @@
       <Method Name="InitializeComponent" Hidden="true" />
       <Field Name="lapSeconds" Hidden="true" />
       <Field Name="lapStartTime" Hidden="true" />
+      <Method Name="MakeReservedAreas" Hidden="true" />
       <Field Name="menuButton" Hidden="true" />
       <Field Name="newMenuItem" Hidden="true" />
       <Method Name="OnAbout" Hidden="true" />
@@ -96,6 +97,13 @@
       <Property Name="SolverController" Hidden="true" />
       <Method Name="strategy_SelectedIndexChanged" Hidden="true" />
     </Members>
+    <AssociationLine Name="solverController" Type="SWA.Ariadne.App.SolverController" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="5.312" Y="3.5" />
+        <Point X="5.312" Y="3.312" />
+        <Point X="6.75" Y="3.312" />
+      </Path>
+    </AssociationLine>
   </Class>
   <Class Name="SWA.Ariadne.App.MazeUserControl" BaseTypeListCollapsed="true">
     <Position X="0.5" Y="0.5" Width="1.75" />
@@ -171,13 +179,14 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="SWA.Ariadne.App.SolverController">
-    <Position X="7.5" Y="2.75" Width="1.5" />
+    <Position X="6.75" Y="2.75" Width="1.5" />
     <TypeIdentifier>
       <FileName>SolverController.cs</FileName>
       <HashCode>AAAAAAAAQCIBBEACAAAAAEAAAACASAAAAAEAAACQABA=</HashCode>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Field Name="mazeForm" />
+      <Field Name="mazeControl" />
     </ShowAsAssociation>
     <Members>
       <Field Name="countBackward" Hidden="true" />
@@ -193,7 +202,14 @@
       <Method Name="SolverController" Hidden="true" />
       <Method Name="Start" Hidden="true" />
       <Method Name="UpdateStatusLine" Hidden="true" />
+      <Field Name="visitedProgressBar" Hidden="true" />
     </Members>
+    <AssociationLine Name="mazeForm" Type="SWA.Ariadne.App.IMazeForm" FixedFromPoint="true">
+      <Path>
+        <Point X="6.75" Y="2.938" />
+        <Point X="2.5" Y="2.938" />
+      </Path>
+    </AssociationLine>
     <Lollipop Orientation="Bottom" Position="0.232" />
   </Class>
   <Class Name="SWA.Ariadne.App.ArenaForm">
@@ -206,6 +222,9 @@
       <Field Name="solverController" />
       <Property Name="SolverController" />
     </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Items" />
+    </ShowAsCollectionAssociation>
     <Members>
       <Method Name="ArenaForm" Hidden="true" />
       <Field Name="arenaItem1" Hidden="true" />
@@ -213,6 +232,8 @@
       <Property Name="Code" Hidden="true" />
       <Field Name="components" Hidden="true" />
       <Method Name="Dispose" Hidden="true" />
+      <Method Name="FillParametersInto" Hidden="true" />
+      <Method Name="FixStateDependantControls" Hidden="true" />
       <Method Name="InitializeComponent" Hidden="true" />
       <Property Name="IsSolved" Hidden="true" />
       <Property Name="Maze" Hidden="true" />
@@ -220,6 +241,7 @@
       <Field Name="nX" Hidden="true" />
       <Field Name="nY" Hidden="true" />
       <Property Name="SolverController" Hidden="true" />
+      <Property Name="StrategyName" Hidden="true" />
       <Method Name="TakeParametersFrom" Hidden="true" />
       <Property Name="TemplateItem" Hidden="true" />
       <Property Name="TemplateMazeUserControl" Hidden="true" />
@@ -284,6 +306,7 @@
       <Method Name="DoStep" Hidden="true" />
       <Method Name="FillStatusMessage" Hidden="true" />
       <Method Name="FinishPath" Hidden="true" />
+      <Field Name="mazeForm" Hidden="true" />
       <Method Name="MultiSolverController" Hidden="true" />
       <Method Name="Reset" Hidden="true" />
       <Method Name="ResetCounters" Hidden="true" />
