@@ -140,6 +140,16 @@ namespace SWA.Ariadne.App
             get { return this.strategyComboBox.SelectedItem.ToString(); }
         }
 
+        /// <summary>
+        /// Enables or disables some controls depending on whether we are Ready or not.
+        /// </summary>
+        public void FixStateDependantControls(AriadneFormBase.SolverState state)
+        {
+            bool enabled = (state == AriadneFormBase.SolverState.Ready);
+
+            strategyComboBox.Enabled = enabled;
+        }
+
         #endregion
     }
 }

@@ -91,6 +91,14 @@ namespace SWA.Ariadne.App
             get { return SolverFactory.DefaultStrategy.Name; }
         }
 
+        /// <summary>
+        /// Enables or disables some controls depending on whether we are Ready or not.
+        /// </summary>
+        public virtual void FixStateDependantControls(AriadneFormBase.SolverState state)
+        {
+            // do nothing
+        }
+
         #endregion
 
         #region Assembly Attribute Accessors

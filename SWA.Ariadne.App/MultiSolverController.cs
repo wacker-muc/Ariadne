@@ -9,6 +9,11 @@ namespace SWA.Ariadne.App
     {
         #region Member variables
 
+        /// <summary>
+        /// The mazeForm has a status line and a caption.
+        /// </summary>
+        private IMazeForm mazeForm;
+
         private List<ISolverController> list;
 
         /// <summary>
@@ -28,8 +33,9 @@ namespace SWA.Ariadne.App
         /// <summary>
         /// Constructor.
         /// </summary>
-        public MultiSolverController()
+        public MultiSolverController(IMazeForm mazeForm)
         {
+            this.mazeForm = mazeForm;
             this.list = new List<ISolverController>();
         }
 
@@ -101,8 +107,13 @@ namespace SWA.Ariadne.App
 
         #region Status methods
 
+        /// <summary>
+        /// Displays information about the running MazeSolver in the status line.
+        /// </summary>
         public void UpdateStatusLine()
         {
+            mazeForm.UpdateStatusLine();
+
             foreach (SolverController item in list)
             {
                 item.UpdateStatusLine();

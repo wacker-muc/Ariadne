@@ -92,7 +92,7 @@ namespace SWA.Ariadne.App
         {
             InitializeComponent();
 
-            this.solverController = new MultiSolverController();
+            this.solverController = new MultiSolverController(this as IMazeForm);
 
             // Start with an empty Items list.  It will be created in OnLayout().
             foreach (ArenaItem item in Items)
@@ -261,11 +261,21 @@ namespace SWA.Ariadne.App
 
         #endregion
 
-        #region AriadneFormBase implementation
+        #region IMazeForm implementation
 
         public override string StrategyName
         {
             get { return "Arena[" + this.Items.Count.ToString() + "]"; }
+        }
+
+        public override void FixStateDependantControls(SolverState state)
+        {
+            base.FixStateDependantControls(state);
+
+            foreach (ArenaItem item in Items)
+            {
+                item.FixStateDependantControls(state);
+            }
         }
 
         #endregion
