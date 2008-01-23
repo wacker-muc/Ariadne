@@ -109,6 +109,9 @@ namespace SWA.Ariadne.App
 
         #region Arena controls
 
+        /// <summary>
+        /// Create and arrange the desired number of ArenaItems.
+        /// </summary>
         private void OnLayout()
         {
             List<ArenaItem> items = Items;
@@ -134,14 +137,16 @@ namespace SWA.Ariadne.App
 
             #region Place the ArenaItems into a regular grid
 
+            const int dx = 6, dy = 6;
+
             for (int x = 0; x < nX; x++)
             {
                 for (int y = 0; y < nY; y++)
                 {
-                    int cw = (this.Width - 6) / nX - 6;
-                    int cx = 6 + x * (cw + 6);
-                    int ch = (this.statusStrip.Location.Y - 2 - 6) / nX - 6;
-                    int cy = 6 + y * (ch + 6);
+                    int cw = (this.ClientSize.Width - dx) / nX - dx;
+                    int cx = dx + x * (cw + dx);
+                    int ch = (this.statusStrip.Location.Y - dx) / nX - dx;
+                    int cy = dy + y * (ch + dy);
 
                     ArenaItem item = items[y * nX + x];
                     item.Location = new Point(cx, cy);
@@ -151,7 +156,11 @@ namespace SWA.Ariadne.App
 
             #endregion
 
+#if false
+            // Note: The maze parameters are still incomplete, so we should not try to update anything. 
             this.UpdateCaption();
+            this.UpdateStatusLine();
+#endif
         }
 
         #endregion
@@ -198,7 +207,7 @@ namespace SWA.Ariadne.App
 
             data.AutoSeed = false;
             data.AutoGridWidth = data.AutoPathWidth = false;
-            data.AutoMazeHeight = data.AutoMazeWidth = false;
+            data.AutoMazeHeight = data.AutoMazeWidth = true;
 
             foreach (ArenaItem item in Items)
             {
@@ -210,52 +219,11 @@ namespace SWA.Ariadne.App
             }
 
             #endregion
+
+            // Now that we have created all mazes, refresh the parameter display.
+            this.UpdateCaption();
+            this.UpdateStatusLine();
         }
-
-        #endregion
-
-        #region Solver controls
-
-#if false
-        /// <summary>
-        /// Start the solver.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        protected override void OnStart(object sender, EventArgs e)
-        {
-            if (State != SolverState.Ready)
-            {
-                //OnReset(sender, e);
-                return;
-            }
-
-            foreach (ArenaItem item in Items)
-            {
-                item.SolverController.Start();
-            }
-
-            base.OnStart(sender, e);
-        }
-#endif
-
-#if false
-        protected void DoStep()
-        {
-            foreach (ArenaItem item in Items)
-            {
-                item.SolverController.DoStep();
-            }
-        }
-
-        protected void FinishPath()
-        {
-            foreach (ArenaItem item in Items)
-            {
-                item.SolverController.FinishPath();
-            }
-        }
-#endif
 
         #endregion
 
