@@ -33,6 +33,7 @@ namespace SWA.Ariadne.App
         {
             get { return this.solverController; }
         }
+        private SolverController solverController;
 
         /// <summary>
         /// The object that accepts the AriadneSettingsSource commands.
@@ -41,11 +42,6 @@ namespace SWA.Ariadne.App
         {
             get { return (this.mazeUserControl as IAriadneSettingsSource); }
         }
-
-        /// <summary>
-        /// The SolverController.
-        /// </summary>
-        private SolverController solverController;
 
         #endregion
 
@@ -111,7 +107,7 @@ namespace SWA.Ariadne.App
         protected override void OnReset(object sender, EventArgs e)
         {
             base.OnReset(sender, e);
-            solverController.Reset();
+            this.SolverController.Reset();
             mazeUserControl.Reset();
         }
 

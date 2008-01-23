@@ -132,9 +132,9 @@ namespace SWA.Ariadne.Model
             this.ySize = Math.Max(MinSize, Math.Min(MaxYSize, ySize));
 
             // Get an initial random seed and use that to create the Random.
-            Random r = new Random();
+            Random r = RandomFactory.CreateRandom();
             this.seed = r.Next(SeedLimit);
-            this.random = new Random(seed);
+            this.random = RandomFactory.CreateRandom(seed);
         }
 
         /// <summary>
@@ -150,7 +150,7 @@ namespace SWA.Ariadne.Model
                 , out this.xStart, out this.yStart
                 , out this.xEnd, out this.yEnd
                 );
-            this.random = new Random(seed);
+            this.random = RandomFactory.CreateRandom(seed);
         }
 
         #endregion
@@ -891,10 +891,10 @@ namespace SWA.Ariadne.Model
             }
             else
             {
-                Random r = new Random();
+                Random r = RandomFactory.CreateRandom();
                 this.seed = r.Next(SeedLimit);
             }
-            this.random = new Random(seed);
+            this.random = RandomFactory.CreateRandom(seed);
 
             // Decode(data.Code);
         }
