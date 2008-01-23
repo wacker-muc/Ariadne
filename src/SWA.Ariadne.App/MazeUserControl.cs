@@ -75,6 +75,7 @@ namespace SWA.Ariadne.App
         internal IMazeForm MazeForm
         {
             get { return this.mazeForm; }
+            set { this.mazeForm = value; }
         }
         IMazeForm mazeForm;
 
@@ -82,11 +83,9 @@ namespace SWA.Ariadne.App
 
         #region Constructor and Initialization
 
-        public MazeUserControl(IMazeForm mazeForm)
+        public MazeUserControl()
         {
             InitializeComponent();
-
-            this.mazeForm = mazeForm;
         }
 
         public void Setup(int squareWidth, int wallWidth, int pathWidth)

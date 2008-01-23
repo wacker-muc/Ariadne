@@ -34,7 +34,7 @@ namespace SWA.Ariadne.App
             this.labelCopyright = new System.Windows.Forms.Label();
             this.labelVersion = new System.Windows.Forms.Label();
             this.labelProductName = new System.Windows.Forms.Label();
-            this.mazeUserControl = new SWA.Ariadne.App.MazeUserControl(this as IMazeForm);
+            this.mazeUserControl = new SWA.Ariadne.App.MazeUserControl();
             this.outerAboutPanel.SuspendLayout();
             this.innerAboutPanel.SuspendLayout();
             this.SuspendLayout();

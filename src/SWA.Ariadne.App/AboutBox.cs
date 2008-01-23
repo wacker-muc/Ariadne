@@ -12,9 +12,12 @@ namespace SWA.Ariadne.App
     public partial class AboutBox : Form
         , IMazeForm
     {
+        #region Constructor
+
         public AboutBox()
         {
             InitializeComponent();
+            InitializeComponent2();
 
             //  Initialize the AboutBox to display the product information from the assembly information.
             //  Change assembly information settings for your application through either:
@@ -30,6 +33,16 @@ namespace SWA.Ariadne.App
 
             FillMaze();
         }
+
+        /// <summary>
+        /// Continue after the designer generated code.
+        /// </summary>
+        private void InitializeComponent2()
+        {
+            this.mazeUserControl.MazeForm = this as IMazeForm;
+        }
+
+        #endregion
 
         private void FillMaze()
         {
