@@ -35,7 +35,7 @@ namespace SWA.Ariadne.Logic
         public RandomBacktracker(Maze maze, IMazeDrawer mazeDrawer)
             : base(maze, mazeDrawer)
         {
-            this.random = new Random();
+            this.random = RandomFactory.CreateRandom();
         }
 
         #endregion

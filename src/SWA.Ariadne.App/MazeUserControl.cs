@@ -123,7 +123,7 @@ namespace SWA.Ariadne.App
 
         public void Setup()
         {
-            Random r = new Random();
+            Random r = RandomFactory.CreateRandom();
             int gridWidth = r.Next(MinAutoGridWidth, MaxAutoGridWidth);
             
             this.Setup(gridWidth);
@@ -559,7 +559,7 @@ namespace SWA.Ariadne.App
             }
             else
             {
-                Random r = new Random();
+                Random r = RandomFactory.CreateRandom();
                 this.gridWidth = r.Next(MinAutoGridWidth, MaxAutoGridWidth);
                 SuggestWidths(gridWidth, out squareWidth, out pathWidth, out wallWidth);
             }
@@ -574,6 +574,12 @@ namespace SWA.Ariadne.App
             #endregion
 
             #endregion
+
+            // Make sure that we have a Maze object.
+            if (maze == null)
+            {
+                maze = new Maze(data.MazeWidth, data.MazeHeight);
+            }
 
             #region Adjust automatic parameters of the underlying Maze
 

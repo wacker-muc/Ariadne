@@ -100,7 +100,7 @@ namespace SWA.Ariadne.App
                 this.Controls.Remove(item);
             }
 
-            OnLayout();
+            OnNew(null, null);
         }
 
         #endregion
@@ -132,6 +132,8 @@ namespace SWA.Ariadne.App
 
             #endregion
 
+            #region Place the ArenaItems into a regular grid
+
             for (int x = 0; x < nX; x++)
             {
                 for (int y = 0; y < nY; y++)
@@ -146,6 +148,10 @@ namespace SWA.Ariadne.App
                     item.Size = new Size(cw, ch);
                 }
             }
+
+            #endregion
+
+            this.UpdateCaption();
         }
 
         #endregion
@@ -159,10 +165,8 @@ namespace SWA.Ariadne.App
         /// <param name="e"></param>
         protected override void OnReset(object sender, EventArgs e)
         {
-            if (State != SolverState.Ready)
-            {
-                base.OnReset(sender, e);
-            }
+            base.OnReset(sender, e);
+            this.SolverController.Reset();
 
             foreach (ArenaItem item in Items)
             {
@@ -187,7 +191,7 @@ namespace SWA.Ariadne.App
 
             #region Setup one item and use its parameters for all other items.
 
-            TemplateItem.Setup();
+            TemplateItem.Setup(true);
 
             AriadneSettingsData data = new AriadneSettingsData();
             TemplateMazeUserControl.FillParametersInto(data);
@@ -198,7 +202,11 @@ namespace SWA.Ariadne.App
 
             foreach (ArenaItem item in Items)
             {
-                item.MazeUserControl.TakeParametersFrom(data);
+                if (item != TemplateItem)
+                {
+                    item.MazeUserControl.TakeParametersFrom(data);
+                    item.Setup(false);
+                }
             }
 
             #endregion
@@ -250,6 +258,15 @@ namespace SWA.Ariadne.App
 #endif
 
         #endregion
+
+        #endregion
+
+        #region AriadneFormBase implementation
+
+        public override string StrategyName
+        {
+            get { return "Arena[" + this.Items.Count.ToString() + "]"; }
+        }
 
         #endregion
 

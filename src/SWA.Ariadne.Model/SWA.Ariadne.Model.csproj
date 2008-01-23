@@ -37,6 +37,7 @@
     <Compile Include="Maze.cs" />
     <Compile Include="MazeSquare.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RandomFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SWA.Ariadne.Settings\SWA.Ariadne.Settings.csproj">

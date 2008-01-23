@@ -519,7 +519,7 @@ namespace SWA.Ariadne.App
             if (true)
             {
                 caption.Append(" - ");
-                caption.Append((string)strategyComboBox.SelectedItem);
+                caption.Append(this.StrategyName);
             }
 
             if (MazeControlProperties != null)
@@ -541,9 +541,19 @@ namespace SWA.Ariadne.App
             }
         }
 
-        public string StrategyName
+        public virtual string StrategyName
         {
-            get { return (this.strategyComboBox.SelectedItem.ToString()); }
+            get 
+            {
+                try
+                {
+                    return this.strategyComboBox.SelectedItem.ToString();
+                }
+                catch (NullReferenceException)
+                {
+                    return "...";
+                }
+            }
         }
 
         #endregion

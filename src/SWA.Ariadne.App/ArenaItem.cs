@@ -96,7 +96,15 @@ namespace SWA.Ariadne.App
 
         public void Setup()
         {
-            mazeUserControl.Setup();
+            Setup(true);
+        }
+
+        public void Setup(bool includingMazeControl)
+        {
+            if (includingMazeControl)
+            {
+                mazeUserControl.Setup();
+            }
 
             // Adapt the progress bar to the maze area
             visitedProgressBar.Minimum = 0;
@@ -129,7 +137,7 @@ namespace SWA.Ariadne.App
 
         public string StrategyName
         {
-            get { return (this.strategyComboBox.SelectedItem.ToString()); }
+            get { return this.strategyComboBox.SelectedItem.ToString(); }
         }
 
         #endregion

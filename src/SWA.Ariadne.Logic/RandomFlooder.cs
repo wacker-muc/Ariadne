@@ -16,7 +16,7 @@ namespace SWA.Ariadne.Logic
         /// <summary>
         /// A source of random numbers.
         /// </summary>
-        private Random random = new Random();
+        private Random random = RandomFactory.CreateRandom();
 
         /// <summary>
         /// All squares passed in forward direction are collected in a list.
