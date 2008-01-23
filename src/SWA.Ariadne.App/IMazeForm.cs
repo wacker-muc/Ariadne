@@ -1,4 +1,5 @@
 ﻿using System;
+using SWA.Ariadne.Model;
 
 namespace SWA.Ariadne.App
 {
@@ -7,9 +8,10 @@ namespace SWA.Ariadne.App
     /// </summary>
     public interface IMazeForm
     {
-        void MakeReservedAreas(SWA.Ariadne.Model.Maze maze);
+        void MakeReservedAreas(Maze maze);
         void UpdateStatusLine();
         void UpdateCaption();
         string StrategyName { get; }
+        void FixStateDependantControls(AriadneFormBase.SolverState state);
     }
 }

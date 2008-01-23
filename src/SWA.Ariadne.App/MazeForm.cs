@@ -168,29 +168,12 @@ namespace SWA.Ariadne.App
 
         #endregion
 
-        #region AriadneFormBase implementation
-
-        /// <summary>
-        /// Write state information to the given StringBuilder.
-        /// Derived classes should call their base class' method.
-        /// </summary>
-        /// <param name="message"></param>
-        protected override void FillStatusMessage(StringBuilder message)
-        {
-            SolverController.FillStatusMessage(message);
-
-            // Add text from the base class.
-            base.FillStatusMessage(message);
-        }
-
-        #endregion
-
-        #region Auxiliary methods
+        #region IMazeForm implementation
 
         /// <summary>
         /// Enables or disables some controls depending on whether we are Ready or not.
         /// </summary>
-        private void FixStateDependantControls()
+        public override void FixStateDependantControls(SolverState state)
         {
             bool enabled = (State == SolverState.Ready);
 

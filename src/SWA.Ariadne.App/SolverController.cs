@@ -144,6 +144,9 @@ namespace SWA.Ariadne.App
 
         #region Status methods
 
+        /// <summary>
+        /// Displays information about the running MazeSolver in the status line.
+        /// </summary>
         public void UpdateStatusLine()
         {
             mazeForm.UpdateStatusLine();

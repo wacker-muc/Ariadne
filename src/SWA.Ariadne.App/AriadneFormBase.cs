@@ -142,8 +142,9 @@ namespace SWA.Ariadne.App
                 stepTimer = null;
             }
 
-            FixStateDependantControls();
+            FixStateDependantControls(this.State);
             ResetCounters();
+            SolverController.UpdateStatusLine();
         }
 
         /// <summary>
@@ -173,7 +174,7 @@ namespace SWA.Ariadne.App
             form.ShowDialog(this);
 
             // What needs to be done if the dialog has caused a State change?
-            FixStateDependantControls();
+            FixStateDependantControls(this.State);
         }
 
         /// <summary>
@@ -215,7 +216,7 @@ namespace SWA.Ariadne.App
             stepTimer.Tick += new EventHandler(this.OnStepTimer);
             stepTimer.Start();
 
-            FixStateDependantControls();
+            FixStateDependantControls(this.State);
             ResetCounters();
 
             SolverController.Start();
@@ -474,8 +475,10 @@ namespace SWA.Ariadne.App
         /// Derived classes should call their base class' method.
         /// </summary>
         /// <param name="message"></param>
-        protected virtual void FillStatusMessage(StringBuilder message)
+        protected void FillStatusMessage(StringBuilder message)
         {
+            SolverController.FillStatusMessage(message);
+
             if (countSteps > 0)
             {
                 message.Append(" / ");
@@ -556,6 +559,14 @@ namespace SWA.Ariadne.App
             }
         }
 
+        /// <summary>
+        /// Enables or disables some controls depending on whether we are Ready or not.
+        /// </summary>
+        public virtual void FixStateDependantControls(SolverState state)
+        {
+            // do nothing
+        }
+
         #endregion
 
         #region Auxiliary methods
@@ -599,7 +610,7 @@ namespace SWA.Ariadne.App
         /// <summary>
         /// The states a SolverController may be in.
         /// </summary>
-        protected enum SolverState
+        public enum SolverState
         {
             Ready,
             Running,
@@ -636,16 +647,6 @@ namespace SWA.Ariadne.App
                     return SolverState.Paused;
                 }
             }
-        }
-
-        /// <summary>
-        /// Enables or disables some controls depending on whether we are Ready or not.
-        /// </summary>
-        private void FixStateDependantControls()
-        {
-            bool enabled = (State == SolverState.Ready);
-
-            strategyComboBox.Enabled = enabled;
         }
 
         #endregion
