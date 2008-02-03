@@ -212,5 +212,29 @@ namespace SWA.Ariadne.Logic
         }
 
         #endregion
+
+        #region support methods for the MasterSolver
+
+        /// <summary>
+        /// Given a square (usually, the end square), return the path leading there from the start square.
+        /// </summary>
+        /// <param name="sq"></param>
+        /// <returns></returns>
+        internal List<MazeSquare> PathFromStartSquare(MazeSquare sq)
+        {
+            List<MazeSquare> result = new List<MazeSquare>();
+
+            result.Add(sq);
+
+            while (sq != this.maze.StartSquare)
+            {
+                sq = this.mazeExtension[sq.XPos, sq.YPos].previousSquare;
+                result.Insert(0, sq);
+            }
+
+            return result;
+        }
+
+        #endregion
     }
 }
