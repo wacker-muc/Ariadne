@@ -26,6 +26,12 @@ namespace SWA.Ariadne.Logic
         void DrawPath(List<MazeSquare> path, bool forward);
 
         /// <summary>
+        /// Draws a highlighted path between the given squares.
+        /// </summary>
+        /// <param name="path"></param>
+        void DrawSolvedPath(List<MazeSquare> path);
+
+        /// <summary>
         /// Paints a dot (in the forward color) at the given square.
         /// Renders the GraphicsBuffer.
         /// </summary>

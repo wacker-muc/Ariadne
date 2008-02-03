@@ -153,6 +153,38 @@ namespace SWA.Ariadne.Model
             this.random = RandomFactory.CreateRandom(seed);
         }
 
+        /// <summary>
+        /// Create a copy of this maze.
+        /// </summary>
+        /// <returns></returns>
+        public Maze Clone()
+        {
+            Maze clone = new Maze(xSize, ySize);
+
+            clone.xStart = this.xStart;
+            clone.yStart = this.yStart;
+            clone.xEnd = this.xEnd;
+            clone.yEnd = this.yEnd;
+            clone.direction = this.direction;
+            clone.seed = this.seed;
+            clone.reservedAreas = this.reservedAreas;
+
+            clone.CreateSquares();
+
+            for (int x = 0; x < xSize; x++)
+            {
+                for (int y = 0; y < ySize; y++)
+                {
+                    for (MazeSquare.WallPosition wp = MazeSquare.WP_MIN; wp <= MazeSquare.WP_MAX; wp++)
+                    {
+                        clone[x, y][wp] = this[x, y][wp];
+                    }
+                }
+            }
+
+            return clone;
+        }
+
         #endregion
 
         #region Encoding of the maze parameters
@@ -413,7 +445,7 @@ namespace SWA.Ariadne.Model
         #region Setup methods
 
         /// <summary>
-        /// Reserves a rectanglurar region of the given dimensions at a random location.
+        /// Reserves a rectangular region of the given dimensions at a random location.
         /// The area must not touch any other reserved ares.
         /// </summary>
         /// <param name="width"></param>
@@ -501,8 +533,13 @@ namespace SWA.Ariadne.Model
 
         public void CreateMaze()
         {
+            this.CreateSquares();
+            this.BuildMaze();
+        }
+
+        private void CreateSquares()
+        {
             #region Create the squares.
-            
             this.squares = new MazeSquare[xSize, ySize];
             for (int x = 0; x < xSize; x++)
             {
@@ -515,7 +552,7 @@ namespace SWA.Ariadne.Model
             #endregion
 
             #region Connect the squares with their neighbors.
-            
+
             for (int x0 = 0; x0 < xSize; x0++)
             {
                 for (int y0 = 0, y1 = 1; y1 < ySize; y0++, y1++)
@@ -534,8 +571,6 @@ namespace SWA.Ariadne.Model
             }
 
             #endregion
-
-            this.BuildMaze();
         }
 
         /// <summary>

@@ -129,6 +129,12 @@ namespace SWA.Ariadne.App
             ++countSteps;
 
             currentBackwardSquare = (forward ? null : sq2);
+
+            if (mazeControl.Maze.IsSolved)
+            {
+                mazeControl.DrawSolvedPath(SolverFactory.SolutionPath(mazeControl.Maze));
+                currentBackwardSquare = null;
+            }
         }
 
         /// <summary>

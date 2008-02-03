@@ -519,6 +519,42 @@ namespace SWA.Ariadne.App
             }
         }
 
+        /// <summary>
+        /// Draws a highlighted path between the given squares.
+        /// </summary>
+        /// <param name="path"></param>
+        public void DrawSolvedPath(List<MazeSquare> path)
+        {
+            float h = forwardColor.GetHue();
+            float s = MaxColor.GetSaturation();
+            float b = MaxColor.GetBrightness();
+
+            // make s and b 30% bigger
+            s = 0.7F * s + 0.3F;
+            b = 0.7F * b + 0.3F;
+
+            Color highlightColor = ColorBuilder.ConvertHSBToColor(h, s, b);
+            Pen p = new Pen(highlightColor, pathWidth);
+            p.StartCap = p.EndCap = System.Drawing.Drawing2D.LineCap.Square;
+
+            PointF[] points = new PointF[path.Count];
+
+            for (int i = 0; i < path.Count; i++)
+            {
+                MazeSquare sq = path[i];
+
+                float cx = xOffset + gridWidth / 2.0F + sq.XPos * gridWidth;
+                float cy = yOffset + gridWidth / 2.0F + sq.YPos * gridWidth;
+
+                points[i] = new PointF(cx, cy);
+            }
+
+            Graphics g = gBuffer.Graphics;
+            g.DrawLines(p, points);
+
+            this.PaintEndpoints(g);
+        }
+
         #endregion
 
         #region IAriadneSettingsSource implementation

@@ -91,6 +91,7 @@
       <Method Name="Dispose" Hidden="true" />
       <Method Name="FixStateDependantControls" Hidden="true" />
       <Method Name="InitializeComponent" Hidden="true" />
+      <Method Name="InitializeComponent2" Hidden="true" />
       <Property Name="MazeControlProperties" Hidden="true" />
       <Method Name="MazeForm" Hidden="true" />
       <Field Name="mazeUserControl" Hidden="true" />
@@ -121,6 +122,7 @@
       <Field Name="components" Hidden="true" />
       <Method Name="Dispose" Hidden="true" />
       <Method Name="DrawPath" Hidden="true" />
+      <Method Name="DrawSolvedPath" Hidden="true" />
       <Method Name="DrawStep" Hidden="true" />
       <Method Name="FillParametersInto" Hidden="true" />
       <Method Name="FinishPath" Hidden="true" />
@@ -264,6 +266,7 @@
       <Method Name="ArenaItem" Hidden="true" />
       <Field Name="components" Hidden="true" />
       <Method Name="Dispose" Hidden="true" />
+      <Method Name="FixStateDependantControls" Hidden="true" />
       <Method Name="InitializeComponent" Hidden="true" />
       <Method Name="MakeReservedAreas" Hidden="true" />
       <Field Name="mazeUserControl" Hidden="true" />
@@ -284,8 +287,8 @@
     </AssociationLine>
     <AssociationLine Name="SolverController" Type="SWA.Ariadne.App.ISolverController" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="2" Y="7.41" />
-        <Point X="10.25" Y="7.41" />
+        <Point X="2" Y="7.438" />
+        <Point X="10.25" Y="7.438" />
         <Point X="10.25" Y="6.599" />
       </Path>
     </AssociationLine>

@@ -133,30 +133,6 @@ namespace SWA.Ariadne.App
 
         #endregion
 
-        #region Solver controls
-
-#if false
-        /// <summary>
-        /// Start the solver.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        protected override void OnStart(object sender, EventArgs e)
-        {
-            if (State != SolverState.Ready)
-            {
-                //OnReset(sender, e);
-                return;
-            }
-
-            solverController.Start((string)strategyComboBox.SelectedItem);
-
-            base.OnStart(sender, e);
-        }
-#endif
-
-        #endregion
-
         #region Parameter settings
 
         protected override void strategy_SelectedIndexChanged(object sender, EventArgs e)

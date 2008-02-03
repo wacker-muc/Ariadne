@@ -75,13 +75,13 @@ namespace SWA.Ariadne.Logic
                     // too dumb
                     continue;
                 }
-#if false
+
                 if (t == typeof(MasterSolver))
                 {
                     // too smart
                     continue;
                 }
-#endif
+
                 return CreateSolver(t, maze, mazeDrawer);
             }
         }
@@ -103,6 +103,13 @@ namespace SWA.Ariadne.Logic
         public static IMazeSolver CreateDefaultSolver(Maze maze, IMazeDrawer mazeDrawer)
         {
             return CreateSolver(DefaultStrategy, maze, mazeDrawer);
+        }
+
+        public static List<MazeSquare> SolutionPath(Maze maze)
+        {
+            // Note: This code must not modify the given maze.
+            MasterSolver m = new MasterSolver(maze, null);
+            return m.Path;
         }
     }
 }

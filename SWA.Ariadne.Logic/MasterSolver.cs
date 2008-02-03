@@ -30,11 +30,15 @@ namespace SWA.Ariadne.Logic
         public MasterSolver(Maze maze, IMazeDrawer mazeDrawer)
             : base(maze, mazeDrawer)
         {
+            // Instead of operating on the original maze, we need to make a copy first.
+            Maze helperMaze = maze.Clone();
+            helperMaze.Reset();
+
             // Use another MazeSolver to find the path from start to end.
-            
-            RoundRobinFlooder helper = new RoundRobinFlooder(maze, null);
+            RoundRobinFlooder helper = new RoundRobinFlooder(helperMaze, null);
             helper.Reset();
             helper.Solve();
+
             this.path = helper.PathFromStartSquare(maze.EndSquare);
         }
 
