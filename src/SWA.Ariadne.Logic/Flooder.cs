@@ -30,6 +30,11 @@ namespace SWA.Ariadne.Logic
         /// A path is considered "open" if its end point is in the list of active squares.
         private MazeSquareExtension[,] mazeExtension;
 
+        /// <summary>
+        /// All squares passed in forward direction are collected in a list.
+        /// </summary>
+        protected List<MazeSquare> list = new List<MazeSquare>();
+
         #endregion
 
         #region Constructor
@@ -57,8 +62,16 @@ namespace SWA.Ariadne.Logic
         {
             base.Reset();
 
-            // As we may not retract beyond the start square, it needs to have a positive count.
+            list.Clear();
+
+            // Move to the start square.
             MazeSquare sq = maze.StartSquare;
+
+            // Add the start square to the list.
+            list.Add(sq);
+            sq.isVisited = true;
+
+            // As we may not retract beyond the start square, it needs to have a positive count.
             mazeExtension[sq.XPos, sq.YPos].openPathCount = 1;
         }
 
@@ -86,6 +99,72 @@ namespace SWA.Ariadne.Logic
                 mazeExtension[sq2.XPos, sq2.YPos].openPathCount = 0;
             }
         }
+
+        /// <summary>
+        /// Travel from one visited square to a neighbor square (through an open wall).
+        /// </summary>
+        /// <param name="sq1">first (previously visited) square</param>
+        /// <param name="sq2">next (neighbor) square</param>
+        /// <param name="forward">true if the neighbor square was not visited previously</param>
+        protected override void StepI(out MazeSquare sq1, out MazeSquare sq2, out bool forward)
+        {
+            if (maze.IsSolved)
+            {
+                throw new Exception("Maze is already solved.");
+            }
+
+            List<MazeSquare.WallPosition> openWalls;
+
+            while (true)
+            {
+                // Get a current square but leave it in the queue.
+                int p = SelectPathIdx();
+                sq1 = list[p];
+
+                // Possible choices of open walls (not visited).
+                openWalls = SolverBase.OpenWalls(sq1, true);
+
+                if (openWalls.Count == 0)
+                {
+                    list.RemoveAt(p);
+                    MarkDeadBranch(sq1);
+                }
+                else
+                {
+                    // If this was the last open wall of sq1, it can be removed from the list.
+                    if (openWalls.Count == 1)
+                    {
+                        list.RemoveAt(p);
+                    }
+
+                    break;
+                }
+            }
+
+            // Select one (any) of the neighbor squares.
+            MazeSquare.WallPosition wp = SelectDirection(sq1, openWalls);
+
+            sq2 = sq1.NeighborSquare(wp);
+            forward = true;
+
+            // Add the next square to the list.
+            list.Add(sq2);
+            sq2.isVisited = true;
+        }
+
+        /// <summary>
+        /// Select an index within the flooder's list of open paths.
+        /// </summary>
+        /// <returns></returns>
+        protected abstract int SelectPathIdx();
+
+        /// <summary>
+        /// Select one of the open walls leading away from the given square.
+        /// </summary>
+        /// <param name="sq1"></param>
+        /// <param name="openWalls"></param>
+        /// <returns></returns>
+        protected abstract MazeSquare.WallPosition SelectDirection(MazeSquare sq1, List<MazeSquare.WallPosition> openWalls);
 
         /// <summary>
         /// Lets the mazeDrawer draw the dead branch ending in the given square.
@@ -127,15 +206,10 @@ namespace SWA.Ariadne.Logic
         /// <param name="message"></param>
         public override void FillStatusMessage(StringBuilder message)
         {
-            int nPaths = this.CountOpenPaths;
+            int nPaths = this.list.Count;
             string paths = (nPaths == 1 ? "path" : "paths");
             message.Append(", " + nPaths.ToString() + " " + paths);
         }
-
-        /// <summary>
-        /// Current number of open paths.
-        /// </summary>
-        protected abstract int CountOpenPaths { get; }
 
         #endregion
     }
