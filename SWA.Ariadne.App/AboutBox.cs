@@ -54,6 +54,7 @@ namespace SWA.Ariadne.App
 
             // Solve the maze.
             IMazeSolver solver = SolverFactory.CreateDefaultSolver(mazeUserControl.Maze, mazeUserControl);
+            solver.Reset();
             solver.Solve();
         }
 
