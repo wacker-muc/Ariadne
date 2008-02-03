@@ -94,6 +94,12 @@ namespace SWA.Ariadne.Logic
                 }
                 else
                 {
+                    // If this was the last open wall of sq1, it can be removed from the list.
+                    if (openWalls.Count == 1)
+                    {
+                        list.RemoveAt(p);
+                    }
+
                     break;
                 }
             }
@@ -107,6 +113,14 @@ namespace SWA.Ariadne.Logic
             // Add the next square to the list.
             list.Add(sq2);
             sq2.isVisited = true;
+        }
+
+        /// <summary>
+        /// Current number of open paths.
+        /// </summary>
+        protected override int CountOpenPaths
+        {
+            get { return this.list.Count; }
         }
 
         #endregion

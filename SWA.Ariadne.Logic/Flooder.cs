@@ -120,6 +120,23 @@ namespace SWA.Ariadne.Logic
             }
         }
 
+        /// <summary>
+        /// Write state information to the given StringBuilder.
+        /// A flooder adds the number of currently open paths.
+        /// </summary>
+        /// <param name="message"></param>
+        public override void FillStatusMessage(StringBuilder message)
+        {
+            int nPaths = this.CountOpenPaths;
+            string paths = (nPaths == 1 ? "path" : "paths");
+            message.Append(", " + nPaths.ToString() + " " + paths);
+        }
+
+        /// <summary>
+        /// Current number of open paths.
+        /// </summary>
+        protected abstract int CountOpenPaths { get; }
+
         #endregion
     }
 }
