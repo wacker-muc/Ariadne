@@ -90,6 +90,16 @@ namespace SWA.Ariadne.Logic
             }
         }
 
+        /// <summary>
+        /// Write state information to the given StringBuilder.
+        /// The default is to do nothing.
+        /// </summary>
+        /// <param name="message"></param>
+        public virtual void FillStatusMessage(StringBuilder message)
+        {
+            return;
+        }
+
         #endregion
 
         #region Auxiliary methods for derived classes

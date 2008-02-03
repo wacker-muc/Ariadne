@@ -160,10 +160,12 @@ namespace SWA.Ariadne.App
         {
             if (countSteps > 0)
             {
-                message.Append(countSteps.ToString("#,##0") + " steps, "
+                string steps = (countSteps == 1 ? "step" : "steps");
+                message.Append(countSteps.ToString("#,##0") + " " + steps + ", "
                     + countForward.ToString("#,##0") + " forward, "
                     + countBackward.ToString("#,##0") + " backward"
                     );
+                solver.FillStatusMessage(message);
             }
         }
 

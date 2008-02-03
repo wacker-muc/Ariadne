@@ -31,5 +31,11 @@ namespace SWA.Ariadne.Logic
         /// Find a path in the maze from the start to the end point.
         /// </summary>
         void Solve();
+
+        /// <summary>
+        /// Write state information to the given StringBuilder.
+        /// </summary>
+        /// <param name="message"></param>
+        void FillStatusMessage(StringBuilder message);
     }
 }
