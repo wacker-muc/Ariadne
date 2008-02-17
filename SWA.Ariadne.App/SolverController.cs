@@ -92,8 +92,19 @@ namespace SWA.Ariadne.App
         public void Start()
         {
             string strategyName = mazeForm.StrategyName;
-            Type strategy = SolverFactory.SolverType(strategyName);
-            solver = SolverFactory.CreateSolver(strategy, mazeControl.Maze, mazeControl);
+
+            try
+            {
+                // If strategyName is a valid solver type name:
+                Type strategy = SolverFactory.SolverType(strategyName);
+                solver = SolverFactory.CreateSolver(strategy, mazeControl.Maze, mazeControl);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                // Otherwise (strategy name is "any"):
+                solver = SolverFactory.CreateSolver(mazeControl.Maze, mazeControl);
+            }
+            this.mazeForm.UpdateCaption();
         }
 
         #endregion
@@ -172,6 +183,14 @@ namespace SWA.Ariadne.App
                     + countBackward.ToString("#,##0") + " backward"
                     );
                 solver.FillStatusMessage(message);
+            }
+        }
+
+        public string StrategyName
+        {
+            get
+            {
+                return this.solver.GetType().Name;
             }
         }
 

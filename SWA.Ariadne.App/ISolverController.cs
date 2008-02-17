@@ -10,6 +10,7 @@ namespace SWA.Ariadne.App
         void Reset();
         void ResetCounters();
         void Start();
+        string StrategyName { get; }
         void UpdateStatusLine();
     }
 }

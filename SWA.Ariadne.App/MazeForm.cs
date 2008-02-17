@@ -88,6 +88,7 @@ namespace SWA.Ariadne.App
                 // Add the solver's name to the combo box.
                 strategyComboBox.Items.Add(t.Name);
             }
+            strategyComboBox.Items.Add("(any)");
             strategyComboBox.SelectedItem = SolverFactory.DefaultStrategy.Name;
 
             #endregion
@@ -151,7 +152,7 @@ namespace SWA.Ariadne.App
         /// </summary>
         public override void FixStateDependantControls(SolverState state)
         {
-            bool enabled = (State == SolverState.Ready);
+            bool enabled = (State == SolverState.Ready || State == SolverState.Finished);
 
             strategyComboBox.Enabled = enabled;
         }
