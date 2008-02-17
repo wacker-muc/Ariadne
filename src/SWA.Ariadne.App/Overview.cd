@@ -5,7 +5,7 @@
     <Position X="2.75" Y="3.5" Width="1.5" />
     <TypeIdentifier>
       <FileName>AriadneFormBase.cs</FileName>
-      <HashCode>gQgoABCJAaIEAEACsAzABAhCIAigYAENKRAAJTI2ASk=</HashCode>
+      <HashCode>gQgoABCJAaIEAEACsAzABAhCIAigYAGNKRAAJTI2gSk=</HashCode>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="SolverController" />
@@ -101,8 +101,10 @@
     <AssociationLine Name="solverController" Type="SWA.Ariadne.App.SolverController" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="5.312" Y="3.5" />
-        <Point X="5.312" Y="3.312" />
-        <Point X="6.75" Y="3.312" />
+        <Point X="5.312" Y="3.25" />
+        <Point X="6.5" Y="3.25" />
+        <Point X="6.5" Y="3.531" />
+        <Point X="6.75" Y="3.531" />
       </Path>
     </AssociationLine>
   </Class>
@@ -184,7 +186,7 @@
     <Position X="6.75" Y="2.75" Width="1.5" />
     <TypeIdentifier>
       <FileName>SolverController.cs</FileName>
-      <HashCode>AAAAAAAAQCIBBEACAAAAAEAAAACASAAAAAEAAACQABA=</HashCode>
+      <HashCode>AAAAAAAAQCIBBEACAAAABEAAAACASAAAAAEAAACQABA=</HashCode>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Field Name="mazeForm" />
@@ -208,8 +210,8 @@
     </Members>
     <AssociationLine Name="mazeForm" Type="SWA.Ariadne.App.IMazeForm" FixedFromPoint="true">
       <Path>
-        <Point X="6.75" Y="2.938" />
-        <Point X="2.5" Y="2.938" />
+        <Point X="6.75" Y="3.011" />
+        <Point X="2.5" Y="3.011" />
       </Path>
     </AssociationLine>
     <Lollipop Orientation="Bottom" Position="0.232" />
@@ -250,6 +252,13 @@
       <Property Name="XSize" Hidden="true" />
       <Property Name="YSize" Hidden="true" />
     </Members>
+    <AssociationLine Name="Items" Type="SWA.Ariadne.App.ArenaItem" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="4.812" Y="6.93" />
+        <Point X="4.812" Y="7.153" />
+        <Point X="2" Y="7.153" />
+      </Path>
+    </AssociationLine>
     <Lollipop Orientation="Bottom" Position="0.179" />
   </Class>
   <Class Name="SWA.Ariadne.App.ArenaItem">
@@ -289,7 +298,7 @@
       <Path>
         <Point X="2" Y="7.438" />
         <Point X="10.25" Y="7.438" />
-        <Point X="10.25" Y="6.599" />
+        <Point X="10.25" Y="6.763" />
       </Path>
     </AssociationLine>
     <Lollipop Orientation="Bottom" Position="0.184" />
@@ -300,6 +309,9 @@
       <FileName>MultiSolverController.cs</FileName>
       <HashCode>AAIAAgAAQCIBBEAAAAAABAAAAAAAQAAAAAEAAAAQAAA=</HashCode>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="mazeForm" />
+    </ShowAsAssociation>
     <ShowAsCollectionAssociation>
       <Field Name="list" />
     </ShowAsCollectionAssociation>
@@ -351,7 +363,7 @@
     <Position X="9.5" Y="4.25" Width="1.5" />
     <TypeIdentifier>
       <FileName>ISolverController.cs</FileName>
-      <HashCode>AAAAAAAAQCIBBAAAAAAAAAAAAAAAQAAAAAEAAAAQAAA=</HashCode>
+      <HashCode>AAAAAAAAQCIBBAAAAAAABAAAAAAAQAAAAAEAAAAQAAA=</HashCode>
     </TypeIdentifier>
   </Interface>
   <Interface Name="SWA.Ariadne.App.IMazeControlSetup">

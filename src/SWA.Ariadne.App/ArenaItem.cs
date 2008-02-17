@@ -73,6 +73,7 @@ namespace SWA.Ariadne.App
                 // Add the solver's name to the combo box.
                 strategyComboBox.Items.Add(t.Name);
             }
+            strategyComboBox.Items.Add("(any)");
             strategyComboBox.SelectedItem = SolverFactory.DefaultStrategy.Name;
 
             #endregion
@@ -133,11 +134,29 @@ namespace SWA.Ariadne.App
         public void UpdateCaption()
         {
             // no action
+            if (this.strategyComboBox.Text.StartsWith("("))
+            {
+                this.strategyComboBox.Text = "(" + this.StrategyName + ")";
+            }
+            else
+            {
+                this.strategyComboBox.Text = this.StrategyName;
+            }
         }
 
         public string StrategyName
         {
-            get { return this.strategyComboBox.SelectedItem.ToString(); }
+            get
+            {
+                try
+                {
+                    return this.SolverController.StrategyName;
+                }
+                catch (NullReferenceException)
+                {
+                    return this.strategyComboBox.SelectedItem.ToString();
+                }
+            }
         }
 
         /// <summary>
@@ -145,7 +164,8 @@ namespace SWA.Ariadne.App
         /// </summary>
         public void FixStateDependantControls(AriadneFormBase.SolverState state)
         {
-            bool enabled = (state == AriadneFormBase.SolverState.Ready);
+            bool enabled = (state == AriadneFormBase.SolverState.Ready
+                         || state == AriadneFormBase.SolverState.Finished);
 
             strategyComboBox.Enabled = enabled;
         }

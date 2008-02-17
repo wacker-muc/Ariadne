@@ -50,6 +50,11 @@ namespace SWA.Ariadne.App
         protected Timer stepTimer;
 
         /// <summary>
+        /// A timer that creates a new maze when repeatMode is set.
+        /// </summary>
+        protected Timer repeatTimer;
+
+        /// <summary>
         /// Number of executed steps.
         /// </summary>
         protected long countSteps
@@ -90,6 +95,8 @@ namespace SWA.Ariadne.App
         private double secondsBeforeRateChange;
 
         #endregion
+
+        protected bool repeatMode = false;
 
         #endregion
 
@@ -289,6 +296,15 @@ namespace SWA.Ariadne.App
                 {
                     stepTimer = null;
                     // State is Finished and may become Ready if someone creates a new Maze.
+
+                    // In repeat mode: Start a timer that will create a new maze.
+                    if (this.repeatMode)
+                    {
+                        this.repeatTimer = new Timer();
+                        repeatTimer.Interval = 3000; // ms
+                        repeatTimer.Tick += new EventHandler(this.OnRepeatTimer);
+                        repeatTimer.Start();
+                    }
                 }
 
                 SolverController.UpdateStatusLine();
@@ -350,6 +366,54 @@ namespace SWA.Ariadne.App
             SolverController.FinishPath();
 
             SolverController.UpdateStatusLine();
+        }
+
+        /// <summary>
+        /// Toggle the repeat mode.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnRepeat(object sender, EventArgs e)
+        {
+            // Switch between Running and Paused.
+            this.repeatMode = !this.repeatMode;
+
+            if (this.repeatMode == false)
+            {
+                this.repeatLabel.BorderStyle = Released;
+                this.repeatLabel.Tag = "";
+            }
+            else
+            {
+                this.repeatLabel.BorderStyle = Pressed;
+                this.repeatLabel.Tag = "sunken";
+            }
+        }
+
+        /// <summary>
+        /// Automatically create and start a new maze.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnRepeatTimer(object sender, EventArgs e)
+        {
+            if (State == SolverState.Finished && this.repeatMode)
+            {
+                repeatTimer.Stop();
+                this.OnNew(null, null);
+                repeatTimer.Interval = 2000; // ms
+                repeatTimer.Start();
+            }
+            else if (State == SolverState.Ready && this.repeatMode)
+            {
+                repeatTimer.Stop();
+                this.OnStart(null, null);
+            }
+            else
+            {
+                repeatTimer.Stop();
+                repeatTimer = null;
+            }
         }
 
         #endregion
@@ -550,11 +614,18 @@ namespace SWA.Ariadne.App
             {
                 try
                 {
-                    return this.strategyComboBox.SelectedItem.ToString();
+                    return this.SolverController.StrategyName;
                 }
-                catch (NullReferenceException)
+                catch (NullReferenceException) // in Ready state: there is no solver
                 {
-                    return "...";
+                    try
+                    {
+                        return this.strategyComboBox.SelectedItem.ToString();
+                    }
+                    catch (NullReferenceException) // in designer mode or on initial startup: there is no combo box, yet
+                    {
+                        return "...";
+                    }
                 }
             }
         }
@@ -625,16 +696,16 @@ namespace SWA.Ariadne.App
         {
             get
             {
-                // While there is no timer, we are Ready to create one and start it.
-                if (stepTimer == null)
-                {
-                    return SolverState.Ready;
-                }
-
                 // If the maze is solved, we are Finished.
                 if (MazeControlProperties.IsSolved)
                 {
                     return SolverState.Finished;
+                }
+
+                // While there is no timer, we are Ready to create one and start it.
+                if (stepTimer == null)
+                {
+                    return SolverState.Ready;
                 }
 
                 // So we are either running or paused.

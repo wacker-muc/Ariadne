@@ -668,7 +668,7 @@ namespace SWA.Ariadne.App
 
         public bool IsSolved
         {
-            get { return maze.IsSolved; }
+            get { return (maze == null ? false : maze.IsSolved); }
         }
 
         public int XSize

@@ -129,6 +129,14 @@ namespace SWA.Ariadne.App
             }
         }
 
+        public string StrategyName
+        {
+            get
+            {
+                return "(multiple)";
+            }
+        }
+
         #endregion
     }
 }
