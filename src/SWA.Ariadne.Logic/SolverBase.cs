@@ -124,6 +124,19 @@ namespace SWA.Ariadne.Logic
             return result;
         }
 
+        /// <summary>
+        /// Returns the euclidian distance between two squares.
+        /// </summary>
+        /// <param name="sq1"></param>
+        /// <param name="sq2"></param>
+        /// <returns></returns>
+        protected static double Distance(MazeSquare sq1, MazeSquare sq2)
+        {
+            double dx = sq1.XPos - sq2.XPos;
+            double dy = sq1.YPos - sq2.YPos;
+            return Math.Sqrt((dx * dx) + (dy * dy));
+        }
+
         #endregion
     }
 }

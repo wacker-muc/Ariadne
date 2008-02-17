@@ -18,6 +18,7 @@ namespace SWA.Ariadne.Logic
             get { return solverTypes; }
         }
         private static System.Type[] solverTypes = new System.Type[] {
+            typeof(ProximityBacktracker),
             typeof(RandomBacktracker),
             typeof(MasterSolver),
             typeof(RightHandWalker),

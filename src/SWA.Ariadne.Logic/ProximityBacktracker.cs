@@ -6,11 +6,15 @@ using SWA.Ariadne.Model;
 namespace SWA.Ariadne.Logic
 {
     /// <summary>
-    /// A MazeSolver with many concurrent paths.
-    /// Is guided by the distance to a reference point.
+    /// A MazeSolver with one current path and backtracking.
+    /// Prefers visiting the square closest to the end point.
     /// </summary>
-    internal abstract class DistanceGuidedFlooderBase : FlooderBase
+    internal class ProximityBacktracker : BacktrackerBase
     {
+        #region Member variables
+
+        #endregion
+
         #region Constructor
 
         /// <summary>
@@ -18,7 +22,7 @@ namespace SWA.Ariadne.Logic
         /// </summary>
         /// <param name="maze"></param>
         /// <param name="mazeDrawer"></param>
-        public DistanceGuidedFlooderBase(Maze maze, IMazeDrawer mazeDrawer)
+        public ProximityBacktracker(Maze maze, IMazeDrawer mazeDrawer)
             : base(maze, mazeDrawer)
         {
         }
@@ -28,31 +32,15 @@ namespace SWA.Ariadne.Logic
         #region Runtime methods
 
         /// <summary>
-        /// Select an index within the flooder's list of open paths.
-        /// </summary>
-        /// <returns></returns>
-        protected override int SelectPathIdx()
-        {
-            int bestIdx = 0;
-            double bestDistance = double.MaxValue;
-
-            for (int i = 0; i < list.Count; i++)
-            {
-                double distance = Distance(ReferenceSquare, list[i]);
-                if (distance < bestDistance)
-                {
-                    bestIdx = i;
-                    bestDistance = distance;
-                }
-            }
-
-            return bestIdx;
-        }
-
-        /// <summary>
         /// The (euclidian) distance to this square should be minimized.
         /// </summary>
-        protected abstract MazeSquare ReferenceSquare { get; }
+        private MazeSquare ReferenceSquare
+        {
+            get
+            {
+                return maze.EndSquare;
+            }
+        }
 
         /// <summary>
         /// Select one of the open walls leading away from the given square.
