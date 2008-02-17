@@ -33,6 +33,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BacktrackerBase.cs" />
     <Compile Include="CloseFlooder.cs" />
     <Compile Include="DeterministicWalker.cs" />
     <Compile Include="DistanceGuidedFlooderBase.cs" />

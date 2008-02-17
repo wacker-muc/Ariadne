@@ -22,10 +22,10 @@
     </Members>
   </Class>
   <Class Name="SWA.Ariadne.Logic.RandomBacktracker">
-    <Position X="7.25" Y="3.75" Width="1.75" />
+    <Position X="7.25" Y="6.25" Width="1.75" />
     <TypeIdentifier>
       <FileName>RandomBacktracker.cs</FileName>
-      <HashCode>AAAAAAAAAAAABAAAAAAAAAAAAAAEAIAAAAQAAAAAAAA=</HashCode>
+      <HashCode>gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAA=</HashCode>
     </TypeIdentifier>
     <Members>
       <Field Name="random" Hidden="true" />
@@ -109,6 +109,16 @@
         </TypeIdentifier>
       </Struct>
     </NestedTypes>
+  </Class>
+  <Class Name="SWA.Ariadne.Logic.BacktrackerBase">
+    <Position X="7.25" Y="3.75" Width="1.75" />
+    <TypeIdentifier>
+      <FileName>BacktrackerBase.cs</FileName>
+      <HashCode>gAAAAAAAAAAABAAAAAAAAAAAAAAEAIAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Members>
+      <Method Name="BacktrackerBase" Hidden="true" />
+    </Members>
   </Class>
   <Interface Name="SWA.Ariadne.Logic.IMazeSolver">
     <Position X="6" Y="0.5" Width="1.5" />
