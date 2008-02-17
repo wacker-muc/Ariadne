@@ -8,7 +8,7 @@ namespace SWA.Ariadne.Logic
     /// <summary>
     /// Base class for all MazeSolvers using a flooding strategy.
     /// </summary>
-    abstract class Flooder : SolverBase
+    abstract class FlooderBase : SolverBase
     {
         #region Member variables
 
@@ -44,7 +44,7 @@ namespace SWA.Ariadne.Logic
         /// </summary>
         /// <param name="maze"></param>
         /// <param name="mazeDrawer"></param>
-        public Flooder(Maze maze, IMazeDrawer mazeDrawer)
+        public FlooderBase(Maze maze, IMazeDrawer mazeDrawer)
             : base(maze, mazeDrawer)
         {
             this.mazeExtension = new MazeSquareExtension[maze.XSize, maze.YSize];

@@ -52,7 +52,7 @@ namespace SWA.Ariadne.Logic
         /// <summary>
         /// The (euclidian) distance to this square should be minimized.
         /// </summary>
-        private abstract MazeSquare ReferenceSquare { get; }
+        protected abstract MazeSquare ReferenceSquare { get; }
 
         /// <summary>
         /// Returns the euclidian distance between two squares.
