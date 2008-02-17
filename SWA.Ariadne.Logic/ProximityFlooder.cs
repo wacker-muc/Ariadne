@@ -7,9 +7,9 @@ namespace SWA.Ariadne.Logic
 {
     /// <summary>
     /// A MazeSolver with many concurrent paths.
-    /// Prefers visiting the square closest to the start point.
+    /// Prefers visiting the square closest to the end point.
     /// </summary>
-    internal class CloseFlooder : DistanceGuidedFlooderBase
+    internal class ProximityFlooder : DistanceGuidedFlooderBase
     {
         #region Constructor
 
@@ -18,7 +18,7 @@ namespace SWA.Ariadne.Logic
         /// </summary>
         /// <param name="maze"></param>
         /// <param name="mazeDrawer"></param>
-        public CloseFlooder(Maze maze, IMazeDrawer mazeDrawer)
+        public ProximityFlooder(Maze maze, IMazeDrawer mazeDrawer)
             : base(maze, mazeDrawer)
         {
         }
@@ -34,7 +34,7 @@ namespace SWA.Ariadne.Logic
         {
             get
             {
-                return maze.StartSquare;
+                return maze.EndSquare;
             }
         }
 

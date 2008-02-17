@@ -25,6 +25,7 @@ namespace SWA.Ariadne.Logic
             typeof(RandomWalker),
             typeof(RoundRobinFlooder),
             typeof(CloseFlooder),
+            typeof(ProximityFlooder),
             typeof(RandomFlooder),
         };
 

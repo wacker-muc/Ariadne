@@ -35,12 +35,14 @@
   <ItemGroup>
     <Compile Include="CloseFlooder.cs" />
     <Compile Include="DeterministicWalker.cs" />
-    <Compile Include="Flooder.cs" />
+    <Compile Include="DistanceGuidedFlooderBase.cs" />
+    <Compile Include="FlooderBase.cs" />
     <Compile Include="IMazeDrawer.cs" />
     <Compile Include="IMazeSolver.cs" />
     <Compile Include="LeftHandWalker.cs" />
     <Compile Include="MasterSolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ProximityFlooder.cs" />
     <Compile Include="RandomBacktracker.cs" />
     <Compile Include="RandomFlooder.cs" />
     <Compile Include="RandomWalker.cs" />

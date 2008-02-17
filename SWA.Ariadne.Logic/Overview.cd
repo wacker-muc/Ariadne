@@ -7,6 +7,9 @@
       <FileName>DeterministicWalker.cs</FileName>
       <HashCode>AAAAAAAAAAACBAgAAAACAgAAAAAEAEAAAAAAAAAAAAA=</HashCode>
     </TypeIdentifier>
+    <Members>
+      <Method Name="DeterministicWalker" Hidden="true" />
+    </Members>
   </Class>
   <Class Name="SWA.Ariadne.Logic.LeftHandWalker">
     <Position X="5" Y="7" Width="1.5" />
@@ -14,6 +17,9 @@
       <FileName>LeftHandWalker.cs</FileName>
       <HashCode>AAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
     </TypeIdentifier>
+    <Members>
+      <Method Name="LeftHandWalker" Hidden="true" />
+    </Members>
   </Class>
   <Class Name="SWA.Ariadne.Logic.RandomBacktracker">
     <Position X="7.25" Y="3.75" Width="1.75" />
@@ -21,6 +27,10 @@
       <FileName>RandomBacktracker.cs</FileName>
       <HashCode>AAAAAAAAAAAABAAAAAAAAAAAAAAEAIAAAAQAAAAAAAA=</HashCode>
     </TypeIdentifier>
+    <Members>
+      <Field Name="random" Hidden="true" />
+      <Method Name="RandomBacktracker" Hidden="true" />
+    </Members>
   </Class>
   <Class Name="SWA.Ariadne.Logic.RandomWalker">
     <Position X="0.5" Y="3.75" Width="1.75" />
@@ -28,6 +38,10 @@
       <FileName>RandomWalker.cs</FileName>
       <HashCode>AAAAAAAAAAAABAgAAAAAAAAAAAAEAAAAAAQAAAAAAAA=</HashCode>
     </TypeIdentifier>
+    <Members>
+      <Field Name="random" Hidden="true" />
+      <Method Name="RandomWalker" Hidden="true" />
+    </Members>
   </Class>
   <Class Name="SWA.Ariadne.Logic.RightHandWalker">
     <Position X="2.75" Y="7" Width="1.5" />
@@ -35,44 +49,61 @@
       <FileName>RightHandWalker.cs</FileName>
       <HashCode>AAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
     </TypeIdentifier>
+    <Members>
+      <Method Name="RightHandWalker" Hidden="true" />
+    </Members>
   </Class>
   <Class Name="SWA.Ariadne.Logic.SolverBase">
     <Position X="3.75" Y="0.5" Width="1.75" />
     <TypeIdentifier>
       <FileName>SolverBase.cs</FileName>
-      <HashCode>AgAAAABAAAAAFAAAAAAAAAAAAAAEAAAAIAAQAAAAAAA=</HashCode>
+      <HashCode>AgAAAADAAAIABAAAAAAAAAAIAAAEAAAAIAAAAAAAAAA=</HashCode>
     </TypeIdentifier>
+    <Members>
+      <Method Name="SolverBase" Hidden="true" />
+    </Members>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="SWA.Ariadne.Logic.RandomFlooder">
-    <Position X="11.75" Y="6.75" Width="1.75" />
+    <Position X="11.75" Y="7" Width="1.75" />
     <TypeIdentifier>
       <FileName>RandomFlooder.cs</FileName>
-      <HashCode>AAAAAgAAAAAABAAAAAAAAAAAAAAEAAAAAAQAAAAAAAA=</HashCode>
+      <HashCode>gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAARAAAAAAAA=</HashCode>
     </TypeIdentifier>
+    <Members>
+      <Field Name="random" Hidden="true" />
+      <Method Name="RandomFlooder" Hidden="true" />
+    </Members>
   </Class>
   <Class Name="SWA.Ariadne.Logic.RoundRobinFlooder">
-    <Position X="9.5" Y="6.75" Width="1.75" />
+    <Position X="9.5" Y="7" Width="1.75" />
     <TypeIdentifier>
       <FileName>RoundRobinFlooder.cs</FileName>
-      <HashCode>AAAAAAAAAAAABAAAAABAAAAAAAAEAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAA=</HashCode>
     </TypeIdentifier>
+    <Members>
+      <Method Name="RoundRobinFlooder" Hidden="true" />
+    </Members>
   </Class>
   <Class Name="SWA.Ariadne.Logic.SolverFactory">
     <Position X="9.5" Y="0.5" Width="2" />
     <TypeIdentifier>
       <FileName>SolverFactory.cs</FileName>
-      <HashCode>AABAAAAAQAAAAAIAAAQAAAAAAAAAAAAAAAAAIAAAAAA=</HashCode>
+      <HashCode>AABAAAAAQAAAAAIAAAQAAAAAAAAAAACAAAAAIAIAAAA=</HashCode>
     </TypeIdentifier>
   </Class>
-  <Class Name="SWA.Ariadne.Logic.Flooder">
-    <Position X="10.75" Y="3.75" Width="1.5" />
+  <Class Name="SWA.Ariadne.Logic.FlooderBase">
+    <Position X="10.75" Y="3.75" Width="1.75" />
     <TypeIdentifier>
-      <FileName>Flooder.cs</FileName>
-      <HashCode>AAAAAAAAAAAABAAAAAAAAAAAAAAAAAAIIBAAAAAAAAA=</HashCode>
+      <FileName>FlooderBase.cs</FileName>
+      <HashCode>gAAAAgAAAAIABAAAAAAAAAAAAAAEQAAIIBBAAAAAAAA=</HashCode>
     </TypeIdentifier>
+    <Members>
+      <Method Name="FillStatusMessage" Hidden="true" />
+      <Method Name="FlooderBase" Hidden="true" />
+    </Members>
     <NestedTypes>
-      <Struct Name="SWA.Ariadne.Logic.Flooder.MazeSquareExtension" Collapsed="true">
+      <Struct Name="SWA.Ariadne.Logic.FlooderBase.MazeSquareExtension" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>Flooder.cs</NewMemberFileName>
         </TypeIdentifier>
@@ -83,7 +114,7 @@
     <Position X="6" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <FileName>IMazeSolver.cs</FileName>
-      <HashCode>AAAAAAAAAAAAFAAAAAAAAAAAAAAAAAAAIAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAIABAAAAAAAAAAIAAAAAAAAIAAAAAAAAAA=</HashCode>
     </TypeIdentifier>
   </Interface>
 </ClassDiagram>

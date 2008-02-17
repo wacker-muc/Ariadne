@@ -400,8 +400,9 @@ namespace SWA.Ariadne.App
             if (State == SolverState.Finished && this.repeatMode)
             {
                 repeatTimer.Stop();
-                this.OnNew(null, null);
-                repeatTimer.Interval = 2000; // ms
+                this.OnNew(null, null); // creates a new maze, invalidates the drawing area
+                Application.DoEvents(); // paints the maze
+                repeatTimer.Interval = 1500; // ms
                 repeatTimer.Start();
             }
             else if (State == SolverState.Ready && this.repeatMode)
