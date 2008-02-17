@@ -342,6 +342,8 @@ namespace SWA.Ariadne.App
                 this.pauseLabel.BorderStyle = Pressed;
                 this.pauseLabel.Tag = "sunken";
             }
+
+            this.pauseLabel.ToolTipText += " [P]";
         }
 
         /// <summary>
@@ -414,6 +416,46 @@ namespace SWA.Ariadne.App
             {
                 repeatTimer.Stop();
                 repeatTimer = null;
+            }
+        }
+
+        #endregion
+
+        #region Keyboard controls
+
+        private void OnKeyPress(object sender, KeyPressEventArgs e)
+        {
+            switch (char.ToUpper(e.KeyChar))
+            {
+                case (char)Keys.Escape:
+                    OnReset(sender, e);
+                    e.Handled = true;
+                    break;
+                case (char)Keys.Enter:
+                    OnStart(sender, e);
+                    e.Handled = true;
+                    break;
+                case (char)Keys.P:
+                    OnPause(sender, e);
+                    e.Handled = true;
+                    break;
+                case (char)Keys.OemPeriod:
+                case '.':
+                    OnStep(sender, e);
+                    e.Handled = true;
+                    break;
+                case (char)Keys.N:
+                    OnNew(sender, e);
+                    e.Handled = true;
+                    break;
+                case (char)Keys.Oemplus:
+                case '+':
+                    OnRepeat(sender, e);
+                    e.Handled = true;
+                    break;
+                case (char)Keys.M:
+                    this.menuButton.ShowDropDown();
+                    break;
             }
         }
 

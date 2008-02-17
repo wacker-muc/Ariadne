@@ -5,7 +5,7 @@
     <Position X="2.75" Y="3.5" Width="1.5" />
     <TypeIdentifier>
       <FileName>AriadneFormBase.cs</FileName>
-      <HashCode>gQgoABCJAaIEAEACsAzABAhCIAigYAGNKRAAJTI2gSk=</HashCode>
+      <HashCode>gwgoABCJAaIEAEACsAzABAhCIAigYAGNKRAAJTI2gSk=</HashCode>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="SolverController" />
