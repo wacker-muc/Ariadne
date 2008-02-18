@@ -37,6 +37,7 @@
     <Compile Include="CloseFlooder.cs" />
     <Compile Include="DeterministicWalker.cs" />
     <Compile Include="DistanceGuidedFlooderBase.cs" />
+    <Compile Include="FarFlooder.cs" />
     <Compile Include="FlooderBase.cs" />
     <Compile Include="IMazeDrawer.cs" />
     <Compile Include="IMazeSolver.cs" />

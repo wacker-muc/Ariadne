@@ -11,6 +11,20 @@ namespace SWA.Ariadne.Logic
     /// </summary>
     internal abstract class DistanceGuidedFlooderBase : FlooderBase
     {
+        #region Member variables
+
+        /// <summary>
+        /// The (euclidian) distance to this square should be minimized (or maximized).
+        /// </summary>
+        protected MazeSquare referenceSquare;
+
+        /// <summary>
+        /// +1 (minimize distanze) or -1 (mazimize distance)
+        /// </summary>
+        protected int distanceSign = +1;
+
+        #endregion
+
         #region Constructor
 
         /// <summary>
@@ -38,7 +52,7 @@ namespace SWA.Ariadne.Logic
 
             for (int i = 0; i < list.Count; i++)
             {
-                double distance = Distance(ReferenceSquare, list[i]);
+                double distance = distanceSign * Distance(referenceSquare, list[i]);
                 if (distance < bestDistance)
                 {
                     bestIdx = i;
@@ -48,11 +62,6 @@ namespace SWA.Ariadne.Logic
 
             return bestIdx;
         }
-
-        /// <summary>
-        /// The (euclidian) distance to this square should be minimized.
-        /// </summary>
-        protected abstract MazeSquare ReferenceSquare { get; }
 
         /// <summary>
         /// Select one of the open walls leading away from the given square.
@@ -67,7 +76,7 @@ namespace SWA.Ariadne.Logic
 
             for (int i = 0; i < openWalls.Count; i++)
             {
-                double distance = Distance(ReferenceSquare, sq1.NeighborSquare(openWalls[i]));
+                double distance = distanceSign * Distance(referenceSquare, sq1.NeighborSquare(openWalls[i]));
                 if (distance < bestDistance)
                 {
                     bestIdx = i;

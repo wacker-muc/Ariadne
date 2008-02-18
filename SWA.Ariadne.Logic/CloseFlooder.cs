@@ -21,21 +21,7 @@ namespace SWA.Ariadne.Logic
         public CloseFlooder(Maze maze, IMazeDrawer mazeDrawer)
             : base(maze, mazeDrawer)
         {
-        }
-
-        #endregion
-
-        #region Runtime methods
-
-        /// <summary>
-        /// The (euclidian) distance to this square should be minimized.
-        /// </summary>
-        protected override MazeSquare ReferenceSquare
-        {
-            get
-            {
-                return maze.StartSquare;
-            }
+            this.referenceSquare = maze.StartSquare;
         }
 
         #endregion
