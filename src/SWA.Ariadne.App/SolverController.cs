@@ -143,6 +143,7 @@ namespace SWA.Ariadne.App
 
             if (mazeControl.Maze.IsSolved)
             {
+                FinishPath();
                 mazeControl.DrawSolvedPath(SolverFactory.SolutionPath(mazeControl.Maze));
                 currentBackwardSquare = null;
             }
