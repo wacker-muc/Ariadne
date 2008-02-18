@@ -39,6 +39,7 @@
     <Compile Include="DistanceGuidedFlooderBase.cs" />
     <Compile Include="FarFlooder.cs" />
     <Compile Include="FlooderBase.cs" />
+    <Compile Include="HesitatingFlooder.cs" />
     <Compile Include="IMazeDrawer.cs" />
     <Compile Include="IMazeSolver.cs" />
     <Compile Include="LeftHandWalker.cs" />

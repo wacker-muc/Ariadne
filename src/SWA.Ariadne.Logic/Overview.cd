@@ -86,7 +86,7 @@
     </Members>
   </Class>
   <Class Name="SWA.Ariadne.Logic.SolverFactory">
-    <Position X="10.25" Y="0.5" Width="2" />
+    <Position X="8" Y="0.5" Width="2" />
     <TypeIdentifier>
       <FileName>SolverFactory.cs</FileName>
       <HashCode>AABAAAAAQAAAAAIAAAQAAAAAAAAAAACAAAAAIAIAAAA=</HashCode>
@@ -132,34 +132,54 @@
     </Members>
   </Class>
   <Class Name="SWA.Ariadne.Logic.DistanceGuidedFlooderBase">
-    <Position X="11" Y="3.75" Width="1.75" />
+    <Position X="10.75" Y="2.75" Width="2.25" />
     <TypeIdentifier>
       <FileName>DistanceGuidedFlooderBase.cs</FileName>
-      <HashCode>gAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAABAAAAAAAA=</HashCode>
+      <HashCode>gAAAAAAFAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAA=</HashCode>
     </TypeIdentifier>
     <Members>
       <Method Name="DistanceGuidedFlooderBase" Hidden="true" />
     </Members>
   </Class>
   <Class Name="SWA.Ariadne.Logic.CloseFlooder">
-    <Position X="10" Y="6" Width="1.75" />
+    <Position X="10" Y="5.25" Width="1.75" />
     <TypeIdentifier>
       <FileName>CloseFlooder.cs</FileName>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
     </TypeIdentifier>
     <Members>
       <Method Name="CloseFlooder" Hidden="true" />
     </Members>
   </Class>
   <Class Name="SWA.Ariadne.Logic.ProximityFlooder">
-    <Position X="12" Y="6" Width="1.75" />
+    <Position X="12" Y="5.25" Width="1.75" />
     <TypeIdentifier>
       <FileName>ProximityFlooder.cs</FileName>
       <NewMemberFileName>CloseFlooder.cs</NewMemberFileName>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
     </TypeIdentifier>
     <Members>
       <Method Name="ProximityFlooder" Hidden="true" />
+    </Members>
+  </Class>
+  <Class Name="SWA.Ariadne.Logic.HesitatingFlooder">
+    <Position X="12" Y="6.5" Width="1.75" />
+    <TypeIdentifier>
+      <FileName>HesitatingFlooder.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Members>
+      <Method Name="HesitatingFlooder" Hidden="true" />
+    </Members>
+  </Class>
+  <Class Name="SWA.Ariadne.Logic.FarFlooder">
+    <Position X="10" Y="6.5" Width="1.75" />
+    <TypeIdentifier>
+      <FileName>FarFlooder.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Members>
+      <Method Name="FarFlooder" Hidden="true" />
     </Members>
   </Class>
   <Interface Name="SWA.Ariadne.Logic.IMazeSolver">
