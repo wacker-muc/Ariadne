@@ -108,6 +108,10 @@
       <SubType>Designer</SubType>
       <DependentUpon>DetailsDialog.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="MazeForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>MazeForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MazeUserControl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>MazeUserControl.cs</DependentUpon>
@@ -116,6 +120,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ScreenSaverForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ScreenSaverForm.cs</DependentUpon>
     </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -131,6 +139,12 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="ScreenSaverForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ScreenSaverForm.Designer.cs">
+      <DependentUpon>ScreenSaverForm.cs</DependentUpon>
     </Compile>
     <Compile Include="SolverController.cs">
       <SubType>Code</SubType>
@@ -158,7 +172,10 @@
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
-  <Target Name="AfterBuild">
-  </Target>
   -->
+  <Target Name="AfterBuild">
+    <Copy SourceFiles="$(TargetDir)\$(TargetName).exe"
+          DestinationFiles="$(TargetDir)\$(TargetName).scr"
+          SkipUnchangedFiles="true" />
+  </Target>
 </Project>
