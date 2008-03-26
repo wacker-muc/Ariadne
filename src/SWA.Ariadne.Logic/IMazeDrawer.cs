@@ -37,5 +37,12 @@ namespace SWA.Ariadne.Logic
         /// </summary>
         /// <param name="sq">when null, no dot is drawn</param>
         void FinishPath(MazeSquare sq);
+
+        /// <summary>
+        /// A counter that switches the end square between two states:
+        /// When it is 0 or another even number, it is painted normally (red).
+        /// When it is an odd number, it is painted invisible (black).
+        /// </summary>
+        int BlinkingCounter { get; set; }
     }
 }

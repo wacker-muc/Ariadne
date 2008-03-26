@@ -55,6 +55,11 @@ namespace SWA.Ariadne.App
         protected Timer repeatTimer;
 
         /// <summary>
+        /// A timer for making the maze's end point blink.
+        /// </summary>
+        protected Timer blinkTimer;
+
+        /// <summary>
         /// Number of executed steps.
         /// </summary>
         protected long countSteps
@@ -145,8 +150,11 @@ namespace SWA.Ariadne.App
                 if (State == SolverState.Running)
                 {
                     stepTimer.Stop();
+                    blinkTimer.Stop();
+                    this.SolverController.BlinkingCounter = 0;
                 }
                 stepTimer = null;
+                blinkTimer = null;
             }
 
             FixStateDependantControls(this.State);
@@ -223,6 +231,11 @@ namespace SWA.Ariadne.App
             stepTimer.Tick += new EventHandler(this.OnStepTimer);
             stepTimer.Start();
 
+            blinkTimer = new Timer();
+            blinkTimer.Interval = 600; // ms
+            blinkTimer.Tick += new EventHandler(this.OnBlinkTimer);
+            blinkTimer.Start();
+
             FixStateDependantControls(this.State);
             ResetCounters();
 
@@ -295,6 +308,8 @@ namespace SWA.Ariadne.App
                 else
                 {
                     stepTimer = null;
+                    blinkTimer.Enabled = false;
+                    blinkTimer = null;
                     // State is Finished and may become Ready if someone creates a new Maze.
 
                     // In repeat mode: Start a timer that will create a new maze.
@@ -309,6 +324,17 @@ namespace SWA.Ariadne.App
 
                 SolverController.UpdateStatusLine();
             }
+        }
+
+        /// <summary>
+        /// Increment the SolverController's BlinkingCounter.
+        /// This makes the end square blink.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnBlinkTimer(object sender, EventArgs e)
+        {
+            this.SolverController.BlinkingCounter = this.SolverController.BlinkingCounter + 1;
         }
 
         /// <summary>
@@ -568,7 +594,7 @@ namespace SWA.Ariadne.App
         /// <summary>
         /// Displays information about the running MazeSolver in the status line.
         /// </summary>
-        public void UpdateStatusLine()
+        public virtual void UpdateStatusLine()
         {
             StringBuilder message = new StringBuilder(200);
 
@@ -608,7 +634,7 @@ namespace SWA.Ariadne.App
         /// Displays Maze and Solver characteristics in the window's caption bar.
         /// The maze ID, step rate and solver strategy name.
         /// </summary>
-        public void UpdateCaption()
+        public virtual void UpdateCaption()
         {
             StringBuilder caption = new StringBuilder(80);
 
