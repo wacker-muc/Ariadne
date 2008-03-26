@@ -20,16 +20,13 @@ namespace SWA.Ariadne.App
                 {
                     case "/c":
                         // Show the options dialog
-                        // TODO: ShowOptions();
+                        // TODO: Application.Run(new ScreenSaverOptionsForm());
                         break;
                     case "/p":
                         // Don't do anything for preview
                         break;
                     case "/s":
                         // Show screensaver form
-                        ScreenSaverForm form = new ScreenSaverForm();
-                        form.TopMost = true;
-                        form.ShowInTaskbar = false;
                         Application.Run(new ScreenSaverForm());
                         break;
                     default:
@@ -39,7 +36,7 @@ namespace SWA.Ariadne.App
             }
             else
             {
-#if true
+#if false
                 ScreenSaverForm form = new ScreenSaverForm();
                 Application.Run(form);
 #else
