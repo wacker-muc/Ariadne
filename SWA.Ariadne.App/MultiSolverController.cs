@@ -138,5 +138,24 @@ namespace SWA.Ariadne.App
         }
 
         #endregion
+
+        #region MazeControl methods
+
+        public int BlinkingCounter
+        {
+            get
+            {
+                return list[0].BlinkingCounter;
+            }
+            set
+            {
+                foreach (SolverController item in list)
+                {
+                    item.BlinkingCounter = value;
+                }
+            }
+        }
+
+        #endregion
     }
 }

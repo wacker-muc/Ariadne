@@ -70,6 +70,43 @@ namespace SWA.Ariadne.App
         private Pen forwardPen;
         private Pen backwardPen;
 
+        /// <summary>
+        /// A counter that switches the end square between two states:
+        /// When it is 0 or another even number, it is painted normally (red).
+        /// When it is an odd number, it is painted invisible (black).
+        /// </summary>
+        public int BlinkingCounter
+        {
+            get
+            {
+                return blinkingCounter;
+            }
+            set {
+                blinkingCounter = value;
+                if (gBuffer != null)
+                {
+                    PaintEndpoints(gBuffer.Graphics);
+                    gBuffer.Render();
+                }
+            }
+        }
+        private int blinkingCounter = 0;
+
+        private Brush StartSquareBrush
+        {
+            get { return Brushes.Red; }
+        }
+
+        private Brush EndSquareBrush
+        {
+            get
+            {
+                if (Maze.IsSolved)                 return StartSquareBrush;
+                if (this.BlinkingCounter % 2 == 0) return StartSquareBrush;
+                return Brushes.Black;
+            }
+        }
+
         private BufferedGraphics gBuffer;
 
         internal IMazeForm MazeForm
@@ -421,9 +458,9 @@ namespace SWA.Ariadne.App
         {
             int x, y;
             maze.GetStartCoordinates(out x, out y);
-            PaintSquare(g, Brushes.Red, x, y);
+            PaintSquare(g, this.StartSquareBrush, x, y);
             maze.GetEndCoordinates(out x, out y);
-            PaintSquare(g, Brushes.Red, x, y);
+            PaintSquare(g, this.EndSquareBrush, x, y);
         }
 
         /// <summary>

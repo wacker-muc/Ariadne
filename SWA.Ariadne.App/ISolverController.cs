@@ -12,5 +12,6 @@ namespace SWA.Ariadne.App
         void Start();
         string StrategyName { get; }
         void UpdateStatusLine();
+        int BlinkingCounter { get; set; }
     }
 }
