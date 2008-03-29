@@ -125,6 +125,22 @@ namespace SWA.Ariadne.App
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Set the graphics context in screen saver preview mode.
+        /// </summary>
+        /// <param name="g"></param>
+        /// <param name="rect"></param>
+        internal void SetGraphics(Graphics g, Rectangle rect)
+        {
+            this.externalGraphics = g;
+            //MessageBox.Show("Setting new drawing rectangle: " + rect.ToString(), "Debugging...", MessageBoxButtons.OK);
+            this.externalRect = rect;
+            this.Size = new Size(rect.Width, rect.Height);
+            this.Location = rect.Location;
+        }
+        private Graphics externalGraphics = null;
+        private Rectangle externalRect;
+
         public void Setup(int squareWidth, int wallWidth, int pathWidth)
         {
             this.squareWidth = squareWidth;
@@ -221,8 +237,9 @@ namespace SWA.Ariadne.App
         /// <param name="yOffset"></param>
         private void FitMazeWidth(out int width, out int xOffset)
         {
-            width = (this.Width - this.wallWidth - 4) / this.gridWidth;
-            xOffset = (this.Width - width * this.gridWidth) / 2;
+            int w = (externalGraphics != null ? externalRect.Width : this.Width);
+            width = (w - this.wallWidth - 4) / this.gridWidth;
+            xOffset = (w - width * this.gridWidth) / 2;
         }
 
         /// <summary>
@@ -232,8 +249,9 @@ namespace SWA.Ariadne.App
         /// <param name="xOffset"></param>
         private void FitMazeHeight(out int height, out int yOffset)
         {
-            height = (this.Height - this.wallWidth - 4) / this.gridWidth;
-            yOffset = (this.Height - height * this.gridWidth) / 2;
+            int h = (externalGraphics != null ? externalRect.Height : this.Height);
+            height = (h - this.wallWidth - 4) / this.gridWidth;
+            yOffset = (h - height * this.gridWidth) / 2;
         }
 
         /// <summary>
@@ -328,6 +346,14 @@ namespace SWA.Ariadne.App
             }
 
             this.Invalidate();
+
+            // If the window is minimized, there will be no OnPaint() event.
+            // Therefore we Paint the maze directly.
+            if (this.ParentForm.WindowState == FormWindowState.Minimized)
+            {
+                // TODO: Reset() is called twice but should be called only once.
+                this.PaintMaze();
+            }
         }
 
         #endregion
@@ -365,7 +391,15 @@ namespace SWA.Ariadne.App
         internal void PaintMaze()
         {
             BufferedGraphicsContext currentContext = BufferedGraphicsManager.Current;
-            gBuffer = currentContext.Allocate(this.CreateGraphics(), this.DisplayRectangle);
+            if (externalGraphics != null)
+            {
+                //MessageBox.Show("Allocating an external graphics buffer: " + externalRect.ToString(), "Debugging...", MessageBoxButtons.OK);
+                gBuffer = currentContext.Allocate(externalGraphics, externalRect);
+            }
+            else
+            {
+                gBuffer = currentContext.Allocate(this.CreateGraphics(), this.DisplayRectangle);
+            }
 
             Graphics g = gBuffer.Graphics;
 
