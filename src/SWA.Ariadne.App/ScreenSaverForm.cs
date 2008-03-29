@@ -5,12 +5,30 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using System.Runtime.InteropServices;
+using Microsoft.Win32;
 using SWA.Ariadne.Model;
 
 namespace SWA.Ariadne.App
 {
     public partial class ScreenSaverForm : MazeForm
     {
+        #region  Use Win32 API functions for dealing with preview dialog box
+
+        [DllImport("user32.dll")]
+        private static extern bool GetClientRect(IntPtr hWnd, ref RECT rect);
+        [DllImport("user32.DLL", EntryPoint = "IsWindowVisible")]
+        private static extern bool IsWindowVisible(IntPtr hWnd);
+
+        #endregion
+
+        #region Member variables
+
+        private bool previewMode = false;
+		private IntPtr parentHwnd = new IntPtr(0);
+
+        #endregion
+
         #region Constructor
 
         public ScreenSaverForm()
@@ -26,18 +44,69 @@ namespace SWA.Ariadne.App
         {
             // Use double buffering to improve drawing performance
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
-            // Capture the mouse
-            this.Capture = true;
-
+            
             // Set the application to full screen mode and hide the mouse
             Cursor.Hide();
             Bounds = Screen.PrimaryScreen.Bounds;
             WindowState = FormWindowState.Maximized;
             TopMost = true;
 
+            // Capture the mouse
+            this.Capture = true;
+
+            // Make this the active Form
+            this.Activate();
+            this.SetStyle(ControlStyles.Selectable, true);
+            bool foo = this.Focus();
+            if (!foo)
+            {
+                MessageBox.Show("ScreenSaverForm did not receive focus.", "Receive Focus Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+
             ShowInTaskbar = false;
             DoubleBuffered = true;
         }
+
+        #region Preview mode constructor
+
+        private struct RECT
+        {
+            public int left, top, right, bottom;
+        }
+
+        public ScreenSaverForm(string windowHandleArg)
+        {
+            InitializeComponent();
+
+            // set the preview mode flag
+            previewMode = true;
+            ShowInTaskbar = false;
+
+            // prevent an 
+            //outerInfoPanel = null;
+
+            parentHwnd = (IntPtr)UInt32.Parse(windowHandleArg);
+
+            RECT rect = new RECT();
+
+            // Let the mazeUserControl paint into the parent window's graphics.
+            if (GetClientRect(parentHwnd, ref rect))
+            {
+                Graphics g = Graphics.FromHwnd(parentHwnd);
+                mazeUserControl.SetGraphics(g, new Rectangle(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top));
+
+                // Hide the form.
+                this.Hide();
+                WindowState = FormWindowState.Minimized;
+
+                // Create the first maze and allocate a graphics buffer.
+                mazeUserControl.Setup(5, 2, 3);
+                mazeUserControl.PaintMaze();
+            }
+        }
+
+        #endregion
 
         #endregion
 
@@ -48,10 +117,13 @@ namespace SWA.Ariadne.App
             // Switch auto repeat mode on.
             this.repeatMode = true;
 
-            // Let the MazeUserControl cover the whole form.
-            this.mazeUserControl.Location = new Point(0, 0);
-            this.mazeUserControl.Size = this.Size;
-            this.mazeUserControl.BringToFront();
+            if (! previewMode)
+            {
+                // Let the MazeUserControl cover the whole form.
+                this.mazeUserControl.Location = new Point(0, 0);
+                this.mazeUserControl.Size = this.Size;
+                this.mazeUserControl.BringToFront();
+            }
 
             // Select the strategyComboBox's item that chooses a random strategy.
             strategyComboBox.SelectedItem = "(any)";
@@ -62,8 +134,14 @@ namespace SWA.Ariadne.App
 
         protected override void OnNew(object sender, EventArgs e)
         {
+            // TODO: Quit if dialog is dismissed.  Check this periodically.
+            if (previewMode && !IsWindowVisible(parentHwnd))
+            {
+                Application.Exit();
+            }
+
             // Place the info panel at a random position
-            if (this.outerInfoPanel != null)
+            if (this.outerInfoPanel != null && !previewMode)
             {
                 Random r = RandomFactory.CreateRandom();
                 int xMin = this.Size.Width / 20;

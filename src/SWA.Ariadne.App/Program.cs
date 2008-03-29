@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using Microsoft.Win32;
 
 namespace SWA.Ariadne.App
 {
@@ -23,7 +24,9 @@ namespace SWA.Ariadne.App
                         // TODO: Application.Run(new ScreenSaverOptionsForm());
                         break;
                     case "/p":
-                        // Don't do anything for preview
+                        // Show screensaver form in preview mode
+                        //MessageBox.Show("Running in preview mode: " + args[1], "Debugging...", MessageBoxButtons.OK);
+                        Application.Run(new ScreenSaverForm(args[1]));
                         break;
                     case "/s":
                         // Show screensaver form
