@@ -104,7 +104,7 @@ namespace SWA.Ariadne.App
 
         #region Assembly Attribute Accessors
 
-        public string AssemblyTitle
+        public static string AssemblyTitle
         {
             get
             {
@@ -124,7 +124,7 @@ namespace SWA.Ariadne.App
             }
         }
 
-        public string AssemblyVersion
+        public static string AssemblyVersion
         {
             get
             {
@@ -132,7 +132,7 @@ namespace SWA.Ariadne.App
             }
         }
 
-        public string AssemblyDescription
+        public static string AssemblyDescription
         {
             get
             {
@@ -146,7 +146,7 @@ namespace SWA.Ariadne.App
             }
         }
 
-        public string AssemblyProduct
+        public static string AssemblyProduct
         {
             get
             {
@@ -160,7 +160,7 @@ namespace SWA.Ariadne.App
             }
         }
 
-        public string AssemblyCopyright
+        public static string AssemblyCopyright
         {
             get
             {
@@ -174,7 +174,7 @@ namespace SWA.Ariadne.App
             }
         }
 
-        public string AssemblyCompany
+        public static string AssemblyCompany
         {
             get
             {

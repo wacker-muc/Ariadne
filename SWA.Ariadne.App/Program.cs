@@ -21,12 +21,16 @@ namespace SWA.Ariadne.App
                 {
                     case "/c":
                         // Show the options dialog
-                        // TODO: Application.Run(new ScreenSaverOptionsForm());
+                        Application.Run(new OptionsDialog());
                         break;
                     case "/p":
                         // Show screensaver form in preview mode
-                        //MessageBox.Show("Running in preview mode: " + args[1], "Debugging...", MessageBoxButtons.OK);
-                        Application.Run(new ScreenSaverForm(args[1]));
+                        // Catch any exceptions when the preview panel is closed.
+                        try
+                        {
+                            Application.Run(new ScreenSaverForm(args[1]));
+                        }
+                        catch(Exception) { }
                         break;
                     case "/s":
                         // Show screensaver form

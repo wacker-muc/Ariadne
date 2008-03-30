@@ -25,7 +25,7 @@ namespace SWA.Ariadne.App
         #region Member variables
 
         private bool previewMode = false;
-		private IntPtr parentHwnd = new IntPtr(0);
+        private IntPtr parentHwnd = new IntPtr(0);
 
         #endregion
 
@@ -151,7 +151,6 @@ namespace SWA.Ariadne.App
                 int x = r.Next(xMin, xMax);
                 int y = r.Next(yMin, yMax);
                 this.outerInfoPanel.Location = new Point(x, y);
-                this.outerInfoPanel.BringToFront();
             }
 
             base.OnNew(sender, e);
@@ -178,7 +177,15 @@ namespace SWA.Ariadne.App
         /// <param name="maze"></param>
         public override void MakeReservedAreas(Maze maze)
         {
-            mazeUserControl.ReserveArea(this.outerInfoPanel);
+            if (!previewMode && OptionsDialog.GetBoolSetting(OptionsDialog.OPT_SHOW_DETAILS_BOX))
+            {
+                mazeUserControl.ReserveArea(this.outerInfoPanel);
+                this.outerInfoPanel.BringToFront();
+            }
+            else
+            {
+                this.outerInfoPanel.SendToBack();
+            }
         }
 
         /// <summary>

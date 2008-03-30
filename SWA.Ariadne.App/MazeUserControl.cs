@@ -178,6 +178,11 @@ namespace SWA.Ariadne.App
         {
             Random r = RandomFactory.CreateRandom();
             int gridWidth = r.Next(MinAutoGridWidth, MaxAutoGridWidth);
+
+            if (externalGraphics != null)
+            {
+                gridWidth /= 2;
+            }
             
             this.Setup(gridWidth);
         }
