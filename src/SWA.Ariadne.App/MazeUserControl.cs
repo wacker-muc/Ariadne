@@ -276,28 +276,40 @@ namespace SWA.Ariadne.App
             int x, y, w, h;
             x = XCoordinate(coveringControl.Left);
             y = YCoordinate(coveringControl.Top);
+#if false
             w = 1 + XCoordinate(coveringControl.Right) - x;
             h = 1 + XCoordinate(coveringControl.Bottom) - y;
+#else
+            w = 1 + (coveringControl.Right - coveringControl.Left + wallWidth + 4) / gridWidth;
+            h = 1 + (coveringControl.Bottom - coveringControl.Top + wallWidth + 4) / gridWidth;
+#endif
 
             bool result = maze.ReserveRectangle(x, y, w, h);
 
             // Move the control into the center of the reserved area.
             if (result)
             {
+                // Adjust the control's size to make it fit symmetrically into the given space
+                coveringControl.Width += coveringControl.Width % 2;
+                coveringControl.Width -= (w * gridWidth - wallWidth - coveringControl.Width) % 2;
+                coveringControl.Height += coveringControl.Height % 2;
+                coveringControl.Height -= (h * gridWidth - wallWidth - coveringControl.Height) % 2;
+
                 int cx = coveringControl.Location.X;
                 int cy = coveringControl.Location.Y;
 
                 if (0 < x && x + w < maze.XSize - 1)
                 {
                     cx = this.Location.X + xOffset + x * gridWidth;
-                    cx += (w * gridWidth - coveringControl.Width) / 2;
+                    cx += 1 + (w * gridWidth - wallWidth - coveringControl.Width) / 2;
                 }
-                if (0 < y && x + w < maze.XSize - 1)
+                if (0 < y && y + h < maze.YSize - 1)
                 {
                     cy = this.Location.Y + yOffset + y * gridWidth;
-                    cy += (h * gridWidth - coveringControl.Height) / 2;
+                    cy += 1 + (h * gridWidth - wallWidth - coveringControl.Height) / 2;
                 }
                 
+                // Adjust the control's location
                 coveringControl.Location = new Point(cx, cy);
             }
 
