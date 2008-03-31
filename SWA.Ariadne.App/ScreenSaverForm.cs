@@ -34,7 +34,9 @@ namespace SWA.Ariadne.App
         public ScreenSaverForm()
         {
             InitializeComponent();
-            SetupScreenSaver();
+
+            this.ShowInTaskbar = false;
+            this.DoubleBuffered = true;
         }
 
         /// <summary>
@@ -46,26 +48,15 @@ namespace SWA.Ariadne.App
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
             
             // Set the application to full screen mode and hide the mouse
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.TopMost = true;
+            this.Bounds = Screen.PrimaryScreen.Bounds;
+            this.WindowState = FormWindowState.Maximized;
             Cursor.Hide();
-            Bounds = Screen.PrimaryScreen.Bounds;
-            WindowState = FormWindowState.Maximized;
-            TopMost = true;
 
-            // Capture the mouse
-            this.Capture = true;
-
-            // Make this the active Form
+            // Make this the active Form and capture the mouse
             this.Activate();
-            this.SetStyle(ControlStyles.Selectable, true);
-            bool foo = this.Focus();
-            if (!foo)
-            {
-                MessageBox.Show("ScreenSaverForm did not receive focus.", "Receive Focus Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            }
-
-            ShowInTaskbar = false;
-            DoubleBuffered = true;
+            this.Capture = true;
         }
 
         #region Preview mode constructor
@@ -114,6 +105,11 @@ namespace SWA.Ariadne.App
 
         private void ScreenSaverForm_Load(object sender, EventArgs e)
         {
+            if (!previewMode)
+            {
+                SetupScreenSaver();
+            }
+
             // Switch auto repeat mode on.
             this.repeatMode = true;
 
