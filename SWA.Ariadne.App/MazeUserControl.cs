@@ -565,7 +565,23 @@ namespace SWA.Ariadne.App
                 this.PaintPathDot(sq);
             }
 
-            gBuffer.Render();
+            // Quit if screen saver preview dialog is dismissed.  Check this periodically.
+            if (externalGraphics != null)
+            {
+                // Quit if screen saver preview dialog is dismissed.  Check this periodically.
+                try
+                {
+                    gBuffer.Render();
+                }
+                catch (ArgumentException)
+                {
+                    Application.Exit();
+                }
+            }
+            else
+            {
+                gBuffer.Render();
+            }
         }
 
         /// <summary>
