@@ -130,7 +130,7 @@ namespace SWA.Ariadne.App
 
         protected override void OnNew(object sender, EventArgs e)
         {
-            // TODO: Quit if dialog is dismissed.  Check this periodically.
+            // Quit if dialog is dismissed.  Check this periodically.
             if (previewMode && !IsWindowVisible(parentHwnd))
             {
                 Application.Exit();
