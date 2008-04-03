@@ -659,6 +659,41 @@ namespace SWA.Ariadne.App
             this.PaintEndpoints(g);
         }
 
+        /// <summary>
+        /// Paints a square to mark it as "dead".
+        /// </summary>
+        /// <param name="sq"></param>
+        /// <param name="distance"></param>
+        public void DrawDeadSquare(MazeSquare sq, int distance)
+        {
+            Graphics g = gBuffer.Graphics;
+            Brush b = Brushes.Brown;
+            PaintSquare(g, b, sq.XPos, sq.YPos);
+        }
+
+        /// <summary>
+        /// Paints a square to mark it as "alive".
+        /// </summary>
+        /// <param name="sq"></param>
+        /// <param name="distance"></param>
+        public void DrawAliveSquare(MazeSquare sq, int distance)
+        {
+            if (squareWidth >= 10)
+            {
+                Graphics g = gBuffer.Graphics;
+                Font font = new Font("Helvetica", 6);
+                int digitHeight = (int)font.GetHeight();
+                int digitWidth = (int)(digitHeight * 0.8);
+                float cx = xOffset + gridWidth / 2.0F + sq.XPos * gridWidth - (digitWidth / 2.0F);
+                float cy = yOffset + gridWidth / 2.0F + sq.YPos * gridWidth - (digitHeight / 2.0F);
+                if( distance > 0)
+                {
+                    g.FillRectangle(Brushes.Black, cx, cy, digitWidth, digitHeight);
+                    g.DrawString(string.Format("{0}", (distance % 10)), font, Brushes.White, new RectangleF(cx, cy, squareWidth, squareWidth));
+                }
+            }
+        }
+
         #endregion
 
         #region IAriadneSettingsSource implementation

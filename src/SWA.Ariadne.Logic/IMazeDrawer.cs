@@ -39,6 +39,20 @@ namespace SWA.Ariadne.Logic
         void FinishPath(MazeSquare sq);
 
         /// <summary>
+        /// Paints a square to mark it as "dead".
+        /// </summary>
+        /// <param name="sq"></param>
+        /// <param name="distance"></param>
+        void DrawDeadSquare(MazeSquare sq, int distance);
+
+        /// <summary>
+        /// Paints a square to mark it as "alive".
+        /// </summary>
+        /// <param name="sq"></param>
+        /// <param name="distance"></param>
+        void DrawAliveSquare(MazeSquare sq, int distance);
+
+        /// <summary>
         /// A counter that switches the end square between two states:
         /// When it is 0 or another even number, it is painted normally (red).
         /// When it is an odd number, it is painted invisible (black).
