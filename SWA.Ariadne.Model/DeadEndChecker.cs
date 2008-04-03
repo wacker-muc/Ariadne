@@ -83,6 +83,11 @@ namespace SWA.Ariadne.Model
             }
         }
 
+        public bool IsDead(MazeSquare sq)
+        {
+            return mazeExtension[sq.XPos, sq.YPos].isDeadEnd;
+        }
+
         #endregion
 
         #region Constructor
@@ -233,12 +238,18 @@ namespace SWA.Ariadne.Model
 
             sqe.isDeadEnd = true;
 
+            if (sqe.trajectoryDistance == 0)
+            {
+                // This is the end square.  No need to kill any more squares...
+                return;
+            }
+
             // Re-calculate trajectories of neighbors if they passed through the visited square.
             for (int i = 0; i < sqe.neighbors.Count; i++)
             {
                 MazeSquareExtension sqe2 = sqe.neighbors[i];
 
-                if (sqe2.trajectoryDistance > sqe.trajectoryDistance)
+                if (sqe2.trajectoryDistance > sqe.trajectoryDistance && !sqe2.isDeadEnd)
                 {
                     List<MazeSquareExtension> theseDeadSquares = new List<MazeSquareExtension>();
                     if (CalculateTrajectory(sqe2, theseDeadSquares))
@@ -259,92 +270,89 @@ namespace SWA.Ariadne.Model
         }
 
         /// <summary>
-        /// Recursively adjust trajectory distances.  Collect dead end squares.
+        /// Adjust trajectory distances.  If no new trajectory is found, collect dead end squares.
         /// </summary>
         /// <param name="sqe"></param>
         /// <param name="deadSquares">(potentially) dead ends</param>
         /// <returns>true if a new trajectory has been found</returns>
         private bool CalculateTrajectory(MazeSquareExtension sqe, List<MazeSquareExtension> deadSquares)
         {
+            // We need to find a square whose distance is smaller than this square's distance.
             int curDistance = sqe.trajectoryDistance;
+            List<MazeSquareExtension> trajectoryBases = new List<MazeSquareExtension>();
 
-            // Mark this square's distance as invalid.
+            List<MazeSquareExtension> surroundingSquares = new List<MazeSquareExtension>();
             sqe.trajectoryDistance *= -1;
+            surroundingSquares.Add(sqe);
 
-            // neighbors whose trajectory depends on this square
-            List<MazeSquareExtension> dependantNeighbors = new List<MazeSquareExtension>(3);
-
-            for (int i = sqe.neighbors.Count; i-- > 0;)
+            for (int i = 0; i < surroundingSquares.Count; i++)
             {
-                MazeSquareExtension sqe2 = sqe.neighbors[i];
-
-                // Dead squares are useless and may be removed from the neighbors list.
-                if (sqe2.isDeadEnd)
+                MazeSquareExtension sqe1 = surroundingSquares[i];
+                for (int j = sqe1.neighbors.Count; j-- > 0; )
                 {
-                    sqe.neighbors.RemoveAt(i);
-                    continue;
-                }
-
-                // Marked squares cannot be considered as part of the new trajectory.
-                if (sqe2.trajectoryDistance < 0)
-                {
-                    continue;
-                }
-
-                // When we encounter a square that is closer than the current square,
-                // we have found a new valid trajectory.
-                if (sqe2.trajectoryDistance < curDistance)
-                {
-                    sqe.trajectoryDistance *= -1;
-                    ReviveNeighbors(sqe);
-                    return true;
-                    // Note: Other neighbors of sqe need not be processed because sqe.trajectoryDistance has not changed.
-                }
-                else
-                {
-                    dependantNeighbors.Add(sqe2);
+                    MazeSquareExtension sqe2 = sqe1.neighbors[j];
+                    if (sqe2.isDeadEnd)
+                    {
+                        // Dead squares may be discarded.
+                        sqe1.neighbors.RemoveAt(j);
+                        continue;
+                    }
+                    else if (sqe2.trajectoryDistance < 0)
+                    {
+                        // Marked squares have already been collected.
+                        continue;
+                    }
+                    else if (sqe2.trajectoryDistance <= curDistance)
+                    {
+                        // This is the base of a new trajectory.
+                        trajectoryBases.Add(sqe2);
+                    }
+                    else
+                    {
+                        // Mark this square as visited.
+                        sqe2.trajectoryDistance *= -1;
+                        surroundingSquares.Add(sqe2);
+                    }
                 }
             }
 
-            // If we did not return from the previous loop, all dependant neighbors need to be checked.
-            int bestNeighborDistance = int.MaxValue;
-            for (int i = 0; i < dependantNeighbors.Count; i++)
+            if (trajectoryBases.Count > 0)
             {
-                MazeSquareExtension sqe2 = dependantNeighbors[i];
-                // If we can find a trajectory for the neighbor square,
-                // it is also valid for the current square.
-                if (CalculateTrajectory(sqe2, deadSquares))
-                {
-                    // Note: sqe2.trajectoryDistance >= 0
-                    bestNeighborDistance = Math.Min(bestNeighborDistance, sqe2.trajectoryDistance);
-                }
-            }
-            if (bestNeighborDistance < int.MaxValue)
-            {
-                sqe.trajectoryDistance = bestNeighborDistance + 1;
-                ReviveNeighbors(sqe);
+                ReviveNeighbors(trajectoryBases);
                 return true;
             }
-
-            // Add this square to the (potentially) dead squares.
-            // Note: sqe.trajectoryDistance is negative but sqe.deadEnd is still false
-            deadSquares.Add(sqe);
-            return false;
+            else
+            {
+                deadSquares.AddRange(surroundingSquares);
+                return false;
+            }
         }
 
         /// <summary>
-        /// Recursively assign valid (positve) trajectory distances to all neighbors of the given square.
+        /// Assign valid (positve) trajectory distances to all marked neighbors of the given list.
         /// </summary>
-        /// <param name="sqe"></param>
-        private void ReviveNeighbors(MazeSquareExtension sqe)
+        /// <param name="list">A list of squares with equal (positive) trajectoryDistance.</param>
+        private void ReviveNeighbors(List<MazeSquareExtension> list)
         {
-            for (int i = 0; i < sqe.neighbors.Count; i++)
+            // Additional items may be added to the list.
+            // The list is ordered by increasing trajectoryDistance.
+
+            for (int i = 0; i < list.Count; i++)
             {
-                MazeSquareExtension sqe2 = sqe.neighbors[i];
-                if (sqe2.trajectoryDistance < 0 && !sqe2.isDeadEnd)
+                MazeSquareExtension sqe1 = list[i];
+                for (int j = sqe1.neighbors.Count; j-- > 0; )
                 {
-                    sqe2.trajectoryDistance = sqe.trajectoryDistance + 1;
-                    ReviveNeighbors(sqe2);
+                    MazeSquareExtension sqe2 = sqe1.neighbors[j];
+                    if (sqe2.trajectoryDistance >= 0)
+                    {
+                        // This square's distance needs not be adjusted.
+                        continue;
+                    }
+                    else
+                    {
+                        sqe2.trajectoryDistance = sqe1.trajectoryDistance + 1;
+                        list.Add(sqe2);
+                    }
                 }
             }
         }

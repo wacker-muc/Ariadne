@@ -591,12 +591,17 @@ namespace SWA.Ariadne.App
         /// <param name="sq"></param>
         private void PaintPathDot(MazeSquare sq)
         {
+            PaintPathDot(sq, this.forwardPen.Brush);
+        }
+
+        private void PaintPathDot(MazeSquare sq, Brush brush)
+        {
             float cx = xOffset + gridWidth / 2.0F + sq.XPos * gridWidth;
             float cy = yOffset + gridWidth / 2.0F + sq.YPos * gridWidth;
 
             // Draw a dot at sq2.
             Graphics g = gBuffer.Graphics;
-            g.FillRectangle(this.forwardPen.Brush, cx - pathWidth / 2.0F, cy - pathWidth / 2.0F, pathWidth, pathWidth);
+            g.FillRectangle(brush, cx - pathWidth / 2.0F, cy - pathWidth / 2.0F, pathWidth, pathWidth);
         }
 
         /// <summary>
@@ -666,9 +671,14 @@ namespace SWA.Ariadne.App
         /// <param name="distance"></param>
         public void DrawDeadSquare(MazeSquare sq, int distance)
         {
+#if false
             Graphics g = gBuffer.Graphics;
             Brush b = Brushes.Brown;
             PaintSquare(g, b, sq.XPos, sq.YPos);
+#else
+            //PaintPathDot(sq, Brushes.Brown);
+            PaintPathDot(sq, Brushes.Gray);
+#endif
         }
 
         /// <summary>

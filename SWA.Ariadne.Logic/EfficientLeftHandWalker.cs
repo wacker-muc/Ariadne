@@ -50,6 +50,33 @@ namespace SWA.Ariadne.Logic
             }
         }
 
+        /// <summary>
+        /// Check if a move to the neighbor square in tne current direction would be valid.
+        /// </summary>
+        /// <returns>true if the move is invalid</returns>
+        protected override bool CurrentDirectionIsInvalid()
+        {
+            if (base.CurrentDirectionIsInvalid())
+            {
+                return true;
+            }
+
+            MazeSquare sq = currentSquare.NeighborSquare(currentDirection);
+            
+            if (sq.isVisited)
+            {
+                // Backward moves must be respected.
+                return false;
+            }
+
+            if (deadEndChecker.IsDead(sq))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         #endregion
     }
 }
