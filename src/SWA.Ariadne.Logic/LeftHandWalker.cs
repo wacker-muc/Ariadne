@@ -35,7 +35,7 @@ namespace SWA.Ariadne.Logic
         protected override void Turn()
         {
             TurnLeft();
-            while (currentSquare[currentDirection] != MazeSquare.WallState.WS_OPEN)
+            while (CurrentDirectionIsInvalid())
             {
                 TurnRight();
             }

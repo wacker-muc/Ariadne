@@ -30,6 +30,7 @@ namespace SWA.Ariadne.Logic
             typeof(ProximityFlooder),
             typeof(HesitatingFlooder),
             typeof(RandomFlooder),
+            typeof(EfficientLeftHandWalker),
         };
 
         public static Type SolverType(string name)

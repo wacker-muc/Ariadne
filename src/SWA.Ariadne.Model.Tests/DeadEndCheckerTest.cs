@@ -204,7 +204,6 @@ namespace SWA.Ariadne.Model.Tests
 
             MazeSquare sq = maze.StartSquare;                                       // 2,0
             deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_E, 0);    // 3,0
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_E, 0);    // 3,0
             deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_E, 0);    // 4,0
             deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 4,1
             deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 4,2

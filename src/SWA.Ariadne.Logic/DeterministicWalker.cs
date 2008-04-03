@@ -128,6 +128,15 @@ namespace SWA.Ariadne.Logic
             }
         }
 
+        /// <summary>
+        /// Check if a move to the neighbor square in tne current direction would be valid.
+        /// </summary>
+        /// <returns>true if the move is invalid</returns>
+        protected virtual bool CurrentDirectionIsInvalid()
+        {
+            return currentSquare[currentDirection] != MazeSquare.WallState.WS_OPEN;
+        }
+
         #endregion
     }
 }
