@@ -238,9 +238,8 @@ namespace SWA.Ariadne.Model.Tests
 
         private static List<MazeSquare> Move(DeadEndChecker target, ref MazeSquare sq, MazeSquare.WallPosition direction, int expectedDeadSquaresCount)
         {
-            List<MazeSquare> deadSquares = new List<MazeSquare>();
             sq = sq.NeighborSquare(direction);
-            target.Visit(sq, deadSquares);
+            List<MazeSquare> deadSquares = target.Visit(sq);
             Assert.AreEqual(expectedDeadSquaresCount, deadSquares.Count, "Number of dead squares doesn't match.");
             return deadSquares;
         }
