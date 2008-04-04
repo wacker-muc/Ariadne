@@ -228,12 +228,12 @@ namespace SWA.Ariadne.Model
 
         /// <summary>
         /// Registers the given square as visited.
-        /// Returns a list of dead end squares.
         /// </summary>
         /// <param name="p"></param>
-        /// <returns></returns>
-        public void Visit(MazeSquare sq, List<MazeSquare> deadSquares)
+        /// <returns>a list of dead end squares</returns>
+        public List<MazeSquare> Visit(MazeSquare sq)
         {
+            List<MazeSquare> result = new List<MazeSquare>();
             MazeSquareExtension sqe = mazeExtension[sq.XPos, sq.YPos];
 
             sqe.isDeadEnd = true;
@@ -241,7 +241,7 @@ namespace SWA.Ariadne.Model
             if (sqe.trajectoryDistance == 0)
             {
                 // This is the end square.  No need to kill any more squares...
-                return;
+                return result;
             }
 
             // Re-calculate trajectories of neighbors if they passed through the visited square.
@@ -251,43 +251,42 @@ namespace SWA.Ariadne.Model
 
                 if (sqe2.trajectoryDistance > sqe.trajectoryDistance && !sqe2.isDeadEnd)
                 {
-                    List<MazeSquareExtension> theseDeadSquares = new List<MazeSquareExtension>();
-                    if (CalculateTrajectory(sqe2, theseDeadSquares))
-                    {
-                        // ... anything to to?
-                    }
-                    else
+                    List<MazeSquareExtension> theseDeadSquares = CalculateTrajectory(sqe2);
+                    if (theseDeadSquares != null)
                     {
                         for (int j = 0; j < theseDeadSquares.Count; j++)
                         {
                             MazeSquareExtension deadSqe = theseDeadSquares[j];
                             deadSqe.isDeadEnd = true;
-                            deadSquares.Add(deadSqe.extendedSquare);
+                            result.Add(deadSqe.extendedSquare);
                         }
                     }
                 }
             }
+
+            return result;
         }
 
         /// <summary>
         /// Adjust trajectory distances.  If no new trajectory is found, collect dead end squares.
         /// </summary>
         /// <param name="sqe"></param>
-        /// <param name="deadSquares">(potentially) dead ends</param>
-        /// <returns>true if a new trajectory has been found</returns>
-        private bool CalculateTrajectory(MazeSquareExtension sqe, List<MazeSquareExtension> deadSquares)
+        /// <returns>a list of dead end squares</returns>
+        private List<MazeSquareExtension> CalculateTrajectory(MazeSquareExtension sqe)
         {
             // We need to find a square whose distance is smaller than this square's distance.
             int curDistance = sqe.trajectoryDistance;
             List<MazeSquareExtension> trajectoryBases = new List<MazeSquareExtension>();
 
-            List<MazeSquareExtension> surroundingSquares = new List<MazeSquareExtension>();
+            // We'll collect the squares surrounding sqe in a List.
+            // If no new trajectory is found, that is the result: a list of dead end squares.
+            List<MazeSquareExtension> result = new List<MazeSquareExtension>();
             sqe.trajectoryDistance *= -1;
-            surroundingSquares.Add(sqe);
+            result.Add(sqe);
 
-            for (int i = 0; i < surroundingSquares.Count; i++)
+            for (int i = 0; i < result.Count; i++)
             {
-                MazeSquareExtension sqe1 = surroundingSquares[i];
+                MazeSquareExtension sqe1 = result[i];
                 for (int j = sqe1.neighbors.Count; j-- > 0; )
                 {
                     MazeSquareExtension sqe2 = sqe1.neighbors[j];
@@ -311,7 +310,7 @@ namespace SWA.Ariadne.Model
                     {
                         // Mark this square as visited.
                         sqe2.trajectoryDistance *= -1;
-                        surroundingSquares.Add(sqe2);
+                        result.Add(sqe2);
                     }
                 }
             }
@@ -319,13 +318,10 @@ namespace SWA.Ariadne.Model
             if (trajectoryBases.Count > 0)
             {
                 ReviveNeighbors(trajectoryBases);
-                return true;
+                result.Clear();
             }
-            else
-            {
-                deadSquares.AddRange(surroundingSquares);
-                return false;
-            }
+
+            return result;
         }
 
         /// <summary>

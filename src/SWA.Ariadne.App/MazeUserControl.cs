@@ -62,13 +62,15 @@ namespace SWA.Ariadne.App
         private int pathWidth;
         private int xOffset, yOffset;
 
-        private Color wallColor = Color.Gray;
+        private static Color wallColor = Color.Gray;
         private Color forwardColor = Color.GreenYellow;
         private Color backwardColor = Color.Brown;
+        private static Color deadEndColor = Color.FromArgb(64, 64, 64); // 25% dark gray
 
         private Pen wallPen;
         private Pen forwardPen;
         private Pen backwardPen;
+        private Brush deadEndBrush = new SolidBrush(deadEndColor);
 
         /// <summary>
         /// A counter that switches the end square between two states:
@@ -671,14 +673,7 @@ namespace SWA.Ariadne.App
         /// <param name="distance"></param>
         public void DrawDeadSquare(MazeSquare sq, int distance)
         {
-#if false
-            Graphics g = gBuffer.Graphics;
-            Brush b = Brushes.Brown;
-            PaintSquare(g, b, sq.XPos, sq.YPos);
-#else
-            //PaintPathDot(sq, Brushes.Brown);
-            PaintPathDot(sq, Brushes.Gray);
-#endif
+            PaintPathDot(sq, deadEndBrush);
         }
 
         /// <summary>
