@@ -134,7 +134,31 @@ namespace SWA.Ariadne.Logic
         /// <returns>true if the move is invalid</returns>
         protected virtual bool CurrentDirectionIsInvalid()
         {
-            return currentSquare[currentDirection] != MazeSquare.WallState.WS_OPEN;
+            // Check for open/closed walls.
+            if (currentSquare[currentDirection] != MazeSquare.WallState.WS_OPEN)
+            {
+                return true;
+            }
+
+            // Check for dead ends.
+            if (deadEndChecker != null)
+            {
+                MazeSquare sq = currentSquare.NeighborSquare(currentDirection);
+
+                if (sq.isVisited)
+                {
+                    // Backward moves must be respected.
+                    return false;
+                }
+
+                if (deadEndChecker.IsDead(sq))
+                {
+                    return true;
+                }
+            }
+
+            // No problem.
+            return false;
         }
 
         #endregion

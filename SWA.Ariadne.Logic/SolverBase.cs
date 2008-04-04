@@ -22,6 +22,11 @@ namespace SWA.Ariadne.Logic
         /// </summary>
         protected IMazeDrawer mazeDrawer;
 
+        /// <summary>
+        /// Some ("efficient") subclasses may make use of a DeadEndChecker to avoid certain areas.
+        /// </summary>
+        protected DeadEndChecker deadEndChecker = null;
+
         #endregion
 
         #region Constructor
@@ -61,6 +66,27 @@ namespace SWA.Ariadne.Logic
         public virtual void Step(out MazeSquare sq1, out MazeSquare sq2, out bool forward)
         {
             StepI(out sq1, out sq2, out forward);
+
+            #region Apply the dead end checker.
+            if (deadEndChecker != null)
+            {
+                List<MazeSquare> deadSquares = deadEndChecker.Visit(sq2);
+                foreach (MazeSquare deadSq in deadSquares)
+                {
+                    mazeDrawer.DrawDeadSquare(deadSq, deadEndChecker.Distance(deadSq.XPos, deadSq.YPos));
+                }
+#if false // debug code
+                for (int i = 0; i < maze.XSize; i++)
+                {
+                    for (int j = 0; j < maze.YSize; j++)
+                    {
+                        MazeSquare sq = maze[i, j];
+                        mazeDrawer.DrawAliveSquare(sq, deadEndChecker.Distance(sq.XPos, sq.YPos));
+                    }
+                }
+#endif
+            }
+            #endregion
         }
 
         /// <summary>
