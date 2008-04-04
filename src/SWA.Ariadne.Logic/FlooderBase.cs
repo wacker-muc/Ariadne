@@ -88,7 +88,7 @@ namespace SWA.Ariadne.Logic
         /// <param name="forward">true if the neighbor square was not visited previously</param>
         public override void Step(out MazeSquare sq1, out MazeSquare sq2, out bool forward)
         {
-            StepI(out sq1, out sq2, out forward);
+            base.Step(out sq1, out sq2, out forward);
 
             if (forward) // Always true; Flooders only travel forwards.
             {
