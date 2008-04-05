@@ -43,7 +43,7 @@ namespace SWA.Ariadne.Logic
         /// </summary>
         /// <param name="sq"></param>
         /// <param name="distance"></param>
-        void DrawDeadSquare(MazeSquare sq, int distance);
+        void DrawDeadSquare(MazeSquare sq);
 
         /// <summary>
         /// Paints a square to mark it as "alive".

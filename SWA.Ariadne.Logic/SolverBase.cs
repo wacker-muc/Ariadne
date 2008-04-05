@@ -73,7 +73,7 @@ namespace SWA.Ariadne.Logic
                 List<MazeSquare> deadSquares = deadEndChecker.Visit(sq2);
                 foreach (MazeSquare deadSq in deadSquares)
                 {
-                    mazeDrawer.DrawDeadSquare(deadSq, deadEndChecker.Distance(deadSq.XPos, deadSq.YPos));
+                    mazeDrawer.DrawDeadSquare(deadSq);
                 }
 #if false // debug code
                 for (int i = 0; i < maze.XSize; i++)
@@ -81,7 +81,7 @@ namespace SWA.Ariadne.Logic
                     for (int j = 0; j < maze.YSize; j++)
                     {
                         MazeSquare sq = maze[i, j];
-                        mazeDrawer.DrawAliveSquare(sq, deadEndChecker.Distance(sq.XPos, sq.YPos));
+                        mazeDrawer.DrawAliveSquare(sq, deadEndChecker.Distance(sq));
                     }
                 }
 #endif

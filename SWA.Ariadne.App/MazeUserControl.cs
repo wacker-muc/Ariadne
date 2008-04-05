@@ -670,8 +670,7 @@ namespace SWA.Ariadne.App
         /// Paints a square to mark it as "dead".
         /// </summary>
         /// <param name="sq"></param>
-        /// <param name="distance"></param>
-        public void DrawDeadSquare(MazeSquare sq, int distance)
+        public void DrawDeadSquare(MazeSquare sq)
         {
             PaintPathDot(sq, deadEndBrush);
         }
