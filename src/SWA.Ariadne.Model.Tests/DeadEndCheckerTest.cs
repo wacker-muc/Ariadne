@@ -221,6 +221,46 @@ namespace SWA.Ariadne.Model.Tests
         }
 
         /// <summary>
+        /// A test for Visit()
+        /// This test failes in revision 108 because some squares along the border of a dead area
+        /// are not in the uncertainSquares list.  The list was cleared when another area was revived.
+        ///</summary>
+        [TestMethod()]
+        public void DEC_VisitTest_06_10()
+        {
+            Maze maze = new Maze("BPQG.WLVB.UWPM");
+            maze.CreateMaze();                                      // 14 x 10
+            maze.PlaceEndpoints();                                  // 2,0 .. 11,7
+
+            DeadEndChecker target = new DeadEndChecker(maze);
+
+            List<MazeSquare> deadSquares;
+
+            MazeSquare sq = maze.StartSquare;                                       // 2,0
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 2,1
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 2,2
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 2,3
+            //deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_E, 0);    // 3,3
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 3,4
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 3,5
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_E, 0);    // 5,3
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_E, 0);    // 6,3
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_N, 0);    // 6,2
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_E, 0);    // 6,3
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_N, 0);    // 6,1
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_E, 0);    // 6,3
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_N, 0);    // 6,1
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_E, 0);    // 6,3
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_E, 0);    // 6,3
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 5,1
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 5,0
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_W, 1);    // 5,0
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_N, 0);    // 5,0
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_N, 0);    // 5,0
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_N, 10);   // 5,0
+        }
+
+        /// <summary>
         ///A test for Visit()
         ///</summary>
         [TestMethod()]
