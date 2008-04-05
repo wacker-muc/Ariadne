@@ -332,11 +332,13 @@ namespace SWA.Ariadne.Model
                 }
             }
 
-            // Empty the internal lists.
 #if true
+            // TODO: disable this debug code
             Console.Out.WriteLine("Visited {0} : {1} uncertain and {2} confirmed squares.",
                                   sq.ToString(), uncertainSquares.Count, confirmedSquares.Count);
 #endif
+
+            // Empty the internal lists.
             uncertainSquares.Clear();
             confirmedSquares.Clear();
 
@@ -507,8 +509,8 @@ namespace SWA.Ariadne.Model
         /// +---+---+---+   +---+---+---+   "x" are dead squares; "o" are alive squares; the rest is irrelevant
         /// | x | x | x |   | x | x | o |   These two constellations are critical (not harmless).
         /// +---+---+---+   +---+---+---+
-        /// |   |   |   |   |   |   |   |
-        /// +---+---+---+   +---+---+---+
+        /// |   |   |   |   |   |   |   |   The straight constellation is harmless if one of the parallel lines
+        /// +---+---+---+   +---+---+---+   is completely dead.
         /// 
         private bool HarmlessConstellation(MazeSquareExtension sqe)
         {
@@ -520,15 +522,37 @@ namespace SWA.Ariadne.Model
             
             bool deadW = (x == 0 || mazeExtension[x - 1, y].isDeadEnd);
             bool deadE = (x == w || mazeExtension[x + 1, y].isDeadEnd);
+            bool deadN = (y == 0 || mazeExtension[x, y - 1].isDeadEnd);
+            bool deadS = (y == h || mazeExtension[x, y + 1].isDeadEnd);
+
+            bool deadNW = (x == 0 || y == 0 || mazeExtension[x - 1, y - 1].isDeadEnd);
+            bool deadNE = (x == w || y == 0 || mazeExtension[x + 1, y - 1].isDeadEnd);
+            bool deadSW = (x == 0 || y == h || mazeExtension[x - 1, y + 1].isDeadEnd);
+            bool deadSE = (x == w || y == h || mazeExtension[x + 1, y + 1].isDeadEnd);
+
             if (deadW && deadE)
             {
+                if (deadSW && deadS && deadSE)
+                {
+                    return true;
+                }
+                if (deadNW && deadN && deadNE)
+                {
+                    return true;
+                }
                 return false;
             }
 
-            bool deadN = (y == 0 || mazeExtension[x, y - 1].isDeadEnd);
-            bool deadS = (y == h || mazeExtension[x, y + 1].isDeadEnd);
             if (deadN && deadS)
             {
+                if (deadNW && deadW && deadSW)
+                {
+                    return true;
+                }
+                if (deadNE && deadE && deadSE)
+                {
+                    return true;
+                }
                 return false;
             }
 
@@ -536,25 +560,21 @@ namespace SWA.Ariadne.Model
 
             #region Identify angled lines.
 
-            bool deadNW = (x == 0 || y == 0 || mazeExtension[x - 1, y - 1].isDeadEnd);
             if (deadNW && !deadN && !deadW && (deadS || deadE))
             {
                 return false;
             }
 
-            bool deadNE = (x == w || y == 0 || mazeExtension[x + 1, y - 1].isDeadEnd);
             if (deadNE && !deadN && !deadE && (deadS || deadW))
             {
                 return false;
             }
 
-            bool deadSW = (x == 0 || y == h || mazeExtension[x - 1, y + 1].isDeadEnd);
             if (deadSW && !deadS && !deadW && (deadN || deadE))
             {
                 return false;
             }
 
-            bool deadSE = (x == w || y == h || mazeExtension[x + 1, y + 1].isDeadEnd);
             if (deadSE && !deadS && !deadE && (deadN || deadW))
             {
                 return false;
