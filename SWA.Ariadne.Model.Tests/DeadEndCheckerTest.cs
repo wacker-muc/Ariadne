@@ -74,6 +74,38 @@ namespace SWA.Ariadne.Model.Tests
         #region Unit Tests
 
         /// <summary>
+        ///A test for AddUncertainSquare()
+        ///</summary>
+        [DeploymentItem("SWA.Ariadne.Model.dll")]
+        [TestMethod()]
+        public void DEC_AddUncertainSquareTest_01()
+        {
+            Maze maze = new Maze("BPQG.WLVB.UWPM");
+            maze.CreateMaze();                                      // 14 x 10
+            maze.PlaceEndpoints();                                  // 2,0 .. 11,7
+
+            DeadEndChecker target = new DeadEndChecker(maze);
+            SWA_Ariadne_Model_DeadEndCheckerAccessor accessor = new SWA_Ariadne_Model_DeadEndCheckerAccessor(target);
+            SWA_Ariadne_Model_DeadEndChecker_MazeSquareExtensionAccessor sqe = null; // TODO: Initialize to an appropriate value
+
+            Random r = new Random(0);
+            for (int i = 0; i < 400; i++)
+            {
+                int x = r.Next(maze.XSize);
+                int y = r.Next(maze.YSize); ;
+                sqe = accessor.mazeExtension[x, y];
+                try
+                {
+                    accessor.AddUncertainSquare(sqe, -1);
+                }
+                catch (Exception)
+                {
+                    Assert.Fail("AddUncertainSquare() threw an exception");
+                }
+            }
+        }
+
+        /// <summary>
         ///A test for Visit()
         ///</summary>
         [TestMethod()]
