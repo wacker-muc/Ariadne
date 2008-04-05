@@ -286,7 +286,14 @@ namespace SWA.Ariadne.Model
             // TODO: Remove sqe from all its neighbors' neighbor lists.  Further tests for dead neighbors are obsolete.
             sqe.isDeadEnd = true;
             int d = sqe.trajectoryDistance;
-            sqe.trajectoryDistance *= -1;
+            if (d > 0)
+            {
+                sqe.trajectoryDistance *= -1;
+            }
+            else
+            {
+                d *= -1;
+            }
 
             if (d == 0)
             {
@@ -302,10 +309,13 @@ namespace SWA.Ariadne.Model
 
                 if (sqe2.trajectoryDistance == d + 1)
                 {
-                    // Note: sqe is not dead; dead squares have negative trajectoryDistance.
-                    sqe2.trajectoryDistance *= -1;
-                    uncertainSquares.Add(sqe2);
+                    AddUncertainSquare(sqe2, -1);
                 }
+            }
+
+            if (HarmlessConstellation(sqe))
+            {
+                return result;
             }
 
             // Re-calculate trajectories of the uncertainSquares.
@@ -314,16 +324,16 @@ namespace SWA.Ariadne.Model
             // The remaining uncertainSquares with negative (invalid) trajectoryDistance are dead.
             for (int j = 0; j < uncertainSquares.Count; j++)
             {
-                MazeSquareExtension deadSqe = uncertainSquares[j];
-                if (deadSqe.trajectoryDistance < 0)
+                MazeSquareExtension sqe2 = uncertainSquares[j];
+                if (sqe2.trajectoryDistance < 0 && !sqe2.isDeadEnd)
                 {
-                    deadSqe.isDeadEnd = true;
-                    result.Add(deadSqe.extendedSquare);
+                    sqe2.isDeadEnd = true;
+                    result.Add(sqe2.extendedSquare);
                 }
             }
 
             // Empty the internal lists.
-#if false
+#if true
             Console.Out.WriteLine("Visited {0} : {1} uncertain and {2} confirmed squares.",
                                   sq.ToString(), uncertainSquares.Count, confirmedSquares.Count);
 #endif
@@ -356,6 +366,12 @@ namespace SWA.Ariadne.Model
                     continue;
                 }
 
+                if (sqe1.isDeadEnd)
+                {
+                    // No chance to revive an already dead square!
+                    continue;
+                }
+
                 // We need to find a neighbor that gives this square a new trajectory.
                 int requiredNeighborDistance = -sqe1.trajectoryDistance - 1;
 
@@ -380,14 +396,81 @@ namespace SWA.Ariadne.Model
                     else if (sqe2.trajectoryDistance > 0)
                     {
                         // Add this square to the list of uncertainSquares.
-                        sqe2.trajectoryDistance *= -1;
-                        uncertainSquares.Add(sqe2);
+                        AddUncertainSquare(sqe2, i);
                     }
                 }
             }
 
             // The areas next to all confirmedSquares will receive an adjusted trajectoryDistance.
             ReviveConfirmedSquaresNeighbors();
+        }
+
+        /// <summary>
+        /// Add the given square to the ordered list of uncertain squares.
+        /// </summary>
+        /// <param name="sqe"></param>
+        private void AddUncertainSquare(MazeSquareExtension sqe, int behindPosition)
+        {
+            int key = sqe.trajectoryDistance; if (key < 0) key = -key;
+
+            // The key needs to be compared with the squares in the index range a..b
+            int a = behindPosition + 1, b = uncertainSquares.Count - 1;
+
+            // Mark sqe's trajectoryDistance as uncertain.
+            sqe.trajectoryDistance *= -1;
+
+            // Empty region.
+            if (b < a)
+            {
+                uncertainSquares.Add(sqe);
+                return;
+            }
+
+            int keyA = uncertainSquares[a].trajectoryDistance; if (keyA < 0) keyA = -keyA;
+            int keyB = uncertainSquares[b].trajectoryDistance; if (keyB < 0) keyB = -keyB;
+
+            // The square fits at the end of the list.
+            if (keyB <= key)
+            {
+                uncertainSquares.Add(sqe);
+                return;
+            }
+
+            // Find a position for insertion into the list.
+            // keyA < key < keyB
+            while (a < b)
+            {
+                int m = (a + b) / 2;
+                int keyM = uncertainSquares[m].trajectoryDistance; if (keyM < 0) keyM = -keyM;
+
+                if (keyM > key)
+                {
+                    b = m;
+                }
+                else if (keyM < key)
+                {
+                    a = m + 1;
+                }
+                else
+                {
+                    a = m + 1;
+                    break;
+                }
+                
+            }
+
+            uncertainSquares.Insert(a, sqe);
+
+#if true
+            // TODO: disable this debug code
+            keyA = (a - 1 > behindPosition ? uncertainSquares[a - 1].trajectoryDistance : sqe.trajectoryDistance); if (keyA < 0) keyA = -keyA;
+            keyB = (a + 1 < uncertainSquares.Count ? uncertainSquares[a + 1].trajectoryDistance : sqe.trajectoryDistance); if (keyB < 0) keyB = -keyB;
+
+            if (keyA > key || keyB < key)
+            {
+                throw new Exception("boo boo");
+            }
+#endif
         }
 
         /// <summary>
@@ -411,6 +494,75 @@ namespace SWA.Ariadne.Model
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Returns true if no squares could have possibly been killed by visiting the given square.
+        /// </summary>
+        /// <param name="sqe"></param>
+        /// <returns></returns>
+        /// 
+        /// +---+---+---+   +---+---+---+ 
+        /// |   |   |   |   |   | o | x |   In these diagrams, sqe is the center square.
+        /// +---+---+---+   +---+---+---+   "x" are dead squares; "o" are alive squares; the rest is irrelevant
+        /// | x | x | x |   | x | x | o |   These two constellations are critical (not harmless).
+        /// +---+---+---+   +---+---+---+
+        /// |   |   |   |   |   |   |   |
+        /// +---+---+---+   +---+---+---+
+        /// 
+        private bool HarmlessConstellation(MazeSquareExtension sqe)
+        {
+            int x = sqe.extendedSquare.XPos, y = sqe.extendedSquare.YPos;
+            int w = mazeExtension.GetUpperBound(0);
+            int h = mazeExtension.GetUpperBound(1);
+
+            #region Identify straight lines.
+            
+            bool deadW = (x == 0 || mazeExtension[x - 1, y].isDeadEnd);
+            bool deadE = (x == w || mazeExtension[x + 1, y].isDeadEnd);
+            if (deadW && deadE)
+            {
+                return false;
+            }
+
+            bool deadN = (y == 0 || mazeExtension[x, y - 1].isDeadEnd);
+            bool deadS = (y == h || mazeExtension[x, y + 1].isDeadEnd);
+            if (deadN && deadS)
+            {
+                return false;
+            }
+
+            #endregion
+
+            #region Identify angled lines.
+
+            bool deadNW = (x == 0 || y == 0 || mazeExtension[x - 1, y - 1].isDeadEnd);
+            if (deadNW && !deadN && !deadW && (deadS || deadE))
+            {
+                return false;
+            }
+
+            bool deadNE = (x == w || y == 0 || mazeExtension[x + 1, y - 1].isDeadEnd);
+            if (deadNE && !deadN && !deadE && (deadS || deadW))
+            {
+                return false;
+            }
+
+            bool deadSW = (x == 0 || y == h || mazeExtension[x - 1, y + 1].isDeadEnd);
+            if (deadSW && !deadS && !deadW && (deadN || deadE))
+            {
+                return false;
+            }
+
+            bool deadSE = (x == w || y == h || mazeExtension[x + 1, y + 1].isDeadEnd);
+            if (deadSE && !deadS && !deadE && (deadN || deadW))
+            {
+                return false;
+            }
+
+            #endregion
+
+            return true;
         }
 
         #endregion
