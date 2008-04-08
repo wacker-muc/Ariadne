@@ -318,8 +318,12 @@ namespace SWA.Ariadne.Model
                 return result;
             }
 
-            // Re-calculate trajectories of the uncertainSquares.
-            FindNewTrajectories();
+            // Add all squares whose trajectory depends on the ones already inserted.
+            // TODO: Process only fresh inserts.
+            CollectUncertainSquares();
+
+            // The areas next to all confirmedSquares will receive an adjusted trajectoryDistance.
+            ReviveConfirmedSquaresNeighbors();
 
             // The remaining uncertainSquares with negative (invalid) trajectoryDistance are dead.
             for (int j = 0; j < uncertainSquares.Count; j++)
@@ -348,7 +352,7 @@ namespace SWA.Ariadne.Model
         /// <summary>
         /// Adjust trajectory distances of the uncertainSquares.
         /// </summary>
-        private void FindNewTrajectories()
+        private void CollectUncertainSquares()
         {
             // Note: Initially, uncertainSquares is an ordered list of the neighbors of a visited square.
             //       As our search for a new trajectory continues, more squares will be marked uncertain
@@ -388,6 +392,7 @@ namespace SWA.Ariadne.Model
                         confirmedSquares.Add(sqe1);
 
                         // Immediately revive all neighbors of sqe1 that have been marked uncertain.
+                        // TODO: This is wrong! The neighbors are not at the end oft the list !!!
                         while( uncertainSquares.Count > p)
                         {
                             uncertainSquares[uncertainSquares.Count - 1].trajectoryDistance *= -1;
@@ -402,9 +407,6 @@ namespace SWA.Ariadne.Model
                     }
                 }
             }
-
-            // The areas next to all confirmedSquares will receive an adjusted trajectoryDistance.
-            ReviveConfirmedSquaresNeighbors();
         }
 
         /// <summary>
@@ -532,11 +534,7 @@ namespace SWA.Ariadne.Model
 
             if (deadW && deadE)
             {
-                if (deadSW && deadS && deadSE)
-                {
-                    return true;
-                }
-                if (deadNW && deadN && deadNE)
+                if (deadN || deadS)
                 {
                     return true;
                 }
@@ -545,11 +543,7 @@ namespace SWA.Ariadne.Model
 
             if (deadN && deadS)
             {
-                if (deadNW && deadW && deadSW)
-                {
-                    return true;
-                }
-                if (deadNE && deadE && deadSE)
+                if (deadW || deadE)
                 {
                     return true;
                 }

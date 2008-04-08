@@ -222,42 +222,63 @@ namespace SWA.Ariadne.Model.Tests
 
         /// <summary>
         /// A test for Visit()
-        /// This test failes in revision 108 because some squares along the border of a dead area
+        /// This test failes in revision 109 because some squares along the border of a dead area
         /// are not in the uncertainSquares list.  The list was cleared when another area was revived.
         ///</summary>
         [TestMethod()]
-        public void DEC_VisitTest_06_10()
+        public void DEC_VisitTest_06_14()
         {
-            Maze maze = new Maze("BPQG.WLVB.UWPM");
-            maze.CreateMaze();                                      // 14 x 10
-            maze.PlaceEndpoints();                                  // 2,0 .. 11,7
+            Maze maze = new Maze(10, 10);
+            SWA_Ariadne_Model_MazeAccessor mazeAccessor = new SWA_Ariadne_Model_MazeAccessor(maze);
+            mazeAccessor.xStart = 4;
+            mazeAccessor.yStart = 9;
+            mazeAccessor.xEnd = mazeAccessor.yEnd = 0;
+            maze.CreateMaze();                                      // 10 x 10
+            //maze.PlaceEndpoints();                                // 4,9 .. 0,0
 
             DeadEndChecker target = new DeadEndChecker(maze);
 
             List<MazeSquare> deadSquares;
 
-            MazeSquare sq = maze.StartSquare;                                       // 2,0
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 2,1
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 2,2
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 2,3
-            //deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_E, 0);    // 3,3
+            MazeSquare sq = maze.StartSquare;                                       // 4,9
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_E, 0);    // 5,9
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_E, 0);    // 6,9
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_E, 0);    // 7,9
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_N, 0);    // 7,8
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_E, 0);    // 8,8
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_E, 2);    // 9,8 !
+            
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_N, 0);    // 9,7
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_N, 0);    // 9,6
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_N, 0);    // 9,5
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_N, 0);    // 9,4
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_W, 0);    // 8,4
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_W, 0);    // 7,4 !
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 7,5
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 7,6
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_W, 0);    // 6,6 !
+
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_N, 0);    // 6,5
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_N, 0);    // 6,4
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_W, 0);    // 5,4 !
+
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_N, 0);    // 5,3
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_N, 0);    // 5,2
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_W, 0);    // 4,2
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_W, 0);    // 3,2
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 3,3
             deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 3,4
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 3,5
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_E, 0);    // 5,3
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_E, 0);    // 6,3
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_N, 0);    // 6,2
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_E, 0);    // 6,3
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_N, 0);    // 6,1
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_E, 0);    // 6,3
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_N, 0);    // 6,1
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_E, 0);    // 6,3
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_E, 0);    // 6,3
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 5,1
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 5,0
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_W, 1);    // 5,0
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_N, 0);    // 5,0
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_N, 0);    // 5,0
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_N, 10);   // 5,0
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_E, 1);    // 4,4 !
+
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 4,5
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 4,6
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_W, 0);    // 3,6
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 3,7
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_W, 0);    // 2,7
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 2,8
+            Assert.AreEqual(2, sq.XPos, "current square at wrong X position");
+            Assert.AreEqual(8, sq.YPos, "current square at wrong Y position");
+            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 14);   // 2,9 !
         }
 
         /// <summary>
