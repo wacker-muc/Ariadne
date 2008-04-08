@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using Microsoft.Win32;
+using SWA.Ariadne.Settings;
 
 namespace SWA.Ariadne.App
 {
@@ -49,67 +50,22 @@ namespace SWA.Ariadne.App
             Close();
         }
 
-        private const string REGISTRY_KEY = "SOFTWARE\\SWA_Ariadne";
-        public const string OPT_SHOW_DETAILS_BOX = "show details box";
-        public const string OPT_BLINKING = "blinking";
-        public const string OPT_STEPS_PER_SECOND = "steps per second";
-
         private void LoadSettings()
         {
-            RegistryKey key = Registry.LocalMachine.OpenSubKey(REGISTRY_KEY);
-            if (key == null)
-            {
-                checkBoxDetailsBox.Checked = true;
-                checkBoxBlinking.Checked = true;
-                textBoxStepsPerSecond.Text = "200";
-            }
-            else
-            {
-                checkBoxDetailsBox.Checked = ((Int32)key.GetValue(OPT_SHOW_DETAILS_BOX, 1) != 0);
-                checkBoxBlinking.Checked = ((Int32)key.GetValue(OPT_BLINKING, 1) != 0);
-                textBoxStepsPerSecond.Text = ((Int32)key.GetValue(OPT_STEPS_PER_SECOND, 200)).ToString();
-            }
-        }
-
-        public static bool GetBoolSetting(string name)
-        {
-            Int32 value = 1;
-
-            RegistryKey key = Registry.LocalMachine.OpenSubKey(REGISTRY_KEY);
-            if (key != null)
-            {
-                value = (Int32)key.GetValue(name, value);
-            }
-
-            return (value != 0);
-        }
-
-        public static int GetIntSetting(string name)
-        {
-            Int32 value = 200;
-
-            RegistryKey key = Registry.LocalMachine.OpenSubKey(REGISTRY_KEY);
-            if (key != null)
-            {
-                value = (Int32)key.GetValue(name, value);
-            }
-
-            return value;
+            checkBoxDetailsBox.Checked = RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_SHOW_DETAILS_BOX);
+            checkBoxBlinking.Checked = RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_BLINKING);
+            checkBoxEfficientSolvers.Checked = RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_EFFICIENT_SOLVERS);
+            textBoxStepsPerSecond.Text = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_STEPS_PER_SECOND).ToString();
         }
 
         private void SaveSettings()
         {
-            RegistryKey key = Registry.LocalMachine.OpenSubKey(REGISTRY_KEY);
-            if (key != null)
-            {
-                Registry.LocalMachine.DeleteSubKeyTree(REGISTRY_KEY);
-            }
+            RegistryKey key = RegisteredOptions.AppRegistryKey(true);
 
-            key = Registry.LocalMachine.CreateSubKey(REGISTRY_KEY);
-
-            key.SetValue(OPT_BLINKING, (checkBoxBlinking.Checked ? 1 : 0), RegistryValueKind.DWord);
-            key.SetValue(OPT_SHOW_DETAILS_BOX, (checkBoxDetailsBox.Checked ? 1 : 0), RegistryValueKind.DWord);
-            key.SetValue(OPT_STEPS_PER_SECOND, Int32.Parse(textBoxStepsPerSecond.Text), RegistryValueKind.DWord);
+            key.SetValue(RegisteredOptions.OPT_SHOW_DETAILS_BOX, (checkBoxDetailsBox.Checked ? 1 : 0), RegistryValueKind.DWord);
+            key.SetValue(RegisteredOptions.OPT_BLINKING, (checkBoxBlinking.Checked ? 1 : 0), RegistryValueKind.DWord);
+            key.SetValue(RegisteredOptions.OPT_EFFICIENT_SOLVERS, (checkBoxEfficientSolvers.Checked ? 1 : 0), RegistryValueKind.DWord);
+            key.SetValue(RegisteredOptions.OPT_STEPS_PER_SECOND, Int32.Parse(textBoxStepsPerSecond.Text), RegistryValueKind.DWord);
         }
     }
 }

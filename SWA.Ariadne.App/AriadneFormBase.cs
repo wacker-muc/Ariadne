@@ -116,7 +116,7 @@ namespace SWA.Ariadne.App
 
             #region Initialize the stepsPerSecTextBox
 
-            stepsPerSecond = OptionsDialog.GetIntSetting(OptionsDialog.OPT_STEPS_PER_SECOND);
+            stepsPerSecond = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_STEPS_PER_SECOND);
             stepsPerSecond = Math.Min(40000, Math.Max(20, stepsPerSecond));
             stepsPerSecTextBox.Text = stepsPerSecond.ToString();
 
@@ -236,7 +236,7 @@ namespace SWA.Ariadne.App
             blinkTimer = new Timer();
             blinkTimer.Interval = 600; // ms
             blinkTimer.Tick += new EventHandler(this.OnBlinkTimer);
-            if (OptionsDialog.GetBoolSetting(OptionsDialog.OPT_BLINKING))
+            if (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_BLINKING))
             {
                 blinkTimer.Start();
             }

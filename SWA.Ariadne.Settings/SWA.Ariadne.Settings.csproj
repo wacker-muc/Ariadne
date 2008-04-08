@@ -45,6 +45,8 @@
     </Compile>
     <Compile Include="IAriadneSettingsSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RegisteredOptions.cs">
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ColorLabel.resx">
