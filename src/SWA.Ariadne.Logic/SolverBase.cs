@@ -27,6 +27,14 @@ namespace SWA.Ariadne.Logic
         /// </summary>
         protected DeadEndChecker deadEndChecker = null;
 
+        /// <summary>
+        /// Returns true if this MazeSolver can detect areas unreachable the end square.
+        /// </summary>
+        public bool IsEfficientSolver
+        {
+            get { return (deadEndChecker != null); }
+        }
+
         #endregion
 
         #region Constructor

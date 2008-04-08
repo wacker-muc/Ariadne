@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using SWA.Ariadne.Model;
+using SWA.Ariadne.Settings;
 
 namespace SWA.Ariadne.Logic
 {
@@ -86,6 +87,20 @@ namespace SWA.Ariadne.Logic
                 {
                     // too smart
                     continue;
+                }
+
+                if (!RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_EFFICIENT_SOLVERS))
+                {
+                    // Get more information from an instance of this solver type.
+                    IMazeSolver foo = (IMazeSolver)t.GetConstructor(
+                        new Type[2] { typeof(Maze), typeof(IMazeDrawer) }).Invoke(
+                        new object[2] { maze, mazeDrawer }
+                        );
+                    if (foo.IsEfficientSolver)
+                    {
+                        // not wanted
+                        continue;
+                    }
                 }
 
                 return CreateSolver(t, maze, mazeDrawer);

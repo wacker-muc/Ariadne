@@ -35,24 +35,25 @@ namespace SWA.Ariadne.App
             this.label1 = new System.Windows.Forms.Label();
             this.textBoxStepsPerSecond = new System.Windows.Forms.TextBox();
             this.labelCopyright = new System.Windows.Forms.Label();
+            this.checkBoxEfficientSolvers = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // checkBoxBlinking
             // 
             this.checkBoxBlinking.AutoSize = true;
             this.checkBoxBlinking.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.checkBoxBlinking.Location = new System.Drawing.Point(23, 36);
+            this.checkBoxBlinking.Location = new System.Drawing.Point(8, 36);
             this.checkBoxBlinking.Name = "checkBoxBlinking";
-            this.checkBoxBlinking.Size = new System.Drawing.Size(134, 17);
+            this.checkBoxBlinking.Size = new System.Drawing.Size(161, 17);
             this.checkBoxBlinking.TabIndex = 0;
-            this.checkBoxBlinking.Text = "Blinking Target Square";
+            this.checkBoxBlinking.Text = "Paint Blinking Target Square";
             this.checkBoxBlinking.UseVisualStyleBackColor = true;
             // 
             // checkBoxDetailsBox
             // 
             this.checkBoxDetailsBox.AutoSize = true;
             this.checkBoxDetailsBox.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.checkBoxDetailsBox.Location = new System.Drawing.Point(48, 13);
+            this.checkBoxDetailsBox.Location = new System.Drawing.Point(60, 13);
             this.checkBoxDetailsBox.Name = "checkBoxDetailsBox";
             this.checkBoxDetailsBox.Size = new System.Drawing.Size(109, 17);
             this.checkBoxDetailsBox.TabIndex = 2;
@@ -62,8 +63,9 @@ namespace SWA.Ariadne.App
             // 
             // buttonOK
             // 
+            this.buttonOK.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.buttonOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.buttonOK.Location = new System.Drawing.Point(23, 96);
+            this.buttonOK.Location = new System.Drawing.Point(23, 119);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 3;
@@ -73,8 +75,9 @@ namespace SWA.Ariadne.App
             // 
             // buttonCancel
             // 
+            this.buttonCancel.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(114, 96);
+            this.buttonCancel.Location = new System.Drawing.Point(114, 119);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 4;
@@ -85,7 +88,7 @@ namespace SWA.Ariadne.App
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(48, 62);
+            this.label1.Location = new System.Drawing.Point(60, 85);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(92, 13);
             this.label1.TabIndex = 5;
@@ -94,7 +97,7 @@ namespace SWA.Ariadne.App
             // 
             // textBoxStepsPerSecond
             // 
-            this.textBoxStepsPerSecond.Location = new System.Drawing.Point(143, 59);
+            this.textBoxStepsPerSecond.Location = new System.Drawing.Point(155, 82);
             this.textBoxStepsPerSecond.Name = "textBoxStepsPerSecond";
             this.textBoxStepsPerSecond.Size = new System.Drawing.Size(46, 20);
             this.textBoxStepsPerSecond.TabIndex = 6;
@@ -106,19 +109,31 @@ namespace SWA.Ariadne.App
             this.labelCopyright.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.labelCopyright.AutoSize = true;
-            this.labelCopyright.Location = new System.Drawing.Point(71, 133);
+            this.labelCopyright.Location = new System.Drawing.Point(71, 156);
             this.labelCopyright.Name = "labelCopyright";
             this.labelCopyright.Size = new System.Drawing.Size(66, 13);
             this.labelCopyright.TabIndex = 7;
             this.labelCopyright.Text = "(c) Copyright";
             this.labelCopyright.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // checkBoxEfficientSolvers
+            // 
+            this.checkBoxEfficientSolvers.AutoSize = true;
+            this.checkBoxEfficientSolvers.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.checkBoxEfficientSolvers.Location = new System.Drawing.Point(45, 59);
+            this.checkBoxEfficientSolvers.Name = "checkBoxEfficientSolvers";
+            this.checkBoxEfficientSolvers.Size = new System.Drawing.Size(124, 17);
+            this.checkBoxEfficientSolvers.TabIndex = 8;
+            this.checkBoxEfficientSolvers.Text = "Use Efficient Solvers";
+            this.checkBoxEfficientSolvers.UseVisualStyleBackColor = true;
+            // 
             // OptionsDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(212, 148);
+            this.ClientSize = new System.Drawing.Size(212, 171);
+            this.Controls.Add(this.checkBoxEfficientSolvers);
             this.Controls.Add(this.labelCopyright);
             this.Controls.Add(this.textBoxStepsPerSecond);
             this.Controls.Add(this.label1);
@@ -145,5 +160,6 @@ namespace SWA.Ariadne.App
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textBoxStepsPerSecond;
         private System.Windows.Forms.Label labelCopyright;
+        private System.Windows.Forms.CheckBox checkBoxEfficientSolvers;
     }
 }

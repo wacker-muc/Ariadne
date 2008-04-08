@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
 using SWA.Ariadne.Model;
+using SWA.Ariadne.Settings;
 
 namespace SWA.Ariadne.App
 {
@@ -173,7 +174,7 @@ namespace SWA.Ariadne.App
         /// <param name="maze"></param>
         public override void MakeReservedAreas(Maze maze)
         {
-            if (!previewMode && OptionsDialog.GetBoolSetting(OptionsDialog.OPT_SHOW_DETAILS_BOX))
+            if (!previewMode && RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_SHOW_DETAILS_BOX))
             {
                 mazeUserControl.ReserveArea(this.outerInfoPanel);
                 this.outerInfoPanel.BringToFront();
