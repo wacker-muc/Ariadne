@@ -86,7 +86,7 @@ namespace SWA.Ariadne.Model.Tests
 
             DeadEndChecker target = new DeadEndChecker(maze);
             SWA_Ariadne_Model_DeadEndCheckerAccessor accessor = new SWA_Ariadne_Model_DeadEndCheckerAccessor(target);
-            SWA_Ariadne_Model_DeadEndChecker_MazeSquareExtensionAccessor sqe = null; // TODO: Initialize to an appropriate value
+            SWA_Ariadne_Model_DeadEndChecker_MazeSquareExtensionAccessor sqe;
 
             Random r = new Random(0);
             for (int i = 0; i < 400; i++)

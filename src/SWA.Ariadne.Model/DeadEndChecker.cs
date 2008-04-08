@@ -319,7 +319,6 @@ namespace SWA.Ariadne.Model
             }
 
             // Add all squares whose trajectory depends on the ones already inserted.
-            // TODO: Process only fresh inserts.
             CollectUncertainSquares();
 
             // The areas next to all confirmedSquares will receive an adjusted trajectoryDistance.
@@ -336,7 +335,7 @@ namespace SWA.Ariadne.Model
                 }
             }
 
-#if true
+#if false
             // TODO: disable this debug code
             Console.Out.WriteLine("Visited {0} : {1} uncertain and {2} confirmed squares.",
                                   sq.ToString(), uncertainSquares.Count, confirmedSquares.Count);
@@ -362,10 +361,6 @@ namespace SWA.Ariadne.Model
             {
                 MazeSquareExtension sqe1 = uncertainSquares[i];
 
-                // Remember the current number of uncertain squares.
-                // Items added to the list during this iteration may be removed if appropriate.
-                int p = uncertainSquares.Count;
-                
                 if (sqe1.trajectoryDistance > 0)
                 {
                     // This square's trajectory has been confirmed.  It is not uncertain any more.
@@ -391,13 +386,6 @@ namespace SWA.Ariadne.Model
                         sqe1.trajectoryDistance *= -1;
                         confirmedSquares.Add(sqe1);
 
-                        // Immediately revive all neighbors of sqe1 that have been marked uncertain.
-                        // TODO: This is wrong! The neighbors are not at the end oft the list !!!
-                        while( uncertainSquares.Count > p)
-                        {
-                            uncertainSquares[uncertainSquares.Count - 1].trajectoryDistance *= -1;
-                            uncertainSquares.RemoveAt(uncertainSquares.Count - 1);
-                        }
                         break; // from for (j)
                     }
                     else if (sqe2.trajectoryDistance > 0)
@@ -465,7 +453,7 @@ namespace SWA.Ariadne.Model
 
             uncertainSquares.Insert(a, sqe);
 
-#if true
+#if false
             // TODO: disable this debug code
             keyA = (a - 1 > behindPosition ? uncertainSquares[a - 1].trajectoryDistance : sqe.trajectoryDistance); if (keyA < 0) keyA = -keyA;
             keyB = (a + 1 < uncertainSquares.Count ? uncertainSquares[a + 1].trajectoryDistance : sqe.trajectoryDistance); if (keyB < 0) keyB = -keyB;
