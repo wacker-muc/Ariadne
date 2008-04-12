@@ -41,6 +41,8 @@ namespace SWA.Ariadne.Model
             /// </summary>
             public int trajectoryDistance;
 
+            public bool distanceChanged;
+
             /// <summary>
             /// All alive neighbors of this square.
             /// Note: At least one of them must have a smaller trajectoryDistance.
@@ -269,9 +271,15 @@ namespace SWA.Ariadne.Model
         /// <summary>
         /// Registers the given square as visited.
         /// </summary>
-        /// <param name="p"></param>
+        /// <param name="sq"></param>
         /// <returns>a list of dead end squares</returns>
         public List<MazeSquare> Visit(MazeSquare sq)
+        {
+            return Visit(sq, null);
+        }
+
+        // TODO: remove the parameter confirmedSquaresResult
+        public List<MazeSquare> Visit(MazeSquare sq, List<MazeSquare> confirmedSquaresResult)
         {
             List<MazeSquare> result = new List<MazeSquare>();
             MazeSquareExtension sqe = mazeExtension[sq.XPos, sq.YPos];
@@ -344,6 +352,18 @@ namespace SWA.Ariadne.Model
                                   sq.ToString(), uncertainSquares.Count, confirmedSquares.Count);
 #endif
 
+            if (confirmedSquaresResult != null)
+            {
+                foreach (MazeSquareExtension csqe in confirmedSquares)
+                {
+                    if (csqe.distanceChanged)
+                    {
+                        confirmedSquaresResult.Add(csqe.extendedSquare);
+                    }
+                    csqe.distanceChanged = false;
+                }
+            }
+
             // Empty the internal lists.
             uncertainSquares.Clear();
             confirmedSquares.Clear();
@@ -386,7 +406,7 @@ namespace SWA.Ariadne.Model
                     if (sqe2.trajectoryDistance == requiredNeighborDistance)
                     {
                         // We have confirmed that sqe1 has a neighbor sqe2 giving it a new trajectory.
-                        AddConfirmedSquare(sqe1);
+                        AddConfirmedSquare(sqe1, -1);
 
                         break; // from for (j)
                     }
@@ -418,7 +438,7 @@ namespace SWA.Ariadne.Model
         /// Add the given square to the ordered list of uncertain squares.
         /// </summary>
         /// <param name="sqe"></param>
-        private void AddConfirmedSquare(MazeSquareExtension sqe)
+        private void AddConfirmedSquare(MazeSquareExtension sqe, int behindPosition)
         {
             // Mark sqe's trajectoryDistance as confirmed.
             if (sqe.trajectoryDistance < 0)
@@ -507,8 +527,9 @@ namespace SWA.Ariadne.Model
                     MazeSquareExtension sqe2 = sqe1.neighbors[j];
                     if (sqe2.trajectoryDistance < 0 && !sqe2.isDeadEnd)
                     {
+                        sqe2.distanceChanged = (-sqe2.trajectoryDistance != sqe1.trajectoryDistance + 1);
                         sqe2.trajectoryDistance = sqe1.trajectoryDistance + 1;
-                        confirmedSquares.Add(sqe2);
+                        AddConfirmedSquare(sqe2, i);
                     }
                 }
             }

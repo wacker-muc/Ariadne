@@ -78,21 +78,34 @@ namespace SWA.Ariadne.Logic
             #region Apply the dead end checker.
             if (deadEndChecker != null && mazeDrawer != null)
             {
+#if false
+                // TODO: disable this debug version
+                List<MazeSquare> confirmedSquares = new List<MazeSquare>();
+                List<MazeSquare> deadSquares = deadEndChecker.Visit(sq2, confirmedSquares);
+                
+                // TODO: disable this version
+                if (sq1 == maze.StartSquare)
+                {
+                    for (int i = 0; i < maze.XSize; i++)
+                    {
+                        for (int j = 0; j < maze.YSize; j++)
+                        {
+                            MazeSquare sq = maze[i, j];
+                            mazeDrawer.DrawAliveSquare(sq, deadEndChecker.Distance(sq), true);
+                        }
+                    }
+                }
+                foreach (MazeSquare sq in confirmedSquares)
+                {
+                    mazeDrawer.DrawAliveSquare(sq, deadEndChecker.Distance(sq), false);
+                }
+#else
                 List<MazeSquare> deadSquares = deadEndChecker.Visit(sq2);
+#endif
                 foreach (MazeSquare deadSq in deadSquares)
                 {
                     mazeDrawer.DrawDeadSquare(deadSq);
                 }
-#if false // debug code
-                for (int i = 0; i < maze.XSize; i++)
-                {
-                    for (int j = 0; j < maze.YSize; j++)
-                    {
-                        MazeSquare sq = maze[i, j];
-                        mazeDrawer.DrawAliveSquare(sq, deadEndChecker.Distance(sq));
-                    }
-                }
-#endif
             }
             #endregion
         }

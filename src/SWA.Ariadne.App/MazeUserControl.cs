@@ -56,6 +56,8 @@ namespace SWA.Ariadne.App
         }
         private Maze maze;
 
+        private AriadneSettingsData settingsData;
+
         private int squareWidth;
         private int wallWidth;
         private int gridWidth;
@@ -178,6 +180,12 @@ namespace SWA.Ariadne.App
 
         public void Setup()
         {
+            if (settingsData != null)
+            {
+                this.TakeParametersFrom(settingsData);
+                return;
+            }
+
             Random r = RandomFactory.CreateRandom();
             int gridWidth = r.Next(MinAutoGridWidth, MaxAutoGridWidth);
 
@@ -680,7 +688,7 @@ namespace SWA.Ariadne.App
         /// </summary>
         /// <param name="sq"></param>
         /// <param name="distance"></param>
-        public void DrawAliveSquare(MazeSquare sq, int distance)
+        public void DrawAliveSquare(MazeSquare sq, int distance, bool initialDrawing)
         {
             if (squareWidth >= 10)
             {
@@ -692,8 +700,9 @@ namespace SWA.Ariadne.App
                 float cy = yOffset + gridWidth / 2.0F + sq.YPos * gridWidth - (digitHeight / 2.0F);
                 if( distance > 0)
                 {
+                    Brush digitBrush = (initialDrawing ? Brushes.White : Brushes.Yellow);
                     g.FillRectangle(Brushes.Black, cx, cy, digitWidth, digitHeight);
-                    g.DrawString(string.Format("{0}", (distance % 10)), font, Brushes.White, new RectangleF(cx, cy, squareWidth, squareWidth));
+                    g.DrawString(string.Format("{0}", (distance % 10)), font, digitBrush, new RectangleF(cx, cy, squareWidth, squareWidth));
                 }
             }
         }
@@ -803,6 +812,8 @@ namespace SWA.Ariadne.App
             Reset();
 
             #endregion
+
+            this.settingsData = data;
         }
 
         #endregion
