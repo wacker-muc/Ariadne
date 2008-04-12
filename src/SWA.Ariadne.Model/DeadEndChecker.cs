@@ -313,10 +313,13 @@ namespace SWA.Ariadne.Model
                 }
             }
 
+#if false
+            // TODO: enable this enhancement: check for harmless constellation
             if (HarmlessConstellation(sqe))
             {
                 return result;
             }
+#endif
 
             // Add all squares whose trajectory depends on the ones already inserted.
             CollectUncertainSquares();
@@ -383,12 +386,11 @@ namespace SWA.Ariadne.Model
                     if (sqe2.trajectoryDistance == requiredNeighborDistance)
                     {
                         // We have confirmed that sqe1 has a neighbor sqe2 giving it a new trajectory.
-                        sqe1.trajectoryDistance *= -1;
-                        confirmedSquares.Add(sqe1);
+                        AddConfirmedSquare(sqe1);
 
                         break; // from for (j)
                     }
-                    else if (sqe2.trajectoryDistance > 0)
+                    else if (sqe2.trajectoryDistance > requiredNeighborDistance)
                     {
                         // Add this square to the list of uncertainSquares.
                         AddUncertainSquare(sqe2, i);
@@ -403,28 +405,63 @@ namespace SWA.Ariadne.Model
         /// <param name="sqe"></param>
         private void AddUncertainSquare(MazeSquareExtension sqe, int behindPosition)
         {
+            // Mark sqe's trajectoryDistance as uncertain.
+            if (sqe.trajectoryDistance > 0)
+            {
+                sqe.trajectoryDistance *= -1;
+            }
+
+            AddSquare(sqe, behindPosition, uncertainSquares);
+        }
+
+        /// <summary>
+        /// Add the given square to the ordered list of uncertain squares.
+        /// </summary>
+        /// <param name="sqe"></param>
+        private void AddConfirmedSquare(MazeSquareExtension sqe)
+        {
+            // Mark sqe's trajectoryDistance as confirmed.
+            if (sqe.trajectoryDistance < 0)
+            {
+                sqe.trajectoryDistance *= -1;
+            }
+
+            AddSquare(sqe, -1, confirmedSquares);
+        }
+
+        private static void AddSquare(MazeSquareExtension sqe, int behindPosition, List<MazeSquareExtension> list)
+        {
+            if (list.Count > 8 * Maze.MaxXSize * Maze.MaxYSize)
+            {
+                throw new Exception("internal list grows too long");
+            }
+
             int key = sqe.trajectoryDistance; if (key < 0) key = -key;
 
             // The key needs to be compared with the squares in the index range a..b
-            int a = behindPosition + 1, b = uncertainSquares.Count - 1;
-
-            // Mark sqe's trajectoryDistance as uncertain.
-            sqe.trajectoryDistance *= -1;
+            int a = behindPosition + 1, b = list.Count - 1;
 
             // Empty region.
             if (b < a)
             {
-                uncertainSquares.Add(sqe);
+                list.Add(sqe);
                 return;
             }
 
-            int keyA = uncertainSquares[a].trajectoryDistance; if (keyA < 0) keyA = -keyA;
-            int keyB = uncertainSquares[b].trajectoryDistance; if (keyB < 0) keyB = -keyB;
+            int keyA = list[a].trajectoryDistance; if (keyA < 0) keyA = -keyA;
+            int keyB = list[b].trajectoryDistance; if (keyB < 0) keyB = -keyB;
 
             // The square fits at the end of the list.
             if (keyB <= key)
             {
-                uncertainSquares.Add(sqe);
+                list.Add(sqe);
+                return;
+            }
+
+            // The square fits at the start of the list.
+            if (keyA >= key)
+            {
+                list.Insert(a, sqe);
                 return;
             }
 
@@ -433,7 +470,7 @@ namespace SWA.Ariadne.Model
             while (a < b)
             {
                 int m = (a + b) / 2;
-                int keyM = uncertainSquares[m].trajectoryDistance; if (keyM < 0) keyM = -keyM;
+                int keyM = list[m].trajectoryDistance; if (keyM < 0) keyM = -keyM;
 
                 if (keyM > key)
                 {
@@ -448,21 +485,10 @@ namespace SWA.Ariadne.Model
                     a = m + 1;
                     break;
                 }
-                
+
             }
 
-            uncertainSquares.Insert(a, sqe);
-
-#if false
-            // TODO: disable this debug code
-            keyA = (a - 1 > behindPosition ? uncertainSquares[a - 1].trajectoryDistance : sqe.trajectoryDistance); if (keyA < 0) keyA = -keyA;
-            keyB = (a + 1 < uncertainSquares.Count ? uncertainSquares[a + 1].trajectoryDistance : sqe.trajectoryDistance); if (keyB < 0) keyB = -keyB;
-
-            if (keyA > key || keyB < key)
-            {
-                throw new Exception("boo boo");
-            }
-#endif
+            list.Insert(a, sqe);
         }
 
         /// <summary>

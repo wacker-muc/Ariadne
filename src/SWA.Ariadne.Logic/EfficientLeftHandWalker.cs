@@ -5,7 +5,7 @@ using SWA.Ariadne.Model;
 
 namespace SWA.Ariadne.Logic
 {
-    class EfficientLeftHandWalker : LeftHandWalker
+    internal class EfficientLeftHandWalker : LeftHandWalker
     {
         #region Constructor
 

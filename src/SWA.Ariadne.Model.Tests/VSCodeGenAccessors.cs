@@ -47,6 +47,179 @@ internal class BaseAccessor {
 }
 [System.Diagnostics.DebuggerStepThrough()]
 [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TestTools.UnitTestGeneration", "1.0.0.0")]
+internal class SWA_Ariadne_Model_DeadEndCheckerAccessor : BaseAccessor {
+    
+    protected static Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType m_privateType = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType(typeof(global::SWA.Ariadne.Model.DeadEndChecker));
+    
+    internal SWA_Ariadne_Model_DeadEndCheckerAccessor(global::SWA.Ariadne.Model.DeadEndChecker target) : 
+            base(target, m_privateType) {
+    }
+    
+    internal global::SWA.Ariadne.Model.Tests.SWA_Ariadne_Model_DeadEndChecker_MazeSquareExtensionAccessor[,] mazeExtension {
+        get {
+            global::System.Array _ret_cache = ((global::System.Array)(m_privateObject.GetField("mazeExtension")));
+            global::SWA.Ariadne.Model.Tests.SWA_Ariadne_Model_DeadEndChecker_MazeSquareExtensionAccessor[,] _ret_temp;
+            if ((_ret_cache == null)) {
+                _ret_temp = null;
+            }
+            else {
+                _ret_temp = ((global::SWA.Ariadne.Model.Tests.SWA_Ariadne_Model_DeadEndChecker_MazeSquareExtensionAccessor[,])(System.Array.CreateInstance(typeof(global::SWA.Ariadne.Model.Tests.SWA_Ariadne_Model_DeadEndChecker_MazeSquareExtensionAccessor), _ret_cache.GetLength(0), _ret_cache.GetLength(1))));
+                int _ret_i0;
+                for (_ret_i0 = 0; (_ret_i0 < _ret_temp.GetLength(0)); _ret_i0 = (_ret_i0 + 1)) {
+                    int _ret_i1;
+                    for (_ret_i1 = 0; (_ret_i1 < _ret_temp.GetLength(1)); _ret_i1 = (_ret_i1 + 1)) {
+                        object _ret_i_val = _ret_cache.GetValue(_ret_i0, _ret_i1);
+                        global::SWA.Ariadne.Model.Tests.SWA_Ariadne_Model_DeadEndChecker_MazeSquareExtensionAccessor _ret_i = null;
+                        if ((_ret_i_val != null)) {
+                            _ret_i = new global::SWA.Ariadne.Model.Tests.SWA_Ariadne_Model_DeadEndChecker_MazeSquareExtensionAccessor(_ret_i_val);
+                        }
+                        _ret_temp.SetValue(_ret_i, _ret_i0, _ret_i1);
+                    }
+                }
+            }
+            global::SWA.Ariadne.Model.Tests.SWA_Ariadne_Model_DeadEndChecker_MazeSquareExtensionAccessor[,] ret = _ret_temp;
+            return ret;
+        }
+        set {
+            m_privateObject.SetField("mazeExtension", value);
+        }
+    }
+    
+    internal void InitializeMazeExtension(global::SWA.Ariadne.Model.Maze maze) {
+        object[] args = new object[] {
+                maze};
+        m_privateObject.Invoke("InitializeMazeExtension", new System.Type[] {
+                    typeof(global::SWA.Ariadne.Model.Maze)}, args);
+    }
+    
+    internal void InitializeTrajectoryDistances(global::SWA.Ariadne.Model.Maze maze) {
+        object[] args = new object[] {
+                maze};
+        m_privateObject.Invoke("InitializeTrajectoryDistances", new System.Type[] {
+                    typeof(global::SWA.Ariadne.Model.Maze)}, args);
+    }
+    
+    internal void FindNewTrajectories() {
+        object[] args = new object[0];
+        m_privateObject.Invoke("FindNewTrajectories", new System.Type[0], args);
+    }
+    
+    internal void AddUncertainSquare(global::SWA.Ariadne.Model.Tests.SWA_Ariadne_Model_DeadEndChecker_MazeSquareExtensionAccessor sqe, int behindPosition) {
+        object sqe_val_target = null;
+        if ((sqe != null)) {
+            sqe_val_target = sqe.Target;
+        }
+        object[] args = new object[] {
+                sqe_val_target,
+                behindPosition};
+        Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType target = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType("SWA.Ariadne.Model", "SWA.Ariadne.Model.DeadEndChecker+MazeSquareExtension");
+        m_privateObject.Invoke("AddUncertainSquare", new System.Type[] {
+                    target.ReferencedType,
+                    typeof(int)}, args);
+    }
+    
+    internal void ReviveConfirmedSquaresNeighbors() {
+        object[] args = new object[0];
+        m_privateObject.Invoke("ReviveConfirmedSquaresNeighbors", new System.Type[0], args);
+    }
+    
+    internal bool HarmlessConstellation(global::SWA.Ariadne.Model.Tests.SWA_Ariadne_Model_DeadEndChecker_MazeSquareExtensionAccessor sqe) {
+        object sqe_val_target = null;
+        if ((sqe != null)) {
+            sqe_val_target = sqe.Target;
+        }
+        object[] args = new object[] {
+                sqe_val_target};
+        Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType target = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType("SWA.Ariadne.Model", "SWA.Ariadne.Model.DeadEndChecker+MazeSquareExtension");
+        bool ret = ((bool)(m_privateObject.Invoke("HarmlessConstellation", new System.Type[] {
+                    target.ReferencedType}, args)));
+        return ret;
+    }
+}
+[System.Diagnostics.DebuggerStepThrough()]
+[System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TestTools.UnitTestGeneration", "1.0.0.0")]
+internal class SWA_Ariadne_Model_DeadEndChecker_MazeSquareExtensionAccessor : BaseAccessor {
+    
+    protected static Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType m_privateType = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType("SWA.Ariadne.Model", "SWA.Ariadne.Model.DeadEndChecker+MazeSquareExtension");
+    
+    internal SWA_Ariadne_Model_DeadEndChecker_MazeSquareExtensionAccessor(object target) : 
+            base(target, m_privateType) {
+    }
+    
+    internal global::SWA.Ariadne.Model.MazeSquare extendedSquare {
+        get {
+            global::SWA.Ariadne.Model.MazeSquare ret = ((global::SWA.Ariadne.Model.MazeSquare)(m_privateObject.GetField("extendedSquare")));
+            return ret;
+        }
+        set {
+            m_privateObject.SetField("extendedSquare", value);
+        }
+    }
+    
+    internal bool isDeadEnd {
+        get {
+            bool ret = ((bool)(m_privateObject.GetField("isDeadEnd")));
+            return ret;
+        }
+        set {
+            m_privateObject.SetField("isDeadEnd", value);
+        }
+    }
+    
+    internal int trajectoryDistance {
+        get {
+            int ret = ((int)(m_privateObject.GetField("trajectoryDistance")));
+            return ret;
+        }
+        set {
+            m_privateObject.SetField("trajectoryDistance", value);
+        }
+    }
+    
+    internal static object CreatePrivate() {
+        object[] args = new object[0];
+        Microsoft.VisualStudio.TestTools.UnitTesting.PrivateObject priv_obj = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateObject("SWA.Ariadne.Model", "SWA.Ariadne.Model.DeadEndChecker+MazeSquareExtension", new System.Type[0], args);
+        return priv_obj.Target;
+    }
+    
+    public override string ToString() {
+        object[] args = new object[0];
+        string ret = ((string)(m_privateObject.Invoke("ToString", new System.Type[0], args)));
+        return ret;
+    }
+}
+[System.Diagnostics.DebuggerStepThrough()]
+[System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TestTools.UnitTestGeneration", "1.0.0.0")]
+internal class SWA_Ariadne_Logic_EfficientLeftHandWalkerAccessor : BaseAccessor {
+    
+    protected static Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType m_privateType = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType("SWA.Ariadne.Logic", "SWA.Ariadne.Logic.EfficientLeftHandWalker");
+    
+    internal SWA_Ariadne_Logic_EfficientLeftHandWalkerAccessor(object target) : 
+            base(target, m_privateType) {
+    }
+    
+    internal static object CreatePrivate(global::SWA.Ariadne.Model.Maze maze, global::SWA.Ariadne.Logic.IMazeDrawer mazeDrawer) {
+        object[] args = new object[] {
+                maze,
+                mazeDrawer};
+        Microsoft.VisualStudio.TestTools.UnitTesting.PrivateObject priv_obj = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateObject("SWA.Ariadne.Logic", "SWA.Ariadne.Logic.EfficientLeftHandWalker", new System.Type[] {
+                    typeof(global::SWA.Ariadne.Model.Maze),
+                    typeof(global::SWA.Ariadne.Logic.IMazeDrawer)}, args);
+        return priv_obj.Target;
+    }
+    
+    internal void Solve() {
+        object[] args = new object[0];
+        m_privateObject.Invoke("Solve", new System.Type[0], args);
+    }
+    
+    internal void Reset() {
+        object[] args = new object[0];
+        m_privateObject.Invoke("Reset", new System.Type[0], args);
+    }
+}
+[System.Diagnostics.DebuggerStepThrough()]
+[System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TestTools.UnitTestGeneration", "1.0.0.0")]
 internal class SWA_Ariadne_Model_MazeAccessor : BaseAccessor {
     
     protected static Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType m_privateType = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType(typeof(global::SWA.Ariadne.Model.Maze));
@@ -192,9 +365,10 @@ internal class SWA_Ariadne_Model_MazeAccessor : BaseAccessor {
         }
     }
     
-    internal static void Decode(string code, out int seed, out int xSize, out int ySize, out int xStart, out int yStart, out int xEnd, out int yEnd) {
+    internal static void Decode(string code, out int seed, out int xSize, out int ySize, out global::SWA.Ariadne.Model.MazeSquare.WallPosition direction, out int xStart, out int yStart, out int xEnd, out int yEnd) {
         object[] args = new object[] {
                 code,
+                null,
                 null,
                 null,
                 null,
@@ -207,6 +381,7 @@ internal class SWA_Ariadne_Model_MazeAccessor : BaseAccessor {
                     typeof(int).MakeByRefType(),
                     typeof(int).MakeByRefType(),
                     typeof(int).MakeByRefType(),
+                    typeof(global::SWA.Ariadne.Model.MazeSquare.WallPosition).MakeByRefType(),
                     typeof(int).MakeByRefType(),
                     typeof(int).MakeByRefType(),
                     typeof(int).MakeByRefType(),
@@ -214,10 +389,11 @@ internal class SWA_Ariadne_Model_MazeAccessor : BaseAccessor {
         seed = ((int)(args[1]));
         xSize = ((int)(args[2]));
         ySize = ((int)(args[3]));
-        xStart = ((int)(args[4]));
-        yStart = ((int)(args[5]));
-        xEnd = ((int)(args[6]));
-        yEnd = ((int)(args[7]));
+        direction = ((global::SWA.Ariadne.Model.MazeSquare.WallPosition)(args[4]));
+        xStart = ((int)(args[5]));
+        yStart = ((int)(args[6]));
+        xEnd = ((int)(args[7]));
+        yEnd = ((int)(args[8]));
     }
     
     internal static void ValidateCodeItemRange(string item, int value, int min, int max) {
@@ -231,6 +407,11 @@ internal class SWA_Ariadne_Model_MazeAccessor : BaseAccessor {
                     typeof(int),
                     typeof(int),
                     typeof(int)}, args);
+    }
+    
+    internal void CreateSquares() {
+        object[] args = new object[0];
+        m_privateObject.Invoke("CreateSquares", new System.Type[0], args);
     }
     
     internal void BuildMaze() {
@@ -248,17 +429,19 @@ internal class SWA_Ariadne_Model_MazeAccessor : BaseAccessor {
         m_privateObject.Invoke("FixReservedAreas", new System.Type[0], args);
     }
     
-    internal void CloseWalls(int left, int right, int top, int bottom) {
+    internal void CloseWalls(int left, int right, int top, int bottom, global::SWA.Ariadne.Model.MazeSquare.WallState borderState) {
         object[] args = new object[] {
                 left,
                 right,
                 top,
-                bottom};
+                bottom,
+                borderState};
         m_privateObject.Invoke("CloseWalls", new System.Type[] {
                     typeof(int),
                     typeof(int),
                     typeof(int),
-                    typeof(int)}, args);
+                    typeof(int),
+                    typeof(global::SWA.Ariadne.Model.MazeSquare.WallState)}, args);
     }
     
     internal int CountClosedWalls(global::SWA.Ariadne.Model.MazeSquare sq) {
@@ -266,149 +449,6 @@ internal class SWA_Ariadne_Model_MazeAccessor : BaseAccessor {
                 sq};
         int ret = ((int)(m_privateObject.Invoke("CountClosedWalls", new System.Type[] {
                     typeof(global::SWA.Ariadne.Model.MazeSquare)}, args)));
-        return ret;
-    }
-}
-[System.Diagnostics.DebuggerStepThrough()]
-[System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TestTools.UnitTestGeneration", "1.0.0.0")]
-internal class SWA_Ariadne_Model_DeadEndCheckerAccessor : BaseAccessor {
-    
-    protected static Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType m_privateType = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType(typeof(global::SWA.Ariadne.Model.DeadEndChecker));
-    
-    internal SWA_Ariadne_Model_DeadEndCheckerAccessor(global::SWA.Ariadne.Model.DeadEndChecker target) : 
-            base(target, m_privateType) {
-    }
-    
-    internal global::SWA.Ariadne.Model.Tests.SWA_Ariadne_Model_DeadEndChecker_MazeSquareExtensionAccessor[,] mazeExtension {
-        get {
-            global::System.Array _ret_cache = ((global::System.Array)(m_privateObject.GetField("mazeExtension")));
-            global::SWA.Ariadne.Model.Tests.SWA_Ariadne_Model_DeadEndChecker_MazeSquareExtensionAccessor[,] _ret_temp;
-            if ((_ret_cache == null)) {
-                _ret_temp = null;
-            }
-            else {
-                _ret_temp = ((global::SWA.Ariadne.Model.Tests.SWA_Ariadne_Model_DeadEndChecker_MazeSquareExtensionAccessor[,])(System.Array.CreateInstance(typeof(global::SWA.Ariadne.Model.Tests.SWA_Ariadne_Model_DeadEndChecker_MazeSquareExtensionAccessor), _ret_cache.GetLength(0), _ret_cache.GetLength(1))));
-                int _ret_i0;
-                for (_ret_i0 = 0; (_ret_i0 < _ret_temp.GetLength(0)); _ret_i0 = (_ret_i0 + 1)) {
-                    int _ret_i1;
-                    for (_ret_i1 = 0; (_ret_i1 < _ret_temp.GetLength(1)); _ret_i1 = (_ret_i1 + 1)) {
-                        object _ret_i_val = _ret_cache.GetValue(_ret_i0, _ret_i1);
-                        global::SWA.Ariadne.Model.Tests.SWA_Ariadne_Model_DeadEndChecker_MazeSquareExtensionAccessor _ret_i = null;
-                        if ((_ret_i_val != null)) {
-                            _ret_i = new global::SWA.Ariadne.Model.Tests.SWA_Ariadne_Model_DeadEndChecker_MazeSquareExtensionAccessor(_ret_i_val);
-                        }
-                        _ret_temp.SetValue(_ret_i, _ret_i0, _ret_i1);
-                    }
-                }
-            }
-            global::SWA.Ariadne.Model.Tests.SWA_Ariadne_Model_DeadEndChecker_MazeSquareExtensionAccessor[,] ret = _ret_temp;
-            return ret;
-        }
-        set {
-            m_privateObject.SetField("mazeExtension", value);
-        }
-    }
-    
-    internal void InitializeMazeExtension(global::SWA.Ariadne.Model.Maze maze) {
-        object[] args = new object[] {
-                maze};
-        m_privateObject.Invoke("InitializeMazeExtension", new System.Type[] {
-                    typeof(global::SWA.Ariadne.Model.Maze)}, args);
-    }
-    
-    internal void InitializeTrajectoryDistances(global::SWA.Ariadne.Model.Maze maze) {
-        object[] args = new object[] {
-                maze};
-        m_privateObject.Invoke("InitializeTrajectoryDistances", new System.Type[] {
-                    typeof(global::SWA.Ariadne.Model.Maze)}, args);
-    }
-    
-    internal void FindNewTrajectories() {
-        object[] args = new object[0];
-        m_privateObject.Invoke("FindNewTrajectories", new System.Type[0], args);
-    }
-    
-    internal void AddUncertainSquare(global::SWA.Ariadne.Model.Tests.SWA_Ariadne_Model_DeadEndChecker_MazeSquareExtensionAccessor sqe, int behindPosition) {
-        object sqe_val_target = null;
-        if ((sqe != null)) {
-            sqe_val_target = sqe.Target;
-        }
-        object[] args = new object[] {
-                sqe_val_target,
-                behindPosition};
-        Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType target = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType("SWA.Ariadne.Model", "SWA.Ariadne.Model.DeadEndChecker+MazeSquareExtension");
-        m_privateObject.Invoke("AddUncertainSquare", new System.Type[] {
-                    target.ReferencedType,
-                    typeof(int)}, args);
-    }
-    
-    internal void ReviveConfirmedSquaresNeighbors() {
-        object[] args = new object[0];
-        m_privateObject.Invoke("ReviveConfirmedSquaresNeighbors", new System.Type[0], args);
-    }
-    
-    internal bool HarmlessConstellation(global::SWA.Ariadne.Model.Tests.SWA_Ariadne_Model_DeadEndChecker_MazeSquareExtensionAccessor sqe) {
-        object sqe_val_target = null;
-        if ((sqe != null)) {
-            sqe_val_target = sqe.Target;
-        }
-        object[] args = new object[] {
-                sqe_val_target};
-        Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType target = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType("SWA.Ariadne.Model", "SWA.Ariadne.Model.DeadEndChecker+MazeSquareExtension");
-        bool ret = ((bool)(m_privateObject.Invoke("HarmlessConstellation", new System.Type[] {
-                    target.ReferencedType}, args)));
-        return ret;
-    }
-}
-[System.Diagnostics.DebuggerStepThrough()]
-[System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TestTools.UnitTestGeneration", "1.0.0.0")]
-internal class SWA_Ariadne_Model_DeadEndChecker_MazeSquareExtensionAccessor : BaseAccessor {
-    
-    protected static Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType m_privateType = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType("SWA.Ariadne.Model", "SWA.Ariadne.Model.DeadEndChecker+MazeSquareExtension");
-    
-    internal SWA_Ariadne_Model_DeadEndChecker_MazeSquareExtensionAccessor(object target) : 
-            base(target, m_privateType) {
-    }
-    
-    internal global::SWA.Ariadne.Model.MazeSquare extendedSquare {
-        get {
-            global::SWA.Ariadne.Model.MazeSquare ret = ((global::SWA.Ariadne.Model.MazeSquare)(m_privateObject.GetField("extendedSquare")));
-            return ret;
-        }
-        set {
-            m_privateObject.SetField("extendedSquare", value);
-        }
-    }
-    
-    internal bool isDeadEnd {
-        get {
-            bool ret = ((bool)(m_privateObject.GetField("isDeadEnd")));
-            return ret;
-        }
-        set {
-            m_privateObject.SetField("isDeadEnd", value);
-        }
-    }
-    
-    internal int trajectoryDistance {
-        get {
-            int ret = ((int)(m_privateObject.GetField("trajectoryDistance")));
-            return ret;
-        }
-        set {
-            m_privateObject.SetField("trajectoryDistance", value);
-        }
-    }
-    
-    internal static object CreatePrivate() {
-        object[] args = new object[0];
-        Microsoft.VisualStudio.TestTools.UnitTesting.PrivateObject priv_obj = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateObject("SWA.Ariadne.Model", "SWA.Ariadne.Model.DeadEndChecker+MazeSquareExtension", new System.Type[0], args);
-        return priv_obj.Target;
-    }
-    
-    public override string ToString() {
-        object[] args = new object[0];
-        string ret = ((string)(m_privateObject.Invoke("ToString", new System.Type[0], args)));
         return ret;
     }
 }

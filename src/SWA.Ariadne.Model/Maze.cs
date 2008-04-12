@@ -147,6 +147,7 @@ namespace SWA.Ariadne.Model
             Decode(code
                 , out this.seed
                 , out this.xSize, out this.ySize
+                , out this.direction
                 , out this.xStart, out this.yStart
                 , out this.xEnd, out this.yEnd
                 );
@@ -306,6 +307,7 @@ namespace SWA.Ariadne.Model
         /// <param name="seed"></param>
         /// <param name="xSize"></param>
         /// <param name="ySize"></param>
+        /// <param name="direction"></param>
         /// <param name="xStart"></param>
         /// <param name="yStart"></param>
         /// <param name="xEnd"></param>
@@ -314,6 +316,7 @@ namespace SWA.Ariadne.Model
         private static void Decode(string code
             , out int seed
             , out int xSize, out int ySize
+            , out MazeSquare.WallPosition direction
             , out int xStart, out int yStart
             , out int xEnd, out int yEnd
             )
@@ -363,7 +366,7 @@ namespace SWA.Ariadne.Model
             int d1, d2, c1, c2;
 
             itemRange = MazeSquare.WP_NUM;
-            MazeSquare.WallPosition direction = (MazeSquare.WallPosition)(nCode % itemRange);
+            direction = (MazeSquare.WallPosition)(nCode % itemRange);
             nCode /= itemRange;
 
             itemRange = MaxXSize + 1;
@@ -892,6 +895,11 @@ namespace SWA.Ariadne.Model
             }
 
             return result;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0}: [{1},{2}], ({3},{4}) -> ({5},{6})", Code, XSize, YSize, xStart, yStart, xEnd, yEnd);
         }
 
         #endregion

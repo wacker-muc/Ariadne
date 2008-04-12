@@ -167,9 +167,36 @@ namespace SWA.Ariadne.Model.Tests
 
             string targetCode = target.Code;
 
-            Assert.AreEqual(templateCode, targetCode, testObject + ": Code has the wrong value");
+            Assert.AreEqual(templateCode, targetCode, testObject + ": Code differs");
+            Assert.IsTrue(template.StartSquare.XPos == target.StartSquare.XPos
+                && template.StartSquare.YPos == target.StartSquare.YPos,
+                testObject + ": StartSquare differs");
+            Assert.IsTrue(template.EndSquare.XPos == target.EndSquare.XPos
+                && template.EndSquare.YPos == target.EndSquare.YPos,
+                testObject + ": EndSquare differs");
+        }
 
-            // TODO: compare other attributes
+        /// <summary>
+        ///A test for Maze (string)
+        ///</summary>
+        [TestMethod()]
+        public void M_ConstructorTest_code_02()
+        {
+            string testObject = "Maze.Constructor(string)-02";
+
+            // These are a few codes of actual mazes.
+            CreateMazeTest(testObject, "FCGC.OIUA.JZRX");
+            CreateMazeTest(testObject, "KWOF.WDEI.TGGD");
+            CreateMazeTest(testObject, "FNYK.QJEA.AJFL");
+            CreateMazeTest(testObject, "OKRQ.YJFO.KQUN");
+        }
+
+        private static void CreateMazeTest(string testObject, string mazeCode)
+        {
+            Maze maze = new Maze(mazeCode);
+            maze.CreateMaze();
+            //maze.PlaceEndpoints();
+            Assert.AreEqual(mazeCode, maze.Code, testObject + ": wrong code");
         }
 
         #endregion
@@ -224,6 +251,7 @@ namespace SWA.Ariadne.Model.Tests
 
                 SWA_Ariadne_Model_MazeAccessor accessor = new SWA_Ariadne_Model_MazeAccessor(target);
                 int seed = accessor.seed;
+                MazeSquare.WallPosition direction = accessor.direction;
                 int xStart = accessor.xStart;
                 int yStart = accessor.yStart;
                 int xEnd = accessor.xEnd;
@@ -232,9 +260,11 @@ namespace SWA.Ariadne.Model.Tests
                 string code = target.Code;
 
                 int seedActual, xSizeActual, ySizeActual, xStartActual, yStartActual, xEndActual, yEndActual;
+                MazeSquare.WallPosition directionActual;
                 SWA_Ariadne_Model_MazeAccessor.Decode(code
                     , out seedActual
                     , out xSizeActual, out ySizeActual
+                    , out directionActual
                     , out xStartActual, out yStartActual
                     , out xEndActual, out yEndActual
                     );
@@ -243,6 +273,7 @@ namespace SWA.Ariadne.Model.Tests
                 ok &= (seed == seedActual);
                 ok &= (xSize == xSizeActual);
                 ok &= (ySize == ySizeActual);
+                ok &= (direction == directionActual);
                 ok &= (xStart == xStartActual);
                 ok &= (yStart == yStartActual);
                 ok &= (xEnd == xEndActual);
