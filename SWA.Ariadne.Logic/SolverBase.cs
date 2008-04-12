@@ -76,7 +76,7 @@ namespace SWA.Ariadne.Logic
             StepI(out sq1, out sq2, out forward);
 
             #region Apply the dead end checker.
-            if (deadEndChecker != null)
+            if (deadEndChecker != null && mazeDrawer != null)
             {
                 List<MazeSquare> deadSquares = deadEndChecker.Visit(sq2);
                 foreach (MazeSquare deadSq in deadSquares)
