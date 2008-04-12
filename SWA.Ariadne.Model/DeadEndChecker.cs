@@ -321,7 +321,7 @@ namespace SWA.Ariadne.Model
                 }
             }
 
-#if false
+#if true
             // TODO: enable this enhancement: check for harmless constellation
             if (HarmlessConstellation(sqe))
             {
@@ -408,6 +408,12 @@ namespace SWA.Ariadne.Model
                         // We have confirmed that sqe1 has a neighbor sqe2 giving it a new trajectory.
                         AddConfirmedSquare(sqe1, -1);
 
+#if true
+                        // TODO: enable this enhancement
+                        // Immediately revive any neighbors supported by sqe1.
+                        ReviveUncertainNeighbors(sqe1);
+#endif
+
                         break; // from for (j)
                     }
                     else if (sqe2.trajectoryDistance > requiredNeighborDistance)
@@ -446,7 +452,7 @@ namespace SWA.Ariadne.Model
                 sqe.trajectoryDistance *= -1;
             }
 
-            AddSquare(sqe, -1, confirmedSquares);
+            AddSquare(sqe, behindPosition, confirmedSquares);
         }
 
         private static void AddSquare(MazeSquareExtension sqe, int behindPosition, List<MazeSquareExtension> list)
@@ -531,6 +537,25 @@ namespace SWA.Ariadne.Model
                         sqe2.trajectoryDistance = sqe1.trajectoryDistance + 1;
                         AddConfirmedSquare(sqe2, i);
                     }
+                }
+            }
+        }
+
+        /// <summary>
+        /// All neighbors whose current (incertain) trajectory is supported by the given (confirmed) square
+        /// are also confirmed.
+        /// (That is the case if their distances differ by 1.
+        /// </summary>
+        /// <param name="sqe"></param>
+        private void ReviveUncertainNeighbors(MazeSquareExtension sqe)
+        {
+            for (int i = 0; i < sqe.neighbors.Count; i++)
+            {
+                MazeSquareExtension sqe2 = sqe.neighbors[i];
+                if (-sqe2.trajectoryDistance == sqe.trajectoryDistance + 1 && !sqe2.isDeadEnd)
+                {
+                    AddConfirmedSquare(sqe2, -1);
+                    ReviveUncertainNeighbors(sqe2);
                 }
             }
         }
