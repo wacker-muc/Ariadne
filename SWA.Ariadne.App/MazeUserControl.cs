@@ -813,6 +813,8 @@ namespace SWA.Ariadne.App
 
             #endregion
 
+            this.mazeForm.UpdateCaption();
+
             this.settingsData = data;
         }
 

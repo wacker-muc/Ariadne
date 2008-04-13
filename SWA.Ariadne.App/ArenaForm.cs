@@ -246,6 +246,19 @@ namespace SWA.Ariadne.App
             }
         }
 
+        /// <summary>
+        /// Reset step and runtime counters.
+        /// </summary>
+        protected override void ResetCounters()
+        {
+            base.ResetCounters();
+
+            foreach (ArenaItem item in Items)
+            {
+                item.ConfigureVisitedProgressBar();
+            }
+        }
+
         #endregion
 
         #region IAriadneSettingsSource implementation
@@ -269,6 +282,7 @@ namespace SWA.Ariadne.App
             {
                 item.MazeUserControl.TakeParametersFrom(data);
             }
+            this.UpdateCaption();
         }
 
         #endregion

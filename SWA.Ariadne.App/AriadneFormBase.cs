@@ -719,7 +719,7 @@ namespace SWA.Ariadne.App
         /// <summary>
         /// Reset step and runtime counters.
         /// </summary>
-        private void ResetCounters()
+        protected virtual void ResetCounters()
         {
             SolverController.ResetCounters();
 
