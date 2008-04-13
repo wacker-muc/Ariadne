@@ -125,8 +125,14 @@ namespace SWA.Ariadne.App
             }
 
             mazeUserControl.Setup();
+            ConfigureVisitedProgressBar();
+        }
 
-            // Adapt the progress bar to the maze area
+        /// <summary>
+        /// Adapt the progress bar to the maze area.
+        /// </summary>
+        private void ConfigureVisitedProgressBar()
+        {
             visitedProgressBar.Minimum = 0;
             visitedProgressBar.Maximum = mazeUserControl.Maze.XSize * mazeUserControl.Maze.YSize;
             visitedProgressBar.Step = 1;
@@ -155,6 +161,16 @@ namespace SWA.Ariadne.App
             bool enabled = (State == SolverState.Ready || State == SolverState.Finished);
 
             strategyComboBox.Enabled = enabled;
+        }
+
+        /// <summary>
+        /// Reset step and runtime counters.
+        /// </summary>
+        protected override void ResetCounters()
+        {
+            base.ResetCounters();
+
+            ConfigureVisitedProgressBar();
         }
 
         #endregion

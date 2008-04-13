@@ -107,7 +107,14 @@ namespace SWA.Ariadne.App
                 mazeUserControl.Setup();
             }
 
-            // Adapt the progress bar to the maze area
+            ConfigureVisitedProgressBar();
+        }
+
+        /// <summary>
+        /// Adapt the progress bar to the maze area.
+        /// </summary>
+        internal void ConfigureVisitedProgressBar()
+        {
             visitedProgressBar.Minimum = 0;
             visitedProgressBar.Maximum = mazeUserControl.Maze.XSize * mazeUserControl.Maze.YSize;
             visitedProgressBar.Step = 1;
