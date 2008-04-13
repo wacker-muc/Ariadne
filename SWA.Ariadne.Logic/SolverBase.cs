@@ -151,7 +151,16 @@ namespace SWA.Ariadne.Logic
 
         #region Auxiliary methods for derived classes
 
-        protected static List<MazeSquare.WallPosition> OpenWalls(MazeSquare sq, bool notVisitedOnly)
+        /// <summary>
+        /// Returns a list of directions leading from the given square to neighbors through open walls.
+        /// </summary>
+        /// <param name="sq"></param>
+        /// <param name="notVisitedOnly">
+        /// When true: Exclude neighbors a) that have already been visited
+        /// or b) that have been identified as dead ends (efficient solvers only).
+        /// </param>
+        /// <returns></returns>
+        protected List<MazeSquare.WallPosition> OpenWalls(MazeSquare sq, bool notVisitedOnly)
         {
             List<MazeSquare.WallPosition> result = new List<MazeSquare.WallPosition>(MazeSquare.WP_NUM);
 
@@ -161,10 +170,22 @@ namespace SWA.Ariadne.Logic
                 {
                     MazeSquare sq2 = sq.NeighborSquare(wp);
 
-                    if (!notVisitedOnly || !sq2.isVisited)
+                    if (notVisitedOnly)
                     {
-                        result.Add(wp);
+                        // Exclude squares that have already been visited.
+                        if (sq2.isVisited)
+                        {
+                            continue;
+                        }
+
+                        // Exclude squares that need not be visited because they are dead ends.
+                        if (this.deadEndChecker != null && deadEndChecker.IsDead(sq2))
+                        {
+                            continue;
+                        }
                     }
+
+                    result.Add(wp);
                 }
             }
 

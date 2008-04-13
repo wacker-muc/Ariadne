@@ -122,7 +122,7 @@ namespace SWA.Ariadne.Logic
                 sq1 = list[p];
 
                 // Possible choices of open walls (not visited).
-                openWalls = SolverBase.OpenWalls(sq1, true);
+                openWalls = OpenWalls(sq1, true);
 
                 if (openWalls.Count == 0)
                 {
@@ -172,7 +172,7 @@ namespace SWA.Ariadne.Logic
         /// <param name="sq">a MazeSquare in a dead end of the Maze</param>
         protected void MarkDeadBranch(MazeSquare sq)
         {
-            if (SolverBase.OpenWalls(sq, false).Count > 1)
+            if (OpenWalls(sq, false).Count > 1)
             {
                 /* This is a false call.
                  * The subclass MazeSolver regards this square as no longer usable
@@ -183,7 +183,7 @@ namespace SWA.Ariadne.Logic
             List<MazeSquare> deadBranch = new List<MazeSquare>();
 
             while (mazeExtension[sq.XPos, sq.YPos].openPathCount == 0   // no more open paths
-                && SolverBase.OpenWalls(sq, true).Count == 0            // no more unvisited neighbors
+                && OpenWalls(sq, true).Count == 0                       // no more unvisited neighbors
                 )
             {
                 deadBranch.Add(sq);                                     // this square is dead

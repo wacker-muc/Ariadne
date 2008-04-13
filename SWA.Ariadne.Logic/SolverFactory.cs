@@ -31,6 +31,8 @@ namespace SWA.Ariadne.Logic
             typeof(ProximityFlooder),
             typeof(HesitatingFlooder),
             typeof(RandomFlooder),
+            typeof(EfficientProximityBacktracker),
+            typeof(EfficientRightHandWalker),
             typeof(EfficientLeftHandWalker),
         };
 
