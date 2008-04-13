@@ -74,7 +74,7 @@ namespace SWA.Ariadne.Logic
             sq1 = stack.Peek();
 
             // Possible choices of open walls (not visited).
-            List<MazeSquare.WallPosition> openWalls = SolverBase.OpenWalls(sq1, true);
+            List<MazeSquare.WallPosition> openWalls = OpenWalls(sq1, true);
 
             if (openWalls.Count > 0)
             {

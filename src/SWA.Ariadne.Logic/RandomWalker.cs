@@ -70,7 +70,7 @@ namespace SWA.Ariadne.Logic
             sq1 = currentSquare;
 
             // Possible choices of open walls.
-            List<MazeSquare.WallPosition> openWalls = SolverBase.OpenWalls(sq1, false);
+            List<MazeSquare.WallPosition> openWalls = OpenWalls(sq1, false);
 
             // Select one of the neighbor squares.
             MazeSquare.WallPosition wp = openWalls[random.Next(openWalls.Count)];
