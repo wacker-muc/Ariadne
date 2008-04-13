@@ -34,6 +34,7 @@ namespace SWA.Ariadne.Logic
             typeof(EfficientProximityBacktracker),
             typeof(EfficientRightHandWalker),
             typeof(EfficientLeftHandWalker),
+            typeof(EfficientCloseFlooder),
         };
 
         public static Type SolverType(string name)

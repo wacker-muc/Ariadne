@@ -37,6 +37,7 @@
     <Compile Include="CloseFlooder.cs" />
     <Compile Include="DeterministicWalker.cs" />
     <Compile Include="DistanceGuidedFlooderBase.cs" />
+    <Compile Include="EfficientCloseFlooder.cs" />
     <Compile Include="EfficientLeftHandWalker.cs" />
     <Compile Include="EfficientProximityBacktracker.cs" />
     <Compile Include="EfficientRightHandWalker.cs" />
