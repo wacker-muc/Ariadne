@@ -31,11 +31,28 @@ namespace SWA.Ariadne.Logic
             typeof(ProximityFlooder),
             typeof(HesitatingFlooder),
             typeof(RandomFlooder),
+#if false
             typeof(EfficientProximityBacktracker),
             typeof(EfficientRightHandWalker),
             typeof(EfficientLeftHandWalker),
             typeof(EfficientCloseFlooder),
+#endif
         };
+
+        public static bool HasEfficientVariant(System.Type solverType)
+        {
+            bool result = (solverType.IsSubclassOf(typeof(SolverBase)));
+            foreach (System.Type t in noEfficientSolverTypes)
+            {
+                result &= (solverType != t);
+            }
+            return result;
+        }
+        private static System.Type[] noEfficientSolverTypes = new System.Type[] {
+            typeof(MasterSolver),
+            typeof(RandomWalker),
+        };
+        public static string EfficientPrefix = "Efficient";
 
         public static Type SolverType(string name)
         {
@@ -79,6 +96,8 @@ namespace SWA.Ariadne.Logic
             while (true)
             {
                 Type t = solverTypes[r.Next(solverTypes.Length)];
+                bool shouldBeEfficient = (r.Next(2) == 0);
+                shouldBeEfficient &= RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_EFFICIENT_SOLVERS);
 
                 if (t == typeof(RandomWalker))
                 {
@@ -92,21 +111,14 @@ namespace SWA.Ariadne.Logic
                     continue;
                 }
 
-                if (!RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_EFFICIENT_SOLVERS))
+                IMazeSolver result = CreateSolver(t, maze, mazeDrawer);
+
+                if (shouldBeEfficient && HasEfficientVariant(t))
                 {
-                    // Get more information from an instance of this solver type.
-                    IMazeSolver foo = (IMazeSolver)t.GetConstructor(
-                        new Type[2] { typeof(Maze), typeof(IMazeDrawer) }).Invoke(
-                        new object[2] { maze, mazeDrawer }
-                        );
-                    if (foo.IsEfficientSolver)
-                    {
-                        // not wanted
-                        continue;
-                    }
+                    result.MakeEfficient();
                 }
 
-                return CreateSolver(t, maze, mazeDrawer);
+                return result;
             }
         }
 

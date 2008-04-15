@@ -73,6 +73,14 @@ namespace SWA.Ariadne.App
                 // Add the solver's name to the combo box.
                 strategyComboBox.Items.Add(t.Name);
             }
+            foreach (System.Type t in SolverFactory.SolverTypes)
+            {
+                if (SolverFactory.HasEfficientVariant(t))
+                {
+                    // Add the solver's name to the combo box.
+                    strategyComboBox.Items.Add(SolverFactory.EfficientPrefix + t.Name);
+                }
+            }
             strategyComboBox.Items.Add("(any)");
             strategyComboBox.SelectedItem = SolverFactory.DefaultStrategy.Name;
 
