@@ -30,6 +30,8 @@ namespace SWA.Ariadne.Logic
             typeof(FarFlooder),
             typeof(ProximityFlooder),
             typeof(HesitatingFlooder),
+            typeof(CenterFlooder),
+            typeof(BorderFlooder),
             typeof(RandomFlooder),
 #if false
             typeof(EfficientProximityBacktracker),
