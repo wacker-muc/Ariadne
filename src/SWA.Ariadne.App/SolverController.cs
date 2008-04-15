@@ -92,12 +92,23 @@ namespace SWA.Ariadne.App
         public void Start()
         {
             string strategyName = mazeForm.StrategyName;
+            bool isEfficient = false;
+
+            if (strategyName.StartsWith(SolverFactory.EfficientPrefix))
+            {
+                strategyName = strategyName.Substring(SolverFactory.EfficientPrefix.Length);
+                isEfficient = true;
+            }
 
             try
             {
                 // If strategyName is a valid solver type name:
                 Type strategy = SolverFactory.SolverType(strategyName);
                 solver = SolverFactory.CreateSolver(strategy, mazeControl.Maze, mazeControl);
+                if (isEfficient)
+                {
+                    solver.MakeEfficient();
+                }
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -197,7 +208,7 @@ namespace SWA.Ariadne.App
         {
             get
             {
-                return this.solver.GetType().Name;
+                return (this.solver.IsEfficientSolver ? SolverFactory.EfficientPrefix : "") + this.solver.GetType().Name;
             }
         }
 

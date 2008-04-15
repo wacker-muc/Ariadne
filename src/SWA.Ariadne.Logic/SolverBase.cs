@@ -27,6 +27,12 @@ namespace SWA.Ariadne.Logic
         /// </summary>
         protected DeadEndChecker deadEndChecker = null;
 
+        public void MakeEfficient()
+        {
+            // An efficient MazeSolver has a DeadEndChecker.
+            deadEndChecker = new DeadEndChecker(maze);
+        }
+
         /// <summary>
         /// Returns true if this MazeSolver can detect areas unreachable the end square.
         /// </summary>

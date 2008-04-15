@@ -39,6 +39,11 @@ namespace SWA.Ariadne.Logic
         void FillStatusMessage(StringBuilder message);
 
         /// <summary>
+        /// Enable an algorithm for detecting areas unreachable the end square.
+        /// </summary>
+        void MakeEfficient();
+
+        /// <summary>
         /// Returns true if this MazeSolver can detect areas unreachable the end square.
         /// </summary>
         bool IsEfficientSolver { get; }
