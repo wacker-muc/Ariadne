@@ -159,11 +159,11 @@ namespace SWA.Ariadne.Logic
 
         /// <summary>
         /// Returns a list of directions leading from the given square to neighbors through open walls.
+        /// Neighbors that have been identified as dead ends are excluded (efficient solvers only).
         /// </summary>
         /// <param name="sq"></param>
         /// <param name="notVisitedOnly">
-        /// When true: Exclude neighbors a) that have already been visited
-        /// or b) that have been identified as dead ends (efficient solvers only).
+        /// When true: Exclude neighbors that have already been visited.
         /// </param>
         /// <returns></returns>
         protected List<MazeSquare.WallPosition> OpenWalls(MazeSquare sq, bool notVisitedOnly)
@@ -183,12 +183,12 @@ namespace SWA.Ariadne.Logic
                         {
                             continue;
                         }
+                    }
 
-                        // Exclude squares that need not be visited because they are dead ends.
-                        if (this.deadEndChecker != null && deadEndChecker.IsDead(sq2))
-                        {
-                            continue;
-                        }
+                    // Exclude squares that need not be visited because they are dead ends.
+                    if (this.deadEndChecker != null && deadEndChecker.IsDead(sq2))
+                    {
+                        continue;
                     }
 
                     result.Add(wp);
