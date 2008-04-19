@@ -328,6 +328,13 @@ namespace SWA.Ariadne.Gui
                 }
 
                 SolverController.UpdateStatusLine();
+
+                if (State == SolverState.Finished)
+                {
+                    // This is a good moment to run the garbage collector.
+                    // TODO: free resources held by the SolverController
+                    System.GC.Collect();
+                }
             }
         }
 
