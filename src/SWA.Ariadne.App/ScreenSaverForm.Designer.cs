@@ -46,7 +46,7 @@ namespace SWA.Ariadne.App
             this.outerInfoPanel.Location = new System.Drawing.Point(151, 231);
             this.outerInfoPanel.Name = "outerInfoPanel";
             this.outerInfoPanel.Padding = new System.Windows.Forms.Padding(3);
-            this.outerInfoPanel.Size = new System.Drawing.Size(425, 44);
+            this.outerInfoPanel.Size = new System.Drawing.Size(444, 44);
             this.outerInfoPanel.TabIndex = 30;
             // 
             // innerInfoPanel
@@ -60,7 +60,7 @@ namespace SWA.Ariadne.App
             this.innerInfoPanel.Location = new System.Drawing.Point(3, 3);
             this.innerInfoPanel.Name = "innerInfoPanel";
             this.innerInfoPanel.Padding = new System.Windows.Forms.Padding(2);
-            this.innerInfoPanel.Size = new System.Drawing.Size(419, 38);
+            this.innerInfoPanel.Size = new System.Drawing.Size(438, 38);
             this.innerInfoPanel.TabIndex = 27;
             // 
             // infoLabelStatus
@@ -70,7 +70,7 @@ namespace SWA.Ariadne.App
             this.infoLabelStatus.Location = new System.Drawing.Point(2, 17);
             this.infoLabelStatus.Margin = new System.Windows.Forms.Padding(0);
             this.infoLabelStatus.Name = "infoLabelStatus";
-            this.infoLabelStatus.Size = new System.Drawing.Size(411, 17);
+            this.infoLabelStatus.Size = new System.Drawing.Size(430, 17);
             this.infoLabelStatus.TabIndex = 22;
             this.infoLabelStatus.Text = "Status";
             this.infoLabelStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -82,7 +82,7 @@ namespace SWA.Ariadne.App
             this.infoLabelCaption.Location = new System.Drawing.Point(2, 1);
             this.infoLabelCaption.Margin = new System.Windows.Forms.Padding(0);
             this.infoLabelCaption.Name = "infoLabelCaption";
-            this.infoLabelCaption.Size = new System.Drawing.Size(411, 16);
+            this.infoLabelCaption.Size = new System.Drawing.Size(430, 16);
             this.infoLabelCaption.TabIndex = 21;
             this.infoLabelCaption.Text = "Caption";
             this.infoLabelCaption.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
