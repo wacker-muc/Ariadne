@@ -201,7 +201,17 @@ namespace SWA.Ariadne.Gui
             #region Setup one item and use its parameters for all other items.
 
             TemplateItem.Setup(true);
+            DistributeTemplateParameters();
 
+            #endregion
+
+            // Now that we have created all mazes, refresh the parameter display.
+            this.UpdateCaption();
+            this.UpdateStatusLine();
+        }
+
+        private void DistributeTemplateParameters()
+        {
             AriadneSettingsData data = new AriadneSettingsData();
             TemplateMazeUserControl.FillParametersInto(data);
 
@@ -217,12 +227,6 @@ namespace SWA.Ariadne.Gui
                     item.Setup(false);
                 }
             }
-
-            #endregion
-
-            // Now that we have created all mazes, refresh the parameter display.
-            this.UpdateCaption();
-            this.UpdateStatusLine();
         }
 
         #endregion
@@ -278,11 +282,9 @@ namespace SWA.Ariadne.Gui
         /// <param name="data"></param>
         public void TakeParametersFrom(AriadneSettingsData data)
         {
-            foreach (ArenaItem item in Items)
-            {
-                item.MazeUserControl.TakeParametersFrom(data);
-            }
-            this.UpdateCaption();
+            TemplateMazeUserControl.TakeParametersFrom(data);
+            DistributeTemplateParameters();
+            UpdateCaption();
         }
 
         #endregion

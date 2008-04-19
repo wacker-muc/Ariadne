@@ -43,6 +43,7 @@
       <DependentUpon>AboutBox.cs</DependentUpon>
     </Compile>
     <Compile Include="ArenaForm.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="ArenaForm.Designer.cs">
       <DependentUpon>ArenaForm.cs</DependentUpon>
