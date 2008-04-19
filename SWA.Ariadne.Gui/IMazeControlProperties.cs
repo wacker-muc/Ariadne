@@ -1,7 +1,7 @@
 ﻿using System;
 using SWA.Ariadne.Model;
 
-namespace SWA.Ariadne.App
+namespace SWA.Ariadne.Gui
 {
     public interface IMazeControlProperties
     {

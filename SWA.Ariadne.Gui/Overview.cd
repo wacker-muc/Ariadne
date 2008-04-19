@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Font Name="Tahoma" Size="8.25" />
-  <Class Name="SWA.Ariadne.App.AriadneFormBase">
+  <Class Name="SWA.Ariadne.Gui.AriadneFormBase">
     <Position X="2.75" Y="3.5" Width="1.5" />
     <TypeIdentifier>
       <FileName>AriadneFormBase.cs</FileName>
@@ -66,7 +66,7 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <NestedTypes>
-      <Enum Name="SWA.Ariadne.App.AriadneFormBase.SolverState" Collapsed="true">
+      <Enum Name="SWA.Ariadne.Gui.AriadneFormBase.SolverState" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>AriadneFormBase.cs</NewMemberFileName>
         </TypeIdentifier>
@@ -74,7 +74,7 @@
     </NestedTypes>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="SWA.Ariadne.App.MazeForm">
+  <Class Name="SWA.Ariadne.Gui.MazeForm">
     <Position X="4.75" Y="3.5" Width="1.5" />
     <TypeIdentifier>
       <FileName>MazeForm.cs</FileName>
@@ -98,7 +98,7 @@
       <Property Name="SolverController" Hidden="true" />
       <Method Name="strategy_SelectedIndexChanged" Hidden="true" />
     </Members>
-    <AssociationLine Name="solverController" Type="SWA.Ariadne.App.SolverController" FixedFromPoint="true" FixedToPoint="true">
+    <AssociationLine Name="solverController" Type="SWA.Ariadne.Gui.SolverController" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="5.312" Y="3.5" />
         <Point X="5.312" Y="3.25" />
@@ -108,7 +108,7 @@
       </Path>
     </AssociationLine>
   </Class>
-  <Class Name="SWA.Ariadne.App.MazeUserControl" BaseTypeListCollapsed="true">
+  <Class Name="SWA.Ariadne.Gui.MazeUserControl" BaseTypeListCollapsed="true">
     <Position X="0.5" Y="0.5" Width="1.75" />
     <TypeIdentifier>
       <FileName>MazeUserControl.cs</FileName>
@@ -174,7 +174,7 @@
       <Compartment Name="Fields" Collapsed="true" />
       <Compartment Name="Properties" Collapsed="true" />
     </Compartments>
-    <AssociationLine Name="MazeForm" Type="SWA.Ariadne.App.IMazeForm" FixedFromPoint="true">
+    <AssociationLine Name="MazeForm" Type="SWA.Ariadne.Gui.IMazeForm" FixedFromPoint="true">
       <Path>
         <Point X="2" Y="2.365" />
         <Point X="2" Y="2.75" />
@@ -182,7 +182,7 @@
     </AssociationLine>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="SWA.Ariadne.App.SolverController">
+  <Class Name="SWA.Ariadne.Gui.SolverController">
     <Position X="7" Y="2.75" Width="1.5" />
     <TypeIdentifier>
       <FileName>SolverController.cs</FileName>
@@ -208,7 +208,7 @@
       <Method Name="UpdateStatusLine" Hidden="true" />
       <Field Name="visitedProgressBar" Hidden="true" />
     </Members>
-    <AssociationLine Name="mazeForm" Type="SWA.Ariadne.App.IMazeForm" FixedFromPoint="true">
+    <AssociationLine Name="mazeForm" Type="SWA.Ariadne.Gui.IMazeForm" FixedFromPoint="true">
       <Path>
         <Point X="7" Y="3.042" />
         <Point X="2.5" Y="3.042" />
@@ -216,7 +216,7 @@
     </AssociationLine>
     <Lollipop Orientation="Bottom" Position="0.232" />
   </Class>
-  <Class Name="SWA.Ariadne.App.ArenaForm">
+  <Class Name="SWA.Ariadne.Gui.ArenaForm">
     <Position X="4.75" Y="5.5" Width="1.5" />
     <TypeIdentifier>
       <FileName>ArenaForm.cs</FileName>
@@ -252,7 +252,7 @@
       <Property Name="XSize" Hidden="true" />
       <Property Name="YSize" Hidden="true" />
     </Members>
-    <AssociationLine Name="Items" Type="SWA.Ariadne.App.ArenaItem" FixedFromPoint="true" FixedToPoint="true">
+    <AssociationLine Name="Items" Type="SWA.Ariadne.Gui.ArenaItem" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="4.812" Y="6.93" />
         <Point X="4.812" Y="7.438" />
@@ -263,7 +263,7 @@
     </AssociationLine>
     <Lollipop Orientation="Bottom" Position="0.179" />
   </Class>
-  <Class Name="SWA.Ariadne.App.ArenaItem">
+  <Class Name="SWA.Ariadne.Gui.ArenaItem">
     <Position X="0.5" Y="6.5" Width="1.5" />
     <TypeIdentifier>
       <FileName>ArenaItem.cs</FileName>
@@ -291,12 +291,12 @@
       <Method Name="UpdateStatusLine" Hidden="true" />
       <Field Name="visitedProgressBar" Hidden="true" />
     </Members>
-    <AssociationLine Name="MazeUserControl" Type="SWA.Ariadne.App.MazeUserControl">
+    <AssociationLine Name="MazeUserControl" Type="SWA.Ariadne.Gui.MazeUserControl">
       <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
         <Position X="-1.421" Y="3.422" Height="0.16" Width="1.285" />
       </MemberNameLabel>
     </AssociationLine>
-    <AssociationLine Name="SolverController" Type="SWA.Ariadne.App.ISolverController" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+    <AssociationLine Name="SolverController" Type="SWA.Ariadne.Gui.ISolverController" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="2" Y="7.438" />
         <Point X="10.25" Y="7.438" />
@@ -305,7 +305,7 @@
     </AssociationLine>
     <Lollipop Orientation="Bottom" Position="0.184" />
   </Class>
-  <Class Name="SWA.Ariadne.App.MultiSolverController">
+  <Class Name="SWA.Ariadne.Gui.MultiSolverController">
     <Position X="7.25" Y="5.5" Width="1.75" />
     <TypeIdentifier>
       <FileName>MultiSolverController.cs</FileName>
@@ -332,21 +332,21 @@
     </Members>
     <Lollipop Orientation="Bottom" Position="0.2" />
   </Class>
-  <Interface Name="SWA.Ariadne.App.IMazeForm">
+  <Interface Name="SWA.Ariadne.Gui.IMazeForm">
     <Position X="1" Y="2.75" Width="1.5" />
     <TypeIdentifier>
       <FileName>IMazeForm.cs</FileName>
       <HashCode>AAAAAAAAAAAAAAAAAAAABAAAIAAgAAAAAAAAACAQAAA=</HashCode>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="SWA.Ariadne.App.IMazeControlProperties">
+  <Interface Name="SWA.Ariadne.Gui.IMazeControlProperties">
     <Position X="7.25" Y="0.5" Width="2" />
     <TypeIdentifier>
       <FileName>IMazeControlProperties.cs</FileName>
       <HashCode>AAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAIAAAABBIAAAA=</HashCode>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="SWA.Ariadne.App.IMazeControl" Collapsed="true">
+  <Interface Name="SWA.Ariadne.Gui.IMazeControl" Collapsed="true">
     <Position X="9.5" Y="2.75" Width="1.5" />
     <TypeIdentifier>
       <FileName>IMazeControl.cs</FileName>
@@ -361,14 +361,14 @@
     <Position X="5" Y="0.5" Width="2" />
     <TypeIdentifier />
   </Interface>
-  <Interface Name="SWA.Ariadne.App.ISolverController">
+  <Interface Name="SWA.Ariadne.Gui.ISolverController">
     <Position X="9.5" Y="4.25" Width="1.5" />
     <TypeIdentifier>
       <FileName>ISolverController.cs</FileName>
       <HashCode>AAAAAAAAQCIBBAAAAAAABAAAAAAAQAAAAAEACAAQAAA=</HashCode>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="SWA.Ariadne.App.IMazeControlSetup">
+  <Interface Name="SWA.Ariadne.Gui.IMazeControlSetup">
     <Position X="3" Y="0.5" Width="1.75" />
     <TypeIdentifier>
       <FileName>IMazeControlSetup.cs</FileName>

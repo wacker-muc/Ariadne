@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using SWA.Ariadne.Model;
 using SWA.Ariadne.Logic;
 
-namespace SWA.Ariadne.App
+namespace SWA.Ariadne.Gui
 {
     /// <summary>
     /// A controller for a MazeSolver and a MazeControl.

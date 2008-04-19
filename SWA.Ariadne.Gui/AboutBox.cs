@@ -7,7 +7,7 @@ using System.Reflection;
 using SWA.Ariadne.Logic;
 using SWA.Ariadne.Model;
 
-namespace SWA.Ariadne.App
+namespace SWA.Ariadne.Gui
 {
     public partial class AboutBox : Form
         , IMazeForm

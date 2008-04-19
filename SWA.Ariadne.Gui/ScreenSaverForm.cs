@@ -10,7 +10,7 @@ using Microsoft.Win32;
 using SWA.Ariadne.Model;
 using SWA.Ariadne.Settings;
 
-namespace SWA.Ariadne.App
+namespace SWA.Ariadne.Gui
 {
     public partial class ScreenSaverForm : MazeForm
     {

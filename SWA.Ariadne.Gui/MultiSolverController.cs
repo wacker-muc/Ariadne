@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SWA.Ariadne.App
+namespace SWA.Ariadne.Gui
 {
     public class MultiSolverController
         : ISolverController

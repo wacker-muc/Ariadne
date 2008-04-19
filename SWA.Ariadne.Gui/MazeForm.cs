@@ -9,7 +9,7 @@ using SWA.Ariadne.Model;
 using SWA.Ariadne.Logic;
 using SWA.Ariadne.Settings;
 
-namespace SWA.Ariadne.App
+namespace SWA.Ariadne.Gui
 {
     /// <summary>
     /// A Windows Form that displays a Maze in a MazeUserControl.

@@ -1,4 +1,4 @@
-namespace SWA.Ariadne.App
+namespace SWA.Ariadne.Gui
 {
     partial class DetailsDialog
     {
