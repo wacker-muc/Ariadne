@@ -1,4 +1,4 @@
-namespace SWA.Ariadne.App
+namespace SWA.Ariadne.Gui
 {
     partial class ArenaForm
     {
@@ -28,7 +28,7 @@ namespace SWA.Ariadne.App
         /// </summary>
         private void InitializeComponent()
         {
-            this.arenaItem1 = new SWA.Ariadne.App.ArenaItem();
+            this.arenaItem1 = new SWA.Ariadne.Gui.ArenaItem();
             this.SuspendLayout();
             // 
             // arenaItem1

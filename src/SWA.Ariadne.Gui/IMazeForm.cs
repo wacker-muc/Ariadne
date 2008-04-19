@@ -1,7 +1,7 @@
 ﻿using System;
 using SWA.Ariadne.Model;
 
-namespace SWA.Ariadne.App
+namespace SWA.Ariadne.Gui
 {
     /// <summary>
     /// A MazeUserControl will try to call these methods of its ParentForm.

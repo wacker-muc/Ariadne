@@ -1,4 +1,4 @@
-namespace SWA.Ariadne.App
+namespace SWA.Ariadne.Gui
 {
     partial class AboutBox
     {
@@ -34,7 +34,7 @@ namespace SWA.Ariadne.App
             this.labelCopyright = new System.Windows.Forms.Label();
             this.labelVersion = new System.Windows.Forms.Label();
             this.labelProductName = new System.Windows.Forms.Label();
-            this.mazeUserControl = new SWA.Ariadne.App.MazeUserControl();
+            this.mazeUserControl = new SWA.Ariadne.Gui.MazeUserControl();
             this.outerAboutPanel.SuspendLayout();
             this.innerAboutPanel.SuspendLayout();
             this.SuspendLayout();

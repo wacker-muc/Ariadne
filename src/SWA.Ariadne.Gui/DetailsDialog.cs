@@ -7,7 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using SWA.Ariadne.Settings;
 
-namespace SWA.Ariadne.App
+namespace SWA.Ariadne.Gui
 {
     public partial class DetailsDialog : Form
     {

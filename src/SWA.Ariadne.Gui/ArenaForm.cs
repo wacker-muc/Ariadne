@@ -8,7 +8,7 @@ using System.Windows.Forms;
 using SWA.Ariadne.Model;
 using SWA.Ariadne.Settings;
 
-namespace SWA.Ariadne.App
+namespace SWA.Ariadne.Gui
 {
     /// <summary>
     /// A Windows Form that displays a grid of MazeUserControls.

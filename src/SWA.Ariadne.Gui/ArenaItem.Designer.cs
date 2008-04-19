@@ -1,4 +1,4 @@
-namespace SWA.Ariadne.App
+namespace SWA.Ariadne.Gui
 {
     partial class ArenaItem
     {
@@ -30,7 +30,7 @@ namespace SWA.Ariadne.App
         {
             this.statusLabel = new System.Windows.Forms.Label();
             this.visitedProgressBar = new System.Windows.Forms.ProgressBar();
-            this.mazeUserControl = new SWA.Ariadne.App.MazeUserControl();
+            this.mazeUserControl = new SWA.Ariadne.Gui.MazeUserControl();
             this.strategyComboBox = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
