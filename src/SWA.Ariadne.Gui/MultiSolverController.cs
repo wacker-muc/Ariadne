@@ -65,6 +65,14 @@ namespace SWA.Ariadne.Gui
             }
         }
 
+        public void ReleaseResources()
+        {
+            foreach (SolverController item in list)
+            {
+                item.ReleaseResources();
+            }
+        }
+
         public void ResetCounters()
         {
             foreach (SolverController item in list)
@@ -72,6 +80,14 @@ namespace SWA.Ariadne.Gui
                 item.ResetCounters();
             }
             countSteps = 0;
+        }
+
+        public void PrepareForStart()
+        {
+            foreach (SolverController item in list)
+            {
+                item.PrepareForStart();
+            }
         }
 
         public void Start()

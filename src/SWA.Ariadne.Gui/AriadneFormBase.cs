@@ -333,6 +333,7 @@ namespace SWA.Ariadne.Gui
                 {
                     // This is a good moment to run the garbage collector.
                     // TODO: free resources held by the SolverController
+                    SolverController.ReleaseResources();
                     System.GC.Collect();
                 }
             }
@@ -440,10 +441,17 @@ namespace SWA.Ariadne.Gui
             if (State == SolverState.Finished && this.repeatMode)
             {
                 repeatTimer.Stop();
+
+                // 1. Create and draw a new maze.
                 this.OnNew(null, null); // creates a new maze, invalidates the drawing area
                 Application.DoEvents(); // paints the maze
+
+                // 2. Wait a short time before starting the solver.
                 repeatTimer.Interval = 1500; // ms
                 repeatTimer.Start();
+
+                // 3. Prepare time consuming actions before the SolverController is started.
+                SolverController.PrepareForStart();
             }
             else if (State == SolverState.Ready && this.repeatMode)
             {

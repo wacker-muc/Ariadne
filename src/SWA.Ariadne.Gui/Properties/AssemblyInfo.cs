@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Stephan Wacker")]
-[assembly: AssemblyProduct("SWA.Ariadne.Gui")]
+[assembly: AssemblyProduct("Ariadne")]
 [assembly: AssemblyCopyright("Copyright © Stephan Wacker 2008")]
 [assembly: AssemblyTrademark("SWA")]
 [assembly: AssemblyCulture("")]
@@ -29,5 +29,5 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("2.1.0.127")]
-[assembly: AssemblyFileVersion("2.1.0.127")]
+[assembly: AssemblyVersion("2.2.0.128")]
+[assembly: AssemblyFileVersion("2.2.0.128")]

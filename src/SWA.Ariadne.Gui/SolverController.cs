@@ -39,6 +39,11 @@ namespace SWA.Ariadne.Gui
         private IMazeSolver solver;
 
         /// <summary>
+        /// The path that will be highlighted when the solution is complete.
+        /// </summary>
+        private List<MazeSquare> solutionPath;
+
+        /// <summary>
         /// Number of executed steps: total and in forward and backward direction.
         /// </summary>
         private long countSteps, countForward, countBackward;
@@ -76,8 +81,17 @@ namespace SWA.Ariadne.Gui
 
         public void Reset()
         {
-            solver = null;
+            ReleaseResources();
             visitedProgressBar.Value = 0;
+        }
+
+        /// <summary>
+        /// When the controller is Ready or Finished, memory consuming resources should be deallocated.
+        /// </summary>
+        public void ReleaseResources()
+        {
+            solver = null;
+            solutionPath = null;
         }
 
         /// <summary>
@@ -89,8 +103,13 @@ namespace SWA.Ariadne.Gui
             visitedProgressBar.PerformStep(); // start square
         }
 
-        public void Start()
+        /// <summary>
+        /// Complex and memory consuming resources may be prepared before the controller is started.
+        /// </summary>
+        public void PrepareForStart()
         {
+            #region Prepare the solver.
+
             string strategyName = mazeForm.StrategyName;
             bool isEfficient = false;
 
@@ -114,6 +133,22 @@ namespace SWA.Ariadne.Gui
             {
                 // Otherwise (strategy name is "any"):
                 solver = SolverFactory.CreateSolver(mazeControl.Maze, mazeControl);
+            }
+            
+            #endregion
+
+            #region Prepare the solution path.
+            
+            solutionPath = SolverFactory.SolutionPath(mazeControl.Maze);
+            
+            #endregion
+        }
+
+        public void Start()
+        {
+            if (solver == null)
+            {
+                PrepareForStart();
             }
             this.mazeForm.UpdateCaption();
         }
@@ -155,7 +190,7 @@ namespace SWA.Ariadne.Gui
             if (mazeControl.Maze.IsSolved)
             {
                 FinishPath();
-                mazeControl.DrawSolvedPath(SolverFactory.SolutionPath(mazeControl.Maze));
+                mazeControl.DrawSolvedPath(solutionPath);
                 currentBackwardSquare = null;
             }
         }
