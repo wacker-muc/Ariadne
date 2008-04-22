@@ -936,8 +936,8 @@ namespace SWA.Ariadne.Gui
 
         private void AddImage(Image img)
         {
-            int sqW = (img.Width + 6 + this.wallWidth) / this.gridWidth + 1;
-            int sqH = (img.Height + 6 + this.wallWidth) / this.gridWidth + 1;
+            int sqW = (img.Width + 8 + this.wallWidth) / this.gridWidth + 1;
+            int sqH = (img.Height + 8 + this.wallWidth) / this.gridWidth + 1;
 
             Rectangle rect;
             if (maze.ReserveRectangle(sqW, sqH, 2, out rect))
