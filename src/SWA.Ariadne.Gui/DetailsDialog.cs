@@ -43,11 +43,19 @@ namespace SWA.Ariadne.Gui
             // Create a data object, fill its contents from the target
             // and add it to the BindingSource.
             this.data = new AriadneSettingsData();
+
+            data.ImageNumber = (int) this.imageNumberNumericUpDown.Value;
+            data.ImageMinSize = (int) this.imageMinSizeNumericUpDown.Value;
+            data.ImageMaxSize = (int) this.imageMaxSizeNumericUpDown.Value;
+            
             target.FillParametersInto(data);
+            
             CalculateResultingArea();
+            
             data.AutoSquareWidth = data.AutoPathWidth = data.AutoWallWidth = data.AutoGridWidth = true;
             data.AutoMazeWidth = data.AutoMazeHeight = data.AutoSeed = true;
             data.ClearModifedFlags();
+            
             dataBindingSource.Add(data);
         }
 
@@ -88,6 +96,15 @@ namespace SWA.Ariadne.Gui
             data.BackwardColor = backwardColor;
 
             dataBindingSource.ResetCurrentItem();
+        }
+
+        private void OnSelectImageFolder(object sender, EventArgs e)
+        {
+            if (this.imageFolderBrowserDialog.ShowDialog() == DialogResult.OK)
+            {
+                this.imageFolderTextBox.Text = this.imageFolderBrowserDialog.SelectedPath;
+                this.data.ImageFolder = this.imageFolderBrowserDialog.SelectedPath;
+            }
         }
 
         /// <summary>

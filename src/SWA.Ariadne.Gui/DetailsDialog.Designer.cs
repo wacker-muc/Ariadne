@@ -65,7 +65,7 @@ namespace SWA.Ariadne.Gui
             this.resultingAreaTextBox1 = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
             this.setShapeButton = new System.Windows.Forms.Button();
-            this.CodeLabel = new System.Windows.Forms.Label();
+            this.codeLabel = new System.Windows.Forms.Label();
             this.codeTextBox = new System.Windows.Forms.TextBox();
             this.autoSeedCheckBox = new System.Windows.Forms.CheckBox();
             this.label10 = new System.Windows.Forms.Label();
@@ -77,7 +77,17 @@ namespace SWA.Ariadne.Gui
             this.autoMazeWidthCheckBox = new System.Windows.Forms.CheckBox();
             this.label8 = new System.Windows.Forms.Label();
             this.mazeWidthBox = new System.Windows.Forms.TextBox();
-            this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+            this.imagesPage = new System.Windows.Forms.TabPage();
+            this.selectImageFolderButton = new System.Windows.Forms.Button();
+            this.imageFolderTextBox = new System.Windows.Forms.TextBox();
+            this.setContentsButton = new System.Windows.Forms.Button();
+            this.imageFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+            this.imageNumberNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.label17 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
+            this.imageMaxSizeNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.imageMinSizeNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.label18 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.layoutPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.squareWidthNumericUpDown)).BeginInit();
@@ -87,6 +97,10 @@ namespace SWA.Ariadne.Gui
             ((System.ComponentModel.ISupportInitialize)(this.gridWidthNumericUpDown)).BeginInit();
             this.colorsPage.SuspendLayout();
             this.shapePage.SuspendLayout();
+            this.imagesPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.imageNumberNumericUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.imageMaxSizeNumericUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.imageMinSizeNumericUpDown)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -94,6 +108,7 @@ namespace SWA.Ariadne.Gui
             this.tabControl1.Controls.Add(this.layoutPage);
             this.tabControl1.Controls.Add(this.colorsPage);
             this.tabControl1.Controls.Add(this.shapePage);
+            this.tabControl1.Controls.Add(this.imagesPage);
             this.tabControl1.Location = new System.Drawing.Point(12, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -510,7 +525,7 @@ namespace SWA.Ariadne.Gui
             this.shapePage.Controls.Add(this.resultingAreaTextBox1);
             this.shapePage.Controls.Add(this.label12);
             this.shapePage.Controls.Add(this.setShapeButton);
-            this.shapePage.Controls.Add(this.CodeLabel);
+            this.shapePage.Controls.Add(this.codeLabel);
             this.shapePage.Controls.Add(this.codeTextBox);
             this.shapePage.Controls.Add(this.autoSeedCheckBox);
             this.shapePage.Controls.Add(this.label10);
@@ -564,16 +579,16 @@ namespace SWA.Ariadne.Gui
             this.setShapeButton.UseVisualStyleBackColor = true;
             this.setShapeButton.Click += new System.EventHandler(this.OnSet);
             // 
-            // CodeLabel
+            // codeLabel
             // 
-            this.CodeLabel.AutoSize = true;
-            this.CodeLabel.Location = new System.Drawing.Point(16, 116);
-            this.CodeLabel.Name = "CodeLabel";
-            this.CodeLabel.Size = new System.Drawing.Size(32, 13);
-            this.CodeLabel.TabIndex = 25;
-            this.CodeLabel.Text = "Code";
-            this.CodeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.CodeLabel.Visible = false;
+            this.codeLabel.AutoSize = true;
+            this.codeLabel.Location = new System.Drawing.Point(16, 116);
+            this.codeLabel.Name = "codeLabel";
+            this.codeLabel.Size = new System.Drawing.Size(32, 13);
+            this.codeLabel.TabIndex = 25;
+            this.codeLabel.Text = "Code";
+            this.codeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.codeLabel.Visible = false;
             // 
             // codeTextBox
             // 
@@ -689,6 +704,148 @@ namespace SWA.Ariadne.Gui
             this.mazeWidthBox.TabIndex = 1;
             this.mazeWidthBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
+            // imagesPage
+            // 
+            this.imagesPage.Controls.Add(this.imageMinSizeNumericUpDown);
+            this.imagesPage.Controls.Add(this.label18);
+            this.imagesPage.Controls.Add(this.imageMaxSizeNumericUpDown);
+            this.imagesPage.Controls.Add(this.label16);
+            this.imagesPage.Controls.Add(this.imageNumberNumericUpDown);
+            this.imagesPage.Controls.Add(this.label17);
+            this.imagesPage.Controls.Add(this.selectImageFolderButton);
+            this.imagesPage.Controls.Add(this.imageFolderTextBox);
+            this.imagesPage.Controls.Add(this.setContentsButton);
+            this.imagesPage.Location = new System.Drawing.Point(4, 22);
+            this.imagesPage.Name = "imagesPage";
+            this.imagesPage.Padding = new System.Windows.Forms.Padding(3);
+            this.imagesPage.Size = new System.Drawing.Size(260, 223);
+            this.imagesPage.TabIndex = 3;
+            this.imagesPage.Text = "Images";
+            this.imagesPage.UseVisualStyleBackColor = true;
+            // 
+            // selectImageFolderButton
+            // 
+            this.selectImageFolderButton.Location = new System.Drawing.Point(10, 106);
+            this.selectImageFolderButton.Name = "selectImageFolderButton";
+            this.selectImageFolderButton.Size = new System.Drawing.Size(49, 23);
+            this.selectImageFolderButton.TabIndex = 105;
+            this.selectImageFolderButton.Text = "Folder";
+            this.selectImageFolderButton.UseVisualStyleBackColor = true;
+            this.selectImageFolderButton.Click += new System.EventHandler(this.OnSelectImageFolder);
+            // 
+            // imageFolderTextBox
+            // 
+            this.imageFolderTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.dataBindingSource, "ImageFolder", true));
+            this.imageFolderTextBox.Location = new System.Drawing.Point(91, 107);
+            this.imageFolderTextBox.MaxLength = 14;
+            this.imageFolderTextBox.Name = "imageFolderTextBox";
+            this.imageFolderTextBox.Size = new System.Drawing.Size(154, 20);
+            this.imageFolderTextBox.TabIndex = 104;
+            this.imageFolderTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.imageFolderTextBox.WordWrap = false;
+            // 
+            // setContentsButton
+            // 
+            this.setContentsButton.Location = new System.Drawing.Point(91, 194);
+            this.setContentsButton.Name = "setContentsButton";
+            this.setContentsButton.Size = new System.Drawing.Size(75, 23);
+            this.setContentsButton.TabIndex = 103;
+            this.setContentsButton.Text = "Set";
+            this.setContentsButton.UseVisualStyleBackColor = true;
+            this.setContentsButton.Click += new System.EventHandler(this.OnSet);
+            // 
+            // imageNumberNumericUpDown
+            // 
+            this.imageNumberNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.dataBindingSource, "ImageNumber", true));
+            this.imageNumberNumericUpDown.Location = new System.Drawing.Point(91, 29);
+            this.imageNumberNumericUpDown.Maximum = new decimal(new int[] {
+            8,
+            0,
+            0,
+            0});
+            this.imageNumberNumericUpDown.Name = "imageNumberNumericUpDown";
+            this.imageNumberNumericUpDown.Size = new System.Drawing.Size(46, 20);
+            this.imageNumberNumericUpDown.TabIndex = 106;
+            this.imageNumberNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(16, 32);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(75, 13);
+            this.label17.TabIndex = 107;
+            this.label17.Text = "Number (max.)";
+            this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(16, 84);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(51, 13);
+            this.label16.TabIndex = 108;
+            this.label16.Text = "Max. size";
+            this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // imageMaxSizeNumericUpDown
+            // 
+            this.imageMaxSizeNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.dataBindingSource, "ImageMaxSize", true));
+            this.imageMaxSizeNumericUpDown.Location = new System.Drawing.Point(91, 81);
+            this.imageMaxSizeNumericUpDown.Maximum = new decimal(new int[] {
+            400,
+            0,
+            0,
+            0});
+            this.imageMaxSizeNumericUpDown.Minimum = new decimal(new int[] {
+            40,
+            0,
+            0,
+            0});
+            this.imageMaxSizeNumericUpDown.Name = "imageMaxSizeNumericUpDown";
+            this.imageMaxSizeNumericUpDown.Size = new System.Drawing.Size(46, 20);
+            this.imageMaxSizeNumericUpDown.TabIndex = 109;
+            this.imageMaxSizeNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.imageMaxSizeNumericUpDown.Value = new decimal(new int[] {
+            180,
+            0,
+            0,
+            0});
+            // 
+            // imageMinSizeNumericUpDown
+            // 
+            this.imageMinSizeNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.dataBindingSource, "ImageMinSize", true));
+            this.imageMinSizeNumericUpDown.Location = new System.Drawing.Point(91, 55);
+            this.imageMinSizeNumericUpDown.Maximum = new decimal(new int[] {
+            400,
+            0,
+            0,
+            0});
+            this.imageMinSizeNumericUpDown.Minimum = new decimal(new int[] {
+            40,
+            0,
+            0,
+            0});
+            this.imageMinSizeNumericUpDown.Name = "imageMinSizeNumericUpDown";
+            this.imageMinSizeNumericUpDown.Size = new System.Drawing.Size(46, 20);
+            this.imageMinSizeNumericUpDown.TabIndex = 111;
+            this.imageMinSizeNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.imageMinSizeNumericUpDown.Value = new decimal(new int[] {
+            120,
+            0,
+            0,
+            0});
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(16, 58);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(48, 13);
+            this.label18.TabIndex = 110;
+            this.label18.Text = "Min. size";
+            this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // DetailsDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -714,6 +871,11 @@ namespace SWA.Ariadne.Gui
             this.colorsPage.PerformLayout();
             this.shapePage.ResumeLayout(false);
             this.shapePage.PerformLayout();
+            this.imagesPage.ResumeLayout(false);
+            this.imagesPage.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.imageNumberNumericUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.imageMaxSizeNumericUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.imageMinSizeNumericUpDown)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -743,7 +905,7 @@ namespace SWA.Ariadne.Gui
         private System.Windows.Forms.CheckBox autoMazeWidthCheckBox;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox mazeWidthBox;
-        private System.Windows.Forms.Label CodeLabel;
+        private System.Windows.Forms.Label codeLabel;
         private System.Windows.Forms.TextBox codeTextBox;
         private System.Windows.Forms.CheckBox autoSeedCheckBox;
         private System.Windows.Forms.Label label10;
@@ -758,7 +920,6 @@ namespace SWA.Ariadne.Gui
         private System.Windows.Forms.NumericUpDown squareWidthNumericUpDown;
         private System.Windows.Forms.NumericUpDown pathWidthNumericUpDown;
         private System.Windows.Forms.NumericUpDown wallWidthNumericUpDown;
-        private System.Windows.Forms.ColorDialog colorDialog1;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label15;
@@ -769,5 +930,16 @@ namespace SWA.Ariadne.Gui
         private SWA.Ariadne.Settings.ColorLabel forwardColorLabel;
         private SWA.Ariadne.Settings.ColorLabel refBColorLabel;
         private System.Windows.Forms.Button setColorsButton;
+        private System.Windows.Forms.TabPage imagesPage;
+        private System.Windows.Forms.Button setContentsButton;
+        private System.Windows.Forms.TextBox imageFolderTextBox;
+        private System.Windows.Forms.FolderBrowserDialog imageFolderBrowserDialog;
+        private System.Windows.Forms.Button selectImageFolderButton;
+        private System.Windows.Forms.NumericUpDown imageNumberNumericUpDown;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.NumericUpDown imageMaxSizeNumericUpDown;
+        private System.Windows.Forms.NumericUpDown imageMinSizeNumericUpDown;
+        private System.Windows.Forms.Label label18;
     }
 }

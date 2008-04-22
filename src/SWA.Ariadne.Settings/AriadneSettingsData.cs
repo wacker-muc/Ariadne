@@ -260,6 +260,38 @@ namespace SWA.Ariadne.Settings
 
         #endregion
 
+        #region Contents tab
+
+        public int ImageNumber
+        {
+            get { return imageNumber; }
+            set { imageNumber = value; }
+        }
+        private int imageNumber;
+
+        public int ImageMinSize
+        {
+            get { return imageMinSize; }
+            set { imageMinSize = value; }
+        }
+        private int imageMinSize;
+
+        public int ImageMaxSize
+        {
+            get { return imageMaxSize; }
+            set { imageMaxSize = value; }
+        }
+        private int imageMaxSize;
+
+        public string ImageFolder
+        {
+            get { return imageFolder; }
+            set { imageFolder = value; }
+        }
+        private string imageFolder;
+
+        #endregion
+
         #endregion
 
         #region Constructor
