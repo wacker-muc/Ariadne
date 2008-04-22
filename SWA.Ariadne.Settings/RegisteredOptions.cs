@@ -12,10 +12,14 @@ namespace SWA.Ariadne.Settings
         public const string OPT_BLINKING = "paint blinking end square";
         public const string OPT_EFFICIENT_SOLVERS = "use efficient solvers";
         public const string OPT_STEPS_PER_SECOND = "steps per second";
+        public const string OPT_IMAGE_NUMBER = "image number";
+        public const string OPT_IMAGE_MIN_SIZE = "image minimum size";
+        public const string OPT_IMAGE_MAX_SIZE = "image maximum size";
+        public const string OPT_IMAGE_FOLDER = "image folder";
 
-        public static bool GetBoolSetting(string name)
+        public static bool GetBoolSetting(string name, bool defaultValue)
         {
-            Int32 value = 1;
+            Int32 value = (defaultValue == false ? 0 : 1);
 
             RegistryKey key = AppRegistryKey();
             if (key != null)
@@ -26,9 +30,14 @@ namespace SWA.Ariadne.Settings
             return (value != 0);
         }
 
-        public static int GetIntSetting(string name)
+        public static bool GetBoolSetting(string name)
         {
-            Int32 value = 200;
+            return GetBoolSetting(name, true);
+        }
+
+        public static int GetIntSetting(string name, int defaultValue)
+        {
+            Int32 value = defaultValue;
 
             RegistryKey key = AppRegistryKey();
             if (key != null)
@@ -37,6 +46,24 @@ namespace SWA.Ariadne.Settings
             }
 
             return value;
+        }
+
+        public static string GetStringSetting(string name, string defaultValue)
+        {
+            string value = defaultValue;
+
+            RegistryKey key = AppRegistryKey();
+            if (key != null)
+            {
+                value = (string)key.GetValue(name, value);
+            }
+
+            return value;
+        }
+
+        public static string GetStringSetting(string name)
+        {
+            return GetStringSetting(name, "");
         }
 
         public static RegistryKey AppRegistryKey(bool initialize)
