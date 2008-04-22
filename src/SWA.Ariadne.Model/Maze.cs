@@ -470,7 +470,7 @@ namespace SWA.Ariadne.Model
                 // Choose a random location.
                 // The resulting rectangle may touch the borders.
                 int x = random.Next(borderDistance, xSize - width - borderDistance);
-                int y = random.Next(borderDistance, ySize - width - borderDistance);
+                int y = random.Next(borderDistance, ySize - height - borderDistance);
 
                 if (ReserveRectangle(x, y, width, height))
                 {

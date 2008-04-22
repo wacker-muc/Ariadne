@@ -33,12 +33,12 @@ namespace SWA.Ariadne.Gui
             this.labelCopyright = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.checkBoxEfficientSolvers = new System.Windows.Forms.CheckBox();
             this.textBoxStepsPerSecond = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.checkBoxDetailsBox = new System.Windows.Forms.CheckBox();
             this.checkBoxBlinking = new System.Windows.Forms.CheckBox();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.imageMinSizeNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.label18 = new System.Windows.Forms.Label();
             this.imageMaxSizeNumericUpDown = new System.Windows.Forms.NumericUpDown();
@@ -117,24 +117,6 @@ namespace SWA.Ariadne.Gui
             this.tabPage1.Text = "General";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // tabPage2
-            // 
-            this.tabPage2.Controls.Add(this.imageMinSizeNumericUpDown);
-            this.tabPage2.Controls.Add(this.label18);
-            this.tabPage2.Controls.Add(this.imageMaxSizeNumericUpDown);
-            this.tabPage2.Controls.Add(this.label16);
-            this.tabPage2.Controls.Add(this.imageNumberNumericUpDown);
-            this.tabPage2.Controls.Add(this.label17);
-            this.tabPage2.Controls.Add(this.selectImageFolderButton);
-            this.tabPage2.Controls.Add(this.imageFolderTextBox);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(204, 106);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Images";
-            this.tabPage2.UseVisualStyleBackColor = true;
-            // 
             // checkBoxEfficientSolvers
             // 
             this.checkBoxEfficientSolvers.AutoSize = true;
@@ -188,11 +170,29 @@ namespace SWA.Ariadne.Gui
             this.checkBoxBlinking.Text = "Paint Blinking Target Square";
             this.checkBoxBlinking.UseVisualStyleBackColor = true;
             // 
+            // tabPage2
+            // 
+            this.tabPage2.Controls.Add(this.imageMinSizeNumericUpDown);
+            this.tabPage2.Controls.Add(this.label18);
+            this.tabPage2.Controls.Add(this.imageMaxSizeNumericUpDown);
+            this.tabPage2.Controls.Add(this.label16);
+            this.tabPage2.Controls.Add(this.imageNumberNumericUpDown);
+            this.tabPage2.Controls.Add(this.label17);
+            this.tabPage2.Controls.Add(this.selectImageFolderButton);
+            this.tabPage2.Controls.Add(this.imageFolderTextBox);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(204, 106);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "Images";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
             // imageMinSizeNumericUpDown
             // 
             this.imageMinSizeNumericUpDown.Location = new System.Drawing.Point(87, 31);
             this.imageMinSizeNumericUpDown.Maximum = new decimal(new int[] {
-            400,
+            600,
             0,
             0,
             0});
@@ -206,7 +206,7 @@ namespace SWA.Ariadne.Gui
             this.imageMinSizeNumericUpDown.TabIndex = 119;
             this.imageMinSizeNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.imageMinSizeNumericUpDown.Value = new decimal(new int[] {
-            120,
+            300,
             0,
             0,
             0});
@@ -225,7 +225,7 @@ namespace SWA.Ariadne.Gui
             // 
             this.imageMaxSizeNumericUpDown.Location = new System.Drawing.Point(87, 54);
             this.imageMaxSizeNumericUpDown.Maximum = new decimal(new int[] {
-            400,
+            600,
             0,
             0,
             0});
@@ -239,7 +239,7 @@ namespace SWA.Ariadne.Gui
             this.imageMaxSizeNumericUpDown.TabIndex = 117;
             this.imageMaxSizeNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.imageMaxSizeNumericUpDown.Value = new decimal(new int[] {
-            180,
+            400,
             0,
             0,
             0});
