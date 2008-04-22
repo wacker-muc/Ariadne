@@ -453,12 +453,15 @@ namespace SWA.Ariadne.Model
         /// </summary>
         /// <param name="width"></param>
         /// <param name="height"></param>
+        /// <param name="borderDistance">minimum number of squares between the reserved area and the maze border</param>
+        /// <param name="rect"></param>
         /// <returns>true if the reservation was successful</returns>
-        public bool ReserveRectangle(int width, int height)
+        public bool ReserveRectangle(int width, int height, int borderDistance, out Rectangle rect)
         {
             // Reject very large areas.
-            if (width < 2 || height < 2 || width > xSize - 4 || height > ySize - 4)
+            if (width < 2 || height < 2 || width > xSize - Math.Max(4, 2 * borderDistance) || height > ySize - Math.Max(4, 2 * borderDistance))
             {
+                rect = new Rectangle();
                 return false;
             }
 
@@ -466,15 +469,17 @@ namespace SWA.Ariadne.Model
             {
                 // Choose a random location.
                 // The resulting rectangle may touch the borders.
-                int x = random.Next(0, xSize - width);
-                int y = random.Next(0, ySize - width);
+                int x = random.Next(borderDistance, xSize - width - borderDistance);
+                int y = random.Next(borderDistance, ySize - width - borderDistance);
 
                 if (ReserveRectangle(x, y, width, height))
                 {
+                    rect = new Rectangle(x, y, width, height);
                     return true;
                 }
             }
 
+            rect = new Rectangle();
             return false;
         }
 
@@ -509,7 +514,7 @@ namespace SWA.Ariadne.Model
                 return false;
             }
 
-            // The candiadte rectangle.
+            // The candidate rectangle.
             Rectangle candidate = new Rectangle(x, y, width, height);
 
             // The candidate, extended with one square around all four edges.
@@ -938,6 +943,8 @@ namespace SWA.Ariadne.Model
                 this.seed = r.Next(SeedLimit);
             }
             this.random = RandomFactory.CreateRandom(seed);
+
+            this.reservedAreas.Clear();
 
             // Decode(data.Code);
         }

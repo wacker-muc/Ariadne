@@ -111,6 +111,9 @@ namespace SWA.Ariadne.Gui
             }
         }
 
+        private List<Image> images = new List<Image>();
+        private List<Point> imageLocations = new List<Point>();
+
         private BufferedGraphics gBuffer;
 
         internal IMazeForm MazeForm
@@ -436,7 +439,7 @@ namespace SWA.Ariadne.Gui
                 PaintBorder(g);
                 PaintWalls(g);
                 PaintEndpoints(g);
-                //PaintPath(g);
+                PaintImages(g);
             }
             catch (MissingMethodException) { }
         }
@@ -536,6 +539,18 @@ namespace SWA.Ariadne.Gui
             float cx = xOffset + wallWidth/2.0F + x * gridWidth;
             float cy = yOffset + wallWidth/2.0F + y * gridWidth;
             g.FillRectangle(b, cx, cy, squareWidth, squareWidth);
+        }
+
+        /// <summary>
+        /// Paints the images into their reserved areas.
+        /// </summary>
+        /// <param name="g"></param>
+        private void PaintImages(Graphics g)
+        {
+            for (int i = 0; i < images.Count; i++)
+            {
+                g.DrawImage(images[i], imageLocations[i]);
+            }
         }
 
         /// <summary>
@@ -737,6 +752,8 @@ namespace SWA.Ariadne.Gui
         /// <param name="data"></param>
         public void TakeParametersFrom(AriadneSettingsData data)
         {
+            this.settingsData = data;
+
             #region Take parameters concerning this MazeUserControl
 
             #region Layout
@@ -803,6 +820,7 @@ namespace SWA.Ariadne.Gui
             // CreateMaze()
             AdjustPathWidth(squareWidth, ref pathWidth);
             MazeForm.MakeReservedAreas(maze);
+            this.ReserveAreasForImages(data);
             maze.CreateMaze();
             MazeForm.UpdateStatusLine();
             MazeForm.UpdateCaption();
@@ -814,8 +832,112 @@ namespace SWA.Ariadne.Gui
             #endregion
 
             this.mazeForm.UpdateCaption();
+        }
 
-            this.settingsData = data;
+        #endregion
+
+        #region Placement of images
+
+        private void ReserveAreasForImages(AriadneSettingsData data)
+        {
+            #region Determine number of images to be placed into reserved areas.
+
+            Random r = RandomFactory.CreateRandom();
+            int n, nMin, nMax = data.ImageNumber;
+            
+            if (nMax <= 2)
+            {
+                nMin = nMax;
+            }
+            else
+            {
+                nMin = nMax * 2 / 3; 
+            }
+            n = r.Next(nMin, nMax);
+
+            #endregion
+
+            images.Clear();
+            imageLocations.Clear();
+
+            foreach (string imagePath in FindImages(data.ImageFolder, n))
+            {
+                try
+                {
+                    Image img = new Bitmap(imagePath);
+
+                    #region Scale img so that its larger dimension is between the data's min and max size.
+
+                    if (img.Width > data.ImageMaxSize || img.Height > data.ImageMaxSize)
+                    {
+                        int d = r.Next(data.ImageMinSize, data.ImageMaxSize);
+                        int h = img.Height, w = img.Width;
+                        if (h > w)
+                        {
+                            w = d * w / h;
+                            h = d;
+                        }
+                        else
+                        {
+                            h = d * h / w;
+                            w = d;
+                        }
+                        img = new Bitmap(img, new Size(w, h));
+                    }
+
+                    #endregion
+
+                    AddImage(img);
+                }
+                catch (Exception e)
+                {
+                    System.Console.Out.WriteLine("failed loading image [{0}]: {1}", imagePath, e.ToString());
+                }
+            }
+        }
+
+        private List<string> FindImages(string folderPath, int count)
+        {
+            if (folderPath == null || count < 1)
+            {
+                return new List<string>();
+            }
+
+            List<string> availableImages = new List<string>();
+
+            availableImages.AddRange(SWA.Utilities.Directory.Find(folderPath, "*.jpg", true));
+            availableImages.AddRange(SWA.Utilities.Directory.Find(folderPath, "*.gif", true));
+            availableImages.AddRange(SWA.Utilities.Directory.Find(folderPath, "*.png", true));
+
+            List<string> result = new List<string>(count);
+            Random r = RandomFactory.CreateRandom();
+
+            for (int i = 0; i < count && availableImages.Count > 0; i++)
+            {
+                int p = r.Next(availableImages.Count);
+                result.Add(availableImages[p]);
+                availableImages.RemoveAt(p);
+            }
+
+            //result.Add(@"C:\Dokumente und Einstellungen\wacker\Eigene Dateien\Eigene Bilder\Bildschirmschoner\Kunstwerke\Kühe-rot.jpg");
+
+            return result;
+        }
+
+        private void AddImage(Image img)
+        {
+            int sqW = (img.Width + 6 + this.wallWidth) / this.gridWidth + 1;
+            int sqH = (img.Height + 6 + this.wallWidth) / this.gridWidth + 1;
+
+            Rectangle rect;
+            if (maze.ReserveRectangle(sqW, sqH, 2, out rect))
+            {
+                // Remember the image data and location.  It will be painted in PaintMaze().
+                int x = rect.X * gridWidth + xOffset + (rect.Width * gridWidth - img.Width) / 2;
+                int y = rect.Y * gridWidth + yOffset + (rect.Height * gridWidth - img.Height) / 2;
+                images.Add(img);
+                imageLocations.Add(new Point(x, y));
+            }
         }
 
         #endregion
