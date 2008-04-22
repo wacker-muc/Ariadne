@@ -174,6 +174,8 @@ namespace SWA.Ariadne.Gui
         /// <param name="maze"></param>
         public override void MakeReservedAreas(Maze maze)
         {
+            #region Info Panel
+
             if (!previewMode && RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_SHOW_DETAILS_BOX))
             {
                 mazeUserControl.ReserveArea(this.outerInfoPanel);
@@ -183,6 +185,22 @@ namespace SWA.Ariadne.Gui
             {
                 this.outerInfoPanel.SendToBack();
             }
+
+            #endregion
+
+            #region Images
+
+            if (!previewMode)
+            {
+                int count = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_NUMBER, 0);
+                int minSize = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_MIN_SIZE, 120);
+                int maxSize = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_MAX_SIZE, 180);
+                string imageFolder = RegisteredOptions.GetStringSetting(RegisteredOptions.OPT_IMAGE_FOLDER);
+
+                mazeUserControl.ReserveAreaForImages(count, minSize, maxSize, imageFolder);
+            }
+
+            #endregion
         }
 
         /// <summary>

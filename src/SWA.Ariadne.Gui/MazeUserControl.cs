@@ -840,18 +840,28 @@ namespace SWA.Ariadne.Gui
 
         private void ReserveAreasForImages(AriadneSettingsData data)
         {
+            int count = data.ImageNumber;
+            int minSize = data.ImageMinSize;
+            int maxSize = data.ImageMaxSize;
+            string imageFolder = data.ImageFolder;
+
+            ReserveAreaForImages(count, minSize, maxSize, imageFolder);
+        }
+
+        public void ReserveAreaForImages(int count, int minSize, int maxSize, string imageFolder)
+        {
             #region Determine number of images to be placed into reserved areas.
 
             Random r = RandomFactory.CreateRandom();
-            int n, nMin, nMax = data.ImageNumber;
-            
+            int n, nMin, nMax = count;
+
             if (nMax <= 2)
             {
                 nMin = nMax;
             }
             else
             {
-                nMin = nMax * 2 / 3; 
+                nMin = nMax * 2 / 3;
             }
             n = r.Next(nMin, nMax);
 
@@ -860,7 +870,7 @@ namespace SWA.Ariadne.Gui
             images.Clear();
             imageLocations.Clear();
 
-            foreach (string imagePath in FindImages(data.ImageFolder, n))
+            foreach (string imagePath in FindImages(imageFolder, n))
             {
                 try
                 {
@@ -868,9 +878,9 @@ namespace SWA.Ariadne.Gui
 
                     #region Scale img so that its larger dimension is between the data's min and max size.
 
-                    if (img.Width > data.ImageMaxSize || img.Height > data.ImageMaxSize)
+                    if (img.Width > maxSize || img.Height > maxSize)
                     {
-                        int d = r.Next(data.ImageMinSize, data.ImageMaxSize);
+                        int d = r.Next(minSize, maxSize);
                         int h = img.Height, w = img.Width;
                         if (h > w)
                         {

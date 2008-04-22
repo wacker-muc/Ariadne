@@ -116,7 +116,7 @@ namespace SWA.Ariadne.Gui
 
             #region Initialize the stepsPerSecTextBox
 
-            stepsPerSecond = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_STEPS_PER_SECOND);
+            stepsPerSecond = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_STEPS_PER_SECOND, 200);
             stepsPerSecond = Math.Min(40000, Math.Max(20, stepsPerSecond));
             stepsPerSecTextBox.Text = stepsPerSecond.ToString();
 

@@ -50,22 +50,44 @@ namespace SWA.Ariadne.Gui
             Close();
         }
 
+        private void selectImageFolderButton_Click(object sender, EventArgs e)
+        {
+            if (this.imageFolderBrowserDialog.ShowDialog() == DialogResult.OK)
+            {
+                this.imageFolderTextBox.Text = this.imageFolderBrowserDialog.SelectedPath;
+            }
+        }
+
         private void LoadSettings()
         {
+            // General tab.
             checkBoxDetailsBox.Checked = RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_SHOW_DETAILS_BOX);
             checkBoxBlinking.Checked = RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_BLINKING);
             checkBoxEfficientSolvers.Checked = RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_EFFICIENT_SOLVERS);
-            textBoxStepsPerSecond.Text = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_STEPS_PER_SECOND).ToString();
+            textBoxStepsPerSecond.Text = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_STEPS_PER_SECOND, 200).ToString();
+
+            // Images tab.
+            imageNumberNumericUpDown.Value = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_NUMBER, 0);
+            imageMinSizeNumericUpDown.Value = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_MIN_SIZE, 120);
+            imageMaxSizeNumericUpDown.Value = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_MAX_SIZE, 180);
+            imageFolderTextBox.Text = RegisteredOptions.GetStringSetting(RegisteredOptions.OPT_IMAGE_FOLDER);
         }
 
         private void SaveSettings()
         {
             RegistryKey key = RegisteredOptions.AppRegistryKey(true);
 
+            // General tab.
             key.SetValue(RegisteredOptions.OPT_SHOW_DETAILS_BOX, (checkBoxDetailsBox.Checked ? 1 : 0), RegistryValueKind.DWord);
             key.SetValue(RegisteredOptions.OPT_BLINKING, (checkBoxBlinking.Checked ? 1 : 0), RegistryValueKind.DWord);
             key.SetValue(RegisteredOptions.OPT_EFFICIENT_SOLVERS, (checkBoxEfficientSolvers.Checked ? 1 : 0), RegistryValueKind.DWord);
             key.SetValue(RegisteredOptions.OPT_STEPS_PER_SECOND, Int32.Parse(textBoxStepsPerSecond.Text), RegistryValueKind.DWord);
+
+            // Images tab.
+            key.SetValue(RegisteredOptions.OPT_IMAGE_NUMBER, imageNumberNumericUpDown.Value, RegistryValueKind.DWord);
+            key.SetValue(RegisteredOptions.OPT_IMAGE_MIN_SIZE, imageMinSizeNumericUpDown.Value, RegistryValueKind.DWord);
+            key.SetValue(RegisteredOptions.OPT_IMAGE_MAX_SIZE, imageMaxSizeNumericUpDown.Value, RegistryValueKind.DWord);
+            key.SetValue(RegisteredOptions.OPT_IMAGE_FOLDER, imageFolderTextBox.Text, RegistryValueKind.String);
         }
     }
 }
