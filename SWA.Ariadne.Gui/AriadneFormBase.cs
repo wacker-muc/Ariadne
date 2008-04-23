@@ -316,7 +316,12 @@ namespace SWA.Ariadne.Gui
                     blinkTimer.Enabled = false;
                     blinkTimer = null;
                     // State is Finished and may become Ready if someone creates a new Maze.
+                }
 
+                SolverController.UpdateStatusLine();
+
+                if (State == SolverState.Finished)
+                {
                     // In repeat mode: Start a timer that will create a new maze.
                     if (this.repeatMode)
                     {
@@ -324,19 +329,23 @@ namespace SWA.Ariadne.Gui
                         repeatTimer.Interval = 3000; // ms
                         repeatTimer.Tick += new EventHandler(this.OnRepeatTimer);
                         repeatTimer.Start();
+
+                        // Perform time consuming preparations for the next start, but first update the display.
+                        this.Update();
+                        PrepareForNextStart();
                     }
-                }
 
-                SolverController.UpdateStatusLine();
-
-                if (State == SolverState.Finished)
-                {
                     // This is a good moment to run the garbage collector.
                     // TODO: free resources held by the SolverController
                     SolverController.ReleaseResources();
                     System.GC.Collect();
                 }
             }
+        }
+
+        protected virtual void PrepareForNextStart()
+        {
+            // do nothing
         }
 
         /// <summary>

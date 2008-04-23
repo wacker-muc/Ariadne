@@ -91,6 +91,7 @@ namespace SWA.Ariadne.Gui
                 {
                     PaintEndpoints(gBuffer.Graphics);
                     gBuffer.Render();
+                    this.Update();
                 }
             }
         }
@@ -113,6 +114,11 @@ namespace SWA.Ariadne.Gui
 
         private List<Image> images = new List<Image>();
         private List<Point> imageLocations = new List<Point>();
+
+        public bool HasPreparedImages
+        {
+            get { return (images.Count > 0 && imageLocations.Count == 0); }
+        }
 
         private BufferedGraphics gBuffer;
 
@@ -412,7 +418,6 @@ namespace SWA.Ariadne.Gui
             }
 
             gBuffer.Render();
-            //gBuffer.Render(e.Graphics);
         }
 
         /// <summary>
@@ -607,6 +612,9 @@ namespace SWA.Ariadne.Gui
             {
                 gBuffer.Render();
             }
+
+            // Finally, update the display.
+            this.Update();
         }
 
         /// <summary>
@@ -850,6 +858,12 @@ namespace SWA.Ariadne.Gui
 
         public void ReserveAreaForImages(int count, int minSize, int maxSize, string imageFolder)
         {
+            PrepareImages(count, minSize, maxSize, imageFolder);
+            ReserveAreaForImages();
+        }
+
+        public void PrepareImages(int count,int minSize,int maxSize,string imageFolder)
+        {
             #region Determine number of images to be placed into reserved areas.
 
             Random r = RandomFactory.CreateRandom();
@@ -897,11 +911,22 @@ namespace SWA.Ariadne.Gui
 
                     #endregion
 
-                    AddImage(img);
+                    images.Add(img);
                 }
                 catch (Exception e)
                 {
                     System.Console.Out.WriteLine("failed loading image [{0}]: {1}", imagePath, e.ToString());
+                }
+            }
+        }
+
+        public void ReserveAreaForImages()
+        {
+            if (this.HasPreparedImages)
+            {
+                foreach (Image img in images)
+                {
+                    AddImage(img);
                 }
             }
         }
@@ -945,7 +970,6 @@ namespace SWA.Ariadne.Gui
                 // Remember the image data and location.  It will be painted in PaintMaze().
                 int x = rect.X * gridWidth + xOffset + (rect.Width * gridWidth - img.Width) / 2;
                 int y = rect.Y * gridWidth + yOffset + (rect.Height * gridWidth - img.Height) / 2;
-                images.Add(img);
                 imageLocations.Add(new Point(x, y));
             }
         }

@@ -165,6 +165,16 @@ namespace SWA.Ariadne.Gui
 
         #endregion
 
+        #region AriadneFormBase implementation
+
+        protected override void PrepareForNextStart()
+        {
+            base.PrepareForNextStart();
+            this.PrepareImages();
+        }
+
+        #endregion
+
         #region IMazeForm implementation
 
         /// <summary>
@@ -192,15 +202,24 @@ namespace SWA.Ariadne.Gui
 
             if (!previewMode)
             {
-                int count = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_NUMBER, 0);
-                int minSize = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_MIN_SIZE, 300);
-                int maxSize = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_MAX_SIZE, 400);
-                string imageFolder = RegisteredOptions.GetStringSetting(RegisteredOptions.OPT_IMAGE_FOLDER);
-
-                mazeUserControl.ReserveAreaForImages(count, minSize, maxSize, imageFolder);
+                if (!mazeUserControl.HasPreparedImages)
+                {
+                    this.PrepareImages();
+                }
+                mazeUserControl.ReserveAreaForImages();
             }
 
             #endregion
+        }
+
+        private void PrepareImages()
+        {
+            int count = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_NUMBER, 0);
+            int minSize = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_MIN_SIZE, 300);
+            int maxSize = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_MAX_SIZE, 400);
+            string imageFolder = RegisteredOptions.GetStringSetting(RegisteredOptions.OPT_IMAGE_FOLDER);
+
+            mazeUserControl.PrepareImages(count, minSize, maxSize, imageFolder);
         }
 
         /// <summary>
