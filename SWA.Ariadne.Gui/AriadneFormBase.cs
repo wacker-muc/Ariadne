@@ -336,7 +336,6 @@ namespace SWA.Ariadne.Gui
                     }
 
                     // This is a good moment to run the garbage collector.
-                    // TODO: free resources held by the SolverController
                     SolverController.ReleaseResources();
                     System.GC.Collect();
                 }

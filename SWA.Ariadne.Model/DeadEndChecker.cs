@@ -321,13 +321,10 @@ namespace SWA.Ariadne.Model
                 }
             }
 
-#if true
-            // TODO: enable this enhancement: check for harmless constellation
             if (HarmlessConstellation(sqe))
             {
                 return result;
             }
-#endif
 
             // Add all squares whose trajectory depends on the ones already inserted.
             CollectUncertainSquares();
@@ -408,11 +405,8 @@ namespace SWA.Ariadne.Model
                         // We have confirmed that sqe1 has a neighbor sqe2 giving it a new trajectory.
                         AddConfirmedSquare(sqe1, -1);
 
-#if true
-                        // TODO: enable this enhancement
                         // Immediately revive any neighbors supported by sqe1.
                         ReviveUncertainNeighbors(sqe1);
-#endif
 
                         break; // from for (j)
                     }
