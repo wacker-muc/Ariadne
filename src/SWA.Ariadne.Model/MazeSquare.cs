@@ -51,6 +51,10 @@ namespace SWA.Ariadne.Model
             /// Closed wall, may not be passed.
             /// </summary>
             WS_CLOSED = 2,
+            /// <summary>
+            /// Undetermined, should be part of an outlined shape.
+            /// </summary>
+            WS_OUTLINE = 3,
         }
 
         #endregion

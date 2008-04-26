@@ -542,6 +542,7 @@ namespace SWA.Ariadne.Model
         public void CreateMaze()
         {
             this.CreateSquares();
+            //AddOutlineCircle(); // TODO: remove this line
             this.BuildMaze();
         }
 
@@ -759,6 +760,9 @@ namespace SWA.Ariadne.Model
             //
             Stack<MazeSquare> stack = new Stack<MazeSquare>(xSize * ySize);
 
+            Queue<MazeSquare> outlineSquares = new Queue<MazeSquare>();
+            Queue<MazeSquare.WallPosition> outlineWalls = new Queue<MazeSquare.WallPosition>();
+
             #region Start with a single random cell in the stack.
             
             while (true)
@@ -787,23 +791,49 @@ namespace SWA.Ariadne.Model
                 //
                 for (MazeSquare.WallPosition wp = MazeSquare.WP_MIN; wp <= MazeSquare.WP_MAX; wp++)
                 {
-                    if (sq0[wp] == MazeSquare.WallState.WS_MAYBE)
+                    switch (sq0[wp])
                     {
-                        MazeSquare sq = sq0.NeighborSquare(wp);
+                        case MazeSquare.WallState.WS_MAYBE:
+                            MazeSquare sq = sq0.NeighborSquare(wp);
 
-                        if (sq.isConnected || sq.isReserved)
-                        {
-                            sq0[wp] = sq[MazeSquare.OppositeWall(wp)] = MazeSquare.WallState.WS_CLOSED;
-                        }
-                        else
-                        {
-                            unresolvedWalls.Add(wp);
-                        }
-                    } // if WS_MAYBE
+                            if (sq.isConnected || sq.isReserved)
+                            {
+                                sq0[wp] = sq[MazeSquare.OppositeWall(wp)] = MazeSquare.WallState.WS_CLOSED;
+                            }
+                            else
+                            {
+                                unresolvedWalls.Add(wp);
+                            }
+                            break; // WS_MAYBE
+
+                        case MazeSquare.WallState.WS_OUTLINE:
+                            outlineSquares.Enqueue(sq0);
+                            outlineWalls.Enqueue(wp);
+                            break; // WS_OUTLINE
+                    }
                 } // foreach wp
 
+                // Discard this square if it has no unresolved walls.
                 if (unresolvedWalls.Count == 0)
                 {
+                    // Note: This is the only place that may end the loop.
+                    // If the stack is empty: Open one outline wall.
+                    if (stack.Count == 0)
+                    {
+                        while (outlineSquares.Count > 0)
+                        {
+                            MazeSquare sq = outlineSquares.Dequeue();
+                            MazeSquare.WallPosition wp = outlineWalls.Dequeue();
+                            if (sq[wp] == MazeSquare.WallState.WS_OUTLINE)
+                            {
+                                sq[wp] = MazeSquare.WallState.WS_MAYBE;
+                                stack.Push(sq);
+                                // This square will be used in the next iteration.
+                                break; // from while(outlineSquares)
+                            }
+                        }
+                    }
+
                     continue; // no walls to choose from
                 }
 
@@ -881,6 +911,60 @@ namespace SWA.Ariadne.Model
                 this.squares[x1, y][MazeSquare.WallPosition.WP_W] = (x1 == 0 ? borderState : MazeSquare.WallState.WS_CLOSED);
                 this.squares[x2, y][MazeSquare.WallPosition.WP_E] = (x2+1 == xSize ? borderState : MazeSquare.WallState.WS_CLOSED);
             }
+        }
+
+        /// <summary>
+        /// Apply the border of the given shape (where neighboring entries have opposite values) to the maze.
+        /// The corresponding walls are switched from WS_MAYBE to WS_OUTLINE.
+        /// </summary>
+        /// <param name="shape">
+        /// A two dimensional array.  The dimensions must not be greater than the maze itself.
+        /// true means "inside", false means "outside".
+        /// </param>
+        public void AddOutline(bool[,] shape)
+        {
+            for (int x = 0; x < xSize; x++)
+            {
+                for (int y1 = 0, y2 = 1; y2 < ySize; y1++, y2++)
+                {
+                    bool b1 = shape[x, y1], b2 = shape[x, y2];
+                    if (b1 != b2 && this.squares[x, y1][MazeSquare.WallPosition.WP_S] == MazeSquare.WallState.WS_MAYBE)
+                    {
+                        this.squares[x, y1][MazeSquare.WallPosition.WP_S] = MazeSquare.WallState.WS_OUTLINE;
+                        this.squares[x, y2][MazeSquare.WallPosition.WP_N] = MazeSquare.WallState.WS_OUTLINE;
+                    }
+                }
+            }
+            for (int y = 0; y < ySize; y++)
+            {
+                for (int x1 = 0, x2 = 1; x2 < xSize; x1++, x2++)
+                {
+                    bool b1 = shape[x1, y], b2 = shape[x2, y];
+                    if (b1 != b2 && this.squares[x1, y][MazeSquare.WallPosition.WP_E] == MazeSquare.WallState.WS_MAYBE)
+                    {
+                        this.squares[x1, y][MazeSquare.WallPosition.WP_E] = MazeSquare.WallState.WS_OUTLINE;
+                        this.squares[x2, y][MazeSquare.WallPosition.WP_W] = MazeSquare.WallState.WS_OUTLINE;
+                    }
+                }
+            }
+        }
+
+        public void AddOutlineCircle()
+        {
+            bool[,] shape = new bool[xSize, ySize];
+            int xc = xSize / 2, yc = ySize / 2;
+            int r = Math.Min(xSize, ySize) * 4 / 5 / 2;
+
+            for (int x = 0; x < xSize; x++)
+            {
+                for (int y = 0; y < ySize; y++)
+                {
+                    int dx = x - xc, dy = y - yc;
+                    shape[x,y] = (dx * dx + dy * dy <= r * r);
+                }
+            }
+
+            AddOutline(shape);
         }
 
         #endregion
