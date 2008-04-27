@@ -106,6 +106,11 @@ namespace SWA.Ariadne.Model
         private List<Rectangle> reservedAreas = new List<Rectangle>();
 
         /// <summary>
+        /// Most of the outlines of these shapes will be turned into closed walls.
+        /// </summary>
+        private List<OutlineShape> outlineShapes = new List<OutlineShape>();
+
+        /// <summary>
         /// The maze is formed by a two-dimensional array of squares.
         /// </summary>
         private MazeSquare[,] squares;
@@ -485,7 +490,7 @@ namespace SWA.Ariadne.Model
 
         /// <summary>
         /// Reserves a rectanglurar region of the given dimensions.
-        /// The area must not touch any other reserved ares.
+        /// The area must not touch any other reserved areas.
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -539,10 +544,18 @@ namespace SWA.Ariadne.Model
             return false;
         }
 
+        /// <summary>
+        /// Most of the given shape will be turned into closed walls.
+        /// </summary>
+        /// <param name="shape"></param>
+        public void AddOutlineShape(OutlineShape shape)
+        {
+            outlineShapes.Add(shape);
+        }
+
         public void CreateMaze()
         {
             this.CreateSquares();
-            //AddOutlineCircle(); // TODO: remove this line
             this.BuildMaze();
         }
 
@@ -754,14 +767,15 @@ namespace SWA.Ariadne.Model
         {
             FixBorderWalls();
             FixReservedAreas();
+            FixOutlineShapes();
 
             // We hold a number of active squares in a stack.
             // Make the initial capacity sufficient to hold all squares.
             //
             Stack<MazeSquare> stack = new Stack<MazeSquare>(xSize * ySize);
 
-            Queue<MazeSquare> outlineSquares = new Queue<MazeSquare>();
-            Queue<MazeSquare.WallPosition> outlineWalls = new Queue<MazeSquare.WallPosition>();
+            List<MazeSquare> outlineSquares = new List<MazeSquare>();
+            List<MazeSquare.WallPosition> outlineWalls = new List<MazeSquare.WallPosition>();
 
             #region Start with a single random cell in the stack.
             
@@ -807,8 +821,8 @@ namespace SWA.Ariadne.Model
                             break; // WS_MAYBE
 
                         case MazeSquare.WallState.WS_OUTLINE:
-                            outlineSquares.Enqueue(sq0);
-                            outlineWalls.Enqueue(wp);
+                            outlineSquares.Add(sq0);
+                            outlineWalls.Add(wp);
                             break; // WS_OUTLINE
                     }
                 } // foreach wp
@@ -822,8 +836,13 @@ namespace SWA.Ariadne.Model
                     {
                         while (outlineSquares.Count > 0)
                         {
-                            MazeSquare sq = outlineSquares.Dequeue();
-                            MazeSquare.WallPosition wp = outlineWalls.Dequeue();
+                            // Select a random square with an outline wall.
+                            int p = random.Next(outlineSquares.Count);
+                            MazeSquare sq = outlineSquares[p];
+                            MazeSquare.WallPosition wp = outlineWalls[p];
+                            outlineSquares.RemoveAt(p);
+                            outlineWalls.RemoveAt(p);
+
                             if (sq[wp] == MazeSquare.WallState.WS_OUTLINE)
                             {
                                 sq[wp] = MazeSquare.WallState.WS_MAYBE;
@@ -914,6 +933,17 @@ namespace SWA.Ariadne.Model
         }
 
         /// <summary>
+        /// Mark the defined outline walls.
+        /// </summary>
+        private void FixOutlineShapes()
+        {
+            foreach (OutlineShape shape in this.outlineShapes)
+            {
+                FixOutline(shape);
+            }
+        }
+
+        /// <summary>
         /// Apply the border of the given shape (where neighboring entries have opposite values) to the maze.
         /// The corresponding walls are switched from WS_MAYBE to WS_OUTLINE.
         /// </summary>
@@ -921,7 +951,7 @@ namespace SWA.Ariadne.Model
         /// A two dimensional array.  The dimensions must not be greater than the maze itself.
         /// true means "inside", false means "outside".
         /// </param>
-        public void AddOutline(bool[,] shape)
+        private void FixOutline(OutlineShape shape)
         {
             for (int x = 0; x < xSize; x++)
             {
@@ -947,24 +977,6 @@ namespace SWA.Ariadne.Model
                     }
                 }
             }
-        }
-
-        public void AddOutlineCircle()
-        {
-            bool[,] shape = new bool[xSize, ySize];
-            int xc = xSize / 2, yc = ySize / 2;
-            int r = Math.Min(xSize, ySize) * 4 / 5 / 2;
-
-            for (int x = 0; x < xSize; x++)
-            {
-                for (int y = 0; y < ySize; y++)
-                {
-                    int dx = x - xc, dy = y - yc;
-                    shape[x,y] = (dx * dx + dy * dy <= r * r);
-                }
-            }
-
-            AddOutline(shape);
         }
 
         #endregion
@@ -1029,6 +1041,7 @@ namespace SWA.Ariadne.Model
             this.random = RandomFactory.CreateRandom(seed);
 
             this.reservedAreas.Clear();
+            this.outlineShapes.Clear();
 
             // Decode(data.Code);
         }
