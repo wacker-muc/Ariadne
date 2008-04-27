@@ -47,7 +47,15 @@ namespace SWA.Ariadne.Gui
             data.ImageNumber = (int) this.imageNumberNumericUpDown.Value;
             data.ImageMinSize = (int) this.imageMinSizeNumericUpDown.Value;
             data.ImageMaxSize = (int) this.imageMaxSizeNumericUpDown.Value;
-            
+
+            data.CircleNumber = (int)this.circleNumberNumericUpDown.Value;
+            data.CircleOffCenter = (int)this.circleOffCenterNumericUpDown.Value;
+            data.CircleSize = (int)this.circleSizeNumericUpDown.Value;
+
+            data.DiamondNumber = (int)this.diamondNumberNumericUpDown.Value;
+            data.DiamondOffCenter = (int)this.diamondOffCenterNumericUpDown.Value;
+            data.DiamondSize = (int)this.diamondSizeNumericUpDown.Value;
+
             target.FillParametersInto(data);
             
             CalculateResultingArea();

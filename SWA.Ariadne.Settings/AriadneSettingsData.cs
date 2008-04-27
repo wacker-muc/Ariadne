@@ -260,7 +260,7 @@ namespace SWA.Ariadne.Settings
 
         #endregion
 
-        #region Contents tab
+        #region Images tab
 
         public int ImageNumber
         {
@@ -289,6 +289,52 @@ namespace SWA.Ariadne.Settings
             set { imageFolder = value; }
         }
         private string imageFolder;
+
+        #endregion
+
+        #region Outlines tab
+
+        public int CircleNumber
+        {
+            get { return circleNumber; }
+            set { circleNumber = value; }
+        }
+        private int circleNumber;
+
+        public int CircleOffCenter
+        {
+            get { return circleOffCenter; }
+            set { circleOffCenter = value; }
+        }
+        private int circleOffCenter;
+
+        public int CircleSize
+        {
+            get { return circleSize; }
+            set { circleSize = value; }
+        }
+        private int circleSize;
+
+        public int DiamondNumber
+        {
+            get { return diamondNumber; }
+            set { diamondNumber = value; }
+        }
+        private int diamondNumber;
+
+        public int DiamondOffCenter
+        {
+            get { return diamondOffCenter; }
+            set { diamondOffCenter = value; }
+        }
+        private int diamondOffCenter;
+
+        public int DiamondSize
+        {
+            get { return diamondSize; }
+            set { diamondSize = value; }
+        }
+        private int diamondSize;
 
         #endregion
 

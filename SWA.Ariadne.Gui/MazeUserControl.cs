@@ -829,6 +829,7 @@ namespace SWA.Ariadne.Gui
             AdjustPathWidth(squareWidth, ref pathWidth);
             MazeForm.MakeReservedAreas(maze);
             this.ReserveAreasForImages(data);
+            this.AddOutlineShapes(data);
             maze.CreateMaze();
             MazeForm.UpdateStatusLine();
             MazeForm.UpdateCaption();
@@ -971,6 +972,32 @@ namespace SWA.Ariadne.Gui
                 int x = rect.X * gridWidth + xOffset + (rect.Width * gridWidth - img.Width) / 2;
                 int y = rect.Y * gridWidth + yOffset + (rect.Height * gridWidth - img.Height) / 2;
                 imageLocations.Add(new Point(x, y));
+            }
+        }
+
+        #endregion
+
+        #region Placement of outline shapes
+
+        private delegate OutlineShape OutlineShapeBuilder(int xSize, int ySize, double centerX, double centerY, double radius);
+
+        private void AddOutlineShapes(AriadneSettingsData data)
+        {
+            Random r = RandomFactory.CreateRandom();
+
+            AddOutlineShapes(r, OutlineShape.Circle, data.CircleNumber, data.CircleOffCenter / 100.0, data.CircleSize / 100.0);
+            AddOutlineShapes(r, OutlineShape.Diamond, data.DiamondNumber, data.DiamondOffCenter / 100.0, data.DiamondSize / 100.0);
+        }
+
+        private void AddOutlineShapes(Random r, OutlineShapeBuilder shapeBuilderDelegate, int count, double offCenter, double size)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                double centerX = 0.5, centerY = 0.5;
+                centerX += (2.0 * offCenter * r.NextDouble() - offCenter);
+                centerY += (2.0 * offCenter * r.NextDouble() - offCenter);
+                OutlineShape shape = shapeBuilderDelegate(XSize, YSize, centerX, centerY, size);
+                this.maze.AddOutlineShape(shape);
             }
         }
 
