@@ -294,6 +294,8 @@ namespace SWA.Ariadne.Settings
 
         #region Outlines tab
 
+        #region Circles
+
         public int CircleNumber
         {
             get { return circleNumber; }
@@ -315,6 +317,10 @@ namespace SWA.Ariadne.Settings
         }
         private int circleSize;
 
+        #endregion
+
+        #region Diamonds
+
         public int DiamondNumber
         {
             get { return diamondNumber; }
@@ -335,6 +341,33 @@ namespace SWA.Ariadne.Settings
             set { diamondSize = value; }
         }
         private int diamondSize;
+
+        #endregion
+
+        #region Characters
+
+        public int CharNumber
+        {
+            get { return charNumber; }
+            set { charNumber = value; }
+        }
+        private int charNumber;
+
+        public int CharOffCenter
+        {
+            get { return charOffCenter; }
+            set { charOffCenter = value; }
+        }
+        private int charOffCenter;
+
+        public int CharSize
+        {
+            get { return charSize; }
+            set { charSize = value; }
+        }
+        private int charSize;
+
+        #endregion
 
         #endregion
 

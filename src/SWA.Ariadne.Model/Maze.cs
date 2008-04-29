@@ -108,7 +108,8 @@ namespace SWA.Ariadne.Model
         /// <summary>
         /// Most of the outlines of these shapes will be turned into closed walls.
         /// </summary>
-        private List<OutlineShape> outlineShapes = new List<OutlineShape>();
+        /// TODO: this should be private!
+        public List<OutlineShape> outlineShapes = new List<OutlineShape>();
 
         /// <summary>
         /// The maze is formed by a two-dimensional array of squares.
