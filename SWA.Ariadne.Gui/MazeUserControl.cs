@@ -441,12 +441,42 @@ namespace SWA.Ariadne.Gui
             // The PaintWalls() method fails in design mode.
             try
             {
+#if false
+                PaintShapes(g);
+#endif
                 PaintBorder(g);
                 PaintWalls(g);
                 PaintEndpoints(g);
                 PaintImages(g);
             }
             catch (MissingMethodException) { }
+        }
+
+        private void PaintShapes(Graphics g)
+        {
+            // Temporarily set zero width walls; thus, the squares will be drawn seamlessly.
+            int savedWallWidth = wallWidth;
+            wallWidth = 0;
+            squareWidth = gridWidth;
+
+            Color shapeColor = Color.FromArgb(0, 0, 40); // dark blue
+            Brush shapeBrush = new SolidBrush(shapeColor);
+            foreach (OutlineShape shape in maze.outlineShapes)
+            {
+                for (int x = 0; x < XSize; x++)
+                {
+                    for (int y = 0; y < YSize; y++)
+                    {
+                        if (shape[x, y])
+                        {
+                            this.PaintSquare(g, shapeBrush, x, y);
+                        }
+                    }
+                }
+            }
+
+            wallWidth = savedWallWidth;
+            squareWidth = gridWidth - wallWidth;
         }
 
         /// <summary>
@@ -987,6 +1017,7 @@ namespace SWA.Ariadne.Gui
 
             AddOutlineShapes(r, OutlineShape.Circle, data.CircleNumber, data.CircleOffCenter / 100.0, data.CircleSize / 100.0);
             AddOutlineShapes(r, OutlineShape.Diamond, data.DiamondNumber, data.DiamondOffCenter / 100.0, data.DiamondSize / 100.0);
+            AddOutlineShapes(r, OutlineShape.Char, data.CharNumber, data.CharOffCenter / 100.0, data.CharSize / 100.0);
         }
 
         private void AddOutlineShapes(Random r, OutlineShapeBuilder shapeBuilderDelegate, int count, double offCenter, double size)

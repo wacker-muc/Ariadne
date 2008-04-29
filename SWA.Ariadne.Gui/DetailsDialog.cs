@@ -56,6 +56,10 @@ namespace SWA.Ariadne.Gui
             data.DiamondOffCenter = (int)this.diamondOffCenterNumericUpDown.Value;
             data.DiamondSize = (int)this.diamondSizeNumericUpDown.Value;
 
+            data.CharNumber = (int)this.charNumberNumericUpDown.Value;
+            data.CharOffCenter = (int)this.charOffCenterNumericUpDown.Value;
+            data.CharSize = (int)this.charSizeNumericUpDown.Value;
+
             target.FillParametersInto(data);
             
             CalculateResultingArea();
