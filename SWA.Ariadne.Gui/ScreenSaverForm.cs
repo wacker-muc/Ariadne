@@ -198,7 +198,7 @@ namespace SWA.Ariadne.Gui
 
             #endregion
 
-            #region Images
+            #region Images and other adornments
 
             if (!previewMode)
             {
@@ -207,11 +207,16 @@ namespace SWA.Ariadne.Gui
                     this.PrepareImages();
                 }
                 mazeUserControl.ReserveAreaForImages();
+
+                this.AddOutlineShape();
             }
 
             #endregion
         }
 
+        /// <summary>
+        /// Load a number of images and place them in the maze.
+        /// </summary>
         private void PrepareImages()
         {
             int count = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_NUMBER, 0);
@@ -220,6 +225,41 @@ namespace SWA.Ariadne.Gui
             string imageFolder = RegisteredOptions.GetStringSetting(RegisteredOptions.OPT_IMAGE_FOLDER);
 
             mazeUserControl.PrepareImages(count, minSize, maxSize, imageFolder);
+        }
+
+        /// <summary>
+        /// Add an outline shape to the maze.
+        /// </summary>
+        private void AddOutlineShape()
+        {
+            int percentage = 100;
+            Random r = RandomFactory.CreateRandom();
+            if (r.Next(100) < percentage)
+            {
+                MazeUserControl.OutlineShapeBuilder[] shapeBuilderDelegates = {
+                    OutlineShape.Circle,
+                    OutlineShape.Diamond,
+                    OutlineShape.Char,
+                    OutlineShape.Symbol,
+                };
+                int[] ratios = {
+                    10,
+                    10,
+                    50,
+                    50,
+                };
+                int n = 0;
+                foreach (int k in ratios) { n += k; }
+                int p = r.Next(n);
+                for (int i = 0; i < ratios.Length; i++)
+                {
+                    if ((p -= ratios[i]) < 0)
+                    {
+                        mazeUserControl.AddOutlineShapes(r, shapeBuilderDelegates[i], 1, 0.3, 0.8);
+                        break;
+                    }
+                }
+            }
         }
 
         /// <summary>

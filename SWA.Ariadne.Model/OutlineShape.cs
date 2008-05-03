@@ -86,61 +86,42 @@ namespace SWA.Ariadne.Model
         /// <param name="centerX">X coordinate, relative to total width; 0.0 = top, 1.0 = bottom</param>
         /// <param name="centerY">Y coordinate, relative to total height; 0.0 = left, 1.0 = right</param>
         /// <param name="shapeSize">size, relative to distance of center from the border; 1.0 will touch the border</param>
-        /// <param name="ch">character</param>
         /// <returns></returns>
         public static OutlineShape Char(int xSize, int ySize, double centerX, double centerY, double shapeSize)
         {
-            char ch = 'X';
+            Random r = RandomFactory.CreateRandom();
             FontFamily fontFamily = new FontFamily("Helvetica");
+            char[] shapeCharacters = { 'C', 'O', 'S', 'V', 'X', '3', '6', '8', '9', '?', };
+            char ch = shapeCharacters[r.Next(shapeCharacters.Length)];
 
-            OutlineShape result = new OutlineShape(xSize, ySize);
+            return Char(xSize, ySize, centerX, centerY, shapeSize, ch, fontFamily);
+        }
 
-            double xc, yc, sz;
-            ConvertParameters(xSize, ySize, centerX, centerY, shapeSize, out xc, out yc, out sz);
+        /// <summary>
+        /// Create an outline shape.
+        /// </summary>
+        /// <param name="centerX">X coordinate, relative to total width; 0.0 = top, 1.0 = bottom</param>
+        /// <param name="centerY">Y coordinate, relative to total height; 0.0 = left, 1.0 = right</param>
+        /// <param name="shapeSize">size, relative to distance of center from the border; 1.0 will touch the border</param>
+        /// <returns></returns>
+        public static OutlineShape Symbol(int xSize, int ySize, double centerX, double centerY, double shapeSize)
+        {
+            Random r = RandomFactory.CreateRandom();
+            FontFamily fontFamily = new FontFamily("Times New Roman");
+            char[] shapeCharacters = {
+                //'\u0040',   // @
+                '\u03C0',   // pi
+                '\u05D0',   // aleph
+                '\u263B',   // smiley
+                '\u2660',   // spades
+                '\u2663',   // clubs
+                '\u2665',   // hearts
+                '\u2666',   // diamonds
+                '\u266A',   // musical note
+            };
+            char ch = shapeCharacters[r.Next(shapeCharacters.Length)];
 
-            #region Find a font with the desired height.
-            
-            Font font = new Font(fontFamily, (float)(2 * sz), FontStyle.Bold);
-            int desiredHeight = (int)(2.5 * sz);
-            for (float a = (float)sz, b = (float)(3 * sz); b - a > 0.5; )
-            {
-                float m = (a + b) / 2;
-                font = new Font(fontFamily, m);
-                if (font.Height > desiredHeight)
-                {
-                    b = m;
-                }
-                else
-                {
-                    a = m;
-                }
-            }
-            
-            #endregion
-
-            #region Draw the given character into an image (white on black).
-
-            StringFormat stringFormat = new StringFormat();
-            stringFormat.Alignment = StringAlignment.Center;
-            stringFormat.LineAlignment = StringAlignment.Center;
-
-            Bitmap img = new Bitmap(xSize, ySize);
-            Graphics g = Graphics.FromImage(img);
-            g.DrawRectangle(Pens.Black, 0, 0, xSize, ySize);
-            g.DrawString(new string(ch, 1), font, Brushes.White, new RectangleF(0, 0, xSize, ySize), stringFormat);
-
-            #endregion
-
-            for (int x = 0; x < xSize; x++)
-            {
-                for (int y = 0; y < ySize; y++)
-                {
-                    double dx = Math.Abs(x - xc), dy = Math.Abs(y - yc);
-                    result.squares[x, y] = (img.GetPixel(x,y).GetBrightness() > 0.5);
-                }
-            }
-
-            return result;
+            return Char(xSize, ySize, centerX, centerY, shapeSize, ch, fontFamily);
         }
 
         #endregion
@@ -163,6 +144,57 @@ namespace SWA.Ariadne.Model
 
             // Multiply with the requested ratio.
             sz *= shapeSize;
+        }
+
+        private static OutlineShape Char(int xSize, int ySize, double centerX, double centerY, double shapeSize, char ch, FontFamily fontFamily)
+        {
+            OutlineShape result = new OutlineShape(xSize, ySize);
+
+            double xc, yc, sz;
+            ConvertParameters(xSize, ySize, centerX, centerY, shapeSize, out xc, out yc, out sz);
+
+            #region Find a font with the desired height.
+
+            Font font = new Font(fontFamily, (float)(2 * sz), FontStyle.Bold);
+            int desiredHeight = (int)(3.17 * sz);
+            for (float a = (float)sz, b = (float)(3 * sz); b - a > 0.5; )
+            {
+                float m = (a + b) / 2;
+                font = new Font(fontFamily, m);
+                if (font.Height > desiredHeight)
+                {
+                    b = m;
+                }
+                else
+                {
+                    a = m;
+                }
+            }
+
+            #endregion
+
+            #region Draw the given character into an image (white on black).
+
+            StringFormat stringFormat = new StringFormat();
+            stringFormat.Alignment = StringAlignment.Center;
+            stringFormat.LineAlignment = StringAlignment.Center;
+
+            Bitmap img = new Bitmap(xSize, ySize);
+            Graphics g = Graphics.FromImage(img);
+            g.DrawRectangle(Pens.Black, 0, 0, xSize, ySize);
+            g.DrawString(new string(ch, 1), font, Brushes.White, new RectangleF(0, 0, xSize, (int)(1.20 * ySize)), stringFormat);
+
+            #endregion
+
+            for (int x = 0; x < xSize; x++)
+            {
+                for (int y = 0; y < ySize; y++)
+                {
+                    double dx = Math.Abs(x - xc), dy = Math.Abs(y - yc);
+                    result.squares[x, y] = (img.GetPixel(x, y).GetBrightness() > 0.5);
+                }
+            }
+            return result;
         }
 
         #endregion
