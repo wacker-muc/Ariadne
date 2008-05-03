@@ -442,6 +442,7 @@ namespace SWA.Ariadne.Gui
             try
             {
 #if false
+                // TODO: disable this in the release binary
                 PaintShapes(g);
 #endif
                 PaintBorder(g);
@@ -1009,7 +1010,7 @@ namespace SWA.Ariadne.Gui
 
         #region Placement of outline shapes
 
-        private delegate OutlineShape OutlineShapeBuilder(int xSize, int ySize, double centerX, double centerY, double radius);
+        internal delegate OutlineShape OutlineShapeBuilder(int xSize, int ySize, double centerX, double centerY, double radius);
 
         private void AddOutlineShapes(AriadneSettingsData data)
         {
@@ -1018,9 +1019,10 @@ namespace SWA.Ariadne.Gui
             AddOutlineShapes(r, OutlineShape.Circle, data.CircleNumber, data.CircleOffCenter / 100.0, data.CircleSize / 100.0);
             AddOutlineShapes(r, OutlineShape.Diamond, data.DiamondNumber, data.DiamondOffCenter / 100.0, data.DiamondSize / 100.0);
             AddOutlineShapes(r, OutlineShape.Char, data.CharNumber, data.CharOffCenter / 100.0, data.CharSize / 100.0);
+            AddOutlineShapes(r, OutlineShape.Symbol, data.SymbolNumber, data.SymbolOffCenter / 100.0, data.SymbolSize / 100.0);
         }
 
-        private void AddOutlineShapes(Random r, OutlineShapeBuilder shapeBuilderDelegate, int count, double offCenter, double size)
+        internal void AddOutlineShapes(Random r, OutlineShapeBuilder shapeBuilderDelegate, int count, double offCenter, double size)
         {
             for (int i = 0; i < count; i++)
             {

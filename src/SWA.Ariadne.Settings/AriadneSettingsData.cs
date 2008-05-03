@@ -369,6 +369,31 @@ namespace SWA.Ariadne.Settings
 
         #endregion
 
+        #region Symbols
+
+        public int SymbolNumber
+        {
+            get { return symbolNumber; }
+            set { symbolNumber = value; }
+        }
+        private int symbolNumber;
+
+        public int SymbolOffCenter
+        {
+            get { return symbolOffCenter; }
+            set { symbolOffCenter = value; }
+        }
+        private int symbolOffCenter;
+
+        public int SymbolSize
+        {
+            get { return symbolSize; }
+            set { symbolSize = value; }
+        }
+        private int symbolSize;
+
+        #endregion
+
         #endregion
 
         #endregion

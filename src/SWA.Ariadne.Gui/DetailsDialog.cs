@@ -60,6 +60,10 @@ namespace SWA.Ariadne.Gui
             data.CharOffCenter = (int)this.charOffCenterNumericUpDown.Value;
             data.CharSize = (int)this.charSizeNumericUpDown.Value;
 
+            data.SymbolNumber = (int)this.symbolNumberNumericUpDown.Value;
+            data.SymbolOffCenter = (int)this.symbolOffCenterNumericUpDown.Value;
+            data.SymbolSize = (int)this.symbolSizeNumericUpDown.Value;
+
             target.FillParametersInto(data);
             
             CalculateResultingArea();
