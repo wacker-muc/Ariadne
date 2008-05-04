@@ -69,16 +69,26 @@ namespace SWA.Ariadne.Settings
 
         public static RegistryKey AppRegistryKey(bool initialize)
         {
-            RegistryKey result = Registry.LocalMachine.OpenSubKey(REGISTRY_KEY);
+            RegistryKey rootKey = Registry.CurrentUser;
+
+            RegistryKey result;
+            try
+            {
+                result = rootKey.OpenSubKey(REGISTRY_KEY);
+            }
+            catch
+            {
+                result = null;
+            }
 
             if (initialize)
             {
                 if (result != null)
                 {
-                    Registry.LocalMachine.DeleteSubKeyTree(REGISTRY_KEY);
+                    rootKey.DeleteSubKeyTree(REGISTRY_KEY);
                 }
 
-                result = Registry.LocalMachine.CreateSubKey(REGISTRY_KEY);
+                result = rootKey.CreateSubKey(REGISTRY_KEY);
             }
 
             return result;
