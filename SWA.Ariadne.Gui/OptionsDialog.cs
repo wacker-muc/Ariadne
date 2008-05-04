@@ -81,19 +81,19 @@ namespace SWA.Ariadne.Gui
             RegistryKey key = RegisteredOptions.AppRegistryKey(true);
 
             // General tab.
-            key.SetValue(RegisteredOptions.OPT_SHOW_DETAILS_BOX, (checkBoxDetailsBox.Checked ? 1 : 0), RegistryValueKind.DWord);
-            key.SetValue(RegisteredOptions.OPT_BLINKING, (checkBoxBlinking.Checked ? 1 : 0), RegistryValueKind.DWord);
-            key.SetValue(RegisteredOptions.OPT_EFFICIENT_SOLVERS, (checkBoxEfficientSolvers.Checked ? 1 : 0), RegistryValueKind.DWord);
+            key.SetValue(RegisteredOptions.OPT_SHOW_DETAILS_BOX, (Int32)(checkBoxDetailsBox.Checked ? 1 : 0), RegistryValueKind.DWord);
+            key.SetValue(RegisteredOptions.OPT_BLINKING, (Int32)(checkBoxBlinking.Checked ? 1 : 0), RegistryValueKind.DWord);
+            key.SetValue(RegisteredOptions.OPT_EFFICIENT_SOLVERS, (Int32)(checkBoxEfficientSolvers.Checked ? 1 : 0), RegistryValueKind.DWord);
             key.SetValue(RegisteredOptions.OPT_STEPS_PER_SECOND, Int32.Parse(textBoxStepsPerSecond.Text), RegistryValueKind.DWord);
 
             // Images tab.
-            key.SetValue(RegisteredOptions.OPT_IMAGE_NUMBER, imageNumberNumericUpDown.Value, RegistryValueKind.DWord);
-            key.SetValue(RegisteredOptions.OPT_IMAGE_MIN_SIZE, imageMinSizeNumericUpDown.Value, RegistryValueKind.DWord);
-            key.SetValue(RegisteredOptions.OPT_IMAGE_MAX_SIZE, imageMaxSizeNumericUpDown.Value, RegistryValueKind.DWord);
+            key.SetValue(RegisteredOptions.OPT_IMAGE_NUMBER, (Int32)imageNumberNumericUpDown.Value, RegistryValueKind.DWord);
+            key.SetValue(RegisteredOptions.OPT_IMAGE_MIN_SIZE, (Int32)imageMinSizeNumericUpDown.Value, RegistryValueKind.DWord);
+            key.SetValue(RegisteredOptions.OPT_IMAGE_MAX_SIZE, (Int32)imageMaxSizeNumericUpDown.Value, RegistryValueKind.DWord);
             key.SetValue(RegisteredOptions.OPT_IMAGE_FOLDER, imageFolderTextBox.Text, RegistryValueKind.String);
 
             // Extras tab.
-            key.SetValue(RegisteredOptions.OPT_OUTLINE_SHAPES, (checkBoxOutlineShapes.Checked ? 1 : 0), RegistryValueKind.DWord);
+            key.SetValue(RegisteredOptions.OPT_OUTLINE_SHAPES, (Int32)(checkBoxOutlineShapes.Checked ? 1 : 0), RegistryValueKind.DWord);
         }
     }
 }
