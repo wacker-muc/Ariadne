@@ -170,7 +170,10 @@ namespace SWA.Ariadne.Gui
         protected override void PrepareForNextStart()
         {
             base.PrepareForNextStart();
-            this.PrepareImages();
+            if (!previewMode)
+            {
+                this.PrepareImages();
+            }
         }
 
         #endregion
@@ -232,7 +235,7 @@ namespace SWA.Ariadne.Gui
         /// </summary>
         private void AddOutlineShape()
         {
-            int percentage = 100;
+            int percentage = (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_OUTLINE_SHAPES, false) ? 20 : 0);
             Random r = RandomFactory.CreateRandom();
             if (r.Next(100) < percentage)
             {
