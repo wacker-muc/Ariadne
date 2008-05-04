@@ -460,18 +460,23 @@ namespace SWA.Ariadne.Gui
             wallWidth = 0;
             squareWidth = gridWidth;
 
-            Color shapeColor = Color.FromArgb(0, 0, 40); // dark blue
+            Color shapeColor = Color.FromArgb(0, 0, 50); // dark blue
             Brush shapeBrush = new SolidBrush(shapeColor);
-            foreach (OutlineShape shape in maze.outlineShapes)
+            for (int x = 0; x < XSize; x++)
             {
-                for (int x = 0; x < XSize; x++)
+                for (int y = 0; y < YSize; y++)
                 {
-                    for (int y = 0; y < YSize; y++)
+                    int n = 0;
+                    foreach (OutlineShape shape in maze.outlineShapes)
                     {
                         if (shape[x, y])
                         {
-                            this.PaintSquare(g, shapeBrush, x, y);
+                            ++n;
                         }
+                    }
+                    if (n % 2 == 1)
+                    {
+                        this.PaintSquare(g, shapeBrush, x, y);
                     }
                 }
             }
@@ -1027,9 +1032,15 @@ namespace SWA.Ariadne.Gui
             for (int i = 0; i < count; i++)
             {
                 double centerX = 0.5, centerY = 0.5;
-                centerX += (2.0 * offCenter * r.NextDouble() - offCenter);
-                centerY += (2.0 * offCenter * r.NextDouble() - offCenter);
-                OutlineShape shape = shapeBuilderDelegate(XSize, YSize, centerX, centerY, size);
+
+                double dx = r.NextDouble() - 0.5, dy = r.NextDouble() - 0.5;
+                centerX += offCenter * dx;
+                centerY += offCenter * dy;
+
+                // Reduce size when we are closer to the center than requested.
+                double f = 1.0 - offCenter * 2.0 * (0.5 - Math.Max(Math.Abs(dx), Math.Abs(dy)));
+                
+                OutlineShape shape = shapeBuilderDelegate(XSize, YSize, centerX, centerY, size * f);
                 this.maze.AddOutlineShape(shape);
             }
         }
