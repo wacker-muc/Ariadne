@@ -61,9 +61,9 @@ namespace SWA.Ariadne.Gui
         private void LoadSettings()
         {
             // General tab.
-            checkBoxDetailsBox.Checked = RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_SHOW_DETAILS_BOX);
-            checkBoxBlinking.Checked = RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_BLINKING);
-            checkBoxEfficientSolvers.Checked = RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_EFFICIENT_SOLVERS);
+            checkBoxDetailsBox.Checked = RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_SHOW_DETAILS_BOX, true);
+            checkBoxBlinking.Checked = RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_BLINKING, true);
+            checkBoxEfficientSolvers.Checked = RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_EFFICIENT_SOLVERS, true);
             textBoxStepsPerSecond.Text = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_STEPS_PER_SECOND, 200).ToString();
 
             // Images tab.
@@ -71,6 +71,9 @@ namespace SWA.Ariadne.Gui
             imageMinSizeNumericUpDown.Value = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_MIN_SIZE, 120);
             imageMaxSizeNumericUpDown.Value = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_MAX_SIZE, 180);
             imageFolderTextBox.Text = RegisteredOptions.GetStringSetting(RegisteredOptions.OPT_IMAGE_FOLDER);
+
+            // Extras tab.
+            checkBoxOutlineShapes.Checked = RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_OUTLINE_SHAPES, false);
         }
 
         private void SaveSettings()
@@ -88,6 +91,9 @@ namespace SWA.Ariadne.Gui
             key.SetValue(RegisteredOptions.OPT_IMAGE_MIN_SIZE, imageMinSizeNumericUpDown.Value, RegistryValueKind.DWord);
             key.SetValue(RegisteredOptions.OPT_IMAGE_MAX_SIZE, imageMaxSizeNumericUpDown.Value, RegistryValueKind.DWord);
             key.SetValue(RegisteredOptions.OPT_IMAGE_FOLDER, imageFolderTextBox.Text, RegistryValueKind.String);
+
+            // Extras tab.
+            key.SetValue(RegisteredOptions.OPT_OUTLINE_SHAPES, (checkBoxOutlineShapes.Checked ? 1 : 0), RegistryValueKind.DWord);
         }
     }
 }

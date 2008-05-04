@@ -48,12 +48,15 @@ namespace SWA.Ariadne.Gui
             this.selectImageFolderButton = new System.Windows.Forms.Button();
             this.imageFolderTextBox = new System.Windows.Forms.TextBox();
             this.imageFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.checkBoxOutlineShapes = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imageMinSizeNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageMaxSizeNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageNumberNumericUpDown)).BeginInit();
+            this.tabPage3.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonOK
@@ -96,6 +99,7 @@ namespace SWA.Ariadne.Gui
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Location = new System.Drawing.Point(0, 1);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -297,6 +301,29 @@ namespace SWA.Ariadne.Gui
             this.imageFolderTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.imageFolderTextBox.WordWrap = false;
             // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.checkBoxOutlineShapes);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(204, 106);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "Extras";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxOutlineShapes
+            // 
+            this.checkBoxOutlineShapes.AutoSize = true;
+            this.checkBoxOutlineShapes.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.checkBoxOutlineShapes.Location = new System.Drawing.Point(47, 8);
+            this.checkBoxOutlineShapes.Name = "checkBoxOutlineShapes";
+            this.checkBoxOutlineShapes.Size = new System.Drawing.Size(120, 17);
+            this.checkBoxOutlineShapes.TabIndex = 11;
+            this.checkBoxOutlineShapes.Text = "Add Outline Shapes";
+            this.checkBoxOutlineShapes.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.checkBoxOutlineShapes.UseVisualStyleBackColor = true;
+            // 
             // OptionsDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -320,6 +347,8 @@ namespace SWA.Ariadne.Gui
             ((System.ComponentModel.ISupportInitialize)(this.imageMinSizeNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageMaxSizeNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageNumberNumericUpDown)).EndInit();
+            this.tabPage3.ResumeLayout(false);
+            this.tabPage3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -347,6 +376,8 @@ namespace SWA.Ariadne.Gui
         private System.Windows.Forms.Button selectImageFolderButton;
         private System.Windows.Forms.TextBox imageFolderTextBox;
         private System.Windows.Forms.FolderBrowserDialog imageFolderBrowserDialog;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.CheckBox checkBoxOutlineShapes;
 
     }
 }

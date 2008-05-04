@@ -899,7 +899,7 @@ namespace SWA.Ariadne.Gui
             ReserveAreaForImages();
         }
 
-        public void PrepareImages(int count,int minSize,int maxSize,string imageFolder)
+        public void PrepareImages(int count, int minSize, int maxSize, string imageFolder)
         {
             #region Determine number of images to be placed into reserved areas.
 

@@ -16,6 +16,7 @@ namespace SWA.Ariadne.Settings
         public const string OPT_IMAGE_MIN_SIZE = "image minimum size";
         public const string OPT_IMAGE_MAX_SIZE = "image maximum size";
         public const string OPT_IMAGE_FOLDER = "image folder";
+        public const string OPT_OUTLINE_SHAPES = "add outline shapes";
 
         public static bool GetBoolSetting(string name, bool defaultValue)
         {
