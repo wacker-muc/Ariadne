@@ -293,15 +293,21 @@ namespace SWA.Ariadne.Gui
 
             // Dimensions of the control in square coordinates.
             int x, y, w, h;
-            x = XCoordinate(coveringControl.Left);
-            y = YCoordinate(coveringControl.Top);
-#if false
-            w = 1 + XCoordinate(coveringControl.Right) - x;
-            h = 1 + XCoordinate(coveringControl.Bottom) - y;
-#else
-            w = 1 + (coveringControl.Right - coveringControl.Left + wallWidth + 4) / gridWidth;
-            h = 1 + (coveringControl.Bottom - coveringControl.Top + wallWidth + 4) / gridWidth;
-#endif
+            x = XCoordinate(coveringControl.Left, true);
+            y = YCoordinate(coveringControl.Top, true);
+
+            w = 1 + XCoordinate(coveringControl.Right, false) - x;
+            h = 1 + YCoordinate(coveringControl.Bottom, false) - y;
+
+            if (0 < x && x + w < maze.XSize - 1)
+            {
+                w = 1 + (coveringControl.Right - coveringControl.Left + wallWidth + 4) / gridWidth;
+            }
+            if (0 < y && y + h < maze.YSize - 1)
+            {
+                h = 1 + (coveringControl.Bottom - coveringControl.Top + wallWidth + 4) / gridWidth;
+            }
+
 
             bool result = maze.ReserveRectangle(x, y, w, h);
 
@@ -335,19 +341,21 @@ namespace SWA.Ariadne.Gui
             return result;
         }
 
-        private int XCoordinate(int xLocation)
+        private int XCoordinate(int xLocation, bool leftBiased)
         {
             int result = (xLocation - this.Location.X);
             result -= xOffset;
+            result += (leftBiased ? -1 : +1) * wallWidth;
             result /= gridWidth;
             
             return result;
         }
 
-        private int YCoordinate(int yLocation)
+        private int YCoordinate(int yLocation, bool topBiased)
         {
             int result = (yLocation - this.Location.Y);
             result -= yOffset;
+            result += (topBiased ? -1 : +1) * wallWidth;
             result /= gridWidth;
 
             return result;

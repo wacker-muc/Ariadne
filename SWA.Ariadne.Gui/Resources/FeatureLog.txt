@@ -1,0 +1,79 @@
+
+   ====================
+   Feature Log: Ariadne
+   ====================
+
+-----------------------------------------------------------------------
+
+Version 2.2
+
+ * Details dialog: Images and Outline Shapes
+ * Screen Saver option: display images from a specified directory
+ * Screen Saver option: include outline shapes in maze structure
+ * Info dialog with feature log
+
+-----------------------------------------------------------------------
+
+Version 2.1 -- r127
+
+ * Strategies: CenterFlooder, CornerFlooder
+ * Strategies: add efficient variants to all regular strategies
+ * Dead End Checker: faster algorithm, act only when necessary
+ * Screen Saver option: use efficient strategies
+
+-----------------------------------------------------------------------
+
+Version 2.0 -- r105
+
+ * GUI: paint blinking target square
+ * Screen Saver: display caption and status line in an embedded panel
+ * Screen Saver: Preview mode and Configuration dialog
+ * Strategy: EfficientLeftHandWalker with Dead End Checker
+ * GUI: mark dead end squares when using an efficient strategy
+
+-----------------------------------------------------------------------
+
+Version 1.5 -- r93
+
+ * Screen Saver mode: basic functionality
+ * actions may be entered with keyboard controls
+ * Strategies: FarFlooder, HesitatingFlooder
+
+-----------------------------------------------------------------------
+
+Version 1.4 -- r89
+
+ * Action: repeat
+ * Strategies: ProximityBacktracker, ProximityFlooder
+
+-----------------------------------------------------------------------
+
+Version 1.3 -- r84
+
+ * GUI: Arena with four concurrent mazes, each with its own strategy
+ * Status line: show percentage of visited squares
+ * About dialog
+ * Strategy: CloseFlooder
+ * Strategy: MasterSolver
+
+-----------------------------------------------------------------------
+
+Version 1.1 -- r54
+
+ * Details dialog: Layout, Colors, Shape
+ * Action: set desired step rate
+ * Maze: encode charactristics in a 12 letter Code string
+ * Strategies: RandomWalker, LeftHandWalker, RightHandWalker
+ * Strategies: RandomFlooder, RoundRobinFlooder
+
+-----------------------------------------------------------------------
+
+Version 1.0 -- r15
+
+ * GUI: one resizable window with a single maze
+ * Status line: show number of total, forward and backward steps
+ * Actions: new, reset, start, pause, single step
+ * Maze: random maze, all squares are connected, no circles
+ * Strategy: RandomBacktracker
+
+-----------------------------------------------------------------------

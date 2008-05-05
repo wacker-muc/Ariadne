@@ -72,7 +72,7 @@ namespace SWA.Ariadne.Gui
             data.AutoMazeWidth = data.AutoMazeHeight = data.AutoSeed = true;
             data.ClearModifedFlags();
             
-            dataBindingSource.Add(data);
+            dataBindingSource.DataSource = data;
         }
 
         #endregion

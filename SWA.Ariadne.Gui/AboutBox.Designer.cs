@@ -35,6 +35,7 @@ namespace SWA.Ariadne.Gui
             this.labelVersion = new System.Windows.Forms.Label();
             this.labelProductName = new System.Windows.Forms.Label();
             this.mazeUserControl = new SWA.Ariadne.Gui.MazeUserControl();
+            this.moreButton = new System.Windows.Forms.Button();
             this.outerAboutPanel.SuspendLayout();
             this.innerAboutPanel.SuspendLayout();
             this.SuspendLayout();
@@ -43,9 +44,9 @@ namespace SWA.Ariadne.Gui
             // 
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.okButton.Location = new System.Drawing.Point(288, 141);
+            this.okButton.Location = new System.Drawing.Point(288, 143);
             this.okButton.Name = "okButton";
-            this.okButton.Size = new System.Drawing.Size(59, 24);
+            this.okButton.Size = new System.Drawing.Size(59, 22);
             this.okButton.TabIndex = 25;
             this.okButton.Text = "&OK";
             // 
@@ -119,10 +120,21 @@ namespace SWA.Ariadne.Gui
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.mazeUserControl.BackColor = System.Drawing.Color.Black;
+            this.mazeUserControl.BlinkingCounter = 0;
             this.mazeUserControl.Location = new System.Drawing.Point(12, 12);
             this.mazeUserControl.Name = "mazeUserControl";
             this.mazeUserControl.Size = new System.Drawing.Size(339, 157);
             this.mazeUserControl.TabIndex = 0;
+            // 
+            // moreButton
+            // 
+            this.moreButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.moreButton.Location = new System.Drawing.Point(288, 16);
+            this.moreButton.Name = "moreButton";
+            this.moreButton.Size = new System.Drawing.Size(59, 22);
+            this.moreButton.TabIndex = 30;
+            this.moreButton.Text = "More";
+            this.moreButton.Click += new System.EventHandler(this.moreButton_Click);
             // 
             // AboutBox
             // 
@@ -130,6 +142,7 @@ namespace SWA.Ariadne.Gui
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(363, 181);
             this.ControlBox = false;
+            this.Controls.Add(this.moreButton);
             this.Controls.Add(this.outerAboutPanel);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.mazeUserControl);
@@ -154,5 +167,6 @@ namespace SWA.Ariadne.Gui
         private System.Windows.Forms.Label labelCopyright;
         private System.Windows.Forms.Label labelVersion;
         private System.Windows.Forms.Label labelProductName;
+        private System.Windows.Forms.Button moreButton;
     }
 }

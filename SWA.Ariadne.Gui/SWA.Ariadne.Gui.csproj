@@ -42,6 +42,12 @@
     <Compile Include="AboutBox.Designer.cs">
       <DependentUpon>AboutBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="AboutDetailsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AboutDetailsForm.Designer.cs">
+      <DependentUpon>AboutDetailsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ArenaForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -97,6 +103,10 @@
       <DependentUpon>AboutBox.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="AboutDetailsForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>AboutDetailsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ArenaForm.resx">
       <DependentUpon>ArenaForm.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -125,11 +135,21 @@
       <SubType>Designer</SubType>
       <DependentUpon>OptionsDialog.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="ScreenSaverForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>ScreenSaverForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Overview.cd" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="ScreenSaverForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -157,6 +177,9 @@
       <Project>{5947CDF1-FDE4-4B7C-9420-0A4DF039B5AB}</Project>
       <Name>SWA.Utilities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\FeatureLog.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
