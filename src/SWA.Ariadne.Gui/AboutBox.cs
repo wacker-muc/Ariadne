@@ -68,6 +68,7 @@ namespace SWA.Ariadne.Gui
         public void MakeReservedAreas(Maze maze)
         {
             mazeUserControl.ReserveArea(this.okButton);
+            mazeUserControl.ReserveArea(this.moreButton);
             mazeUserControl.ReserveArea(this.outerAboutPanel);
         }
 
@@ -98,6 +99,16 @@ namespace SWA.Ariadne.Gui
         public virtual void FixStateDependantControls(AriadneFormBase.SolverState state)
         {
             // do nothing
+        }
+
+        #endregion
+
+        #region Event handlers
+
+        private void moreButton_Click(object sender, EventArgs e)
+        {
+            Form form = new AboutDetailsForm();
+            form.ShowDialog();
         }
 
         #endregion

@@ -201,7 +201,7 @@ namespace SWA.Ariadne.Gui
         /// <param name="e"></param>
         private void OnAbout(object sender, EventArgs e)
         {
-            AboutBox form = new AboutBox();
+            Form form = new AboutBox();
             form.ShowDialog();
         }
 
