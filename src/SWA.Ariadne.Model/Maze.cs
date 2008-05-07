@@ -523,8 +523,8 @@ namespace SWA.Ariadne.Model
             // The candidate rectangle.
             Rectangle candidate = new Rectangle(x, y, width, height);
 
-            // The candidate, extended with one square around all four edges.
-            Rectangle extendedCandidate = new Rectangle(x - 1, y - 1, width + 2, height + 2);
+            // The candidate, extended with two squares around all four edges.
+            Rectangle extendedCandidate = new Rectangle(x - 2, y - 2, width + 4, height + 4);
 
             bool reject = false;
             foreach (Rectangle rect in this.reservedAreas)
