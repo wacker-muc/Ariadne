@@ -969,9 +969,14 @@ namespace SWA.Ariadne.Gui
         {
             if (this.HasPreparedImages)
             {
-                foreach (Image img in images)
+                for (int i = 0; i < images.Count; i++ )
                 {
-                    AddImage(img);
+                    Image img = images[i];
+                    if (!AddImage(img))
+                    {
+                        images.RemoveAt(i);
+                        i--;
+                    }
                 }
             }
         }
@@ -1004,7 +1009,7 @@ namespace SWA.Ariadne.Gui
             return result;
         }
 
-        private void AddImage(Image img)
+        private bool AddImage(Image img)
         {
             int sqW = (img.Width + 8 + this.wallWidth) / this.gridWidth + 1;
             int sqH = (img.Height + 8 + this.wallWidth) / this.gridWidth + 1;
@@ -1016,7 +1021,13 @@ namespace SWA.Ariadne.Gui
                 int x = rect.X * gridWidth + xOffset + (rect.Width * gridWidth - img.Width) / 2;
                 int y = rect.Y * gridWidth + yOffset + (rect.Height * gridWidth - img.Height) / 2;
                 imageLocations.Add(new Point(x, y));
+                return true;
             }
+            else
+            {
+                return false;
+            }
+
         }
 
         #endregion
