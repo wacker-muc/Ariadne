@@ -124,6 +124,11 @@ namespace SWA.Ariadne.Gui
         private List<Rectangle> imageLocations = new List<Rectangle>();
 
         /// <summary>
+        /// A list of recently used images.  We'll try to avoid using the same images in rapid succession.
+        /// </summary>
+        private List<string> recentlyUsedImages = new List<string>();
+
+        /// <summary>
         /// Returns true when the list of prepared images is not empty.
         /// </summary>
         public bool HasPreparedImages
@@ -1016,14 +1021,32 @@ namespace SWA.Ariadne.Gui
             List<string> result = new List<string>(count);
             Random r = RandomFactory.CreateRandom();
 
-            for (int i = 0; i < count && availableImages.Count > 0; i++)
+            // Shorten the list of recently used images.
+            // Make sure the list does not get too short.
+            while (this.recentlyUsedImages.Count > 0
+                && this.recentlyUsedImages.Count > availableImages.Count - count
+                && this.recentlyUsedImages.Count > availableImages.Count * 3 / 4
+                )
             {
-                int p = r.Next(availableImages.Count);
-                result.Add(availableImages[p]);
-                availableImages.RemoveAt(p);
+                // Remove an item near the beginning of the list (recently added items are at the end).
+                this.recentlyUsedImages.RemoveAt(r.Next(this.recentlyUsedImages.Count / 3 + 1));
             }
 
-            //result.Add(@"C:\Dokumente und Einstellungen\wacker\Eigene Dateien\Eigene Bilder\Bildschirmschoner\Kunstwerke\Kühe-rot.jpg");
+            // Select the required number of images.
+            // Avoid recently used images.
+            while (result.Count < count && availableImages.Count > 0)
+            {
+                int p = r.Next(availableImages.Count);
+                string imagePath = availableImages[p];
+
+                if (!recentlyUsedImages.Contains(imagePath))
+                {
+                    result.Add(imagePath);
+                    recentlyUsedImages.Add(imagePath);
+                }
+
+                availableImages.RemoveAt(p);
+            }
 
             return result;
         }
