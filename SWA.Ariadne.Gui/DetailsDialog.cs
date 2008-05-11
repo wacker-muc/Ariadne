@@ -47,6 +47,7 @@ namespace SWA.Ariadne.Gui
             data.ImageNumber = (int) this.imageNumberNumericUpDown.Value;
             data.ImageMinSize = (int) this.imageMinSizeNumericUpDown.Value;
             data.ImageMaxSize = (int) this.imageMaxSizeNumericUpDown.Value;
+            data.ImageFolder = RegisteredOptions.GetStringSetting(RegisteredOptions.OPT_IMAGE_FOLDER);
 
             data.CircleNumber = (int)this.circleNumberNumericUpDown.Value;
             data.CircleOffCenter = (int)this.circleOffCenterNumericUpDown.Value;
@@ -116,6 +117,9 @@ namespace SWA.Ariadne.Gui
 
         private void OnSelectImageFolder(object sender, EventArgs e)
         {
+            // Start at the path found in the registered options.
+            this.imageFolderBrowserDialog.SelectedPath = this.data.ImageFolder;
+
             if (this.imageFolderBrowserDialog.ShowDialog() == DialogResult.OK)
             {
                 this.imageFolderTextBox.Text = this.imageFolderBrowserDialog.SelectedPath;

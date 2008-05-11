@@ -771,7 +771,7 @@ namespace SWA.Ariadne.Gui
             this.imageMinSizeNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.dataBindingSource, "ImageMinSize", true));
             this.imageMinSizeNumericUpDown.Location = new System.Drawing.Point(91, 55);
             this.imageMinSizeNumericUpDown.Maximum = new decimal(new int[] {
-            400,
+            800,
             0,
             0,
             0});
@@ -805,7 +805,7 @@ namespace SWA.Ariadne.Gui
             this.imageMaxSizeNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.dataBindingSource, "ImageMaxSize", true));
             this.imageMaxSizeNumericUpDown.Location = new System.Drawing.Point(91, 81);
             this.imageMaxSizeNumericUpDown.Maximum = new decimal(new int[] {
-            400,
+            800,
             0,
             0,
             0});
