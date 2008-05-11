@@ -52,6 +52,9 @@ namespace SWA.Ariadne.Gui
 
         private void selectImageFolderButton_Click(object sender, EventArgs e)
         {
+            // Start at the path found in the registered options.
+            this.imageFolderBrowserDialog.SelectedPath = RegisteredOptions.GetStringSetting(RegisteredOptions.OPT_IMAGE_FOLDER);
+
             if (this.imageFolderBrowserDialog.ShowDialog() == DialogResult.OK)
             {
                 this.imageFolderTextBox.Text = this.imageFolderBrowserDialog.SelectedPath;
