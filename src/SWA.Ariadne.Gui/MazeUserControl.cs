@@ -112,9 +112,20 @@ namespace SWA.Ariadne.Gui
             }
         }
 
+        /// <summary>
+        /// A list of (scaled) images that will be painted in reserved areas of the maze.
+        /// </summary>
         private List<Image> images = new List<Image>();
-        private List<Point> imageLocations = new List<Point>();
 
+        /// <summary>
+        /// A list of locations (in graphics coordinates) where the images will be painted.
+        /// Note: Specifying a Point is not sufficient if the image's resolution differs from the graphics resolution.
+        /// </summary>
+        private List<Rectangle> imageLocations = new List<Rectangle>();
+
+        /// <summary>
+        /// Returns true when the list of prepared images is not empty.
+        /// </summary>
         public bool HasPreparedImages
         {
             get { return (images.Count > 0 && imageLocations.Count == 0); }
@@ -795,6 +806,14 @@ namespace SWA.Ariadne.Gui
             data.ForwardColor = this.forwardColor;
             data.BackwardColor = this.backwardColor;
 
+            if (settingsData != null)
+            {
+                data.ImageNumber = settingsData.ImageNumber;
+                data.ImageMinSize = settingsData.ImageMinSize;
+                data.ImageMaxSize = settingsData.ImageMaxSize;
+                data.ImageFolder = settingsData.ImageFolder;
+            }
+
             this.maze.FillParametersInto(data);
         }
 
@@ -1020,7 +1039,7 @@ namespace SWA.Ariadne.Gui
                 // Remember the image data and location.  It will be painted in PaintMaze().
                 int x = rect.X * gridWidth + xOffset + (rect.Width * gridWidth - img.Width) / 2;
                 int y = rect.Y * gridWidth + yOffset + (rect.Height * gridWidth - img.Height) / 2;
-                imageLocations.Add(new Point(x, y));
+                imageLocations.Add(new Rectangle(x, y, img.Width, img.Height));
                 return true;
             }
             else
