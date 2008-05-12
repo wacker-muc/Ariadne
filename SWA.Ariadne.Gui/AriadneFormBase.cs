@@ -99,6 +99,15 @@ namespace SWA.Ariadne.Gui
         /// </summary>
         private double secondsBeforeRateChange;
 
+        /// <summary>
+        /// Start of a short-term interval.
+        /// Used for setting a limit to the current step rate (e.g. 150% of the desired step rate).
+        /// </summary>
+        private DateTime hopStartTime = new DateTime(0);
+        private const double hopDuration = 0.05; // seconds
+        private const double maxHopSpeed = 1.20 * 1.50; // relative to desired step rate; 20% for overhead
+        private long stepsBeforeThisHop = 0;
+
         #endregion
 
         protected bool repeatMode = false;
@@ -762,8 +771,25 @@ namespace SWA.Ariadne.Gui
                 return false;
             }
 
+            DateTime now = System.DateTime.Now;
+
+            #region Limit current short-term speed
+
+            TimeSpan hop = now - hopStartTime;
+            if (hop.TotalSeconds > hopDuration)
+            {
+                hopStartTime = now;
+                stepsBeforeThisHop = countSteps;
+            }
+            else if (countSteps - stepsBeforeThisHop > (long)(stepsPerSecond * hopDuration * maxHopSpeed))
+            {
+                return false;
+            }
+
+            #endregion
+
             // TimeSpan since last Start or Continue.
-            TimeSpan lap = System.DateTime.Now - lapStartTime;
+            TimeSpan lap = now - lapStartTime;
             this.lapSeconds = lap.TotalSeconds;
 
             // Duration for which the desired step rate should be achieved.
