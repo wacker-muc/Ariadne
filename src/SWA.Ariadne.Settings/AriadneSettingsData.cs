@@ -441,5 +441,29 @@ namespace SWA.Ariadne.Settings
 
             #endregion
         }
+
+        public void CopyContentsParameters(AriadneSettingsData template)
+        {
+            this.ImageNumber = template.ImageNumber;
+            this.ImageMinSize = template.ImageMinSize;
+            this.ImageMaxSize = template.ImageMaxSize;
+            this.ImageFolder = template.ImageFolder;
+
+            this.CircleNumber = template.CircleNumber;
+            this.CircleOffCenter = template.CircleOffCenter;
+            this.CircleSize = template.CircleSize;
+
+            this.DiamondNumber = template.DiamondNumber;
+            this.DiamondOffCenter = template.DiamondOffCenter;
+            this.DiamondSize = template.DiamondSize;
+            
+            this.CharNumber = template.CharNumber;
+            this.CharOffCenter = template.CharOffCenter;
+            this.CharSize = template.CharSize;
+            
+            this.SymbolNumber = template.SymbolNumber;
+            this.symbolOffCenter = template.symbolOffCenter;
+            this.SymbolSize = template.SymbolSize;
+        }
     }
 }
