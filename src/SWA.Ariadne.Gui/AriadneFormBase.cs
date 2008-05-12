@@ -217,6 +217,7 @@ namespace SWA.Ariadne.Gui
         private void OnOpenArena(object sender, EventArgs e)
         {
             ArenaForm arena = new ArenaForm();
+            arena.Icon = this.Icon;
             arena.Show();
         }
 
