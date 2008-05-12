@@ -11,6 +11,7 @@ Version 2.2
  * Screen Saver option: display images from a specified directory
  * Screen Saver option: include outline shapes in maze structure
  * Info dialog with feature log
+ * application has its own icon
 
 -----------------------------------------------------------------------
 
