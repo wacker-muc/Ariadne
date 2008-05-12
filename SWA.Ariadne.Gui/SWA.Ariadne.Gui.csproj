@@ -181,6 +181,20 @@
   <ItemGroup>
     <None Include="Resources\FeatureLog.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ButtonReset.png">
+    </None>
+    <None Include="Resources\ButtonStart.png">
+    </None>
+    <None Include="Resources\ButtonPause.png">
+    </None>
+    <None Include="Resources\ButtonStep.png">
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\ButtonRepeat.png">
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

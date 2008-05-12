@@ -60,6 +60,41 @@ namespace SWA.Ariadne.Gui.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap ButtonPause {
+            get {
+                object obj = ResourceManager.GetObject("ButtonPause", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap ButtonRepeat {
+            get {
+                object obj = ResourceManager.GetObject("ButtonRepeat", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap ButtonReset {
+            get {
+                object obj = ResourceManager.GetObject("ButtonReset", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap ButtonStart {
+            get {
+                object obj = ResourceManager.GetObject("ButtonStart", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap ButtonStep {
+            get {
+                object obj = ResourceManager.GetObject("ButtonStep", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         /// <summary>
         ///   Looks up a localized string similar to 
         ///   ====================
@@ -70,16 +105,16 @@ namespace SWA.Ariadne.Gui.Properties {
         ///
         ///Version 2.2
         ///
-        /// * Details Dialog: Images and Outline Shapes
+        /// * Details dialog: Images and Outline Shapes
         /// * Screen Saver option: display images from a specified directory
         /// * Screen Saver option: include outline shapes in maze structure
+        /// * Info dialog with feature log
         ///
         ///-----------------------------------------------------------------------
         ///
         ///Version 2.1 -- r127
         ///
-        /// * Strategies: CenterFlooder, CornerFlooder
-        /// * Strategies: add  [rest of string was truncated]&quot;;.
+        /// * Strategies: CenterFlooder, C [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string FeatureLog {
             get {
