@@ -31,13 +31,14 @@ namespace SWA.Ariadne.Model
         /// <summary>
         /// Create an outline shape.
         /// </summary>
+        /// <param name="r">a source of random numbers</param>
         /// <param name="xSize">width of the created shape</param>
         /// <param name="ySize">height of the created shape</param>
         /// <param name="centerX">X coordinate, relative to total width; 0.0 = top, 1.0 = bottom</param>
         /// <param name="centerY">Y coordinate, relative to total height; 0.0 = left, 1.0 = right</param>
         /// <param name="shapeSize">size, relative to distance of center from the border; 1.0 will touch the border </param>
         /// <returns></returns>
-        public static OutlineShape Circle(int xSize, int ySize, double centerX, double centerY, double shapeSize)
+        public static OutlineShape Circle(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
         {
             OutlineShape result = new OutlineShape(xSize, ySize);
 
@@ -59,13 +60,14 @@ namespace SWA.Ariadne.Model
         /// <summary>
         /// Create an outline shape.
         /// </summary>
+        /// <param name="r">a source of random numbers</param>
         /// <param name="xSize">width of the created shape</param>
         /// <param name="ySize">height of the created shape</param>
         /// <param name="centerX">X coordinate, relative to total width; 0.0 = top, 1.0 = bottom</param>
         /// <param name="centerY">Y coordinate, relative to total height; 0.0 = left, 1.0 = right</param>
         /// <param name="shapeSize">size, relative to distance of center from the border; 1.0 will touch the border </param>
         /// <returns></returns>
-        public static OutlineShape Diamond(int xSize, int ySize, double centerX, double centerY, double shapeSize)
+        public static OutlineShape Diamond(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
         {
             OutlineShape result = new OutlineShape(xSize, ySize);
 
@@ -87,15 +89,15 @@ namespace SWA.Ariadne.Model
         /// <summary>
         /// Create an outline shape.
         /// </summary>
+        /// <param name="r">a source of random numbers</param>
         /// <param name="xSize">width of the created shape</param>
         /// <param name="ySize">height of the created shape</param>
         /// <param name="centerX">X coordinate, relative to total width; 0.0 = top, 1.0 = bottom</param>
         /// <param name="centerY">Y coordinate, relative to total height; 0.0 = left, 1.0 = right</param>
         /// <param name="shapeSize">size, relative to distance of center from the border; 1.0 will touch the border</param>
         /// <returns></returns>
-        public static OutlineShape Char(int xSize, int ySize, double centerX, double centerY, double shapeSize)
+        public static OutlineShape Char(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
         {
-            Random r = RandomFactory.CreateRandom();
             FontFamily fontFamily = new FontFamily("Helvetica");
             char[] shapeCharacters = { 'C', 'O', 'S', 'V', 'X', '3', '6', '8', '9', '?', };
             char ch = shapeCharacters[r.Next(shapeCharacters.Length)];
@@ -106,15 +108,15 @@ namespace SWA.Ariadne.Model
         /// <summary>
         /// Create an outline shape.
         /// </summary>
+        /// <param name="r">a source of random numbers</param>
         /// <param name="xSize">width of the created shape</param>
         /// <param name="ySize">height of the created shape</param>
         /// <param name="centerX">X coordinate, relative to total width; 0.0 = top, 1.0 = bottom</param>
         /// <param name="centerY">Y coordinate, relative to total height; 0.0 = left, 1.0 = right</param>
         /// <param name="shapeSize">size, relative to distance of center from the border; 1.0 will touch the border</param>
         /// <returns></returns>
-        public static OutlineShape Symbol(int xSize, int ySize, double centerX, double centerY, double shapeSize)
+        public static OutlineShape Symbol(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
         {
-            Random r = RandomFactory.CreateRandom();
             FontFamily fontFamily = new FontFamily("Times New Roman");
             char[] shapeCharacters = {
                 //'\u0040',   // @

@@ -90,6 +90,14 @@ namespace SWA.Ariadne.Model
         private Random random;
 
         /// <summary>
+        /// The source of random numbers specific to this maze.
+        /// </summary>
+        public Random Random
+        {
+            get { return this.random; }
+        }
+
+        /// <summary>
         /// Maximum initial seed value: 2^13-1.
         /// This value and the other Max... values are chosen so that the maze Code may be represented with 12 characters.
         /// </summary>

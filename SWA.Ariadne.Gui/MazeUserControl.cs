@@ -800,6 +800,11 @@ namespace SWA.Ariadne.Gui
         /// <param name="data"></param>
         public void FillParametersInto(AriadneSettingsData data)
         {
+            if (settingsData != null)
+            {
+                data.CopyContentsParameters(settingsData);
+            }
+
             data.GridWidth = this.gridWidth;
             data.PathCapStyle = System.Drawing.Drawing2D.LineCap.Square;
             data.PathWidth = this.pathWidth;
@@ -810,14 +815,6 @@ namespace SWA.Ariadne.Gui
             data.ReferenceColor2 = MinColor;
             data.ForwardColor = this.forwardColor;
             data.BackwardColor = this.backwardColor;
-
-            if (settingsData != null)
-            {
-                data.ImageNumber = settingsData.ImageNumber;
-                data.ImageMinSize = settingsData.ImageMinSize;
-                data.ImageMaxSize = settingsData.ImageMaxSize;
-                data.ImageFolder = settingsData.ImageFolder;
-            }
 
             this.maze.FillParametersInto(data);
         }
@@ -850,7 +847,7 @@ namespace SWA.Ariadne.Gui
             }
             else
             {
-                Random r = RandomFactory.CreateRandom();
+                Random r = maze.Random;
                 this.gridWidth = r.Next(MinAutoGridWidth, MaxAutoGridWidth);
                 SuggestWidths(gridWidth, out squareWidth, out pathWidth, out wallWidth);
             }
@@ -935,7 +932,7 @@ namespace SWA.Ariadne.Gui
         {
             #region Determine number of images to be placed into reserved areas.
 
-            Random r = RandomFactory.CreateRandom();
+            Random r = maze.Random;
             int n, nMin, nMax = count;
 
             if (nMax <= 2)
@@ -946,7 +943,15 @@ namespace SWA.Ariadne.Gui
             {
                 nMin = nMax * 2 / 3;
             }
-            n = r.Next(nMin, nMax);
+
+            if (nMax > 0)
+            {
+                n = r.Next(nMin, nMax);
+            }
+            else
+            {
+                return;
+            }
 
             #endregion
 
@@ -1019,7 +1024,7 @@ namespace SWA.Ariadne.Gui
             availableImages.AddRange(SWA.Utilities.Directory.Find(folderPath, "*.png", true));
 
             List<string> result = new List<string>(count);
-            Random r = RandomFactory.CreateRandom();
+            Random r = maze.Random;
 
             // Shorten the list of recently used images.
             // Make sure the list does not get too short.
@@ -1076,11 +1081,11 @@ namespace SWA.Ariadne.Gui
 
         #region Placement of outline shapes
 
-        internal delegate OutlineShape OutlineShapeBuilder(int xSize, int ySize, double centerX, double centerY, double radius);
+        internal delegate OutlineShape OutlineShapeBuilder(Random r, int xSize, int ySize, double centerX, double centerY, double radius);
 
         private void AddOutlineShapes(AriadneSettingsData data)
         {
-            Random r = RandomFactory.CreateRandom();
+            Random r = maze.Random;
 
             AddOutlineShapes(r, OutlineShape.Circle, data.CircleNumber, data.CircleOffCenter / 100.0, data.CircleSize / 100.0);
             AddOutlineShapes(r, OutlineShape.Diamond, data.DiamondNumber, data.DiamondOffCenter / 100.0, data.DiamondSize / 100.0);
@@ -1101,7 +1106,7 @@ namespace SWA.Ariadne.Gui
                 // Reduce size when we are closer to the center than requested.
                 double f = 1.0 - offCenter * 2.0 * (0.5 - Math.Max(Math.Abs(dx), Math.Abs(dy)));
                 
-                OutlineShape shape = shapeBuilderDelegate(XSize, YSize, centerX, centerY, size * f);
+                OutlineShape shape = shapeBuilderDelegate(maze.Random, XSize, YSize, centerX, centerY, size * f);
                 this.maze.AddOutlineShape(shape);
             }
         }
