@@ -51,7 +51,9 @@ namespace SWA.Ariadne.App
                 // If no arguments were passed in, run as a regular application.
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new MazeForm());
+                Form form = new MazeForm();
+                form.Icon = Properties.Resources.AriadneIcon_32x32;
+                Application.Run(form);
 #endif
             }
         }
