@@ -72,6 +72,7 @@
     <Compile Include="DetailsDialog.Designer.cs">
       <DependentUpon>DetailsDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IMazeControl.cs" />
     <Compile Include="IMazeControlProperties.cs" />
     <Compile Include="IMazeControlSetup.cs" />
@@ -194,6 +195,7 @@
   <ItemGroup>
     <Content Include="Resources\ButtonRepeat.png">
     </Content>
+    <None Include="Resources\ImageStephan_64x64.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

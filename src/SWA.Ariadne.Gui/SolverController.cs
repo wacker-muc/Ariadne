@@ -220,6 +220,7 @@ namespace SWA.Ariadne.Gui
         /// Write state information to the given StringBuilder.
         /// </summary>
         /// <param name="message"></param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.Int64.ToString(System.String)")]
         public void FillStatusMessage(StringBuilder message)
         {
             if (countSteps > 0)

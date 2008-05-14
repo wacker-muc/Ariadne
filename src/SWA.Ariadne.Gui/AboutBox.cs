@@ -12,6 +12,12 @@ namespace SWA.Ariadne.Gui
     public partial class AboutBox : Form
         , IMazeForm
     {
+        #region Member variables
+
+        private bool displayAuthorButton = false;
+
+        #endregion
+
         #region Constructor
 
         public AboutBox()
@@ -23,13 +29,10 @@ namespace SWA.Ariadne.Gui
             //  Change assembly information settings for your application through either:
             //  - Project->Properties->Application->Assembly Information
             //  - AssemblyInfo.cs
-            //this.Text = String.Format("About {0}", AssemblyTitle);
             this.Text = String.Format("About {0}", AssemblyProduct);
             this.labelProductName.Text = AssemblyProduct;
             this.labelVersion.Text = String.Format("Version {0}", AssemblyVersion);
             this.labelCopyright.Text = AssemblyCopyright;
-            //this.labelCompanyName.Text = AssemblyCompany;
-            //this.textBoxDescription.Text = AssemblyDescription;
 
             FillMaze();
         }
@@ -69,7 +72,18 @@ namespace SWA.Ariadne.Gui
         {
             mazeUserControl.ReserveArea(this.okButton);
             mazeUserControl.ReserveArea(this.moreButton);
-            mazeUserControl.ReserveArea(this.outerAboutPanel);
+            if (displayAuthorButton)
+            {
+                this.outerAboutPanel.SendToBack();
+                this.authorButton.BringToFront();
+                mazeUserControl.ReserveArea(this.authorButton);
+            }
+            else
+            {
+                this.authorButton.SendToBack();
+                this.outerAboutPanel.BringToFront();
+                mazeUserControl.ReserveArea(this.outerAboutPanel);
+            }
         }
 
         /// <summary>
@@ -111,6 +125,23 @@ namespace SWA.Ariadne.Gui
             form.ShowDialog();
         }
 
+        private void mazeUserControl_Click(object sender, EventArgs e)
+        {
+            this.FillMaze();
+        }
+
+        private void labelCopyright_Click(object sender, EventArgs e)
+        {
+            this.displayAuthorButton = true;
+            this.FillMaze();
+        }
+
+        private void authorButton_Click(object sender, EventArgs e)
+        {
+            this.displayAuthorButton = false;
+            this.FillMaze();
+        }
+
         #endregion
 
         #region Assembly Attribute Accessors
@@ -127,7 +158,7 @@ namespace SWA.Ariadne.Gui
                     // Select the first one
                     AssemblyTitleAttribute titleAttribute = (AssemblyTitleAttribute)attributes[0];
                     // If it is not an empty string, return it
-                    if (titleAttribute.Title != "")
+                    if (!String.IsNullOrEmpty(titleAttribute.Title))
                         return titleAttribute.Title;
                 }
                 // If there was no Title attribute, or if the Title attribute was the empty string, return the .exe name
