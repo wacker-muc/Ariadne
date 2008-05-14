@@ -12,6 +12,7 @@ Version 2.2
  * Screen Saver option: include outline shapes in maze structure
  * Info dialog with feature log
  * application has its own icon
+ * AboutBox: display the author's photo
 
 -----------------------------------------------------------------------
 
