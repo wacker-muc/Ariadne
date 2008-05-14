@@ -109,16 +109,23 @@ namespace SWA.Ariadne.Gui.Properties {
         /// * Screen Saver option: display images from a specified directory
         /// * Screen Saver option: include outline shapes in maze structure
         /// * Info dialog with feature log
+        /// * application has its own icon
         ///
         ///-----------------------------------------------------------------------
         ///
         ///Version 2.1 -- r127
-        ///
-        /// * Strategies: CenterFlooder, C [rest of string was truncated]&quot;;.
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string FeatureLog {
             get {
                 return ResourceManager.GetString("FeatureLog", resourceCulture);
+            }
+        }
+        
+        internal static System.Drawing.Bitmap ImageStephan_64x64 {
+            get {
+                object obj = ResourceManager.GetObject("ImageStephan_64x64", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }

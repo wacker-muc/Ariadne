@@ -34,8 +34,9 @@ namespace SWA.Ariadne.Gui
             this.labelCopyright = new System.Windows.Forms.Label();
             this.labelVersion = new System.Windows.Forms.Label();
             this.labelProductName = new System.Windows.Forms.Label();
-            this.mazeUserControl = new SWA.Ariadne.Gui.MazeUserControl();
             this.moreButton = new System.Windows.Forms.Button();
+            this.authorButton = new System.Windows.Forms.Button();
+            this.mazeUserControl = new SWA.Ariadne.Gui.MazeUserControl();
             this.outerAboutPanel.SuspendLayout();
             this.innerAboutPanel.SuspendLayout();
             this.SuspendLayout();
@@ -44,9 +45,9 @@ namespace SWA.Ariadne.Gui
             // 
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.okButton.Location = new System.Drawing.Point(288, 143);
+            this.okButton.Location = new System.Drawing.Point(288, 146);
             this.okButton.Name = "okButton";
-            this.okButton.Size = new System.Drawing.Size(59, 22);
+            this.okButton.Size = new System.Drawing.Size(59, 20);
             this.okButton.TabIndex = 25;
             this.okButton.Text = "&OK";
             // 
@@ -78,6 +79,7 @@ namespace SWA.Ariadne.Gui
             // 
             this.labelCopyright.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelCopyright.Cursor = System.Windows.Forms.Cursors.Hand;
             this.labelCopyright.Location = new System.Drawing.Point(2, 33);
             this.labelCopyright.Margin = new System.Windows.Forms.Padding(0);
             this.labelCopyright.MaximumSize = new System.Drawing.Size(186, 17);
@@ -86,6 +88,7 @@ namespace SWA.Ariadne.Gui
             this.labelCopyright.TabIndex = 22;
             this.labelCopyright.Text = "Copyright";
             this.labelCopyright.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.labelCopyright.Click += new System.EventHandler(this.labelCopyright_Click);
             // 
             // labelVersion
             // 
@@ -114,6 +117,37 @@ namespace SWA.Ariadne.Gui
             this.labelProductName.Text = "Product Name";
             this.labelProductName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // moreButton
+            // 
+            this.moreButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.moreButton.Location = new System.Drawing.Point(288, 16);
+            this.moreButton.Name = "moreButton";
+            this.moreButton.Size = new System.Drawing.Size(59, 20);
+            this.moreButton.TabIndex = 30;
+            this.moreButton.Text = "More";
+            this.moreButton.Click += new System.EventHandler(this.moreButton_Click);
+            // 
+            // authorButton
+            // 
+            this.authorButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.authorButton.BackgroundImage = global::SWA.Ariadne.Gui.Properties.Resources.ImageStephan_64x64;
+            this.authorButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.authorButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.authorButton.FlatAppearance.BorderSize = 0;
+            this.authorButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.authorButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.authorButton.ForeColor = System.Drawing.Color.White;
+            this.authorButton.Location = new System.Drawing.Point(83, 52);
+            this.authorButton.Margin = new System.Windows.Forms.Padding(0);
+            this.authorButton.Name = "authorButton";
+            this.authorButton.Size = new System.Drawing.Size(64, 97);
+            this.authorButton.TabIndex = 31;
+            this.authorButton.Text = "Stephan Wacker";
+            this.authorButton.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.authorButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.authorButton.UseVisualStyleBackColor = false;
+            this.authorButton.Click += new System.EventHandler(this.authorButton_Click);
+            // 
             // mazeUserControl
             // 
             this.mazeUserControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -125,16 +159,7 @@ namespace SWA.Ariadne.Gui
             this.mazeUserControl.Name = "mazeUserControl";
             this.mazeUserControl.Size = new System.Drawing.Size(339, 157);
             this.mazeUserControl.TabIndex = 0;
-            // 
-            // moreButton
-            // 
-            this.moreButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.moreButton.Location = new System.Drawing.Point(288, 16);
-            this.moreButton.Name = "moreButton";
-            this.moreButton.Size = new System.Drawing.Size(59, 22);
-            this.moreButton.TabIndex = 30;
-            this.moreButton.Text = "More";
-            this.moreButton.Click += new System.EventHandler(this.moreButton_Click);
+            this.mazeUserControl.Click += new System.EventHandler(this.mazeUserControl_Click);
             // 
             // AboutBox
             // 
@@ -142,6 +167,7 @@ namespace SWA.Ariadne.Gui
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(363, 181);
             this.ControlBox = false;
+            this.Controls.Add(this.authorButton);
             this.Controls.Add(this.moreButton);
             this.Controls.Add(this.outerAboutPanel);
             this.Controls.Add(this.okButton);
@@ -168,5 +194,6 @@ namespace SWA.Ariadne.Gui
         private System.Windows.Forms.Label labelVersion;
         private System.Windows.Forms.Label labelProductName;
         private System.Windows.Forms.Button moreButton;
+        private System.Windows.Forms.Button authorButton;
     }
 }

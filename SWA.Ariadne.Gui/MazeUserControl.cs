@@ -312,16 +312,16 @@ namespace SWA.Ariadne.Gui
             x = XCoordinate(coveringControl.Left, true);
             y = YCoordinate(coveringControl.Top, true);
 
-            w = 1 + XCoordinate(coveringControl.Right, false) - x;
-            h = 1 + YCoordinate(coveringControl.Bottom, false) - y;
+            w = 1 + XCoordinate(coveringControl.Right - 1, false) - x;
+            h = 1 + YCoordinate(coveringControl.Bottom - 1, false) - y;
 
-            if (0 < x && x + w < maze.XSize - 1)
+            if (0 < x && x + w < maze.XSize)
             {
-                w = 1 + (coveringControl.Right - coveringControl.Left + wallWidth + 4) / gridWidth;
+                w = 1 + (coveringControl.Width + wallWidth + 6) / gridWidth;
             }
-            if (0 < y && y + h < maze.YSize - 1)
+            if (0 < y && y + h < maze.YSize)
             {
-                h = 1 + (coveringControl.Bottom - coveringControl.Top + wallWidth + 4) / gridWidth;
+                h = 1 + (coveringControl.Height + wallWidth + 6) / gridWidth;
             }
 
 
@@ -330,21 +330,23 @@ namespace SWA.Ariadne.Gui
             // Move the control into the center of the reserved area.
             if (result)
             {
+#if false
                 // Adjust the control's size to make it fit symmetrically into the given space
                 coveringControl.Width += coveringControl.Width % 2;
                 coveringControl.Width -= (w * gridWidth - wallWidth - coveringControl.Width) % 2;
                 coveringControl.Height += coveringControl.Height % 2;
                 coveringControl.Height -= (h * gridWidth - wallWidth - coveringControl.Height) % 2;
+#endif
 
-                int cx = coveringControl.Location.X;
-                int cy = coveringControl.Location.Y;
+                int cx = coveringControl.Left;
+                int cy = coveringControl.Top;
 
-                if (0 < x && x + w < maze.XSize - 1)
+                if (0 < x && x + w < maze.XSize)
                 {
                     cx = this.Location.X + xOffset + x * gridWidth;
                     cx += 1 + (w * gridWidth - wallWidth - coveringControl.Width) / 2;
                 }
-                if (0 < y && y + h < maze.YSize - 1)
+                if (0 < y && y + h < maze.YSize)
                 {
                     cy = this.Location.Y + yOffset + y * gridWidth;
                     cy += 1 + (h * gridWidth - wallWidth - coveringControl.Height) / 2;
@@ -771,6 +773,7 @@ namespace SWA.Ariadne.Gui
         /// </summary>
         /// <param name="sq"></param>
         /// <param name="distance"></param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)")]
         public void DrawAliveSquare(MazeSquare sq, int distance, bool initialDrawing)
         {
             if (squareWidth >= 10)

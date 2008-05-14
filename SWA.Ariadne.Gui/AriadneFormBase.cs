@@ -62,7 +62,7 @@ namespace SWA.Ariadne.Gui
         /// <summary>
         /// Number of executed steps.
         /// </summary>
-        protected long countSteps
+        protected long CountSteps
         {
             get { return (SolverController == null ? -1 : SolverController.CountSteps); }
         }
@@ -230,6 +230,7 @@ namespace SWA.Ariadne.Gui
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Mobility", "CA1601:DoNotUseTimersThatPreventPowerStateChanges")]
         protected virtual void OnStart(object sender, EventArgs e)
         {
             if (State != SolverState.Ready)
@@ -605,7 +606,7 @@ namespace SWA.Ariadne.Gui
 
             // Adjust scheduling parameters.
             secondsBeforeRateChange = accumulatedSeconds + lapSeconds;
-            stepsBeforeRateChange = countSteps;
+            stepsBeforeRateChange = CountSteps;
         }
 
         protected virtual void strategy_SelectedIndexChanged(object sender, EventArgs e)
@@ -646,17 +647,18 @@ namespace SWA.Ariadne.Gui
         /// Derived classes should call their base class' method.
         /// </summary>
         /// <param name="message"></param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.Double.ToString(System.String)")]
         protected void FillStatusMessage(StringBuilder message)
         {
             SolverController.FillStatusMessage(message);
 
-            if (countSteps > 0)
+            if (CountSteps > 0)
             {
                 message.Append(" / ");
                 double totalSeconds = accumulatedSeconds + lapSeconds;
                 message.Append(totalSeconds.ToString("#,##0.00") + " sec");
 
-                double sps = (countSteps - stepsBeforeRateChange) / (totalSeconds - secondsBeforeRateChange);
+                double sps = (CountSteps - stepsBeforeRateChange) / (totalSeconds - secondsBeforeRateChange);
                 if (stepsBeforeRateChange > 0)
                 {
                     message.Append(" = [" + sps.ToString("#,##0") + "] steps/sec");
@@ -686,6 +688,7 @@ namespace SWA.Ariadne.Gui
         /// Derived classes should call their base class' method.
         /// </summary>
         /// <param name="caption"></param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.Int32.ToString")]
         protected virtual void FillCaption(StringBuilder caption)
         {
             caption.Append("Ariadne");
@@ -780,9 +783,9 @@ namespace SWA.Ariadne.Gui
             if (hop.TotalSeconds > hopDuration)
             {
                 hopStartTime = now;
-                stepsBeforeThisHop = countSteps;
+                stepsBeforeThisHop = CountSteps;
             }
-            else if (countSteps - stepsBeforeThisHop > (long)(stepsPerSecond * hopDuration * maxHopSpeed))
+            else if (CountSteps - stepsBeforeThisHop > (long)(stepsPerSecond * hopDuration * maxHopSpeed))
             {
                 return false;
             }
@@ -799,7 +802,7 @@ namespace SWA.Ariadne.Gui
             // Number of steps that should have been achieved.
             double scheduledSteps = (relevantSeconds * stepsPerSecond) + stepsBeforeRateChange;
 
-            return (countSteps < 1 + scheduledSteps);
+            return (CountSteps < 1 + scheduledSteps);
         }
 
         /// <summary>
