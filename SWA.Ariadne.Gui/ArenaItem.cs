@@ -124,7 +124,7 @@ namespace SWA.Ariadne.Gui
         internal void ConfigureVisitedProgressBar()
         {
             visitedProgressBar.Minimum = 0;
-            visitedProgressBar.Maximum = mazeUserControl.Maze.XSize * mazeUserControl.Maze.YSize;
+            visitedProgressBar.Maximum = mazeUserControl.Maze.CountSquares;
             visitedProgressBar.Step = 1;
         }
 

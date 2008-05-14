@@ -130,6 +130,21 @@ namespace SWA.Ariadne.Model
         }
         #endregion
 
+        public int CountSquares
+        {
+            get
+            {
+                int result = xSize * ySize;
+                
+                foreach (Rectangle rect in reservedAreas)
+                {
+                    result -= rect.Width * rect.Height;
+                }
+
+                return result;
+            }
+        }
+
         #endregion
 
         #region Constructor
