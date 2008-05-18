@@ -484,6 +484,16 @@ namespace SWA.Ariadne.Gui
             }
         }
 
+        /// <summary>
+        /// Display the drop down menu (when pressing the split button).
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnShowDropDownMenu(object sender, EventArgs e)
+        {
+            this.menuButton.ShowDropDown();
+        }
+
         #endregion
 
         #region Keyboard controls
@@ -519,7 +529,8 @@ namespace SWA.Ariadne.Gui
                     e.Handled = true;
                     break;
                 case (char)Keys.M:
-                    this.menuButton.ShowDropDown();
+                    OnShowDropDownMenu(sender, e);
+                    e.Handled = true;
                     break;
             }
         }
