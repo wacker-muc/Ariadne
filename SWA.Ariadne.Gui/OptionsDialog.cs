@@ -15,6 +15,13 @@ namespace SWA.Ariadne.Gui
         public OptionsDialog()
         {
             InitializeComponent();
+
+            #region Adjust horizontal alignment of the controls.
+
+            int x = this.imageNumberNumericUpDown.Location.X;
+            this.imageNumberNumericUpDown.Location = new Point(x, this.imageNumberNumericUpDown.Location.Y);
+
+            #endregion
         }
 
         private void OptionsDialog_Load(object sender, EventArgs e)

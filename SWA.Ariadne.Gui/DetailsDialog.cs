@@ -30,7 +30,8 @@ namespace SWA.Ariadne.Gui
         {
             this.target = target;
 
-            // Set the minimum and maximum values of NumericUpDownControls.
+            #region Set the minimum and maximum values of NumericUpDownControls.
+
             this.squareWidthNumericUpDown.Minimum = MazeUserControl.MinSquareWidth;
             this.squareWidthNumericUpDown.Maximum = MazeUserControl.MaxSquareWidth;
             this.pathWidthNumericUpDown.Minimum = MazeUserControl.MinPathWidth;
@@ -40,8 +41,10 @@ namespace SWA.Ariadne.Gui
             this.gridWidthNumericUpDown.Minimum = MazeUserControl.MinGridWidth;
             this.gridWidthNumericUpDown.Maximum = MazeUserControl.MaxGridWidth;
 
-            // Create a data object, fill its contents from the target
-            // and add it to the BindingSource.
+            #endregion
+
+            #region Create a data object, fill its contents from the target and add it to the BindingSource.
+
             this.data = new AriadneSettingsData();
 
             data.ImageNumber = (int) this.imageNumberNumericUpDown.Value;
@@ -74,6 +77,8 @@ namespace SWA.Ariadne.Gui
             data.ClearModifedFlags();
             
             dataBindingSource.DataSource = data;
+
+            #endregion
         }
 
         #endregion
