@@ -5,7 +5,13 @@
 
 -----------------------------------------------------------------------
 
-Version 2.2
+Version 2.3
+
+ * Options and Details dialog: better alignment of labels and controls
+
+-----------------------------------------------------------------------
+
+Version 2.2 -- r153
 
  * Details dialog: Images and Outline Shapes
  * Screen Saver option: display images from a specified directory

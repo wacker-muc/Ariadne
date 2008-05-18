@@ -5,22 +5,22 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SWA.Ariadne.Gui")]
+[assembly: AssemblyTitle("SWA.Ariadne.Gui.Tests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Stephan Wacker")]
-[assembly: AssemblyProduct("Ariadne")]
-[assembly: AssemblyCopyright("Copyright © Stephan Wacker 2008")]
-[assembly: AssemblyTrademark("SWA")]
+[assembly: AssemblyCompany("T-Systems GEI GmbH")]
+[assembly: AssemblyProduct("SWA.Ariadne.Gui.Tests")]
+[assembly: AssemblyCopyright("Copyright © T-Systems GEI GmbH 2008")]
+[assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
-// to COM components.  If you need to access a type in this assembly from 
+// to COM componenets.  If you need to access a type in this assembly from 
 // COM, set the ComVisible attribute to true on that type.
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("c3a4644f-43ae-4fcd-9a30-2bede308eed7")]
+[assembly: Guid("5d40123a-17cb-4216-871f-ffd450fb22ee")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -29,5 +29,7 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
+// You can specify all the values or you can default the Revision and Build Numbers 
+// by using the '*' as shown below:
 [assembly: AssemblyVersion("2.3.0.154")]
 [assembly: AssemblyFileVersion("2.3.0.154")]

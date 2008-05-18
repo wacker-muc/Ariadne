@@ -40,16 +40,16 @@ namespace SWA.Ariadne.Gui
             this.checkBoxBlinking = new System.Windows.Forms.CheckBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.imageMinSizeNumericUpDown = new System.Windows.Forms.NumericUpDown();
-            this.label18 = new System.Windows.Forms.Label();
+            this.labelImagesMinSize = new System.Windows.Forms.Label();
             this.imageMaxSizeNumericUpDown = new System.Windows.Forms.NumericUpDown();
-            this.label16 = new System.Windows.Forms.Label();
+            this.labelImagesMaxSize = new System.Windows.Forms.Label();
             this.imageNumberNumericUpDown = new System.Windows.Forms.NumericUpDown();
-            this.label17 = new System.Windows.Forms.Label();
+            this.labelImagesNumber = new System.Windows.Forms.Label();
             this.selectImageFolderButton = new System.Windows.Forms.Button();
             this.imageFolderTextBox = new System.Windows.Forms.TextBox();
-            this.imageFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.checkBoxOutlineShapes = new System.Windows.Forms.CheckBox();
+            this.imageFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -123,12 +123,14 @@ namespace SWA.Ariadne.Gui
             // 
             // checkBoxEfficientSolvers
             // 
+            this.checkBoxEfficientSolvers.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.checkBoxEfficientSolvers.AutoSize = true;
             this.checkBoxEfficientSolvers.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.checkBoxEfficientSolvers.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.checkBoxEfficientSolvers.Location = new System.Drawing.Point(43, 54);
             this.checkBoxEfficientSolvers.Name = "checkBoxEfficientSolvers";
             this.checkBoxEfficientSolvers.Size = new System.Drawing.Size(124, 17);
-            this.checkBoxEfficientSolvers.TabIndex = 13;
+            this.checkBoxEfficientSolvers.TabIndex = 3;
             this.checkBoxEfficientSolvers.Text = "Use Efficient Solvers";
             this.checkBoxEfficientSolvers.UseVisualStyleBackColor = true;
             // 
@@ -137,13 +139,14 @@ namespace SWA.Ariadne.Gui
             this.textBoxStepsPerSecond.Location = new System.Drawing.Point(153, 77);
             this.textBoxStepsPerSecond.Name = "textBoxStepsPerSecond";
             this.textBoxStepsPerSecond.Size = new System.Drawing.Size(46, 20);
-            this.textBoxStepsPerSecond.TabIndex = 12;
+            this.textBoxStepsPerSecond.TabIndex = 4;
             this.textBoxStepsPerSecond.Text = "200";
             this.textBoxStepsPerSecond.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.label1.Location = new System.Drawing.Point(58, 80);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(92, 13);
@@ -153,35 +156,39 @@ namespace SWA.Ariadne.Gui
             // 
             // checkBoxDetailsBox
             // 
+            this.checkBoxDetailsBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.checkBoxDetailsBox.AutoSize = true;
             this.checkBoxDetailsBox.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.checkBoxDetailsBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.checkBoxDetailsBox.Location = new System.Drawing.Point(58, 8);
             this.checkBoxDetailsBox.Name = "checkBoxDetailsBox";
             this.checkBoxDetailsBox.Size = new System.Drawing.Size(109, 17);
-            this.checkBoxDetailsBox.TabIndex = 10;
+            this.checkBoxDetailsBox.TabIndex = 1;
             this.checkBoxDetailsBox.Text = "Show Details Box";
             this.checkBoxDetailsBox.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.checkBoxDetailsBox.UseVisualStyleBackColor = true;
             // 
             // checkBoxBlinking
             // 
+            this.checkBoxBlinking.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.checkBoxBlinking.AutoSize = true;
             this.checkBoxBlinking.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.checkBoxBlinking.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.checkBoxBlinking.Location = new System.Drawing.Point(6, 31);
             this.checkBoxBlinking.Name = "checkBoxBlinking";
             this.checkBoxBlinking.Size = new System.Drawing.Size(161, 17);
-            this.checkBoxBlinking.TabIndex = 9;
+            this.checkBoxBlinking.TabIndex = 2;
             this.checkBoxBlinking.Text = "Paint Blinking Target Square";
             this.checkBoxBlinking.UseVisualStyleBackColor = true;
             // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.imageMinSizeNumericUpDown);
-            this.tabPage2.Controls.Add(this.label18);
+            this.tabPage2.Controls.Add(this.labelImagesMinSize);
             this.tabPage2.Controls.Add(this.imageMaxSizeNumericUpDown);
-            this.tabPage2.Controls.Add(this.label16);
+            this.tabPage2.Controls.Add(this.labelImagesMaxSize);
             this.tabPage2.Controls.Add(this.imageNumberNumericUpDown);
-            this.tabPage2.Controls.Add(this.label17);
+            this.tabPage2.Controls.Add(this.labelImagesNumber);
             this.tabPage2.Controls.Add(this.selectImageFolderButton);
             this.tabPage2.Controls.Add(this.imageFolderTextBox);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
@@ -207,7 +214,7 @@ namespace SWA.Ariadne.Gui
             0});
             this.imageMinSizeNumericUpDown.Name = "imageMinSizeNumericUpDown";
             this.imageMinSizeNumericUpDown.Size = new System.Drawing.Size(46, 20);
-            this.imageMinSizeNumericUpDown.TabIndex = 119;
+            this.imageMinSizeNumericUpDown.TabIndex = 2;
             this.imageMinSizeNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.imageMinSizeNumericUpDown.Value = new decimal(new int[] {
             300,
@@ -215,15 +222,16 @@ namespace SWA.Ariadne.Gui
             0,
             0});
             // 
-            // label18
+            // labelImagesMinSize
             // 
-            this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(12, 34);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(48, 13);
-            this.label18.TabIndex = 118;
-            this.label18.Text = "Min. size";
-            this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.labelImagesMinSize.AutoSize = true;
+            this.labelImagesMinSize.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.labelImagesMinSize.Location = new System.Drawing.Point(10, 34);
+            this.labelImagesMinSize.Name = "labelImagesMinSize";
+            this.labelImagesMinSize.Size = new System.Drawing.Size(48, 13);
+            this.labelImagesMinSize.TabIndex = 118;
+            this.labelImagesMinSize.Text = "Min. size";
+            this.labelImagesMinSize.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // imageMaxSizeNumericUpDown
             // 
@@ -240,7 +248,7 @@ namespace SWA.Ariadne.Gui
             0});
             this.imageMaxSizeNumericUpDown.Name = "imageMaxSizeNumericUpDown";
             this.imageMaxSizeNumericUpDown.Size = new System.Drawing.Size(46, 20);
-            this.imageMaxSizeNumericUpDown.TabIndex = 117;
+            this.imageMaxSizeNumericUpDown.TabIndex = 3;
             this.imageMaxSizeNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.imageMaxSizeNumericUpDown.Value = new decimal(new int[] {
             400,
@@ -248,15 +256,16 @@ namespace SWA.Ariadne.Gui
             0,
             0});
             // 
-            // label16
+            // labelImagesMaxSize
             // 
-            this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(12, 57);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(51, 13);
-            this.label16.TabIndex = 116;
-            this.label16.Text = "Max. size";
-            this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.labelImagesMaxSize.AutoSize = true;
+            this.labelImagesMaxSize.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.labelImagesMaxSize.Location = new System.Drawing.Point(10, 57);
+            this.labelImagesMaxSize.Name = "labelImagesMaxSize";
+            this.labelImagesMaxSize.Size = new System.Drawing.Size(51, 13);
+            this.labelImagesMaxSize.TabIndex = 116;
+            this.labelImagesMaxSize.Text = "Max. size";
+            this.labelImagesMaxSize.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // imageNumberNumericUpDown
             // 
@@ -268,36 +277,39 @@ namespace SWA.Ariadne.Gui
             0});
             this.imageNumberNumericUpDown.Name = "imageNumberNumericUpDown";
             this.imageNumberNumericUpDown.Size = new System.Drawing.Size(46, 20);
-            this.imageNumberNumericUpDown.TabIndex = 114;
+            this.imageNumberNumericUpDown.TabIndex = 1;
             this.imageNumberNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // label17
+            // labelImagesNumber
             // 
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(12, 11);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(75, 13);
-            this.label17.TabIndex = 115;
-            this.label17.Text = "Number (max.)";
-            this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.labelImagesNumber.AutoSize = true;
+            this.labelImagesNumber.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.labelImagesNumber.Location = new System.Drawing.Point(10, 11);
+            this.labelImagesNumber.Name = "labelImagesNumber";
+            this.labelImagesNumber.Size = new System.Drawing.Size(75, 13);
+            this.labelImagesNumber.TabIndex = 115;
+            this.labelImagesNumber.Text = "Number (max.)";
+            this.labelImagesNumber.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // selectImageFolderButton
             // 
             this.selectImageFolderButton.Location = new System.Drawing.Point(6, 76);
             this.selectImageFolderButton.Name = "selectImageFolderButton";
             this.selectImageFolderButton.Size = new System.Drawing.Size(49, 23);
-            this.selectImageFolderButton.TabIndex = 113;
+            this.selectImageFolderButton.TabIndex = 4;
             this.selectImageFolderButton.Text = "Folder";
             this.selectImageFolderButton.UseVisualStyleBackColor = true;
             this.selectImageFolderButton.Click += new System.EventHandler(this.selectImageFolderButton_Click);
             // 
             // imageFolderTextBox
             // 
+            this.imageFolderTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.imageFolderTextBox.Location = new System.Drawing.Point(87, 77);
             this.imageFolderTextBox.MaxLength = 14;
             this.imageFolderTextBox.Name = "imageFolderTextBox";
             this.imageFolderTextBox.Size = new System.Drawing.Size(114, 20);
-            this.imageFolderTextBox.TabIndex = 112;
+            this.imageFolderTextBox.TabIndex = 5;
             this.imageFolderTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.imageFolderTextBox.WordWrap = false;
             // 
@@ -314,12 +326,14 @@ namespace SWA.Ariadne.Gui
             // 
             // checkBoxOutlineShapes
             // 
+            this.checkBoxOutlineShapes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.checkBoxOutlineShapes.AutoSize = true;
             this.checkBoxOutlineShapes.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.checkBoxOutlineShapes.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.checkBoxOutlineShapes.Location = new System.Drawing.Point(47, 8);
             this.checkBoxOutlineShapes.Name = "checkBoxOutlineShapes";
             this.checkBoxOutlineShapes.Size = new System.Drawing.Size(120, 17);
-            this.checkBoxOutlineShapes.TabIndex = 11;
+            this.checkBoxOutlineShapes.TabIndex = 1;
             this.checkBoxOutlineShapes.Text = "Add Outline Shapes";
             this.checkBoxOutlineShapes.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.checkBoxOutlineShapes.UseVisualStyleBackColor = true;
@@ -368,11 +382,11 @@ namespace SWA.Ariadne.Gui
         private System.Windows.Forms.CheckBox checkBoxBlinking;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.NumericUpDown imageMinSizeNumericUpDown;
-        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.Label labelImagesMinSize;
         private System.Windows.Forms.NumericUpDown imageMaxSizeNumericUpDown;
-        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label labelImagesMaxSize;
         private System.Windows.Forms.NumericUpDown imageNumberNumericUpDown;
-        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Label labelImagesNumber;
         private System.Windows.Forms.Button selectImageFolderButton;
         private System.Windows.Forms.TextBox imageFolderTextBox;
         private System.Windows.Forms.FolderBrowserDialog imageFolderBrowserDialog;
