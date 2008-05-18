@@ -193,6 +193,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\ButtonAbout.png" />
+    <Content Include="Resources\ButtonArena.png" />
+    <Content Include="Resources\ButtonDetails.png" />
+    <Content Include="Resources\ButtonNew.png" />
     <Content Include="Resources\ButtonRepeat.png">
     </Content>
     <None Include="Resources\ImageStephan_64x64.jpg" />
