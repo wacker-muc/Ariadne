@@ -60,6 +60,34 @@ namespace SWA.Ariadne.Gui.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap ButtonAbout {
+            get {
+                object obj = ResourceManager.GetObject("ButtonAbout", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap ButtonArena {
+            get {
+                object obj = ResourceManager.GetObject("ButtonArena", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap ButtonDetails {
+            get {
+                object obj = ResourceManager.GetObject("ButtonDetails", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap ButtonNew {
+            get {
+                object obj = ResourceManager.GetObject("ButtonNew", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap ButtonPause {
             get {
                 object obj = ResourceManager.GetObject("ButtonPause", resourceCulture);
@@ -103,18 +131,17 @@ namespace SWA.Ariadne.Gui.Properties {
         ///
         ///-----------------------------------------------------------------------
         ///
-        ///Version 2.2
+        ///Version 2.3
         ///
-        /// * Details dialog: Images and Outline Shapes
-        /// * Screen Saver option: display images from a specified directory
-        /// * Screen Saver option: include outline shapes in maze structure
-        /// * Info dialog with feature log
-        /// * application has its own icon
+        /// * Options and Details dialog: better alignment of labels and controls
         ///
         ///-----------------------------------------------------------------------
         ///
-        ///Version 2.1 -- r127
-        /// [rest of string was truncated]&quot;;.
+        ///Version 2.2 -- r153
+        ///
+        /// * Details dialog: Images and Outline Shapes
+        /// * Screen Saver option: display images from a specified directory
+        /// * Screen Saver option: include outline shapes in maze str [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string FeatureLog {
             get {
