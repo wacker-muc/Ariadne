@@ -497,6 +497,12 @@ namespace SWA.Ariadne.Gui
                 // Use the previously prepared alternate buffer, if possible.
                 if (gBufferAlternate != null)
                 {
+                    // For a brief moment, display a black screen.
+                    Graphics g = this.CreateGraphics();
+                    g.FillRectangle(Brushes.Black, this.DisplayRectangle);
+                    g.Flush();
+                    System.Threading.Thread.Sleep(120); // milliseconds
+
                     gBuffer = gBufferAlternate;
                     gBufferAlternate = null;
 
