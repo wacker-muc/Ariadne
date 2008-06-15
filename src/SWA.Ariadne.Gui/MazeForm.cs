@@ -159,6 +159,24 @@ namespace SWA.Ariadne.Gui
 
         #endregion
 
+        #region AriadneFormBase implementation
+
+        protected override void PrepareForNextStart(bool baseFirst)
+        {
+            if (baseFirst)
+            {
+                base.PrepareForNextStart(baseFirst);
+                // more code
+            }
+            else
+            {
+                this.mazeUserControl.PrepareAlternateBuffer();
+                base.PrepareForNextStart(baseFirst);
+            }
+        }
+
+        #endregion
+
         #region IMazeForm implementation
 
         /// <summary>

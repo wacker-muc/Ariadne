@@ -28,6 +28,18 @@ namespace SWA.Ariadne.Gui
         private bool previewMode = false;
         private IntPtr parentHwnd = new IntPtr(0);
 
+        private Random random;
+
+        /// <summary>
+        /// These controls are displayed in reserved areas of the maze.
+        /// </summary>
+        List<Control> visibleControls = new List<Control>();
+
+        /// <summary>
+        /// These controls are placed at the locations their actual counterparts will take in the following iteration.
+        /// </summary>
+        List<Control> placeholderControls = new List<Control>();
+
         #endregion
 
         #region Constructor
@@ -36,8 +48,13 @@ namespace SWA.Ariadne.Gui
         {
             InitializeComponent();
 
+            random = RandomFactory.CreateRandom();
+
             this.ShowInTaskbar = false;
             this.DoubleBuffered = true;
+
+            // Initially, the (optinally) displayed controls should be invisible until the maze has been built.
+            this.outerInfoPanel.Visible = false;
         }
 
         /// <summary>
@@ -120,6 +137,9 @@ namespace SWA.Ariadne.Gui
                 this.mazeUserControl.Location = new Point(0, 0);
                 this.mazeUserControl.Size = this.Size;
                 this.mazeUserControl.BringToFront();
+
+                // Other optional controls need to be displayed in front of the maze.
+                this.outerInfoPanel.BringToFront();
             }
 
             // Select the strategyComboBox's item that chooses a random strategy.
@@ -137,20 +157,32 @@ namespace SWA.Ariadne.Gui
                 Application.Exit();
             }
 
-            // Place the info panel at a random position
-            if (this.outerInfoPanel != null && !previewMode)
+            // Choose new locations of controls, before the maze is built.
+            if (!previewMode)
             {
-                Random r = RandomFactory.CreateRandom();
-                int xMin = this.Size.Width / 20;
-                int yMin = this.Size.Height / 20;
-                int xMax = this.Size.Width - xMin - this.outerInfoPanel.Size.Width;
-                int yMax = this.Size.Height - yMin - this.outerInfoPanel.Size.Height;
-                int x = r.Next(xMin, xMax);
-                int y = r.Next(yMin, yMax);
-                this.outerInfoPanel.Location = new Point(x, y);
+                if (visibleControls.Count == 0)
+                {
+                    PreparePlaceholderControls();
+                }
             }
 
+            // Build and display the new maze.
             base.OnNew(sender, e);
+
+            // Place visible controls at the locations determined for their placeholders.
+            if (!previewMode)
+            {
+                for (int i = 0; i < visibleControls.Count; i++)
+                {
+                    Control control = visibleControls[i];
+                    Control placeholder = placeholderControls[i];
+
+                    control.Location = placeholder.Location;
+                    control.Visible = true;
+                    
+                    this.Controls.Remove(placeholder);
+                }
+            }
         }
 
         private void ScreenSaverForm_KeyDown(object sender, KeyEventArgs e)
@@ -167,13 +199,76 @@ namespace SWA.Ariadne.Gui
 
         #region AriadneFormBase implementation
 
-        protected override void PrepareForNextStart()
+        /// <summary>
+        /// Prepare images; determine positions of other visible controls.
+        /// </summary>
+        /// <param name="baseFirst"></param>
+        protected override void PrepareForNextStart(bool baseFirst)
         {
-            base.PrepareForNextStart();
-            if (!previewMode)
+            if (baseFirst)
             {
-                this.PrepareImages();
+                base.PrepareForNextStart(baseFirst);
+                // more code
             }
+            else
+            {
+                if (!previewMode)
+                {
+                    this.PrepareImages();
+                    this.PreparePlaceholderControls();
+                }
+                base.PrepareForNextStart(baseFirst);
+            }
+        }
+
+        /// <summary>
+        /// While the actual controls are still visible, create and place (invisible) placeholders at new locations.
+        /// These placeholders are used for reserving free areas in the maze.
+        /// </summary>
+        private void PreparePlaceholderControls()
+        {
+            visibleControls.Clear();
+            placeholderControls.Clear();
+            
+            PreparePlaceholderControl(this.outerInfoPanel, RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_SHOW_DETAILS_BOX));
+        }
+
+        /// <summary>
+        /// If the given control shall be visible, an invisible placeholder is added to this form at a new, random location.
+        /// In the next iteration, the actual control will replace the placeholder at that location.
+        /// </summary>
+        /// <param name="control"></param>
+        /// <param name="isVisible"></param>
+        private void PreparePlaceholderControl(Control control, bool isVisible)
+        {
+            if (control == null)
+            {
+                return;
+            }
+
+            if (!isVisible)
+            {
+                control.Visible = false;
+                return;
+            }
+
+            // Add the control and a placeholder of the same size to their respective lists.
+            visibleControls.Add(control);
+            Control placeholder = new Control("", control.Left, control.Top, control.Width, control.Height);
+            placeholderControls.Add(placeholder);
+
+            // Place the placeholder at a random location.
+            int xMin = this.Size.Width / 20;
+            int yMin = this.Size.Height / 20;
+            int xMax = this.Size.Width - xMin - control.Size.Width;
+            int yMax = this.Size.Height - yMin - control.Size.Height;
+            int x = this.random.Next(xMin, xMax);
+            int y = this.random.Next(yMin, yMax);
+            placeholder.Location = new Point(x, y);
+
+            // Add the invisible placeholder control to this form.
+            placeholder.Visible = false;
+            this.Controls.Add(placeholder);
         }
 
         #endregion
@@ -187,16 +282,11 @@ namespace SWA.Ariadne.Gui
         /// <param name="maze"></param>
         public override void MakeReservedAreas(Maze maze)
         {
-            #region Info Panel
+            #region Info Panel (and other controls)
 
-            if (!previewMode && RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_SHOW_DETAILS_BOX))
+            for (int i = 0; i < placeholderControls.Count; i++)
             {
-                mazeUserControl.ReserveArea(this.outerInfoPanel);
-                this.outerInfoPanel.BringToFront();
-            }
-            else
-            {
-                this.outerInfoPanel.SendToBack();
+                mazeUserControl.ReserveArea(placeholderControls[i]);
             }
 
             #endregion

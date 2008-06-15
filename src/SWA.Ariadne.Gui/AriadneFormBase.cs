@@ -353,9 +353,24 @@ namespace SWA.Ariadne.Gui
             }
         }
 
-        protected virtual void PrepareForNextStart()
+        private void PrepareForNextStart()
         {
-            // do nothing
+            PrepareForNextStart(true);
+            PrepareForNextStart(false);
+        }
+
+        protected virtual void PrepareForNextStart(bool baseFirst)
+        {
+            if (baseFirst)
+            {
+                // base.PrepareForNextStart(baseFirst);
+                // more code
+            }
+            else
+            {
+                // more code
+                // base.PrepareForNextStart(baseFirst);
+            }
         }
 
         /// <summary>
