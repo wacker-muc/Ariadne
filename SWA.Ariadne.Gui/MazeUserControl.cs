@@ -136,7 +136,20 @@ namespace SWA.Ariadne.Gui
             get { return (images.Count > 0 && imageLocations.Count == 0); }
         }
 
+        /// <summary>
+        /// This buffer holds the graphics and is rendered in the control.
+        /// </summary>
         private BufferedGraphics gBuffer;
+
+        /// <summary>
+        /// This buffer is used to prepare a new maze in Repeat Mode.
+        /// </summary>
+        private BufferedGraphics gBufferAlternate;
+
+        /// <summary>
+        /// When false, do not update the caption or status bar.
+        /// </summary>
+        private bool allowUpdates = true;
 
         internal IMazeForm MazeForm
         {
@@ -205,6 +218,13 @@ namespace SWA.Ariadne.Gui
 
         public void Setup()
         {
+            if (gBufferAlternate != null)
+            {
+                // the Setup() method was already executed for creating the alternate buffer
+                this.Invalidate();
+                return;
+            }
+
             if (settingsData != null)
             {
                 this.TakeParametersFrom(settingsData);
@@ -220,6 +240,34 @@ namespace SWA.Ariadne.Gui
             }
             
             this.Setup(gridWidth);
+        }
+
+        /// <summary>
+        /// Paint a new maze into an alternate graphics buffer that will be used at the next repetition.
+        /// </summary>
+        public void PrepareAlternateBuffer()
+        {
+            // An alternate buffer must only be prepared when the previous maze is solved.
+            if (maze != null && maze.IsSolved != true)
+            {
+                return;
+            }
+
+            // The alternate buffer method doesn't work properly in the screen saver preview mode.
+            if (externalGraphics != null)
+            {
+                return;
+            }
+
+            this.allowUpdates = false;
+            
+            this.Setup();
+
+            gBufferAlternate = this.CreateGraphicsBuffer();
+            Graphics g = gBufferAlternate.Graphics;
+            PaintMaze(g);
+            
+            this.allowUpdates = true;
         }
 
         /// <summary>
@@ -264,8 +312,11 @@ namespace SWA.Ariadne.Gui
             try
             {
                 // Note: In the designer, the MazeForm property is not valid.
-                this.MazeForm.UpdateStatusLine();
-                this.MazeForm.UpdateCaption();
+                if (allowUpdates)
+                {
+                    this.MazeForm.UpdateStatusLine();
+                    this.MazeForm.UpdateCaption();
+                }
             }
             catch { }
         }
@@ -407,7 +458,10 @@ namespace SWA.Ariadne.Gui
                 gBuffer = null;
             }
 
-            this.Invalidate();
+            if (allowUpdates)
+            {
+                this.Invalidate();
+            }
 
             // If the window is minimized, there will be no OnPaint() event.
             // Therefore we Paint the maze directly.
@@ -440,7 +494,20 @@ namespace SWA.Ariadne.Gui
             //
             if (gBuffer == null)
             {
-                PaintMaze();
+                // Use the previously prepared alternate buffer, if possible.
+                if (gBufferAlternate != null)
+                {
+                    gBuffer = gBufferAlternate;
+                    gBufferAlternate = null;
+
+                    // An update of the status line and caption has been delayed until now.
+                    //MazeForm.UpdateStatusLine();
+                    MazeForm.UpdateCaption();
+                }
+                else
+                {
+                    PaintMaze();
+                }
             }
 
             gBuffer.Render();
@@ -451,19 +518,36 @@ namespace SWA.Ariadne.Gui
         /// </summary>
         internal void PaintMaze()
         {
+            gBuffer = CreateGraphicsBuffer();
+            Graphics g = gBuffer.Graphics;
+            PaintMaze(g);
+        }
+
+        /// <summary>
+        /// Creates a new GraphicsBuffer associated with the current graphics context.
+        /// </summary>
+        /// <returns></returns>
+        private BufferedGraphics CreateGraphicsBuffer()
+        {
+            BufferedGraphics result;
             BufferedGraphicsContext currentContext = BufferedGraphicsManager.Current;
             if (externalGraphics != null)
             {
                 //MessageBox.Show("Allocating an external graphics buffer: " + externalRect.ToString(), "Debugging...", MessageBoxButtons.OK);
-                gBuffer = currentContext.Allocate(externalGraphics, externalRect);
+                result = currentContext.Allocate(externalGraphics, externalRect);
             }
             else
             {
-                gBuffer = currentContext.Allocate(this.CreateGraphics(), this.DisplayRectangle);
+                result = currentContext.Allocate(this.CreateGraphics(), this.DisplayRectangle);
             }
+            return result;
+        }
 
-            Graphics g = gBuffer.Graphics;
-
+        /// <summary>
+        /// Creates the GraphicsBuffer and draws the static maze.
+        /// </summary>
+        private void PaintMaze(Graphics g)
+        {
             // The PaintWalls() method fails in design mode.
             try
             {
@@ -1120,7 +1204,7 @@ namespace SWA.Ariadne.Gui
 
         public bool IsSolved
         {
-            get { return (maze == null ? false : maze.IsSolved); }
+            get { return (gBufferAlternate != null ? true : maze == null ? false : maze.IsSolved); }
         }
 
         public int XSize
