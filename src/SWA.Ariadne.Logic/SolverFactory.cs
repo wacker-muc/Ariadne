@@ -32,13 +32,8 @@ namespace SWA.Ariadne.Logic
             typeof(HesitatingFlooder),
             typeof(CenterFlooder),
             typeof(CornerFlooder),
+            typeof(ThickestBranchFlooder),
             typeof(RandomFlooder),
-#if false
-            typeof(EfficientProximityBacktracker),
-            typeof(EfficientRightHandWalker),
-            typeof(EfficientLeftHandWalker),
-            typeof(EfficientCloseFlooder),
-#endif
         };
 
         public static bool HasEfficientVariant(System.Type solverType)
