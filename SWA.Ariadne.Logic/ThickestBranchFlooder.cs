@@ -20,7 +20,7 @@ namespace SWA.Ariadne.Logic
             /// The start square's thickness is 1.
             /// When a branch is split, each branch gets an equal share of the current thickness.
             /// </summary>
-            public double thickness;
+            public float thickness;
         }
         /// <summary>
         /// For every MazeSquare: a counter of the open paths that lead away from it.
@@ -32,6 +32,11 @@ namespace SWA.Ariadne.Logic
         /// A source of random numbers.
         /// </summary>
         private Random random = RandomFactory.CreateRandom();
+
+        /// <summary>
+        /// +1 (maximize thickness) or -1 (minimize thickness)
+        /// </summary>
+        protected int thicknessSign = +1;
 
         #endregion
 
@@ -81,16 +86,16 @@ namespace SWA.Ariadne.Logic
         protected override int SelectPathIdx()
         {
             int bestIdx = 0;
-            double bestThickness = 0;
+            float bestThickness = thicknessSign * -2;
             int bestLength = 0;
 
             for (int i = 0; i < list.Count; i++)
             {
                 MazeSquare sq = list[i];
-                double thickness = branchExtension[sq.XPos, sq.YPos].thickness;
+                float thickness = branchExtension[sq.XPos, sq.YPos].thickness;
                 int length = branchExtension[sq.XPos, sq.YPos].length;
-                
-                if (thickness > bestThickness)
+
+                if (thicknessSign * thickness > thicknessSign * bestThickness)
                 {
                     bestIdx = i;
                     bestThickness = thickness;

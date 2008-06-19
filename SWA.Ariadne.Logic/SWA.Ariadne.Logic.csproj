@@ -57,6 +57,7 @@
     <Compile Include="SolverBase.cs" />
     <Compile Include="SolverFactory.cs" />
     <Compile Include="ThickestBranchFlooder.cs" />
+    <Compile Include="ThinnestBranchFlooder.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SWA.Ariadne.Model\SWA.Ariadne.Model.csproj">

@@ -33,6 +33,7 @@ namespace SWA.Ariadne.Logic
             typeof(CenterFlooder),
             typeof(CornerFlooder),
             typeof(ThickestBranchFlooder),
+            typeof(ThinnestBranchFlooder),
             typeof(RandomFlooder),
         };
 
