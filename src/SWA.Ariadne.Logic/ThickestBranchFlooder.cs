@@ -101,7 +101,7 @@ namespace SWA.Ariadne.Logic
                     bestThickness = thickness;
                     bestLength = length;
                 }
-                else if (thickness == bestThickness && length > bestLength)
+                else if (thickness == bestThickness && thicknessSign * length > thicknessSign * bestLength)
                 {
                     bestIdx = i;
                     //bestThickness = thickness;
