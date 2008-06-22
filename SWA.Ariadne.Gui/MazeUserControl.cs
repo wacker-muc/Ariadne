@@ -823,9 +823,13 @@ namespace SWA.Ariadne.Gui
             float s = MaxColor.GetSaturation();
             float b = MaxColor.GetBrightness();
 
-            // make s and b 30% bigger
+            // Make s and b 30% bigger.
             s = 0.7F * s + 0.3F;
             b = 0.7F * b + 0.3F;
+
+            // Make s and b sufficiently different from the forward color.
+            s = Math.Max(s, 0.6F * forwardColor.GetSaturation() + 0.4F);
+            b = Math.Max(b, 0.6F * forwardColor.GetBrightness() + 0.4F);
 
             Color highlightColor = ColorBuilder.ConvertHSBToColor(h, s, b);
             Pen p = new Pen(highlightColor, pathWidth);
