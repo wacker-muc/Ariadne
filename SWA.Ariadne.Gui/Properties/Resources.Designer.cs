@@ -134,14 +134,14 @@ namespace SWA.Ariadne.Gui.Properties {
         ///Version 2.3
         ///
         /// * Options and Details dialog: better alignment of labels and controls
+        /// * Screen Saver: avoid visible delay and black screen between iterations
+        /// * Strategies: ThickestBranchFlooder, ThinnestBranchFlooder
         ///
         ///-----------------------------------------------------------------------
         ///
         ///Version 2.2 -- r153
         ///
-        /// * Details dialog: Images and Outline Shapes
-        /// * Screen Saver option: display images from a specified directory
-        /// * Screen Saver option: include outline shapes in maze str [rest of string was truncated]&quot;;.
+        /// * Details dialog: Images and Outlin [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string FeatureLog {
             get {
