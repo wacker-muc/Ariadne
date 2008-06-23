@@ -42,7 +42,7 @@ namespace SWA.Ariadne.Outlines
         #region Constructor
 
         /// <summary>
-        /// Creates an OutlineShape based on a Bitmap image.
+        /// Create an OutlineShape based on a Bitmap image.
         /// </summary>
         /// <param name="img"></param>
         /// <param name="xImg">X location of the image in shape coordinates</param>
@@ -54,23 +54,34 @@ namespace SWA.Ariadne.Outlines
             this.imgYOffset = yImg;
         }
 
+        /// <summary>
+        /// Create an OutlineShape based on a Bitmap image.
+        /// </summary>
+        /// <param name="img"></param>
+        /// <param name="xSize">width of the created shape</param>
+        /// <param name="ySize">height of the created shape</param>
+        /// <param name="centerX">X coordinate, relative to total width; 0.0 = top, 1.0 = bottom</param>
+        /// <param name="centerY">Y coordinate, relative to total height; 0.0 = left, 1.0 = right</param>
+        /// <param name="shapeSize">size, relative to distance of center from the border; 1.0 will touch the border</param>
+        private ImageOutlineShape(Bitmap img, int xSize, int ySize, double centerX, double centerY, double shapeSize)
+        {
+            double xc, yc, sz;
+            ConvertParameters(xSize, ySize, centerX, centerY, shapeSize, out xc, out yc, out sz);
+            double scale = 2 * sz / Math.Max(img.Width, img.Height);
+
+            this.img = new Bitmap(img, new Size((int)(img.Width * scale), (int)(img.Height * scale)));
+            this.imgXOffset = (int)(xc - this.img.Width / 2.0);
+            this.imgYOffset = (int)(yc - this.img.Height / 2.0);
+        }
+
         #endregion
 
         #region Static methods for creating OutlineShapes
 
         public static OutlineShape SouthAmerica(int xSize, int ySize, double centerX, double centerY, double shapeSize)
         {
-            double xc, yc, sz;
-            ConvertParameters(xSize, ySize, centerX, centerY, shapeSize, out xc, out yc, out sz);
-
             Bitmap img = Properties.Resources.SouthAmerica;
-            double scale = 2 * sz / Math.Max(img.Width, img.Height);
-            img = new Bitmap(img, new Size((int)(img.Width * scale), (int)(img.Height * scale)));
-
-            int xImg = (int)(xc - img.Width / 2.0);
-            int yImg = (int)(yc - img.Height / 2.0);
-
-            return new ImageOutlineShape(img, xImg, yImg);
+            return new ImageOutlineShape(img, xSize, ySize, centerX, centerY, shapeSize);
         }
 
         #endregion
