@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
 
-namespace SWA.Ariadne.Model
+namespace SWA.Ariadne.Outlines
 {
     public class OutlineShape
     {

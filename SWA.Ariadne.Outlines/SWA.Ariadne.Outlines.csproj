@@ -4,11 +4,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{1ECDFF25-8784-44B4-B4DA-25B20F1DF7EC}</ProjectGuid>
+    <ProjectGuid>{9751AAAE-B751-451E-BA8C-FBD55234FE56}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SWA.Ariadne.Model</RootNamespace>
-    <AssemblyName>SWA.Ariadne.Model</AssemblyName>
+    <RootNamespace>SWA.Ariadne.Outlines</RootNamespace>
+    <AssemblyName>SWA.Ariadne.Outlines</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -34,21 +34,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DeadEndChecker.cs" />
-    <Compile Include="Maze.cs" />
-    <Compile Include="MazeSquare.cs" />
+    <Compile Include="OutlineShape.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RandomFactory.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SWA.Ariadne.Outlines\SWA.Ariadne.Outlines.csproj">
-      <Project>{9751AAAE-B751-451E-BA8C-FBD55234FE56}</Project>
-      <Name>SWA.Ariadne.Outlines</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SWA.Ariadne.Settings\SWA.Ariadne.Settings.csproj">
-      <Project>{30293912-CD50-4ECE-B51A-CD89890186F8}</Project>
-      <Name>SWA.Ariadne.Settings</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

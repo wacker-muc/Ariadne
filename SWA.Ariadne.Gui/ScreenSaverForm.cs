@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
 using SWA.Ariadne.Model;
+using SWA.Ariadne.Outlines;
 using SWA.Ariadne.Settings;
 
 namespace SWA.Ariadne.Gui
