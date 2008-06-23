@@ -9,7 +9,7 @@ namespace SWA.Ariadne.Outlines
     {
         #region Member variables and Properties
 
-        public bool this[int x, int y]
+        public virtual bool this[int x, int y]
         {
             get { return squares[x, y]; }
         }
@@ -22,6 +22,13 @@ namespace SWA.Ariadne.Outlines
         private OutlineShape(int xSize, int ySize)
         {
             this.squares = new bool[xSize, ySize];
+        }
+
+        /// <summary>
+        /// Constructor for derived classes.
+        /// </summary>
+        protected OutlineShape()
+        {
         }
 
         #endregion
@@ -40,6 +47,9 @@ namespace SWA.Ariadne.Outlines
         /// <returns></returns>
         public static OutlineShape Circle(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
         {
+#if true
+            return ImageOutlineShape.SouthAmerica(xSize, ySize, centerX, centerX, shapeSize);
+#else
             OutlineShape result = new OutlineShape(xSize, ySize);
 
             double xc, yc, sz;
@@ -55,6 +65,7 @@ namespace SWA.Ariadne.Outlines
             }
 
             return result;
+#endif
         }
 
         /// <summary>
@@ -149,7 +160,7 @@ namespace SWA.Ariadne.Outlines
         /// <param name="xc"></param>
         /// <param name="yc"></param>
         /// <param name="sz"></param>
-        private static void ConvertParameters(int xSize, int ySize, double centerX, double centerY, double shapeSize, out double xc, out double yc, out double sz)
+        protected static void ConvertParameters(int xSize, int ySize, double centerX, double centerY, double shapeSize, out double xc, out double yc, out double sz)
         {
             // Determine center coordinates in the shape coordinate system.
             xc = xSize * centerX;
