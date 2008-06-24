@@ -48,7 +48,7 @@ namespace SWA.Ariadne.Outlines
         public static OutlineShape Circle(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
         {
 #if true
-            return ImageOutlineShape.SouthAmerica(xSize, ySize, centerX, centerX, shapeSize);
+            return ImageOutlineShape.Random(r, xSize, ySize, centerX, centerX, shapeSize);
 #else
             OutlineShape result = new OutlineShape(xSize, ySize);
 
@@ -145,6 +145,20 @@ namespace SWA.Ariadne.Outlines
             return Char(xSize, ySize, centerX, centerY, shapeSize, ch, fontFamily);
         }
 
+        /// <summary>
+        /// Create an outline shape.
+        /// </summary>
+        /// <param name="r">a source of random numbers</param>
+        /// <param name="xSize">width of the created shape</param>
+        /// <param name="ySize">height of the created shape</param>
+        /// <param name="centerX">X coordinate, relative to total width; 0.0 = top, 1.0 = bottom</param>
+        /// <param name="centerY">Y coordinate, relative to total height; 0.0 = left, 1.0 = right</param>
+        /// <param name="shapeSize">size, relative to distance of center from the border; 1.0 will touch the border</param>
+        /// <returns></returns>
+        public static OutlineShape Image(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
+        {
+            return ImageOutlineShape.Random(r, xSize, ySize, centerX, centerX, shapeSize);
+        }
         #endregion
 
         #region Auxiliary methods
