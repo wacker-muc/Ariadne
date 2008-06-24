@@ -2,11 +2,45 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
+using System.Reflection;
 
 namespace SWA.Ariadne.Outlines
 {
     public class ImageOutlineShape : OutlineShape
     {
+        #region Class variables
+
+        static List<System.Reflection.MethodInfo> BitmapProperties;
+
+        #endregion
+
+        #region Class Constructor
+
+        static ImageOutlineShape()
+        {
+            BitmapProperties = new List<System.Reflection.MethodInfo>();
+#if false
+            // This fails in the class constructor and returns null.  :-(
+            Type bitmapType = System.Type.GetType("System.Drawing.Bitmap");
+#else
+            Bitmap bitmap = new Bitmap(1, 1);
+            Type bitmapType = bitmap.GetType();
+#endif
+
+            System.Type resourcesType = System.Type.GetType("SWA.Ariadne.Outlines.Properties.Resources");
+            BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static;
+            foreach (System.Reflection.PropertyInfo info in resourcesType.GetProperties(flags))
+            {
+                Type propertyType = info.PropertyType;
+                if (bitmapType.IsAssignableFrom(propertyType))
+                {
+                    BitmapProperties.Add(info.GetGetMethod(true));
+                }
+            }
+        }
+
+        #endregion
+
         #region Member variables and Properties
 
         private Bitmap img;
@@ -78,9 +112,10 @@ namespace SWA.Ariadne.Outlines
 
         #region Static methods for creating OutlineShapes
 
-        public static OutlineShape SouthAmerica(int xSize, int ySize, double centerX, double centerY, double shapeSize)
+        public static OutlineShape Random(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
         {
-            Bitmap img = Properties.Resources.SouthAmerica;
+            System.Reflection.MethodInfo method = BitmapProperties[r.Next(BitmapProperties.Count)];
+            Bitmap img = (Bitmap) method.Invoke(null, null);
             return new ImageOutlineShape(img, xSize, ySize, centerX, centerY, shapeSize);
         }
 
