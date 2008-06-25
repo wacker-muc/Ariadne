@@ -47,7 +47,7 @@ namespace SWA.Ariadne.Outlines
         /// <returns></returns>
         public static OutlineShape Circle(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
         {
-#if true
+#if false
             return ImageOutlineShape.Random(r, xSize, ySize, centerX, centerX, shapeSize);
 #else
             OutlineShape result = new OutlineShape(xSize, ySize);
@@ -80,6 +80,9 @@ namespace SWA.Ariadne.Outlines
         /// <returns></returns>
         public static OutlineShape Diamond(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
         {
+#if false
+            return PolygonOutlineShape.Random(r, xSize, ySize, centerX, centerX, shapeSize);
+#else
             OutlineShape result = new OutlineShape(xSize, ySize);
 
             double xc, yc, sz;
@@ -95,6 +98,22 @@ namespace SWA.Ariadne.Outlines
             }
 
             return result;
+#endif
+        }
+
+        /// <summary>
+        /// Create an outline shape.
+        /// </summary>
+        /// <param name="r">a source of random numbers</param>
+        /// <param name="xSize">width of the created shape</param>
+        /// <param name="ySize">height of the created shape</param>
+        /// <param name="centerX">X coordinate, relative to total width; 0.0 = top, 1.0 = bottom</param>
+        /// <param name="centerY">Y coordinate, relative to total height; 0.0 = left, 1.0 = right</param>
+        /// <param name="shapeSize">size, relative to distance of center from the border; 1.0 will touch the border </param>
+        /// <returns></returns>
+        public static OutlineShape Polygon(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
+        {
+            return PolygonOutlineShape.Random(r, xSize, ySize, centerX, centerX, shapeSize);
         }
 
         /// <summary>

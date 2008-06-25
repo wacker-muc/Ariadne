@@ -34,6 +34,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PolygonOutlineShape.cs" />
     <Compile Include="ImageOutlineShape.cs" />
     <Compile Include="OutlineShape.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

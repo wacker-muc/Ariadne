@@ -10,7 +10,10 @@ namespace SWA.Ariadne.Outlines
     {
         #region Class variables
 
-        static List<System.Reflection.MethodInfo> BitmapProperties;
+        /// <summary>
+        /// List of Property Methods that return bitmap images from the Resources file.
+        /// </summary>
+        private static List<System.Reflection.MethodInfo> BitmapProperties;
 
         #endregion
 
@@ -27,8 +30,11 @@ namespace SWA.Ariadne.Outlines
             Type bitmapType = bitmap.GetType();
 #endif
 
-            System.Type resourcesType = System.Type.GetType("SWA.Ariadne.Outlines.Properties.Resources");
+            #region Collect all (internal) Properties of the Resources type that return a Bitmap type.
+
+            Type resourcesType = Type.GetType("SWA.Ariadne.Outlines.Properties.Resources");
             BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static;
+
             foreach (System.Reflection.PropertyInfo info in resourcesType.GetProperties(flags))
             {
                 Type propertyType = info.PropertyType;
@@ -37,6 +43,8 @@ namespace SWA.Ariadne.Outlines
                     BitmapProperties.Add(info.GetGetMethod(true));
                 }
             }
+
+            #endregion
         }
 
         #endregion

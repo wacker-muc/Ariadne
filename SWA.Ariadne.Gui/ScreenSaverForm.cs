@@ -333,14 +333,18 @@ namespace SWA.Ariadne.Gui
                 MazeUserControl.OutlineShapeBuilder[] shapeBuilderDelegates = {
                     OutlineShape.Circle,
                     OutlineShape.Diamond,
+                    OutlineShape.Polygon,
                     OutlineShape.Char,
                     OutlineShape.Symbol,
+                    OutlineShape.Image,
                 };
-                int[] ratios = {
-                    10,
-                    10,
-                    50,
-                    50,
+                int[] ratios = { // number * interest
+                     1 * 20,
+                     1 *  5,
+                     6 * 40,
+                    10 * 10,
+                     8 * 15,
+                    32 * 25,
                 };
                 int n = 0;
                 foreach (int k in ratios) { n += k; }
