@@ -440,6 +440,9 @@ namespace SWA.Ariadne.Gui
             SolverController.DoStep();
             SolverController.FinishPath();
 
+            // Each single step is assumed to take exactly the desired time.
+            this.accumulatedSeconds += 1.0 / stepsPerSecond;
+
             SolverController.UpdateStatusLine();
         }
 
