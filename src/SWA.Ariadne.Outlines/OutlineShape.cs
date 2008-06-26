@@ -48,7 +48,7 @@ namespace SWA.Ariadne.Outlines
         public static OutlineShape Circle(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
         {
 #if false
-            return ImageOutlineShape.Random(r, xSize, ySize, centerX, centerX, shapeSize);
+            return BitmapOutlineShape.Random(r, xSize, ySize, centerX, centerX, shapeSize);
 #else
             OutlineShape result = new OutlineShape(xSize, ySize);
 
@@ -176,7 +176,7 @@ namespace SWA.Ariadne.Outlines
         /// <returns></returns>
         public static OutlineShape Image(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
         {
-            return ImageOutlineShape.Random(r, xSize, ySize, centerX, centerX, shapeSize);
+            return BitmapOutlineShape.Random(r, xSize, ySize, centerX, centerX, shapeSize);
         }
         #endregion
 

@@ -34,8 +34,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BitmapOutlineShape.cs" />
     <Compile Include="PolygonOutlineShape.cs" />
-    <Compile Include="ImageOutlineShape.cs" />
     <Compile Include="OutlineShape.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -53,6 +53,105 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\SouthAmerica.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Africa.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Bavaria.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Antarctica.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Australia.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Austria.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BritishIslands.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Islandia.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\China.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\France.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Germany.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\India.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Iberia.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Texas.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Tibet.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\USA.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Corsica.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Cyprus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CzechRepublic.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Europe.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Greenland.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Hungary.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Italy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ItalyMainland.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Japan.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Madagascar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Mexico.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\NorthAmerica.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Poland.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Peru.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Scandinavia.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Russia.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Sicily.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Spain.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
