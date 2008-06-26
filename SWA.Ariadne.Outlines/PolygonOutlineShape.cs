@@ -22,10 +22,10 @@ namespace SWA.Ariadne.Outlines
         /// <summary>
         /// Center and size (radius) in outline shape coordinates.
         /// </summary>
-        private double xc, yc, sz;
+        protected double xc, yc, sz;
 
         /// <summary>
-        /// Returns true if the given point is inside the polygon.
+        /// Returns true if the given point is inside the shape.
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -39,6 +39,7 @@ namespace SWA.Ariadne.Outlines
                 // Convert to polar coordinates.
                 double r, phi;
                 RectToPolar(dx, dy, out r, out phi);
+
                 double halfSectorAngle = Math.PI / corners;
                 double fullSectorAngle = 2.0 * halfSectorAngle;
 
@@ -60,19 +61,19 @@ namespace SWA.Ariadne.Outlines
                 PolarToRect(r, phi, out dx, out dy);
 
                 // Test if the resulting x coordinate is on the "inside", i.e. to the left of a vertical polygon edge.
-                bool result = dx < sz * Math.Cos(halfSectorAngle);
+                bool result = (dx <= sz * Math.Cos(halfSectorAngle));
 
                 return result;
             }
         }
 
-        private void RectToPolar(double x, double y, out double r, out double phi)
+        protected static void RectToPolar(double x, double y, out double r, out double phi)
         {
             r = Math.Sqrt(x * x + y * y);
             phi = Math.Atan2(y, x);
         }
 
-        private void PolarToRect(double r, double phi, out double x, out double y)
+        protected static void PolarToRect(double r, double phi, out double x, out double y)
         {
             x = r * Math.Cos(phi);
             y = r * Math.Sin(phi);
@@ -92,7 +93,7 @@ namespace SWA.Ariadne.Outlines
         /// <param name="centerX">X coordinate, relative to total width; 0.0 = top, 1.0 = bottom</param>
         /// <param name="centerY">Y coordinate, relative to total height; 0.0 = left, 1.0 = right</param>
         /// <param name="shapeSize">size, relative to distance of center from the border; 1.0 will touch the border</param>
-        private PolygonOutlineShape(int corners, double slant, int xSize, int ySize, double centerX, double centerY, double shapeSize)
+        protected PolygonOutlineShape(int corners, double slant, int xSize, int ySize, double centerX, double centerY, double shapeSize)
         {
             this.corners = corners;
             this.slant = slant;

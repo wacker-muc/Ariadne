@@ -50,6 +50,9 @@ namespace SWA.Ariadne.Outlines
 #if false
             return BitmapOutlineShape.Random(r, xSize, ySize, centerX, centerX, shapeSize);
 #else
+#if true
+            return CircleOutlineShape.Create(r, xSize, ySize, centerX, centerX, shapeSize);
+#else
             OutlineShape result = new OutlineShape(xSize, ySize);
 
             double xc, yc, sz;
@@ -65,6 +68,7 @@ namespace SWA.Ariadne.Outlines
             }
 
             return result;
+#endif
 #endif
         }
 
@@ -174,7 +178,7 @@ namespace SWA.Ariadne.Outlines
         /// <param name="centerY">Y coordinate, relative to total height; 0.0 = left, 1.0 = right</param>
         /// <param name="shapeSize">size, relative to distance of center from the border; 1.0 will touch the border</param>
         /// <returns></returns>
-        public static OutlineShape Image(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
+        public static OutlineShape Bitmap(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
         {
             return BitmapOutlineShape.Random(r, xSize, ySize, centerX, centerX, shapeSize);
         }
