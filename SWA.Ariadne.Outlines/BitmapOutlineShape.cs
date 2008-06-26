@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace SWA.Ariadne.Outlines
 {
-    public class ImageOutlineShape : OutlineShape
+    internal class BitmapOutlineShape : OutlineShape
     {
         #region Class variables
 
@@ -19,7 +19,7 @@ namespace SWA.Ariadne.Outlines
 
         #region Class Constructor
 
-        static ImageOutlineShape()
+        static BitmapOutlineShape()
         {
             BitmapProperties = new List<System.Reflection.MethodInfo>();
 #if false
@@ -51,8 +51,8 @@ namespace SWA.Ariadne.Outlines
 
         #region Member variables and Properties
 
-        private Bitmap img;
-        private int imgXOffset, imgYOffset;
+        private Bitmap map;
+        private int mapXOffset, mapYOffset;
         private bool hasBlackBackground = false;
 
         /// <summary>
@@ -66,15 +66,15 @@ namespace SWA.Ariadne.Outlines
         {
             get
             {
-                int xi = x - imgXOffset, yi = y - imgYOffset;
+                int xi = x - mapXOffset, yi = y - mapYOffset;
 
-                if (xi < 0 || yi < 0 || xi >= img.Width || yi >= img.Height)
+                if (xi < 0 || yi < 0 || xi >= map.Width || yi >= map.Height)
                 {
                     return hasBlackBackground;
                 }
                 else
                 {
-                    return (img.GetPixel(xi, yi).GetBrightness() <= 0.5);
+                    return (map.GetPixel(xi, yi).GetBrightness() <= 0.5);
                 }
             }
         }
@@ -87,33 +87,32 @@ namespace SWA.Ariadne.Outlines
         /// Create an OutlineShape based on a Bitmap image.
         /// </summary>
         /// <param name="img"></param>
-        /// <param name="xImg">X location of the image in shape coordinates</param>
-        /// <param name="yImg">Y location of the image in shape coordinates</param>
-        private ImageOutlineShape(Bitmap img, int xImg, int yImg)
-        {
-            this.img = img;
-            this.imgXOffset = xImg;
-            this.imgYOffset = yImg;
-        }
-
-        /// <summary>
-        /// Create an OutlineShape based on a Bitmap image.
-        /// </summary>
-        /// <param name="img"></param>
         /// <param name="xSize">width of the created shape</param>
         /// <param name="ySize">height of the created shape</param>
         /// <param name="centerX">X coordinate, relative to total width; 0.0 = top, 1.0 = bottom</param>
         /// <param name="centerY">Y coordinate, relative to total height; 0.0 = left, 1.0 = right</param>
         /// <param name="shapeSize">size, relative to distance of center from the border; 1.0 will touch the border</param>
-        private ImageOutlineShape(Bitmap img, int xSize, int ySize, double centerX, double centerY, double shapeSize)
+        private BitmapOutlineShape(Bitmap img, int xSize, int ySize, double centerX, double centerY, double shapeSize)
         {
             double xc, yc, sz;
             ConvertParameters(xSize, ySize, centerX, centerY, shapeSize, out xc, out yc, out sz);
             double scale = 2 * sz / Math.Max(img.Width, img.Height);
 
-            this.img = new Bitmap(img, new Size((int)(img.Width * scale), (int)(img.Height * scale)));
-            this.imgXOffset = (int)(xc - this.img.Width / 2.0);
-            this.imgYOffset = (int)(yc - this.img.Height / 2.0);
+            this.map = new Bitmap(img, new Size((int)(img.Width * scale), (int)(img.Height * scale)));
+            this.mapXOffset = (int)(xc - this.map.Width / 2.0);
+            this.mapYOffset = (int)(yc - this.map.Height / 2.0);
+
+            #region Determine the background color: black or white.
+
+            int w = this.map.Width - 1, h = this.map.Height - 1;
+            float cornerBrightness = 0;
+            cornerBrightness += this.map.GetPixel(0, 0).GetBrightness();
+            cornerBrightness += this.map.GetPixel(w, 0).GetBrightness();
+            cornerBrightness += this.map.GetPixel(0, h).GetBrightness();
+            cornerBrightness += this.map.GetPixel(w, h).GetBrightness();
+            this.hasBlackBackground = (cornerBrightness < 0.5F * 4);
+
+            #endregion
         }
 
         #endregion
@@ -124,7 +123,7 @@ namespace SWA.Ariadne.Outlines
         {
             System.Reflection.MethodInfo method = BitmapProperties[r.Next(BitmapProperties.Count)];
             Bitmap img = (Bitmap) method.Invoke(null, null);
-            return new ImageOutlineShape(img, xSize, ySize, centerX, centerY, shapeSize);
+            return new BitmapOutlineShape(img, xSize, ySize, centerX, centerY, shapeSize);
         }
 
         #endregion

@@ -344,7 +344,7 @@ namespace SWA.Ariadne.Gui
                      6 * 40,
                     10 * 10,
                      8 * 15,
-                    32 * 25,
+                    36 * 25,
                 };
                 int n = 0;
                 foreach (int k in ratios) { n += k; }

@@ -60,9 +60,240 @@ namespace SWA.Ariadne.Outlines.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap Africa {
+            get {
+                object obj = ResourceManager.GetObject("Africa", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Antarctica {
+            get {
+                object obj = ResourceManager.GetObject("Antarctica", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Australia {
+            get {
+                object obj = ResourceManager.GetObject("Australia", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Austria {
+            get {
+                object obj = ResourceManager.GetObject("Austria", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Bavaria {
+            get {
+                object obj = ResourceManager.GetObject("Bavaria", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap BritishIslands {
+            get {
+                object obj = ResourceManager.GetObject("BritishIslands", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap China {
+            get {
+                object obj = ResourceManager.GetObject("China", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Corsica {
+            get {
+                object obj = ResourceManager.GetObject("Corsica", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Cyprus {
+            get {
+                object obj = ResourceManager.GetObject("Cyprus", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap CzechRepublic {
+            get {
+                object obj = ResourceManager.GetObject("CzechRepublic", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Europe {
+            get {
+                object obj = ResourceManager.GetObject("Europe", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap France {
+            get {
+                object obj = ResourceManager.GetObject("France", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Germany {
+            get {
+                object obj = ResourceManager.GetObject("Germany", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Greenland {
+            get {
+                object obj = ResourceManager.GetObject("Greenland", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Hungary {
+            get {
+                object obj = ResourceManager.GetObject("Hungary", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Iberia {
+            get {
+                object obj = ResourceManager.GetObject("Iberia", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap India {
+            get {
+                object obj = ResourceManager.GetObject("India", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Islandia {
+            get {
+                object obj = ResourceManager.GetObject("Islandia", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Italy {
+            get {
+                object obj = ResourceManager.GetObject("Italy", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap ItalyMainland {
+            get {
+                object obj = ResourceManager.GetObject("ItalyMainland", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Japan {
+            get {
+                object obj = ResourceManager.GetObject("Japan", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Madagascar {
+            get {
+                object obj = ResourceManager.GetObject("Madagascar", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Mexico {
+            get {
+                object obj = ResourceManager.GetObject("Mexico", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap NorthAmerica {
+            get {
+                object obj = ResourceManager.GetObject("NorthAmerica", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Peru {
+            get {
+                object obj = ResourceManager.GetObject("Peru", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Poland {
+            get {
+                object obj = ResourceManager.GetObject("Poland", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Russia {
+            get {
+                object obj = ResourceManager.GetObject("Russia", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Scandinavia {
+            get {
+                object obj = ResourceManager.GetObject("Scandinavia", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Sicily {
+            get {
+                object obj = ResourceManager.GetObject("Sicily", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap SouthAmerica {
             get {
                 object obj = ResourceManager.GetObject("SouthAmerica", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Spain {
+            get {
+                object obj = ResourceManager.GetObject("Spain", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Texas {
+            get {
+                object obj = ResourceManager.GetObject("Texas", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Tibet {
+            get {
+                object obj = ResourceManager.GetObject("Tibet", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap USA {
+            get {
+                object obj = ResourceManager.GetObject("USA", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
