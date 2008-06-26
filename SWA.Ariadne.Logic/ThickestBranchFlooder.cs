@@ -9,6 +9,8 @@ namespace SWA.Ariadne.Logic
     {
         #region Member variables
 
+        float[] branchesLog = { -1, 0, (float)Math.Log(2), (float)Math.Log(3) };
+
         private struct BranchExtension
         {
             /// <summary>
@@ -20,6 +22,10 @@ namespace SWA.Ariadne.Logic
             /// The start square's thickness is 1.
             /// When a branch is split, each branch gets an equal share of the current thickness.
             /// </summary>
+            /// 
+            /// Note: Instead of the direct thickness, we store its (natural) logarithm.
+            ///       Otherwise the range of values would be very limited;
+            ///       after approx. 500 splits, the value would be less than float.Epsilon.
             public float thickness;
         }
         /// <summary>
@@ -54,7 +60,7 @@ namespace SWA.Ariadne.Logic
 
             MazeSquare sq0 = maze.StartSquare;
             branchExtension[sq0.XPos, sq0.YPos].length = 0;
-            branchExtension[sq0.XPos, sq0.YPos].thickness = 1;
+            branchExtension[sq0.XPos, sq0.YPos].thickness = 0;
         }
 
         #endregion
@@ -79,14 +85,14 @@ namespace SWA.Ariadne.Logic
 
                 // The branch's thickness is divided by the number of branches leading away.
                 int branches = Math.Max(1, OpenWalls(sq2, false).Count - 1);
-                branchExtension[sq2.XPos, sq2.YPos].thickness = branchExtension[sq1.XPos, sq1.YPos].thickness / branches;
+                branchExtension[sq2.XPos, sq2.YPos].thickness = branchExtension[sq1.XPos, sq1.YPos].thickness - branchesLog[branches];
             }
         }
 
         protected override int SelectPathIdx()
         {
             int bestIdx = 0;
-            float bestThickness = thicknessSign * -2;
+            float bestThickness = thicknessSign * float.NegativeInfinity;
             int bestLength = 0;
 
             for (int i = 0; i < list.Count; i++)
