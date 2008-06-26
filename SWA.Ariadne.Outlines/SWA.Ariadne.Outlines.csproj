@@ -36,6 +36,7 @@
   <ItemGroup>
     <Compile Include="BitmapOutlineShape.cs" />
     <Compile Include="CircleOutlineShape.cs" />
+    <Compile Include="DiamondOutlineShape.cs" />
     <Compile Include="PolygonOutlineShape.cs" />
     <Compile Include="OutlineShape.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
