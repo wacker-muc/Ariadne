@@ -87,6 +87,9 @@ namespace SWA.Ariadne.Outlines
 #if false
             return PolygonOutlineShape.Random(r, xSize, ySize, centerX, centerX, shapeSize);
 #else
+#if true
+            return DiamondOutlineShape.Create(r, xSize, ySize, centerX, centerX, shapeSize);
+#else
             OutlineShape result = new OutlineShape(xSize, ySize);
 
             double xc, yc, sz;
@@ -102,6 +105,7 @@ namespace SWA.Ariadne.Outlines
             }
 
             return result;
+#endif
 #endif
         }
 
