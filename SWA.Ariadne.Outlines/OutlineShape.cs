@@ -50,25 +50,7 @@ namespace SWA.Ariadne.Outlines
 #if false
             return BitmapOutlineShape.Random(r, xSize, ySize, centerX, centerX, shapeSize);
 #else
-#if true
             return CircleOutlineShape.Create(r, xSize, ySize, centerX, centerX, shapeSize);
-#else
-            OutlineShape result = new OutlineShape(xSize, ySize);
-
-            double xc, yc, sz;
-            ConvertParameters(xSize, ySize, centerX, centerY, shapeSize, out xc, out yc, out sz);
-
-            for (int x = 0; x < xSize; x++)
-            {
-                for (int y = 0; y < ySize; y++)
-                {
-                    double dx = x - xc, dy = y - yc;
-                    result.squares[x, y] = (dx * dx + dy * dy <= sz * sz);
-                }
-            }
-
-            return result;
-#endif
 #endif
         }
 
@@ -87,25 +69,7 @@ namespace SWA.Ariadne.Outlines
 #if false
             return PolygonOutlineShape.Random(r, xSize, ySize, centerX, centerX, shapeSize);
 #else
-#if true
             return DiamondOutlineShape.Create(r, xSize, ySize, centerX, centerX, shapeSize);
-#else
-            OutlineShape result = new OutlineShape(xSize, ySize);
-
-            double xc, yc, sz;
-            ConvertParameters(xSize, ySize, centerX, centerY, shapeSize, out xc, out yc, out sz);
-
-            for (int x = 0; x < xSize; x++)
-            {
-                for (int y = 0; y < ySize; y++)
-                {
-                    double dx = Math.Abs(x - xc), dy = Math.Abs(y - yc);
-                    result.squares[x, y] = (dx + dy <= sz);
-                }
-            }
-
-            return result;
-#endif
 #endif
         }
 

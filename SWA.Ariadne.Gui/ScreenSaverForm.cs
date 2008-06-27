@@ -326,7 +326,7 @@ namespace SWA.Ariadne.Gui
         /// </summary>
         private void AddOutlineShape()
         {
-            int percentage = (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_OUTLINE_SHAPES, false) ? 20 : 0);
+            int percentage = (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_OUTLINE_SHAPES, false) ? 66 : 0);
             Random r = RandomFactory.CreateRandom();
             if (r.Next(100) < percentage)
             {
@@ -336,15 +336,15 @@ namespace SWA.Ariadne.Gui
                     OutlineShape.Polygon,
                     OutlineShape.Char,
                     OutlineShape.Symbol,
-                    OutlineShape.Image,
+                    OutlineShape.Bitmap,
                 };
-                int[] ratios = { // number * interest
-                     1 * 20,
-                     1 *  5,
-                     6 * 40,
-                    10 * 10,
-                     8 * 15,
-                    36 * 25,
+                int[] ratios = { // (number of items) * (novelty value) / (easyness of recognition)
+                     1 * 20 / 3,
+                     1 *  5 / 4,
+                    (10 + 8 + 6 + 4 + 2) * 20 / 3,
+                    10 * 10 / 2,
+                     8 * 15 / 2,
+                    25 * 15 / 1,
                 };
                 int n = 0;
                 foreach (int k in ratios) { n += k; }
