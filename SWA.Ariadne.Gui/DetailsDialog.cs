@@ -68,6 +68,14 @@ namespace SWA.Ariadne.Gui
             data.SymbolOffCenter = (int)this.symbolOffCenterNumericUpDown.Value;
             data.SymbolSize = (int)this.symbolSizeNumericUpDown.Value;
 
+            data.PolygonNumber = (int)this.polygonNumberNumericUpDown.Value;
+            data.PolygonOffCenter = (int)this.polygonOffCenterNumericUpDown.Value;
+            data.PolygonSize = (int)this.polygonSizeNumericUpDown.Value;
+
+            data.BitmapNumber = (int)this.bitmapNumberNumericUpDown.Value;
+            data.BitmapOffCenter = (int)this.bitmapOffCenterNumericUpDown.Value;
+            data.BitmapSize = (int)this.bitmapSizeNumericUpDown.Value;
+
             target.FillParametersInto(data);
             
             CalculateResultingArea();

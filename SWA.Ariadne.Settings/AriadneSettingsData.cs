@@ -394,6 +394,56 @@ namespace SWA.Ariadne.Settings
 
         #endregion
 
+        #region Polygons
+
+        public int PolygonNumber
+        {
+            get { return polygonNumber; }
+            set { polygonNumber = value; }
+        }
+        private int polygonNumber;
+
+        public int PolygonOffCenter
+        {
+            get { return polygonOffCenter; }
+            set { polygonOffCenter = value; }
+        }
+        private int polygonOffCenter;
+
+        public int PolygonSize
+        {
+            get { return polygonSize; }
+            set { polygonSize = value; }
+        }
+        private int polygonSize;
+
+        #endregion
+
+        #region Bitmaps
+
+        public int BitmapNumber
+        {
+            get { return bitmapNumber; }
+            set { bitmapNumber = value; }
+        }
+        private int bitmapNumber;
+
+        public int BitmapOffCenter
+        {
+            get { return bitmapOffCenter; }
+            set { bitmapOffCenter = value; }
+        }
+        private int bitmapOffCenter;
+
+        public int BitmapSize
+        {
+            get { return bitmapSize; }
+            set { bitmapSize = value; }
+        }
+        private int bitmapSize;
+
+        #endregion
+
         #endregion
 
         #endregion
@@ -460,10 +510,18 @@ namespace SWA.Ariadne.Settings
             this.CharNumber = template.CharNumber;
             this.CharOffCenter = template.CharOffCenter;
             this.CharSize = template.CharSize;
-            
+
             this.SymbolNumber = template.SymbolNumber;
-            this.symbolOffCenter = template.symbolOffCenter;
+            this.SymbolOffCenter = template.SymbolOffCenter;
             this.SymbolSize = template.SymbolSize;
+
+            this.PolygonNumber = template.PolygonNumber;
+            this.PolygonOffCenter = template.PolygonOffCenter;
+            this.PolygonSize = template.PolygonSize;
+
+            this.BitmapNumber = template.BitmapNumber;
+            this.BitmapOffCenter = template.BitmapOffCenter;
+            this.BitmapSize = template.BitmapSize;
         }
     }
 }

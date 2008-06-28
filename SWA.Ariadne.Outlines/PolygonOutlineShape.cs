@@ -37,6 +37,11 @@ namespace SWA.Ariadne.Outlines
         private double halfSectorAngle, fullSectorAngle, sliceAngle;
 
         /// <summary>
+        /// X coordinate of a vertical edge that separates the polygon's inside and outside.
+        /// </summary>
+        private double xEdge;
+
+        /// <summary>
         /// Center and size (radius) in outline shape coordinates.
         /// </summary>
         protected double xc, yc, sz;
@@ -60,10 +65,10 @@ namespace SWA.Ariadne.Outlines
 
                 // Convert to polar coordinates.
                 double r, phi;
-                RectToPolar(dx, dy, out r, out phi);
+                RectToPolar(dx, dy, out r, out phi);        // phi > -PI
 
                 // Rotate by a multiple of 90 degrees.  This will bring one edge to the south.
-                phi += (windings + 1.5) * Math.PI;
+                phi += (windings + 1.5) * Math.PI;          // phi > +PI/2 > 0
 
                 // Rotate by the given slant.
                 phi += this.slant;
@@ -77,9 +82,7 @@ namespace SWA.Ariadne.Outlines
                 PolarToRect(r, phi, out dx, out dy);
 
                 // Test if the resulting x coordinate is on the "inside", i.e. to the left of a vertical polygon edge.
-                bool result = (dx <= sz * Math.Cos(halfSectorAngle));
-
-                return result;
+                return (dx <= xEdge);
             }
         }
 
@@ -88,7 +91,7 @@ namespace SWA.Ariadne.Outlines
         #region Constructor
 
         /// <summary>
-        /// Create an OutlineShape based on a Bitmap image.
+        /// Create an OutlineShape in polygon shape.
         /// </summary>
         /// <param name="corners"></param>
         /// <param name="windings">1 for regular polygons, >1 for star shaped polygons; less than corners/2</param>
@@ -104,11 +107,16 @@ namespace SWA.Ariadne.Outlines
             this.windings = windings;
             this.slant = slant;
 
+            // There are 2*corners slices.
+            // The full sector is a triangle formed by the center and two corners connected by an edge.
             this.sliceAngle = Math.PI / corners;
             this.halfSectorAngle = this.sliceAngle * windings;
             this.fullSectorAngle = 2.0 * halfSectorAngle;
 
             ConvertParameters(xSize, ySize, centerX, centerY, shapeSize, out this.xc, out this.yc, out this.sz);
+
+            // This is the X coordinate of the two corners of a vertical edge (after an adequate rotation).
+            this.xEdge = this.sz * Math.Cos(halfSectorAngle);
 
             BuildSliceRotationMap();
         }
@@ -126,12 +134,12 @@ namespace SWA.Ariadne.Outlines
             int n = 2 * corners;
             sliceRotationMap = new int[n];
 
-            // These sectors are naturally in their regular position.
+            // These sectors are naturally in their regular position (next to the vertical edge).
             int p1 = windings - 1, p2 = (n - 1) - p1;
 
             int gcd = GreatestCommonDivisor(corners, windings);
 
-            // These slices can be rotated into a regular position...
+            // k is the number of full sector rotations required to bring a slice into a regular position...
             for (int k = 0; k < n / gcd / 2; k++)
             {
                 // Set the number of full sector rotations required to bring these slices
@@ -203,6 +211,7 @@ namespace SWA.Ariadne.Outlines
             double slant = 0;
 
             // For high number of corners, we prefer star shapes.
+            // 5 corners: 50% / 12 corners: 99%
             if (corners > 4 && r.Next(100) < 50 + (corners - 5) * 7)
             {
                 // Build a star shaped polygon.
@@ -215,6 +224,7 @@ namespace SWA.Ariadne.Outlines
             }
 
             // Apply a random rotation of the whole shape.
+            // 3 corners: 55% / 12 corners: 10%
             if (r.Next(100) < 70 - corners * 5)
             {
                 slant = 2.0 * Math.PI * r.NextDouble();
@@ -222,12 +232,16 @@ namespace SWA.Ariadne.Outlines
             else
             {
                 // Rotate by half the rotation symmetry angle.
+                // This brings a corner (instead of an edge) to the south; applies to all shapes.
                 if (r.Next(100) < 50)
                 {
                     slant = 2.0 * Math.PI / corners / 2;
                 }
 
                 // Rotate by 90 degrees.
+                // This has no effect when corners is a multiple of four.
+                // For an even number of corners, the effect is the same as the previous rotation, i.e. neutral.
+                // For an odd number of corners, the edge is rotated from south/north to east/west.
                 if (r.Next(100) < 50)
                 {
                     slant += Math.PI / 4.0;
