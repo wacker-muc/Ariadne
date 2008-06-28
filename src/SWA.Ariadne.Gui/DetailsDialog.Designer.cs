@@ -88,6 +88,18 @@ namespace SWA.Ariadne.Gui
             this.imageFolderTextBox = new System.Windows.Forms.TextBox();
             this.setContentsButton = new System.Windows.Forms.Button();
             this.outlinesPage = new System.Windows.Forms.TabPage();
+            this.bitmapNumberNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.bitmapOffCenterNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.bitmapSizeNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.label34 = new System.Windows.Forms.Label();
+            this.label35 = new System.Windows.Forms.Label();
+            this.label36 = new System.Windows.Forms.Label();
+            this.polygonNumberNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.polygonOffCenterNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.polygonSizeNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.label37 = new System.Windows.Forms.Label();
+            this.label38 = new System.Windows.Forms.Label();
+            this.label39 = new System.Windows.Forms.Label();
             this.symbolNumberNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.symbolOffCenterNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.symbolSizeNumericUpDown = new System.Windows.Forms.NumericUpDown();
@@ -131,6 +143,12 @@ namespace SWA.Ariadne.Gui
             ((System.ComponentModel.ISupportInitialize)(this.imageMaxSizeNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageNumberNumericUpDown)).BeginInit();
             this.outlinesPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bitmapNumberNumericUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bitmapOffCenterNumericUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bitmapSizeNumericUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.polygonNumberNumericUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.polygonOffCenterNumericUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.polygonSizeNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.symbolNumberNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.symbolOffCenterNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.symbolSizeNumericUpDown)).BeginInit();
@@ -891,6 +909,18 @@ namespace SWA.Ariadne.Gui
             // 
             // outlinesPage
             // 
+            this.outlinesPage.Controls.Add(this.bitmapNumberNumericUpDown);
+            this.outlinesPage.Controls.Add(this.bitmapOffCenterNumericUpDown);
+            this.outlinesPage.Controls.Add(this.bitmapSizeNumericUpDown);
+            this.outlinesPage.Controls.Add(this.label34);
+            this.outlinesPage.Controls.Add(this.label35);
+            this.outlinesPage.Controls.Add(this.label36);
+            this.outlinesPage.Controls.Add(this.polygonNumberNumericUpDown);
+            this.outlinesPage.Controls.Add(this.polygonOffCenterNumericUpDown);
+            this.outlinesPage.Controls.Add(this.polygonSizeNumericUpDown);
+            this.outlinesPage.Controls.Add(this.label37);
+            this.outlinesPage.Controls.Add(this.label38);
+            this.outlinesPage.Controls.Add(this.label39);
             this.outlinesPage.Controls.Add(this.symbolNumberNumericUpDown);
             this.outlinesPage.Controls.Add(this.symbolOffCenterNumericUpDown);
             this.outlinesPage.Controls.Add(this.symbolSizeNumericUpDown);
@@ -926,6 +956,170 @@ namespace SWA.Ariadne.Gui
             this.outlinesPage.TabIndex = 4;
             this.outlinesPage.Text = "Outlines";
             this.outlinesPage.UseVisualStyleBackColor = true;
+            // 
+            // bitmapNumberNumericUpDown
+            // 
+            this.bitmapNumberNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.dataBindingSource, "BitmapNumber", true));
+            this.bitmapNumberNumericUpDown.Location = new System.Drawing.Point(79, 159);
+            this.bitmapNumberNumericUpDown.Maximum = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            this.bitmapNumberNumericUpDown.Name = "bitmapNumberNumericUpDown";
+            this.bitmapNumberNumericUpDown.Size = new System.Drawing.Size(46, 20);
+            this.bitmapNumberNumericUpDown.TabIndex = 122;
+            this.bitmapNumberNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // bitmapOffCenterNumericUpDown
+            // 
+            this.bitmapOffCenterNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.dataBindingSource, "BitmapOffCenter", true));
+            this.bitmapOffCenterNumericUpDown.Location = new System.Drawing.Point(131, 159);
+            this.bitmapOffCenterNumericUpDown.Maximum = new decimal(new int[] {
+            120,
+            0,
+            0,
+            0});
+            this.bitmapOffCenterNumericUpDown.Name = "bitmapOffCenterNumericUpDown";
+            this.bitmapOffCenterNumericUpDown.Size = new System.Drawing.Size(46, 20);
+            this.bitmapOffCenterNumericUpDown.TabIndex = 123;
+            this.bitmapOffCenterNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // bitmapSizeNumericUpDown
+            // 
+            this.bitmapSizeNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.dataBindingSource, "BitmapSize", true));
+            this.bitmapSizeNumericUpDown.Location = new System.Drawing.Point(195, 159);
+            this.bitmapSizeNumericUpDown.Maximum = new decimal(new int[] {
+            150,
+            0,
+            0,
+            0});
+            this.bitmapSizeNumericUpDown.Minimum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.bitmapSizeNumericUpDown.Name = "bitmapSizeNumericUpDown";
+            this.bitmapSizeNumericUpDown.Size = new System.Drawing.Size(46, 20);
+            this.bitmapSizeNumericUpDown.TabIndex = 124;
+            this.bitmapSizeNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.bitmapSizeNumericUpDown.Value = new decimal(new int[] {
+            80,
+            0,
+            0,
+            0});
+            // 
+            // label34
+            // 
+            this.label34.AutoSize = true;
+            this.label34.Location = new System.Drawing.Point(176, 162);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(15, 13);
+            this.label34.TabIndex = 130;
+            this.label34.Text = "%";
+            this.label34.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label35
+            // 
+            this.label35.AutoSize = true;
+            this.label35.Location = new System.Drawing.Point(239, 162);
+            this.label35.Name = "label35";
+            this.label35.Size = new System.Drawing.Size(15, 13);
+            this.label35.TabIndex = 129;
+            this.label35.Text = "%";
+            this.label35.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label36
+            // 
+            this.label36.AutoSize = true;
+            this.label36.Location = new System.Drawing.Point(16, 162);
+            this.label36.Name = "label36";
+            this.label36.Size = new System.Drawing.Size(44, 13);
+            this.label36.TabIndex = 128;
+            this.label36.Text = "Bitmaps";
+            this.label36.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // polygonNumberNumericUpDown
+            // 
+            this.polygonNumberNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.dataBindingSource, "PolygonNumber", true));
+            this.polygonNumberNumericUpDown.Location = new System.Drawing.Point(79, 133);
+            this.polygonNumberNumericUpDown.Maximum = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            this.polygonNumberNumericUpDown.Name = "polygonNumberNumericUpDown";
+            this.polygonNumberNumericUpDown.Size = new System.Drawing.Size(46, 20);
+            this.polygonNumberNumericUpDown.TabIndex = 119;
+            this.polygonNumberNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // polygonOffCenterNumericUpDown
+            // 
+            this.polygonOffCenterNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.dataBindingSource, "PolygonOffCenter", true));
+            this.polygonOffCenterNumericUpDown.Location = new System.Drawing.Point(131, 133);
+            this.polygonOffCenterNumericUpDown.Maximum = new decimal(new int[] {
+            120,
+            0,
+            0,
+            0});
+            this.polygonOffCenterNumericUpDown.Name = "polygonOffCenterNumericUpDown";
+            this.polygonOffCenterNumericUpDown.Size = new System.Drawing.Size(46, 20);
+            this.polygonOffCenterNumericUpDown.TabIndex = 120;
+            this.polygonOffCenterNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // polygonSizeNumericUpDown
+            // 
+            this.polygonSizeNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.dataBindingSource, "PolygonSize", true));
+            this.polygonSizeNumericUpDown.Location = new System.Drawing.Point(195, 133);
+            this.polygonSizeNumericUpDown.Maximum = new decimal(new int[] {
+            150,
+            0,
+            0,
+            0});
+            this.polygonSizeNumericUpDown.Minimum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.polygonSizeNumericUpDown.Name = "polygonSizeNumericUpDown";
+            this.polygonSizeNumericUpDown.Size = new System.Drawing.Size(46, 20);
+            this.polygonSizeNumericUpDown.TabIndex = 121;
+            this.polygonSizeNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.polygonSizeNumericUpDown.Value = new decimal(new int[] {
+            80,
+            0,
+            0,
+            0});
+            // 
+            // label37
+            // 
+            this.label37.AutoSize = true;
+            this.label37.Location = new System.Drawing.Point(176, 136);
+            this.label37.Name = "label37";
+            this.label37.Size = new System.Drawing.Size(15, 13);
+            this.label37.TabIndex = 127;
+            this.label37.Text = "%";
+            this.label37.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label38
+            // 
+            this.label38.AutoSize = true;
+            this.label38.Location = new System.Drawing.Point(239, 136);
+            this.label38.Name = "label38";
+            this.label38.Size = new System.Drawing.Size(15, 13);
+            this.label38.TabIndex = 126;
+            this.label38.Text = "%";
+            this.label38.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label39
+            // 
+            this.label39.AutoSize = true;
+            this.label39.Location = new System.Drawing.Point(16, 136);
+            this.label39.Name = "label39";
+            this.label39.Size = new System.Drawing.Size(50, 13);
+            this.label39.TabIndex = 125;
+            this.label39.Text = "Polygons";
+            this.label39.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // symbolNumberNumericUpDown
             // 
@@ -1327,6 +1521,12 @@ namespace SWA.Ariadne.Gui
             ((System.ComponentModel.ISupportInitialize)(this.imageNumberNumericUpDown)).EndInit();
             this.outlinesPage.ResumeLayout(false);
             this.outlinesPage.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bitmapNumberNumericUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bitmapOffCenterNumericUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bitmapSizeNumericUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.polygonNumberNumericUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.polygonOffCenterNumericUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.polygonSizeNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.symbolNumberNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.symbolOffCenterNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.symbolSizeNumericUpDown)).EndInit();
@@ -1433,5 +1633,17 @@ namespace SWA.Ariadne.Gui
         private System.Windows.Forms.Label label31;
         private System.Windows.Forms.Label label32;
         private System.Windows.Forms.Label label33;
+        private System.Windows.Forms.NumericUpDown bitmapNumberNumericUpDown;
+        private System.Windows.Forms.NumericUpDown bitmapOffCenterNumericUpDown;
+        private System.Windows.Forms.NumericUpDown bitmapSizeNumericUpDown;
+        private System.Windows.Forms.Label label34;
+        private System.Windows.Forms.Label label35;
+        private System.Windows.Forms.Label label36;
+        private System.Windows.Forms.NumericUpDown polygonNumberNumericUpDown;
+        private System.Windows.Forms.NumericUpDown polygonOffCenterNumericUpDown;
+        private System.Windows.Forms.NumericUpDown polygonSizeNumericUpDown;
+        private System.Windows.Forms.Label label37;
+        private System.Windows.Forms.Label label38;
+        private System.Windows.Forms.Label label39;
     }
 }

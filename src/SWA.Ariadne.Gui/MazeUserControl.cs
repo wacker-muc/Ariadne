@@ -1189,6 +1189,8 @@ namespace SWA.Ariadne.Gui
             AddOutlineShapes(r, OutlineShape.Diamond, data.DiamondNumber, data.DiamondOffCenter / 100.0, data.DiamondSize / 100.0);
             AddOutlineShapes(r, OutlineShape.Char, data.CharNumber, data.CharOffCenter / 100.0, data.CharSize / 100.0);
             AddOutlineShapes(r, OutlineShape.Symbol, data.SymbolNumber, data.SymbolOffCenter / 100.0, data.SymbolSize / 100.0);
+            AddOutlineShapes(r, OutlineShape.Polygon, data.PolygonNumber, data.PolygonOffCenter / 100.0, data.PolygonSize / 100.0);
+            AddOutlineShapes(r, OutlineShape.Bitmap, data.BitmapNumber, data.BitmapOffCenter / 100.0, data.BitmapSize / 100.0);
         }
 
         internal void AddOutlineShapes(Random r, OutlineShapeBuilder shapeBuilderDelegate, int count, double offCenter, double size)
