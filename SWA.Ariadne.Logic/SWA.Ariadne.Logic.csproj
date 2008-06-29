@@ -34,13 +34,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BacktrackerBase.cs" />
+    <Compile Include="BackwardFlooder.cs" />
     <Compile Include="CenterFlooder.cs" />
     <Compile Include="CloseFlooder.cs" />
     <Compile Include="CornerFlooder.cs" />
     <Compile Include="DeterministicWalker.cs" />
+    <Compile Include="DirectionGuidedFlooderBase.cs" />
     <Compile Include="DistanceGuidedFlooderBase.cs" />
     <Compile Include="FarFlooder.cs" />
     <Compile Include="FlooderBase.cs" />
+    <Compile Include="ForwardFlooder.cs" />
     <Compile Include="HesitatingFlooder.cs" />
     <Compile Include="IMazeDrawer.cs" />
     <Compile Include="IMazeSolver.cs" />
