@@ -558,10 +558,11 @@ namespace SWA.Ariadne.Gui
             // The PaintWalls() method fails in design mode.
             try
             {
-#if false
-                // TODO: disable this in the release binary
-                PaintShapes(g);
-#endif
+                if (settingsData != null && settingsData.VisibleOutlines)
+                {
+                    PaintShapes(g);
+                }
+
                 PaintBorder(g);
                 PaintWalls(g);
                 PaintEndpoints(g);

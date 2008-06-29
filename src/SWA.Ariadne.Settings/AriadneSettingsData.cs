@@ -444,6 +444,13 @@ namespace SWA.Ariadne.Settings
 
         #endregion
 
+        public bool VisibleOutlines
+        {
+            get { return visibleOutlines; }
+            set { visibleOutlines = value; }
+        }
+        private bool visibleOutlines;
+
         #endregion
 
         #endregion

@@ -88,6 +88,7 @@ namespace SWA.Ariadne.Gui
             this.imageFolderTextBox = new System.Windows.Forms.TextBox();
             this.setContentsButton = new System.Windows.Forms.Button();
             this.outlinesPage = new System.Windows.Forms.TabPage();
+            this.visibleOutlinesCheckBox = new System.Windows.Forms.CheckBox();
             this.bitmapNumberNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.bitmapOffCenterNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.bitmapSizeNumericUpDown = new System.Windows.Forms.NumericUpDown();
@@ -909,6 +910,7 @@ namespace SWA.Ariadne.Gui
             // 
             // outlinesPage
             // 
+            this.outlinesPage.Controls.Add(this.visibleOutlinesCheckBox);
             this.outlinesPage.Controls.Add(this.bitmapNumberNumericUpDown);
             this.outlinesPage.Controls.Add(this.bitmapOffCenterNumericUpDown);
             this.outlinesPage.Controls.Add(this.bitmapSizeNumericUpDown);
@@ -956,6 +958,19 @@ namespace SWA.Ariadne.Gui
             this.outlinesPage.TabIndex = 4;
             this.outlinesPage.Text = "Outlines";
             this.outlinesPage.UseVisualStyleBackColor = true;
+            // 
+            // visibleOutlinesCheckBox
+            // 
+            this.visibleOutlinesCheckBox.AutoSize = true;
+            this.visibleOutlinesCheckBox.Checked = true;
+            this.visibleOutlinesCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.visibleOutlinesCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.dataBindingSource, "VisibleOutlines", true));
+            this.visibleOutlinesCheckBox.Location = new System.Drawing.Point(195, 198);
+            this.visibleOutlinesCheckBox.Name = "visibleOutlinesCheckBox";
+            this.visibleOutlinesCheckBox.Size = new System.Drawing.Size(55, 17);
+            this.visibleOutlinesCheckBox.TabIndex = 131;
+            this.visibleOutlinesCheckBox.Text = "visible";
+            this.visibleOutlinesCheckBox.UseVisualStyleBackColor = true;
             // 
             // bitmapNumberNumericUpDown
             // 
@@ -1645,5 +1660,6 @@ namespace SWA.Ariadne.Gui
         private System.Windows.Forms.Label label37;
         private System.Windows.Forms.Label label38;
         private System.Windows.Forms.Label label39;
+        private System.Windows.Forms.CheckBox visibleOutlinesCheckBox;
     }
 }
