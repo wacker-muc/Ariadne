@@ -32,6 +32,8 @@ namespace SWA.Ariadne.Logic
             typeof(HesitatingFlooder),
             typeof(CenterFlooder),
             typeof(CornerFlooder),
+            typeof(ForwardFlooder),
+            typeof(BackwardFlooder),
             typeof(ThickestBranchFlooder),
             typeof(ThinnestBranchFlooder),
             typeof(RandomFlooder),
