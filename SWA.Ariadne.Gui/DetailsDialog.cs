@@ -47,6 +47,8 @@ namespace SWA.Ariadne.Gui
 
             this.data = new AriadneSettingsData();
 
+            #region Put all Outline panel settings into the data object.
+
             data.ImageNumber = (int) this.imageNumberNumericUpDown.Value;
             data.ImageMinSize = (int) this.imageMinSizeNumericUpDown.Value;
             data.ImageMaxSize = (int) this.imageMaxSizeNumericUpDown.Value;
@@ -75,6 +77,10 @@ namespace SWA.Ariadne.Gui
             data.BitmapNumber = (int)this.bitmapNumberNumericUpDown.Value;
             data.BitmapOffCenter = (int)this.bitmapOffCenterNumericUpDown.Value;
             data.BitmapSize = (int)this.bitmapSizeNumericUpDown.Value;
+
+            data.VisibleOutlines = this.visibleOutlinesCheckBox.Checked;
+
+            #endregion
 
             target.FillParametersInto(data);
             

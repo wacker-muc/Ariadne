@@ -47,11 +47,7 @@ namespace SWA.Ariadne.Outlines
         /// <returns></returns>
         public static OutlineShape Circle(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
         {
-#if false
-            return BitmapOutlineShape.Random(r, xSize, ySize, centerX, centerX, shapeSize);
-#else
             return CircleOutlineShape.Create(r, xSize, ySize, centerX, centerX, shapeSize);
-#endif
         }
 
         /// <summary>
@@ -66,11 +62,7 @@ namespace SWA.Ariadne.Outlines
         /// <returns></returns>
         public static OutlineShape Diamond(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
         {
-#if false
-            return PolygonOutlineShape.Random(r, xSize, ySize, centerX, centerX, shapeSize);
-#else
             return DiamondOutlineShape.Create(r, xSize, ySize, centerX, centerX, shapeSize);
-#endif
         }
 
         /// <summary>

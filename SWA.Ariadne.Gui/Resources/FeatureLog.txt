@@ -10,6 +10,7 @@ Version 2.3
  * Options and Details dialog: better alignment of labels and controls
  * Screen Saver: avoid visible delay and black screen between iterations
  * Strategies: ThickestBranchFlooder, ThinnestBranchFlooder
+ * Outline Shapes: regular and star shaped Polygons
 
 -----------------------------------------------------------------------
 
