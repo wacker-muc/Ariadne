@@ -155,6 +155,12 @@
   <ItemGroup>
     <None Include="Resources\Spain.png" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SWA.Utilities\SWA.Utilities.csproj">
+      <Project>{5947CDF1-FDE4-4B7C-9420-0A4DF039B5AB}</Project>
+      <Name>SWA.Utilities</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

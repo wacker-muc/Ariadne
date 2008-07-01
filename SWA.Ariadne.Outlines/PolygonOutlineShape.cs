@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using SWA.Utilities;
 
 namespace SWA.Ariadne.Outlines
 {
@@ -65,7 +66,7 @@ namespace SWA.Ariadne.Outlines
 
                 // Convert to polar coordinates.
                 double r, phi;
-                RectToPolar(dx, dy, out r, out phi);        // phi > -PI
+                Geometry.RectToPolar(dx, dy, out r, out phi);        // phi > -PI
 
                 // Rotate by a multiple of 90 degrees.  This will bring one edge to the south.
                 phi += (windings + 1.5) * Math.PI;          // phi > +PI/2 > 0
@@ -79,7 +80,7 @@ namespace SWA.Ariadne.Outlines
                 phi += sliceRotationMap[slice] * sliceAngle;
 
                 // Convert back to rectangular coordinates.
-                PolarToRect(r, phi, out dx, out dy);
+                Geometry.PolarToRect(r, phi, out dx, out dy);
 
                 // Test if the resulting x coordinate is on the "inside", i.e. to the left of a vertical polygon edge.
                 return (dx <= xEdge);
@@ -137,7 +138,7 @@ namespace SWA.Ariadne.Outlines
             // These sectors are naturally in their regular position (next to the vertical edge).
             int p1 = windings - 1, p2 = (n - 1) - p1;
 
-            int gcd = GreatestCommonDivisor(corners, windings);
+            int gcd = Geometry.GreatestCommonDivisor(corners, windings);
 
             // k is the number of full sector rotations required to bring a slice into a regular position...
             for (int k = 0; k < n / gcd / 2; k++)
@@ -159,34 +160,6 @@ namespace SWA.Ariadne.Outlines
                 p1 = (p1 - 2 * windings + n) % n;
                 p2 = (p2 - 2 * windings + n) % n;
             }
-        }
-
-        #endregion
-
-        #region Auxiliary methods
-
-        protected static int GreatestCommonDivisor(int a, int b)
-        {
-            while (b != 0)
-            {
-                int t = a % b;
-                a = b;
-                b = t;
-            }
-
-            return a;
-        }
-
-        protected static void RectToPolar(double x, double y, out double r, out double phi)
-        {
-            r = Math.Sqrt(x * x + y * y);
-            phi = Math.Atan2(y, x);
-        }
-
-        protected static void PolarToRect(double r, double phi, out double x, out double y)
-        {
-            x = r * Math.Cos(phi);
-            y = r * Math.Sin(phi);
         }
 
         #endregion

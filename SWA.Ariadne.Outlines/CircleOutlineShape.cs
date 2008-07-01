@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using SWA.Utilities;
 
 namespace SWA.Ariadne.Outlines
 {
@@ -22,7 +23,7 @@ namespace SWA.Ariadne.Outlines
 
                 // Convert to polar coordinates.
                 double r, phi;
-                RectToPolar(dx, dy, out r, out phi);
+                Geometry.RectToPolar(dx, dy, out r, out phi);
 
                 return (r <= sz);
             }
