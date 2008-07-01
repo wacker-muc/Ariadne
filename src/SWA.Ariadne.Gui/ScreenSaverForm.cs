@@ -52,7 +52,7 @@ namespace SWA.Ariadne.Gui
             random = RandomFactory.CreateRandom();
 
             this.ShowInTaskbar = false;
-            this.DoubleBuffered = true;
+            this.DoubleBuffered = false;
 
             // Initially, the (optinally) displayed controls should be invisible until the maze has been built.
             this.outerInfoPanel.Visible = false;
