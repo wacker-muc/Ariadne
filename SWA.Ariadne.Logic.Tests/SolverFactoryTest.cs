@@ -129,7 +129,7 @@ namespace SWA.Ariadne.Logic.Tests
 
         internal static Maze NewMaze()
         {
-            Maze maze = new Maze(Maze.MinSize, Maze.MinSize);
+            Maze maze = new Maze(MazeDimensions.MinSize, MazeDimensions.MinSize);
             maze.CreateMaze();
             maze.PlaceEndpoints();
             return maze;

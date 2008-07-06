@@ -10,54 +10,6 @@ namespace SWA.Ariadne.Model
     public class Maze
         : IAriadneSettingsSource
     {
-        #region Static properties, derived from MazeDimensions
-
-        /// <summary>
-        /// Minimum width or height: number of squares.
-        /// </summary>
-        public static int MinSize
-        {
-            get
-            {
-                return MazeDimensions.MinSize;
-            }
-        }
-
-        /// <summary>
-        /// Maximum width: number of squares.
-        /// </summary>
-        public static int MaxXSize
-        {
-            get
-            {
-                return MazeDimensions.MaxXSize;
-            }
-        }
-
-        /// <summary>
-        /// Maximum height: number of squares.
-        /// </summary>
-        public static int MaxYSize
-        {
-            get
-            {
-                return MazeDimensions.MaxYSize;
-            }
-        }
-
-        /// <summary>
-        /// Maximum distance of start/end point from border.
-        /// </summary>
-        private static int MaxBorderDistance
-        {
-            get
-            {
-                return MazeDimensions.MaxBorderDistance;
-            }
-        }
-
-        #endregion
-
         #region Member variables
 
         /// <summary>
@@ -84,6 +36,11 @@ namespace SWA.Ariadne.Model
         /// Travel direction: 0..3
         /// </summary>
         private MazeSquare.WallPosition direction;
+        public MazeSquare.WallPosition Direction
+        {
+            get { return direction; }
+        }
+
 
         /// <summary>
         /// A source of random numbers.
@@ -99,15 +56,13 @@ namespace SWA.Ariadne.Model
         }
 
         /// <summary>
-        /// Maximum initial seed value: 2^13-1.
-        /// This value and the other Max... values are chosen so that the maze Code may be represented with 12 characters.
-        /// </summary>
-        internal const int SeedLimit = 8192;
-
-        /// <summary>
         /// The seed used to initialize this.random.
         /// </summary>
         private int seed;
+        public int Seed
+        {
+            get { return seed; }
+        }
 
         /// <summary>
         /// Position and dimensions of some reserved areas.
@@ -158,12 +113,12 @@ namespace SWA.Ariadne.Model
         /// <param name="ySize"></param>
         public Maze(int xSize, int ySize)
         {
-            this.xSize = Math.Max(MinSize, Math.Min(MaxXSize, xSize));
-            this.ySize = Math.Max(MinSize, Math.Min(MaxYSize, ySize));
+            this.xSize = Math.Max(MazeDimensions.MinSize, Math.Min(MazeDimensions.MaxXSize, xSize));
+            this.ySize = Math.Max(MazeDimensions.MinSize, Math.Min(MazeDimensions.MaxYSize, ySize));
 
             // Get an initial random seed and use that to create the Random.
             Random r = RandomFactory.CreateRandom();
-            this.seed = r.Next(SeedLimit);
+            this.seed = r.Next(MazeCode.SeedLimit);
             this.random = RandomFactory.CreateRandom(seed);
         }
 
@@ -174,7 +129,7 @@ namespace SWA.Ariadne.Model
         /// <param name="code">a string of seven letters (case is ignored)</param>
         public Maze(string code)
         {
-            Decode(code
+            MazeCode.Decode(code
                 , out this.seed
                 , out this.xSize, out this.ySize
                 , out this.direction
@@ -220,259 +175,17 @@ namespace SWA.Ariadne.Model
 
         #region Encoding of the maze parameters
 
-        public const int CodeLength = 12;
-        public const int CodeDigitRange = 26; // 'A' .. 'Z'
-
         /// <summary>
-        /// A string of twelve characters (A..Z) that encodes the maze parameters.
+        /// A string that encodes the maze parameters.
         /// This code can be used to construct an identical maze.
         /// </summary>
         public string Code
         {
             get
             {
-                long nCode = 0;
-
-                #region Encode the relevant parameters into a numeric code
-
-                // Items are encoded in reverse order of decoding.
-                // Some items must be encoded before others if decoding requires them.
-
-                // Encode the start and end points.
-                // Instead of the direct coordinates we will use the following information:
-                // * travel direction
-                // * distance from the border (instead of coordinate)
-                // * other coordinate
-                // The scaling factor is always MaxXSize, as it is greater than MaxYSize.
-
-                int d1, d2, c1, c2;
-
-                switch (direction)
-                {
-                    case MazeSquare.WallPosition.WP_E:
-                        d1 = xStart;
-                        d2 = xSize - 1 - xEnd;
-                        c1 = yStart;
-                        c2 = yEnd;
-                        break;
-                    case MazeSquare.WallPosition.WP_W:
-                        d1 = xEnd;
-                        d2 = xSize - 1 - xStart;
-                        c1 = yEnd;
-                        c2 = yStart;
-                        break;
-                    case MazeSquare.WallPosition.WP_S:
-                        d1 = yStart;
-                        d2 = ySize - 1 - yEnd;
-                        c1 = xStart;
-                        c2 = xEnd;
-                        break;
-                    case MazeSquare.WallPosition.WP_N:
-                        d1 = yEnd;
-                        d2 = ySize - 1 - yStart;
-                        c1 = xEnd;
-                        c2 = xStart;
-                        break;
-                    default:
-                        d1 = d2 = c1 = c2 = -1;
-                        break;
-                }
-
-                nCode *= (MaxBorderDistance + 1);
-                nCode += d1;
-
-                nCode *= (MaxBorderDistance + 1);
-                nCode += d2;
-
-                nCode *= (MaxXSize + 1);
-                nCode += c1;
-
-                nCode *= (MaxXSize + 1);
-                nCode += c2;
-
-                nCode *= MazeSquare.WP_NUM;
-                nCode += (int)direction;
-
-                // Encode maze dimension.
-
-                nCode *= (MaxYSize - MinSize + 1);
-                nCode += (ySize - MinSize);
-
-                nCode *= (MaxXSize - MinSize + 1);
-                nCode += (xSize - MinSize);
-
-                // Encode initial seed.
-
-                nCode *= SeedLimit;
-                nCode += seed;
-
-                #endregion
-
-                // The resulting nCode is less than 26^12.  See SWA.Ariadne.Model.Tests unit tests.
-
-                #region Convert the numeric code into a character code (base 26)
-
-                StringBuilder result = new StringBuilder(7);
-
-                for (int p = CodeLength; p-- > 0; )
-                {
-                    int digit = (int)(nCode % CodeDigitRange);
-                    nCode /= CodeDigitRange;
-                    result.Insert(0, (char)(digit + 'A'));
-                }
-
-                result.Insert(8, '.');
-                result.Insert(4, '.');
-
-                #endregion
-
-                return result.ToString();
+                return MazeCode.Code(this);
             }
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="code"></param>
-        /// <param name="seed"></param>
-        /// <param name="xSize"></param>
-        /// <param name="ySize"></param>
-        /// <param name="direction"></param>
-        /// <param name="xStart"></param>
-        /// <param name="yStart"></param>
-        /// <param name="xEnd"></param>
-        /// <param name="yEnd"></param>
-        /// <exception cref="ArgumentOutOfRangeException">decoded parameters are invalid</exception>
-        private static void Decode(string code
-            , out int seed
-            , out int xSize, out int ySize
-            , out MazeSquare.WallPosition direction
-            , out int xStart, out int yStart
-            , out int xEnd, out int yEnd
-            )
-        {
-            long nCode = 0;
-
-            #region Convert the character code (base 26) into a numeric code
-
-            char[] a = code.Replace(".","").ToUpper().ToCharArray();
-
-            if (!(a.Length == CodeLength))
-            {
-                throw new ArgumentOutOfRangeException("code", code, "Must be " + CodeLength.ToString() + " characters.");
-            }
-
-            for (int p = 0; p < a.Length; p++)
-            {
-                int digit = a[p] - 'A';
-                if (!(0 <= digit && digit < CodeDigitRange))
-                {
-                    throw new ArgumentOutOfRangeException("code", code, "Allowed characters are 'A'..'Z' only.");
-                }
-                nCode *= CodeDigitRange;
-                nCode += digit;
-            }
-
-            #endregion
-
-            #region Decode items in the code in reverse order of encoding
-
-            long nCodeOriginal = nCode; // for debugging
-
-            long itemRange;
-
-            itemRange = SeedLimit;
-            seed = (int)(nCode % itemRange);
-            nCode /= itemRange;
-
-            itemRange = MaxXSize - MinSize + 1;
-            xSize = (int)(nCode % itemRange) + MinSize;
-            nCode /= itemRange;
-
-            itemRange = MaxYSize - MinSize + 1;
-            ySize = (int)(nCode % itemRange) + MinSize;
-            nCode /= itemRange;
-
-            int d1, d2, c1, c2;
-
-            itemRange = MazeSquare.WP_NUM;
-            direction = (MazeSquare.WallPosition)(nCode % itemRange);
-            nCode /= itemRange;
-
-            itemRange = MaxXSize + 1;
-            c2 = (int)(nCode % itemRange);
-            nCode /= itemRange;
-
-            itemRange = MaxXSize + 1;
-            c1 = (int)(nCode % itemRange);
-            nCode /= itemRange;
-
-            itemRange = MaxBorderDistance + 1;
-            d2 = (int)(nCode % itemRange);
-            nCode /= itemRange;
-
-            itemRange = MaxBorderDistance + 1;
-            d1 = (int)(nCode % itemRange);
-            nCode /= itemRange;
-
-            switch (direction)
-            {
-                case MazeSquare.WallPosition.WP_E:
-                    xStart = d1;
-                    xEnd = xSize - 1 - d2;
-                    yStart = c1;
-                    yEnd = c2;
-                    break;
-                case MazeSquare.WallPosition.WP_W:
-                    xEnd = d1;
-                    xStart = xSize - 1 - d2;
-                    yEnd = c1;
-                    yStart = c2;
-                    break;
-                case MazeSquare.WallPosition.WP_S:
-                    yStart = d1;
-                    yEnd = ySize - 1 - d2;
-                    xStart = c1;
-                    xEnd = c2;
-                    break;
-                case MazeSquare.WallPosition.WP_N:
-                    yEnd = d1;
-                    yStart = ySize - 1 - d2;
-                    xEnd = c1;
-                    xStart = c2;
-                    break;
-                default:
-                    xStart = yStart = xEnd = yEnd = -1;
-                    break;
-            }
-
-            #endregion
-
-            #region Verify the validity of the decoded items
-
-            if (!(nCode == 0))
-            {
-                throw new ArgumentOutOfRangeException("remainder(code)", seed, "Must be a zero.");
-            }
-            ValidateCodeItemRange("seed", seed, 0, SeedLimit-1);
-            ValidateCodeItemRange("xSize", xSize, MinSize, MaxXSize);
-            ValidateCodeItemRange("ySize", ySize, MinSize, MaxYSize);
-            ValidateCodeItemRange("xStart", xStart, 0, xSize);
-            ValidateCodeItemRange("yStart", yStart, 0, ySize);
-            ValidateCodeItemRange("xEnd", xEnd, 0, xSize);
-            ValidateCodeItemRange("yEnd", yEnd, 0, yEnd);
-
-            #endregion
-        }
-
-        private static void ValidateCodeItemRange(string item, int value, int min, int max)
-        {
-            if (!(min <= value && value <= max))
-            {
-                throw new ArgumentOutOfRangeException(item + "(code)", value, "Must be between " + min.ToString() + " and " + max.ToString() + ".");
-            }
-        }
-
         #endregion
 
         #region Setup methods
@@ -660,8 +373,8 @@ namespace SWA.Ariadne.Model
                     + random.Next(edgeWidth)
                     ;
 
-                edgeDistStart = Math.Min(edgeDistStart, MaxBorderDistance);
-                edgeDistEnd = Math.Min(edgeDistEnd, MaxBorderDistance);
+                edgeDistStart = Math.Min(edgeDistStart, MazeDimensions.MaxBorderDistance);
+                edgeDistEnd = Math.Min(edgeDistEnd, MazeDimensions.MaxBorderDistance);
 
                 // The two rows (or columns) that make up the (positive) travel direction.
                 int lesserRow = 0, greaterRow = 0;
@@ -1051,17 +764,17 @@ namespace SWA.Ariadne.Model
         public void TakeParametersFrom(AriadneSettingsData data)
         {
             // The Auto... flags for Width and Height have already been checked by the MazeUserControl.
-            this.xSize = Math.Max(MinSize, Math.Min(MaxXSize, data.MazeWidth));
-            this.ySize = Math.Max(MinSize, Math.Min(MaxYSize, data.MazeHeight));
+            this.xSize = Math.Max(MazeDimensions.MinSize, Math.Min(MazeDimensions.MaxXSize, data.MazeWidth));
+            this.ySize = Math.Max(MazeDimensions.MinSize, Math.Min(MazeDimensions.MaxYSize, data.MazeHeight));
 
             if (!data.AutoSeed)
             {
-                this.seed = Math.Max(0, Math.Min(SeedLimit - 1, data.Seed));
+                this.seed = Math.Max(0, Math.Min(MazeCode.SeedLimit - 1, data.Seed));
             }
             else
             {
                 Random r = RandomFactory.CreateRandom();
-                this.seed = r.Next(SeedLimit);
+                this.seed = r.Next(MazeCode.SeedLimit);
             }
             this.random = RandomFactory.CreateRandom(seed);
 
@@ -1073,102 +786,4 @@ namespace SWA.Ariadne.Model
 
         #endregion
     }
-
-    #region class MazeDimensions
-
-    /// <summary>
-    /// Provides Maze dimension limits based on the desired Maze.Code length.
-    /// </summary>
-    internal class MazeDimensions
-    {
-        private const double XYRatio = (4.0/3.0); // e.g. 1024x768
-
-        /// <summary>
-        /// Minimum width or height: number of squares.
-        /// </summary>
-        public static readonly int MinSize = 4;
-
-        /// <summary>
-        /// Maximum width: number of squares.
-        /// </summary>
-        public static int MaxXSize
-        {
-            get
-            {
-                return MinSize + xRange;
-            }
-        }
-        private static readonly int xRange = 337; // expected value, manually calculated
-
-        /// <summary>
-        /// Maximum height: number of squares.
-        /// </summary>
-        public static int MaxYSize
-        {
-            get
-            {
-                return MinSize + yRange;
-            }
-        }
-        private static readonly int yRange = 251; // expected value, manually calculated
-
-        /// <summary>
-        /// Maximum distance of start/end point from border.
-        /// </summary>
-        public static readonly int MaxBorderDistance = 16;
-
-        /// <summary>
-        /// Calculate maximum x and y dimensions, based on the desired Maze.Code length.
-        /// </summary>
-        static MazeDimensions()
-        {
-            double codeLimit = Math.Pow(Maze.CodeDigitRange, Maze.CodeLength);
-
-            if (codeLimit > long.MaxValue)
-            {
-                throw new Exception("Maze.Code is too large to be represented as a 64 bit integer");
-            }
-
-            codeLimit /= Maze.SeedLimit;
-            //           (MaxXSize - MinSize + 1)
-            //           (MaxYSize - MinSize + 1)
-            codeLimit /= MazeSquare.WP_NUM;
-            codeLimit /= (MaxBorderDistance + 1);
-            codeLimit /= (MaxBorderDistance + 1);
-            //           (MaxXSize + 1)
-            //           (MaxXSize + 1)
-
-            /* We want to find the greatest integer MaxXSize and MaxYSize with the limitation:
-             *          (x-m) * (y-m) * x * x < c
-             * with:
-             *          x = MaxXSize + 1
-             *          y = MaxYSize + 1  =  MaxXSize / XYRatio + 1
-             *          m = MinSize
-             *          c = codeLimit
-             *          r = XYRatio
-             * 
-             * This is approximately equivalent to:
-             *          x*x*x*x < c*r
-             * or
-             *          x = (c*r)^^(1/4)
-             * With m>0, that x is even too small.
-             */
-
-            double x = Math.Truncate(Math.Pow(codeLimit * XYRatio, 0.25));
-
-            while ((x - MinSize) * (x / XYRatio - MinSize) * (x) * (x) < codeLimit)
-            {
-                x = x + 1;
-            }
-
-            /* Now, x is 1 greater than acceptable, i.e.
-             *          x-1  =  MaxXSize + 1  =  MinSize + xRange + 1
-             *          MinSize + yRange  =  MaxYSize  =  MaxXSize / XYRatio
-             */
-            xRange = (int)(x - MinSize - 2);
-            yRange = (int)(MaxXSize / XYRatio - MinSize); // Note: MaxXSize is valid after xRange has been assigned
-        }
-    }
-
-    #endregion
 }

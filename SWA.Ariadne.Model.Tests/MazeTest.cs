@@ -98,8 +98,8 @@ namespace SWA.Ariadne.Model.Tests
             string testObject = "Maze.Constructor(size)-02-max";
             int xSize = int.MaxValue;
             int ySize = int.MaxValue;
-            int xSizeExpected = Maze.MaxXSize;
-            int ySizeExpected = Maze.MaxYSize;
+            int xSizeExpected = MazeDimensions.MaxXSize;
+            int ySizeExpected = MazeDimensions.MaxYSize;
 
             ConstructorTestOutsideBounds(testObject, xSize, ySize, xSizeExpected, ySizeExpected);
         }
@@ -141,8 +141,8 @@ namespace SWA.Ariadne.Model.Tests
             string testObject = "Maze.Constructor(size)-05-min";
             int xSize = 0;
             int ySize = 0;
-            int xSizeExpected = Maze.MinSize;
-            int ySizeExpected = Maze.MinSize;
+            int xSizeExpected = MazeDimensions.MinSize;
+            int ySizeExpected = MazeDimensions.MinSize;
 
             ConstructorTestOutsideBounds(testObject, xSize, ySize, xSizeExpected, ySizeExpected);
         }
@@ -218,9 +218,11 @@ namespace SWA.Ariadne.Model.Tests
 
             for (int nTests = 0; nTests < 100; nTests++)
             {
-                int xSize = r.Next(Maze.MinSize, Maze.MaxXSize + 1);
-                int ySize = r.Next(Maze.MinSize, Maze.MaxYSize + 1);
+                int xSize = r.Next(MazeDimensions.MinSize, MazeDimensions.MaxXSize + 1);
+                int ySize = r.Next(MazeDimensions.MinSize, MazeDimensions.MaxYSize + 1);
                 Maze target = new Maze(xSize, ySize);
+                target.CreateMaze();
+                target.PlaceEndpoints();
 
                 string codeValue = target.Code;
 
@@ -243,8 +245,8 @@ namespace SWA.Ariadne.Model.Tests
 
             for (int nTests = 0; nTests < 100; nTests++)
             {
-                int xSize = r.Next(Maze.MinSize, Maze.MaxXSize + 1);
-                int ySize = r.Next(Maze.MinSize, Maze.MaxYSize + 1);
+                int xSize = r.Next(MazeDimensions.MinSize, MazeDimensions.MaxXSize + 1);
+                int ySize = r.Next(MazeDimensions.MinSize, MazeDimensions.MaxYSize + 1);
                 Maze target = new Maze(xSize, ySize);
                 target.CreateMaze();
                 target.PlaceEndpoints();
@@ -261,7 +263,7 @@ namespace SWA.Ariadne.Model.Tests
 
                 int seedActual, xSizeActual, ySizeActual, xStartActual, yStartActual, xEndActual, yEndActual;
                 MazeSquare.WallPosition directionActual;
-                SWA_Ariadne_Model_MazeAccessor.Decode(code
+                MazeCode.Decode(code
                     , out seedActual
                     , out xSizeActual, out ySizeActual
                     , out directionActual
@@ -309,17 +311,17 @@ namespace SWA.Ariadne.Model.Tests
 
             // simulate the multiplications executed in Maze.Code:
 
-            double f1 = SWA_Ariadne_Model_MazeAccessor.SeedLimit;
-            double f2 = Maze.MaxXSize - Maze.MinSize + 1;
-            double f3 = Maze.MaxYSize - Maze.MinSize + 1;
-            double f4 = SWA_Ariadne_Model_MazeAccessor.MaxBorderDistance + 1;
-            double f5 = SWA_Ariadne_Model_MazeAccessor.MaxBorderDistance + 1;
-            double f6 = Maze.MaxXSize + 1;
-            double f7 = Maze.MaxXSize + 1;
+            double f1 = MazeCode.SeedLimit;
+            double f2 = MazeDimensions.MaxXSize - MazeDimensions.MinSize + 1;
+            double f3 = MazeDimensions.MaxYSize - MazeDimensions.MinSize + 1;
+            double f4 = MazeDimensions.MaxBorderDistance + 1;
+            double f5 = MazeDimensions.MaxBorderDistance + 1;
+            double f6 = MazeDimensions.MaxXSize + 1;
+            double f7 = MazeDimensions.MaxXSize + 1;
             double f8 = MazeSquare.WP_NUM;
 
             double maxCodeValue = (f1 * f2 * f3 * f4 * f5 * f6 * f7 * f8) - 1;
-            double codeRange = Math.Pow(Maze.CodeDigitRange, Maze.CodeLength);
+            double codeRange = Math.Pow(MazeCode.CodeDigitRange, MazeCode.CodeLength);
 
             Assert.IsTrue(maxCodeValue < codeRange,
                 testObject
@@ -345,7 +347,7 @@ namespace SWA.Ariadne.Model.Tests
             string testObject = "Maze.MaxXSize";
 
             int expected = 341; // manually calculated
-            int actual = Maze.MaxXSize;
+            int actual = MazeDimensions.MaxXSize;
 
             Assert.AreEqual(expected, actual, testObject + ": wrong value");
         }
@@ -360,7 +362,7 @@ namespace SWA.Ariadne.Model.Tests
             string testObject = "Maze.MaxYSize";
 
             int expected = 255; // manually calculated
-            int actual = Maze.MaxYSize;
+            int actual = MazeDimensions.MaxYSize;
 
             Assert.AreEqual(expected, actual, testObject + ": wrong value");
         }

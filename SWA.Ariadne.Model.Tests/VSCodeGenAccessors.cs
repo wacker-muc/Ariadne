@@ -190,11 +190,11 @@ internal class SWA_Ariadne_Model_DeadEndChecker_MazeSquareExtensionAccessor : Ba
 }
 [System.Diagnostics.DebuggerStepThrough()]
 [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TestTools.UnitTestGeneration", "1.0.0.0")]
-internal class SWA_Ariadne_Logic_EfficientLeftHandWalkerAccessor : BaseAccessor {
+internal class SWA_Ariadne_Logic_LeftHandWalkerAccessor : BaseAccessor {
     
-    protected static Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType m_privateType = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType("SWA.Ariadne.Logic", "SWA.Ariadne.Logic.EfficientLeftHandWalker");
+    protected static Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType m_privateType = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType("SWA.Ariadne.Logic", "SWA.Ariadne.Logic.LeftHandWalker");
     
-    internal SWA_Ariadne_Logic_EfficientLeftHandWalkerAccessor(object target) : 
+    internal SWA_Ariadne_Logic_LeftHandWalkerAccessor(object target) : 
             base(target, m_privateType) {
     }
     
@@ -202,7 +202,7 @@ internal class SWA_Ariadne_Logic_EfficientLeftHandWalkerAccessor : BaseAccessor 
         object[] args = new object[] {
                 maze,
                 mazeDrawer};
-        Microsoft.VisualStudio.TestTools.UnitTesting.PrivateObject priv_obj = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateObject("SWA.Ariadne.Logic", "SWA.Ariadne.Logic.EfficientLeftHandWalker", new System.Type[] {
+        Microsoft.VisualStudio.TestTools.UnitTesting.PrivateObject priv_obj = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateObject("SWA.Ariadne.Logic", "SWA.Ariadne.Logic.LeftHandWalker", new System.Type[] {
                     typeof(global::SWA.Ariadne.Model.Maze),
                     typeof(global::SWA.Ariadne.Logic.IMazeDrawer)}, args);
         return priv_obj.Target;
@@ -217,6 +217,12 @@ internal class SWA_Ariadne_Logic_EfficientLeftHandWalkerAccessor : BaseAccessor 
         object[] args = new object[0];
         m_privateObject.Invoke("Reset", new System.Type[0], args);
     }
+
+    internal void MakeEfficient()
+    {
+        object[] args = new object[0];
+        m_privateObject.Invoke("MakeEfficient", new System.Type[0], args);
+    }
 }
 [System.Diagnostics.DebuggerStepThrough()]
 [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TestTools.UnitTestGeneration", "1.0.0.0")]
@@ -226,13 +232,6 @@ internal class SWA_Ariadne_Model_MazeAccessor : BaseAccessor {
     
     internal SWA_Ariadne_Model_MazeAccessor(global::SWA.Ariadne.Model.Maze target) : 
             base(target, m_privateType) {
-    }
-    
-    internal static int MaxBorderDistance {
-        get {
-            int ret = ((int)(m_privateType.GetStaticProperty("MaxBorderDistance")));
-            return ret;
-        }
     }
     
     internal int xSize {
@@ -315,16 +314,6 @@ internal class SWA_Ariadne_Model_MazeAccessor : BaseAccessor {
         }
     }
     
-    internal static int SeedLimit {
-        get {
-            int ret = ((int)(m_privateType.GetStaticField("SeedLimit")));
-            return ret;
-        }
-        set {
-            m_privateType.SetStaticField("SeedLimit", value);
-        }
-    }
-    
     internal int seed {
         get {
             int ret = ((int)(m_privateObject.GetField("seed")));
@@ -343,70 +332,6 @@ internal class SWA_Ariadne_Model_MazeAccessor : BaseAccessor {
         set {
             m_privateObject.SetField("squares", value);
         }
-    }
-    
-    internal static int CodeLength {
-        get {
-            int ret = ((int)(m_privateType.GetStaticField("CodeLength")));
-            return ret;
-        }
-        set {
-            m_privateType.SetStaticField("CodeLength", value);
-        }
-    }
-    
-    internal static int CodeDigitRange {
-        get {
-            int ret = ((int)(m_privateType.GetStaticField("CodeDigitRange")));
-            return ret;
-        }
-        set {
-            m_privateType.SetStaticField("CodeDigitRange", value);
-        }
-    }
-    
-    internal static void Decode(string code, out int seed, out int xSize, out int ySize, out global::SWA.Ariadne.Model.MazeSquare.WallPosition direction, out int xStart, out int yStart, out int xEnd, out int yEnd) {
-        object[] args = new object[] {
-                code,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null};
-        m_privateType.InvokeStatic("Decode", new System.Type[] {
-                    typeof(string),
-                    typeof(int).MakeByRefType(),
-                    typeof(int).MakeByRefType(),
-                    typeof(int).MakeByRefType(),
-                    typeof(global::SWA.Ariadne.Model.MazeSquare.WallPosition).MakeByRefType(),
-                    typeof(int).MakeByRefType(),
-                    typeof(int).MakeByRefType(),
-                    typeof(int).MakeByRefType(),
-                    typeof(int).MakeByRefType()}, args);
-        seed = ((int)(args[1]));
-        xSize = ((int)(args[2]));
-        ySize = ((int)(args[3]));
-        direction = ((global::SWA.Ariadne.Model.MazeSquare.WallPosition)(args[4]));
-        xStart = ((int)(args[5]));
-        yStart = ((int)(args[6]));
-        xEnd = ((int)(args[7]));
-        yEnd = ((int)(args[8]));
-    }
-    
-    internal static void ValidateCodeItemRange(string item, int value, int min, int max) {
-        object[] args = new object[] {
-                item,
-                value,
-                min,
-                max};
-        m_privateType.InvokeStatic("ValidateCodeItemRange", new System.Type[] {
-                    typeof(string),
-                    typeof(int),
-                    typeof(int),
-                    typeof(int)}, args);
     }
     
     internal void CreateSquares() {
