@@ -124,9 +124,20 @@ namespace SWA.Ariadne.Model
         /// <param name="xSize"></param>
         /// <param name="ySize"></param>
         public Maze(int xSize, int ySize)
+            : this(xSize, ySize, MazeCode.DefaultCodeVersion)
         {
-            this.dimensionsObj = MazeDimensions.Instance();
-            this.codeObj = MazeCode.Instance();
+        }
+
+        /// <summary>
+        /// Constructor.
+        /// Create a maze with the given dimensions.
+        /// </summary>
+        /// <param name="xSize"></param>
+        /// <param name="ySize"></param>
+        public Maze(int xSize, int ySize, int version)
+        {
+            this.dimensionsObj = MazeDimensions.Instance(version);
+            this.codeObj = MazeCode.Instance(version);
 
             this.xSize = Math.Max(dimensionsObj.MinSize, Math.Min(dimensionsObj.MaxXSize, xSize));
             this.ySize = Math.Max(dimensionsObj.MinSize, Math.Min(dimensionsObj.MaxYSize, ySize));
@@ -144,8 +155,9 @@ namespace SWA.Ariadne.Model
         /// <param name="code">a string of seven letters (case is ignored)</param>
         public Maze(string code)
         {
-            this.dimensionsObj = MazeDimensions.Instance();
-            this.codeObj = MazeCode.Instance();
+            int version = MazeCode.GetCodeVersion(code);
+            this.dimensionsObj = MazeDimensions.Instance(version);
+            this.codeObj = MazeCode.Instance(version);
 
             codeObj.Decode(code
                 , out this.seed
