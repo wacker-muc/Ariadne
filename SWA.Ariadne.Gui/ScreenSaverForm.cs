@@ -353,7 +353,7 @@ namespace SWA.Ariadne.Gui
                 {
                     if ((p -= ratios[i]) < 0)
                     {
-                        mazeUserControl.AddOutlineShapes(r, shapeBuilderDelegates[i], 1, 0.3, 0.6);
+                        mazeUserControl.AddOutlineShapes(r, shapeBuilderDelegates[i], 1, 0.3, 0.7);
                         break;
                     }
                 }
