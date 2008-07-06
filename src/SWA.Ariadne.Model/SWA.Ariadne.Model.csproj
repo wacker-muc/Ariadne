@@ -36,6 +36,8 @@
   <ItemGroup>
     <Compile Include="DeadEndChecker.cs" />
     <Compile Include="Maze.cs" />
+    <Compile Include="MazeCode.cs" />
+    <Compile Include="MazeDimensions.cs" />
     <Compile Include="MazeSquare.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RandomFactory.cs" />
@@ -49,6 +51,9 @@
       <Project>{30293912-CD50-4ECE-B51A-CD89890186F8}</Project>
       <Name>SWA.Ariadne.Settings</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Overview.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -134,8 +134,9 @@ namespace SWA.Ariadne.Model.Tests
 
             Assert.AreEqual(mazeCode, maze.Code, testObject + ": wrong code");
 
-            object target = SWA_Ariadne_Logic_EfficientLeftHandWalkerAccessor.CreatePrivate(maze, null);
-            SWA_Ariadne_Logic_EfficientLeftHandWalkerAccessor accessor = new SWA_Ariadne_Logic_EfficientLeftHandWalkerAccessor(target);
+            object target = SWA_Ariadne_Logic_LeftHandWalkerAccessor.CreatePrivate(maze, null);
+            SWA_Ariadne_Logic_LeftHandWalkerAccessor accessor = new SWA_Ariadne_Logic_LeftHandWalkerAccessor(target);
+            accessor.MakeEfficient();
 
             try
             {

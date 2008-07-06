@@ -449,9 +449,9 @@ namespace SWA.Ariadne.Model
             AddSquare(sqe, behindPosition, confirmedSquares);
         }
 
-        private static void AddSquare(MazeSquareExtension sqe, int behindPosition, List<MazeSquareExtension> list)
+        private void AddSquare(MazeSquareExtension sqe, int behindPosition, List<MazeSquareExtension> list)
         {
-            if (list.Count > 8 * Maze.MaxXSize * Maze.MaxYSize)
+            if (list.Count > 8 * mazeExtension.Length)
             {
                 throw new Exception("internal list grows too long");
             }

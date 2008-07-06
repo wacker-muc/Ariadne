@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Font Name="Tahoma" Size="8.25" />
+  <Class Name="SWA.Ariadne.Model.DeadEndChecker">
+    <Position X="7.75" Y="0.5" Width="2.5" />
+    <TypeIdentifier>
+      <FileName>DeadEndChecker.cs</FileName>
+      <HashCode>ABAAAAgABBgAAAQAAAAAEAIAIAABAABMAAAAAEAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="SWA.Ariadne.Model.DeadEndChecker.MazeSquareExtension" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>DeadEndChecker.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+  </Class>
+  <Class Name="SWA.Ariadne.Model.Maze" BaseTypeListCollapsed="true">
+    <Position X="2.75" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <FileName>Maze.cs</FileName>
+      <HashCode>QAAQAAAoAAIAZEEECGQhQgAIEwmEBABMiAQFBBAAAxA=</HashCode>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Field Name="squares" />
+    </ShowAsCollectionAssociation>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="SWA.Ariadne.Model.MazeSquare">
+    <Position X="5.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>MazeSquare.cs</FileName>
+      <HashCode>AAACAAQAAAAAAAAEKAAEQAAAoAAgAKABEIAAIQAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="SWA.Ariadne.Model.MazeSquare.WallPosition" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>MazeSquare.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="SWA.Ariadne.Model.MazeSquare.WallState" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>MazeSquare.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+  </Class>
+  <Class Name="SWA.Ariadne.Model.MazeDimensions">
+    <Position X="0.5" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <FileName>MazeDimensions.cs</FileName>
+      <HashCode>AACAAAAQAAAAAABAAAAAIAAAABAAAAAIIAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SWA.Ariadne.Model.MazeCode">
+    <Position X="0.5" Y="3.75" Width="1.75" />
+    <TypeIdentifier>
+      <FileName>MazeCode.cs</FileName>
+      <HashCode>AAAAAAEAAAAAAAABAAAgAAAAAAAAAAAAAAwAQAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+</ClassDiagram>
