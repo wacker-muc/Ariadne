@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SWA.Ariadne.Model
 {
-    public static class MazeCode
+    public class MazeCode
     {
         #region Member variables
 
@@ -12,26 +12,26 @@ namespace SWA.Ariadne.Model
         /// Maximum initial seed value: 2^13-1.
         /// This value and the other Max... values are chosen so that the maze Code may be represented with 12 characters.
         /// </summary>
-        public const int SeedLimit = 8192;
+        public readonly int SeedLimit = 8192;
+
+        public readonly int CodeLength = 12;
+        public readonly int CodeDigitRange = 26; // 'A' .. 'Z'
 
         #endregion
 
         #region Constructor
 
-        // No constructor for a static class.
+        MazeCode()
+        {
+        }
 
         #endregion
-
-        #region Encoding of the maze parameters
-
-        public const int CodeLength = 12;
-        public const int CodeDigitRange = 26; // 'A' .. 'Z'
 
         /// <summary>
         /// A string of twelve characters (A..Z) that encodes the maze parameters.
         /// This code can be used to construct an identical maze.
         /// </summary>
-        public static string Code(Maze maze)
+        public string Code(Maze maze)
         {
             long nCode = 0;
 
@@ -80,16 +80,16 @@ namespace SWA.Ariadne.Model
                     break;
             }
 
-            nCode *= (MazeDimensions.MaxBorderDistance + 1);
+            nCode *= (maze.DimensionsObj.MaxBorderDistance + 1);
             nCode += d1;
 
-            nCode *= (MazeDimensions.MaxBorderDistance + 1);
+            nCode *= (maze.DimensionsObj.MaxBorderDistance + 1);
             nCode += d2;
 
-            nCode *= (MazeDimensions.MaxXSize + 1);
+            nCode *= (maze.DimensionsObj.MaxXSize + 1);
             nCode += c1;
 
-            nCode *= (MazeDimensions.MaxXSize + 1);
+            nCode *= (maze.DimensionsObj.MaxXSize + 1);
             nCode += c2;
 
             nCode *= MazeSquare.WP_NUM;
@@ -97,11 +97,11 @@ namespace SWA.Ariadne.Model
 
             // Encode maze dimension.
 
-            nCode *= (MazeDimensions.MaxYSize - MazeDimensions.MinSize + 1);
-            nCode += (maze.YSize - MazeDimensions.MinSize);
+            nCode *= (maze.DimensionsObj.MaxYSize - maze.DimensionsObj.MinSize + 1);
+            nCode += (maze.YSize - maze.DimensionsObj.MinSize);
 
-            nCode *= (MazeDimensions.MaxXSize - MazeDimensions.MinSize + 1);
-            nCode += (maze.XSize - MazeDimensions.MinSize);
+            nCode *= (maze.DimensionsObj.MaxXSize - maze.DimensionsObj.MinSize + 1);
+            nCode += (maze.XSize - maze.DimensionsObj.MinSize);
 
             // Encode initial seed.
 
@@ -144,7 +144,7 @@ namespace SWA.Ariadne.Model
         /// <param name="maze.EndSquare.XPos"></param>
         /// <param name="maze.EndSquare.YPos"></param>
         /// <exception cref="ArgumentOutOfRangeException">decoded parameters are invalid</exception>
-        public static void Decode(string code
+        public void Decode(string code
             , out int seed
             , out int xSize, out int ySize
             , out MazeSquare.WallPosition direction
@@ -153,6 +153,7 @@ namespace SWA.Ariadne.Model
             )
         {
             long nCode = 0;
+            MazeDimensions dimensionsObj = MazeDimensions.Instance();
 
             #region Convert the character code (base 26) into a numeric code
 
@@ -186,12 +187,12 @@ namespace SWA.Ariadne.Model
             seed = (int)(nCode % itemRange);
             nCode /= itemRange;
 
-            itemRange = MazeDimensions.MaxXSize - MazeDimensions.MinSize + 1;
-            xSize = (int)(nCode % itemRange) + MazeDimensions.MinSize;
+            itemRange = dimensionsObj.MaxXSize - dimensionsObj.MinSize + 1;
+            xSize = (int)(nCode % itemRange) + dimensionsObj.MinSize;
             nCode /= itemRange;
 
-            itemRange = MazeDimensions.MaxYSize - MazeDimensions.MinSize + 1;
-            ySize = (int)(nCode % itemRange) + MazeDimensions.MinSize;
+            itemRange = dimensionsObj.MaxYSize - dimensionsObj.MinSize + 1;
+            ySize = (int)(nCode % itemRange) + dimensionsObj.MinSize;
             nCode /= itemRange;
 
             int d1, d2, c1, c2;
@@ -200,19 +201,19 @@ namespace SWA.Ariadne.Model
             direction = (MazeSquare.WallPosition)(nCode % itemRange);
             nCode /= itemRange;
 
-            itemRange = MazeDimensions.MaxXSize + 1;
+            itemRange = dimensionsObj.MaxXSize + 1;
             c2 = (int)(nCode % itemRange);
             nCode /= itemRange;
 
-            itemRange = MazeDimensions.MaxXSize + 1;
+            itemRange = dimensionsObj.MaxXSize + 1;
             c1 = (int)(nCode % itemRange);
             nCode /= itemRange;
 
-            itemRange = MazeDimensions.MaxBorderDistance + 1;
+            itemRange = dimensionsObj.MaxBorderDistance + 1;
             d2 = (int)(nCode % itemRange);
             nCode /= itemRange;
 
-            itemRange = MazeDimensions.MaxBorderDistance + 1;
+            itemRange = dimensionsObj.MaxBorderDistance + 1;
             d1 = (int)(nCode % itemRange);
             nCode /= itemRange;
 
@@ -256,8 +257,8 @@ namespace SWA.Ariadne.Model
                 throw new ArgumentOutOfRangeException("remainder(code)", seed, "Must be a zero.");
             }
             ValidateCodeItemRange("seed", seed, 0, SeedLimit-1);
-            ValidateCodeItemRange("xSize", xSize, MazeDimensions.MinSize, MazeDimensions.MaxXSize);
-            ValidateCodeItemRange("ySize", ySize, MazeDimensions.MinSize, MazeDimensions.MaxYSize);
+            ValidateCodeItemRange("xSize", xSize, dimensionsObj.MinSize, dimensionsObj.MaxXSize);
+            ValidateCodeItemRange("ySize", ySize, dimensionsObj.MinSize, dimensionsObj.MaxYSize);
             ValidateCodeItemRange("xStart", xStart, 0, xSize-1);
             ValidateCodeItemRange("yStart", yStart, 0, ySize-1);
             ValidateCodeItemRange("xEnd", xEnd, 0, xSize-1);
@@ -274,6 +275,19 @@ namespace SWA.Ariadne.Model
             }
         }
 
-        #endregion
+        /// <summary>
+        /// Returns a singleton MazeCode instance.
+        /// </summary>
+        /// <returns></returns>
+        public static MazeCode Instance()
+        {
+            if (instance == null)
+            {
+                instance = new MazeCode();
+            }
+            return instance;
+        }
+
+        private static MazeCode instance = null;
     }
 }

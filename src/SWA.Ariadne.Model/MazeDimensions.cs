@@ -14,50 +14,56 @@ namespace SWA.Ariadne.Model
         /// <summary>
         /// Minimum width or height: number of squares.
         /// </summary>
-        public static readonly int MinSize = 4;
+        public readonly int MinSize = 4;
 
         /// <summary>
         /// Maximum width: number of squares.
         /// </summary>
-        public static int MaxXSize
+        public int MaxXSize
         {
             get
             {
                 return MinSize + xRange;
             }
         }
-        private static readonly int xRange = 337; // expected value, manually calculated
+        private readonly int xRange = 337; // expected value, manually calculated
 
         /// <summary>
         /// Maximum height: number of squares.
         /// </summary>
-        public static int MaxYSize
+        public int MaxYSize
         {
             get
             {
                 return MinSize + yRange;
             }
         }
-        private static readonly int yRange = 251; // expected value, manually calculated
+        private readonly int yRange = 251; // expected value, manually calculated
 
         /// <summary>
         /// Maximum distance of start/end point from border.
         /// </summary>
-        public static readonly int MaxBorderDistance = 16;
+        public readonly int MaxBorderDistance = 16;
+
+        private MazeDimensions()
+        {
+            this.CalculateDimensions(out this.xRange, out this.yRange);
+        }
 
         /// <summary>
         /// Calculate maximum x and y dimensions, based on the desired Maze.Code length.
         /// </summary>
-        static MazeDimensions()
+        protected void CalculateDimensions(out int xRange, out int yRange)
         {
-            double codeLimit = Math.Pow(MazeCode.CodeDigitRange, MazeCode.CodeLength);
+            MazeCode codeObj = MazeCode.Instance();
+            double codeLimit = Math.Pow(codeObj.CodeDigitRange, codeObj.CodeLength);
 
             if (codeLimit > long.MaxValue)
             {
                 throw new Exception("Maze.Code is too large to be represented as a 64 bit integer");
             }
 
-            codeLimit /= MazeCode.SeedLimit;
+            codeLimit /= codeObj.SeedLimit;
             //           (MaxXSize - MinSize + 1)
             //           (MaxYSize - MinSize + 1)
             codeLimit /= MazeSquare.WP_NUM;
@@ -96,5 +102,20 @@ namespace SWA.Ariadne.Model
             xRange = (int)(x - MinSize - 2);
             yRange = (int)(MaxXSize / XYRatio - MinSize); // Note: MaxXSize is valid after xRange has been assigned
         }
+
+        /// <summary>
+        /// Returns a singleton MazeDimensions instance.
+        /// </summary>
+        /// <returns></returns>
+        public static MazeDimensions Instance()
+        {
+            if (instance == null)
+            {
+                instance = new MazeDimensions();
+            }
+            return instance;
+        }
+
+        private static MazeDimensions instance = null;
     }
 }

@@ -12,6 +12,18 @@ namespace SWA.Ariadne.Model
     {
         #region Member variables
 
+        private MazeDimensions dimensionsObj;
+        public MazeDimensions DimensionsObj
+        {
+            get { return dimensionsObj; }
+        }
+
+        private MazeCode codeObj;
+        public MazeCode CodeObj
+        {
+            get { return codeObj; }
+        }
+
         /// <summary>
         /// Maze dimension: number of squares.
         /// </summary>
@@ -113,12 +125,15 @@ namespace SWA.Ariadne.Model
         /// <param name="ySize"></param>
         public Maze(int xSize, int ySize)
         {
-            this.xSize = Math.Max(MazeDimensions.MinSize, Math.Min(MazeDimensions.MaxXSize, xSize));
-            this.ySize = Math.Max(MazeDimensions.MinSize, Math.Min(MazeDimensions.MaxYSize, ySize));
+            this.dimensionsObj = MazeDimensions.Instance();
+            this.codeObj = MazeCode.Instance();
+
+            this.xSize = Math.Max(dimensionsObj.MinSize, Math.Min(dimensionsObj.MaxXSize, xSize));
+            this.ySize = Math.Max(dimensionsObj.MinSize, Math.Min(dimensionsObj.MaxYSize, ySize));
 
             // Get an initial random seed and use that to create the Random.
             Random r = RandomFactory.CreateRandom();
-            this.seed = r.Next(MazeCode.SeedLimit);
+            this.seed = r.Next(codeObj.SeedLimit);
             this.random = RandomFactory.CreateRandom(seed);
         }
 
@@ -129,7 +144,10 @@ namespace SWA.Ariadne.Model
         /// <param name="code">a string of seven letters (case is ignored)</param>
         public Maze(string code)
         {
-            MazeCode.Decode(code
+            this.dimensionsObj = MazeDimensions.Instance();
+            this.codeObj = MazeCode.Instance();
+
+            codeObj.Decode(code
                 , out this.seed
                 , out this.xSize, out this.ySize
                 , out this.direction
@@ -183,7 +201,7 @@ namespace SWA.Ariadne.Model
         {
             get
             {
-                return MazeCode.Code(this);
+                return codeObj.Code(this);
             }
         }
         #endregion
@@ -373,8 +391,8 @@ namespace SWA.Ariadne.Model
                     + random.Next(edgeWidth)
                     ;
 
-                edgeDistStart = Math.Min(edgeDistStart, MazeDimensions.MaxBorderDistance);
-                edgeDistEnd = Math.Min(edgeDistEnd, MazeDimensions.MaxBorderDistance);
+                edgeDistStart = Math.Min(edgeDistStart, dimensionsObj.MaxBorderDistance);
+                edgeDistEnd = Math.Min(edgeDistEnd, dimensionsObj.MaxBorderDistance);
 
                 // The two rows (or columns) that make up the (positive) travel direction.
                 int lesserRow = 0, greaterRow = 0;
@@ -764,17 +782,17 @@ namespace SWA.Ariadne.Model
         public void TakeParametersFrom(AriadneSettingsData data)
         {
             // The Auto... flags for Width and Height have already been checked by the MazeUserControl.
-            this.xSize = Math.Max(MazeDimensions.MinSize, Math.Min(MazeDimensions.MaxXSize, data.MazeWidth));
-            this.ySize = Math.Max(MazeDimensions.MinSize, Math.Min(MazeDimensions.MaxYSize, data.MazeHeight));
+            this.xSize = Math.Max(dimensionsObj.MinSize, Math.Min(dimensionsObj.MaxXSize, data.MazeWidth));
+            this.ySize = Math.Max(dimensionsObj.MinSize, Math.Min(dimensionsObj.MaxYSize, data.MazeHeight));
 
             if (!data.AutoSeed)
             {
-                this.seed = Math.Max(0, Math.Min(MazeCode.SeedLimit - 1, data.Seed));
+                this.seed = Math.Max(0, Math.Min(codeObj.SeedLimit - 1, data.Seed));
             }
             else
             {
                 Random r = RandomFactory.CreateRandom();
-                this.seed = r.Next(MazeCode.SeedLimit);
+                this.seed = r.Next(codeObj.SeedLimit);
             }
             this.random = RandomFactory.CreateRandom(seed);
 
