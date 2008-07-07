@@ -12,17 +12,15 @@ namespace SWA.Ariadne.Model
     {
         #region Member variables
 
+        /// <summary>
+        /// Provides minimum and maximum dimension parameters.
+        /// </summary>
         private MazeDimensions dimensionsObj;
-        public MazeDimensions DimensionsObj
-        {
-            get { return dimensionsObj; }
-        }
 
+        /// <summary>
+        /// Can encode and decode maze parameters into maze ID strings.
+        /// </summary>
         private MazeCode codeObj;
-        public MazeCode CodeObj
-        {
-            get { return codeObj; }
-        }
 
         /// <summary>
         /// Maze dimension: number of squares.
@@ -48,7 +46,7 @@ namespace SWA.Ariadne.Model
         /// Travel direction: 0..3
         /// </summary>
         private MazeSquare.WallPosition direction;
-        public MazeSquare.WallPosition Direction
+        internal MazeSquare.WallPosition Direction
         {
             get { return direction; }
         }
@@ -134,7 +132,21 @@ namespace SWA.Ariadne.Model
         /// </summary>
         /// <param name="xSize"></param>
         /// <param name="ySize"></param>
+        /// <param name="version"></param>
         public Maze(int xSize, int ySize, int version)
+            : this(xSize, ySize, version, -1)
+        {
+        }
+
+        /// <summary>
+        /// Constructor.
+        /// Create a maze with the given dimensions.
+        /// </summary>
+        /// <param name="xSize"></param>
+        /// <param name="ySize"></param>
+        /// <param name="version"></param>
+        /// <param name="seed"></param>
+        internal Maze(int xSize, int ySize, int version, int seed)
         {
             this.dimensionsObj = MazeDimensions.Instance(version);
             this.codeObj = MazeCode.Instance(version);
@@ -143,9 +155,16 @@ namespace SWA.Ariadne.Model
             this.ySize = Math.Max(dimensionsObj.MinSize, Math.Min(dimensionsObj.MaxYSize, ySize));
 
             // Get an initial random seed and use that to create the Random.
-            Random r = RandomFactory.CreateRandom();
-            this.seed = r.Next(codeObj.SeedLimit);
-            this.random = RandomFactory.CreateRandom(seed);
+            if (seed < 0)
+            {
+                Random r = RandomFactory.CreateRandom();
+                this.seed = r.Next(codeObj.SeedLimit);
+            }
+            else
+            {
+                this.seed = seed;
+            }
+            this.random = RandomFactory.CreateRandom(this.seed);
         }
 
         /// <summary>
