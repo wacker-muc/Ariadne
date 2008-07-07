@@ -377,4 +377,317 @@ internal class SWA_Ariadne_Model_MazeAccessor : BaseAccessor {
         return ret;
     }
 }
+[System.Diagnostics.DebuggerStepThrough()]
+[System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TestTools.UnitTestGeneration", "1.0.0.0")]
+internal class SWA_Ariadne_Model_MazeCodeAccessor : BaseAccessor {
+    
+    protected static Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType m_privateType = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType("SWA.Ariadne.Model", "SWA.Ariadne.Model.MazeCode");
+    
+    internal SWA_Ariadne_Model_MazeCodeAccessor(object target) : 
+            base(target, m_privateType) {
+    }
+    
+    internal int SeedLimit {
+        get {
+            int ret = ((int)(m_privateObject.GetField("SeedLimit")));
+            return ret;
+        }
+        set {
+            m_privateObject.SetField("SeedLimit", value);
+        }
+    }
+    
+    internal int CodeLength {
+        get {
+            int ret = ((int)(m_privateObject.GetField("CodeLength")));
+            return ret;
+        }
+        set {
+            m_privateObject.SetField("CodeLength", value);
+        }
+    }
+    
+    internal int CodeDigitRange {
+        get {
+            int ret = ((int)(m_privateObject.GetField("CodeDigitRange")));
+            return ret;
+        }
+        set {
+            m_privateObject.SetField("CodeDigitRange", value);
+        }
+    }
+    
+    internal static int DefaultCodeVersion {
+        get {
+            int ret = ((int)(m_privateType.GetStaticField("DefaultCodeVersion")));
+            return ret;
+        }
+        set {
+            m_privateType.SetStaticField("DefaultCodeVersion", value);
+        }
+    }
+    
+    internal int codeVersion {
+        get {
+            int ret = ((int)(m_privateObject.GetField("codeVersion")));
+            return ret;
+        }
+        set {
+            m_privateObject.SetField("codeVersion", value);
+        }
+    }
+    
+    internal static global::SWA.Ariadne.Model.Tests.SWA_Ariadne_Model_MazeCodeAccessor[] instance {
+        get {
+            global::System.Array _ret_cache = ((global::System.Array)(m_privateType.GetStaticField("instance")));
+            global::SWA.Ariadne.Model.Tests.SWA_Ariadne_Model_MazeCodeAccessor[] _ret_temp;
+            if ((_ret_cache == null)) {
+                _ret_temp = null;
+            }
+            else {
+                _ret_temp = ((global::SWA.Ariadne.Model.Tests.SWA_Ariadne_Model_MazeCodeAccessor[])(System.Array.CreateInstance(typeof(global::SWA.Ariadne.Model.Tests.SWA_Ariadne_Model_MazeCodeAccessor), _ret_cache.GetLength(0))));
+                int _ret_i0;
+                for (_ret_i0 = 0; (_ret_i0 < _ret_temp.GetLength(0)); _ret_i0 = (_ret_i0 + 1)) {
+                    object _ret_i_val = _ret_cache.GetValue(_ret_i0);
+                    global::SWA.Ariadne.Model.Tests.SWA_Ariadne_Model_MazeCodeAccessor _ret_i = null;
+                    if ((_ret_i_val != null)) {
+                        _ret_i = new global::SWA.Ariadne.Model.Tests.SWA_Ariadne_Model_MazeCodeAccessor(_ret_i_val);
+                    }
+                    _ret_temp.SetValue(_ret_i, _ret_i0);
+                }
+            }
+            global::SWA.Ariadne.Model.Tests.SWA_Ariadne_Model_MazeCodeAccessor[] ret = _ret_temp;
+            return ret;
+        }
+        set {
+            m_privateType.SetStaticField("instance", value);
+        }
+    }
+    
+    internal static object CreatePrivate(int version) {
+        object[] args = new object[] {
+                version};
+        Microsoft.VisualStudio.TestTools.UnitTesting.PrivateObject priv_obj = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateObject("SWA.Ariadne.Model", "SWA.Ariadne.Model.MazeCode", new System.Type[] {
+                    typeof(int)}, args);
+        return priv_obj.Target;
+    }
+    
+    internal string Code(global::SWA.Ariadne.Model.Maze maze) {
+        object[] args = new object[] {
+                maze};
+        string ret = ((string)(m_privateObject.Invoke("Code", new System.Type[] {
+                    typeof(global::SWA.Ariadne.Model.Maze)}, args)));
+        return ret;
+    }
+    
+    internal static int GetCodeVersion(string code) {
+        object[] args = new object[] {
+                code};
+        int ret = ((int)(m_privateType.InvokeStatic("GetCodeVersion", new System.Type[] {
+                    typeof(string)}, args)));
+        return ret;
+    }
+    
+    internal void Decode(string code, out int seed, out int xSize, out int ySize, out global::SWA.Ariadne.Model.MazeSquare.WallPosition direction, out int xStart, out int yStart, out int xEnd, out int yEnd) {
+        object[] args = new object[] {
+                code,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null};
+        m_privateObject.Invoke("Decode", new System.Type[] {
+                    typeof(string),
+                    typeof(int).MakeByRefType(),
+                    typeof(int).MakeByRefType(),
+                    typeof(int).MakeByRefType(),
+                    typeof(global::SWA.Ariadne.Model.MazeSquare.WallPosition).MakeByRefType(),
+                    typeof(int).MakeByRefType(),
+                    typeof(int).MakeByRefType(),
+                    typeof(int).MakeByRefType(),
+                    typeof(int).MakeByRefType()}, args);
+        seed = ((int)(args[1]));
+        xSize = ((int)(args[2]));
+        ySize = ((int)(args[3]));
+        direction = ((global::SWA.Ariadne.Model.MazeSquare.WallPosition)(args[4]));
+        xStart = ((int)(args[5]));
+        yStart = ((int)(args[6]));
+        xEnd = ((int)(args[7]));
+        yEnd = ((int)(args[8]));
+    }
+    
+    internal static void ValidateCodeItemRange(string item, int value, int min, int max) {
+        object[] args = new object[] {
+                item,
+                value,
+                min,
+                max};
+        m_privateType.InvokeStatic("ValidateCodeItemRange", new System.Type[] {
+                    typeof(string),
+                    typeof(int),
+                    typeof(int),
+                    typeof(int)}, args);
+    }
+    
+    internal static global::SWA.Ariadne.Model.Tests.SWA_Ariadne_Model_MazeCodeAccessor Instance(int version) {
+        object[] args = new object[] {
+                version};
+        object _ret_val = m_privateType.InvokeStatic("Instance", new System.Type[] {
+                    typeof(int)}, args);
+        global::SWA.Ariadne.Model.Tests.SWA_Ariadne_Model_MazeCodeAccessor _ret = null;
+        if ((_ret_val != null)) {
+            _ret = new global::SWA.Ariadne.Model.Tests.SWA_Ariadne_Model_MazeCodeAccessor(_ret_val);
+        }
+        global::SWA.Ariadne.Model.Tests.SWA_Ariadne_Model_MazeCodeAccessor ret = _ret;
+        return ret;
+    }
+}
+[System.Diagnostics.DebuggerStepThrough()]
+[System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TestTools.UnitTestGeneration", "1.0.0.0")]
+internal class SWA_Ariadne_Model_MazeDimensionsAccessor : BaseAccessor {
+    
+    protected static Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType m_privateType = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType("SWA.Ariadne.Model", "SWA.Ariadne.Model.MazeDimensions");
+    
+    internal SWA_Ariadne_Model_MazeDimensionsAccessor(object target) : 
+            base(target, m_privateType) {
+    }
+    
+    internal static double XYRatio {
+        get {
+            double ret = ((double)(m_privateType.GetStaticField("XYRatio")));
+            return ret;
+        }
+        set {
+            m_privateType.SetStaticField("XYRatio", value);
+        }
+    }
+    
+    internal int MinSize {
+        get {
+            int ret = ((int)(m_privateObject.GetField("MinSize")));
+            return ret;
+        }
+        set {
+            m_privateObject.SetField("MinSize", value);
+        }
+    }
+    
+    internal int MaxXSize {
+        get {
+            int ret = ((int)(m_privateObject.GetProperty("MaxXSize")));
+            return ret;
+        }
+    }
+    
+    internal int xRange {
+        get {
+            int ret = ((int)(m_privateObject.GetField("xRange")));
+            return ret;
+        }
+        set {
+            m_privateObject.SetField("xRange", value);
+        }
+    }
+    
+    internal int MaxYSize {
+        get {
+            int ret = ((int)(m_privateObject.GetProperty("MaxYSize")));
+            return ret;
+        }
+    }
+    
+    internal int yRange {
+        get {
+            int ret = ((int)(m_privateObject.GetField("yRange")));
+            return ret;
+        }
+        set {
+            m_privateObject.SetField("yRange", value);
+        }
+    }
+    
+    internal int MaxBorderDistance {
+        get {
+            int ret = ((int)(m_privateObject.GetField("MaxBorderDistance")));
+            return ret;
+        }
+        set {
+            m_privateObject.SetField("MaxBorderDistance", value);
+        }
+    }
+    
+    internal int codeVersion {
+        get {
+            int ret = ((int)(m_privateObject.GetField("codeVersion")));
+            return ret;
+        }
+        set {
+            m_privateObject.SetField("codeVersion", value);
+        }
+    }
+    
+    internal static global::SWA.Ariadne.Model.Tests.SWA_Ariadne_Model_MazeDimensionsAccessor[] instance {
+        get {
+            global::System.Array _ret_cache = ((global::System.Array)(m_privateType.GetStaticField("instance")));
+            global::SWA.Ariadne.Model.Tests.SWA_Ariadne_Model_MazeDimensionsAccessor[] _ret_temp;
+            if ((_ret_cache == null)) {
+                _ret_temp = null;
+            }
+            else {
+                _ret_temp = ((global::SWA.Ariadne.Model.Tests.SWA_Ariadne_Model_MazeDimensionsAccessor[])(System.Array.CreateInstance(typeof(global::SWA.Ariadne.Model.Tests.SWA_Ariadne_Model_MazeDimensionsAccessor), _ret_cache.GetLength(0))));
+                int _ret_i0;
+                for (_ret_i0 = 0; (_ret_i0 < _ret_temp.GetLength(0)); _ret_i0 = (_ret_i0 + 1)) {
+                    object _ret_i_val = _ret_cache.GetValue(_ret_i0);
+                    global::SWA.Ariadne.Model.Tests.SWA_Ariadne_Model_MazeDimensionsAccessor _ret_i = null;
+                    if ((_ret_i_val != null)) {
+                        _ret_i = new global::SWA.Ariadne.Model.Tests.SWA_Ariadne_Model_MazeDimensionsAccessor(_ret_i_val);
+                    }
+                    _ret_temp.SetValue(_ret_i, _ret_i0);
+                }
+            }
+            global::SWA.Ariadne.Model.Tests.SWA_Ariadne_Model_MazeDimensionsAccessor[] ret = _ret_temp;
+            return ret;
+        }
+        set {
+            m_privateType.SetStaticField("instance", value);
+        }
+    }
+    
+    internal static object CreatePrivate(int version) {
+        object[] args = new object[] {
+                version};
+        Microsoft.VisualStudio.TestTools.UnitTesting.PrivateObject priv_obj = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateObject("SWA.Ariadne.Model", "SWA.Ariadne.Model.MazeDimensions", new System.Type[] {
+                    typeof(int)}, args);
+        return priv_obj.Target;
+    }
+    
+    internal void CalculateDimensions(int version, out int xRange, out int yRange) {
+        object[] args = new object[] {
+                version,
+                null,
+                null};
+        m_privateObject.Invoke("CalculateDimensions", new System.Type[] {
+                    typeof(int),
+                    typeof(int).MakeByRefType(),
+                    typeof(int).MakeByRefType()}, args);
+        xRange = ((int)(args[1]));
+        yRange = ((int)(args[2]));
+    }
+    
+    internal static global::SWA.Ariadne.Model.Tests.SWA_Ariadne_Model_MazeDimensionsAccessor Instance(int version) {
+        object[] args = new object[] {
+                version};
+        object _ret_val = m_privateType.InvokeStatic("Instance", new System.Type[] {
+                    typeof(int)}, args);
+        global::SWA.Ariadne.Model.Tests.SWA_Ariadne_Model_MazeDimensionsAccessor _ret = null;
+        if ((_ret_val != null)) {
+            _ret = new global::SWA.Ariadne.Model.Tests.SWA_Ariadne_Model_MazeDimensionsAccessor(_ret_val);
+        }
+        global::SWA.Ariadne.Model.Tests.SWA_Ariadne_Model_MazeDimensionsAccessor ret = _ret;
+        return ret;
+    }
+}
 }

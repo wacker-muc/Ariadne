@@ -10,7 +10,7 @@ namespace SWA.Ariadne.Model
     ///    Version 0: 12 characters 'A'..'Z'
     ///    Version 1:  6 characters '0'..'9', 'a'..'z'
     /// </summary>
-    public class MazeCode
+    internal class MazeCode
     {
         #region Member variables
 
@@ -37,7 +37,11 @@ namespace SWA.Ariadne.Model
 
         #region Constructor
 
-        MazeCode(int version)
+        /// <summary>
+        /// Private Constructor.
+        /// </summary>
+        /// <param name="version"></param>
+        private MazeCode(int version)
         {
             this.codeVersion = version;
 
@@ -67,6 +71,7 @@ namespace SWA.Ariadne.Model
         public string Code(Maze maze)
         {
             long nCode = 0;
+            MazeDimensions dimensionsObj = MazeDimensions.Instance(codeVersion);
 
             #region Encode the relevant parameters into a numeric code
 
@@ -115,16 +120,16 @@ namespace SWA.Ariadne.Model
                         break;
                 }
 
-                nCode *= (maze.DimensionsObj.MaxBorderDistance + 1);
+                nCode *= (dimensionsObj.MaxBorderDistance + 1);
                 nCode += d1;
 
-                nCode *= (maze.DimensionsObj.MaxBorderDistance + 1);
+                nCode *= (dimensionsObj.MaxBorderDistance + 1);
                 nCode += d2;
 
-                nCode *= (maze.DimensionsObj.MaxXSize + 1);
+                nCode *= (dimensionsObj.MaxXSize + 1);
                 nCode += c1;
 
-                nCode *= (maze.DimensionsObj.MaxXSize + 1);
+                nCode *= (dimensionsObj.MaxXSize + 1);
                 nCode += c2;
 
                 nCode *= MazeSquare.WP_NUM;
@@ -133,11 +138,11 @@ namespace SWA.Ariadne.Model
 
             // Encode maze dimension.
 
-            nCode *= (maze.DimensionsObj.MaxYSize - maze.DimensionsObj.MinSize + 1);
-            nCode += (maze.YSize - maze.DimensionsObj.MinSize);
+            nCode *= (dimensionsObj.MaxYSize - dimensionsObj.MinSize + 1);
+            nCode += (maze.YSize - dimensionsObj.MinSize);
 
-            nCode *= (maze.DimensionsObj.MaxXSize - maze.DimensionsObj.MinSize + 1);
-            nCode += (maze.XSize - maze.DimensionsObj.MinSize);
+            nCode *= (dimensionsObj.MaxXSize - dimensionsObj.MinSize + 1);
+            nCode += (maze.XSize - dimensionsObj.MinSize);
 
             // Encode initial seed.
 
@@ -253,9 +258,7 @@ namespace SWA.Ariadne.Model
             )
         {
             long nCode = 0;
-            int version = GetCodeVersion(code);
-            MazeDimensions dimensionsObj = MazeDimensions.Instance(version);
-            MazeCode codeObj = MazeCode.Instance(version);
+            MazeDimensions dimensionsObj = MazeDimensions.Instance(codeVersion);
 
             #region Convert the character code (base 26) into a numeric code
 
@@ -268,11 +271,37 @@ namespace SWA.Ariadne.Model
 
             for (int p = 0; p < a.Length; p++)
             {
-                int digit = a[p] - 'A';
+                int digit = 0;
+
+                switch (CodeDigitRange)
+                {
+                    case 26:
+                        digit = a[p] - 'A';
+                        break;
+                    case 36:
+                        digit = a[p] - '0';
+                        if (digit >= 10)
+                        {
+                            digit = 10 + a[p] - 'a';
+                        }
+                        break;
+                }
+
                 if (!(0 <= digit && digit < CodeDigitRange))
                 {
-                    throw new ArgumentOutOfRangeException("code", code, "Allowed characters are 'A'..'Z' only.");
+                    string allowed = "???";
+                    switch (CodeDigitRange)
+                    {
+                        case 26:
+                            allowed = "'A'..'Z'";
+                            break;
+                        case 36:
+                            allowed = "'0'..'9' and 'a'..'z'";
+                            break;
+                    }
+                    throw new ArgumentOutOfRangeException("code", code, "Allowed characters are " + allowed + " only.");
                 }
+
                 nCode *= CodeDigitRange;
                 nCode += digit;
             }
@@ -297,56 +326,75 @@ namespace SWA.Ariadne.Model
             ySize = (int)(nCode % itemRange) + dimensionsObj.MinSize;
             nCode /= itemRange;
 
-            int d1, d2, c1, c2;
-
-            itemRange = MazeSquare.WP_NUM;
-            direction = (MazeSquare.WallPosition)(nCode % itemRange);
-            nCode /= itemRange;
-
-            itemRange = dimensionsObj.MaxXSize + 1;
-            c2 = (int)(nCode % itemRange);
-            nCode /= itemRange;
-
-            itemRange = dimensionsObj.MaxXSize + 1;
-            c1 = (int)(nCode % itemRange);
-            nCode /= itemRange;
-
-            itemRange = dimensionsObj.MaxBorderDistance + 1;
-            d2 = (int)(nCode % itemRange);
-            nCode /= itemRange;
-
-            itemRange = dimensionsObj.MaxBorderDistance + 1;
-            d1 = (int)(nCode % itemRange);
-            nCode /= itemRange;
-
-            switch (direction)
+            switch (codeVersion)
             {
-                case MazeSquare.WallPosition.WP_E:
-                    xStart = d1;
-                    xEnd = xSize - 1 - d2;
-                    yStart = c1;
-                    yEnd = c2;
+                case 0:
+                    int d1, d2, c1, c2;
+
+                    itemRange = MazeSquare.WP_NUM;
+                    direction = (MazeSquare.WallPosition)(nCode % itemRange);
+                    nCode /= itemRange;
+
+                    itemRange = dimensionsObj.MaxXSize + 1;
+                    c2 = (int)(nCode % itemRange);
+                    nCode /= itemRange;
+
+                    itemRange = dimensionsObj.MaxXSize + 1;
+                    c1 = (int)(nCode % itemRange);
+                    nCode /= itemRange;
+
+                    itemRange = dimensionsObj.MaxBorderDistance + 1;
+                    d2 = (int)(nCode % itemRange);
+                    nCode /= itemRange;
+
+                    itemRange = dimensionsObj.MaxBorderDistance + 1;
+                    d1 = (int)(nCode % itemRange);
+                    nCode /= itemRange;
+
+                    switch (direction)
+                    {
+                        case MazeSquare.WallPosition.WP_E:
+                            xStart = d1;
+                            xEnd = xSize - 1 - d2;
+                            yStart = c1;
+                            yEnd = c2;
+                            break;
+                        case MazeSquare.WallPosition.WP_W:
+                            xEnd = d1;
+                            xStart = xSize - 1 - d2;
+                            yEnd = c1;
+                            yStart = c2;
+                            break;
+                        case MazeSquare.WallPosition.WP_S:
+                            yStart = d1;
+                            yEnd = ySize - 1 - d2;
+                            xStart = c1;
+                            xEnd = c2;
+                            break;
+                        case MazeSquare.WallPosition.WP_N:
+                            yEnd = d1;
+                            yStart = ySize - 1 - d2;
+                            xEnd = c1;
+                            xStart = c2;
+                            break;
+                        default:
+                            xStart = yStart = xEnd = yEnd = -1;
+                            break;
+                    }
                     break;
-                case MazeSquare.WallPosition.WP_W:
-                    xEnd = d1;
-                    xStart = xSize - 1 - d2;
-                    yEnd = c1;
-                    yStart = c2;
-                    break;
-                case MazeSquare.WallPosition.WP_S:
-                    yStart = d1;
-                    yEnd = ySize - 1 - d2;
-                    xStart = c1;
-                    xEnd = c2;
-                    break;
-                case MazeSquare.WallPosition.WP_N:
-                    yEnd = d1;
-                    yStart = ySize - 1 - d2;
-                    xEnd = c1;
-                    xStart = c2;
+                case 1:
+                    Maze m = new Maze(xSize, ySize, codeVersion, seed);
+                    m.CreateMaze();
+                    m.PlaceEndpoints();
+                    xStart = m.StartSquare.XPos;
+                    yStart = m.StartSquare.YPos;
+                    xEnd = m.EndSquare.XPos;
+                    yEnd = m.EndSquare.YPos;
+                    direction = m.Direction;
                     break;
                 default:
                     xStart = yStart = xEnd = yEnd = -1;
+                    direction = MazeSquare.WallPosition.WP_E;
                     break;
             }
 

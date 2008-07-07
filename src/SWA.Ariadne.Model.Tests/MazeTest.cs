@@ -97,7 +97,7 @@ namespace SWA.Ariadne.Model.Tests
         {
             string testObject = "Maze.Constructor(size)-02-max";
             int version = 0;
-            MazeDimensions dimensionsObj = MazeDimensions.Instance(version);
+            SWA_Ariadne_Model_MazeDimensionsAccessor dimensionsObj = SWA_Ariadne_Model_MazeDimensionsAccessor.Instance(version);
             int xSize = int.MaxValue;
             int ySize = int.MaxValue;
             int xSizeExpected = dimensionsObj.MaxXSize;
@@ -142,7 +142,7 @@ namespace SWA.Ariadne.Model.Tests
         {
             string testObject = "Maze.Constructor(size)-05-min";
             int version = 0;
-            MazeDimensions dimensionsObj = MazeDimensions.Instance(version);
+            SWA_Ariadne_Model_MazeDimensionsAccessor dimensionsObj = SWA_Ariadne_Model_MazeDimensionsAccessor.Instance(version);
             int xSize = 0;
             int ySize = 0;
             int xSizeExpected = dimensionsObj.MinSize;
@@ -216,7 +216,7 @@ namespace SWA.Ariadne.Model.Tests
         {
             string testObject = "Maze.Code";
             int version = 0;
-            MazeDimensions dimensionsObj = MazeDimensions.Instance(version);
+            SWA_Ariadne_Model_MazeDimensionsAccessor dimensionsObj = SWA_Ariadne_Model_MazeDimensionsAccessor.Instance(version);
 
             Random r = new Random();
 
@@ -248,7 +248,8 @@ namespace SWA.Ariadne.Model.Tests
         {
             string testObject = "Maze.Decode";
             int version = 0;
-            MazeDimensions dimensionsObj = MazeDimensions.Instance(version);
+            SWA_Ariadne_Model_MazeDimensionsAccessor dimensionsObj = SWA_Ariadne_Model_MazeDimensionsAccessor.Instance(version);
+            SWA_Ariadne_Model_MazeCodeAccessor codeObj = SWA_Ariadne_Model_MazeCodeAccessor.Instance(version);
 
             Random r = new Random();
 
@@ -272,7 +273,7 @@ namespace SWA.Ariadne.Model.Tests
 
                 int seedActual, xSizeActual, ySizeActual, xStartActual, yStartActual, xEndActual, yEndActual;
                 MazeSquare.WallPosition directionActual;
-                target.CodeObj.Decode(code
+                codeObj.Decode(code
                     , out seedActual
                     , out xSizeActual, out ySizeActual
                     , out directionActual
@@ -318,8 +319,8 @@ namespace SWA.Ariadne.Model.Tests
         {
             string testObject = "Maze.MaxXSize and Maze.MaxYSize";
             int version = 0;
-            MazeDimensions dimensionsObj = MazeDimensions.Instance(version);
-            MazeCode codeObj = MazeCode.Instance(version);
+            SWA_Ariadne_Model_MazeDimensionsAccessor dimensionsObj = SWA_Ariadne_Model_MazeDimensionsAccessor.Instance(version);
+            SWA_Ariadne_Model_MazeCodeAccessor codeObj = SWA_Ariadne_Model_MazeCodeAccessor.Instance(version);
 
             // simulate the multiplications executed in Maze.Code:
 
@@ -358,7 +359,7 @@ namespace SWA.Ariadne.Model.Tests
         {
             string testObject = "Maze.MaxXSize";
             int version = 0;
-            MazeDimensions dimensionsObj = MazeDimensions.Instance(version);
+            SWA_Ariadne_Model_MazeDimensionsAccessor dimensionsObj = SWA_Ariadne_Model_MazeDimensionsAccessor.Instance(version);
 
             int expected = 341; // manually calculated
             int actual = dimensionsObj.MaxXSize;
@@ -375,7 +376,7 @@ namespace SWA.Ariadne.Model.Tests
         {
             string testObject = "Maze.MaxYSize";
             int version = 0;
-            MazeDimensions dimensionsObj = MazeDimensions.Instance(version);
+            SWA_Ariadne_Model_MazeDimensionsAccessor dimensionsObj = SWA_Ariadne_Model_MazeDimensionsAccessor.Instance(version);
 
             int expected = 255; // manually calculated
             int actual = dimensionsObj.MaxYSize;
