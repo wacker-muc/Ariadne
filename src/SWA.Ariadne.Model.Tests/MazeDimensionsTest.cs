@@ -101,6 +101,34 @@ namespace SWA.Ariadne.Model.Tests
         }
 
         /// <summary>
+        ///A test for MaxXSize and MaxYSize
+        ///</summary>
+        [DeploymentItem("SWA.Ariadne.Model.dll")]
+        [TestMethod()]
+        public void MD_MaxSizeTest_02()
+        {
+            string testObject = "MazeDimensions.MaxXSize and MazeDimensions.MaxYSize";
+            int version = 1;
+            SWA_Ariadne_Model_MazeDimensionsAccessor dimensionsObj = SWA_Ariadne_Model_MazeDimensionsAccessor.Instance(version);
+            SWA_Ariadne_Model_MazeCodeAccessor codeObj = SWA_Ariadne_Model_MazeCodeAccessor.Instance(version);
+
+            // simulate the multiplications executed in Maze.Code:
+
+            double f1 = codeObj.SeedLimit;
+            double f2 = dimensionsObj.MaxXSize - dimensionsObj.MinSize + 1;
+            double f3 = dimensionsObj.MaxYSize - dimensionsObj.MinSize + 1;
+            //double f4 = dimensionsObj.MaxBorderDistance + 1;
+            //double f5 = dimensionsObj.MaxBorderDistance + 1;
+            //double f6 = dimensionsObj.MaxXSize + 1;
+            //double f7 = dimensionsObj.MaxXSize + 1;
+            //double f8 = MazeSquare.WP_NUM;
+
+            double maxCodeValue = (f1 * f2 * f3 /** f4 * f5 * f6 * f7 * f8*/) - 1;
+
+            TestMaxCodeValue(testObject, maxCodeValue, codeObj.CodeLength, codeObj.CodeDigitRange);
+        }
+
+        /// <summary>
         ///A test for Instance (int)
         ///</summary>
         [DeploymentItem("SWA.Ariadne.Model.dll")]
@@ -119,6 +147,29 @@ namespace SWA.Ariadne.Model.Tests
             Assert.AreEqual(expected, actual, testObject + ": wrong MaxXSize value");
 
             expected = 255; // manually calculated
+            actual = target.MaxYSize;
+            Assert.AreEqual(expected, actual, testObject + ": wrong MaxYSize value");
+        }
+
+        /// <summary>
+        ///A test for Instance (int)
+        ///</summary>
+        [DeploymentItem("SWA.Ariadne.Model.dll")]
+        [TestMethod()]
+        public void MD_InstanceTest_02()
+        {
+            string testObject = "MazeDimensions.Instance(1)";
+            int version = 1;
+
+            SWA_Ariadne_Model_MazeDimensionsAccessor target = SWA_Ariadne_Model_MazeDimensionsAccessor.Instance(version);
+
+            int expected, actual;
+
+            expected = 424; // manually calculated
+            actual = target.MaxXSize;
+            Assert.AreEqual(expected, actual, testObject + ": wrong MaxXSize value");
+
+            expected = 318; // manually calculated
             actual = target.MaxYSize;
             Assert.AreEqual(expected, actual, testObject + ": wrong MaxYSize value");
         }
