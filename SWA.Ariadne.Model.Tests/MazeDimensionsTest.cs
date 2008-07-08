@@ -4,7 +4,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Text;
 using System.Collections.Generic;
-using SWA.Ariadne.Model;
 
 namespace SWA.Ariadne.Model.Tests
 {
@@ -73,16 +72,14 @@ namespace SWA.Ariadne.Model.Tests
 
         #region Unit Tests
 
-        #region Unit Tests for MaxXSize and MaxYSize
-
         /// <summary>
         ///A test for MaxXSize and MaxYSize
         ///</summary>
         [DeploymentItem("SWA.Ariadne.Model.dll")]
         [TestMethod()]
-        public void M_MaxSizeTest_01()
+        public void MD_MaxSizeTest_01()
         {
-            string testObject = "Maze.MaxXSize and Maze.MaxYSize";
+            string testObject = "MazeDimensions.MaxXSize and MazeDimensions.MaxYSize (version 0)";
             int version = 0;
             SWA_Ariadne_Model_MazeDimensionsAccessor dimensionsObj = SWA_Ariadne_Model_MazeDimensionsAccessor.Instance(version);
             SWA_Ariadne_Model_MazeCodeAccessor codeObj = SWA_Ariadne_Model_MazeCodeAccessor.Instance(version);
@@ -99,20 +96,8 @@ namespace SWA.Ariadne.Model.Tests
             double f8 = MazeSquare.WP_NUM;
 
             double maxCodeValue = (f1 * f2 * f3 * f4 * f5 * f6 * f7 * f8) - 1;
-            double codeRange = Math.Pow(codeObj.CodeDigitRange, codeObj.CodeLength);
 
-            Assert.IsTrue(maxCodeValue < codeRange,
-                testObject
-                + ": resulting Code would exceed the Code range: "
-                + maxCodeValue.ToString("#,##0") + " >= "
-                + codeRange.ToString("#,##0")
-                );
-            Assert.IsTrue(codeRange < long.MaxValue,
-                testObject
-                + ": Code range would exceed an Int64 representation: "
-                + codeRange.ToString("#,##0") + " >= "
-                + long.MaxValue.ToString("#,##0")
-                );
+            TestMaxCodeValue(testObject, maxCodeValue, codeObj.CodeLength, codeObj.CodeDigitRange);
         }
 
         /// <summary>
@@ -150,6 +135,35 @@ namespace SWA.Ariadne.Model.Tests
         }
 
         #endregion
+
+        #region Auxiliary methods
+
+        private static void TestMaxCodeValue(string testObject, double maxCodeValue, int codeLength, int codeDigitRange)
+        {
+            double codeRange = Math.Pow(codeDigitRange, codeLength);
+
+            Assert.IsTrue(codeRange < long.MaxValue,
+                testObject
+                + ": Code range would exceed an Int64 representation: "
+                + codeRange.ToString("#,##0") + " >= "
+                + long.MaxValue.ToString("#,##0")
+                );
+
+            Assert.IsTrue(maxCodeValue < codeRange,
+                testObject
+                + ": resulting Code would exceed the Code range: "
+                + maxCodeValue.ToString("#,##0") + " >= "
+                + codeRange.ToString("#,##0")
+                );
+
+            codeRange /= codeDigitRange;
+            Assert.IsFalse(maxCodeValue < codeRange,
+                testObject
+                + ": resulting Code would fit into shorter Code range: "
+                + maxCodeValue.ToString("#,##0") + " >= "
+                + codeRange.ToString("#,##0")
+                );
+        }
 
         #endregion
     }
