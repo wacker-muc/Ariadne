@@ -199,7 +199,8 @@ namespace SWA.Ariadne.Model.Tests
         {
             Maze maze = new Maze(mazeCode);
             maze.CreateMaze();
-            //maze.PlaceEndpoints();
+            maze.PlaceEndpoints();
+
             Assert.AreEqual(mazeCode, maze.Code, testObject + ": wrong code");
         }
 

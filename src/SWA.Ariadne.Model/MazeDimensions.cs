@@ -62,15 +62,15 @@ namespace SWA.Ariadne.Model
         private MazeDimensions(int version)
         {
             this.codeVersion = version;
-            this.CalculateDimensions(version, out this.xRange, out this.yRange);
+            this.CalculateDimensions(out this.xRange, out this.yRange);
         }
 
         /// <summary>
         /// Calculate maximum x and y dimensions, based on the desired Maze.Code length.
         /// </summary>
-        protected void CalculateDimensions(int version, out int xRange, out int yRange)
+        protected void CalculateDimensions(out int xRange, out int yRange)
         {
-            MazeCode codeObj = MazeCode.Instance(version);
+            MazeCode codeObj = MazeCode.Instance(codeVersion);
             double codeLimit = Math.Pow(codeObj.CodeDigitRange, codeObj.CodeLength);
 
             if (codeLimit > long.MaxValue)
@@ -82,7 +82,7 @@ namespace SWA.Ariadne.Model
             //           (MaxXSize - MinSize + 1)
             //           (MaxYSize - MinSize + 1)
 
-            if (version == 0)
+            if (codeVersion == 0)
             {
                 codeLimit /= MazeSquare.WP_NUM;
                 codeLimit /= (MaxBorderDistance + 1);
@@ -93,7 +93,7 @@ namespace SWA.Ariadne.Model
 
             double x;
 
-            if (version == 0)
+            if (codeVersion == 0)
             {
                 /* We want to find the greatest integer MaxXSize and MaxYSize with the limitation:
                  *          (x-m) * (y-m) * x * x < c
