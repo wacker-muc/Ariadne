@@ -96,6 +96,16 @@ namespace SWA.Ariadne.Model.Tests
         {
             string testObject = "MazeCode.Decode (version 0)";
             int version = 0;
+
+            TestDecodeIdentity(testObject, version);
+        }
+
+        #endregion
+
+        #region Auxiliary methods
+
+        private static void TestDecodeIdentity(string testObject, int version)
+        {
             SWA_Ariadne_Model_MazeDimensionsAccessor dimensionsObj = SWA_Ariadne_Model_MazeDimensionsAccessor.Instance(version);
             SWA_Ariadne_Model_MazeCodeAccessor codeObj = SWA_Ariadne_Model_MazeCodeAccessor.Instance(version);
 
@@ -105,11 +115,11 @@ namespace SWA.Ariadne.Model.Tests
             {
                 int xSize = r.Next(dimensionsObj.MinSize, dimensionsObj.MaxXSize + 1);
                 int ySize = r.Next(dimensionsObj.MinSize, dimensionsObj.MaxYSize + 1);
-                Maze target = new Maze(xSize, ySize, version);
-                target.CreateMaze();
-                target.PlaceEndpoints();
+                Maze maze = new Maze(xSize, ySize, version);
+                maze.CreateMaze();
+                maze.PlaceEndpoints();
 
-                SWA_Ariadne_Model_MazeAccessor accessor = new SWA_Ariadne_Model_MazeAccessor(target);
+                SWA_Ariadne_Model_MazeAccessor accessor = new SWA_Ariadne_Model_MazeAccessor(maze);
                 int seed = accessor.seed;
                 MazeSquare.WallPosition direction = accessor.direction;
                 int xStart = accessor.xStart;
@@ -117,7 +127,7 @@ namespace SWA.Ariadne.Model.Tests
                 int xEnd = accessor.xEnd;
                 int yEnd = accessor.yEnd;
 
-                string code = target.Code;
+                string code = maze.Code;
 
                 int seedActual, xSizeActual, ySizeActual, xStartActual, yStartActual, xEndActual, yEndActual;
                 MazeSquare.WallPosition directionActual;
@@ -153,10 +163,6 @@ namespace SWA.Ariadne.Model.Tests
                 Assert.AreEqual(yEnd, yEndActual, testObject + ": yEnd was not set correctly.");
             }
         }
-
-        #endregion
-
-        #region Auxiliary methods
 
         private static void TestCodePattern(string testObject, int version, string pattern)
         {
