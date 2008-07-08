@@ -160,20 +160,12 @@ namespace SWA.Ariadne.Model.Tests
                 codeObj.Decode(code
                     , out seedActual
                     , out xSizeActual, out ySizeActual
-                    , out directionActual
-                    , out xStartActual, out yStartActual
-                    , out xEndActual, out yEndActual
                     );
 
                 bool ok = true;
                 ok &= (seed == seedActual);
                 ok &= (xSize == xSizeActual);
                 ok &= (ySize == ySizeActual);
-                ok &= (direction == directionActual);
-                ok &= (xStart == xStartActual);
-                ok &= (yStart == yStartActual);
-                ok &= (xEnd == xEndActual);
-                ok &= (yEnd == yEndActual);
 
                 if (!ok)
                 {
@@ -183,10 +175,6 @@ namespace SWA.Ariadne.Model.Tests
                 Assert.AreEqual(seed, seedActual, testObject + ": seed was not set correctly.");
                 Assert.AreEqual(xSize, xSizeActual, testObject + ": xSize was not set correctly.");
                 Assert.AreEqual(ySize, ySizeActual, testObject + ": ySize was not set correctly.");
-                Assert.AreEqual(xStart, xStartActual, testObject + ": xStart was not set correctly.");
-                Assert.AreEqual(yStart, yStartActual, testObject + ": yStart was not set correctly.");
-                Assert.AreEqual(xEnd, xEndActual, testObject + ": xEnd was not set correctly.");
-                Assert.AreEqual(yEnd, yEndActual, testObject + ": yEnd was not set correctly.");
             }
         }
 

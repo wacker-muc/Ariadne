@@ -488,14 +488,9 @@ internal class SWA_Ariadne_Model_MazeCodeAccessor : BaseAccessor {
         return ret;
     }
     
-    internal void Decode(string code, out int seed, out int xSize, out int ySize, out global::SWA.Ariadne.Model.MazeSquare.WallPosition direction, out int xStart, out int yStart, out int xEnd, out int yEnd) {
+    internal void Decode(string code, out int seed, out int xSize, out int ySize) {
         object[] args = new object[] {
                 code,
-                null,
-                null,
-                null,
-                null,
-                null,
                 null,
                 null,
                 null};
@@ -503,20 +498,10 @@ internal class SWA_Ariadne_Model_MazeCodeAccessor : BaseAccessor {
                     typeof(string),
                     typeof(int).MakeByRefType(),
                     typeof(int).MakeByRefType(),
-                    typeof(int).MakeByRefType(),
-                    typeof(global::SWA.Ariadne.Model.MazeSquare.WallPosition).MakeByRefType(),
-                    typeof(int).MakeByRefType(),
-                    typeof(int).MakeByRefType(),
-                    typeof(int).MakeByRefType(),
                     typeof(int).MakeByRefType()}, args);
         seed = ((int)(args[1]));
         xSize = ((int)(args[2]));
         ySize = ((int)(args[3]));
-        direction = ((global::SWA.Ariadne.Model.MazeSquare.WallPosition)(args[4]));
-        xStart = ((int)(args[5]));
-        yStart = ((int)(args[6]));
-        xEnd = ((int)(args[7]));
-        yEnd = ((int)(args[8]));
     }
     
     internal static void ValidateCodeItemRange(string item, int value, int min, int max) {

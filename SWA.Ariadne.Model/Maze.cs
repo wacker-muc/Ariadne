@@ -181,9 +181,6 @@ namespace SWA.Ariadne.Model
             codeObj.Decode(code
                 , out this.seed
                 , out this.xSize, out this.ySize
-                , out this.direction
-                , out this.xStart, out this.yStart
-                , out this.xEnd, out this.yEnd
                 );
             this.random = RandomFactory.CreateRandom(seed);
         }

@@ -243,18 +243,10 @@ namespace SWA.Ariadne.Model
         /// <param name="seed"></param>
         /// <param name="maze.XSize"></param>
         /// <param name="maze.YSize"></param>
-        /// <param name="direction"></param>
-        /// <param name="maze.StartSquare.XPos"></param>
-        /// <param name="maze.StartSquare.YPos"></param>
-        /// <param name="maze.EndSquare.XPos"></param>
-        /// <param name="maze.EndSquare.YPos"></param>
         /// <exception cref="ArgumentOutOfRangeException">decoded parameters are invalid</exception>
         public void Decode(string code
             , out int seed
             , out int xSize, out int ySize
-            , out MazeSquare.WallPosition direction
-            , out int xStart, out int yStart
-            , out int xEnd, out int yEnd
             )
         {
             long nCode = 0;
@@ -326,76 +318,67 @@ namespace SWA.Ariadne.Model
             ySize = (int)(nCode % itemRange) + dimensionsObj.MinSize;
             nCode /= itemRange;
 
-            switch (codeVersion)
+            if (codeVersion == 0)
             {
-                case 0:
-                    int d1, d2, c1, c2;
+                #region Decoding of obsolete Version 0 parameters
 
-                    itemRange = MazeSquare.WP_NUM;
-                    direction = (MazeSquare.WallPosition)(nCode % itemRange);
-                    nCode /= itemRange;
+                MazeSquare.WallPosition direction;
+                int xStart, yStart;
+                int xEnd, yEnd;
+                int d1, d2, c1, c2;
 
-                    itemRange = dimensionsObj.MaxXSize + 1;
-                    c2 = (int)(nCode % itemRange);
-                    nCode /= itemRange;
+                itemRange = MazeSquare.WP_NUM;
+                direction = (MazeSquare.WallPosition)(nCode % itemRange);
+                nCode /= itemRange;
 
-                    itemRange = dimensionsObj.MaxXSize + 1;
-                    c1 = (int)(nCode % itemRange);
-                    nCode /= itemRange;
+                itemRange = dimensionsObj.MaxXSize + 1;
+                c2 = (int)(nCode % itemRange);
+                nCode /= itemRange;
 
-                    itemRange = dimensionsObj.MaxBorderDistance + 1;
-                    d2 = (int)(nCode % itemRange);
-                    nCode /= itemRange;
+                itemRange = dimensionsObj.MaxXSize + 1;
+                c1 = (int)(nCode % itemRange);
+                nCode /= itemRange;
 
-                    itemRange = dimensionsObj.MaxBorderDistance + 1;
-                    d1 = (int)(nCode % itemRange);
-                    nCode /= itemRange;
+                itemRange = dimensionsObj.MaxBorderDistance + 1;
+                d2 = (int)(nCode % itemRange);
+                nCode /= itemRange;
 
-                    switch (direction)
-                    {
-                        case MazeSquare.WallPosition.WP_E:
-                            xStart = d1;
-                            xEnd = xSize - 1 - d2;
-                            yStart = c1;
-                            yEnd = c2;
-                            break;
-                        case MazeSquare.WallPosition.WP_W:
-                            xEnd = d1;
-                            xStart = xSize - 1 - d2;
-                            yEnd = c1;
-                            yStart = c2;
-                            break;
-                        case MazeSquare.WallPosition.WP_S:
-                            yStart = d1;
-                            yEnd = ySize - 1 - d2;
-                            xStart = c1;
-                            xEnd = c2;
-                            break;
-                        case MazeSquare.WallPosition.WP_N:
-                            yEnd = d1;
-                            yStart = ySize - 1 - d2;
-                            xEnd = c1;
-                            xStart = c2;
-                            break;
-                        default:
-                            xStart = yStart = xEnd = yEnd = -1;
-                            break;
-                    }
-                    break;
-                case 1:
-                    Maze m = new Maze(xSize, ySize, codeVersion, seed);
-                    m.CreateMaze();
-                    m.PlaceEndpoints();
-                    xStart = m.StartSquare.XPos;
-                    yStart = m.StartSquare.YPos;
-                    xEnd = m.EndSquare.XPos;
-                    yEnd = m.EndSquare.YPos;
-                    direction = m.Direction;
-                    break;
-                default:
-                    xStart = yStart = xEnd = yEnd = -1;
-                    direction = MazeSquare.WallPosition.WP_E;
-                    break;
+                itemRange = dimensionsObj.MaxBorderDistance + 1;
+                d1 = (int)(nCode % itemRange);
+                nCode /= itemRange;
+
+                switch (direction)
+                {
+                    case MazeSquare.WallPosition.WP_E:
+                        xStart = d1;
+                        xEnd = xSize - 1 - d2;
+                        yStart = c1;
+                        yEnd = c2;
+                        break;
+                    case MazeSquare.WallPosition.WP_W:
+                        xEnd = d1;
+                        xStart = xSize - 1 - d2;
+                        yEnd = c1;
+                        yStart = c2;
+                        break;
+                    case MazeSquare.WallPosition.WP_S:
+                        yStart = d1;
+                        yEnd = ySize - 1 - d2;
+                        xStart = c1;
+                        xEnd = c2;
+                        break;
+                    case MazeSquare.WallPosition.WP_N:
+                        yEnd = d1;
+                        yStart = ySize - 1 - d2;
+                        xEnd = c1;
+                        xStart = c2;
+                        break;
+                    default:
+                        xStart = yStart = xEnd = yEnd = -1;
+                        break;
+                }
+
+                #endregion
             }
 
             #endregion
@@ -409,10 +392,6 @@ namespace SWA.Ariadne.Model
             ValidateCodeItemRange("seed", seed, 0, SeedLimit-1);
             ValidateCodeItemRange("xSize", xSize, dimensionsObj.MinSize, dimensionsObj.MaxXSize);
             ValidateCodeItemRange("ySize", ySize, dimensionsObj.MinSize, dimensionsObj.MaxYSize);
-            ValidateCodeItemRange("xStart", xStart, 0, xSize-1);
-            ValidateCodeItemRange("yStart", yStart, 0, ySize-1);
-            ValidateCodeItemRange("xEnd", xEnd, 0, xSize-1);
-            ValidateCodeItemRange("yEnd", yEnd, 0, ySize-1);
 
             #endregion
         }
