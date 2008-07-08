@@ -143,7 +143,6 @@ namespace SWA.Ariadne.Model.Tests
                 int ySize = r.Next(dimensionsObj.MinSize, dimensionsObj.MaxYSize + 1);
                 Maze maze = new Maze(xSize, ySize, version);
                 maze.CreateMaze();
-                maze.PlaceEndpoints();
 
                 SWA_Ariadne_Model_MazeAccessor accessor = new SWA_Ariadne_Model_MazeAccessor(maze);
                 int seed = accessor.seed;
@@ -155,8 +154,7 @@ namespace SWA.Ariadne.Model.Tests
 
                 string code = maze.Code;
 
-                int seedActual, xSizeActual, ySizeActual, xStartActual, yStartActual, xEndActual, yEndActual;
-                MazeSquare.WallPosition directionActual;
+                int seedActual, xSizeActual, ySizeActual;
                 codeObj.Decode(code
                     , out seedActual
                     , out xSizeActual, out ySizeActual
@@ -196,7 +194,6 @@ namespace SWA.Ariadne.Model.Tests
                 int ySize = r.Next(minSize, maxYSize + 1);
                 Maze maze = new Maze(xSize, ySize, version);
                 maze.CreateMaze();
-                maze.PlaceEndpoints();
 
                 string codeValue = codeObj.Code(maze);
 

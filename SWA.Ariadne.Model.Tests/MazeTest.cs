@@ -161,13 +161,11 @@ namespace SWA.Ariadne.Model.Tests
 
             Maze template = new Maze(87, 34, version);
             template.CreateMaze();
-            template.PlaceEndpoints();
 
             string templateCode = template.Code;
 
             Maze target = new Maze(templateCode);
             target.CreateMaze();
-            target.PlaceEndpoints();
 
             string targetCode = target.Code;
 
@@ -199,7 +197,6 @@ namespace SWA.Ariadne.Model.Tests
         {
             Maze maze = new Maze(mazeCode);
             maze.CreateMaze();
-            maze.PlaceEndpoints();
 
             Assert.AreEqual(mazeCode, maze.Code, testObject + ": wrong code");
         }
