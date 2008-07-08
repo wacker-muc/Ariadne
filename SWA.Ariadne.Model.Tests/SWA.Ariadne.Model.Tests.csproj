@@ -38,6 +38,8 @@
   <ItemGroup>
     <Compile Include="DeadEndCheckerTest.cs" />
     <Compile Include="EfficientLeftHandWalkerTest.cs" />
+    <Compile Include="MazeCodeTest.cs" />
+    <Compile Include="MazeDimensionsTest.cs" />
     <Compile Include="MazeTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VSCodeGenAccessors.cs" />
@@ -50,6 +52,10 @@
     <ProjectReference Include="..\SWA.Ariadne.Model\SWA.Ariadne.Model.csproj">
       <Project>{1ECDFF25-8784-44B4-B4DA-25B20F1DF7EC}</Project>
       <Name>SWA.Ariadne.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SWA.Ariadne.Outlines\SWA.Ariadne.Outlines.csproj">
+      <Project>{9751AAAE-B751-451E-BA8C-FBD55234FE56}</Project>
+      <Name>SWA.Ariadne.Outlines</Name>
     </ProjectReference>
     <ProjectReference Include="..\SWA.Ariadne.Settings\SWA.Ariadne.Settings.csproj">
       <Project>{30293912-CD50-4ECE-B51A-CD89890186F8}</Project>
