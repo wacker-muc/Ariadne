@@ -131,7 +131,6 @@ namespace SWA.Ariadne.Logic.Tests
         {
             Maze maze = new Maze(2, 2);
             maze.CreateMaze();
-            maze.PlaceEndpoints();
             return maze;
         }
 

@@ -2,14 +2,15 @@
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Font Name="Tahoma" Size="8.25" />
   <Class Name="SWA.Ariadne.Model.DeadEndChecker">
-    <Position X="7.75" Y="0.5" Width="2.5" />
+    <Position X="8.5" Y="0.5" Width="2.5" />
     <TypeIdentifier>
       <FileName>DeadEndChecker.cs</FileName>
       <HashCode>ABAAAAgABBgAAAQAAAAAEAIAIAABAABMAAAAAEAAAAA=</HashCode>
     </TypeIdentifier>
-    <Compartments>
-      <Compartment Name="Nested Types" Collapsed="false" />
-    </Compartments>
+    <Members>
+      <Method Name="InitializeMazeExtension" Hidden="true" />
+      <Method Name="InitializeTrajectoryDistances" Hidden="true" />
+    </Members>
     <NestedTypes>
       <Class Name="SWA.Ariadne.Model.DeadEndChecker.MazeSquareExtension" Collapsed="true">
         <TypeIdentifier>
@@ -19,25 +20,56 @@
     </NestedTypes>
   </Class>
   <Class Name="SWA.Ariadne.Model.Maze" BaseTypeListCollapsed="true">
-    <Position X="2.75" Y="0.5" Width="2.25" />
+    <Position X="3.5" Y="0.5" Width="2.25" />
     <TypeIdentifier>
       <FileName>Maze.cs</FileName>
-      <HashCode>QAAQAAAoAAIAZEEEDGQhQgQIE0mEBABMiAQFBBAAAxA=</HashCode>
+      <HashCode>QAAAAAAoAAIAZEAEDGQhQgAIEwmEBABMiEQFBBAAAxA=</HashCode>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="codeObj" />
+      <Field Name="dimensionsObj" />
+    </ShowAsAssociation>
     <ShowAsCollectionAssociation>
       <Field Name="squares" />
     </ShowAsCollectionAssociation>
+    <Members>
+      <Method Name="BuildMaze" Hidden="true" />
+      <Method Name="CloseWalls" Hidden="true" />
+      <Method Name="CountClosedWalls" Hidden="true" />
+      <Property Name="CountSquares" Hidden="true" />
+      <Method Name="CreateSquares" Hidden="true" />
+      <Field Name="direction" Hidden="true" />
+      <Property Name="Direction" Hidden="true" />
+      <Method Name="FixBorderWalls" Hidden="true" />
+      <Method Name="FixOutline" Hidden="true" />
+      <Method Name="FixOutlineShapes" Hidden="true" />
+      <Method Name="FixReservedAreas" Hidden="true" />
+      <Method Name="PlaceEndpoints" Hidden="true" />
+      <Property Name="Seed" Hidden="true" />
+      <Property Name="this" Hidden="true" />
+      <Field Name="xEnd" Hidden="true" />
+      <Field Name="xSize" Hidden="true" />
+      <Field Name="xStart" Hidden="true" />
+      <Field Name="yEnd" Hidden="true" />
+      <Field Name="ySize" Hidden="true" />
+      <Field Name="yStart" Hidden="true" />
+    </Members>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="SWA.Ariadne.Model.MazeSquare">
-    <Position X="5.75" Y="1.5" Width="1.5" />
+    <Position X="6.5" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <FileName>MazeSquare.cs</FileName>
       <HashCode>AAACAAQAAAAAAAAEKAAEQAAAoAAgAKABEIAAIQAAAAA=</HashCode>
     </TypeIdentifier>
-    <Compartments>
-      <Compartment Name="Nested Types" Collapsed="false" />
-    </Compartments>
+    <Members>
+      <Property Name="this" Hidden="true" />
+      <Field Name="WP_MAX" Hidden="true" />
+      <Field Name="WP_MIN" Hidden="true" />
+      <Field Name="WP_NUM" Hidden="true" />
+      <Field Name="xPos" Hidden="true" />
+      <Field Name="yPos" Hidden="true" />
+    </Members>
     <NestedTypes>
       <Enum Name="SWA.Ariadne.Model.MazeSquare.WallPosition" Collapsed="true">
         <TypeIdentifier>
@@ -57,12 +89,24 @@
       <FileName>MazeDimensions.cs</FileName>
       <HashCode>CACAAAAQAAAAAABAAQAAIAAAABBAAAAIYAAAAAAAAAA=</HashCode>
     </TypeIdentifier>
+    <Members>
+      <Method Name="CalculateDimensions" Hidden="true" />
+      <Field Name="instance" Hidden="true" />
+      <Method Name="MazeDimensions" Hidden="true" />
+      <Field Name="xRange" Hidden="true" />
+      <Field Name="yRange" Hidden="true" />
+    </Members>
   </Class>
   <Class Name="SWA.Ariadne.Model.MazeCode">
-    <Position X="0.5" Y="4.25" Width="1.75" />
+    <Position X="0.5" Y="3.5" Width="1.75" />
     <TypeIdentifier>
       <FileName>MazeCode.cs</FileName>
       <HashCode>CAAAAAEAAAAEAAABACAgAAAAAABAAAAAQAwAQAAAAAA=</HashCode>
     </TypeIdentifier>
+    <Members>
+      <Field Name="instance" Hidden="true" />
+      <Method Name="MazeCode" Hidden="true" />
+      <Method Name="ValidateCodeItemRange" Hidden="true" />
+    </Members>
   </Class>
 </ClassDiagram>

@@ -194,7 +194,6 @@ namespace SWA.Ariadne.Gui
             AdjustPathWidth(squareWidth, ref pathWidth);
             ColorBuilder.SuggestColors(MinColor, MaxColor, out forwardColor, out backwardColor);
             CreateMaze();
-            PlaceEndpoints();
             Reset();
         }
 
@@ -431,11 +430,6 @@ namespace SWA.Ariadne.Gui
             return result;
         }
 
-        private void PlaceEndpoints()
-        {
-            maze.PlaceEndpoints();
-        }
-
         /// <summary>
         /// Reset to the initial state (before the maze is solved).
         /// </summary>
@@ -584,14 +578,7 @@ namespace SWA.Ariadne.Gui
             {
                 for (int y = 0; y < YSize; y++)
                 {
-                    int n = 0;
-                    foreach (OutlineShape shape in maze.outlineShapes)
-                    {
-                        if (shape[x, y])
-                        {
-                            ++n;
-                        }
-                    }
+                    int n = maze.CountCoveringOutlineShapes(x, y);
                     if (n % 2 == 1)
                     {
                         this.PaintSquare(g, shapeBrush, x, y);
@@ -679,11 +666,8 @@ namespace SWA.Ariadne.Gui
         /// <param name="g"></param>
         private void PaintEndpoints(Graphics g)
         {
-            int x, y;
-            maze.GetStartCoordinates(out x, out y);
-            PaintSquare(g, this.StartSquareBrush, x, y);
-            maze.GetEndCoordinates(out x, out y);
-            PaintSquare(g, this.EndSquareBrush, x, y);
+            PaintSquare(g, this.StartSquareBrush, maze.StartSquare.XPos, maze.StartSquare.YPos);
+            PaintSquare(g, this.EndSquareBrush, maze.EndSquare.XPos, maze.EndSquare.YPos);
         }
 
         /// <summary>
@@ -997,8 +981,6 @@ namespace SWA.Ariadne.Gui
             maze.CreateMaze();
             MazeForm.UpdateStatusLine();
             MazeForm.UpdateCaption();
-
-            PlaceEndpoints();
 
             Reset();
 

@@ -82,8 +82,7 @@ namespace SWA.Ariadne.Model
         /// <summary>
         /// Most of the outlines of these shapes will be turned into closed walls.
         /// </summary>
-        /// TODO: this should be private!
-        public List<OutlineShape> outlineShapes = new List<OutlineShape>();
+        private List<OutlineShape> outlineShapes = new List<OutlineShape>();
 
         /// <summary>
         /// The maze is formed by a two-dimensional array of squares.
@@ -337,10 +336,24 @@ namespace SWA.Ariadne.Model
             outlineShapes.Add(shape);
         }
 
+        public int CountCoveringOutlineShapes(int x, int y)
+        {
+            int result = 0;
+            foreach (OutlineShape shape in outlineShapes)
+            {
+                if (shape[x, y])
+                {
+                    ++result;
+                }
+            }
+            return result;
+        }
+
         public void CreateMaze()
         {
             this.CreateSquares();
             this.BuildMaze();
+            this.PlaceEndpoints();
         }
 
         private void CreateSquares()
@@ -383,7 +396,7 @@ namespace SWA.Ariadne.Model
         /// Choose a start and end point near opposite borders.
         /// The end point should be in a dead end (a square with three closed walls).
         /// </summary>
-        public void PlaceEndpoints()
+        private void PlaceEndpoints()
         {
             bool reject = true;
             while (reject)
@@ -509,28 +522,6 @@ namespace SWA.Ariadne.Model
         public bool IsSolved
         {
             get { return (squares[xEnd, yEnd].isVisited); }
-        }
-
-        /// <summary>
-        /// Returns the coordinates of the start point.
-        /// </summary>
-        /// <param name="xStart"></param>
-        /// <param name="yStart"></param>
-        public void GetStartCoordinates(out int xStart, out int yStart)
-        {
-            xStart = this.xStart;
-            yStart = this.yStart;
-        }
-
-        /// <summary>
-        /// Returns the coordinates of the end point.
-        /// </summary>
-        /// <param name="xEnd"></param>
-        /// <param name="yEnd"></param>
-        public void GetEndCoordinates(out int xEnd, out int yEnd)
-        {
-            xEnd = this.xEnd;
-            yEnd = this.yEnd;
         }
 
         public MazeSquare StartSquare

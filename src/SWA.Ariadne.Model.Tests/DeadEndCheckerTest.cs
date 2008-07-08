@@ -81,8 +81,7 @@ namespace SWA.Ariadne.Model.Tests
         public void DEC_AddUncertainSquareTest_01()
         {
             Maze maze = new Maze("BPQG.WLVB.UWPM");
-            maze.CreateMaze();                                      // 14 x 10
-            maze.PlaceEndpoints();                                  // 2,0 .. 11,7
+            maze.CreateMaze();                                      // 14 x 10 - 2,0 .. 11,7
 
             DeadEndChecker target = new DeadEndChecker(maze);
             SWA_Ariadne_Model_DeadEndCheckerAccessor accessor = new SWA_Ariadne_Model_DeadEndCheckerAccessor(target);
@@ -112,8 +111,7 @@ namespace SWA.Ariadne.Model.Tests
         public void DEC_VisitTest_01_2()
         {
             Maze maze = new Maze("BPQG.WLVB.UWPM");
-            maze.CreateMaze();                                      // 14 x 10
-            maze.PlaceEndpoints();                                  // 2,0 .. 11,7
+            maze.CreateMaze();                                      // 14 x 10 - 2,0 .. 11,7
 
             DeadEndChecker target = new DeadEndChecker(maze);
 
@@ -132,8 +130,7 @@ namespace SWA.Ariadne.Model.Tests
         public void DEC_VisitTest_02_1()
         {
             Maze maze = new Maze("BPQG.WLVB.UWPM");
-            maze.CreateMaze();                                      // 14 x 10
-            maze.PlaceEndpoints();                                  // 2,0 .. 11,7
+            maze.CreateMaze();                                      // 14 x 10 - 2,0 .. 11,7
 
             DeadEndChecker target = new DeadEndChecker(maze);
 
@@ -153,8 +150,7 @@ namespace SWA.Ariadne.Model.Tests
         public void DEC_VisitTest_03_20()
         {
             Maze maze = new Maze("BPQG.WLVB.UWPM");
-            maze.CreateMaze();                                      // 14 x 10
-            maze.PlaceEndpoints();                                  // 2,0 .. 11,7
+            maze.CreateMaze();                                      // 14 x 10 - 2,0 .. 11,7
 
             DeadEndChecker target = new DeadEndChecker(maze);
 
@@ -179,8 +175,7 @@ namespace SWA.Ariadne.Model.Tests
         public void DEC_VisitTest_04_10()
         {
             Maze maze = new Maze("BPQG.WLVB.UWPM");
-            maze.CreateMaze();                                      // 14 x 10
-            maze.PlaceEndpoints();                                  // 2,0 .. 11,7
+            maze.CreateMaze();                                      // 14 x 10 - 2,0 .. 11,7
 
             DeadEndChecker target = new DeadEndChecker(maze);
 
@@ -206,8 +201,7 @@ namespace SWA.Ariadne.Model.Tests
         public void DEC_VisitTest_05_4()
         {
             Maze maze = new Maze("BPQG.WLVB.UWPM");
-            maze.CreateMaze();                                      // 14 x 10
-            maze.PlaceEndpoints();                                  // 2,0 .. 11,7
+            maze.CreateMaze();                                      // 14 x 10 - 2,0 .. 11,7
 
             DeadEndChecker target = new DeadEndChecker(maze);
 
@@ -230,11 +224,10 @@ namespace SWA.Ariadne.Model.Tests
         {
             Maze maze = new Maze(10, 10);
             SWA_Ariadne_Model_MazeAccessor mazeAccessor = new SWA_Ariadne_Model_MazeAccessor(maze);
+            maze.CreateMaze();                                      // 10 x 10
             mazeAccessor.xStart = 4;
             mazeAccessor.yStart = 9;
             mazeAccessor.xEnd = mazeAccessor.yEnd = 0;
-            maze.CreateMaze();                                      // 10 x 10
-            //maze.PlaceEndpoints();                                // 4,9 .. 0,0
 
             DeadEndChecker target = new DeadEndChecker(maze);
 
@@ -288,8 +281,7 @@ namespace SWA.Ariadne.Model.Tests
         public void DEC_VisitTest_10_64()
         {
             Maze maze = new Maze("BPQG.WLVB.UWPM");
-            maze.CreateMaze();                                      // 14 x 10
-            maze.PlaceEndpoints();                                  // 2,0 .. 11,7
+            maze.CreateMaze();                                      // 14 x 10 - 2,0 .. 11,7
 
             DeadEndChecker target = new DeadEndChecker(maze);
 
