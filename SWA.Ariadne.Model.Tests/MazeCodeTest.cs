@@ -88,6 +88,19 @@ namespace SWA.Ariadne.Model.Tests
         }
 
         /// <summary>
+        ///A test for Code (Maze)
+        ///</summary>
+        [TestMethod()]
+        public void MC_CodeTest_02()
+        {
+            string testObject = "MazeCode.Code (version 1)";
+            int version = 1;
+            string pattern = @"^[0-9a-z]{3}\.[0-9a-z]{3}$";
+
+            TestCodePattern(testObject, version, pattern);
+        }
+
+        /// <summary>
         ///A test for Decode (string, out int, out int, out int)
         ///</summary>
         [DeploymentItem("SWA.Ariadne.Model.dll")]
@@ -96,6 +109,19 @@ namespace SWA.Ariadne.Model.Tests
         {
             string testObject = "MazeCode.Decode (version 0)";
             int version = 0;
+
+            TestDecodeIdentity(testObject, version);
+        }
+
+        /// <summary>
+        ///A test for Decode (string, out int, out int, out int)
+        ///</summary>
+        [DeploymentItem("SWA.Ariadne.Model.dll")]
+        [TestMethod()]
+        public void MC_DecodeTest_02()
+        {
+            string testObject = "MazeCode.Decode (version 1)";
+            int version = 1;
 
             TestDecodeIdentity(testObject, version);
         }
