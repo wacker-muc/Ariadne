@@ -74,37 +74,17 @@ namespace SWA.Ariadne.Model.Tests
 
         #region Unit Tests
 
-        #region Code and Decode Unit Tests
-
         /// <summary>
-        ///A test for Code
+        ///A test for Code (Maze)
         ///</summary>
         [TestMethod()]
-        public void M_CodeTest_01()
+        public void MC_CodeTest_01()
         {
-            string testObject = "Maze.Code";
+            string testObject = "MazeCode.Code (version 0)";
             int version = 0;
-            SWA_Ariadne_Model_MazeDimensionsAccessor dimensionsObj = SWA_Ariadne_Model_MazeDimensionsAccessor.Instance(version);
-
-            Random r = new Random();
-
             string pattern = @"^[A-Z]{4}\.[A-Z]{4}\.[A-Z]{4}$";
-            Regex rx = new Regex(pattern);
 
-            for (int nTests = 0; nTests < 100; nTests++)
-            {
-                int xSize = r.Next(dimensionsObj.MinSize, dimensionsObj.MaxXSize + 1);
-                int ySize = r.Next(dimensionsObj.MinSize, dimensionsObj.MaxYSize + 1);
-                Maze target = new Maze(xSize, ySize, version);
-                target.CreateMaze();
-                target.PlaceEndpoints();
-
-                string codeValue = target.Code;
-
-                Match m = rx.Match(codeValue);
-
-                Assert.IsTrue(m.Success, testObject + " does not match expected pattern: " + pattern);
-            }
+            TestCodePattern(testObject, version, pattern);
         }
 
         /// <summary>
@@ -112,9 +92,9 @@ namespace SWA.Ariadne.Model.Tests
         ///</summary>
         [DeploymentItem("SWA.Ariadne.Model.dll")]
         [TestMethod()]
-        public void M_DecodeTest_01()
+        public void MC_DecodeTest_01()
         {
-            string testObject = "Maze.Decode";
+            string testObject = "MazeCode.Decode (version 0)";
             int version = 0;
             SWA_Ariadne_Model_MazeDimensionsAccessor dimensionsObj = SWA_Ariadne_Model_MazeDimensionsAccessor.Instance(version);
             SWA_Ariadne_Model_MazeCodeAccessor codeObj = SWA_Ariadne_Model_MazeCodeAccessor.Instance(version);
@@ -175,6 +155,36 @@ namespace SWA.Ariadne.Model.Tests
         }
 
         #endregion
+
+        #region Auxiliary methods
+
+        private static void TestCodePattern(string testObject, int version, string pattern)
+        {
+            SWA_Ariadne_Model_MazeDimensionsAccessor dimensionsObj = SWA_Ariadne_Model_MazeDimensionsAccessor.Instance(version);
+            SWA_Ariadne_Model_MazeCodeAccessor codeObj = SWA_Ariadne_Model_MazeCodeAccessor.Instance(version);
+            
+            Regex rx = new Regex(pattern);
+
+            Random r = new Random();
+            int minSize = dimensionsObj.MinSize;
+            int maxXSize = dimensionsObj.MaxXSize;
+            int maxYSize = dimensionsObj.MaxYSize;
+
+            for (int nTests = 0; nTests < 100; nTests++)
+            {
+                int xSize = r.Next(minSize, maxXSize + 1);
+                int ySize = r.Next(minSize, maxYSize + 1);
+                Maze maze = new Maze(xSize, ySize, version);
+                maze.CreateMaze();
+                maze.PlaceEndpoints();
+
+                string codeValue = codeObj.Code(maze);
+
+                Match m = rx.Match(codeValue);
+
+                Assert.IsTrue(m.Success, testObject + " does not match expected pattern: " + pattern);
+            }
+        }
 
         #endregion
     }
