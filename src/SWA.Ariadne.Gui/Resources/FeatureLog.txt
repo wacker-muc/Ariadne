@@ -14,6 +14,7 @@ Version 2.3
  * Strategies: ThickestBranchFlooder, ThinnestBranchFlooder
  * Strategies: ForwardFlooder, BackwardFlooder
  * Outline Shapes: regular and star shaped Polygons
+ * Outline Shapes: two-dimensional functions
  * Maze: Version 1 of ID encoding schema: 6 characters (Version 0: 12)
 
 -----------------------------------------------------------------------

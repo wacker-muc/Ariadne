@@ -334,6 +334,7 @@ namespace SWA.Ariadne.Gui
                     OutlineShape.Circle,
                     OutlineShape.Diamond,
                     OutlineShape.Polygon,
+                    OutlineShape.Function,
                     OutlineShape.Char,
                     OutlineShape.Symbol,
                     OutlineShape.Bitmap,
@@ -341,7 +342,8 @@ namespace SWA.Ariadne.Gui
                 int[] ratios = { // (number of items) * (novelty value) / (easyness of recognition)
                      1 * 20 / 3,
                      1 *  5 / 4,
-                    (10 + 8 + 6 + 4 + 2) * 20 / 3,
+                    (10 + 8 + 6 + 4 + 2) * 8 / 3,
+                     4 *  8 / 4 * 8,
                     10 * 10 / 2,
                      8 * 15 / 2,
                     25 * 15 / 1,

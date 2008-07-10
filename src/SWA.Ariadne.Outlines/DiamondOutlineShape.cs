@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SWA.Ariadne.Outlines
 {
-    class DiamondOutlineShape : PolygonOutlineShape
+    internal class DiamondOutlineShape : PolygonOutlineShape
     {
         #region Member variables and Properties
 

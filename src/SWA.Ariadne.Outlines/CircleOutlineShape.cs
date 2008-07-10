@@ -5,7 +5,7 @@ using SWA.Utilities;
 
 namespace SWA.Ariadne.Outlines
 {
-    class CircleOutlineShape : PolygonOutlineShape
+    internal class CircleOutlineShape : PolygonOutlineShape
     {
         #region Member variables and Properties
 
