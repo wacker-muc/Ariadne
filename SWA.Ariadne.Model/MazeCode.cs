@@ -65,7 +65,7 @@ namespace SWA.Ariadne.Model
         #region Encoding methods
 
         /// <summary>
-        /// A string of twelve characters (A..Z) that encodes the maze parameters.
+        /// A string that encodes the maze parameters.
         /// This code can be used to construct an identical maze.
         /// </summary>
         public string Code(Maze maze)
