@@ -54,6 +54,12 @@ namespace SWA.Ariadne.Outlines
         private MethodInfo f;
 
         /// <summary>
+        /// General purpose parameters controlling the function.
+        /// Should be initialized by a configuration method.
+        /// </summary>
+        private static double t1 = 0, t2 = 0, t3 = 0;
+
+        /// <summary>
         /// One of four orientations of the coordinate system.
         /// TODO: eight orientations
         /// For value 0, the function is called with parameters f(r, phi) instead of f(x, y).
@@ -133,8 +139,9 @@ namespace SWA.Ariadne.Outlines
             double xc, yc, sz;
             ConvertParameters(xSize, ySize, centerX, centerY, shapeSize, out xc, out yc, out sz);
 
-            this.xOffset = -xc;
-            this.yOffset = -yc;
+            // The coordinate system's center is adjusted to an integer value (in shape coordinates)
+            this.xOffset = -Math.Round(xc);
+            this.yOffset = -Math.Round(yc);
 
             double n = 5; // number of units (in function coordinates) that span the shape's size
             this.scale = n / sz;
@@ -163,8 +170,21 @@ namespace SWA.Ariadne.Outlines
                 symmetryRotation = 1 + r.Next(4 / characteristics.symmetry);
             }
 
-            FunctionOutlineShape result = new FunctionOutlineShape(xSize, ySize, centerX, centerY, shapeSize, function, symmetryRotation);
+            double scale = characteristics.scaleMin + r.NextDouble() * (characteristics.scaleMax - characteristics.scaleMin);
+
+            FunctionOutlineShape result = new FunctionOutlineShape(xSize, ySize, centerX, centerY, scale * shapeSize, function, symmetryRotation);
             
+            // Reset general purpose parameters.
+            t1 = t2 = t3 = 0.0;
+
+            // Execute the function's configurator.
+            switch (function.Name)
+            {
+                case "TDF_06":
+                    TDF_06_Configurator(result, result.scale);
+                    break;
+            }
+
             return result;
         }
 
@@ -179,7 +199,7 @@ namespace SWA.Ariadne.Outlines
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        [TDF(2)]
+        [TDF(2, 0.5, 1.0)]
         private static double TDF_01(double x, double y)
         {
             return Math.Cos(0.5 * Math.PI * x);
@@ -192,10 +212,95 @@ namespace SWA.Ariadne.Outlines
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        [TDF(4)]
+        [TDF(4, 0.5, 1.0)]
         private static double TDF_02(double x, double y)
         {
             return TDF_01(x, y) * TDF_01(y, x);
+        }
+
+        /// <summary>
+        /// Cosine of x multiplied by cosine of y, subtracting a specific constant.
+        /// Creates a sparse array of circles!
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        //[TDF(4, 1.0, 1.0)]
+        private static double TDF_03(double x, double y)
+        {
+            return TDF_02(x, y) - 0.6204;
+        }
+
+        /// <summary>
+        /// Cosine of x multiplied by cosine of y, subtracting a small value.
+        /// Creates a sparse array of rounded squares; the other squares are connected yia their diagonals!
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        [TDF(4, 0.8, 1.2)]
+        private static double TDF_04(double x, double y)
+        {
+            return TDF_02(x, y) - 0.05;
+        }
+
+        /// <summary>
+        /// Cosine of x multiplied by cosine of y, subtracting a specific constant.
+        /// Creates an array of circles!
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        //[TDF(4, 0.8, 1.2)]
+        private static double TDF_05(double x, double y)
+        {
+            return Math.Abs(TDF_02(x, y)) - 0.6204;
+        }
+
+        /// <summary>
+        /// Cosine of x multiplied by cosine of y, subtracting a small value.
+        /// Creates a closely packed grid of (rounded) tiles.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        [TDF(4, 0.8, 1.2)]
+        private static double TDF_06(double x, double y)
+        {
+            // The shift parameter should be calibrated so that there is a one-square wide path between the tiles.
+            return Math.Abs(TDF_02(x, y)) - t1;
+        }
+
+        /// <summary>
+        /// Calibrate the parameter t1.
+        /// Goal: There should be a small gap (approx. one square wide) between the tiles.
+        /// Some tiles may even touch.
+        /// </summary>
+        /// <param name="shape"></param>
+        /// <param name="squaresPerUnit"></param>
+        private static void TDF_06_Configurator(FunctionOutlineShape shape, double squareWidth)
+        {
+            // Find the minimum function value at integer coordinates, when t1 is 0.
+            t1 = 0;
+            double xMin = 0, zMin = TDF_06(xMin, 0);
+            for (int i = 1; i <= 6; i++)
+            {
+                double x = Math.Round(i / squareWidth) * squareWidth;
+                double z = TDF_06(x, 0);
+                if (z < zMin)
+                {
+                    zMin = z;
+                    xMin = x;
+                }
+            }
+
+            // Get the smaller of the two function values at half a square width distance.
+            double delta = 0.5 * squareWidth;
+            zMin = Math.Min(TDF_06(xMin - delta, 0), TDF_06(xMin + delta, 0));
+
+            // t1 can be determined directly from zMin:
+            // If t1 > zMin, the function value will become negative.
+            t1 = zMin * 1.001;
         }
 
         /// <summary>
@@ -242,7 +347,7 @@ namespace SWA.Ariadne.Outlines
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        [TDF(0)]
+        [TDF(0, 0.5, 2.0)]
         private static double TDF_31(double r, double phi)
         {
             return Math.Cos(0.5 * Math.PI * r);
@@ -254,7 +359,7 @@ namespace SWA.Ariadne.Outlines
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        [TDF(0)]
+        [TDF(0, 0.4, 1.2)]
         private static double TDF_32(double r, double phi)
         {
             return Math.Cos(0.5 * Math.PI * r + phi);
@@ -270,6 +375,8 @@ namespace SWA.Ariadne.Outlines
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     internal class TDFAttribute : System.Attribute
     {
+        #region Member variables
+
         /// <summary>
         /// Rotational symmetry: 1 = single, 2 = mirror, 4 = fourfold, 0 = rotational
         /// </summary>
@@ -279,6 +386,10 @@ namespace SWA.Ariadne.Outlines
         /// Range of additional scaling factors to be applied to the coordinate system.
         /// </summary>
         public readonly double scaleMin = 1.0, scaleMax = 1.0;
+
+        #endregion
+
+        #region Constructor
 
         public TDFAttribute()
         {
@@ -295,5 +406,7 @@ namespace SWA.Ariadne.Outlines
             this.scaleMin = scaleMin;
             this.scaleMax = scaleMax;
         }
+
+        #endregion
     }
 }

@@ -47,7 +47,11 @@ namespace SWA.Ariadne.Outlines
         /// <returns></returns>
         public static OutlineShape Circle(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
         {
+#if false
+            return FunctionOutlineShape.Random(r, xSize, ySize, centerX, centerX, shapeSize);
+#else
             return CircleOutlineShape.Create(r, xSize, ySize, centerX, centerX, shapeSize);
+#endif
         }
 
         /// <summary>
@@ -88,15 +92,11 @@ namespace SWA.Ariadne.Outlines
         /// <param name="ySize">height of the created shape</param>
         /// <param name="centerX">X coordinate, relative to total width; 0.0 = top, 1.0 = bottom</param>
         /// <param name="centerY">Y coordinate, relative to total height; 0.0 = left, 1.0 = right</param>
-        /// <param name="shapeSize">size, relative to distance of center from the border; 1.0 will touch the border</param>
+        /// <param name="shapeSize">size, relative to distance of center from the border; 1.0 will touch the border </param>
         /// <returns></returns>
-        public static OutlineShape Char(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
+        public static OutlineShape Function(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
         {
-            FontFamily fontFamily = new FontFamily("Helvetica");
-            char[] shapeCharacters = { 'C', 'O', 'S', 'V', 'X', '3', '6', '8', '9', '?', };
-            char ch = shapeCharacters[r.Next(shapeCharacters.Length)];
-
-            return Char(xSize, ySize, centerX, centerY, shapeSize, ch, fontFamily);
+            return FunctionOutlineShape.Random(r, xSize, ySize, centerX, centerX, shapeSize);
         }
 
         /// <summary>
@@ -107,11 +107,15 @@ namespace SWA.Ariadne.Outlines
         /// <param name="ySize">height of the created shape</param>
         /// <param name="centerX">X coordinate, relative to total width; 0.0 = top, 1.0 = bottom</param>
         /// <param name="centerY">Y coordinate, relative to total height; 0.0 = left, 1.0 = right</param>
-        /// <param name="shapeSize">size, relative to distance of center from the border; 1.0 will touch the border </param>
+        /// <param name="shapeSize">size, relative to distance of center from the border; 1.0 will touch the border</param>
         /// <returns></returns>
-        public static OutlineShape Function(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
+        public static OutlineShape Char(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
         {
-            return FunctionOutlineShape.Random(r, xSize, ySize, centerX, centerX, shapeSize);
+            FontFamily fontFamily = new FontFamily("Helvetica");
+            char[] shapeCharacters = { 'C', 'O', 'S', 'V', 'X', '3', '6', '8', '9', '?', };
+            char ch = shapeCharacters[r.Next(shapeCharacters.Length)];
+
+            return Char(xSize, ySize, centerX, centerY, shapeSize, ch, fontFamily);
         }
 
         /// <summary>
