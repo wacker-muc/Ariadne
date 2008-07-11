@@ -10,25 +10,23 @@ namespace SWA.Ariadne.Outlines
     {
         #region Class variables and class constructor
 
-        private static List<MethodInfo> Functions;
-        private static List<TDFAttribute> Attributes;
+        private static List<MethodInfo> Functions = new List<MethodInfo>();
+        private static List<TDFAttribute> Attributes = new List<TDFAttribute>();
 
         static FunctionOutlineShape()
         {
-            Functions = new List<MethodInfo>();
-            Attributes = new List<TDFAttribute>();
+            CollectFunctions((new FunctionOutlineShape()).GetType());
+            CollectFunctions((new FractalOutlineShape()).GetType());
+        }
 
-            #region Collect all (internal) static methods that have the TDF attribute.
-
-#if false
-            Type classType = Type.GetType("FunctionOutlineShape");
-            Type  = Type.GetType("TDFAttribute");
-#else
-            FunctionOutlineShape shape = new FunctionOutlineShape(1, 1, 0, 0, 1, null, 0);
-            Type classType = shape.GetType();
+        /// <summary>
+        /// Collect all (internal) static methods that have the TDF attribute.
+        /// </summary>
+        /// <param name="classType"></param>
+        protected static void CollectFunctions(Type classType)
+        {
             TDFAttribute attribute = new TDFAttribute();
             Type attributeType = attribute.GetType();
-#endif
             BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static;
 
             foreach (System.Reflection.MethodInfo info in classType.GetMethods(flags))
@@ -40,8 +38,6 @@ namespace SWA.Ariadne.Outlines
                     Attributes.Add((TDFAttribute)attributes[0]);
                 }
             }
-
-            #endregion
         }
 
         #endregion
@@ -125,6 +121,11 @@ namespace SWA.Ariadne.Outlines
 
         #region Constructor
 
+        protected FunctionOutlineShape()
+            : this(1, 1, 0, 0, 1, null, 0)
+        {
+        }
+
         /// <summary>
         /// Create an OutlineShape based on a two dimensional function.
         /// </summary>
@@ -157,6 +158,7 @@ namespace SWA.Ariadne.Outlines
         public static OutlineShape Random(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
         {
             int p = r.Next(Functions.Count);
+            //p = 7;
             MethodInfo function = Functions[p];
             TDFAttribute characteristics = Attributes[p];
 
