@@ -47,7 +47,7 @@ namespace SWA.Ariadne.Gui
 
             this.data = new AriadneSettingsData();
 
-            #region Put all Outline panel settings into the data object.
+            #region Put the panel settings into the data object.
 
             data.ImageNumber = (int) this.imageNumberNumericUpDown.Value;
             data.ImageMinSize = (int) this.imageMinSizeNumericUpDown.Value;
@@ -55,29 +55,15 @@ namespace SWA.Ariadne.Gui
             data.ImageFolder = RegisteredOptions.GetStringSetting(RegisteredOptions.OPT_IMAGE_FOLDER);
 
             data.CircleNumber = (int)this.circleNumberNumericUpDown.Value;
-            data.CircleOffCenter = (int)this.circleOffCenterNumericUpDown.Value;
-            data.CircleSize = (int)this.circleSizeNumericUpDown.Value;
-
             data.DiamondNumber = (int)this.diamondNumberNumericUpDown.Value;
-            data.DiamondOffCenter = (int)this.diamondOffCenterNumericUpDown.Value;
-            data.DiamondSize = (int)this.diamondSizeNumericUpDown.Value;
-
             data.CharNumber = (int)this.charNumberNumericUpDown.Value;
-            data.CharOffCenter = (int)this.charOffCenterNumericUpDown.Value;
-            data.CharSize = (int)this.charSizeNumericUpDown.Value;
-
             data.SymbolNumber = (int)this.symbolNumberNumericUpDown.Value;
-            data.SymbolOffCenter = (int)this.symbolOffCenterNumericUpDown.Value;
-            data.SymbolSize = (int)this.symbolSizeNumericUpDown.Value;
-
             data.PolygonNumber = (int)this.polygonNumberNumericUpDown.Value;
-            data.PolygonOffCenter = (int)this.polygonOffCenterNumericUpDown.Value;
-            data.PolygonSize = (int)this.polygonSizeNumericUpDown.Value;
-
+            data.FunctionNumber = (int)this.functionNumberNumericUpDown.Value;
             data.BitmapNumber = (int)this.bitmapNumberNumericUpDown.Value;
-            data.BitmapOffCenter = (int)this.bitmapOffCenterNumericUpDown.Value;
-            data.BitmapSize = (int)this.bitmapSizeNumericUpDown.Value;
 
+            data.OutlineOffCenter = (int)this.offCenterNumericUpDown.Value;
+            data.OutlineSize = (int)this.sizeNumericUpDown.Value;
             data.VisibleOutlines = this.visibleOutlinesCheckBox.Checked;
 
             #endregion
