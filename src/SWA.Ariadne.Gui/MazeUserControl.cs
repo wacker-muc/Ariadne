@@ -1168,12 +1168,16 @@ namespace SWA.Ariadne.Gui
         {
             Random r = maze.Random;
 
-            AddOutlineShapes(r, OutlineShape.Circle, data.CircleNumber, data.CircleOffCenter / 100.0, data.CircleSize / 100.0);
-            AddOutlineShapes(r, OutlineShape.Diamond, data.DiamondNumber, data.DiamondOffCenter / 100.0, data.DiamondSize / 100.0);
-            AddOutlineShapes(r, OutlineShape.Char, data.CharNumber, data.CharOffCenter / 100.0, data.CharSize / 100.0);
-            AddOutlineShapes(r, OutlineShape.Symbol, data.SymbolNumber, data.SymbolOffCenter / 100.0, data.SymbolSize / 100.0);
-            AddOutlineShapes(r, OutlineShape.Polygon, data.PolygonNumber, data.PolygonOffCenter / 100.0, data.PolygonSize / 100.0);
-            AddOutlineShapes(r, OutlineShape.Bitmap, data.BitmapNumber, data.BitmapOffCenter / 100.0, data.BitmapSize / 100.0);
+            double offCenter = data.OutlineOffCenter / 100.0;
+            double size = data.OutlineSize / 100.0;
+
+            AddOutlineShapes(r, OutlineShape.Circle, data.CircleNumber, offCenter, size);
+            AddOutlineShapes(r, OutlineShape.Diamond, data.DiamondNumber, offCenter, size);
+            AddOutlineShapes(r, OutlineShape.Char, data.CharNumber, offCenter, size);
+            AddOutlineShapes(r, OutlineShape.Symbol, data.SymbolNumber, offCenter, size);
+            AddOutlineShapes(r, OutlineShape.Polygon, data.PolygonNumber, offCenter, size);
+            AddOutlineShapes(r, OutlineShape.Function, data.FunctionNumber, offCenter, size);
+            AddOutlineShapes(r, OutlineShape.Bitmap, data.BitmapNumber, offCenter, size);
         }
 
         internal void AddOutlineShapes(Random r, OutlineShapeBuilder shapeBuilderDelegate, int count, double offCenter, double size)

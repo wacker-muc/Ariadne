@@ -88,44 +88,27 @@ namespace SWA.Ariadne.Gui
             this.imageFolderTextBox = new System.Windows.Forms.TextBox();
             this.setContentsButton = new System.Windows.Forms.Button();
             this.outlinesPage = new System.Windows.Forms.TabPage();
+            this.label27 = new System.Windows.Forms.Label();
+            this.functionNumberNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.label26 = new System.Windows.Forms.Label();
             this.visibleOutlinesCheckBox = new System.Windows.Forms.CheckBox();
             this.bitmapNumberNumericUpDown = new System.Windows.Forms.NumericUpDown();
-            this.bitmapOffCenterNumericUpDown = new System.Windows.Forms.NumericUpDown();
-            this.bitmapSizeNumericUpDown = new System.Windows.Forms.NumericUpDown();
-            this.label34 = new System.Windows.Forms.Label();
-            this.label35 = new System.Windows.Forms.Label();
             this.label36 = new System.Windows.Forms.Label();
             this.polygonNumberNumericUpDown = new System.Windows.Forms.NumericUpDown();
-            this.polygonOffCenterNumericUpDown = new System.Windows.Forms.NumericUpDown();
-            this.polygonSizeNumericUpDown = new System.Windows.Forms.NumericUpDown();
-            this.label37 = new System.Windows.Forms.Label();
-            this.label38 = new System.Windows.Forms.Label();
             this.label39 = new System.Windows.Forms.Label();
             this.symbolNumberNumericUpDown = new System.Windows.Forms.NumericUpDown();
-            this.symbolOffCenterNumericUpDown = new System.Windows.Forms.NumericUpDown();
-            this.symbolSizeNumericUpDown = new System.Windows.Forms.NumericUpDown();
-            this.label31 = new System.Windows.Forms.Label();
-            this.label32 = new System.Windows.Forms.Label();
             this.label33 = new System.Windows.Forms.Label();
             this.charNumberNumericUpDown = new System.Windows.Forms.NumericUpDown();
-            this.charOffCenterNumericUpDown = new System.Windows.Forms.NumericUpDown();
-            this.charSizeNumericUpDown = new System.Windows.Forms.NumericUpDown();
-            this.label29 = new System.Windows.Forms.Label();
-            this.label30 = new System.Windows.Forms.Label();
             this.label28 = new System.Windows.Forms.Label();
             this.diamondNumberNumericUpDown = new System.Windows.Forms.NumericUpDown();
-            this.diamondOffCenterNumericUpDown = new System.Windows.Forms.NumericUpDown();
-            this.diamondSizeNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.label25 = new System.Windows.Forms.Label();
-            this.label26 = new System.Windows.Forms.Label();
-            this.label27 = new System.Windows.Forms.Label();
             this.setOutlinesButton = new System.Windows.Forms.Button();
             this.label22 = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
             this.label20 = new System.Windows.Forms.Label();
             this.circleNumberNumericUpDown = new System.Windows.Forms.NumericUpDown();
-            this.circleOffCenterNumericUpDown = new System.Windows.Forms.NumericUpDown();
-            this.circleSizeNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.offCenterNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.sizeNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.label19 = new System.Windows.Forms.Label();
             this.label24 = new System.Windows.Forms.Label();
             this.label23 = new System.Windows.Forms.Label();
@@ -144,24 +127,15 @@ namespace SWA.Ariadne.Gui
             ((System.ComponentModel.ISupportInitialize)(this.imageMaxSizeNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageNumberNumericUpDown)).BeginInit();
             this.outlinesPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.functionNumberNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bitmapNumberNumericUpDown)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bitmapOffCenterNumericUpDown)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bitmapSizeNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.polygonNumberNumericUpDown)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.polygonOffCenterNumericUpDown)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.polygonSizeNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.symbolNumberNumericUpDown)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.symbolOffCenterNumericUpDown)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.symbolSizeNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.charNumberNumericUpDown)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.charOffCenterNumericUpDown)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.charSizeNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.diamondNumberNumericUpDown)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.diamondOffCenterNumericUpDown)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.diamondSizeNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.circleNumberNumericUpDown)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.circleOffCenterNumericUpDown)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.circleSizeNumericUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.offCenterNumericUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sizeNumericUpDown)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -910,44 +884,27 @@ namespace SWA.Ariadne.Gui
             // 
             // outlinesPage
             // 
+            this.outlinesPage.Controls.Add(this.label27);
+            this.outlinesPage.Controls.Add(this.functionNumberNumericUpDown);
+            this.outlinesPage.Controls.Add(this.label26);
             this.outlinesPage.Controls.Add(this.visibleOutlinesCheckBox);
             this.outlinesPage.Controls.Add(this.bitmapNumberNumericUpDown);
-            this.outlinesPage.Controls.Add(this.bitmapOffCenterNumericUpDown);
-            this.outlinesPage.Controls.Add(this.bitmapSizeNumericUpDown);
-            this.outlinesPage.Controls.Add(this.label34);
-            this.outlinesPage.Controls.Add(this.label35);
             this.outlinesPage.Controls.Add(this.label36);
             this.outlinesPage.Controls.Add(this.polygonNumberNumericUpDown);
-            this.outlinesPage.Controls.Add(this.polygonOffCenterNumericUpDown);
-            this.outlinesPage.Controls.Add(this.polygonSizeNumericUpDown);
-            this.outlinesPage.Controls.Add(this.label37);
-            this.outlinesPage.Controls.Add(this.label38);
             this.outlinesPage.Controls.Add(this.label39);
             this.outlinesPage.Controls.Add(this.symbolNumberNumericUpDown);
-            this.outlinesPage.Controls.Add(this.symbolOffCenterNumericUpDown);
-            this.outlinesPage.Controls.Add(this.symbolSizeNumericUpDown);
-            this.outlinesPage.Controls.Add(this.label31);
-            this.outlinesPage.Controls.Add(this.label32);
             this.outlinesPage.Controls.Add(this.label33);
             this.outlinesPage.Controls.Add(this.charNumberNumericUpDown);
-            this.outlinesPage.Controls.Add(this.charOffCenterNumericUpDown);
-            this.outlinesPage.Controls.Add(this.charSizeNumericUpDown);
-            this.outlinesPage.Controls.Add(this.label29);
-            this.outlinesPage.Controls.Add(this.label30);
             this.outlinesPage.Controls.Add(this.label28);
             this.outlinesPage.Controls.Add(this.diamondNumberNumericUpDown);
-            this.outlinesPage.Controls.Add(this.diamondOffCenterNumericUpDown);
-            this.outlinesPage.Controls.Add(this.diamondSizeNumericUpDown);
             this.outlinesPage.Controls.Add(this.label25);
-            this.outlinesPage.Controls.Add(this.label26);
-            this.outlinesPage.Controls.Add(this.label27);
             this.outlinesPage.Controls.Add(this.setOutlinesButton);
             this.outlinesPage.Controls.Add(this.label22);
             this.outlinesPage.Controls.Add(this.label21);
             this.outlinesPage.Controls.Add(this.label20);
             this.outlinesPage.Controls.Add(this.circleNumberNumericUpDown);
-            this.outlinesPage.Controls.Add(this.circleOffCenterNumericUpDown);
-            this.outlinesPage.Controls.Add(this.circleSizeNumericUpDown);
+            this.outlinesPage.Controls.Add(this.offCenterNumericUpDown);
+            this.outlinesPage.Controls.Add(this.sizeNumericUpDown);
             this.outlinesPage.Controls.Add(this.label19);
             this.outlinesPage.Controls.Add(this.label24);
             this.outlinesPage.Controls.Add(this.label23);
@@ -959,23 +916,57 @@ namespace SWA.Ariadne.Gui
             this.outlinesPage.Text = "Outlines";
             this.outlinesPage.UseVisualStyleBackColor = true;
             // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Location = new System.Drawing.Point(192, 11);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(44, 13);
+            this.label27.TabIndex = 134;
+            this.label27.Text = "Number";
+            this.label27.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // functionNumberNumericUpDown
+            // 
+            this.functionNumberNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.dataBindingSource, "FunctionNumber", true));
+            this.functionNumberNumericUpDown.Location = new System.Drawing.Point(195, 82);
+            this.functionNumberNumericUpDown.Maximum = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            this.functionNumberNumericUpDown.Name = "functionNumberNumericUpDown";
+            this.functionNumberNumericUpDown.Size = new System.Drawing.Size(46, 20);
+            this.functionNumberNumericUpDown.TabIndex = 6;
+            this.functionNumberNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Location = new System.Drawing.Point(132, 85);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(53, 13);
+            this.label26.TabIndex = 133;
+            this.label26.Text = "Functions";
+            this.label26.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // visibleOutlinesCheckBox
             // 
             this.visibleOutlinesCheckBox.AutoSize = true;
             this.visibleOutlinesCheckBox.Checked = true;
             this.visibleOutlinesCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.visibleOutlinesCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.dataBindingSource, "VisibleOutlines", true));
-            this.visibleOutlinesCheckBox.Location = new System.Drawing.Point(195, 198);
+            this.visibleOutlinesCheckBox.Location = new System.Drawing.Point(19, 198);
             this.visibleOutlinesCheckBox.Name = "visibleOutlinesCheckBox";
             this.visibleOutlinesCheckBox.Size = new System.Drawing.Size(55, 17);
-            this.visibleOutlinesCheckBox.TabIndex = 131;
+            this.visibleOutlinesCheckBox.TabIndex = 91;
             this.visibleOutlinesCheckBox.Text = "visible";
             this.visibleOutlinesCheckBox.UseVisualStyleBackColor = true;
             // 
             // bitmapNumberNumericUpDown
             // 
             this.bitmapNumberNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.dataBindingSource, "BitmapNumber", true));
-            this.bitmapNumberNumericUpDown.Location = new System.Drawing.Point(79, 159);
+            this.bitmapNumberNumericUpDown.Location = new System.Drawing.Point(79, 107);
             this.bitmapNumberNumericUpDown.Maximum = new decimal(new int[] {
             4,
             0,
@@ -983,71 +974,13 @@ namespace SWA.Ariadne.Gui
             0});
             this.bitmapNumberNumericUpDown.Name = "bitmapNumberNumericUpDown";
             this.bitmapNumberNumericUpDown.Size = new System.Drawing.Size(46, 20);
-            this.bitmapNumberNumericUpDown.TabIndex = 122;
+            this.bitmapNumberNumericUpDown.TabIndex = 7;
             this.bitmapNumberNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // bitmapOffCenterNumericUpDown
-            // 
-            this.bitmapOffCenterNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.dataBindingSource, "BitmapOffCenter", true));
-            this.bitmapOffCenterNumericUpDown.Location = new System.Drawing.Point(131, 159);
-            this.bitmapOffCenterNumericUpDown.Maximum = new decimal(new int[] {
-            120,
-            0,
-            0,
-            0});
-            this.bitmapOffCenterNumericUpDown.Name = "bitmapOffCenterNumericUpDown";
-            this.bitmapOffCenterNumericUpDown.Size = new System.Drawing.Size(46, 20);
-            this.bitmapOffCenterNumericUpDown.TabIndex = 123;
-            this.bitmapOffCenterNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // bitmapSizeNumericUpDown
-            // 
-            this.bitmapSizeNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.dataBindingSource, "BitmapSize", true));
-            this.bitmapSizeNumericUpDown.Location = new System.Drawing.Point(195, 159);
-            this.bitmapSizeNumericUpDown.Maximum = new decimal(new int[] {
-            150,
-            0,
-            0,
-            0});
-            this.bitmapSizeNumericUpDown.Minimum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.bitmapSizeNumericUpDown.Name = "bitmapSizeNumericUpDown";
-            this.bitmapSizeNumericUpDown.Size = new System.Drawing.Size(46, 20);
-            this.bitmapSizeNumericUpDown.TabIndex = 124;
-            this.bitmapSizeNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.bitmapSizeNumericUpDown.Value = new decimal(new int[] {
-            80,
-            0,
-            0,
-            0});
-            // 
-            // label34
-            // 
-            this.label34.AutoSize = true;
-            this.label34.Location = new System.Drawing.Point(176, 162);
-            this.label34.Name = "label34";
-            this.label34.Size = new System.Drawing.Size(15, 13);
-            this.label34.TabIndex = 130;
-            this.label34.Text = "%";
-            this.label34.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // label35
-            // 
-            this.label35.AutoSize = true;
-            this.label35.Location = new System.Drawing.Point(239, 162);
-            this.label35.Name = "label35";
-            this.label35.Size = new System.Drawing.Size(15, 13);
-            this.label35.TabIndex = 129;
-            this.label35.Text = "%";
-            this.label35.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label36
             // 
             this.label36.AutoSize = true;
-            this.label36.Location = new System.Drawing.Point(16, 162);
+            this.label36.Location = new System.Drawing.Point(16, 110);
             this.label36.Name = "label36";
             this.label36.Size = new System.Drawing.Size(44, 13);
             this.label36.TabIndex = 128;
@@ -1057,7 +990,7 @@ namespace SWA.Ariadne.Gui
             // polygonNumberNumericUpDown
             // 
             this.polygonNumberNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.dataBindingSource, "PolygonNumber", true));
-            this.polygonNumberNumericUpDown.Location = new System.Drawing.Point(79, 133);
+            this.polygonNumberNumericUpDown.Location = new System.Drawing.Point(79, 81);
             this.polygonNumberNumericUpDown.Maximum = new decimal(new int[] {
             4,
             0,
@@ -1065,71 +998,13 @@ namespace SWA.Ariadne.Gui
             0});
             this.polygonNumberNumericUpDown.Name = "polygonNumberNumericUpDown";
             this.polygonNumberNumericUpDown.Size = new System.Drawing.Size(46, 20);
-            this.polygonNumberNumericUpDown.TabIndex = 119;
+            this.polygonNumberNumericUpDown.TabIndex = 5;
             this.polygonNumberNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // polygonOffCenterNumericUpDown
-            // 
-            this.polygonOffCenterNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.dataBindingSource, "PolygonOffCenter", true));
-            this.polygonOffCenterNumericUpDown.Location = new System.Drawing.Point(131, 133);
-            this.polygonOffCenterNumericUpDown.Maximum = new decimal(new int[] {
-            120,
-            0,
-            0,
-            0});
-            this.polygonOffCenterNumericUpDown.Name = "polygonOffCenterNumericUpDown";
-            this.polygonOffCenterNumericUpDown.Size = new System.Drawing.Size(46, 20);
-            this.polygonOffCenterNumericUpDown.TabIndex = 120;
-            this.polygonOffCenterNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // polygonSizeNumericUpDown
-            // 
-            this.polygonSizeNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.dataBindingSource, "PolygonSize", true));
-            this.polygonSizeNumericUpDown.Location = new System.Drawing.Point(195, 133);
-            this.polygonSizeNumericUpDown.Maximum = new decimal(new int[] {
-            150,
-            0,
-            0,
-            0});
-            this.polygonSizeNumericUpDown.Minimum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.polygonSizeNumericUpDown.Name = "polygonSizeNumericUpDown";
-            this.polygonSizeNumericUpDown.Size = new System.Drawing.Size(46, 20);
-            this.polygonSizeNumericUpDown.TabIndex = 121;
-            this.polygonSizeNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.polygonSizeNumericUpDown.Value = new decimal(new int[] {
-            80,
-            0,
-            0,
-            0});
-            // 
-            // label37
-            // 
-            this.label37.AutoSize = true;
-            this.label37.Location = new System.Drawing.Point(176, 136);
-            this.label37.Name = "label37";
-            this.label37.Size = new System.Drawing.Size(15, 13);
-            this.label37.TabIndex = 127;
-            this.label37.Text = "%";
-            this.label37.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // label38
-            // 
-            this.label38.AutoSize = true;
-            this.label38.Location = new System.Drawing.Point(239, 136);
-            this.label38.Name = "label38";
-            this.label38.Size = new System.Drawing.Size(15, 13);
-            this.label38.TabIndex = 126;
-            this.label38.Text = "%";
-            this.label38.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label39
             // 
             this.label39.AutoSize = true;
-            this.label39.Location = new System.Drawing.Point(16, 136);
+            this.label39.Location = new System.Drawing.Point(16, 84);
             this.label39.Name = "label39";
             this.label39.Size = new System.Drawing.Size(50, 13);
             this.label39.TabIndex = 125;
@@ -1139,7 +1014,7 @@ namespace SWA.Ariadne.Gui
             // symbolNumberNumericUpDown
             // 
             this.symbolNumberNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.dataBindingSource, "SymbolNumber", true));
-            this.symbolNumberNumericUpDown.Location = new System.Drawing.Point(79, 107);
+            this.symbolNumberNumericUpDown.Location = new System.Drawing.Point(195, 56);
             this.symbolNumberNumericUpDown.Maximum = new decimal(new int[] {
             4,
             0,
@@ -1147,71 +1022,13 @@ namespace SWA.Ariadne.Gui
             0});
             this.symbolNumberNumericUpDown.Name = "symbolNumberNumericUpDown";
             this.symbolNumberNumericUpDown.Size = new System.Drawing.Size(46, 20);
-            this.symbolNumberNumericUpDown.TabIndex = 31;
+            this.symbolNumberNumericUpDown.TabIndex = 4;
             this.symbolNumberNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // symbolOffCenterNumericUpDown
-            // 
-            this.symbolOffCenterNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.dataBindingSource, "SymbolOffCenter", true));
-            this.symbolOffCenterNumericUpDown.Location = new System.Drawing.Point(131, 107);
-            this.symbolOffCenterNumericUpDown.Maximum = new decimal(new int[] {
-            120,
-            0,
-            0,
-            0});
-            this.symbolOffCenterNumericUpDown.Name = "symbolOffCenterNumericUpDown";
-            this.symbolOffCenterNumericUpDown.Size = new System.Drawing.Size(46, 20);
-            this.symbolOffCenterNumericUpDown.TabIndex = 32;
-            this.symbolOffCenterNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // symbolSizeNumericUpDown
-            // 
-            this.symbolSizeNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.dataBindingSource, "SymbolSize", true));
-            this.symbolSizeNumericUpDown.Location = new System.Drawing.Point(195, 107);
-            this.symbolSizeNumericUpDown.Maximum = new decimal(new int[] {
-            150,
-            0,
-            0,
-            0});
-            this.symbolSizeNumericUpDown.Minimum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.symbolSizeNumericUpDown.Name = "symbolSizeNumericUpDown";
-            this.symbolSizeNumericUpDown.Size = new System.Drawing.Size(46, 20);
-            this.symbolSizeNumericUpDown.TabIndex = 33;
-            this.symbolSizeNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.symbolSizeNumericUpDown.Value = new decimal(new int[] {
-            80,
-            0,
-            0,
-            0});
-            // 
-            // label31
-            // 
-            this.label31.AutoSize = true;
-            this.label31.Location = new System.Drawing.Point(176, 110);
-            this.label31.Name = "label31";
-            this.label31.Size = new System.Drawing.Size(15, 13);
-            this.label31.TabIndex = 118;
-            this.label31.Text = "%";
-            this.label31.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // label32
-            // 
-            this.label32.AutoSize = true;
-            this.label32.Location = new System.Drawing.Point(239, 110);
-            this.label32.Name = "label32";
-            this.label32.Size = new System.Drawing.Size(15, 13);
-            this.label32.TabIndex = 117;
-            this.label32.Text = "%";
-            this.label32.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label33
             // 
             this.label33.AutoSize = true;
-            this.label33.Location = new System.Drawing.Point(16, 110);
+            this.label33.Location = new System.Drawing.Point(132, 59);
             this.label33.Name = "label33";
             this.label33.Size = new System.Drawing.Size(46, 13);
             this.label33.TabIndex = 113;
@@ -1221,7 +1038,7 @@ namespace SWA.Ariadne.Gui
             // charNumberNumericUpDown
             // 
             this.charNumberNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.dataBindingSource, "CharNumber", true));
-            this.charNumberNumericUpDown.Location = new System.Drawing.Point(79, 81);
+            this.charNumberNumericUpDown.Location = new System.Drawing.Point(79, 55);
             this.charNumberNumericUpDown.Maximum = new decimal(new int[] {
             4,
             0,
@@ -1229,71 +1046,13 @@ namespace SWA.Ariadne.Gui
             0});
             this.charNumberNumericUpDown.Name = "charNumberNumericUpDown";
             this.charNumberNumericUpDown.Size = new System.Drawing.Size(46, 20);
-            this.charNumberNumericUpDown.TabIndex = 21;
+            this.charNumberNumericUpDown.TabIndex = 3;
             this.charNumberNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // charOffCenterNumericUpDown
-            // 
-            this.charOffCenterNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.dataBindingSource, "CharOffCenter", true));
-            this.charOffCenterNumericUpDown.Location = new System.Drawing.Point(131, 81);
-            this.charOffCenterNumericUpDown.Maximum = new decimal(new int[] {
-            120,
-            0,
-            0,
-            0});
-            this.charOffCenterNumericUpDown.Name = "charOffCenterNumericUpDown";
-            this.charOffCenterNumericUpDown.Size = new System.Drawing.Size(46, 20);
-            this.charOffCenterNumericUpDown.TabIndex = 22;
-            this.charOffCenterNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // charSizeNumericUpDown
-            // 
-            this.charSizeNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.dataBindingSource, "CharSize", true));
-            this.charSizeNumericUpDown.Location = new System.Drawing.Point(195, 81);
-            this.charSizeNumericUpDown.Maximum = new decimal(new int[] {
-            150,
-            0,
-            0,
-            0});
-            this.charSizeNumericUpDown.Minimum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.charSizeNumericUpDown.Name = "charSizeNumericUpDown";
-            this.charSizeNumericUpDown.Size = new System.Drawing.Size(46, 20);
-            this.charSizeNumericUpDown.TabIndex = 23;
-            this.charSizeNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.charSizeNumericUpDown.Value = new decimal(new int[] {
-            80,
-            0,
-            0,
-            0});
-            // 
-            // label29
-            // 
-            this.label29.AutoSize = true;
-            this.label29.Location = new System.Drawing.Point(176, 84);
-            this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(15, 13);
-            this.label29.TabIndex = 112;
-            this.label29.Text = "%";
-            this.label29.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // label30
-            // 
-            this.label30.AutoSize = true;
-            this.label30.Location = new System.Drawing.Point(239, 84);
-            this.label30.Name = "label30";
-            this.label30.Size = new System.Drawing.Size(15, 13);
-            this.label30.TabIndex = 111;
-            this.label30.Text = "%";
-            this.label30.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label28
             // 
             this.label28.AutoSize = true;
-            this.label28.Location = new System.Drawing.Point(16, 84);
+            this.label28.Location = new System.Drawing.Point(16, 58);
             this.label28.Name = "label28";
             this.label28.Size = new System.Drawing.Size(58, 13);
             this.label28.TabIndex = 107;
@@ -1303,7 +1062,7 @@ namespace SWA.Ariadne.Gui
             // diamondNumberNumericUpDown
             // 
             this.diamondNumberNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.dataBindingSource, "DiamondNumber", true));
-            this.diamondNumberNumericUpDown.Location = new System.Drawing.Point(79, 55);
+            this.diamondNumberNumericUpDown.Location = new System.Drawing.Point(195, 29);
             this.diamondNumberNumericUpDown.Maximum = new decimal(new int[] {
             4,
             0,
@@ -1311,76 +1070,18 @@ namespace SWA.Ariadne.Gui
             0});
             this.diamondNumberNumericUpDown.Name = "diamondNumberNumericUpDown";
             this.diamondNumberNumericUpDown.Size = new System.Drawing.Size(46, 20);
-            this.diamondNumberNumericUpDown.TabIndex = 11;
+            this.diamondNumberNumericUpDown.TabIndex = 2;
             this.diamondNumberNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // diamondOffCenterNumericUpDown
-            // 
-            this.diamondOffCenterNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.dataBindingSource, "DiamondOffCenter", true));
-            this.diamondOffCenterNumericUpDown.Location = new System.Drawing.Point(131, 55);
-            this.diamondOffCenterNumericUpDown.Maximum = new decimal(new int[] {
-            120,
-            0,
-            0,
-            0});
-            this.diamondOffCenterNumericUpDown.Name = "diamondOffCenterNumericUpDown";
-            this.diamondOffCenterNumericUpDown.Size = new System.Drawing.Size(46, 20);
-            this.diamondOffCenterNumericUpDown.TabIndex = 12;
-            this.diamondOffCenterNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // diamondSizeNumericUpDown
-            // 
-            this.diamondSizeNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.dataBindingSource, "DiamondSize", true));
-            this.diamondSizeNumericUpDown.Location = new System.Drawing.Point(195, 55);
-            this.diamondSizeNumericUpDown.Maximum = new decimal(new int[] {
-            150,
-            0,
-            0,
-            0});
-            this.diamondSizeNumericUpDown.Minimum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.diamondSizeNumericUpDown.Name = "diamondSizeNumericUpDown";
-            this.diamondSizeNumericUpDown.Size = new System.Drawing.Size(46, 20);
-            this.diamondSizeNumericUpDown.TabIndex = 13;
-            this.diamondSizeNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.diamondSizeNumericUpDown.Value = new decimal(new int[] {
-            80,
-            0,
-            0,
-            0});
             // 
             // label25
             // 
             this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(16, 58);
+            this.label25.Location = new System.Drawing.Point(132, 32);
             this.label25.Name = "label25";
             this.label25.Size = new System.Drawing.Size(54, 13);
             this.label25.TabIndex = 104;
             this.label25.Text = "Diamonds";
             this.label25.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // label26
-            // 
-            this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(176, 58);
-            this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(15, 13);
-            this.label26.TabIndex = 106;
-            this.label26.Text = "%";
-            this.label26.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // label27
-            // 
-            this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(239, 58);
-            this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(15, 13);
-            this.label27.TabIndex = 105;
-            this.label27.Text = "%";
-            this.label27.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // setOutlinesButton
             // 
@@ -1395,7 +1096,7 @@ namespace SWA.Ariadne.Gui
             // label22
             // 
             this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(192, 11);
+            this.label22.Location = new System.Drawing.Point(158, 165);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(27, 13);
             this.label22.TabIndex = 18;
@@ -1405,7 +1106,7 @@ namespace SWA.Ariadne.Gui
             // label21
             // 
             this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(128, 11);
+            this.label21.Location = new System.Drawing.Point(16, 165);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(55, 13);
             this.label21.TabIndex = 17;
@@ -1436,39 +1137,39 @@ namespace SWA.Ariadne.Gui
             this.circleNumberNumericUpDown.TabIndex = 1;
             this.circleNumberNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // circleOffCenterNumericUpDown
+            // offCenterNumericUpDown
             // 
-            this.circleOffCenterNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.dataBindingSource, "CircleOffCenter", true));
-            this.circleOffCenterNumericUpDown.Location = new System.Drawing.Point(131, 29);
-            this.circleOffCenterNumericUpDown.Maximum = new decimal(new int[] {
+            this.offCenterNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.dataBindingSource, "OutlineOffCenter", true));
+            this.offCenterNumericUpDown.Location = new System.Drawing.Point(79, 162);
+            this.offCenterNumericUpDown.Maximum = new decimal(new int[] {
             120,
             0,
             0,
             0});
-            this.circleOffCenterNumericUpDown.Name = "circleOffCenterNumericUpDown";
-            this.circleOffCenterNumericUpDown.Size = new System.Drawing.Size(46, 20);
-            this.circleOffCenterNumericUpDown.TabIndex = 2;
-            this.circleOffCenterNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.offCenterNumericUpDown.Name = "offCenterNumericUpDown";
+            this.offCenterNumericUpDown.Size = new System.Drawing.Size(46, 20);
+            this.offCenterNumericUpDown.TabIndex = 81;
+            this.offCenterNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // circleSizeNumericUpDown
+            // sizeNumericUpDown
             // 
-            this.circleSizeNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.dataBindingSource, "CircleSize", true));
-            this.circleSizeNumericUpDown.Location = new System.Drawing.Point(195, 29);
-            this.circleSizeNumericUpDown.Maximum = new decimal(new int[] {
+            this.sizeNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.dataBindingSource, "OutlineSize", true));
+            this.sizeNumericUpDown.Location = new System.Drawing.Point(195, 161);
+            this.sizeNumericUpDown.Maximum = new decimal(new int[] {
             150,
             0,
             0,
             0});
-            this.circleSizeNumericUpDown.Minimum = new decimal(new int[] {
+            this.sizeNumericUpDown.Minimum = new decimal(new int[] {
             20,
             0,
             0,
             0});
-            this.circleSizeNumericUpDown.Name = "circleSizeNumericUpDown";
-            this.circleSizeNumericUpDown.Size = new System.Drawing.Size(46, 20);
-            this.circleSizeNumericUpDown.TabIndex = 3;
-            this.circleSizeNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.circleSizeNumericUpDown.Value = new decimal(new int[] {
+            this.sizeNumericUpDown.Name = "sizeNumericUpDown";
+            this.sizeNumericUpDown.Size = new System.Drawing.Size(46, 20);
+            this.sizeNumericUpDown.TabIndex = 82;
+            this.sizeNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.sizeNumericUpDown.Value = new decimal(new int[] {
             80,
             0,
             0,
@@ -1487,7 +1188,7 @@ namespace SWA.Ariadne.Gui
             // label24
             // 
             this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(176, 32);
+            this.label24.Location = new System.Drawing.Point(124, 165);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(15, 13);
             this.label24.TabIndex = 20;
@@ -1497,7 +1198,7 @@ namespace SWA.Ariadne.Gui
             // label23
             // 
             this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(239, 32);
+            this.label23.Location = new System.Drawing.Point(239, 164);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(15, 13);
             this.label23.TabIndex = 19;
@@ -1536,24 +1237,15 @@ namespace SWA.Ariadne.Gui
             ((System.ComponentModel.ISupportInitialize)(this.imageNumberNumericUpDown)).EndInit();
             this.outlinesPage.ResumeLayout(false);
             this.outlinesPage.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.functionNumberNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bitmapNumberNumericUpDown)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bitmapOffCenterNumericUpDown)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bitmapSizeNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.polygonNumberNumericUpDown)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.polygonOffCenterNumericUpDown)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.polygonSizeNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.symbolNumberNumericUpDown)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.symbolOffCenterNumericUpDown)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.symbolSizeNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.charNumberNumericUpDown)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.charOffCenterNumericUpDown)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.charSizeNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.diamondNumberNumericUpDown)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.diamondOffCenterNumericUpDown)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.diamondSizeNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.circleNumberNumericUpDown)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.circleOffCenterNumericUpDown)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.circleSizeNumericUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.offCenterNumericUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sizeNumericUpDown)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1620,10 +1312,10 @@ namespace SWA.Ariadne.Gui
         private System.Windows.Forms.NumericUpDown imageMinSizeNumericUpDown;
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.TabPage outlinesPage;
-        private System.Windows.Forms.NumericUpDown circleSizeNumericUpDown;
+        private System.Windows.Forms.NumericUpDown sizeNumericUpDown;
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.NumericUpDown circleNumberNumericUpDown;
-        private System.Windows.Forms.NumericUpDown circleOffCenterNumericUpDown;
+        private System.Windows.Forms.NumericUpDown offCenterNumericUpDown;
         private System.Windows.Forms.Label label24;
         private System.Windows.Forms.Label label23;
         private System.Windows.Forms.Label label22;
@@ -1631,35 +1323,18 @@ namespace SWA.Ariadne.Gui
         private System.Windows.Forms.Label label20;
         private System.Windows.Forms.Button setOutlinesButton;
         private System.Windows.Forms.NumericUpDown diamondNumberNumericUpDown;
-        private System.Windows.Forms.NumericUpDown diamondOffCenterNumericUpDown;
-        private System.Windows.Forms.NumericUpDown diamondSizeNumericUpDown;
         private System.Windows.Forms.Label label25;
-        private System.Windows.Forms.Label label26;
-        private System.Windows.Forms.Label label27;
         private System.Windows.Forms.Label label28;
         private System.Windows.Forms.NumericUpDown charNumberNumericUpDown;
-        private System.Windows.Forms.NumericUpDown charOffCenterNumericUpDown;
-        private System.Windows.Forms.NumericUpDown charSizeNumericUpDown;
-        private System.Windows.Forms.Label label29;
-        private System.Windows.Forms.Label label30;
         private System.Windows.Forms.NumericUpDown symbolNumberNumericUpDown;
-        private System.Windows.Forms.NumericUpDown symbolOffCenterNumericUpDown;
-        private System.Windows.Forms.NumericUpDown symbolSizeNumericUpDown;
-        private System.Windows.Forms.Label label31;
-        private System.Windows.Forms.Label label32;
         private System.Windows.Forms.Label label33;
         private System.Windows.Forms.NumericUpDown bitmapNumberNumericUpDown;
-        private System.Windows.Forms.NumericUpDown bitmapOffCenterNumericUpDown;
-        private System.Windows.Forms.NumericUpDown bitmapSizeNumericUpDown;
-        private System.Windows.Forms.Label label34;
-        private System.Windows.Forms.Label label35;
         private System.Windows.Forms.Label label36;
         private System.Windows.Forms.NumericUpDown polygonNumberNumericUpDown;
-        private System.Windows.Forms.NumericUpDown polygonOffCenterNumericUpDown;
-        private System.Windows.Forms.NumericUpDown polygonSizeNumericUpDown;
-        private System.Windows.Forms.Label label37;
-        private System.Windows.Forms.Label label38;
         private System.Windows.Forms.Label label39;
         private System.Windows.Forms.CheckBox visibleOutlinesCheckBox;
+        private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.NumericUpDown functionNumberNumericUpDown;
+        private System.Windows.Forms.Label label26;
     }
 }

@@ -53,7 +53,7 @@ namespace SWA.Ariadne.Outlines
         /// General purpose parameters controlling the function.
         /// Should be initialized by a configuration method.
         /// </summary>
-        private static double t1 = 0, t2 = 0, t3 = 0;
+        protected static double t1 = 0, t2 = 0, t3 = 0;
 
         /// <summary>
         /// One of four orientations of the coordinate system.
@@ -158,7 +158,7 @@ namespace SWA.Ariadne.Outlines
         public static OutlineShape Random(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
         {
             int p = r.Next(Functions.Count);
-            //p = 7;
+            //p = 8;
             MethodInfo function = Functions[p];
             TDFAttribute characteristics = Attributes[p];
 
@@ -184,6 +184,9 @@ namespace SWA.Ariadne.Outlines
             {
                 case "TDF_06":
                     TDF_06_Configurator(result, result.scale);
+                    break;
+                case "Julia":
+                    FractalOutlineShape.JuliaConfigurator(r, result.scale);
                     break;
             }
 

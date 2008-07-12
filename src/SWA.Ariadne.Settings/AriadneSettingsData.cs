@@ -303,20 +303,6 @@ namespace SWA.Ariadne.Settings
         }
         private int circleNumber;
 
-        public int CircleOffCenter
-        {
-            get { return circleOffCenter; }
-            set { circleOffCenter = value; }
-        }
-        private int circleOffCenter;
-
-        public int CircleSize
-        {
-            get { return circleSize; }
-            set { circleSize = value; }
-        }
-        private int circleSize;
-
         #endregion
 
         #region Diamonds
@@ -327,20 +313,6 @@ namespace SWA.Ariadne.Settings
             set { diamondNumber = value; }
         }
         private int diamondNumber;
-
-        public int DiamondOffCenter
-        {
-            get { return diamondOffCenter; }
-            set { diamondOffCenter = value; }
-        }
-        private int diamondOffCenter;
-
-        public int DiamondSize
-        {
-            get { return diamondSize; }
-            set { diamondSize = value; }
-        }
-        private int diamondSize;
 
         #endregion
 
@@ -353,20 +325,6 @@ namespace SWA.Ariadne.Settings
         }
         private int charNumber;
 
-        public int CharOffCenter
-        {
-            get { return charOffCenter; }
-            set { charOffCenter = value; }
-        }
-        private int charOffCenter;
-
-        public int CharSize
-        {
-            get { return charSize; }
-            set { charSize = value; }
-        }
-        private int charSize;
-
         #endregion
 
         #region Symbols
@@ -377,20 +335,6 @@ namespace SWA.Ariadne.Settings
             set { symbolNumber = value; }
         }
         private int symbolNumber;
-
-        public int SymbolOffCenter
-        {
-            get { return symbolOffCenter; }
-            set { symbolOffCenter = value; }
-        }
-        private int symbolOffCenter;
-
-        public int SymbolSize
-        {
-            get { return symbolSize; }
-            set { symbolSize = value; }
-        }
-        private int symbolSize;
 
         #endregion
 
@@ -403,19 +347,16 @@ namespace SWA.Ariadne.Settings
         }
         private int polygonNumber;
 
-        public int PolygonOffCenter
-        {
-            get { return polygonOffCenter; }
-            set { polygonOffCenter = value; }
-        }
-        private int polygonOffCenter;
+        #endregion
 
-        public int PolygonSize
+        #region Functions
+
+        public int FunctionNumber
         {
-            get { return polygonSize; }
-            set { polygonSize = value; }
+            get { return functionNumber; }
+            set { functionNumber = value; }
         }
-        private int polygonSize;
+        private int functionNumber;
 
         #endregion
 
@@ -428,21 +369,21 @@ namespace SWA.Ariadne.Settings
         }
         private int bitmapNumber;
 
-        public int BitmapOffCenter
-        {
-            get { return bitmapOffCenter; }
-            set { bitmapOffCenter = value; }
-        }
-        private int bitmapOffCenter;
-
-        public int BitmapSize
-        {
-            get { return bitmapSize; }
-            set { bitmapSize = value; }
-        }
-        private int bitmapSize;
-
         #endregion
+
+        public int OutlineOffCenter
+        {
+            get { return outlineOffCenter; }
+            set { outlineOffCenter = value; }
+        }
+        private int outlineOffCenter;
+
+        public int OutlineSize
+        {
+            get { return outlineSize; }
+            set { outlineSize = value; }
+        }
+        private int outlineSize;
 
         public bool VisibleOutlines
         {
@@ -507,28 +448,16 @@ namespace SWA.Ariadne.Settings
             this.ImageFolder = template.ImageFolder;
 
             this.CircleNumber = template.CircleNumber;
-            this.CircleOffCenter = template.CircleOffCenter;
-            this.CircleSize = template.CircleSize;
-
             this.DiamondNumber = template.DiamondNumber;
-            this.DiamondOffCenter = template.DiamondOffCenter;
-            this.DiamondSize = template.DiamondSize;
-            
             this.CharNumber = template.CharNumber;
-            this.CharOffCenter = template.CharOffCenter;
-            this.CharSize = template.CharSize;
-
             this.SymbolNumber = template.SymbolNumber;
-            this.SymbolOffCenter = template.SymbolOffCenter;
-            this.SymbolSize = template.SymbolSize;
-
             this.PolygonNumber = template.PolygonNumber;
-            this.PolygonOffCenter = template.PolygonOffCenter;
-            this.PolygonSize = template.PolygonSize;
-
+            this.FunctionNumber = template.FunctionNumber;
             this.BitmapNumber = template.BitmapNumber;
-            this.BitmapOffCenter = template.BitmapOffCenter;
-            this.BitmapSize = template.BitmapSize;
+
+            this.OutlineOffCenter = template.OutlineOffCenter;
+            this.OutlineSize = template.OutlineSize;
+            this.VisibleOutlines = template.VisibleOutlines;
         }
     }
 }
