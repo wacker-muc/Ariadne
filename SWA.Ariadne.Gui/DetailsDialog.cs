@@ -49,6 +49,9 @@ namespace SWA.Ariadne.Gui
 
             #region Put the panel settings into the data object.
 
+            data.IrregularMaze = this.irregularMazeCheckBox.Checked;
+            data.Irregularity = (int)this.irregularityNumericUpDown.Value;
+
             data.ImageNumber = (int) this.imageNumberNumericUpDown.Value;
             data.ImageMinSize = (int) this.imageMinSizeNumericUpDown.Value;
             data.ImageMaxSize = (int) this.imageMaxSizeNumericUpDown.Value;

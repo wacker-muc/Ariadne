@@ -45,8 +45,8 @@ namespace SWA.Ariadne.Logic
                 MazeSquare.WallPosition wp = SelectDirection(sq1, openWalls);
                 MazeSquare sq2 = sq1.NeighborSquare(wp);
 
-                double d1 = Distance(referenceSquare, sq1);
-                double d2 = Distance(referenceSquare, sq2);
+                double d1 = Maze.Distance(referenceSquare, sq1);
+                double d2 = Maze.Distance(referenceSquare, sq2);
                 double distanceGain = distanceSign * ((d2 - d1) / d1);
                 if (distanceGain < bestDistanceGain)
                 {

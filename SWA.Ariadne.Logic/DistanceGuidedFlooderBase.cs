@@ -52,7 +52,7 @@ namespace SWA.Ariadne.Logic
 
             for (int i = 0; i < list.Count; i++)
             {
-                double distance = distanceSign * Distance(referenceSquare, list[i]);
+                double distance = distanceSign * Maze.Distance(referenceSquare, list[i]);
                 if (distance < bestDistance)
                 {
                     bestIdx = i;
@@ -76,7 +76,7 @@ namespace SWA.Ariadne.Logic
 
             for (int i = 0; i < openWalls.Count; i++)
             {
-                double distance = distanceSign * Distance(referenceSquare, sq1.NeighborSquare(openWalls[i]));
+                double distance = distanceSign * Maze.Distance(referenceSquare, sq1.NeighborSquare(openWalls[i]));
                 if (distance < bestDistance)
                 {
                     bestIdx = i;

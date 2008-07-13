@@ -55,7 +55,7 @@ namespace SWA.Ariadne.Logic
 
             for (int i = 0; i < openWalls.Count; i++)
             {
-                double distance = Distance(ReferenceSquare, sq1.NeighborSquare(openWalls[i]));
+                double distance = Maze.Distance(ReferenceSquare, sq1.NeighborSquare(openWalls[i]));
                 if (distance < bestDistance)
                 {
                     bestIdx = i;
