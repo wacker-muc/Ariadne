@@ -52,16 +52,19 @@ namespace SWA.Ariadne.Gui
             this.setLayoutButton = new System.Windows.Forms.Button();
             this.colorsPage = new System.Windows.Forms.TabPage();
             this.setColorsButton = new System.Windows.Forms.Button();
-            this.backwardColorLabel = new SWA.Ariadne.Settings.ColorLabel();
-            this.forwardColorLabel = new SWA.Ariadne.Settings.ColorLabel();
-            this.refBColorLabel = new SWA.Ariadne.Settings.ColorLabel();
-            this.refAColorLabel = new SWA.Ariadne.Settings.ColorLabel();
             this.button1 = new System.Windows.Forms.Button();
             this.label15 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
+            this.backwardColorLabel = new SWA.Ariadne.Settings.ColorLabel();
+            this.forwardColorLabel = new SWA.Ariadne.Settings.ColorLabel();
+            this.refBColorLabel = new SWA.Ariadne.Settings.ColorLabel();
+            this.refAColorLabel = new SWA.Ariadne.Settings.ColorLabel();
             this.shapePage = new System.Windows.Forms.TabPage();
+            this.irregularityNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.label29 = new System.Windows.Forms.Label();
+            this.irregularMazeCheckBox = new System.Windows.Forms.CheckBox();
             this.resultingAreaTextBox1 = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
             this.setShapeButton = new System.Windows.Forms.Button();
@@ -122,6 +125,7 @@ namespace SWA.Ariadne.Gui
             ((System.ComponentModel.ISupportInitialize)(this.gridWidthNumericUpDown)).BeginInit();
             this.colorsPage.SuspendLayout();
             this.shapePage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.irregularityNumericUpDown)).BeginInit();
             this.imagesPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imageMinSizeNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageMaxSizeNumericUpDown)).BeginInit();
@@ -435,15 +439,15 @@ namespace SWA.Ariadne.Gui
             // colorsPage
             // 
             this.colorsPage.Controls.Add(this.setColorsButton);
-            this.colorsPage.Controls.Add(this.backwardColorLabel);
-            this.colorsPage.Controls.Add(this.forwardColorLabel);
-            this.colorsPage.Controls.Add(this.refBColorLabel);
-            this.colorsPage.Controls.Add(this.refAColorLabel);
             this.colorsPage.Controls.Add(this.button1);
             this.colorsPage.Controls.Add(this.label15);
             this.colorsPage.Controls.Add(this.label14);
             this.colorsPage.Controls.Add(this.label13);
             this.colorsPage.Controls.Add(this.label11);
+            this.colorsPage.Controls.Add(this.backwardColorLabel);
+            this.colorsPage.Controls.Add(this.forwardColorLabel);
+            this.colorsPage.Controls.Add(this.refBColorLabel);
+            this.colorsPage.Controls.Add(this.refAColorLabel);
             this.colorsPage.Location = new System.Drawing.Point(4, 22);
             this.colorsPage.Name = "colorsPage";
             this.colorsPage.Padding = new System.Windows.Forms.Padding(3);
@@ -461,6 +465,52 @@ namespace SWA.Ariadne.Gui
             this.setColorsButton.Text = "Set";
             this.setColorsButton.UseVisualStyleBackColor = true;
             this.setColorsButton.Click += new System.EventHandler(this.OnSet);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(91, 146);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 7;
+            this.button1.Text = "Suggest";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.OnSuggestColors);
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(16, 116);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(55, 13);
+            this.label15.TabIndex = 6;
+            this.label15.Text = "Backward";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(16, 90);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(45, 13);
+            this.label14.TabIndex = 6;
+            this.label14.Text = "Forward";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(16, 58);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(67, 13);
+            this.label13.TabIndex = 5;
+            this.label13.Text = "Reference B";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(16, 32);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(67, 13);
+            this.label11.TabIndex = 4;
+            this.label11.Text = "Reference A";
             // 
             // backwardColorLabel
             // 
@@ -510,54 +560,11 @@ namespace SWA.Ariadne.Gui
             this.refAColorLabel.Text = "h = 051, s = 1,00, b = 0,50";
             this.refAColorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(91, 146);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 7;
-            this.button1.Text = "Suggest";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.OnSuggestColors);
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(16, 116);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(55, 13);
-            this.label15.TabIndex = 6;
-            this.label15.Text = "Backward";
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(16, 90);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(45, 13);
-            this.label14.TabIndex = 6;
-            this.label14.Text = "Forward";
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(16, 58);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(67, 13);
-            this.label13.TabIndex = 5;
-            this.label13.Text = "Reference B";
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(16, 32);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(67, 13);
-            this.label11.TabIndex = 4;
-            this.label11.Text = "Reference A";
-            // 
             // shapePage
             // 
+            this.shapePage.Controls.Add(this.irregularityNumericUpDown);
+            this.shapePage.Controls.Add(this.label29);
+            this.shapePage.Controls.Add(this.irregularMazeCheckBox);
             this.shapePage.Controls.Add(this.resultingAreaTextBox1);
             this.shapePage.Controls.Add(this.label12);
             this.shapePage.Controls.Add(this.setShapeButton);
@@ -580,6 +587,47 @@ namespace SWA.Ariadne.Gui
             this.shapePage.TabIndex = 0;
             this.shapePage.Text = "Shape";
             this.shapePage.UseVisualStyleBackColor = true;
+            // 
+            // irregularityNumericUpDown
+            // 
+            this.irregularityNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.dataBindingSource, "Irregularity", true));
+            this.irregularityNumericUpDown.Location = new System.Drawing.Point(164, 110);
+            this.irregularityNumericUpDown.Minimum = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            this.irregularityNumericUpDown.Name = "irregularityNumericUpDown";
+            this.irregularityNumericUpDown.Size = new System.Drawing.Size(46, 20);
+            this.irregularityNumericUpDown.TabIndex = 22;
+            this.irregularityNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.irregularityNumericUpDown.Value = new decimal(new int[] {
+            80,
+            0,
+            0,
+            0});
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Location = new System.Drawing.Point(208, 113);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(15, 13);
+            this.label29.TabIndex = 104;
+            this.label29.Text = "%";
+            this.label29.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // irregularMazeCheckBox
+            // 
+            this.irregularMazeCheckBox.AutoSize = true;
+            this.irregularMazeCheckBox.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.irregularMazeCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.dataBindingSource, "IrregularMaze", true));
+            this.irregularMazeCheckBox.Location = new System.Drawing.Point(30, 111);
+            this.irregularMazeCheckBox.Name = "irregularMazeCheckBox";
+            this.irregularMazeCheckBox.Size = new System.Drawing.Size(128, 17);
+            this.irregularMazeCheckBox.TabIndex = 21;
+            this.irregularMazeCheckBox.Text = "Irregular Maze Builder";
+            this.irregularMazeCheckBox.UseVisualStyleBackColor = true;
             // 
             // resultingAreaTextBox1
             // 
@@ -618,7 +666,7 @@ namespace SWA.Ariadne.Gui
             // codeLabel
             // 
             this.codeLabel.AutoSize = true;
-            this.codeLabel.Location = new System.Drawing.Point(16, 116);
+            this.codeLabel.Location = new System.Drawing.Point(16, 153);
             this.codeLabel.Name = "codeLabel";
             this.codeLabel.Size = new System.Drawing.Size(32, 13);
             this.codeLabel.TabIndex = 25;
@@ -629,11 +677,11 @@ namespace SWA.Ariadne.Gui
             // codeTextBox
             // 
             this.codeTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.dataBindingSource, "Code", true));
-            this.codeTextBox.Location = new System.Drawing.Point(91, 113);
+            this.codeTextBox.Location = new System.Drawing.Point(91, 150);
             this.codeTextBox.MaxLength = 14;
             this.codeTextBox.Name = "codeTextBox";
             this.codeTextBox.Size = new System.Drawing.Size(154, 20);
-            this.codeTextBox.TabIndex = 4;
+            this.codeTextBox.TabIndex = 31;
             this.codeTextBox.Text = "WWWW-WWWW-WWWW";
             this.codeTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.codeTextBox.Visible = false;
@@ -646,6 +694,7 @@ namespace SWA.Ariadne.Gui
             this.autoSeedCheckBox.Name = "autoSeedCheckBox";
             this.autoSeedCheckBox.Size = new System.Drawing.Size(15, 14);
             this.autoSeedCheckBox.TabIndex = 13;
+            this.autoSeedCheckBox.TabStop = false;
             this.autoSeedCheckBox.UseVisualStyleBackColor = true;
             this.autoSeedCheckBox.Click += new System.EventHandler(this.OnClickImmediateUpdate);
             // 
@@ -677,6 +726,7 @@ namespace SWA.Ariadne.Gui
             this.autoMazeHeightCheckBox.Name = "autoMazeHeightCheckBox";
             this.autoMazeHeightCheckBox.Size = new System.Drawing.Size(15, 14);
             this.autoMazeHeightCheckBox.TabIndex = 12;
+            this.autoMazeHeightCheckBox.TabStop = false;
             this.autoMazeHeightCheckBox.UseVisualStyleBackColor = true;
             this.autoMazeHeightCheckBox.Click += new System.EventHandler(this.OnClickImmediateUpdate);
             // 
@@ -717,6 +767,7 @@ namespace SWA.Ariadne.Gui
             this.autoMazeWidthCheckBox.Name = "autoMazeWidthCheckBox";
             this.autoMazeWidthCheckBox.Size = new System.Drawing.Size(15, 14);
             this.autoMazeWidthCheckBox.TabIndex = 11;
+            this.autoMazeWidthCheckBox.TabStop = false;
             this.autoMazeWidthCheckBox.UseVisualStyleBackColor = true;
             this.autoMazeWidthCheckBox.Click += new System.EventHandler(this.OnClickImmediateUpdate);
             // 
@@ -1230,6 +1281,7 @@ namespace SWA.Ariadne.Gui
             this.colorsPage.PerformLayout();
             this.shapePage.ResumeLayout(false);
             this.shapePage.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.irregularityNumericUpDown)).EndInit();
             this.imagesPage.ResumeLayout(false);
             this.imagesPage.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imageMinSizeNumericUpDown)).EndInit();
@@ -1336,5 +1388,8 @@ namespace SWA.Ariadne.Gui
         private System.Windows.Forms.Label label27;
         private System.Windows.Forms.NumericUpDown functionNumberNumericUpDown;
         private System.Windows.Forms.Label label26;
+        private System.Windows.Forms.CheckBox irregularMazeCheckBox;
+        private System.Windows.Forms.NumericUpDown irregularityNumericUpDown;
+        private System.Windows.Forms.Label label29;
     }
 }

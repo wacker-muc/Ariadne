@@ -110,6 +110,41 @@ namespace SWA.Ariadne.Model
             }
         }
 
+        IrregularMazeShape irregularMazeShape = null;
+
+        /// <summary>
+        /// When true, a uniform (completely random) maze is built.
+        /// When false, specific path shapes are preferred.
+        /// </summary>
+        public bool Irregular
+        {
+            get
+            {
+                return (irregularMazeShape != null);
+            }
+            set
+            {
+                if (value == false)
+                {
+                    irregularMazeShape = null;
+                }
+                else
+                {
+                    irregularMazeShape = IrregularMazeShape.Instance(this.random, this);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Percentage of cases when the irregularMazeShape is applied, range 0..100.
+        /// </summary>
+        public int Irregularity
+        {
+            get { return irregularity; }
+            set { irregularity = value; }
+        }
+        private int irregularity = 80;
+
         #endregion
 
         #region Constructor
@@ -487,7 +522,7 @@ namespace SWA.Ariadne.Model
                 // Prefer real dead ends.
                 // Reject an end point with less than three walls (with probability 90%).
                 //
-                if ((this.CountClosedWalls(squares[xEnd, yEnd]) < MazeSquare.WP_NUM - 1) && (random.Next(100) < 90))
+                if ((CountClosedWalls(squares[xEnd, yEnd]) < MazeSquare.WP_NUM - 1) && (random.Next(100) < 90))
                 {
                     reject = true;
                 }
@@ -631,18 +666,37 @@ namespace SWA.Ariadne.Model
                     continue; // no walls to choose from
                 }
 
+                // Add the current cell to the stack.
+                // Note: Do this before replacing unresolvedWalls with preferredWalls.
+                if (unresolvedWalls.Count > 1)
+                {
+                    stack.Push(sq0);
+                }
+
+                // Use only preferred wall positions.
+                if (unresolvedWalls.Count > 1 && irregularMazeShape != null && (random.Next(100) < this.irregularity))
+                {
+                    bool[] preferredPositions = irregularMazeShape.PreferredDirections(sq0);
+                    List<MazeSquare.WallPosition> preferredWalls = new List<MazeSquare.WallPosition>(unresolvedWalls.Count);
+                    foreach (MazeSquare.WallPosition p in unresolvedWalls)
+                    {
+                        if (preferredPositions[(int)p])
+                        {
+                            preferredWalls.Add(p);
+                        }
+                    }
+                    if (preferredWalls.Count > 0)
+                    {
+                        unresolvedWalls = preferredWalls;
+                    }
+                }
+
                 // Choose one wall.
                 MazeSquare.WallPosition wp0 = unresolvedWalls[random.Next(unresolvedWalls.Count)];
                 MazeSquare sq1 = sq0.NeighborSquare(wp0);
 
                 // Open the wall.
                 sq0[wp0] = sq1[MazeSquare.OppositeWall(wp0)] = MazeSquare.WallState.WS_OPEN;
-
-                // Add the current cell to the stack.
-                if (unresolvedWalls.Count > 1)
-                {
-                    stack.Push(sq0);
-                }
 
                 // Add the new cell to the stack.
                 sq1.isConnected = true;
@@ -758,7 +812,7 @@ namespace SWA.Ariadne.Model
 
         #region Auxiliary methods
 
-        private int CountClosedWalls(MazeSquare sq)
+        private static int CountClosedWalls(MazeSquare sq)
         {
             int result = 0;
 
@@ -778,6 +832,19 @@ namespace SWA.Ariadne.Model
             return string.Format("{0}: [{1},{2}], ({3},{4}) -> ({5},{6})", Code, XSize, YSize, xStart, yStart, xEnd, yEnd);
         }
 
+        /// <summary>
+        /// Returns the euclidian distance between two squares.
+        /// </summary>
+        /// <param name="sq1"></param>
+        /// <param name="sq2"></param>
+        /// <returns></returns>
+        public static double Distance(MazeSquare sq1, MazeSquare sq2)
+        {
+            double dx = sq1.XPos - sq2.XPos;
+            double dy = sq1.YPos - sq2.YPos;
+            return Math.Sqrt((dx * dx) + (dy * dy));
+        }
+
         #endregion
 
         #region IAriadneSettingsSource implementation
@@ -792,6 +859,8 @@ namespace SWA.Ariadne.Model
             data.MazeHeight = this.ySize;
             data.Seed = this.seed;
             data.Code = this.Code;
+            data.IrregularMaze = this.Irregular;
+            data.Irregularity = this.Irregularity;
         }
 
         /// <summary>

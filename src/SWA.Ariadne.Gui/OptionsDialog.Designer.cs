@@ -32,13 +32,13 @@ namespace SWA.Ariadne.Gui
             this.buttonCancel = new System.Windows.Forms.Button();
             this.labelCopyright = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabPageGeneral = new System.Windows.Forms.TabPage();
             this.checkBoxEfficientSolvers = new System.Windows.Forms.CheckBox();
             this.textBoxStepsPerSecond = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.labelStepsPerSecond = new System.Windows.Forms.Label();
             this.checkBoxDetailsBox = new System.Windows.Forms.CheckBox();
             this.checkBoxBlinking = new System.Windows.Forms.CheckBox();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.tabPageImages = new System.Windows.Forms.TabPage();
             this.imageMinSizeNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.labelImagesMinSize = new System.Windows.Forms.Label();
             this.imageMaxSizeNumericUpDown = new System.Windows.Forms.NumericUpDown();
@@ -47,16 +47,17 @@ namespace SWA.Ariadne.Gui
             this.labelImagesNumber = new System.Windows.Forms.Label();
             this.selectImageFolderButton = new System.Windows.Forms.Button();
             this.imageFolderTextBox = new System.Windows.Forms.TextBox();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.tabPageExtras = new System.Windows.Forms.TabPage();
+            this.checkBoxIrregularMazes = new System.Windows.Forms.CheckBox();
             this.checkBoxOutlineShapes = new System.Windows.Forms.CheckBox();
             this.imageFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.tabControl1.SuspendLayout();
-            this.tabPage1.SuspendLayout();
-            this.tabPage2.SuspendLayout();
+            this.tabPageGeneral.SuspendLayout();
+            this.tabPageImages.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imageMinSizeNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageMaxSizeNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageNumberNumericUpDown)).BeginInit();
-            this.tabPage3.SuspendLayout();
+            this.tabPageExtras.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonOK
@@ -97,29 +98,29 @@ namespace SWA.Ariadne.Gui
             // 
             // tabControl1
             // 
-            this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Controls.Add(this.tabPage3);
+            this.tabControl1.Controls.Add(this.tabPageGeneral);
+            this.tabControl1.Controls.Add(this.tabPageImages);
+            this.tabControl1.Controls.Add(this.tabPageExtras);
             this.tabControl1.Location = new System.Drawing.Point(0, 1);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(212, 132);
             this.tabControl1.TabIndex = 8;
             // 
-            // tabPage1
+            // tabPageGeneral
             // 
-            this.tabPage1.Controls.Add(this.checkBoxEfficientSolvers);
-            this.tabPage1.Controls.Add(this.textBoxStepsPerSecond);
-            this.tabPage1.Controls.Add(this.label1);
-            this.tabPage1.Controls.Add(this.checkBoxDetailsBox);
-            this.tabPage1.Controls.Add(this.checkBoxBlinking);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(204, 106);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "General";
-            this.tabPage1.UseVisualStyleBackColor = true;
+            this.tabPageGeneral.Controls.Add(this.checkBoxEfficientSolvers);
+            this.tabPageGeneral.Controls.Add(this.textBoxStepsPerSecond);
+            this.tabPageGeneral.Controls.Add(this.labelStepsPerSecond);
+            this.tabPageGeneral.Controls.Add(this.checkBoxDetailsBox);
+            this.tabPageGeneral.Controls.Add(this.checkBoxBlinking);
+            this.tabPageGeneral.Location = new System.Drawing.Point(4, 22);
+            this.tabPageGeneral.Name = "tabPageGeneral";
+            this.tabPageGeneral.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageGeneral.Size = new System.Drawing.Size(204, 106);
+            this.tabPageGeneral.TabIndex = 0;
+            this.tabPageGeneral.Text = "General";
+            this.tabPageGeneral.UseVisualStyleBackColor = true;
             // 
             // checkBoxEfficientSolvers
             // 
@@ -143,16 +144,16 @@ namespace SWA.Ariadne.Gui
             this.textBoxStepsPerSecond.Text = "200";
             this.textBoxStepsPerSecond.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // label1
+            // labelStepsPerSecond
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.label1.Location = new System.Drawing.Point(58, 80);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(92, 13);
-            this.label1.TabIndex = 11;
-            this.label1.Text = "Steps per Second";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.labelStepsPerSecond.AutoSize = true;
+            this.labelStepsPerSecond.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.labelStepsPerSecond.Location = new System.Drawing.Point(58, 80);
+            this.labelStepsPerSecond.Name = "labelStepsPerSecond";
+            this.labelStepsPerSecond.Size = new System.Drawing.Size(92, 13);
+            this.labelStepsPerSecond.TabIndex = 11;
+            this.labelStepsPerSecond.Text = "Steps per Second";
+            this.labelStepsPerSecond.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // checkBoxDetailsBox
             // 
@@ -181,23 +182,23 @@ namespace SWA.Ariadne.Gui
             this.checkBoxBlinking.Text = "Paint Blinking Target Square";
             this.checkBoxBlinking.UseVisualStyleBackColor = true;
             // 
-            // tabPage2
+            // tabPageImages
             // 
-            this.tabPage2.Controls.Add(this.imageMinSizeNumericUpDown);
-            this.tabPage2.Controls.Add(this.labelImagesMinSize);
-            this.tabPage2.Controls.Add(this.imageMaxSizeNumericUpDown);
-            this.tabPage2.Controls.Add(this.labelImagesMaxSize);
-            this.tabPage2.Controls.Add(this.imageNumberNumericUpDown);
-            this.tabPage2.Controls.Add(this.labelImagesNumber);
-            this.tabPage2.Controls.Add(this.selectImageFolderButton);
-            this.tabPage2.Controls.Add(this.imageFolderTextBox);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(204, 106);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Images";
-            this.tabPage2.UseVisualStyleBackColor = true;
+            this.tabPageImages.Controls.Add(this.imageMinSizeNumericUpDown);
+            this.tabPageImages.Controls.Add(this.labelImagesMinSize);
+            this.tabPageImages.Controls.Add(this.imageMaxSizeNumericUpDown);
+            this.tabPageImages.Controls.Add(this.labelImagesMaxSize);
+            this.tabPageImages.Controls.Add(this.imageNumberNumericUpDown);
+            this.tabPageImages.Controls.Add(this.labelImagesNumber);
+            this.tabPageImages.Controls.Add(this.selectImageFolderButton);
+            this.tabPageImages.Controls.Add(this.imageFolderTextBox);
+            this.tabPageImages.Location = new System.Drawing.Point(4, 22);
+            this.tabPageImages.Name = "tabPageImages";
+            this.tabPageImages.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageImages.Size = new System.Drawing.Size(204, 106);
+            this.tabPageImages.TabIndex = 1;
+            this.tabPageImages.Text = "Images";
+            this.tabPageImages.UseVisualStyleBackColor = true;
             // 
             // imageMinSizeNumericUpDown
             // 
@@ -313,16 +314,31 @@ namespace SWA.Ariadne.Gui
             this.imageFolderTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.imageFolderTextBox.WordWrap = false;
             // 
-            // tabPage3
+            // tabPageExtras
             // 
-            this.tabPage3.Controls.Add(this.checkBoxOutlineShapes);
-            this.tabPage3.Location = new System.Drawing.Point(4, 22);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(204, 106);
-            this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "Extras";
-            this.tabPage3.UseVisualStyleBackColor = true;
+            this.tabPageExtras.Controls.Add(this.checkBoxIrregularMazes);
+            this.tabPageExtras.Controls.Add(this.checkBoxOutlineShapes);
+            this.tabPageExtras.Location = new System.Drawing.Point(4, 22);
+            this.tabPageExtras.Name = "tabPageExtras";
+            this.tabPageExtras.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageExtras.Size = new System.Drawing.Size(204, 106);
+            this.tabPageExtras.TabIndex = 2;
+            this.tabPageExtras.Text = "Extras";
+            this.tabPageExtras.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxIrregularMazes
+            // 
+            this.checkBoxIrregularMazes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBoxIrregularMazes.AutoSize = true;
+            this.checkBoxIrregularMazes.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.checkBoxIrregularMazes.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.checkBoxIrregularMazes.Location = new System.Drawing.Point(43, 31);
+            this.checkBoxIrregularMazes.Name = "checkBoxIrregularMazes";
+            this.checkBoxIrregularMazes.Size = new System.Drawing.Size(124, 17);
+            this.checkBoxIrregularMazes.TabIndex = 2;
+            this.checkBoxIrregularMazes.Text = "Build Irregular Mazes";
+            this.checkBoxIrregularMazes.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.checkBoxIrregularMazes.UseVisualStyleBackColor = true;
             // 
             // checkBoxOutlineShapes
             // 
@@ -354,15 +370,15 @@ namespace SWA.Ariadne.Gui
             this.Text = "Ariadne Settings";
             this.Load += new System.EventHandler(this.OptionsDialog_Load);
             this.tabControl1.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
-            this.tabPage1.PerformLayout();
-            this.tabPage2.ResumeLayout(false);
-            this.tabPage2.PerformLayout();
+            this.tabPageGeneral.ResumeLayout(false);
+            this.tabPageGeneral.PerformLayout();
+            this.tabPageImages.ResumeLayout(false);
+            this.tabPageImages.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imageMinSizeNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageMaxSizeNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageNumberNumericUpDown)).EndInit();
-            this.tabPage3.ResumeLayout(false);
-            this.tabPage3.PerformLayout();
+            this.tabPageExtras.ResumeLayout(false);
+            this.tabPageExtras.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -374,13 +390,13 @@ namespace SWA.Ariadne.Gui
         private System.Windows.Forms.Button buttonCancel;
         private System.Windows.Forms.Label labelCopyright;
         private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage tabPageGeneral;
         private System.Windows.Forms.CheckBox checkBoxEfficientSolvers;
         private System.Windows.Forms.TextBox textBoxStepsPerSecond;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label labelStepsPerSecond;
         private System.Windows.Forms.CheckBox checkBoxDetailsBox;
         private System.Windows.Forms.CheckBox checkBoxBlinking;
-        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.TabPage tabPageImages;
         private System.Windows.Forms.NumericUpDown imageMinSizeNumericUpDown;
         private System.Windows.Forms.Label labelImagesMinSize;
         private System.Windows.Forms.NumericUpDown imageMaxSizeNumericUpDown;
@@ -390,8 +406,9 @@ namespace SWA.Ariadne.Gui
         private System.Windows.Forms.Button selectImageFolderButton;
         private System.Windows.Forms.TextBox imageFolderTextBox;
         private System.Windows.Forms.FolderBrowserDialog imageFolderBrowserDialog;
-        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.TabPage tabPageExtras;
         private System.Windows.Forms.CheckBox checkBoxOutlineShapes;
+        private System.Windows.Forms.CheckBox checkBoxIrregularMazes;
 
     }
 }

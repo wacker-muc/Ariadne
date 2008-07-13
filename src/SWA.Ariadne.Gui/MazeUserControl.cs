@@ -978,6 +978,8 @@ namespace SWA.Ariadne.Gui
             MazeForm.MakeReservedAreas(maze);
             this.ReserveAreasForImages(data);
             this.AddOutlineShapes(data);
+            maze.Irregular = data.IrregularMaze;
+            maze.Irregularity = data.Irregularity;
             maze.CreateMaze();
             MazeForm.UpdateStatusLine();
             MazeForm.UpdateCaption();

@@ -90,7 +90,20 @@ namespace SWA.Ariadne.Settings
             get { return (code[M] != code[S]); }
         }
         private string[] code = new string[2];
-        
+
+        public bool IrregularMaze
+        {
+            get { return irregularMaze; }
+            set { irregularMaze = value; }
+        }
+        private bool irregularMaze;
+
+        public int Irregularity
+        {
+            get { return irregularity; }
+            set { irregularity = value; }
+        }
+        private int irregularity;
 
         #endregion
 
@@ -442,6 +455,9 @@ namespace SWA.Ariadne.Settings
 
         public void CopyContentsParameters(AriadneSettingsData template)
         {
+            this.IrregularMaze = template.IrregularMaze;
+            this.Irregularity = template.Irregularity;
+
             this.ImageNumber = template.ImageNumber;
             this.ImageMinSize = template.ImageMinSize;
             this.ImageMaxSize = template.ImageMaxSize;
