@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using SWA.Ariadne.Outlines;
 
 namespace SWA.Ariadne.Model
 {
@@ -11,12 +12,24 @@ namespace SWA.Ariadne.Model
     {
         #region Member variables.
 
+        internal enum Kind
+        {
+            Mixed = -1,
+            Neutral = 0,
+            Straights,
+            Circles,
+            Zigzags,
+        }
+
+        protected readonly Kind kind;
+
         #endregion
 
         #region Constructor
 
-        protected IrregularMazeShape()
+        protected IrregularMazeShape(Kind kind)
         {
+            this.kind = kind;
         }
 
         #endregion
@@ -37,10 +50,67 @@ namespace SWA.Ariadne.Model
 
         /// <summary>
         /// Returns a randomly chosen instance.
+        /// Some patterns are "simple", applied to the whole maze area.
+        /// Some patterns are "mixed", with two different patterns on the inside/outside of an OutlineShape.
         /// </summary>
         /// <param name="r"></param>
         /// <returns></returns>
         public static IrregularMazeShape Instance(Random r, Maze maze)
+        {
+            if (maze.OutlineShape != null && r.Next(100) < 10)
+            {
+                // Build a mixed instance, using the OutlineShape laid into the maze.
+
+                if (r.Next(100) < 50)
+                {
+                    // two different patterns inside and outside of the OutlineShape
+                    return MixedInstance(r, maze, maze.OutlineShape);
+                }
+                else if (r.Next(100) < 66)
+                {
+                    // the outside of the OutlineShape is regular
+                    return ConfinedInstance(r, maze, maze.OutlineShape, true);
+                }
+                else
+                {
+                    // the inside of the OutlineShape is regular
+                    return ConfinedInstance(r, maze, maze.OutlineShape, false);
+                }
+            }
+            else if (maze.OutlineShape == null && r.Next(100) < 20)
+            {
+                // Build a mixed instance, using a new OutlineShape.
+                
+                OutlineShape outline = OutlineShape.RandomInstance(r, maze.XSize, maze.YSize, 0.3, 0.9);
+
+                if (r.Next(100) < 20)
+                {
+                    // two different patterns inside and outside of the OutlineShape
+                    return MixedInstance(r, maze, outline);
+                }
+                else if (r.Next(100) < 50)
+                {
+                    // the outside of the OutlineShape is regular
+                    return ConfinedInstance(r, maze, outline, true);
+                }
+                else
+                {
+                    // the inside of the OutlineShape is regular
+                    return ConfinedInstance(r, maze, outline, false);
+                }
+            }
+            else
+            {
+                return SimpleInstance(r, maze);
+            }
+        }
+            
+        /// <summary>
+        /// Returns a randomly chosen (simple) instance.
+        /// </summary>
+        /// <param name="r"></param>
+        /// <returns></returns>
+        private static IrregularMazeShape SimpleInstance(Random r, Maze maze)
         {
             int choice = r.Next(20);
 
@@ -103,9 +173,74 @@ namespace SWA.Ariadne.Model
             }
         }
 
+        /// <summary>
+        /// Returns a combination of two different patterns on the inside/outside of the given OutlineShape.
+        /// </summary>
+        /// <param name="r"></param>
+        /// <param name="maze"></param>
+        /// <param name="outline"></param>
+        /// <returns></returns>
+        private static IrregularMazeShape MixedInstance(Random r, Maze maze, OutlineShape outline)
+        {
+            IrregularMazeShape inside = null, outside = null;
+            do
+            {
+                inside = SimpleInstance(r, maze);
+                outside = SimpleInstance(r, maze);
+            } while (inside.kind <= Kind.Neutral
+                || outside.kind <= Kind.Neutral
+                || inside.kind == outside.kind
+                || (inside.kind != Kind.Zigzags && outside.kind != Kind.Zigzags)
+                );
+
+            return new MixedIrregularMazeShape(outline, inside, outside);
+        }
+
+        /// <summary>
+        /// Returns an irregular pattern that is only applied to the inside/outside of the given OutlineShape.
+        /// The remainder is a regular pattern (without preferred directions).
+        /// </summary>
+        /// <param name="r"></param>
+        /// <param name="maze"></param>
+        /// <param name="outline"></param>
+        /// <param name="confinedToInside">
+        /// When true: only the inside is irregular.
+        /// When false: only the outside is irregular.
+        /// </param>
+        /// <returns></returns>
+        private static IrregularMazeShape ConfinedInstance(Random r, Maze maze, OutlineShape outline, bool confinedToInside)
+        {
+            IrregularMazeShape regular = new PreferNothing();
+            IrregularMazeShape irregular = SimpleInstance(r, maze);
+
+            if (confinedToInside)
+            {
+                return new MixedIrregularMazeShape(outline, irregular, regular);
+            }
+            else
+            {
+                return new MixedIrregularMazeShape(outline, regular, irregular);
+            }
+        }
+
         #endregion
 
         #region Internal derived classes, implementing different patterns.
+
+        private class PreferNothing : IrregularMazeShape
+        {
+            public PreferNothing()
+                : base(Kind.Neutral)
+            {
+            }
+
+            public override bool[] PreferredDirections(MazeSquare sq)
+            {
+                bool[] result = new bool[4] { false, false, false, false };
+
+                return result;
+            }
+        }
 
         /// <summary>
         /// Prefer walls opposite of already open walls.
@@ -113,6 +248,11 @@ namespace SWA.Ariadne.Model
         /// </summary>
         private class PreferStraightPaths : IrregularMazeShape
         {
+            public PreferStraightPaths()
+                : base(Kind.Straights)
+            {
+            }
+
             public override bool[] PreferredDirections(MazeSquare sq)
             {
                 bool[] result = new bool[4];
@@ -132,6 +272,11 @@ namespace SWA.Ariadne.Model
         /// <summary>
         private class PreferAngledPaths : IrregularMazeShape
         {
+            public PreferAngledPaths()
+                : base(Kind.Zigzags)
+            {
+            }
+
             public override bool[] PreferredDirections(MazeSquare sq)
             {
                 bool[] result = new bool[4];
@@ -151,6 +296,11 @@ namespace SWA.Ariadne.Model
         /// </summary>
         private class PreferUndulatingPaths : IrregularMazeShape
         {
+            public PreferUndulatingPaths()
+                : base(Kind.Zigzags)
+            {
+            }
+
             public override bool[] PreferredDirections(MazeSquare sq)
             {
                 bool[] result = new bool[4] { false, false, false, false };
@@ -205,6 +355,7 @@ namespace SWA.Ariadne.Model
             /// <param name="approximateCircles">Selects a round or square basic shape.</param>
             /// <param name="followDiagonals">Selects shape in the four corner octants.</param>
             public PreferPathsRelativeToReferenceSquare(Maze maze, int xPartitions, int yPartitions, bool minimizeDistance, bool approximateCircles, bool followDiagonals)
+                : base(approximateCircles ? Kind.Circles : Kind.Straights)
             {
                 this.xSize = maze.XSize;
                 this.ySize = maze.YSize;
@@ -407,6 +558,37 @@ namespace SWA.Ariadne.Model
                 }
 
                 return new MazeSquare(xCenter, yCenter);
+            }
+        }
+
+        protected class MixedIrregularMazeShape : IrregularMazeShape
+        {
+            #region Member variables
+
+            private readonly OutlineShape outline;
+            private readonly IrregularMazeShape inside;
+            private readonly IrregularMazeShape outside;
+
+            #endregion
+
+            public MixedIrregularMazeShape(OutlineShape outline, IrregularMazeShape inside, IrregularMazeShape outside)
+                : base(Kind.Mixed)
+            {
+                this.outline = outline;
+                this.inside = inside;
+                this.outside = outside;
+            }
+
+            public override bool[] PreferredDirections(MazeSquare sq)
+            {
+                if (outline[sq.XPos, sq.YPos] == true)
+                {
+                    return inside.PreferredDirections(sq);
+                }
+                else
+                {
+                    return outside.PreferredDirections(sq);
+                }
             }
         }
 

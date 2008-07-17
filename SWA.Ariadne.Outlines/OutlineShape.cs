@@ -35,6 +35,61 @@ namespace SWA.Ariadne.Outlines
 
         #region Static methods for creating OutlineShapes
 
+        public delegate OutlineShape OutlineShapeBuilder(Random r, int xSize, int ySize, double centerX, double centerY, double radius);
+
+        // TODO: private
+        private static OutlineShapeBuilder RandomOutlineShapeBuilder(Random r)
+        {
+            OutlineShapeBuilder[] shapeBuilderDelegates = {
+                    OutlineShape.Circle,
+                    OutlineShape.Diamond,
+                    OutlineShape.Polygon,
+                    OutlineShape.Function,
+                    OutlineShape.Char,
+                    OutlineShape.Symbol,
+                    OutlineShape.Bitmap,
+                };
+            int[] ratios = { // (number of items) * (novelty value) / (easyness of recognition)
+                     1 * 20 / 3,
+                     1 *  5 / 4,
+                    (10 + 8 + 6 + 4 + 2) * 8 / 3,
+                    (7 + 2) * 12 / 3 * 8,
+                    10 * 10 / 2,
+                     8 * 15 / 2,
+                    25 * 15 / 1,
+                };
+            
+            int n = 0;
+            foreach (int k in ratios) { n += k; }
+            int p = r.Next(n);
+            
+            OutlineShapeBuilder result = null;
+            for (int i = 0; i < ratios.Length; i++)
+            {
+                if ((p -= ratios[i]) < 0)
+                {
+                    result = shapeBuilderDelegates[i];
+                    break;
+                }
+            }
+
+            return result;
+        }
+
+        public static OutlineShape RandomInstance(Random r, int xSize, int ySize, double offCenter, double size)
+        {
+            double centerX = 0.5, centerY = 0.5;
+
+            double dx = r.NextDouble() - 0.5, dy = r.NextDouble() - 0.5;
+            centerX += offCenter * dx;
+            centerY += offCenter * dy;
+
+            // Reduce size when we are closer to the center than requested.
+            double f = 1.0 - offCenter * 2.0 * (0.5 - Math.Max(Math.Abs(dx), Math.Abs(dy)));
+
+            return RandomOutlineShapeBuilder(r)(r, xSize, ySize, centerX, centerY, size * f);
+        }
+
         /// <summary>
         /// Create an outline shape.
         /// </summary>

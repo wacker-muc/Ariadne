@@ -339,35 +339,8 @@ namespace SWA.Ariadne.Gui
             Random r = RandomFactory.CreateRandom();
             if (r.Next(100) < percentage)
             {
-                MazeUserControl.OutlineShapeBuilder[] shapeBuilderDelegates = {
-                    OutlineShape.Circle,
-                    OutlineShape.Diamond,
-                    OutlineShape.Polygon,
-                    OutlineShape.Function,
-                    OutlineShape.Char,
-                    OutlineShape.Symbol,
-                    OutlineShape.Bitmap,
-                };
-                int[] ratios = { // (number of items) * (novelty value) / (easyness of recognition)
-                     1 * 20 / 3,
-                     1 *  5 / 4,
-                    (10 + 8 + 6 + 4 + 2) * 8 / 3,
-                    (7 + 2) * 12 / 3 * 8,
-                    10 * 10 / 2,
-                     8 * 15 / 2,
-                    25 * 15 / 1,
-                };
-                int n = 0;
-                foreach (int k in ratios) { n += k; }
-                int p = r.Next(n);
-                for (int i = 0; i < ratios.Length; i++)
-                {
-                    if ((p -= ratios[i]) < 0)
-                    {
-                        mazeUserControl.AddOutlineShapes(r, shapeBuilderDelegates[i], 1, 0.3, 0.7);
-                        break;
-                    }
-                }
+                OutlineShape shape = OutlineShape.RandomInstance(r, mazeUserControl.Maze.XSize, mazeUserControl.Maze.YSize, 0.3, 0.7);
+                mazeUserControl.AddOutlineShape(shape);
             }
         }
 
