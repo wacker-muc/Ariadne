@@ -1164,8 +1164,6 @@ namespace SWA.Ariadne.Gui
 
         #region Placement of outline shapes
 
-        internal delegate OutlineShape OutlineShapeBuilder(Random r, int xSize, int ySize, double centerX, double centerY, double radius);
-
         private void AddOutlineShapes(AriadneSettingsData data)
         {
             Random r = maze.Random;
@@ -1173,6 +1171,7 @@ namespace SWA.Ariadne.Gui
             double offCenter = data.OutlineOffCenter / 100.0;
             double size = data.OutlineSize / 100.0;
 
+            // TODO: Replace data.CircleNumber... with a radio button selection; this will become a switch() statement.
             AddOutlineShapes(r, OutlineShape.Circle, data.CircleNumber, offCenter, size);
             AddOutlineShapes(r, OutlineShape.Diamond, data.DiamondNumber, offCenter, size);
             AddOutlineShapes(r, OutlineShape.Char, data.CharNumber, offCenter, size);
@@ -1182,7 +1181,8 @@ namespace SWA.Ariadne.Gui
             AddOutlineShapes(r, OutlineShape.Bitmap, data.BitmapNumber, offCenter, size);
         }
 
-        internal void AddOutlineShapes(Random r, OutlineShapeBuilder shapeBuilderDelegate, int count, double offCenter, double size)
+        // TODO: Don't call this method but the next one: AddOutlineShape().
+        internal void AddOutlineShapes(Random r, OutlineShape.OutlineShapeBuilder shapeBuilderDelegate, int count, double offCenter, double size)
         {
             for (int i = 0; i < count; i++)
             {
@@ -1198,6 +1198,11 @@ namespace SWA.Ariadne.Gui
                 OutlineShape shape = shapeBuilderDelegate(maze.Random, XSize, YSize, centerX, centerY, size * f);
                 this.maze.AddOutlineShape(shape);
             }
+        }
+
+        internal void AddOutlineShape(OutlineShape shape)
+        {
+            this.maze.AddOutlineShape(shape);
         }
 
         #endregion
