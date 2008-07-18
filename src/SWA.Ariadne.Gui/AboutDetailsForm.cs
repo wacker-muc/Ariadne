@@ -15,7 +15,9 @@ namespace SWA.Ariadne.Gui
             InitializeComponent();
 
             this.Size = new Size(400, 480);
-            this.textBoxFeatureLog.Text = Properties.Resources.FeatureLog;
+            this.textBoxFeatureLog.Text = "";
+            this.textBoxFeatureLog.Text += Properties.Resources.Overview;
+            this.textBoxFeatureLog.Text += Properties.Resources.FeatureLog;
         }
     }
 }

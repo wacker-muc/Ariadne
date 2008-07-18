@@ -203,6 +203,7 @@
     <Content Include="Resources\ButtonNew.png" />
     <Content Include="Resources\ButtonRepeat.png">
     </Content>
+    <Content Include="Resources\Overview.txt" />
     <None Include="Resources\ImageStephan_64x64.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

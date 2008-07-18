@@ -124,24 +124,26 @@ namespace SWA.Ariadne.Gui.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 
+        ///   Looks up a localized string similar to -----------------------------------------------------------------------
+        ///
         ///   ====================
         ///   Feature Log: Ariadne
         ///   ====================
         ///
+        ///Copyright (c) Stephan Wacker, 2008
+        ///
         ///-----------------------------------------------------------------------
         ///
-        ///Version 2.3
+        ///Version 3.0
+        ///
+        /// * Maze: optionally build irregular, non-uniform mazes
+        ///
+        ///-----------------------------------------------------------------------
+        ///
+        ///Version 2.3 -- r197
         ///
         /// * Options and Details dialog: better alignment of labels and controls
-        /// * Screen Saver: avoid visible delay and black screen between iterations
-        /// * Strategies: ThickestBranchFlooder, ThinnestBranchFlooder
-        ///
-        ///-----------------------------------------------------------------------
-        ///
-        ///Version 2.2 -- r153
-        ///
-        /// * Details dialog: Images and Outlin [rest of string was truncated]&quot;;.
+        /// * S [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string FeatureLog {
             get {
@@ -153,6 +155,27 @@ namespace SWA.Ariadne.Gui.Properties {
             get {
                 object obj = ResourceManager.GetObject("ImageStephan_64x64", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to -----------------------------------------------------------------------
+        ///
+        ///   =================
+        ///   Overview: Ariadne
+        ///   =================
+        ///
+        ///Copyright (c) Stephan Wacker, 2008
+        ///
+        ///-----------------------------------------------------------------------
+        ///
+        ///The Ariadne application builds and solves a variety of maze puzzles.  When running as a regular application (Ariadne.exe), you can control the maze layout, its shape, additional content etc.  The Ariadne.scr file can be installed as a screen saver.
+        ///
+        ///[Ari [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Overview {
+            get {
+                return ResourceManager.GetString("Overview", resourceCulture);
             }
         }
     }
