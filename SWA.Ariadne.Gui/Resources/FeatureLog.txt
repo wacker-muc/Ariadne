@@ -1,3 +1,4 @@
+-----------------------------------------------------------------------
 
    ====================
    Feature Log: Ariadne
@@ -10,6 +11,7 @@ Copyright (c) Stephan Wacker, 2008
 Version 3.0
 
  * Maze: optionally build irregular, non-uniform mazes
+ * AboutBox: show an Overview describing the application before the Feature Log
 
 -----------------------------------------------------------------------
 
@@ -21,7 +23,7 @@ Version 2.3 -- r197
  * Strategies: ForwardFlooder, BackwardFlooder
  * Outline Shapes: regular and star shaped Polygons
  * Outline Shapes: two-dimensional Functions and Fractals
- * Maze: Version 1 of ID encoding schema: 6 characters (Version 0: 12)
+ * Maze: version 1 of ID encoding schema: 6 characters (version 0: 12)
 
 -----------------------------------------------------------------------
 
@@ -30,7 +32,7 @@ Version 2.2 -- r153
  * Details dialog: Images and Outline Shapes
  * Screen Saver option: display images from a specified directory
  * Screen Saver option: include outline shapes in maze structure
- * Info dialog with feature log
+ * AboutBox: show an Info dialog with Feature Log
  * application has its own icon
  * AboutBox: display the author's photo
 
