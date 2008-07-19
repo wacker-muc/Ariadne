@@ -7,7 +7,7 @@ namespace SWA.Ariadne.Model
     /// <summary>
     /// Provides Maze dimension limits based on the desired Maze.Code length.
     /// </summary>
-    internal class MazeDimensions
+    public class MazeDimensions
     {
         #region Member variables and Properties
 

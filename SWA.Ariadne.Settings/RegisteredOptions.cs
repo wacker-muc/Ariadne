@@ -18,6 +18,7 @@ namespace SWA.Ariadne.Settings
         public const string OPT_IMAGE_FOLDER = "image folder";
         public const string OPT_OUTLINE_SHAPES = "add outline shapes";
         public const string OPT_IRREGULAR_MAZES = "build irregular mazes";
+        public const string OPT_PAINT_ALL_WALLS = "paint all maze walls";
 
         public static bool GetBoolSetting(string name, bool defaultValue)
         {
