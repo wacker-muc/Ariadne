@@ -36,14 +36,30 @@ namespace SWA.Ariadne.Gui
             this.outlineRadioButtonBitmap.Tag = AriadneSettingsData.OutlineKindEnum.Bitmap;
             this.outlineRadioButtonNone.Checked = true;
 
-            // Set the relevant action delegates of all radio buttons.
-            RadioButton template = this.outlineRadioButtonNone;
+            this.wallVisibilityRadioButtonAlways.Tag = AriadneSettingsData.WallVisibilityEnum.Always;
+            this.wallVisibilityRadioButtonNever.Tag = AriadneSettingsData.WallVisibilityEnum.Never;
+            this.wallVisibilityRadioButtonWhenVisited.Tag = AriadneSettingsData.WallVisibilityEnum.WhenVisited;
+            this.wallVisibilityRadioButtonAlways.Checked = true;
+
+            // Set the relevant action delegates of all OutlineKind radio buttons.
+            RadioButton templateOK = this.outlineRadioButtonNone;
             foreach (Control control in this.outlineKindPanel.Controls)
             {
-                if (template.GetType().IsAssignableFrom(control.GetType()))
+                if (templateOK.GetType().IsAssignableFrom(control.GetType()))
                 {
                     RadioButton button = (RadioButton)control;
                     button.CheckedChanged += new System.EventHandler(this.OnOutlineKindChanged);
+                }
+            }
+
+            // Set the relevant action delegates of all WallVisibility radio buttons.
+            RadioButton templateWV = this.wallVisibilityRadioButtonAlways;
+            foreach (Control control in this.wallVisibilityGroupBox.Controls)
+            {
+                if (templateWV.GetType().IsAssignableFrom(control.GetType()))
+                {
+                    RadioButton button = (RadioButton)control;
+                    button.CheckedChanged += new System.EventHandler(this.OnWallVisibilityChanged);
                 }
             }
         }
@@ -75,6 +91,8 @@ namespace SWA.Ariadne.Gui
             data.IrregularMaze = this.irregularMazeCheckBox.Checked;
             data.Irregularity = (int)this.irregularityNumericUpDown.Value;
 
+            data.WallVisibility = AriadneSettingsData.WallVisibilityEnum.Always;
+
             data.AutoColors = true;
 
             data.ImageNumber = (int) this.imageNumberNumericUpDown.Value;
@@ -91,17 +109,28 @@ namespace SWA.Ariadne.Gui
 
             target.FillParametersInto(data);
 
-            // Select the current outline radio button.
-            RadioButton template = this.outlineRadioButtonNone;
+            // Select the current OutlineKind radio button.
+            RadioButton templateOK = this.outlineRadioButtonNone;
             foreach (Control control in this.outlineKindPanel.Controls)
             {
-                if (template.GetType().IsAssignableFrom(control.GetType()))
+                if (templateOK.GetType().IsAssignableFrom(control.GetType()))
                 {
                     RadioButton button = (RadioButton)control;
                     button.Checked = ((AriadneSettingsData.OutlineKindEnum)button.Tag == data.OutlineKind);
                 }
             }
-            
+
+            // Select the current WallVisibility radio button.
+            RadioButton templateWV = this.wallVisibilityRadioButtonAlways;
+            foreach (Control control in this.wallVisibilityGroupBox.Controls)
+            {
+                if (templateWV.GetType().IsAssignableFrom(control.GetType()))
+                {
+                    RadioButton button = (RadioButton)control;
+                    button.Checked = ((AriadneSettingsData.WallVisibilityEnum)button.Tag == data.WallVisibility);
+                }
+            }
+
             CalculateResultingArea();
             
             data.AutoSquareWidth = data.AutoPathWidth = data.AutoWallWidth = data.AutoGridWidth = true;
@@ -146,7 +175,21 @@ namespace SWA.Ariadne.Gui
             RadioButton b = (RadioButton)sender;
             if (b.Checked)
             {
-                data.OutlineKind = (AriadneSettingsData.OutlineKindEnum) b.Tag;
+                data.OutlineKind = (AriadneSettingsData.OutlineKindEnum)b.Tag;
+            }
+        }
+
+        /// <summary>
+        /// Called from the RadioButtons in the wallVisibilityGroupBox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnWallVisibilityChanged(object sender, EventArgs e)
+        {
+            RadioButton b = (RadioButton)sender;
+            if (b.Checked)
+            {
+                data.WallVisibility = (AriadneSettingsData.WallVisibilityEnum)b.Tag;
             }
         }
 
@@ -234,7 +277,8 @@ namespace SWA.Ariadne.Gui
                     data.AutoGridWidth = false;
                     
                     int squareWidth, pathWidth, wallWidth;
-                    MazeUserControl.SuggestWidths(data.GridWidth, out squareWidth, out pathWidth, out wallWidth);
+                    bool visibleWalls = (data.WallVisibility != AriadneSettingsData.WallVisibilityEnum.Never);
+                    MazeUserControl.SuggestWidths(data.GridWidth, visibleWalls, out squareWidth, out pathWidth, out wallWidth);
 
                     data.WallWidth = wallWidth;
                     data.SquareWidth = squareWidth;

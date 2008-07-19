@@ -255,6 +255,20 @@ namespace SWA.Ariadne.Settings
         }
         private string resultingArea;
 
+        public enum WallVisibilityEnum
+        {
+            Always,
+            Never,
+            WhenVisited,
+        }
+        public WallVisibilityEnum WallVisibility
+        {
+            get { return wallVisibility; }
+            set { wallVisibility = value; }
+        }
+        private WallVisibilityEnum wallVisibility;
+
+#if false
         public List<string> CapStyleList
         {
             get { return capStyleList; }
@@ -262,14 +276,13 @@ namespace SWA.Ariadne.Settings
         }
         private List<string> capStyleList;
 
-        /*
         public string CapStyle
         {
             get { return capStyle; }
             set { capStyle = value; }
         }
         private string capStyle;
-         * */
+#endif
 
         public System.Drawing.Drawing2D.LineCap PathCapStyle
         {
@@ -330,7 +343,6 @@ namespace SWA.Ariadne.Settings
             Function,
             Bitmap,
         }
-
         public OutlineKindEnum OutlineKind
         {
             get { return outlineKind; }
@@ -412,6 +424,8 @@ namespace SWA.Ariadne.Settings
         {
             this.IrregularMaze = template.IrregularMaze;
             this.Irregularity = template.Irregularity;
+
+            this.WallVisibility = template.WallVisibility;
 
             this.AutoColors = template.AutoColors;
 

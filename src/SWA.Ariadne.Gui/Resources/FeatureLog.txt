@@ -11,6 +11,7 @@ Copyright (c) Stephan Wacker, 2008
 Version 3.0
 
  * Maze: optionally build irregular, non-uniform mazes
+ * Maze: optionally paint maze walls only around visited squares or not at all
  * AboutBox: show an Overview describing the application before the Feature Log
 
 -----------------------------------------------------------------------

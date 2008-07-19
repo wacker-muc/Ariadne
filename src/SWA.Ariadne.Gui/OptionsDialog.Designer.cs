@@ -51,6 +51,7 @@ namespace SWA.Ariadne.Gui
             this.checkBoxIrregularMazes = new System.Windows.Forms.CheckBox();
             this.checkBoxOutlineShapes = new System.Windows.Forms.CheckBox();
             this.imageFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+            this.checkBoxPaintAllWalls = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPageGeneral.SuspendLayout();
             this.tabPageImages.SuspendLayout();
@@ -316,6 +317,7 @@ namespace SWA.Ariadne.Gui
             // 
             // tabPageExtras
             // 
+            this.tabPageExtras.Controls.Add(this.checkBoxPaintAllWalls);
             this.tabPageExtras.Controls.Add(this.checkBoxIrregularMazes);
             this.tabPageExtras.Controls.Add(this.checkBoxOutlineShapes);
             this.tabPageExtras.Location = new System.Drawing.Point(4, 22);
@@ -332,10 +334,10 @@ namespace SWA.Ariadne.Gui
             this.checkBoxIrregularMazes.AutoSize = true;
             this.checkBoxIrregularMazes.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.checkBoxIrregularMazes.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.checkBoxIrregularMazes.Location = new System.Drawing.Point(43, 31);
+            this.checkBoxIrregularMazes.Location = new System.Drawing.Point(43, 54);
             this.checkBoxIrregularMazes.Name = "checkBoxIrregularMazes";
             this.checkBoxIrregularMazes.Size = new System.Drawing.Size(124, 17);
-            this.checkBoxIrregularMazes.TabIndex = 2;
+            this.checkBoxIrregularMazes.TabIndex = 3;
             this.checkBoxIrregularMazes.Text = "Build Irregular Mazes";
             this.checkBoxIrregularMazes.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.checkBoxIrregularMazes.UseVisualStyleBackColor = true;
@@ -346,13 +348,27 @@ namespace SWA.Ariadne.Gui
             this.checkBoxOutlineShapes.AutoSize = true;
             this.checkBoxOutlineShapes.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.checkBoxOutlineShapes.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.checkBoxOutlineShapes.Location = new System.Drawing.Point(47, 8);
+            this.checkBoxOutlineShapes.Location = new System.Drawing.Point(47, 31);
             this.checkBoxOutlineShapes.Name = "checkBoxOutlineShapes";
             this.checkBoxOutlineShapes.Size = new System.Drawing.Size(120, 17);
-            this.checkBoxOutlineShapes.TabIndex = 1;
+            this.checkBoxOutlineShapes.TabIndex = 2;
             this.checkBoxOutlineShapes.Text = "Add Outline Shapes";
             this.checkBoxOutlineShapes.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.checkBoxOutlineShapes.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxPaintAllWalls
+            // 
+            this.checkBoxPaintAllWalls.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBoxPaintAllWalls.AutoSize = true;
+            this.checkBoxPaintAllWalls.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.checkBoxPaintAllWalls.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.checkBoxPaintAllWalls.Location = new System.Drawing.Point(75, 8);
+            this.checkBoxPaintAllWalls.Name = "checkBoxPaintAllWalls";
+            this.checkBoxPaintAllWalls.Size = new System.Drawing.Size(92, 17);
+            this.checkBoxPaintAllWalls.TabIndex = 1;
+            this.checkBoxPaintAllWalls.Text = "Paint all Walls";
+            this.checkBoxPaintAllWalls.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.checkBoxPaintAllWalls.UseVisualStyleBackColor = true;
             // 
             // OptionsDialog
             // 
@@ -409,6 +425,7 @@ namespace SWA.Ariadne.Gui
         private System.Windows.Forms.TabPage tabPageExtras;
         private System.Windows.Forms.CheckBox checkBoxOutlineShapes;
         private System.Windows.Forms.CheckBox checkBoxIrregularMazes;
+        private System.Windows.Forms.CheckBox checkBoxPaintAllWalls;
 
     }
 }

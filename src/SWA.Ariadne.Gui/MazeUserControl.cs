@@ -28,6 +28,11 @@ namespace SWA.Ariadne.Gui
         public const int MinAutoGridWidth = 6, MaxAutoGridWidth = 12;
 
         /// <summary>
+        /// Minimum and maximum grid width when using automatic settings without walls.
+        /// </summary>
+        public const int MinAutoGridWidthWithoutWalls = 4, MaxAutoGridWidthWithoutWalls = 9;
+
+        /// <summary>
         /// Miniumum and maximum square width.
         /// </summary>
         public const int MinSquareWidth = 1, MaxSquareWidth = MaxGridWidth - 1;
@@ -59,8 +64,46 @@ namespace SWA.Ariadne.Gui
 
         private AriadneSettingsData settingsData;
 
+        private bool VisibleWalls
+        {
+            get
+            {
+                return (WallVisibility != AriadneSettingsData.WallVisibilityEnum.Never);
+            }
+        }
+        public AriadneSettingsData.WallVisibilityEnum WallVisibility
+        {
+            get
+            {
+                return (this.settingsData == null ? this.wallVisibility : this.settingsData.WallVisibility);
+            }
+        }
+        private AriadneSettingsData.WallVisibilityEnum wallVisibility = AriadneSettingsData.WallVisibilityEnum.Always;
+
+        public bool RandomizeWallVisibility
+        {
+            set { randomizeWallVisibility = value; }
+        }
+        private bool randomizeWallVisibility = false;
+
+        private int GetRandomGridWidth(Random r)
+        {
+            int result = (VisibleWalls
+                ? r.Next(MinAutoGridWidth, MaxAutoGridWidth)
+                : r.Next(MinAutoGridWidthWithoutWalls, MaxAutoGridWidthWithoutWalls));
+
+            MazeDimensions dim = MazeDimensions.Instance(MazeCode.DefaultCodeVersion);
+
+            while ((this.Width - wallWidth) / result > dim.MaxXSize || (this.Height - wallWidth) / result > dim.MaxYSize)
+            {
+                ++ result;
+            }
+
+            return result;
+        }
+
         private int squareWidth;
-        private int wallWidth;
+        private int wallWidth = -1;
         private int gridWidth;
         private int pathWidth;
         private int xOffset, yOffset;
@@ -191,7 +234,7 @@ namespace SWA.Ariadne.Gui
             this.gridWidth = squareWidth + wallWidth;
             this.pathWidth = pathWidth;
 
-            AdjustPathWidth(squareWidth, ref pathWidth);
+            AdjustPathWidth(squareWidth, wallWidth, ref pathWidth);
             ColorBuilder.SuggestColors(MinColor, MaxColor, out forwardColor, out backwardColor);
             CreateMaze();
             Reset();
@@ -202,18 +245,27 @@ namespace SWA.Ariadne.Gui
             int wallWidth;
             int squareWidth;
             int pathWidth;
-            SuggestWidths(gridWidth, out squareWidth, out pathWidth, out wallWidth);
+            SuggestWidths(gridWidth, VisibleWalls, out squareWidth, out pathWidth, out wallWidth);
 
             this.Setup(squareWidth, wallWidth, pathWidth);
         }
 
-        internal static void SuggestWidths(int gridWidth, out int squareWidth, out int pathWidth, out int wallWidth)
+        internal static void SuggestWidths(int gridWidth, bool visibleWalls, out int squareWidth, out int pathWidth, out int wallWidth)
         {
-            wallWidth = Math.Max(MinWallWidth, Math.Min(MaxWallWidth, (int)(0.3 * gridWidth)));
-            squareWidth = gridWidth - wallWidth;
-            pathWidth = (int)(0.7 * squareWidth);
-            
-            AdjustPathWidth(squareWidth, ref pathWidth);
+            if (visibleWalls)
+            {
+                wallWidth = Math.Max(MinWallWidth, Math.Min(MaxWallWidth, (int)(0.3 * gridWidth)));
+                squareWidth = gridWidth - wallWidth;
+                pathWidth = (int)(0.7 * squareWidth);
+            }
+            else
+            {
+                wallWidth = 0;
+                squareWidth = gridWidth - wallWidth;
+                pathWidth = (int)(0.75 * squareWidth);
+            }
+
+            AdjustPathWidth(squareWidth, wallWidth, ref pathWidth);
         }
 
         public void Setup()
@@ -232,7 +284,28 @@ namespace SWA.Ariadne.Gui
             }
 
             Random r = RandomFactory.CreateRandom();
-            int gridWidth = r.Next(MinAutoGridWidth, MaxAutoGridWidth);
+
+            if (randomizeWallVisibility)
+            {
+                switch (r.Next(3))
+                {
+                    case 0:
+                        this.wallVisibility = AriadneSettingsData.WallVisibilityEnum.Always;
+                        break;
+                    case 1:
+                        this.wallVisibility = AriadneSettingsData.WallVisibilityEnum.Never;
+                        break;
+                    case 2:
+                        this.wallVisibility = AriadneSettingsData.WallVisibilityEnum.WhenVisited;
+                        break;
+                }
+            }
+            else
+            {
+                this.wallVisibility = AriadneSettingsData.WallVisibilityEnum.Always;
+            }
+
+            int gridWidth = GetRandomGridWidth(r);
 
             if (externalGraphics != null)
             {
@@ -275,9 +348,9 @@ namespace SWA.Ariadne.Gui
         /// That will make sure that the path is centered nicely between the walls.
         /// </summary>
         /// <returns></returns>
-        private static void AdjustPathWidth(int squareWidth, ref int pathWidth)
+        private static void AdjustPathWidth(int squareWidth, int wallWidth, ref int pathWidth)
         {
-            if ((squareWidth - pathWidth) % 2 != 0)
+            if (wallWidth > 0 && (squareWidth - pathWidth) % 2 != 0)
             {
                 pathWidth -= 1;
             }
@@ -480,7 +553,7 @@ namespace SWA.Ariadne.Gui
         {
             base.OnPaint(e);
 
-            if (this.wallWidth == 0)
+            if (this.wallWidth < 0)
             {
                 this.Setup(12, 3, 8);
             }
@@ -557,8 +630,20 @@ namespace SWA.Ariadne.Gui
                     PaintShapes(g);
                 }
 
-                PaintBorder(g);
-                PaintWalls(g);
+                switch (this.WallVisibility)
+                {
+                    default:
+                    case AriadneSettingsData.WallVisibilityEnum.Always:
+                        PaintBorder(g);
+                        PaintWalls(g);
+                        break;
+                    case AriadneSettingsData.WallVisibilityEnum.Never:
+                        break;
+                    case AriadneSettingsData.WallVisibilityEnum.WhenVisited:
+                        PaintWalls(g, maze.StartSquare);
+                        break;
+                }
+
                 PaintEndpoints(g);
                 PaintImages(g);
             }
@@ -661,6 +746,42 @@ namespace SWA.Ariadne.Gui
         }
 
         /// <summary>
+        /// Paints the closed walls around a given square.
+        /// This method is called for the visited squares when the walls are initially invisible.
+        /// </summary>
+        /// <param name="g"></param>
+        /// <param name="sq"></param>
+        private void PaintWalls(Graphics g, MazeSquare sq)
+        {
+            int cx = xOffset + sq.XPos * gridWidth;
+            int cy = yOffset + sq.YPos * gridWidth;
+
+            // Draw the west wall.
+            if (sq[MazeSquare.WallPosition.WP_W] == MazeSquare.WallState.WS_CLOSED)
+            {
+                g.DrawLine(wallPen, cx, cy, cx, cy + gridWidth);
+            }
+
+            // Draw the north wall.
+            if (sq[MazeSquare.WallPosition.WP_N] == MazeSquare.WallState.WS_CLOSED)
+            {
+                g.DrawLine(wallPen, cx, cy, cx + gridWidth, cy);
+            }
+
+            // Draw the east wall.
+            if (sq[MazeSquare.WallPosition.WP_E] == MazeSquare.WallState.WS_CLOSED)
+            {
+                g.DrawLine(wallPen, cx + gridWidth, cy, cx + gridWidth, cy + gridWidth);
+            }
+
+            // Draw the south wall.
+            if (sq[MazeSquare.WallPosition.WP_S] == MazeSquare.WallState.WS_CLOSED)
+            {
+                g.DrawLine(wallPen, cx, cy + gridWidth, cx + gridWidth, cy + gridWidth);
+            }
+        }
+
+        /// <summary>
         /// Paints the start and end point.
         /// </summary>
         /// <param name="g"></param>
@@ -718,6 +839,12 @@ namespace SWA.Ariadne.Gui
             if (sq1 == maze.StartSquare || sq2 == maze.StartSquare || sq1 == maze.EndSquare || sq2 == maze.EndSquare)
             {
                 this.PaintEndpoints(g);
+            }
+
+            // Maybe draw walls around the visited square.
+            if (forward && this.WallVisibility == AriadneSettingsData.WallVisibilityEnum.WhenVisited)
+            {
+                this.PaintWalls(g, sq2);
             }
         }
 
@@ -918,11 +1045,11 @@ namespace SWA.Ariadne.Gui
             {
                 this.gridWidth = Math.Max(2, Math.Min(MaxGridWidth, data.GridWidth));
 
-                SuggestWidths(gridWidth, out squareWidth, out pathWidth, out wallWidth);
+                SuggestWidths(gridWidth, VisibleWalls, out squareWidth, out pathWidth, out wallWidth);
             }
             else if (!data.AutoSquareWidth || !data.AutoPathWidth || !data.AutoWallWidth)
             {
-                this.wallWidth = Math.Max(MinWallWidth, Math.Min(MaxWallWidth, data.WallWidth));
+                this.wallWidth = (VisibleWalls ? Math.Max(MinWallWidth, Math.Min(MaxWallWidth, data.WallWidth)) : 0);
                 this.squareWidth = Math.Max(MinSquareWidth, Math.Min(MaxGridWidth - wallWidth, data.SquareWidth));
                 this.pathWidth = Math.Max(MinPathWidth, Math.Min(squareWidth, data.PathWidth));
 
@@ -930,9 +1057,8 @@ namespace SWA.Ariadne.Gui
             }
             else
             {
-                Random r = maze.Random;
-                this.gridWidth = r.Next(MinAutoGridWidth, MaxAutoGridWidth);
-                SuggestWidths(gridWidth, out squareWidth, out pathWidth, out wallWidth);
+                this.gridWidth = GetRandomGridWidth(maze.Random);
+                SuggestWidths(gridWidth, VisibleWalls, out squareWidth, out pathWidth, out wallWidth);
             }
 
             #endregion
@@ -981,7 +1107,7 @@ namespace SWA.Ariadne.Gui
             #region Do the equivalent of Setup() with the modified parameters.
 
             // CreateMaze()
-            AdjustPathWidth(squareWidth, ref pathWidth);
+            AdjustPathWidth(squareWidth, wallWidth, ref pathWidth);
             MazeForm.MakeReservedAreas(maze);
             this.ReserveAreasForImages(data);
             this.AddOutlineShape(data);

@@ -111,6 +111,10 @@ namespace SWA.Ariadne.Gui
             this.label24 = new System.Windows.Forms.Label();
             this.label23 = new System.Windows.Forms.Label();
             this.imageFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+            this.wallVisibilityGroupBox = new System.Windows.Forms.GroupBox();
+            this.wallVisibilityRadioButtonAlways = new System.Windows.Forms.RadioButton();
+            this.wallVisibilityRadioButtonNever = new System.Windows.Forms.RadioButton();
+            this.wallVisibilityRadioButtonWhenVisited = new System.Windows.Forms.RadioButton();
             this.tabControl1.SuspendLayout();
             this.layoutPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.squareWidthNumericUpDown)).BeginInit();
@@ -129,6 +133,7 @@ namespace SWA.Ariadne.Gui
             this.outlineKindPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.offCenterNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sizeNumericUpDown)).BeginInit();
+            this.wallVisibilityGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -146,6 +151,7 @@ namespace SWA.Ariadne.Gui
             // 
             // layoutPage
             // 
+            this.layoutPage.Controls.Add(this.wallVisibilityGroupBox);
             this.layoutPage.Controls.Add(this.squareWidthNumericUpDown);
             this.layoutPage.Controls.Add(this.pathWidthNumericUpDown);
             this.layoutPage.Controls.Add(this.wallWidthNumericUpDown);
@@ -328,7 +334,7 @@ namespace SWA.Ariadne.Gui
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(16, 149);
+            this.label5.Location = new System.Drawing.Point(16, 173);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(74, 13);
             this.label5.TabIndex = 11;
@@ -404,9 +410,9 @@ namespace SWA.Ariadne.Gui
             // 
             this.capStyleComboBox.DataBindings.Add(new System.Windows.Forms.Binding("SelectedValue", this.dataBindingSource, "PathCapStyle", true));
             this.capStyleComboBox.FormattingEnabled = true;
-            this.capStyleComboBox.Location = new System.Drawing.Point(91, 146);
+            this.capStyleComboBox.Location = new System.Drawing.Point(91, 170);
             this.capStyleComboBox.Name = "capStyleComboBox";
-            this.capStyleComboBox.Size = new System.Drawing.Size(121, 21);
+            this.capStyleComboBox.Size = new System.Drawing.Size(76, 21);
             this.capStyleComboBox.TabIndex = 5;
             this.capStyleComboBox.Visible = false;
             // 
@@ -1169,6 +1175,51 @@ namespace SWA.Ariadne.Gui
             this.label23.Text = "%";
             this.label23.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // wallVisibilityGroupBox
+            // 
+            this.wallVisibilityGroupBox.Controls.Add(this.wallVisibilityRadioButtonWhenVisited);
+            this.wallVisibilityGroupBox.Controls.Add(this.wallVisibilityRadioButtonNever);
+            this.wallVisibilityGroupBox.Controls.Add(this.wallVisibilityRadioButtonAlways);
+            this.wallVisibilityGroupBox.Location = new System.Drawing.Point(173, 84);
+            this.wallVisibilityGroupBox.Name = "wallVisibilityGroupBox";
+            this.wallVisibilityGroupBox.Size = new System.Drawing.Size(73, 74);
+            this.wallVisibilityGroupBox.TabIndex = 100;
+            this.wallVisibilityGroupBox.TabStop = false;
+            this.wallVisibilityGroupBox.Text = "Paint walls";
+            // 
+            // wallVisibilityRadioButtonAlways
+            // 
+            this.wallVisibilityRadioButtonAlways.AutoSize = true;
+            this.wallVisibilityRadioButtonAlways.Location = new System.Drawing.Point(7, 16);
+            this.wallVisibilityRadioButtonAlways.Name = "wallVisibilityRadioButtonAlways";
+            this.wallVisibilityRadioButtonAlways.Size = new System.Drawing.Size(57, 17);
+            this.wallVisibilityRadioButtonAlways.TabIndex = 0;
+            this.wallVisibilityRadioButtonAlways.TabStop = true;
+            this.wallVisibilityRadioButtonAlways.Text = "always";
+            this.wallVisibilityRadioButtonAlways.UseVisualStyleBackColor = true;
+            // 
+            // wallVisibilityRadioButtonNever
+            // 
+            this.wallVisibilityRadioButtonNever.AutoSize = true;
+            this.wallVisibilityRadioButtonNever.Location = new System.Drawing.Point(7, 34);
+            this.wallVisibilityRadioButtonNever.Name = "wallVisibilityRadioButtonNever";
+            this.wallVisibilityRadioButtonNever.Size = new System.Drawing.Size(52, 17);
+            this.wallVisibilityRadioButtonNever.TabIndex = 1;
+            this.wallVisibilityRadioButtonNever.TabStop = true;
+            this.wallVisibilityRadioButtonNever.Text = "never";
+            this.wallVisibilityRadioButtonNever.UseVisualStyleBackColor = true;
+            // 
+            // wallVisibilityRadioButtonWhenVisited
+            // 
+            this.wallVisibilityRadioButtonWhenVisited.AutoSize = true;
+            this.wallVisibilityRadioButtonWhenVisited.Location = new System.Drawing.Point(7, 52);
+            this.wallVisibilityRadioButtonWhenVisited.Name = "wallVisibilityRadioButtonWhenVisited";
+            this.wallVisibilityRadioButtonWhenVisited.Size = new System.Drawing.Size(55, 17);
+            this.wallVisibilityRadioButtonWhenVisited.TabIndex = 2;
+            this.wallVisibilityRadioButtonWhenVisited.TabStop = true;
+            this.wallVisibilityRadioButtonWhenVisited.Text = "visited";
+            this.wallVisibilityRadioButtonWhenVisited.UseVisualStyleBackColor = true;
+            // 
             // DetailsDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1206,6 +1257,8 @@ namespace SWA.Ariadne.Gui
             this.outlineKindPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.offCenterNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sizeNumericUpDown)).EndInit();
+            this.wallVisibilityGroupBox.ResumeLayout(false);
+            this.wallVisibilityGroupBox.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1294,5 +1347,9 @@ namespace SWA.Ariadne.Gui
         private System.Windows.Forms.RadioButton outlineRadioButtonCircle;
         private System.Windows.Forms.RadioButton outlineRadioButtonNone;
         private System.Windows.Forms.CheckBox autoColorsCheckBox;
+        private System.Windows.Forms.GroupBox wallVisibilityGroupBox;
+        private System.Windows.Forms.RadioButton wallVisibilityRadioButtonWhenVisited;
+        private System.Windows.Forms.RadioButton wallVisibilityRadioButtonNever;
+        private System.Windows.Forms.RadioButton wallVisibilityRadioButtonAlways;
     }
 }

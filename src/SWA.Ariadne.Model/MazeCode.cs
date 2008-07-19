@@ -10,7 +10,7 @@ namespace SWA.Ariadne.Model
     ///    Version 0: 12 characters 'A'..'Z'
     ///    Version 1:  6 characters '0'..'9', 'a'..'z'
     /// </summary>
-    internal class MazeCode
+    public class MazeCode
     {
         #region Member variables
 

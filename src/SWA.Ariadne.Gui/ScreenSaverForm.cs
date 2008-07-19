@@ -56,6 +56,11 @@ namespace SWA.Ariadne.Gui
 
             // Initially, the (optinally) displayed controls should be invisible until the maze has been built.
             this.outerInfoPanel.Visible = false;
+
+            if (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_PAINT_ALL_WALLS, true) == false)
+            {
+                this.mazeUserControl.RandomizeWallVisibility = true;
+            }
         }
 
         /// <summary>

@@ -83,6 +83,7 @@ namespace SWA.Ariadne.Gui
             imageFolderTextBox.Text = RegisteredOptions.GetStringSetting(RegisteredOptions.OPT_IMAGE_FOLDER);
 
             // Extras tab.
+            checkBoxPaintAllWalls.Checked = RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_PAINT_ALL_WALLS, true);
             checkBoxOutlineShapes.Checked = RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_OUTLINE_SHAPES, false);
             checkBoxIrregularMazes.Checked = RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_IRREGULAR_MAZES, false);
         }
@@ -104,6 +105,7 @@ namespace SWA.Ariadne.Gui
             key.SetValue(RegisteredOptions.OPT_IMAGE_FOLDER, imageFolderTextBox.Text, RegistryValueKind.String);
 
             // Extras tab.
+            key.SetValue(RegisteredOptions.OPT_PAINT_ALL_WALLS, (Int32)(checkBoxPaintAllWalls.Checked ? 1 : 0), RegistryValueKind.DWord);
             key.SetValue(RegisteredOptions.OPT_OUTLINE_SHAPES, (Int32)(checkBoxOutlineShapes.Checked ? 1 : 0), RegistryValueKind.DWord);
             key.SetValue(RegisteredOptions.OPT_IRREGULAR_MAZES, (Int32)(checkBoxIrregularMazes.Checked ? 1 : 0), RegistryValueKind.DWord);
         }
