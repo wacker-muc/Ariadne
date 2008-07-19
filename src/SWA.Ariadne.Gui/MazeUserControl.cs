@@ -86,22 +86,6 @@ namespace SWA.Ariadne.Gui
         }
         private bool randomizeWallVisibility = false;
 
-        private int GetRandomGridWidth(Random r)
-        {
-            int result = (VisibleWalls
-                ? r.Next(MinAutoGridWidth, MaxAutoGridWidth)
-                : r.Next(MinAutoGridWidthWithoutWalls, MaxAutoGridWidthWithoutWalls));
-
-            MazeDimensions dim = MazeDimensions.Instance(MazeCode.DefaultCodeVersion);
-
-            while ((this.Width - wallWidth) / result > dim.MaxXSize || (this.Height - wallWidth) / result > dim.MaxYSize)
-            {
-                ++ result;
-            }
-
-            return result;
-        }
-
         private int squareWidth;
         private int wallWidth = -1;
         private int gridWidth;
@@ -313,6 +297,34 @@ namespace SWA.Ariadne.Gui
             }
             
             this.Setup(gridWidth);
+        }
+
+        /// <summary>
+        /// Return a random grid width between the constant minimum and maximum values.
+        /// </summary>
+        /// <param name="r"></param>
+        /// <returns></returns>
+        private int GetRandomGridWidth(Random r)
+        {
+            int minWidth = (VisibleWalls ? MinAutoGridWidth : MinAutoGridWidthWithoutWalls);
+            int maxWidth = (VisibleWalls ? MaxAutoGridWidth : MaxAutoGridWidthWithoutWalls);
+
+            // Use a larger grid width for the first maze.
+            if (this.wallWidth < 0)
+            {
+                minWidth = (minWidth + maxWidth) / 2;
+            }
+
+            int result = r.Next(minWidth, maxWidth);
+
+            // Make sure we do not exceed the maximally allowed dimensions.
+            MazeDimensions dim = MazeDimensions.Instance(MazeCode.DefaultCodeVersion);
+            while (this.Width / result > dim.MaxXSize || this.Height / result > dim.MaxYSize)
+            {
+                ++result;
+            }
+
+            return result;
         }
 
         /// <summary>
