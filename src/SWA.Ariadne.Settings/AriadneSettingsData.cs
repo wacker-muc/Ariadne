@@ -307,82 +307,25 @@ namespace SWA.Ariadne.Settings
 
         #region Outlines tab
 
-        #region Circles
-
-        public int CircleNumber
+        public enum OutlineKindEnum
         {
-            get { return circleNumber; }
-            set { circleNumber = value; }
+            None = -1,
+            Random = 0,
+            Circle,
+            Diamond,
+            Character,
+            Symbol,
+            Polygon,
+            Function,
+            Bitmap,
         }
-        private int circleNumber;
 
-        #endregion
-
-        #region Diamonds
-
-        public int DiamondNumber
+        public OutlineKindEnum OutlineKind
         {
-            get { return diamondNumber; }
-            set { diamondNumber = value; }
+            get { return outlineKind; }
+            set { outlineKind = value; }
         }
-        private int diamondNumber;
-
-        #endregion
-
-        #region Characters
-
-        public int CharNumber
-        {
-            get { return charNumber; }
-            set { charNumber = value; }
-        }
-        private int charNumber;
-
-        #endregion
-
-        #region Symbols
-
-        public int SymbolNumber
-        {
-            get { return symbolNumber; }
-            set { symbolNumber = value; }
-        }
-        private int symbolNumber;
-
-        #endregion
-
-        #region Polygons
-
-        public int PolygonNumber
-        {
-            get { return polygonNumber; }
-            set { polygonNumber = value; }
-        }
-        private int polygonNumber;
-
-        #endregion
-
-        #region Functions
-
-        public int FunctionNumber
-        {
-            get { return functionNumber; }
-            set { functionNumber = value; }
-        }
-        private int functionNumber;
-
-        #endregion
-
-        #region Bitmaps
-
-        public int BitmapNumber
-        {
-            get { return bitmapNumber; }
-            set { bitmapNumber = value; }
-        }
-        private int bitmapNumber;
-
-        #endregion
+        private OutlineKindEnum outlineKind;
 
         public int OutlineOffCenter
         {
@@ -463,14 +406,7 @@ namespace SWA.Ariadne.Settings
             this.ImageMaxSize = template.ImageMaxSize;
             this.ImageFolder = template.ImageFolder;
 
-            this.CircleNumber = template.CircleNumber;
-            this.DiamondNumber = template.DiamondNumber;
-            this.CharNumber = template.CharNumber;
-            this.SymbolNumber = template.SymbolNumber;
-            this.PolygonNumber = template.PolygonNumber;
-            this.FunctionNumber = template.FunctionNumber;
-            this.BitmapNumber = template.BitmapNumber;
-
+            this.OutlineKind = template.OutlineKind;
             this.OutlineOffCenter = template.OutlineOffCenter;
             this.OutlineSize = template.OutlineSize;
             this.VisibleOutlines = template.VisibleOutlines;

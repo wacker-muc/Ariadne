@@ -37,15 +37,14 @@ namespace SWA.Ariadne.Outlines
 
         public delegate OutlineShape OutlineShapeBuilder(Random r, int xSize, int ySize, double centerX, double centerY, double radius);
 
-        // TODO: private
-        private static OutlineShapeBuilder RandomOutlineShapeBuilder(Random r)
+        public static OutlineShapeBuilder RandomOutlineShapeBuilder(Random r)
         {
             OutlineShapeBuilder[] shapeBuilderDelegates = {
                     OutlineShape.Circle,
                     OutlineShape.Diamond,
                     OutlineShape.Polygon,
                     OutlineShape.Function,
-                    OutlineShape.Char,
+                    OutlineShape.Character,
                     OutlineShape.Symbol,
                     OutlineShape.Bitmap,
                 };
@@ -78,6 +77,12 @@ namespace SWA.Ariadne.Outlines
 
         public static OutlineShape RandomInstance(Random r, int xSize, int ySize, double offCenter, double size)
         {
+            OutlineShapeBuilder outlineShapeBuilder = RandomOutlineShapeBuilder(r);
+            return Instance(r, outlineShapeBuilder, xSize, ySize, offCenter, size);
+        }
+
+        public static OutlineShape Instance(Random r, OutlineShapeBuilder outlineShapeBuilder, int xSize, int ySize, double offCenter, double size)
+        {
             double centerX = 0.5, centerY = 0.5;
 
             double dx = r.NextDouble() - 0.5, dy = r.NextDouble() - 0.5;
@@ -87,7 +92,7 @@ namespace SWA.Ariadne.Outlines
             // Reduce size when we are closer to the center than requested.
             double f = 1.0 - offCenter * 2.0 * (0.5 - Math.Max(Math.Abs(dx), Math.Abs(dy)));
 
-            return RandomOutlineShapeBuilder(r)(r, xSize, ySize, centerX, centerY, size * f);
+            return outlineShapeBuilder(r, xSize, ySize, centerX, centerY, size * f);
         }
 
         /// <summary>
@@ -164,7 +169,7 @@ namespace SWA.Ariadne.Outlines
         /// <param name="centerY">Y coordinate, relative to total height; 0.0 = left, 1.0 = right</param>
         /// <param name="shapeSize">size, relative to distance of center from the border; 1.0 will touch the border</param>
         /// <returns></returns>
-        public static OutlineShape Char(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
+        public static OutlineShape Character(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
         {
             FontFamily fontFamily = new FontFamily("Helvetica");
             char[] shapeCharacters = { 'C', 'O', 'S', 'V', 'X', '3', '6', '8', '9', '?', };
