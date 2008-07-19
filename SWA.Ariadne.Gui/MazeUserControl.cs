@@ -977,7 +977,7 @@ namespace SWA.Ariadne.Gui
             AdjustPathWidth(squareWidth, ref pathWidth);
             MazeForm.MakeReservedAreas(maze);
             this.ReserveAreasForImages(data);
-            this.AddOutlineShapes(data);
+            this.AddOutlineShape(data);
             maze.Irregular = data.IrregularMaze;
             maze.Irregularity = data.Irregularity;
             maze.CreateMaze();
@@ -1164,39 +1164,46 @@ namespace SWA.Ariadne.Gui
 
         #region Placement of outline shapes
 
-        private void AddOutlineShapes(AriadneSettingsData data)
+        private void AddOutlineShape(AriadneSettingsData data)
         {
             Random r = maze.Random;
 
             double offCenter = data.OutlineOffCenter / 100.0;
             double size = data.OutlineSize / 100.0;
 
-            // TODO: Replace data.CircleNumber... with a radio button selection; this will become a switch() statement.
-            AddOutlineShapes(r, OutlineShape.Circle, data.CircleNumber, offCenter, size);
-            AddOutlineShapes(r, OutlineShape.Diamond, data.DiamondNumber, offCenter, size);
-            AddOutlineShapes(r, OutlineShape.Char, data.CharNumber, offCenter, size);
-            AddOutlineShapes(r, OutlineShape.Symbol, data.SymbolNumber, offCenter, size);
-            AddOutlineShapes(r, OutlineShape.Polygon, data.PolygonNumber, offCenter, size);
-            AddOutlineShapes(r, OutlineShape.Function, data.FunctionNumber, offCenter, size);
-            AddOutlineShapes(r, OutlineShape.Bitmap, data.BitmapNumber, offCenter, size);
-        }
+            OutlineShape.OutlineShapeBuilder shapeBuilderDelegate = null;
 
-        // TODO: Don't call this method but the next one: AddOutlineShape().
-        internal void AddOutlineShapes(Random r, OutlineShape.OutlineShapeBuilder shapeBuilderDelegate, int count, double offCenter, double size)
-        {
-            for (int i = 0; i < count; i++)
+            switch (data.OutlineKind)
             {
-                double centerX = 0.5, centerY = 0.5;
-
-                double dx = r.NextDouble() - 0.5, dy = r.NextDouble() - 0.5;
-                centerX += offCenter * dx;
-                centerY += offCenter * dy;
-
-                // Reduce size when we are closer to the center than requested.
-                double f = 1.0 - offCenter * 2.0 * (0.5 - Math.Max(Math.Abs(dx), Math.Abs(dy)));
-                
-                OutlineShape shape = shapeBuilderDelegate(maze.Random, XSize, YSize, centerX, centerY, size * f);
-                this.maze.AddOutlineShape(shape);
+                case AriadneSettingsData.OutlineKindEnum.Random:
+                    shapeBuilderDelegate = OutlineShape.RandomOutlineShapeBuilder(r);
+                    break;
+                case AriadneSettingsData.OutlineKindEnum.Circle:
+                    shapeBuilderDelegate = OutlineShape.Circle;
+                    break;
+                case AriadneSettingsData.OutlineKindEnum.Diamond:
+                    shapeBuilderDelegate = OutlineShape.Diamond;
+                    break;
+                case AriadneSettingsData.OutlineKindEnum.Character:
+                    shapeBuilderDelegate = OutlineShape.Character;
+                    break;
+                case AriadneSettingsData.OutlineKindEnum.Symbol:
+                    shapeBuilderDelegate = OutlineShape.Symbol;
+                    break;
+                case AriadneSettingsData.OutlineKindEnum.Polygon:
+                    shapeBuilderDelegate = OutlineShape.Polygon;
+                    break;
+                case AriadneSettingsData.OutlineKindEnum.Function:
+                    shapeBuilderDelegate = OutlineShape.Function;
+                    break;
+                case AriadneSettingsData.OutlineKindEnum.Bitmap:
+                    shapeBuilderDelegate = OutlineShape.Bitmap;
+                    break;
+            }
+            if (shapeBuilderDelegate != null)
+            {
+                OutlineShape shape = OutlineShape.Instance(r, shapeBuilderDelegate, XSize, YSize, offCenter, size);
+                AddOutlineShape(shape);
             }
         }
 

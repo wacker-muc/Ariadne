@@ -23,6 +23,29 @@ namespace SWA.Ariadne.Gui
         public DetailsDialog()
         {
             InitializeComponent();
+
+            // Give every radio button its specific Tag value.
+            this.outlineRadioButtonNone.Tag = AriadneSettingsData.OutlineKindEnum.None;
+            this.outlineRadioButtonRandom.Tag = AriadneSettingsData.OutlineKindEnum.Random;
+            this.outlineRadioButtonCircle.Tag = AriadneSettingsData.OutlineKindEnum.Circle;
+            this.outlineRadioButtonDiamond.Tag = AriadneSettingsData.OutlineKindEnum.Diamond;
+            this.outlineRadioButtonCharacter.Tag = AriadneSettingsData.OutlineKindEnum.Character;
+            this.outlineRadioButtonSymbol.Tag = AriadneSettingsData.OutlineKindEnum.Symbol;
+            this.outlineRadioButtonPolygon.Tag = AriadneSettingsData.OutlineKindEnum.Polygon;
+            this.outlineRadioButtonFunction.Tag = AriadneSettingsData.OutlineKindEnum.Function;
+            this.outlineRadioButtonBitmap.Tag = AriadneSettingsData.OutlineKindEnum.Bitmap;
+            this.outlineRadioButtonNone.Checked = true;
+
+            // Set the relevant action delegates of all radio buttons.
+            RadioButton template = this.outlineRadioButtonNone;
+            foreach (Control control in this.outlineKindPanel.Controls)
+            {
+                if (template.GetType().IsAssignableFrom(control.GetType()))
+                {
+                    RadioButton button = (RadioButton)control;
+                    button.CheckedChanged += new System.EventHandler(this.OnOutlineKindChanged);
+                }
+            }
         }
 
         public DetailsDialog(IAriadneSettingsSource target)
@@ -57,14 +80,7 @@ namespace SWA.Ariadne.Gui
             data.ImageMaxSize = (int) this.imageMaxSizeNumericUpDown.Value;
             data.ImageFolder = RegisteredOptions.GetStringSetting(RegisteredOptions.OPT_IMAGE_FOLDER);
 
-            data.CircleNumber = (int)this.circleNumberNumericUpDown.Value;
-            data.DiamondNumber = (int)this.diamondNumberNumericUpDown.Value;
-            data.CharNumber = (int)this.charNumberNumericUpDown.Value;
-            data.SymbolNumber = (int)this.symbolNumberNumericUpDown.Value;
-            data.PolygonNumber = (int)this.polygonNumberNumericUpDown.Value;
-            data.FunctionNumber = (int)this.functionNumberNumericUpDown.Value;
-            data.BitmapNumber = (int)this.bitmapNumberNumericUpDown.Value;
-
+            data.OutlineKind = AriadneSettingsData.OutlineKindEnum.None;
             data.OutlineOffCenter = (int)this.offCenterNumericUpDown.Value;
             data.OutlineSize = (int)this.sizeNumericUpDown.Value;
             data.VisibleOutlines = this.visibleOutlinesCheckBox.Checked;
@@ -72,6 +88,17 @@ namespace SWA.Ariadne.Gui
             #endregion
 
             target.FillParametersInto(data);
+
+            // Select the current outline radio button.
+            RadioButton template = this.outlineRadioButtonNone;
+            foreach (Control control in this.outlineKindPanel.Controls)
+            {
+                if (template.GetType().IsAssignableFrom(control.GetType()))
+                {
+                    RadioButton button = (RadioButton)control;
+                    button.Checked = ((AriadneSettingsData.OutlineKindEnum)button.Tag == data.OutlineKind);
+                }
+            }
             
             CalculateResultingArea();
             
@@ -105,6 +132,20 @@ namespace SWA.Ariadne.Gui
             data.ClearModifedFlags();
             
             dataBindingSource.ResetCurrentItem();
+        }
+
+        /// <summary>
+        /// Called from the RadioButtons in the outlineKindPanel
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnOutlineKindChanged(object sender, EventArgs e)
+        {
+            RadioButton b = (RadioButton)sender;
+            if (b.Checked)
+            {
+                data.OutlineKind = (AriadneSettingsData.OutlineKindEnum) b.Tag;
+            }
         }
 
         /// <summary>
