@@ -75,6 +75,8 @@ namespace SWA.Ariadne.Gui
             data.IrregularMaze = this.irregularMazeCheckBox.Checked;
             data.Irregularity = (int)this.irregularityNumericUpDown.Value;
 
+            data.AutoColors = true;
+
             data.ImageNumber = (int) this.imageNumberNumericUpDown.Value;
             data.ImageMinSize = (int) this.imageMinSizeNumericUpDown.Value;
             data.ImageMaxSize = (int) this.imageMaxSizeNumericUpDown.Value;
@@ -160,6 +162,7 @@ namespace SWA.Ariadne.Gui
             
             data.ForwardColor = forwardColor;
             data.BackwardColor = backwardColor;
+            data.AutoColors = false;
 
             dataBindingSource.ResetCurrentItem();
         }

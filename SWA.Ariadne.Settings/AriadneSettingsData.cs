@@ -145,6 +145,17 @@ namespace SWA.Ariadne.Settings
         }
         private Color[] backwardColor = new Color[2];
 
+        public bool AutoColors
+        {
+            get { return autoColors[M]; }
+            set { autoColors[M] = value; }
+        }
+        public bool AutoColorsModified
+        {
+            get { return (autoColors[M] != autoColors[S]); }
+        }
+        private bool[] autoColors = new bool[2];
+
         #endregion
 
         #region Layout tab
@@ -376,6 +387,7 @@ namespace SWA.Ariadne.Settings
 
             forwardColor[S] = forwardColor[M];
             backwardColor[S] = backwardColor[M];
+            autoColors[S] = autoColors[M];
 
             #endregion
 
@@ -400,6 +412,8 @@ namespace SWA.Ariadne.Settings
         {
             this.IrregularMaze = template.IrregularMaze;
             this.Irregularity = template.Irregularity;
+
+            this.AutoColors = template.AutoColors;
 
             this.ImageNumber = template.ImageNumber;
             this.ImageMinSize = template.ImageMinSize;
