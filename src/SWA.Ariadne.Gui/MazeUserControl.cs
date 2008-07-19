@@ -939,8 +939,15 @@ namespace SWA.Ariadne.Gui
 
             #region Colors
 
-            this.forwardColor = data.ForwardColor;
-            this.backwardColor = data.BackwardColor;
+            if (!data.AutoColors)
+            {
+                this.forwardColor = data.ForwardColor;
+                this.backwardColor = data.BackwardColor;
+            }
+            else
+            {
+                ColorBuilder.SuggestColors(MinColor, MaxColor, out forwardColor, out backwardColor);
+            }
 
             #endregion
 

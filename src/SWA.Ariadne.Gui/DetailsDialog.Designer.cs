@@ -51,6 +51,7 @@ namespace SWA.Ariadne.Gui
             this.capStyleComboBox = new System.Windows.Forms.ComboBox();
             this.setLayoutButton = new System.Windows.Forms.Button();
             this.colorsPage = new System.Windows.Forms.TabPage();
+            this.autoColorsCheckBox = new System.Windows.Forms.CheckBox();
             this.setColorsButton = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.label15 = new System.Windows.Forms.Label();
@@ -232,11 +233,6 @@ namespace SWA.Ariadne.Gui
             this.wallWidthNumericUpDown.Location = new System.Drawing.Point(91, 81);
             this.wallWidthNumericUpDown.Maximum = new decimal(new int[] {
             20,
-            0,
-            0,
-            0});
-            this.wallWidthNumericUpDown.Minimum = new decimal(new int[] {
-            1,
             0,
             0,
             0});
@@ -426,6 +422,7 @@ namespace SWA.Ariadne.Gui
             // 
             // colorsPage
             // 
+            this.colorsPage.Controls.Add(this.autoColorsCheckBox);
             this.colorsPage.Controls.Add(this.setColorsButton);
             this.colorsPage.Controls.Add(this.button1);
             this.colorsPage.Controls.Add(this.label15);
@@ -443,6 +440,17 @@ namespace SWA.Ariadne.Gui
             this.colorsPage.TabIndex = 2;
             this.colorsPage.Text = "Colors";
             this.colorsPage.UseVisualStyleBackColor = true;
+            // 
+            // autoColorsCheckBox
+            // 
+            this.autoColorsCheckBox.AutoSize = true;
+            this.autoColorsCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.dataBindingSource, "AutoColors", true));
+            this.autoColorsCheckBox.Location = new System.Drawing.Point(177, 150);
+            this.autoColorsCheckBox.Name = "autoColorsCheckBox";
+            this.autoColorsCheckBox.Size = new System.Drawing.Size(73, 17);
+            this.autoColorsCheckBox.TabIndex = 101;
+            this.autoColorsCheckBox.Text = "Automatic";
+            this.autoColorsCheckBox.UseVisualStyleBackColor = true;
             // 
             // setColorsButton
             // 
@@ -1285,5 +1293,6 @@ namespace SWA.Ariadne.Gui
         private System.Windows.Forms.RadioButton outlineRadioButtonCharacter;
         private System.Windows.Forms.RadioButton outlineRadioButtonCircle;
         private System.Windows.Forms.RadioButton outlineRadioButtonNone;
+        private System.Windows.Forms.CheckBox autoColorsCheckBox;
     }
 }
