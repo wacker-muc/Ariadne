@@ -10,7 +10,7 @@ Copyright (c) Stephan Wacker, 2008
 
 The Ariadne application builds and solves a variety of maze puzzles.  When running as a regular application (Ariadne.exe), you can control the maze layout, its shape, additional content etc.  The Ariadne.scr file can be installed as a screen saver.
 
-[Ariadne: Figure from Greek mythology.  Ariadne helped Theseus to escape from the maze where the Minotaurus was held.]
+[Ariadne: Figure from Greek mythology.  Ariadne helped Theseus escape from the maze where the Minotaurus was held.]
 
 There are several components for specific responsibilities and most of them have many optional features.
 
@@ -21,11 +21,13 @@ There are several components for specific responsibilities and most of them have
 
 The Maze fills a rectangular region in a window.  In screen saver mode, the display is filled completely.
 
-The maze has a tree-like structure.  Any square can be reached from every other square by exactly one solution path.  There are no circles (paths leading from a square to itself).
+The maze has a tree-like topological structure.  Any square can be reached from every other square by exactly one solution path.  There are no circles (paths leading from a square to itself).
 
 The maze builder algorithm starts at an arbitrary square and adds it to the "visited" region.  From then on, walls (whose state is initially undecided) beteen one visited and one not-visited square are opened until all squares have been reached.  The remaining walls are closed.
 
-Only closed walls are painted; open walls "do not exist".
+Only closed walls are painted; open walls or doors are not painted.
+
+[Option:] Usually, all walls of the empty maze are painted before the solver starts.  There is an option by which two alternative modes can be activated: In one mode, no walls are painted at all (they have zero width); in the other mode, only the walls around visited squares are painted.
 
     Additional Contents
     -------------------
@@ -62,7 +64,7 @@ In an irregular maze, some directions are preferred over other directions when o
     Outline Shapes
     --------------
 
-This option builds continuous closed walls around invisible shapes, e.g. a circle.  Only one wall will be opened so that a path can lead into the shape.  When the solver reaches the outline of the shape, it will run around it and the shape will become visible.  When the solver finds the entry into the shape, it will be filled from the inside but the solver cannot leave the shape as there is no second exit.
+This option builds continuous closed walls around invisible shapes, e.g. a circle or a silhouette bitmap image (black on white).  Only one wall will be opened so that a path can run into the shape.  When the solver reaches the (closed) outline of the shape, it will run around it and the shape's contour will become visible.  When the solver finds the entry into the shape, it will be filled from the inside but the solver cannot leave the shape as there is no second exit.
 
 Usually, an Outline Shape is one contiguous shape, like a circle, a square or another polygon.  However, an Outline Shape can be any pattern that defines an inside and an outside.  Separate regions are all treated the same way, i.e. they are surrounded by closed walls with a single entry.
 
@@ -147,5 +149,25 @@ The ThickestBranchFlooder advances on a chosen branch in one run up to the next 
 ForwardFlooder and BackwardFlooder tend to fill the whole maze, just like a HesitatingFlooder.  That is because both solvers assign highest penalties to undesired steps near the target square: the BackwardFlooder assigns an extreme penalty (100%) to the last step onto the target square; the ForwardFlooder assigns very high penalties to backward steps close to the target.  In that situation, both solvers will visit the whole rest of the maze before doing the one highly penalized required step.
 
 Efficient solvers often run for long stretches without error (i.e. without leaving the correct solution path), especially towards the end.  It is not unlikely that such a run spans more than half or two thirds of the solution path.  Even perfect runs without any error at all can be observed.  Considering that an average path may have several dozen or even hundreds of forks, this is quite amazing.
+
+-----------------------------------------------------------------------
+
+    Summary of Options and Variants
+    ===============================
+    
+   * [3] Paint walls always / never / when visited.
+   * Display images from a user specified directory.
+   * Display a run-time statistics panel.
+   * [20] Build mazes with irregular wall patterns.
+   * Apply two mixed irregular patterns or apply the pattern to part of the maze only.
+   * [15] Build a continuous wall around an outline shape.
+   * [16] Different solver strategies.
+   * [2] Let an efficient solver detect dead end areas.
+   
+That gives a large number of pattern or style combinations:
+
+    3 x (1+20) x (1+15) x 16 x 2  =  32,256
+
+The exact application of each variant is often determined by random parameter values:  Some shapes are generated dynamically, some solvers choose arbitrary paths and the maze builder generates random patterns of walls.
 
 -----------------------------------------------------------------------
