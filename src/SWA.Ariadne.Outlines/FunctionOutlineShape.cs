@@ -6,6 +6,11 @@ using SWA.Utilities;
 
 namespace SWA.Ariadne.Outlines
 {
+    /// <summary>
+    /// An OutlineShape defined by a geometrical function in two dimensions: f(x,y).
+    /// The division between inside and outside is defined by the function's roots,
+    /// i.e. the contour is where the function f(x,y) becomes zero.
+    /// </summary>
     internal class FunctionOutlineShape : OutlineShape
     {
         #region Class variables and class constructor
@@ -174,7 +179,7 @@ namespace SWA.Ariadne.Outlines
             int p = r.Next(Functions.Count);
             //p = Functions.Count - 2 + r.Next(2);
             //p = r.Next(Functions.Count - 2);
-            //p = 0;
+            //p = 4;
             MethodInfo function = Functions[p];
             TDFAttribute characteristics = Attributes[p];
 
@@ -273,7 +278,7 @@ namespace SWA.Ariadne.Outlines
         [TDF(2, 0.5, 1.0)]
         [TDFDistortion(0.3, "DistortX_CosY", 0.2, 0.5, 0.5, 2.0)]
         [TDFDistortion(0.3, "DistortX_CosY_Alternating", 0.15, 0.3, 0.5, 2.0)]
-        private double TDF_01(double x, double y)
+        private double TDF_Stripes(double x, double y)
         {
             return Math.Cos(0.5 * Math.PI * x);
         }
@@ -290,9 +295,9 @@ namespace SWA.Ariadne.Outlines
         [TDFDistortion(0.1, "DistortY_CosX", 0.2, 0.5, 0.5, 2.0)]
         [TDFDistortion(0.2, "DistortXY_CosY_CosX", 0.2, 0.5, 0.5, 2.0, 0.5)]
         [TDFDistortion(0.3, "DistortXY_CosY_CosX_Alternating", 0.15, 0.3, 0.5, 2.0, 0.5)]
-        private double TDF_02(double x, double y)
+        private double TDF_Squares(double x, double y)
         {
-            return TDF_01(x, y) * TDF_01(y, x);
+            return TDF_Stripes(x, y) * TDF_Stripes(y, x);
         }
 
         /// <summary>
@@ -303,9 +308,9 @@ namespace SWA.Ariadne.Outlines
         /// <param name="y"></param>
         /// <returns></returns>
         //[TDF(4, 1.0, 1.0)]
-        private double TDF_03(double x, double y)
+        private double TDF_SmallCirclesSparse(double x, double y)
         {
-            return TDF_02(x, y) - 0.6204;
+            return TDF_Squares(x, y) - 0.6204;
         }
 
         /// <summary>
@@ -318,9 +323,9 @@ namespace SWA.Ariadne.Outlines
         [TDF(4, 0.8, 1.2)]
         [TDFDistortion(0.2, "DistortXY_CosY_CosX", 0.1, 0.3)]
         [TDFDistortion(0.3, "DistortXY_CosY_CosX_Alternating", 0.1, 0.3)]
-        private double TDF_04(double x, double y)
+        private double TDF_RoundedSquaresSparse(double x, double y)
         {
-            return TDF_02(x, y) - 0.05;
+            return TDF_Squares(x, y) - 0.05;
         }
 
         /// <summary>
@@ -331,9 +336,9 @@ namespace SWA.Ariadne.Outlines
         /// <param name="y"></param>
         /// <returns></returns>
         //[TDF(4, 0.8, 1.2)]
-        private double TDF_05(double x, double y)
+        private double TDF_SmallCircles(double x, double y)
         {
-            return Math.Abs(TDF_02(x, y)) - 0.6204;
+            return Math.Abs(TDF_Squares(x, y)) - 0.6204;
         }
 
         /// <summary>
@@ -344,13 +349,13 @@ namespace SWA.Ariadne.Outlines
         /// <param name="y"></param>
         /// <returns></returns>
         [TDF(4, 0.8, 1.2)]
-        [TDFConfigurator("TDF_06_Configurator")]
+        [TDFConfigurator("TDF_RoundedSquares_Configurator")]
         [TDFDistortion(0.2, "DistortXY_CosY_CosX", 0.2, 0.3)]
         [TDFDistortion(0.3, "DistortXY_CosY_CosX_Alternating", 0.15, 0.25)]
-        private double TDF_06(double x, double y)
+        private double TDF_RoundedSquares(double x, double y)
         {
             // The shift parameter is calibrated so that there is a one-square wide path between the tiles.
-            return Math.Abs(TDF_02(x, y)) - t1;
+            return Math.Abs(TDF_Squares(x, y)) - t1;
         }
 
         /// <summary>
@@ -360,15 +365,15 @@ namespace SWA.Ariadne.Outlines
         /// </summary>
         /// <param name="shape"></param>
         /// <param name="squaresPerUnit"></param>
-        private void TDF_06_Configurator(Random r)
+        private void TDF_RoundedSquares_Configurator(Random r)
         {
             // Find the minimum function value at integer coordinates, when t1 is 0.
             t1 = 0;
-            double xMin = 0, zMin = TDF_06(xMin, 0);
+            double xMin = 0, zMin = TDF_RoundedSquares(xMin, 0);
             for (int i = 1; i <= 6; i++)
             {
                 double x = Math.Round(i / this.scale) * this.scale;
-                double z = TDF_06(x, 0);
+                double z = TDF_RoundedSquares(x, 0);
                 if (z < zMin)
                 {
                     zMin = z;
@@ -378,7 +383,7 @@ namespace SWA.Ariadne.Outlines
 
             // Get the smaller of the two function values at half a square width distance.
             double delta = 0.5 * this.scale;
-            zMin = Math.Min(TDF_06(xMin - delta, 0), TDF_06(xMin + delta, 0));
+            zMin = Math.Min(TDF_RoundedSquares(xMin - delta, 0), TDF_RoundedSquares(xMin + delta, 0));
 
             // t1 can be determined directly from zMin:
             // If t1 > zMin, the function value will become negative.
@@ -393,16 +398,14 @@ namespace SWA.Ariadne.Outlines
 
         /// <summary>
         /// Paraboloid.
-        /// Creates a circle.
+        /// Creates a circle or ellipsis.
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        //[TDF(4, 2.0, 4.0)]
-        [TDFDistortion(0.3, "DistortX_CosY", 0.1, 0.2, 3.0, 8.0, 1.0)]
-        [TDFDistortion(0.3, "DistortY_CosX", 0.1, 0.2, 3.0, 8.0, 1.0)]
-        [TDFDistortion(0.6, "DistortXY_CosY_CosX", 0.05, 0.15, 3.0, 8.0, 1.0)]
-        private double TDF_11(double x, double y)
+        [TDF(4, 1.5, 2.0)]
+        [TDFDistortion(1.0, "DistortXY_StretchY_Rotate", 1.6, 3.0, 0.0, Math.PI)]
+        private double TDF_Circle(double x, double y)
         {
             return (1.0 - (x * x + y * y));
         }
@@ -415,7 +418,9 @@ namespace SWA.Ariadne.Outlines
         /// <param name="y"></param>
         /// <returns></returns>
         [TDF(2)]
-        private double TDF_12(double x, double y)
+        [TDFDistortion(0.4, "DistortY_Stretch", 0.5, 1.5)]
+        [TDFDistortion(0.2, "DistortXY_StretchY_Rotate", 0.8, 1.2, Math.PI * 1 / 12, Math.PI * 5 / 12)]
+        private double TDF_Hyperbola(double x, double y)
         {
             return (1.0 - (x * x - y * y));
         }
@@ -429,7 +434,7 @@ namespace SWA.Ariadne.Outlines
         [TDF(0, 0.5, 2.0)]
         [TDFDistortion(0.3, "DistortR_Exp", -0.25, -0.15)]
         [TDFDistortion(0.3, "DistortR_Exp", +0.2, +0.5)]
-        private double TDF_31(double r, double phi)
+        private double TDF_ConcentricCircles(double r, double phi)
         {
             return Math.Cos(0.5 * Math.PI * r);
         }
@@ -443,7 +448,7 @@ namespace SWA.Ariadne.Outlines
         [TDF(0, 0.4, 1.2)]
         [TDFDistortion(0.3, "DistortR_Exp", -0.4, -0.2)]
         [TDFDistortion(0.3, "DistortR_Exp", +0.2, +0.5)]
-        private double TDF_32(double r, double phi)
+        private double TDF_Spiral(double r, double phi)
         {
             return Math.Cos(0.5 * Math.PI * r + phi);
         }
@@ -512,7 +517,7 @@ namespace SWA.Ariadne.Outlines
     /// Example:
     /// DistortX_CosY() subtracts the cosine of Y from X.
     /// The function value calculated for the coordinates (x,y) is not f(x,y) but f(x-d,y).
-    /// The outline contour that follows the function's zero locations is modulated:
+    /// The outline contour that follows the function's roots is modulated:
     /// a straight (vertical) line becomes a cosine wave.
     /// 
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
@@ -619,6 +624,7 @@ namespace SWA.Ariadne.Outlines
         /// <summary
         /// Distort the X parameter.
         /// Add a cosine wave.
+        /// Every second wave is inverted.
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -626,7 +632,7 @@ namespace SWA.Ariadne.Outlines
         /// <param name="k">frequency</param>
         public static void DistortX_CosY_Alternating(ref double x, ref double y, double a, double f)
         {
-            // The wave lines are where x or y is an odd number.
+            // The wave lines are located where x or y is an odd number.
             double sgnX = ((int)Math.Round(0.5 * (x - 1.0)) % 2 == 0 ? +1.0 : -1.0);
 
             x -= sgnX * a * Math.Cos(0.5 * Math.PI * f * y);
@@ -646,6 +652,40 @@ namespace SWA.Ariadne.Outlines
         }
 
         /// <summary>
+        /// Distort the Y parameter.
+        /// Divide by A, thus stretching the shape.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="a">amplitude</param>
+        /// <param name="k">frequency</param>
+        public static void DistortY_Stretch(ref double x, ref double y, double a, double f)
+        {
+            y /= a;
+        }
+
+        /// <summary>
+        /// Distort the X and Y parameter.
+        /// Stretch the shape by A in Y direction and rotate it by F.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="a">amplitude</param>
+        /// <param name="k">frequency</param>
+        /// 
+        /// Note: The distortions need to be applied in inverse order: first rotate, then stretch.
+        /// 
+        public static void DistortXY_StretchY_Rotate(ref double x, ref double y, double a, double f)
+        {
+            double r, phi;
+            Geometry.RectToPolar(x, y, out r, out phi);
+            phi -= f;
+            Geometry.PolarToRect(r, phi, out x, out y);
+
+            y /= a;
+        }
+
+        /// <summary>
         /// Distort the X and Y parameters.
         /// Add a cosine wave.
         /// </summary>
@@ -655,8 +695,9 @@ namespace SWA.Ariadne.Outlines
         /// <param name="k">frequency</param>
         public static void DistortXY_CosY_CosX(ref double x, ref double y, double a, double f)
         {
+            double x0 = x;
             x -= a * Math.Cos(0.5 * Math.PI * f * y);
-            y -= a * Math.Cos(0.5 * Math.PI * f * x);
+            y -= a * Math.Cos(0.5 * Math.PI * f * x0);
         }
 
         /// <summary>
@@ -670,12 +711,13 @@ namespace SWA.Ariadne.Outlines
         /// <param name="k">frequency</param>
         public static void DistortXY_CosY_CosX_Alternating(ref double x, ref double y, double a, double f)
         {
-            // The wave lines are where x or y is an odd number.
+            // The wave lines are located where x or y is an odd number.
             double sgnX = ((int)Math.Round(0.5 * (x - 1.0)) % 2 == 0 ? +1.0 : -1.0);
             double sgnY = ((int)Math.Round(0.5 * (y - 1.0)) % 2 == 0 ? +1.0 : -1.0);
 
+            double x0 = x;
             x -= sgnX * a * Math.Cos(0.5 * Math.PI * f * y);
-            y -= sgnY * a * Math.Cos(0.5 * Math.PI * f * x);
+            y -= sgnY * a * Math.Cos(0.5 * Math.PI * f * x0);
         }
 
         /// <summary>

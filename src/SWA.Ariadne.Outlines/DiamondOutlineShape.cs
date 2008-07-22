@@ -4,6 +4,9 @@ using System.Text;
 
 namespace SWA.Ariadne.Outlines
 {
+    /// <summary>
+    /// A simple OutlineShape in the form of a square standing on one of its corners.
+    /// </summary>
     internal class DiamondOutlineShape : PolygonOutlineShape
     {
         #region Member variables and Properties
