@@ -51,7 +51,8 @@ namespace SWA.Ariadne.Outlines
         /// <summary>
         /// A two dimensional function.
         /// </summary>
-        private MethodInfo f;
+        private delegate double FunctionDelegate(double x, double y);
+        private FunctionDelegate f;
 
         /// <summary>
         /// General purpose parameters controlling the function.
@@ -77,6 +78,14 @@ namespace SWA.Ariadne.Outlines
         private double scale;
 
         /// <summary>
+        /// A distortion method applied to the input coordinates, immediately before the function is called.
+        /// </summary>
+        private delegate void DistortionDelegate(ref double x, ref double y, double a, double f);
+        private DistortionDelegate distortion;
+        private double distortionAmplitude;
+        private double distortionFrequency;
+
+        /// <summary>
         /// Returns true if the given point is inside the shape.
         /// Here: ... if the function evaluates to a positive value.
         /// </summary>
@@ -88,13 +97,13 @@ namespace SWA.Ariadne.Outlines
             get
             {
                 double dx = scale * (x + xOffset), dy = -scale * (y + yOffset);
-                object[] args;
+                double arg1, arg2;
 
                 if (symmetryRotation == 0)
                 {
                     double r, phi;
                     Geometry.RectToPolar(dx, dy, out r, out phi);
-                    args = new object[] { r, phi };
+                    arg1 = r; arg2 = phi;
                 }
                 else
                 {
@@ -102,21 +111,26 @@ namespace SWA.Ariadne.Outlines
                     {
                         default:
                         case 1: // natural orientation
-                            args = new object[] { dx, dy };
+                            arg1 = dx; arg2 = dy;
                             break;
                         case 2: // 90 degrees rotated
-                            args = new object[] { -dy, dx };
+                            arg1 = -dy; arg2 = dx;
                             break;
                         case 3: // 180 degrees rotated
-                            args = new object[] { -dx, -dy };
+                            arg1 = -dx; arg2 = -dy;
                             break;
                         case 4: // 270 degrees rotated
-                            args = new object[] { dy, -dx };
+                            arg1 = dy; arg2 = -dx;
                             break;
                     }
                 }
 
-                double z = (double)f.Invoke(this, args);
+                if (distortion != null)
+                {
+                    distortion(ref arg1, ref arg2, distortionAmplitude, distortionFrequency);
+                }
+
+                double z = f(arg1, arg2);
                 return (z > 0);
             }
         }
@@ -147,7 +161,7 @@ namespace SWA.Ariadne.Outlines
             double n = 5; // number of units (in function coordinates) that span the shape's size
             this.scale = n / sz;
 
-            this.f = function;
+            this.f = (FunctionDelegate)Delegate.CreateDelegate(typeof(FunctionDelegate), this, function);
             this.symmetryRotation = symmetryRotation;
         }
 
@@ -159,6 +173,8 @@ namespace SWA.Ariadne.Outlines
         {
             int p = r.Next(Functions.Count);
             //p = Functions.Count - 2 + r.Next(2);
+            //p = r.Next(Functions.Count - 2);
+            //p = 0;
             MethodInfo function = Functions[p];
             TDFAttribute characteristics = Attributes[p];
 
@@ -179,22 +195,68 @@ namespace SWA.Ariadne.Outlines
                 new Type[7] { typeof(int), typeof(int), typeof(double), typeof(double), typeof(double), typeof(MethodInfo), typeof(int) }).Invoke(
                 new object[7] { xSize, ySize, centerX, centerY, scale * shapeSize, function, symmetryRotation }
                 );
-            
+
+            result.ConfigureDistortion(function, r);
+            result.ConfigureFunctionParameters(function, r);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Apply the function's configuration attribute to set up the t1, t2, t3 parameters.
+        /// </summary>
+        /// <param name="function"></param>
+        /// <param name="r"></param>
+        private void ConfigureFunctionParameters(MethodInfo function, Random r)
+        {
             // Reset general purpose parameters.
-            result.t1 = result.t2 = result.t3 = 0.0;
+            t1 = t2 = t3 = 0.0;
 
             // Execute the function's configurator.
             Type attributeType = typeof(TDFConfiguratorAttribute);
             object[] attributes = function.GetCustomAttributes(attributeType, false);
             if (attributes.Length > 0)
             {
-                // Note: result.GetType() may be a subclass; the method name must be definied by that subclass
+                // Note: this.GetType() may be a subclass; the method name must be definied by that subclass
                 TDFConfiguratorAttribute cfgAttribute = (TDFConfiguratorAttribute)attributes[0];
-                MethodInfo cfgMethod = result.GetType().GetMethod(cfgAttribute.methodName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-                cfgMethod.Invoke(result, new object[1] { r });
+                MethodInfo cfgMethod = this.GetType().GetMethod(cfgAttribute.methodName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                cfgMethod.Invoke(this, new object[1] { r });
             }
+        }
 
-            return result;
+        /// <summary>
+        /// Apply the function's distortion attribute to set up the distortion parameters.
+        /// </summary>
+        /// <param name="function"></param>
+        /// <param name="r"></param>
+        private void ConfigureDistortion(MethodInfo function, Random r)
+        {
+            Type attributeType = typeof(TDFDistortionAttribute);
+            object[] attributes = function.GetCustomAttributes(attributeType, false);
+            if (attributes.Length > 0)
+            {
+                double pRejected = 0.0;
+                for (int i = 0; i < attributes.Length; i++)
+                {
+                    TDFDistortionAttribute attr = (TDFDistortionAttribute)attributes[i];
+                    if (r.NextDouble() - pRejected < attr.probability)
+                    {
+                        MethodInfo distortionInfo = typeof(TDFDistortionAttribute).GetMethod(attr.methodName);
+                        this.distortion = (DistortionDelegate)Delegate.CreateDelegate(typeof(DistortionDelegate), distortionInfo);
+                        this.distortionAmplitude = attr.aMin + r.NextDouble() * (attr.aMax - attr.aMin);
+                        this.distortionFrequency = attr.fMin + r.NextDouble() * (attr.fMax - attr.fMin);
+                        if (attr.fStep > 0)
+                        {
+                            this.distortionFrequency = attr.fStep * Math.Max(1.0, Math.Round(this.distortionFrequency / attr.fStep));
+                        }
+                        break;
+                    }
+                    else
+                    {
+                        pRejected += attr.probability;
+                    }
+                }
+            }
         }
 
         #endregion
@@ -209,6 +271,8 @@ namespace SWA.Ariadne.Outlines
         /// <param name="y"></param>
         /// <returns></returns>
         [TDF(2, 0.5, 1.0)]
+        [TDFDistortion(0.3, "DistortX_CosY", 0.2, 0.5, 0.5, 2.0)]
+        [TDFDistortion(0.3, "DistortX_CosY_Alternating", 0.15, 0.3, 0.5, 2.0)]
         private double TDF_01(double x, double y)
         {
             return Math.Cos(0.5 * Math.PI * x);
@@ -222,6 +286,10 @@ namespace SWA.Ariadne.Outlines
         /// <param name="y"></param>
         /// <returns></returns>
         [TDF(4, 0.5, 1.0)]
+        [TDFDistortion(0.1, "DistortX_CosY", 0.2, 0.5, 0.5, 2.0)]
+        [TDFDistortion(0.1, "DistortY_CosX", 0.2, 0.5, 0.5, 2.0)]
+        [TDFDistortion(0.2, "DistortXY_CosY_CosX", 0.2, 0.5, 0.5, 2.0, 0.5)]
+        [TDFDistortion(0.3, "DistortXY_CosY_CosX_Alternating", 0.15, 0.3, 0.5, 2.0, 0.5)]
         private double TDF_02(double x, double y)
         {
             return TDF_01(x, y) * TDF_01(y, x);
@@ -248,6 +316,8 @@ namespace SWA.Ariadne.Outlines
         /// <param name="y"></param>
         /// <returns></returns>
         [TDF(4, 0.8, 1.2)]
+        [TDFDistortion(0.2, "DistortXY_CosY_CosX", 0.1, 0.3)]
+        [TDFDistortion(0.3, "DistortXY_CosY_CosX_Alternating", 0.1, 0.3)]
         private double TDF_04(double x, double y)
         {
             return TDF_02(x, y) - 0.05;
@@ -275,9 +345,11 @@ namespace SWA.Ariadne.Outlines
         /// <returns></returns>
         [TDF(4, 0.8, 1.2)]
         [TDFConfigurator("TDF_06_Configurator")]
+        [TDFDistortion(0.2, "DistortXY_CosY_CosX", 0.2, 0.3)]
+        [TDFDistortion(0.3, "DistortXY_CosY_CosX_Alternating", 0.15, 0.25)]
         private double TDF_06(double x, double y)
         {
-            // The shift parameter should be calibrated so that there is a one-square wide path between the tiles.
+            // The shift parameter is calibrated so that there is a one-square wide path between the tiles.
             return Math.Abs(TDF_02(x, y)) - t1;
         }
 
@@ -311,6 +383,12 @@ namespace SWA.Ariadne.Outlines
             // t1 can be determined directly from zMin:
             // If t1 > zMin, the function value will become negative.
             t1 = zMin * 1.001;
+
+            // For a distorted coordinate system, we need a larger value to get connected gap lines.
+            if (this.distortion != null)
+            {
+                t1 *= 1.5;
+            }
         }
 
         /// <summary>
@@ -320,7 +398,10 @@ namespace SWA.Ariadne.Outlines
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        //[TDF()]
+        //[TDF(4, 2.0, 4.0)]
+        [TDFDistortion(0.3, "DistortX_CosY", 0.1, 0.2, 3.0, 8.0, 1.0)]
+        [TDFDistortion(0.3, "DistortY_CosX", 0.1, 0.2, 3.0, 8.0, 1.0)]
+        [TDFDistortion(0.6, "DistortXY_CosY_CosX", 0.05, 0.15, 3.0, 8.0, 1.0)]
         private double TDF_11(double x, double y)
         {
             return (1.0 - (x * x + y * y));
@@ -340,24 +421,14 @@ namespace SWA.Ariadne.Outlines
         }
 
         /// <summary>
-        /// Creates a distorted hyperbola.
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns></returns>
-        //[TDF(2)]
-        private double TDF_21(double x, double y)
-        {
-            return TDF_12(x, y) + 3.0 * TDF_02(x, y);
-        }
-
-        /// <summary>
         /// Creates concentric circles.
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
         [TDF(0, 0.5, 2.0)]
+        [TDFDistortion(0.3, "DistortR_Exp", -0.25, -0.15)]
+        [TDFDistortion(0.3, "DistortR_Exp", +0.2, +0.5)]
         private double TDF_31(double r, double phi)
         {
             return Math.Cos(0.5 * Math.PI * r);
@@ -370,6 +441,8 @@ namespace SWA.Ariadne.Outlines
         /// <param name="y"></param>
         /// <returns></returns>
         [TDF(0, 0.4, 1.2)]
+        [TDFDistortion(0.3, "DistortR_Exp", -0.4, -0.2)]
+        [TDFDistortion(0.3, "DistortR_Exp", +0.2, +0.5)]
         private double TDF_32(double r, double phi)
         {
             return Math.Cos(0.5 * Math.PI * r + phi);
@@ -423,17 +496,199 @@ namespace SWA.Ariadne.Outlines
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     internal class TDFConfiguratorAttribute : System.Attribute
     {
+        public readonly string methodName;
+
+        public TDFConfiguratorAttribute(string configuratorMethodName)
+        {
+            this.methodName = configuratorMethodName;
+        }
+    }
+
+    /// <summary>
+    /// A method attribute that defines a distortion of a function's input parameters.
+    /// X any Y (or R and Phi) are slightly modified.
+    /// </summary>
+    /// 
+    /// Example:
+    /// DistortX_CosY() subtracts the cosine of Y from X.
+    /// The function value calculated for the coordinates (x,y) is not f(x,y) but f(x-d,y).
+    /// The outline contour that follows the function's zero locations is modulated:
+    /// a straight (vertical) line becomes a cosine wave.
+    /// 
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
+    internal class TDFDistortionAttribute : System.Attribute
+    {
         #region Member variables
 
+        /// <summary>
+        /// Probability with which this distortion should be applied.
+        /// </summary>
+        public readonly double probability;
+
+        /// <summary>
+        /// Method defined by the TDFDistortionAttribute class.
+        /// </summary>
         public readonly string methodName;
+
+        public MethodInfo method;
+
+        /// <summary>
+        /// Amplitude range: 0..1
+        /// </summary>
+        public readonly double aMin, aMax;
+
+        /// <summary>
+        /// Frequency range: 1/2 .. 2
+        /// </summary>
+        public readonly double fMin, fMax;
+
+        /// <summary>
+        /// The frequency should be rounded to a multiple of fStep (if positive).
+        /// </summary>
+        public readonly double fStep;
 
         #endregion
 
         #region Constructor
 
-        public TDFConfiguratorAttribute(string configuratorMethodName)
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="probability">0..1</param>
+        /// <param name="distortionMethodName"></param>
+        /// <param name="aMin">minimum distortion amplitude, in shape coordinate units</param>
+        /// <param name="aMax">maximum distortion amplitude, in shape coordinate units</param>
+        public TDFDistortionAttribute(double probability, string distortionMethodName, double aMin, double aMax)
+            : this(probability, distortionMethodName, aMin, aMax, 1, 1)
         {
-            this.methodName = configuratorMethodName;
+        }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="probability">0..1</param>
+        /// <param name="distortionMethodName"></param>
+        /// <param name="aMin">minimum distortion amplitude, in shape coordinate units</param>
+        /// <param name="aMax">maximum distortion amplitude, in shape coordinate units</param>
+        /// <param name="fMin">minimum distortion frequency, approx. 1.0</param>
+        /// <param name="fMax">maximum distortion frequency, approx. 1.0</param>
+        public TDFDistortionAttribute(double probability, string distortionMethodName, double aMin, double aMax, double fMin, double fMax)
+            : this(probability, distortionMethodName, aMin, aMax, fMin, fMax, 0.0)
+        {
+        }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="probability">0..1</param>
+        /// <param name="distortionMethodName"></param>
+        /// <param name="aMin">minimum distortion amplitude, in shape coordinate units</param>
+        /// <param name="aMax">maximum distortion amplitude, in shape coordinate units</param>
+        /// <param name="fMin">minimum distortion frequency, approx. 1.0</param>
+        /// <param name="fMax">maximum distortion frequency, approx. 1.0</param>
+        public TDFDistortionAttribute(double probability, string distortionMethodName, double aMin, double aMax, double fMin, double fMax, double fStep)
+        {
+            this.probability = probability;
+            this.methodName = distortionMethodName;
+            this.aMin = aMin;
+            this.aMax = aMax;
+            this.fMin = fMin;
+            this.fMax = fMax;
+            this.fStep = fStep;
+
+            this.method = this.GetType().GetMethod(distortionMethodName);
+        }
+
+        #endregion
+
+        #region Coordinate distortion methods.
+
+        /// <summary
+        /// Distort the X parameter.
+        /// Add a cosine wave.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="a">amplitude</param>
+        /// <param name="k">frequency</param>
+        public static void DistortX_CosY(ref double x, ref double y, double a, double f)
+        {
+            x -= a * Math.Cos(0.5 * Math.PI * f * y);
+        }
+
+        /// <summary
+        /// Distort the X parameter.
+        /// Add a cosine wave.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="a">amplitude</param>
+        /// <param name="k">frequency</param>
+        public static void DistortX_CosY_Alternating(ref double x, ref double y, double a, double f)
+        {
+            // The wave lines are where x or y is an odd number.
+            double sgnX = ((int)Math.Round(0.5 * (x - 1.0)) % 2 == 0 ? +1.0 : -1.0);
+
+            x -= sgnX * a * Math.Cos(0.5 * Math.PI * f * y);
+        }
+
+        /// <summary>
+        /// Distort the Y parameter.
+        /// Add a cosine wave.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="a">amplitude</param>
+        /// <param name="k">frequency</param>
+        public static void DistortY_CosX(ref double x, ref double y, double a, double f)
+        {
+            y -= a * Math.Cos(0.5 * Math.PI * f * x);
+        }
+
+        /// <summary>
+        /// Distort the X and Y parameters.
+        /// Add a cosine wave.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="a">amplitude</param>
+        /// <param name="k">frequency</param>
+        public static void DistortXY_CosY_CosX(ref double x, ref double y, double a, double f)
+        {
+            x -= a * Math.Cos(0.5 * Math.PI * f * y);
+            y -= a * Math.Cos(0.5 * Math.PI * f * x);
+        }
+
+        /// <summary>
+        /// Distort the X and Y parameters.
+        /// Add a cosine wave.
+        /// Every second wave is inverted.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="a">amplitude</param>
+        /// <param name="k">frequency</param>
+        public static void DistortXY_CosY_CosX_Alternating(ref double x, ref double y, double a, double f)
+        {
+            // The wave lines are where x or y is an odd number.
+            double sgnX = ((int)Math.Round(0.5 * (x - 1.0)) % 2 == 0 ? +1.0 : -1.0);
+            double sgnY = ((int)Math.Round(0.5 * (y - 1.0)) % 2 == 0 ? +1.0 : -1.0);
+
+            x -= sgnX * a * Math.Cos(0.5 * Math.PI * f * y);
+            y -= sgnY * a * Math.Cos(0.5 * Math.PI * f * x);
+        }
+
+        /// <summary>
+        /// Distort the R parameter.
+        /// Scale exponentially, creating a concave bending.
+        /// </summary>
+        /// <param name="r"></param>
+        /// <param name="phi"></param>
+        /// <param name="a">amplitude</param>
+        /// <param name="k">frequency</param>
+        public static void DistortR_Exp(ref double r, ref double phi, double a, double f)
+        {
+            r = Math.Pow(r, 1 + a);
         }
 
         #endregion
