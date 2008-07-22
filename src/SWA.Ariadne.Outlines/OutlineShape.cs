@@ -156,7 +156,7 @@ namespace SWA.Ariadne.Outlines
         /// <returns></returns>
         public static OutlineShape Function(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
         {
-            return FunctionOutlineShape.Random(r, xSize, ySize, centerX, centerX, shapeSize);
+            return FunctionOutlineShape.RandomInstance(r, xSize, ySize, centerX, centerX, shapeSize);
         }
 
         /// <summary>

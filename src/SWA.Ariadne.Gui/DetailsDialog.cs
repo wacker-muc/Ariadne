@@ -42,10 +42,9 @@ namespace SWA.Ariadne.Gui
             this.wallVisibilityRadioButtonAlways.Checked = true;
 
             // Set the relevant action delegates of all OutlineKind radio buttons.
-            RadioButton templateOK = this.outlineRadioButtonNone;
             foreach (Control control in this.outlineKindPanel.Controls)
             {
-                if (templateOK.GetType().IsAssignableFrom(control.GetType()))
+                if (typeof(RadioButton).IsAssignableFrom(control.GetType()))
                 {
                     RadioButton button = (RadioButton)control;
                     button.CheckedChanged += new System.EventHandler(this.OnOutlineKindChanged);
@@ -53,10 +52,9 @@ namespace SWA.Ariadne.Gui
             }
 
             // Set the relevant action delegates of all WallVisibility radio buttons.
-            RadioButton templateWV = this.wallVisibilityRadioButtonAlways;
             foreach (Control control in this.wallVisibilityGroupBox.Controls)
             {
-                if (templateWV.GetType().IsAssignableFrom(control.GetType()))
+                if (typeof(RadioButton).IsAssignableFrom(control.GetType()))
                 {
                     RadioButton button = (RadioButton)control;
                     button.CheckedChanged += new System.EventHandler(this.OnWallVisibilityChanged);
@@ -110,10 +108,9 @@ namespace SWA.Ariadne.Gui
             target.FillParametersInto(data);
 
             // Select the current OutlineKind radio button.
-            RadioButton templateOK = this.outlineRadioButtonNone;
             foreach (Control control in this.outlineKindPanel.Controls)
             {
-                if (templateOK.GetType().IsAssignableFrom(control.GetType()))
+                if (typeof(RadioButton).IsAssignableFrom(control.GetType()))
                 {
                     RadioButton button = (RadioButton)control;
                     button.Checked = ((AriadneSettingsData.OutlineKindEnum)button.Tag == data.OutlineKind);
@@ -121,10 +118,9 @@ namespace SWA.Ariadne.Gui
             }
 
             // Select the current WallVisibility radio button.
-            RadioButton templateWV = this.wallVisibilityRadioButtonAlways;
             foreach (Control control in this.wallVisibilityGroupBox.Controls)
             {
-                if (templateWV.GetType().IsAssignableFrom(control.GetType()))
+                if (typeof(RadioButton).IsAssignableFrom(control.GetType()))
                 {
                     RadioButton button = (RadioButton)control;
                     button.Checked = ((AriadneSettingsData.WallVisibilityEnum)button.Tag == data.WallVisibility);
