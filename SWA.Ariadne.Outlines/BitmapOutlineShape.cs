@@ -6,6 +6,9 @@ using System.Reflection;
 
 namespace SWA.Ariadne.Outlines
 {
+    /// <summary>
+    /// An OutlineShape defined by the contour of a black and white bitmap image.
+    /// </summary>
     internal class BitmapOutlineShape : OutlineShape
     {
         #region Class variables

@@ -6,6 +6,10 @@ using SWA.Utilities;
 
 namespace SWA.Ariadne.Outlines
 {
+    /// <summary>
+    /// Defines functions for building classical fractals:
+    /// the Mandelbrot set and its Julia sets.
+    /// </summary>
     internal class FractalOutlineShape : FunctionOutlineShape
     {
         #region Constructor

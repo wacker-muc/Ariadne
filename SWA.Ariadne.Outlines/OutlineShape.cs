@@ -5,6 +5,11 @@ using System.Drawing;
 
 namespace SWA.Ariadne.Outlines
 {
+    /// <summary>
+    /// An OutlineShape defines a contour line dividing the shape's inside and outside.
+    /// When used by the maze builder, the walls on the contour line should all be closed
+    /// (with the exception of a single entry).
+    /// </summary>
     public class OutlineShape
     {
         #region Member variables and Properties
@@ -52,7 +57,7 @@ namespace SWA.Ariadne.Outlines
                      1 * 20 / 3,
                      1 *  5 / 4,
                     (10 + 8 + 6 + 4 + 2) * 8 / 3,
-                    (7 + 2) * 12 / 3 * 8,
+                    (3 * 8 + 2) * 12 / 2,
                     10 * 10 / 2,
                      8 * 15 / 2,
                     25 * 15 / 1,
