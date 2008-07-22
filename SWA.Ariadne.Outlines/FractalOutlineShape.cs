@@ -1,12 +1,32 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Reflection;
 using SWA.Utilities;
 
 namespace SWA.Ariadne.Outlines
 {
     internal class FractalOutlineShape : FunctionOutlineShape
     {
+        #region Constructor
+
+        /// <summary>
+        /// Create an OutlineShape based on a two dimensional function.
+        /// </summary>
+        /// <param name="img"></param>
+        /// <param name="xSize">width of the created shape</param>
+        /// <param name="ySize">height of the created shape</param>
+        /// <param name="centerX">X coordinate, relative to total width; 0.0 = top, 1.0 = bottom</param>
+        /// <param name="centerY">Y coordinate, relative to total height; 0.0 = left, 1.0 = right</param>
+        /// <param name="shapeSize">size, relative to distance of center from the border; 1.0 will touch the border</param>
+        /// Note: The constructor must be public as it is invoked via reflection.
+        public FractalOutlineShape(int xSize, int ySize, double centerX, double centerY, double shapeSize, MethodInfo function, int symmetryRotation)
+            : base(xSize, ySize, centerX, centerY, shapeSize, function, symmetryRotation)
+        {
+        }
+
+        #endregion
+
         #region Geometric functions, tagged with the TDF attribute
 
         /// <summary>
@@ -21,7 +41,7 @@ namespace SWA.Ariadne.Outlines
         /// Symmetry = 4: Will not be rotated.
         /// Scale ~ 5: Compensates for the scaling applied in the FunctionOutlineShape constructor.
         [TDF(4, 5.0, 7.0)]
-        private static double Mandelbrot(double cr, double ci)
+        private double Mandelbrot(double cr, double ci)
         {
             double zr = 0, zi = 0;
 
@@ -58,7 +78,8 @@ namespace SWA.Ariadne.Outlines
         /// Symmetry = 4: Will not be rotated.
         /// Scale ~ 4: Compensates for the scaling applied in the FunctionOutlineShape constructor.
         [TDF(4, 4.0, 5.0)]
-        private static double Julia(double zr, double zi)
+        [TDFConfigurator("JuliaConfigurator")]
+        private double Julia(double zr, double zi)
         {
             // The escape limit is rather low to get a thicker shape.
             // Thus, we avoid that the shape breaks up into several not connected parts.
@@ -89,7 +110,7 @@ namespace SWA.Ariadne.Outlines
         /// (t1, t2) is a point close to the border of the Mandelbrot set.
         /// </summary>
         /// <param name="r"></param>
-        internal static void JuliaConfigurator(Random r, double squareWidth)
+        internal void JuliaConfigurator(Random r)
         {
             #region Find a point close to the Mandelbrot border.
 

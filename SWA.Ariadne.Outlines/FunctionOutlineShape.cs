@@ -13,21 +13,25 @@ namespace SWA.Ariadne.Outlines
         private static List<MethodInfo> Functions = new List<MethodInfo>();
         private static List<TDFAttribute> Attributes = new List<TDFAttribute>();
 
+        /// <summary>
+        /// This class initially needs to collect a set of methods that can generate two-dimensional function shapes.
+        /// </summary>
+        /// Note: We need to collect the functions of subclasses, as well.
+        ///       Using their class constructors would not work as they are not called until some other method is called.
         static FunctionOutlineShape()
         {
-            CollectFunctions((new FunctionOutlineShape()).GetType());
-            CollectFunctions((new FractalOutlineShape()).GetType());
+            CollectFunctions(typeof(FunctionOutlineShape));
+            CollectFunctions(typeof(FractalOutlineShape));
         }
 
         /// <summary>
-        /// Collect all (internal) static methods that have the TDF attribute.
+        /// Collect all (internal) methods that have the TDF attribute.
         /// </summary>
         /// <param name="classType"></param>
         protected static void CollectFunctions(Type classType)
         {
-            TDFAttribute attribute = new TDFAttribute();
-            Type attributeType = attribute.GetType();
-            BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static;
+            Type attributeType = typeof(TDFAttribute);
+            BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 
             foreach (System.Reflection.MethodInfo info in classType.GetMethods(flags))
             {
@@ -53,7 +57,7 @@ namespace SWA.Ariadne.Outlines
         /// General purpose parameters controlling the function.
         /// Should be initialized by a configuration method.
         /// </summary>
-        protected static double t1 = 0, t2 = 0, t3 = 0;
+        protected double t1 = 0, t2 = 0, t3 = 0;
 
         /// <summary>
         /// One of four orientations of the coordinate system.
@@ -112,7 +116,7 @@ namespace SWA.Ariadne.Outlines
                     }
                 }
 
-                double z = (double)f.Invoke(null, args);
+                double z = (double)f.Invoke(this, args);
                 return (z > 0);
             }
         }
@@ -120,11 +124,6 @@ namespace SWA.Ariadne.Outlines
         #endregion
 
         #region Constructor
-
-        protected FunctionOutlineShape()
-            : this(1, 1, 0, 0, 1, null, 0)
-        {
-        }
 
         /// <summary>
         /// Create an OutlineShape based on a two dimensional function.
@@ -135,7 +134,8 @@ namespace SWA.Ariadne.Outlines
         /// <param name="centerX">X coordinate, relative to total width; 0.0 = top, 1.0 = bottom</param>
         /// <param name="centerY">Y coordinate, relative to total height; 0.0 = left, 1.0 = right</param>
         /// <param name="shapeSize">size, relative to distance of center from the border; 1.0 will touch the border</param>
-        private FunctionOutlineShape(int xSize, int ySize, double centerX, double centerY, double shapeSize, MethodInfo function, int symmetryRotation)
+        /// Note: The constructor must be public as it is invoked via reflection.
+        public FunctionOutlineShape(int xSize, int ySize, double centerX, double centerY, double shapeSize, MethodInfo function, int symmetryRotation)
         {
             double xc, yc, sz;
             ConvertParameters(xSize, ySize, centerX, centerY, shapeSize, out xc, out yc, out sz);
@@ -155,10 +155,10 @@ namespace SWA.Ariadne.Outlines
 
         #region Static methods for creating OutlineShapes
 
-        public static OutlineShape Random(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
+        public static OutlineShape RandomInstance(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
         {
             int p = r.Next(Functions.Count);
-            //p = 8;
+            //p = Functions.Count - 2 + r.Next(2);
             MethodInfo function = Functions[p];
             TDFAttribute characteristics = Attributes[p];
 
@@ -174,20 +174,24 @@ namespace SWA.Ariadne.Outlines
 
             double scale = characteristics.scaleMin + r.NextDouble() * (characteristics.scaleMax - characteristics.scaleMin);
 
-            FunctionOutlineShape result = new FunctionOutlineShape(xSize, ySize, centerX, centerY, scale * shapeSize, function, symmetryRotation);
+            // Call the declaring type's constructor.
+            FunctionOutlineShape result = (FunctionOutlineShape)function.DeclaringType.GetConstructor(
+                new Type[7] { typeof(int), typeof(int), typeof(double), typeof(double), typeof(double), typeof(MethodInfo), typeof(int) }).Invoke(
+                new object[7] { xSize, ySize, centerX, centerY, scale * shapeSize, function, symmetryRotation }
+                );
             
             // Reset general purpose parameters.
-            t1 = t2 = t3 = 0.0;
+            result.t1 = result.t2 = result.t3 = 0.0;
 
             // Execute the function's configurator.
-            switch (function.Name)
+            Type attributeType = typeof(TDFConfiguratorAttribute);
+            object[] attributes = function.GetCustomAttributes(attributeType, false);
+            if (attributes.Length > 0)
             {
-                case "TDF_06":
-                    TDF_06_Configurator(result, result.scale);
-                    break;
-                case "Julia":
-                    FractalOutlineShape.JuliaConfigurator(r, result.scale);
-                    break;
+                // Note: result.GetType() may be a subclass; the method name must be definied by that subclass
+                TDFConfiguratorAttribute cfgAttribute = (TDFConfiguratorAttribute)attributes[0];
+                MethodInfo cfgMethod = result.GetType().GetMethod(cfgAttribute.methodName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                cfgMethod.Invoke(result, new object[1] { r });
             }
 
             return result;
@@ -205,7 +209,7 @@ namespace SWA.Ariadne.Outlines
         /// <param name="y"></param>
         /// <returns></returns>
         [TDF(2, 0.5, 1.0)]
-        private static double TDF_01(double x, double y)
+        private double TDF_01(double x, double y)
         {
             return Math.Cos(0.5 * Math.PI * x);
         }
@@ -218,7 +222,7 @@ namespace SWA.Ariadne.Outlines
         /// <param name="y"></param>
         /// <returns></returns>
         [TDF(4, 0.5, 1.0)]
-        private static double TDF_02(double x, double y)
+        private double TDF_02(double x, double y)
         {
             return TDF_01(x, y) * TDF_01(y, x);
         }
@@ -231,7 +235,7 @@ namespace SWA.Ariadne.Outlines
         /// <param name="y"></param>
         /// <returns></returns>
         //[TDF(4, 1.0, 1.0)]
-        private static double TDF_03(double x, double y)
+        private double TDF_03(double x, double y)
         {
             return TDF_02(x, y) - 0.6204;
         }
@@ -244,7 +248,7 @@ namespace SWA.Ariadne.Outlines
         /// <param name="y"></param>
         /// <returns></returns>
         [TDF(4, 0.8, 1.2)]
-        private static double TDF_04(double x, double y)
+        private double TDF_04(double x, double y)
         {
             return TDF_02(x, y) - 0.05;
         }
@@ -257,7 +261,7 @@ namespace SWA.Ariadne.Outlines
         /// <param name="y"></param>
         /// <returns></returns>
         //[TDF(4, 0.8, 1.2)]
-        private static double TDF_05(double x, double y)
+        private double TDF_05(double x, double y)
         {
             return Math.Abs(TDF_02(x, y)) - 0.6204;
         }
@@ -270,7 +274,8 @@ namespace SWA.Ariadne.Outlines
         /// <param name="y"></param>
         /// <returns></returns>
         [TDF(4, 0.8, 1.2)]
-        private static double TDF_06(double x, double y)
+        [TDFConfigurator("TDF_06_Configurator")]
+        private double TDF_06(double x, double y)
         {
             // The shift parameter should be calibrated so that there is a one-square wide path between the tiles.
             return Math.Abs(TDF_02(x, y)) - t1;
@@ -283,14 +288,14 @@ namespace SWA.Ariadne.Outlines
         /// </summary>
         /// <param name="shape"></param>
         /// <param name="squaresPerUnit"></param>
-        private static void TDF_06_Configurator(FunctionOutlineShape shape, double squareWidth)
+        private void TDF_06_Configurator(Random r)
         {
             // Find the minimum function value at integer coordinates, when t1 is 0.
             t1 = 0;
             double xMin = 0, zMin = TDF_06(xMin, 0);
             for (int i = 1; i <= 6; i++)
             {
-                double x = Math.Round(i / squareWidth) * squareWidth;
+                double x = Math.Round(i / this.scale) * this.scale;
                 double z = TDF_06(x, 0);
                 if (z < zMin)
                 {
@@ -300,7 +305,7 @@ namespace SWA.Ariadne.Outlines
             }
 
             // Get the smaller of the two function values at half a square width distance.
-            double delta = 0.5 * squareWidth;
+            double delta = 0.5 * this.scale;
             zMin = Math.Min(TDF_06(xMin - delta, 0), TDF_06(xMin + delta, 0));
 
             // t1 can be determined directly from zMin:
@@ -316,7 +321,7 @@ namespace SWA.Ariadne.Outlines
         /// <param name="y"></param>
         /// <returns></returns>
         //[TDF()]
-        private static double TDF_11(double x, double y)
+        private double TDF_11(double x, double y)
         {
             return (1.0 - (x * x + y * y));
         }
@@ -329,7 +334,7 @@ namespace SWA.Ariadne.Outlines
         /// <param name="y"></param>
         /// <returns></returns>
         [TDF(2)]
-        private static double TDF_12(double x, double y)
+        private double TDF_12(double x, double y)
         {
             return (1.0 - (x * x - y * y));
         }
@@ -341,7 +346,7 @@ namespace SWA.Ariadne.Outlines
         /// <param name="y"></param>
         /// <returns></returns>
         //[TDF(2)]
-        private static double TDF_21(double x, double y)
+        private double TDF_21(double x, double y)
         {
             return TDF_12(x, y) + 3.0 * TDF_02(x, y);
         }
@@ -353,7 +358,7 @@ namespace SWA.Ariadne.Outlines
         /// <param name="y"></param>
         /// <returns></returns>
         [TDF(0, 0.5, 2.0)]
-        private static double TDF_31(double r, double phi)
+        private double TDF_31(double r, double phi)
         {
             return Math.Cos(0.5 * Math.PI * r);
         }
@@ -365,7 +370,7 @@ namespace SWA.Ariadne.Outlines
         /// <param name="y"></param>
         /// <returns></returns>
         [TDF(0, 0.4, 1.2)]
-        private static double TDF_32(double r, double phi)
+        private double TDF_32(double r, double phi)
         {
             return Math.Cos(0.5 * Math.PI * r + phi);
         }
@@ -396,10 +401,6 @@ namespace SWA.Ariadne.Outlines
 
         #region Constructor
 
-        public TDFAttribute()
-        {
-        }
-
         public TDFAttribute(int symmetry)
         {
             this.symmetry = symmetry;
@@ -410,6 +411,29 @@ namespace SWA.Ariadne.Outlines
             this.symmetry = symmetry;
             this.scaleMin = scaleMin;
             this.scaleMax = scaleMax;
+        }
+
+        #endregion
+    }
+
+    /// <summary>
+    /// A method attribute that defines a configurator method for the function it is applied to.
+    /// The configurator is called once when the FunctionOutlineShape is constructed.
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+    internal class TDFConfiguratorAttribute : System.Attribute
+    {
+        #region Member variables
+
+        public readonly string methodName;
+
+        #endregion
+
+        #region Constructor
+
+        public TDFConfiguratorAttribute(string configuratorMethodName)
+        {
+            this.methodName = configuratorMethodName;
         }
 
         #endregion

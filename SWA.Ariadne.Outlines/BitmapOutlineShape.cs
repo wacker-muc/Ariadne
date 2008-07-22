@@ -22,22 +22,16 @@ namespace SWA.Ariadne.Outlines
         static BitmapOutlineShape()
         {
             BitmapProperties = new List<System.Reflection.MethodInfo>();
-#if false
-            // This fails in the class constructor and returns null.  :-(
-            Type bitmapType = System.Type.GetType("System.Drawing.Bitmap");
-#else
-            Bitmap bitmap = new Bitmap(1, 1);
-            Type bitmapType = bitmap.GetType();
-#endif
 
             #region Collect all (internal) Properties of the Resources type that return a Bitmap type.
 
-            Type resourcesType = Type.GetType("SWA.Ariadne.Outlines.Properties.Resources");
+            Type resourcesType = typeof(Properties.Resources);
             BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static;
 
             foreach (System.Reflection.PropertyInfo info in resourcesType.GetProperties(flags))
             {
                 Type propertyType = info.PropertyType;
+                Type bitmapType = typeof(Bitmap);
                 if (bitmapType.IsAssignableFrom(propertyType))
                 {
                     BitmapProperties.Add(info.GetGetMethod(true));
