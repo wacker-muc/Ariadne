@@ -112,6 +112,11 @@ namespace SWA.Ariadne.Gui
 
         protected bool repeatMode = false;
 
+        /// <summary>
+        /// Remembers the strategy name after the solver has been deleted.
+        /// </summary>
+        private string finishedStrategyName;
+
         #endregion
 
         #region Constructor
@@ -221,6 +226,44 @@ namespace SWA.Ariadne.Gui
             arena.Show();
         }
 
+        private void OnSaveImage(object sender, EventArgs e)
+        {
+            System.Drawing.Imaging.ImageFormat imgFormat = System.Drawing.Imaging.ImageFormat.Png;
+            int mazeWidth = MazeControlProperties.XSize, mazeHeigth = MazeControlProperties.YSize;
+
+            Image img = GetImage();
+            if (img == null)
+            {
+                return;
+            }
+
+            StringBuilder filename = new StringBuilder(200);
+            // TODO: path to directory
+            filename.Append("Ariadne_");
+            filename.Append(MazeControlProperties.Code.Replace(".", ""));
+            filename.Append("_" + mazeWidth.ToString() + "x" + mazeHeigth.ToString());
+            if (State == SolverState.Ready)
+            {
+                filename.Append("_empty");
+            }
+            else
+            {
+                filename.Append("_" + this.StrategyName);
+                if (State == SolverState.Finished)
+                {
+                    filename.Append("_solved");
+                }
+                else
+                {
+                    filename.Append("_partial-");
+                    filename.Append(SolverController.CountSteps);
+                }
+            }
+            filename.Append(".png");
+
+            img.Save(filename.ToString(), imgFormat);
+        }
+
         #endregion
 
         #region Solver controls
@@ -256,6 +299,7 @@ namespace SWA.Ariadne.Gui
             ResetCounters();
 
             SolverController.Start();
+            this.finishedStrategyName = SolverController.StrategyName;
 
             lapStartTime = System.DateTime.Now;
         }
@@ -550,6 +594,10 @@ namespace SWA.Ariadne.Gui
                     OnShowDropDownMenu(sender, e);
                     e.Handled = true;
                     break;
+                case (char)Keys.S:
+                    OnSaveImage(sender, e);
+                    e.Handled = true;
+                    break;
             }
         }
 
@@ -757,6 +805,11 @@ namespace SWA.Ariadne.Gui
                 }
                 catch (NullReferenceException) // in Ready state: there is no solver
                 {
+                    if (MazeControlProperties != null && State == SolverState.Finished)
+                    {
+                        return this.finishedStrategyName;
+                    }
+
                     try
                     {
                         return this.strategyComboBox.SelectedItem.ToString();
@@ -874,6 +927,21 @@ namespace SWA.Ariadne.Gui
                     return SolverState.Paused;
                 }
             }
+        }
+
+        /// <summary>
+        /// Returns an image of the current maze, without the Form border.
+        /// </summary>
+        /// <returns></returns>
+        protected virtual Image GetImage()
+        {
+            return null;
+
+            System.Drawing.Imaging.PixelFormat pxlFormat = System.Drawing.Imaging.PixelFormat.Format8bppIndexed;
+            int imgWidth = 20, imgHeight = 20;
+            Image img = new Bitmap(imgWidth, imgHeight, pxlFormat);
+
+            return img;
         }
 
         #endregion

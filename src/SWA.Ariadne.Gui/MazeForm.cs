@@ -175,6 +175,15 @@ namespace SWA.Ariadne.Gui
             }
         }
 
+        /// <summary>
+        /// Returns an image of the current maze, without the Form border.
+        /// </summary>
+        /// <returns></returns>
+        protected override Image GetImage()
+        {
+            return this.mazeUserControl.GetImage();
+        }
+
         #endregion
 
         #region IMazeForm implementation
