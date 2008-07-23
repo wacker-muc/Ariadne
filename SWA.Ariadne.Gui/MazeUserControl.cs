@@ -641,7 +641,7 @@ namespace SWA.Ariadne.Gui
             {
                 if (settingsData != null && settingsData.VisibleOutlines)
                 {
-                    PaintShapes(g);
+                    PaintOutlineShape(g);
                 }
 
                 switch (this.WallVisibility)
@@ -664,8 +664,13 @@ namespace SWA.Ariadne.Gui
             catch (MissingMethodException) { }
         }
 
-        private void PaintShapes(Graphics g)
+        private void PaintOutlineShape(Graphics g)
         {
+            if (maze.OutlineShape == null)
+            {
+                return;
+            }
+
             // Temporarily set zero width walls; thus, the squares will be drawn seamlessly.
             int savedWallWidth = wallWidth;
             wallWidth = 0;
@@ -677,8 +682,7 @@ namespace SWA.Ariadne.Gui
             {
                 for (int y = 0; y < YSize; y++)
                 {
-                    int n = maze.CountCoveringOutlineShapes(x, y);
-                    if (n % 2 == 1)
+                    if (maze.OutlineShape[x, y] == true)
                     {
                         this.PaintSquare(g, shapeBrush, x, y);
                     }
@@ -1386,13 +1390,8 @@ namespace SWA.Ariadne.Gui
             if (shapeBuilderDelegate != null)
             {
                 OutlineShape shape = OutlineShape.Instance(r, shapeBuilderDelegate, XSize, YSize, offCenter, size);
-                AddOutlineShape(shape);
+                maze.OutlineShape = shape;
             }
-        }
-
-        internal void AddOutlineShape(OutlineShape shape)
-        {
-            this.maze.AddOutlineShape(shape);
         }
 
         #endregion

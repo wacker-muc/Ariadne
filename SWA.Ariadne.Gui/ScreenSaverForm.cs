@@ -345,7 +345,7 @@ namespace SWA.Ariadne.Gui
             if (r.Next(100) < percentage)
             {
                 OutlineShape shape = OutlineShape.RandomInstance(r, mazeUserControl.Maze.XSize, mazeUserControl.Maze.YSize, 0.3, 0.7);
-                mazeUserControl.AddOutlineShape(shape);
+                mazeUserControl.Maze.OutlineShape = shape;
             }
         }
 
