@@ -936,12 +936,6 @@ namespace SWA.Ariadne.Gui
         protected virtual Image GetImage()
         {
             return null;
-
-            System.Drawing.Imaging.PixelFormat pxlFormat = System.Drawing.Imaging.PixelFormat.Format8bppIndexed;
-            int imgWidth = 20, imgHeight = 20;
-            Image img = new Bitmap(imgWidth, imgHeight, pxlFormat);
-
-            return img;
         }
 
         #endregion

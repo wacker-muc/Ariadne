@@ -55,7 +55,7 @@ namespace SWA.Ariadne.Model
         /// </summary>
         /// <param name="r"></param>
         /// <returns></returns>
-        public static IrregularMazeShape Instance(Random r, Maze maze)
+        public static IrregularMazeShape RandomInstance(Random r, Maze maze)
         {
             if (maze.OutlineShape != null && r.Next(100) < 10)
             {

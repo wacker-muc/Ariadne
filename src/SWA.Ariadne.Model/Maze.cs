@@ -80,25 +80,20 @@ namespace SWA.Ariadne.Model
         private List<Rectangle> reservedAreas = new List<Rectangle>();
 
         /// <summary>
-        /// Most of the outlines of these shapes will be turned into closed walls.
+        /// Most of the outline of this shape will be turned into closed walls.
         /// </summary>
-        private List<OutlineShape> outlineShapes = new List<OutlineShape>();
-        #region Properties
-        internal OutlineShape OutlineShape
+        public OutlineShape OutlineShape
         {
             get
             {
-                if (outlineShapes.Count > 0)
-                {
-                    return outlineShapes[0];
-                }
-                else
-                {
-                    return null;
-                }
+                return this.outlineShape;
+            }
+            set
+            {
+                this.outlineShape = value;
             }
         }
-        #endregion
+        private OutlineShape outlineShape = null;
 
         /// <summary>
         /// The maze is formed by a two-dimensional array of squares.
@@ -146,7 +141,7 @@ namespace SWA.Ariadne.Model
                 }
                 else
                 {
-                    irregularMazeShape = IrregularMazeShape.Instance(this.random, this);
+                    irregularMazeShape = IrregularMazeShape.RandomInstance(this.random, this);
                 }
             }
         }
@@ -376,28 +371,6 @@ namespace SWA.Ariadne.Model
             }
 
             return false;
-        }
-
-        /// <summary>
-        /// Most of the given shape will be turned into closed walls.
-        /// </summary>
-        /// <param name="shape"></param>
-        public void AddOutlineShape(OutlineShape shape)
-        {
-            outlineShapes.Add(shape);
-        }
-
-        public int CountCoveringOutlineShapes(int x, int y)
-        {
-            int result = 0;
-            foreach (OutlineShape shape in outlineShapes)
-            {
-                if (shape[x, y])
-                {
-                    ++result;
-                }
-            }
-            return result;
         }
 
         public void CreateMaze()
@@ -782,9 +755,9 @@ namespace SWA.Ariadne.Model
         /// </summary>
         private void FixOutlineShapes()
         {
-            foreach (OutlineShape shape in this.outlineShapes)
+            if (outlineShape != null)
             {
-                FixOutline(shape);
+                FixOutline(outlineShape);
             }
         }
 
@@ -901,7 +874,7 @@ namespace SWA.Ariadne.Model
             this.random = RandomFactory.CreateRandom(seed);
 
             this.reservedAreas.Clear();
-            this.outlineShapes.Clear();
+            this.outlineShape = null;
 
             // Decode(data.Code);
         }
