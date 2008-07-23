@@ -538,6 +538,8 @@ namespace SWA.Ariadne.Gui
                 gBuffer = null;
             }
 
+            this.BlinkingCounter = 0;
+
             if (allowUpdates)
             {
                 this.Invalidate();
@@ -1014,6 +1016,42 @@ namespace SWA.Ariadne.Gui
 
         #endregion
 
+        #region Support for saving image files
+
+        /// <summary>
+        /// Returns a Bitmap image of the maze.
+        /// </summary>
+        /// <returns></returns>
+        internal Image GetImage()
+        {
+            int margin = 4;
+            margin = Math.Max(margin, wallWidth + 2);
+            margin = Math.Max(margin, gridWidth / 2);
+            margin = Math.Min(margin, 12);
+
+            // Determine the dimensions of the image.
+            Point clientUpperLeft = new Point(xOffset - wallWidth / 2 - 1, yOffset - wallWidth / 2 - 1);
+            Size clientSize = new Size(XSize * gridWidth + wallWidth + 2, YSize * gridWidth + wallWidth + 2);
+            Size imgSize = new Size(clientSize.Width + 2 * (margin - 1), clientSize.Height + 2 * (margin - 1));
+
+            // Create a fitting Bitmap image.
+            System.Drawing.Imaging.PixelFormat pxlFormat = System.Drawing.Imaging.PixelFormat.Format16bppRgb555;
+            Bitmap result = new Bitmap(imgSize.Width, imgSize.Height, pxlFormat);
+
+            // Make sure the end square is painted solid.
+            this.BlinkingCounter = 0;
+
+            // Grab the painted maze from the screen.
+            // Note: I've found no way to get access to the contents of the BufferedGraphics.
+            Graphics g = Graphics.FromImage(result);
+            g.FillRectangle(Brushes.Black, new Rectangle(new Point(0, 0), imgSize));
+            g.CopyFromScreen(PointToScreen(clientUpperLeft), new Point(margin, margin), clientSize);
+
+            return result;
+        }
+
+        #endregion
+
         #region IAriadneSettingsSource implementation
 
         /// <summary>
@@ -1158,6 +1196,9 @@ namespace SWA.Ariadne.Gui
 
         public void PrepareImages(int count, int minSize, int maxSize, string imageFolder)
         {
+            images.Clear();
+            imageLocations.Clear();
+
             #region Determine number of images to be placed into reserved areas.
 
             Random r = maze.Random;
@@ -1182,9 +1223,6 @@ namespace SWA.Ariadne.Gui
             }
 
             #endregion
-
-            images.Clear();
-            imageLocations.Clear();
 
             foreach (string imagePath in FindImages(imageFolder, n))
             {

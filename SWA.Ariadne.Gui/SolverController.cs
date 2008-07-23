@@ -236,7 +236,10 @@ namespace SWA.Ariadne.Gui
                         );
                 }
 
-                solver.FillStatusMessage(message);
+                if (solver != null)
+                {
+                    solver.FillStatusMessage(message);
+                }
             }
         }
 
