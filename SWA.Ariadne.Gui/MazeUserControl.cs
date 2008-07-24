@@ -15,92 +15,35 @@ namespace SWA.Ariadne.Gui
     public partial class MazeUserControl : UserControl
         , IMazeControl
     {
-        #region Constants
-
-        /// <summary>
-        /// Minimum and maximum grid width.
-        /// </summary>
-        public const int MinGridWidth = 2, MaxGridWidth = 40;
-
-        /// <summary>
-        /// Minimum and maximum grid width when using automatic settings.
-        /// </summary>
-        public const int MinAutoGridWidth = 6, MaxAutoGridWidth = 12;
-
-        /// <summary>
-        /// Minimum and maximum grid width when using automatic settings without walls.
-        /// </summary>
-        public const int MinAutoGridWidthWithoutWalls = 4, MaxAutoGridWidthWithoutWalls = 9;
-
-        /// <summary>
-        /// Miniumum and maximum square width.
-        /// </summary>
-        public const int MinSquareWidth = 1, MaxSquareWidth = MaxGridWidth - 1;
-
-        /// <summary>
-        /// Miniumum and maximum square width.
-        /// </summary>
-        public const int MinPathWidth = 1, MaxPathWidth = MaxSquareWidth;
-
-        /// <summary>
-        /// Miniumum and maximum wall width.
-        /// </summary>
-        public const int MinWallWidth = 1, MaxWallWidth = MaxGridWidth / 2;
-
-        /// <summary>
-        /// Two reference Colors for deriving forward and backward path colors.
-        /// </summary>
-        private static readonly Color MinColor = Color.DarkSlateBlue, MaxColor = Color.Gold;
-
-        #endregion
-
         #region Member variables
+
+        /// <summary>
+        /// The MazePainter responsible for all painting activities.
+        /// </summary>
+        private MazePainter painter;
 
         public Maze Maze
         {
-            get { return maze; }
+            get { return painter.Maze; }
         }
-        private Maze maze;
+        private Maze maze
+        {
+            // TODO: remove this property
+            get { return painter.Maze; }
+        }
 
         private AriadneSettingsData settingsData;
 
-        private bool VisibleWalls
-        {
-            get
-            {
-                return (WallVisibility != AriadneSettingsData.WallVisibilityEnum.Never);
-            }
-        }
-        public AriadneSettingsData.WallVisibilityEnum WallVisibility
-        {
-            get
-            {
-                return (this.settingsData == null ? this.wallVisibility : this.settingsData.WallVisibility);
-            }
-        }
-        private AriadneSettingsData.WallVisibilityEnum wallVisibility = AriadneSettingsData.WallVisibilityEnum.Always;
-
         public bool RandomizeWallVisibility
         {
-            set { randomizeWallVisibility = value; }
+            set { painter.RandomizeWallVisibility = value; }
         }
-        private bool randomizeWallVisibility = false;
 
-        private int squareWidth;
-        private int wallWidth = -1;
-        private int gridWidth;
-        private int pathWidth;
-        private int xOffset, yOffset;
-
-        private static Color wallColor = Color.Gray;
-        private Color forwardColor = Color.GreenYellow;
-        private Color backwardColor = Color.Brown;
-        private static Color deadEndColor = Color.FromArgb(64, 64, 64); // 25% dark gray
-
-        private Pen wallPen;
-        private Pen forwardPen;
-        private Pen backwardPen;
-        private Brush deadEndBrush = new SolidBrush(deadEndColor);
+        // TODO: evaluate these properties inline
+        private int wallWidth { get { return painter.WallWidth; } }
+        private int gridWidth { get { return painter.GridWidth; } }
+        private int xOffset { get { return painter.XOffset; } }
+        private int yOffset { get { return painter.YOffset; } }
 
         /// <summary>
         /// A counter that switches the end square between two states:
@@ -109,35 +52,8 @@ namespace SWA.Ariadne.Gui
         /// </summary>
         public int BlinkingCounter
         {
-            get
-            {
-                return blinkingCounter;
-            }
-            set {
-                blinkingCounter = value;
-                if (gBuffer != null)
-                {
-                    PaintEndpoints(gBuffer.Graphics);
-                    gBuffer.Render();
-                    this.Update();
-                }
-            }
-        }
-        private int blinkingCounter = 0;
-
-        private Brush StartSquareBrush
-        {
-            get { return Brushes.Red; }
-        }
-
-        private Brush EndSquareBrush
-        {
-            get
-            {
-                if (Maze.IsSolved)                 return StartSquareBrush;
-                if (this.BlinkingCounter % 2 == 0) return StartSquareBrush;
-                return Brushes.Black;
-            }
+            get { return painter.BlinkingCounter; }
+            set { painter.BlinkingCounter = value; }
         }
 
         /// <summary>
@@ -165,16 +81,6 @@ namespace SWA.Ariadne.Gui
         }
 
         /// <summary>
-        /// This buffer holds the graphics and is rendered in the control.
-        /// </summary>
-        private BufferedGraphics gBuffer;
-
-        /// <summary>
-        /// This buffer is used to prepare a new maze in Repeat Mode.
-        /// </summary>
-        private BufferedGraphics gBufferAlternate;
-
-        /// <summary>
         /// When false, do not update the caption or status bar.
         /// </summary>
         private bool allowUpdates = true;
@@ -193,6 +99,7 @@ namespace SWA.Ariadne.Gui
         public MazeUserControl()
         {
             InitializeComponent();
+            this.painter = new MazePainter(this);
         }
 
         /// <summary>
@@ -202,59 +109,24 @@ namespace SWA.Ariadne.Gui
         /// <param name="rect"></param>
         internal void SetGraphics(Graphics g, Rectangle rect)
         {
-            this.externalGraphics = g;
-            //MessageBox.Show("Setting new drawing rectangle: " + rect.ToString(), "Debugging...", MessageBoxButtons.OK);
-            this.externalRect = rect;
+#if false // TODO: false
             this.Size = new Size(rect.Width, rect.Height);
             this.Location = rect.Location;
+#endif
+
+            this.painter = new MazePainter(g, rect);
         }
-        private Graphics externalGraphics = null;
-        private Rectangle externalRect;
 
         public void Setup(int squareWidth, int wallWidth, int pathWidth)
         {
-            this.squareWidth = squareWidth;
-            this.wallWidth = wallWidth;
-            this.gridWidth = squareWidth + wallWidth;
-            this.pathWidth = pathWidth;
-
-            AdjustPathWidth(squareWidth, wallWidth, ref pathWidth);
-            ColorBuilder.SuggestColors(MinColor, MaxColor, out forwardColor, out backwardColor);
+            painter.Setup(squareWidth, wallWidth, pathWidth);
             CreateMaze();
             Reset();
         }
 
-        public void Setup(int gridWidth)
-        {
-            int wallWidth;
-            int squareWidth;
-            int pathWidth;
-            SuggestWidths(gridWidth, VisibleWalls, out squareWidth, out pathWidth, out wallWidth);
-
-            this.Setup(squareWidth, wallWidth, pathWidth);
-        }
-
-        internal static void SuggestWidths(int gridWidth, bool visibleWalls, out int squareWidth, out int pathWidth, out int wallWidth)
-        {
-            if (visibleWalls)
-            {
-                wallWidth = Math.Max(MinWallWidth, Math.Min(MaxWallWidth, (int)(0.3 * gridWidth)));
-                squareWidth = gridWidth - wallWidth;
-                pathWidth = (int)(0.7 * squareWidth);
-            }
-            else
-            {
-                wallWidth = 0;
-                squareWidth = gridWidth - wallWidth;
-                pathWidth = (int)(0.75 * squareWidth);
-            }
-
-            AdjustPathWidth(squareWidth, wallWidth, ref pathWidth);
-        }
-
         public void Setup()
         {
-            if (gBufferAlternate != null)
+            if (painter.HasBufferAlternate)
             {
                 // the Setup() method was already executed for creating the alternate buffer
                 this.Invalidate();
@@ -267,64 +139,14 @@ namespace SWA.Ariadne.Gui
                 return;
             }
 
-            Random r = RandomFactory.CreateRandom();
+            painter.Setup();
 
-            if (randomizeWallVisibility)
-            {
-                switch (r.Next(3))
-                {
-                    case 0:
-                        this.wallVisibility = AriadneSettingsData.WallVisibilityEnum.Always;
-                        break;
-                    case 1:
-                        this.wallVisibility = AriadneSettingsData.WallVisibilityEnum.Never;
-                        break;
-                    case 2:
-                        this.wallVisibility = AriadneSettingsData.WallVisibilityEnum.WhenVisited;
-                        break;
-                }
-            }
-            else
-            {
-                this.wallVisibility = AriadneSettingsData.WallVisibilityEnum.Always;
-            }
+            int wallWidth;
+            int squareWidth;
+            int pathWidth;
+            MazePainter.SuggestWidths(painter.GridWidth, painter.VisibleWalls, out squareWidth, out pathWidth, out wallWidth);
 
-            int gridWidth = GetRandomGridWidth(r);
-
-            if (externalGraphics != null)
-            {
-                gridWidth /= 2;
-            }
-            
-            this.Setup(gridWidth);
-        }
-
-        /// <summary>
-        /// Return a random grid width between the constant minimum and maximum values.
-        /// </summary>
-        /// <param name="r"></param>
-        /// <returns></returns>
-        private int GetRandomGridWidth(Random r)
-        {
-            int minWidth = (VisibleWalls ? MinAutoGridWidth : MinAutoGridWidthWithoutWalls);
-            int maxWidth = (VisibleWalls ? MaxAutoGridWidth : MaxAutoGridWidthWithoutWalls);
-
-            // Use a larger grid width for the first maze.
-            if (this.wallWidth < 0)
-            {
-                minWidth = (minWidth + maxWidth) / 2;
-            }
-
-            int result = r.Next(minWidth, maxWidth);
-
-            // Make sure we do not exceed the maximally allowed dimensions.
-            MazeDimensions dim = MazeDimensions.Instance(MazeCode.DefaultCodeVersion);
-            while (this.Width / result > dim.MaxXSize || this.Height / result > dim.MaxYSize)
-            {
-                ++result;
-            }
-
-            return result;
+            this.Setup(squareWidth, wallWidth, pathWidth);
         }
 
         /// <summary>
@@ -333,69 +155,40 @@ namespace SWA.Ariadne.Gui
         public void PrepareAlternateBuffer()
         {
             // An alternate buffer must only be prepared when the previous maze is solved.
-            if (maze != null && maze.IsSolved != true)
+            if (Maze != null && Maze.IsSolved != true)
             {
                 return;
             }
 
             // The alternate buffer method doesn't work properly in the screen saver preview mode.
-            if (externalGraphics != null)
+            if (painter.screenSaverPreviewMode == true)
             {
                 return;
             }
 
+            // TODO: see if this variable is still required
             this.allowUpdates = false;
             
             this.Setup();
 
-            gBufferAlternate = this.CreateGraphicsBuffer();
-            Graphics g = gBufferAlternate.Graphics;
-            PaintMaze(g);
+            painter.PrepareAlternateBuffer(this.PaintImages);
             
             this.allowUpdates = true;
         }
 
         /// <summary>
-        /// Make (squareWidth - pathWidth) an even number.
-        /// That will make sure that the path is centered nicely between the walls.
-        /// </summary>
-        /// <returns></returns>
-        private static void AdjustPathWidth(int squareWidth, int wallWidth, ref int pathWidth)
-        {
-            if (wallWidth > 0 && (squareWidth - pathWidth) % 2 != 0)
-            {
-                pathWidth -= 1;
-            }
-            if (pathWidth < 2)
-            {
-                pathWidth = squareWidth;
-            }
-        }
-
-        /// <summary>
-        /// Construct a maze 
+        /// Construct a maze that fits into the drawing area.
         /// </summary>
         private void CreateMaze()
         {
-            // Determine dimensions of a maze that fits into the drawing area.
-            int xSize, ySize;
-            FitMazeWidth(out xSize, out this.xOffset);
-            FitMazeHeight(out ySize, out this.yOffset);
-
-            // Create a maze.
-            this.maze = new Maze(xSize, ySize);
-
-            try
+            if (this.MazeForm == null)
             {
-                // Note: In the designer, the MazeForm property is not valid.
-                this.MazeForm.MakeReservedAreas(maze);
+                painter.CreateMaze(null);
             }
-            catch { }
-
-            maze.CreateMaze();
-
-            try
+            else
             {
+                painter.CreateMaze(this.MazeForm.MakeReservedAreas);
+
                 // Note: In the designer, the MazeForm property is not valid.
                 if (allowUpdates)
                 {
@@ -403,31 +196,6 @@ namespace SWA.Ariadne.Gui
                     this.MazeForm.UpdateCaption();
                 }
             }
-            catch { }
-        }
-
-        /// <summary>
-        /// Calculate width and xOffset.
-        /// </summary>
-        /// <param name="width"></param>
-        /// <param name="yOffset"></param>
-        private void FitMazeWidth(out int width, out int xOffset)
-        {
-            int w = (externalGraphics != null ? externalRect.Width : this.Width);
-            width = (w - this.wallWidth - 4) / this.gridWidth;
-            xOffset = (w - width * this.gridWidth) / 2;
-        }
-
-        /// <summary>
-        /// Calculate height and yOffset.
-        /// </summary>
-        /// <param name="height"></param>
-        /// <param name="xOffset"></param>
-        private void FitMazeHeight(out int height, out int yOffset)
-        {
-            int h = (externalGraphics != null ? externalRect.Height : this.Height);
-            height = (h - this.wallWidth - 4) / this.gridWidth;
-            yOffset = (h - height * this.gridWidth) / 2;
         }
 
         /// <summary>
@@ -495,6 +263,8 @@ namespace SWA.Ariadne.Gui
             return result;
         }
 
+        // TODO: remove remaining methods
+
         private int XCoordinate(int xLocation, bool leftBiased)
         {
             int result = (xLocation - this.Location.X);
@@ -520,23 +290,8 @@ namespace SWA.Ariadne.Gui
         /// </summary>
         public void Reset()
         {
-            maze.Reset();
-
-            this.BackColor = Color.Black;
-            this.wallPen = new Pen(wallColor, wallWidth);
-            this.forwardPen = new Pen(forwardColor, pathWidth);
-            this.backwardPen = new Pen(backwardColor, pathWidth);
-
-            wallPen.StartCap = wallPen.EndCap = System.Drawing.Drawing2D.LineCap.Square;
-            forwardPen.StartCap = forwardPen.EndCap = System.Drawing.Drawing2D.LineCap.Square;
-            backwardPen.StartCap = backwardPen.EndCap = System.Drawing.Drawing2D.LineCap.Square;
-
-            // Destroy the current buffer; it will be re-created in the OnPaint() method.
-            if (gBuffer != null)
-            {
-                gBuffer.Dispose();
-                gBuffer = null;
-            }
+            //this.BackColor = Color.Black;
+            painter.Reset();
 
             this.BlinkingCounter = 0;
 
@@ -558,9 +313,10 @@ namespace SWA.Ariadne.Gui
 
         #region Painting methods
 
+        // TODO: remove remaining methods
+
         /// <summary>
         /// Paints the contents of this control by rendering the GraphicsBuffer.
-        /// On first time, the buffer is created and the maze (without any path) is painted.
         /// </summary>
         /// <param name="e"></param>
         protected override void OnPaint(PaintEventArgs e)
@@ -572,255 +328,19 @@ namespace SWA.Ariadne.Gui
                 this.Setup(12, 3, 8);
             }
 
-            // On first time, create a graphics buffer and draw the static maze.
-            //
-            if (gBuffer == null)
-            {
-                // Use the previously prepared alternate buffer, if possible.
-                if (gBufferAlternate != null)
-                {
-                    // For a brief moment, display a black screen.
-                    Graphics g = this.CreateGraphics();
-                    g.FillRectangle(Brushes.Black, this.DisplayRectangle);
-                    g.Flush();
-                    System.Threading.Thread.Sleep(120); // milliseconds
+            painter.OnPaint(this.PaintImages, true);
 
-                    gBuffer = gBufferAlternate;
-                    gBufferAlternate = null;
-
-                    // An update of the status line and caption has been delayed until now.
-                    //MazeForm.UpdateStatusLine();
-                    MazeForm.UpdateCaption();
-                }
-                else
-                {
-                    PaintMaze();
-                }
-            }
-
-            gBuffer.Render();
+            // If a new maze has been painted, the caption needs to be updated.
+            MazeForm.UpdateCaption();
         }
 
         /// <summary>
         /// Creates the GraphicsBuffer and draws the static maze.
         /// </summary>
+        /// TODO: remove this method
         internal void PaintMaze()
         {
-            gBuffer = CreateGraphicsBuffer();
-            Graphics g = gBuffer.Graphics;
-            PaintMaze(g);
-        }
-
-        /// <summary>
-        /// Creates a new GraphicsBuffer associated with the current graphics context.
-        /// </summary>
-        /// <returns></returns>
-        private BufferedGraphics CreateGraphicsBuffer()
-        {
-            BufferedGraphics result;
-            BufferedGraphicsContext currentContext = BufferedGraphicsManager.Current;
-            if (externalGraphics != null)
-            {
-                //MessageBox.Show("Allocating an external graphics buffer: " + externalRect.ToString(), "Debugging...", MessageBoxButtons.OK);
-                result = currentContext.Allocate(externalGraphics, externalRect);
-            }
-            else
-            {
-                result = currentContext.Allocate(this.CreateGraphics(), this.DisplayRectangle);
-            }
-            return result;
-        }
-
-        /// <summary>
-        /// Creates the GraphicsBuffer and draws the static maze.
-        /// </summary>
-        private void PaintMaze(Graphics g)
-        {
-            // The PaintWalls() method fails in design mode.
-            try
-            {
-                if (settingsData != null && settingsData.VisibleOutlines)
-                {
-                    PaintOutlineShape(g);
-                }
-
-                switch (this.WallVisibility)
-                {
-                    default:
-                    case AriadneSettingsData.WallVisibilityEnum.Always:
-                        PaintBorder(g);
-                        PaintWalls(g);
-                        break;
-                    case AriadneSettingsData.WallVisibilityEnum.Never:
-                        break;
-                    case AriadneSettingsData.WallVisibilityEnum.WhenVisited:
-                        PaintWalls(g, maze.StartSquare);
-                        break;
-                }
-
-                PaintEndpoints(g);
-                PaintImages(g);
-            }
-            catch (MissingMethodException) { }
-        }
-
-        private void PaintOutlineShape(Graphics g)
-        {
-            if (maze.OutlineShape == null)
-            {
-                return;
-            }
-
-            // Temporarily set zero width walls; thus, the squares will be drawn seamlessly.
-            int savedWallWidth = wallWidth;
-            wallWidth = 0;
-            squareWidth = gridWidth;
-
-            Color shapeColor = Color.FromArgb(0, 0, 50); // dark blue
-            Brush shapeBrush = new SolidBrush(shapeColor);
-            for (int x = 0; x < XSize; x++)
-            {
-                for (int y = 0; y < YSize; y++)
-                {
-                    if (maze.OutlineShape[x, y] == true)
-                    {
-                        this.PaintSquare(g, shapeBrush, x, y);
-                    }
-                }
-            }
-
-            wallWidth = savedWallWidth;
-            squareWidth = gridWidth - wallWidth;
-        }
-
-        /// <summary>
-        /// Paints a border around the maze.
-        /// </summary>
-        /// <param name="g"></param>
-        private void PaintBorder(Graphics g)
-        {
-            /* Actually, we only paint the east and south wall of every
-             * square on the respective border.
-             * We don't optimize by drawing long lines or a rectangle
-             * because there may be reserved areas on the border
-             * and the walls may be open instead of closed.
-             */
-
-            // Draw the south walls of every square on the southern border.
-            for (int x = 0; x < maze.XSize; x++)
-            {
-                int cx = xOffset + x * gridWidth;
-                int cy = yOffset + maze.YSize * gridWidth;
-                MazeSquare sq = maze[x, maze.YSize-1];
-
-                if (sq[MazeSquare.WallPosition.WP_S] == MazeSquare.WallState.WS_CLOSED)
-                {
-                    g.DrawLine(wallPen, cx, cy, cx + gridWidth, cy);
-                }
-            }
-
-            // Draw the east walls of every square on the eastern border.
-            for (int y = 0; y < maze.YSize; y++)
-            {
-                int cy = yOffset + y * gridWidth;
-                int cx = xOffset + maze.XSize * gridWidth;
-                MazeSquare sq = maze[maze.XSize-1, y];
-
-                if (sq[MazeSquare.WallPosition.WP_E] == MazeSquare.WallState.WS_CLOSED)
-                {
-                    g.DrawLine(wallPen, cx, cy, cx, cy + gridWidth);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Paints the closed inner walls.
-        /// </summary>
-        /// <param name="g"></param>
-        private void PaintWalls(Graphics g)
-        {
-            // We'll only draw the west and north walls of every square.
-            for (int x = 0; x < maze.XSize; x++)
-            {
-                int cx = xOffset + x * gridWidth;
-                for (int y = 0; y < maze.YSize; y++)
-                {
-                    int cy = yOffset + y * gridWidth;
-                    MazeSquare sq = maze[x, y];
-
-                    // Draw the west wall.
-                    if (sq[MazeSquare.WallPosition.WP_W] == MazeSquare.WallState.WS_CLOSED)
-                    {
-                        g.DrawLine(wallPen, cx, cy, cx, cy + gridWidth);
-                    }
-
-                    // Draw the north wall.
-                    if (sq[MazeSquare.WallPosition.WP_N] == MazeSquare.WallState.WS_CLOSED)
-                    {
-                        g.DrawLine(wallPen, cx, cy, cx + gridWidth, cy);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Paints the closed walls around a given square.
-        /// This method is called for the visited squares when the walls are initially invisible.
-        /// </summary>
-        /// <param name="g"></param>
-        /// <param name="sq"></param>
-        private void PaintWalls(Graphics g, MazeSquare sq)
-        {
-            int cx = xOffset + sq.XPos * gridWidth;
-            int cy = yOffset + sq.YPos * gridWidth;
-
-            // Draw the west wall.
-            if (sq[MazeSquare.WallPosition.WP_W] == MazeSquare.WallState.WS_CLOSED)
-            {
-                g.DrawLine(wallPen, cx, cy, cx, cy + gridWidth);
-            }
-
-            // Draw the north wall.
-            if (sq[MazeSquare.WallPosition.WP_N] == MazeSquare.WallState.WS_CLOSED)
-            {
-                g.DrawLine(wallPen, cx, cy, cx + gridWidth, cy);
-            }
-
-            // Draw the east wall.
-            if (sq[MazeSquare.WallPosition.WP_E] == MazeSquare.WallState.WS_CLOSED)
-            {
-                g.DrawLine(wallPen, cx + gridWidth, cy, cx + gridWidth, cy + gridWidth);
-            }
-
-            // Draw the south wall.
-            if (sq[MazeSquare.WallPosition.WP_S] == MazeSquare.WallState.WS_CLOSED)
-            {
-                g.DrawLine(wallPen, cx, cy + gridWidth, cx + gridWidth, cy + gridWidth);
-            }
-        }
-
-        /// <summary>
-        /// Paints the start and end point.
-        /// </summary>
-        /// <param name="g"></param>
-        private void PaintEndpoints(Graphics g)
-        {
-            PaintSquare(g, this.StartSquareBrush, maze.StartSquare.XPos, maze.StartSquare.YPos);
-            PaintSquare(g, this.EndSquareBrush, maze.EndSquare.XPos, maze.EndSquare.YPos);
-        }
-
-        /// <summary>
-        /// Fills one square with the given color.
-        /// </summary>
-        /// <param name="g"></param>
-        /// <param name="b"></param>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        private void PaintSquare(Graphics g, Brush b, int x, int y)
-        {
-            float cx = xOffset + wallWidth/2.0F + x * gridWidth;
-            float cy = yOffset + wallWidth/2.0F + y * gridWidth;
-            g.FillRectangle(b, cx, cy, squareWidth, squareWidth);
+            painter.PaintMaze(this.PaintImages);
         }
 
         /// <summary>
@@ -843,27 +363,7 @@ namespace SWA.Ariadne.Gui
         /// <param name="forward"></param>
         public void DrawStep(MazeSquare sq1, MazeSquare sq2, bool forward)
         {
-            float cx1 = xOffset + gridWidth / 2.0F + sq1.XPos * gridWidth;
-            float cy1 = yOffset + gridWidth / 2.0F + sq1.YPos * gridWidth;
-            float cx2 = xOffset + gridWidth / 2.0F + sq2.XPos * gridWidth;
-            float cy2 = yOffset + gridWidth / 2.0F + sq2.YPos * gridWidth;
-
-            // Draw a line from sq1 to sq2.
-            Graphics g = gBuffer.Graphics;
-            Pen p = (forward ? this.forwardPen : this.backwardPen);
-            g.DrawLine(p, cx1, cy1, cx2, cy2);
-
-            // Maybe redraw the end point.
-            if (sq1 == maze.StartSquare || sq2 == maze.StartSquare || sq1 == maze.EndSquare || sq2 == maze.EndSquare)
-            {
-                this.PaintEndpoints(g);
-            }
-
-            // Maybe draw walls around the visited square.
-            if (forward && this.WallVisibility == AriadneSettingsData.WallVisibilityEnum.WhenVisited)
-            {
-                this.PaintWalls(g, sq2);
-            }
+            painter.DrawStep(sq1, sq2, forward);
         }
 
         /// <summary>
@@ -873,51 +373,12 @@ namespace SWA.Ariadne.Gui
         /// <param name="sq">when null, no dot is drawn</param>
         public void FinishPath(MazeSquare sq)
         {
-            if (sq != null && sq != maze.EndSquare)
-            {
-                this.PaintPathDot(sq);
-            }
+            painter.FinishPath(sq);
 
-            // Quit if screen saver preview dialog is dismissed.  Check this periodically.
-            if (externalGraphics != null)
-            {
-                // Quit if screen saver preview dialog is dismissed.  Check this periodically.
-                try
-                {
-                    gBuffer.Render();
-                }
-                catch (ArgumentException)
-                {
-                    Application.Exit();
-                }
-            }
-            else
-            {
-                gBuffer.Render();
-            }
-
+#if false
             // Finally, update the display.
             this.Update();
-        }
-
-        /// <summary>
-        /// Paints a dot in forward direction at the square.
-        /// Covers up for drawing a backward path into a square on the forward path.
-        /// </summary>
-        /// <param name="sq"></param>
-        private void PaintPathDot(MazeSquare sq)
-        {
-            PaintPathDot(sq, this.forwardPen.Brush);
-        }
-
-        private void PaintPathDot(MazeSquare sq, Brush brush)
-        {
-            float cx = xOffset + gridWidth / 2.0F + sq.XPos * gridWidth;
-            float cy = yOffset + gridWidth / 2.0F + sq.YPos * gridWidth;
-
-            // Draw a dot at sq2.
-            Graphics g = gBuffer.Graphics;
-            g.FillRectangle(brush, cx - pathWidth / 2.0F, cy - pathWidth / 2.0F, pathWidth, pathWidth);
+#endif
         }
 
         /// <summary>
@@ -927,21 +388,7 @@ namespace SWA.Ariadne.Gui
         /// <param name="forward"></param>
         public void DrawPath(List<MazeSquare> path, bool forward)
         {
-            for (int i = 1; i < path.Count; i++)
-            {
-                this.DrawStep(path[i - 1], path[i], forward);
-            }
-            
-            // Redraw the square where the branching occurred.
-            MazeSquare sq = path[path.Count - 1];
-            if (sq == maze.StartSquare)
-            {
-                this.PaintEndpoints(gBuffer.Graphics);
-            }
-            else
-            {
-                this.PaintPathDot(sq);
-            }
+            painter.DrawPath(path, forward);
         }
 
         /// <summary>
@@ -950,38 +397,7 @@ namespace SWA.Ariadne.Gui
         /// <param name="path"></param>
         public void DrawSolvedPath(List<MazeSquare> path)
         {
-            float h = forwardColor.GetHue();
-            float s = MaxColor.GetSaturation();
-            float b = MaxColor.GetBrightness();
-
-            // Make s and b 30% bigger.
-            s = 0.7F * s + 0.3F;
-            b = 0.7F * b + 0.3F;
-
-            // Make s and b sufficiently different from the forward color.
-            s = Math.Max(s, 0.6F * forwardColor.GetSaturation() + 0.4F);
-            b = Math.Max(b, 0.6F * forwardColor.GetBrightness() + 0.4F);
-
-            Color highlightColor = ColorBuilder.ConvertHSBToColor(h, s, b);
-            Pen p = new Pen(highlightColor, pathWidth);
-            p.StartCap = p.EndCap = System.Drawing.Drawing2D.LineCap.Square;
-
-            PointF[] points = new PointF[path.Count];
-
-            for (int i = 0; i < path.Count; i++)
-            {
-                MazeSquare sq = path[i];
-
-                float cx = xOffset + gridWidth / 2.0F + sq.XPos * gridWidth;
-                float cy = yOffset + gridWidth / 2.0F + sq.YPos * gridWidth;
-
-                points[i] = new PointF(cx, cy);
-            }
-
-            Graphics g = gBuffer.Graphics;
-            g.DrawLines(p, points);
-
-            this.PaintEndpoints(g);
+            painter.DrawSolvedPath(path);
         }
 
         /// <summary>
@@ -990,32 +406,7 @@ namespace SWA.Ariadne.Gui
         /// <param name="sq"></param>
         public void DrawDeadSquare(MazeSquare sq)
         {
-            PaintPathDot(sq, deadEndBrush);
-        }
-
-        /// <summary>
-        /// Paints a square to mark it as "alive".
-        /// </summary>
-        /// <param name="sq"></param>
-        /// <param name="distance"></param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)")]
-        public void DrawAliveSquare(MazeSquare sq, int distance, bool initialDrawing)
-        {
-            if (squareWidth >= 10)
-            {
-                Graphics g = gBuffer.Graphics;
-                Font font = new Font("Helvetica", 6);
-                int digitHeight = (int)font.GetHeight();
-                int digitWidth = (int)(digitHeight * 0.8);
-                float cx = xOffset + gridWidth / 2.0F + sq.XPos * gridWidth - (digitWidth / 2.0F);
-                float cy = yOffset + gridWidth / 2.0F + sq.YPos * gridWidth - (digitHeight / 2.0F);
-                if( distance > 0)
-                {
-                    Brush digitBrush = (initialDrawing ? Brushes.White : Brushes.Yellow);
-                    g.FillRectangle(Brushes.Black, cx, cy, digitWidth, digitHeight);
-                    g.DrawString(string.Format("{0}", (distance % 10)), font, digitBrush, new RectangleF(cx, cy, squareWidth, squareWidth));
-                }
-            }
+            painter.DrawDeadSquare(sq);
         }
 
         #endregion
@@ -1028,6 +419,8 @@ namespace SWA.Ariadne.Gui
         /// <returns></returns>
         internal Image GetImage()
         {
+            // TODO: use painter's dimensions
+
             int margin = 4;
             margin = Math.Max(margin, wallWidth + 2);
             margin = Math.Max(margin, gridWidth / 2);
@@ -1064,23 +457,7 @@ namespace SWA.Ariadne.Gui
         /// <param name="data"></param>
         public void FillParametersInto(AriadneSettingsData data)
         {
-            if (settingsData != null)
-            {
-                data.CopyContentsParameters(settingsData);
-            }
-
-            data.GridWidth = this.gridWidth;
-            data.PathCapStyle = System.Drawing.Drawing2D.LineCap.Square;
-            data.PathWidth = this.pathWidth;
-            data.SquareWidth = this.squareWidth;
-            data.WallWidth = this.wallWidth;
-
-            data.ReferenceColor1 = MaxColor;
-            data.ReferenceColor2 = MinColor;
-            data.ForwardColor = this.forwardColor;
-            data.BackwardColor = this.backwardColor;
-
-            this.maze.FillParametersInto(data);
+            painter.FillParametersInto(data);
         }
 
         /// <summary>
@@ -1091,91 +468,21 @@ namespace SWA.Ariadne.Gui
         {
             this.settingsData = data;
 
-            #region Take parameters concerning this MazeUserControl
-
-            #region Layout
-
-            if (!data.AutoGridWidth)
-            {
-                this.gridWidth = Math.Max(2, Math.Min(MaxGridWidth, data.GridWidth));
-
-                SuggestWidths(gridWidth, VisibleWalls, out squareWidth, out pathWidth, out wallWidth);
-            }
-            else if (!data.AutoSquareWidth || !data.AutoPathWidth || !data.AutoWallWidth)
-            {
-                this.wallWidth = (VisibleWalls ? Math.Max(MinWallWidth, Math.Min(MaxWallWidth, data.WallWidth)) : 0);
-                this.squareWidth = Math.Max(MinSquareWidth, Math.Min(MaxGridWidth - wallWidth, data.SquareWidth));
-                this.pathWidth = Math.Max(MinPathWidth, Math.Min(squareWidth, data.PathWidth));
-
-                this.gridWidth = squareWidth + wallWidth;
-            }
-            else
-            {
-                this.gridWidth = GetRandomGridWidth(maze.Random);
-                SuggestWidths(gridWidth, VisibleWalls, out squareWidth, out pathWidth, out wallWidth);
-            }
-
-            #endregion
-
-            #region Colors
-
-            if (!data.AutoColors)
-            {
-                this.forwardColor = data.ForwardColor;
-                this.backwardColor = data.BackwardColor;
-            }
-            else
-            {
-                ColorBuilder.SuggestColors(MinColor, MaxColor, out forwardColor, out backwardColor);
-            }
-
-            #endregion
-
-            #endregion
-
-            // Make sure that we have a Maze object.
-            if (maze == null)
-            {
-                maze = new Maze(data.MazeWidth, data.MazeHeight);
-            }
-
-            #region Adjust automatic parameters of the underlying Maze
-
-            if (data.AutoMazeWidth)
-            {
-                int width;
-                FitMazeWidth(out width, out this.xOffset);
-                data.MazeWidth = width;
-            }
-            if (data.AutoMazeHeight)
-            {
-                int height;
-                FitMazeHeight(out height, out this.yOffset);
-                data.MazeHeight = height;
-            }
-
-            #endregion
-
-            maze.TakeParametersFrom(data);
+            painter.TakeParametersFrom(data);
 
             #region Do the equivalent of Setup() with the modified parameters.
 
             // CreateMaze()
-            AdjustPathWidth(squareWidth, wallWidth, ref pathWidth);
             MazeForm.MakeReservedAreas(maze);
             this.ReserveAreasForImages(data);
             this.AddOutlineShape(data);
-            maze.Irregular = data.IrregularMaze;
-            maze.Irregularity = data.Irregularity;
-            maze.CreateMaze();
-            MazeForm.UpdateStatusLine();
-            MazeForm.UpdateCaption();
-
+            Maze.CreateMaze();
             Reset();
 
             #endregion
 
-            this.mazeForm.UpdateCaption();
+            mazeForm.UpdateStatusLine();
+            mazeForm.UpdateCaption();
         }
 
         #endregion
@@ -1400,22 +707,22 @@ namespace SWA.Ariadne.Gui
 
         public bool IsSolved
         {
-            get { return (gBufferAlternate != null ? true : maze == null ? false : maze.IsSolved); }
+            get { return (painter.HasBufferAlternate ? true : Maze == null ? false : Maze.IsSolved); }
         }
 
         public int XSize
         {
-            get { return (maze == null ? -1 : maze.XSize); }
+            get { return (Maze == null ? -1 : Maze.XSize); }
         }
 
         public int YSize
         {
-            get { return (maze == null ? -1 : maze.YSize); }
+            get { return (Maze == null ? -1 : Maze.YSize); }
         }
 
         public string Code
         {
-            get { return (maze == null ? "---" : maze.Code); }
+            get { return (Maze == null ? "---" : Maze.Code); }
         }
 
         #endregion

@@ -84,6 +84,8 @@
     <Compile Include="MazeForm.Designer.cs">
       <DependentUpon>MazeForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="MazePainter.cs">
+    </Compile>
     <Compile Include="MazeUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
