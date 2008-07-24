@@ -5,7 +5,7 @@
     <Position X="2.75" Y="3.5" Width="1.5" />
     <TypeIdentifier>
       <FileName>AriadneFormBase.cs</FileName>
-      <HashCode>jwgoABCJQaIEAAACsAzAhAhDIAihYAGNKZAAJTI2gSk=</HashCode>
+      <HashCode>jwgoQBCJQaIEAAACsAzAhAhTIAihYAGNKZAAJTJ2gSk=</HashCode>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="SolverController" />
@@ -84,7 +84,7 @@
     <Position X="4.75" Y="3.5" Width="1.5" />
     <TypeIdentifier>
       <FileName>MazeForm.cs</FileName>
-      <HashCode>AAAgAAAAAaAAAAAAAASCgAACAAgAQAAAAAAIACIgAAA=</HashCode>
+      <HashCode>AAAgAAAAAaAAAAAAAASCgAASAAgAQAAAAAAIACIgAAA=</HashCode>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Field Name="solverController" />
@@ -94,6 +94,7 @@
     <Members>
       <Property Name="AriadneSettingsSource" Hidden="true" />
       <Field Name="components" Hidden="true" />
+      <Method Name="ConfigureVisitedProgressBar" Hidden="true" />
       <Method Name="Dispose" Hidden="true" />
       <Method Name="FixStateDependantControls" Hidden="true" />
       <Method Name="InitializeComponent" Hidden="true" />
@@ -116,14 +117,13 @@
     <Position X="0.5" Y="0.5" Width="1.75" />
     <TypeIdentifier>
       <FileName>MazeUserControl.cs</FileName>
-      <HashCode>AgTgIDEASKASPAA2BAegAhKGEBHHCKAsCVMwrDoCkgw=</HashCode>
+      <HashCode>AgTgIDEATCISNAAyBAagAAKWUhHECKAoABOwrDoCkhw=</HashCode>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="MazeForm" />
     </ShowAsAssociation>
     <Members>
       <Method Name="AddImage" Hidden="true" />
-      <Method Name="AddOutlineShapes" Hidden="true" />
       <Method Name="AdjustPathWidth" Hidden="true" />
       <Field Name="backwardColor" Hidden="true" />
       <Field Name="backwardPen" Hidden="true" />
@@ -143,31 +143,18 @@
       <Field Name="gBuffer" Hidden="true" />
       <Field Name="gridWidth" Hidden="true" />
       <Method Name="InitializeComponent" Hidden="true" />
-      <Field Name="MaxAutoGridWidth" Hidden="true" />
-      <Field Name="MaxColor" Hidden="true" />
-      <Field Name="MaxGridWidth" Hidden="true" />
-      <Field Name="MaxPathWidth" Hidden="true" />
-      <Field Name="MaxSquareWidth" Hidden="true" />
-      <Field Name="MaxWallWidth" Hidden="true" />
       <Field Name="maze" Hidden="true" />
       <Method Name="MazeUserControl" Hidden="true" />
-      <Field Name="MinAutoGridWidth" Hidden="true" />
-      <Field Name="MinColor" Hidden="true" />
-      <Field Name="MinGridWidth" Hidden="true" />
-      <Field Name="MinPathWidth" Hidden="true" />
-      <Field Name="MinSquareWidth" Hidden="true" />
-      <Field Name="MinWallWidth" Hidden="true" />
       <Method Name="OnPaint" Hidden="true" />
       <Method Name="PaintBorder" Hidden="true" />
       <Method Name="PaintEndpoints" Hidden="true" />
       <Method Name="PaintImages" Hidden="true" />
       <Method Name="PaintMaze" Hidden="true" />
       <Method Name="PaintPathDot" Hidden="true" />
-      <Method Name="PaintShapes" Hidden="true" />
+      <Method Name="PaintOutlineShape" Hidden="true" />
       <Method Name="PaintSquare" Hidden="true" />
       <Method Name="PaintWalls" Hidden="true" />
       <Field Name="pathWidth" Hidden="true" />
-      <Method Name="PlaceEndpoints" Hidden="true" />
       <Method Name="PrepareImages" Hidden="true" />
       <Method Name="ReserveAreaForImages" Hidden="true" />
       <Method Name="ReserveAreasForImages" Hidden="true" />
@@ -175,7 +162,6 @@
       <Method Name="SetGraphics" Hidden="true" />
       <Method Name="Setup" Hidden="true" />
       <Field Name="squareWidth" Hidden="true" />
-      <Method Name="SuggestWidths" Hidden="true" />
       <Method Name="TakeParametersFrom" Hidden="true" />
       <Field Name="wallColor" Hidden="true" />
       <Field Name="wallPen" Hidden="true" />
@@ -190,13 +176,6 @@
       <Compartment Name="Properties" Collapsed="true" />
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
-    <NestedTypes>
-      <Delegate Name="SWA.Ariadne.Gui.MazeUserControl.OutlineShapeBuilder" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>MazeUserControl.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Delegate>
-    </NestedTypes>
     <AssociationLine Name="MazeForm" Type="SWA.Ariadne.Gui.IMazeForm">
       <MemberNameLabel ManuallyPlaced="true">
         <Position X="-0.92" Y="0.291" />
@@ -285,8 +264,8 @@
       <HashCode>AAAAAAAACKAABAACAACCBAACIACgAAABAgAIACIQAAA=</HashCode>
     </TypeIdentifier>
     <ShowAsAssociation>
-      <Property Name="SolverController" />
       <Property Name="MazeUserControl" />
+      <Property Name="SolverController" />
     </ShowAsAssociation>
     <Members>
       <Method Name="ArenaItem" Hidden="true" />
@@ -308,6 +287,11 @@
       <Method Name="UpdateStatusLine" Hidden="true" />
       <Field Name="visitedProgressBar" Hidden="true" />
     </Members>
+    <AssociationLine Name="MazeUserControl" Type="SWA.Ariadne.Gui.MazeUserControl">
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="-1.325" Y="3.347" Height="0.16" Width="1.212" />
+      </MemberNameLabel>
+    </AssociationLine>
     <AssociationLine Name="SolverController" Type="SWA.Ariadne.Gui.ISolverController" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="2.104" Y="7.158" />
@@ -315,11 +299,6 @@
         <Point X="10.25" Y="7.624" />
         <Point X="10.25" Y="6.928" />
       </Path>
-    </AssociationLine>
-    <AssociationLine Name="MazeUserControl" Type="SWA.Ariadne.Gui.MazeUserControl">
-      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
-        <Position X="-1.325" Y="3.347" Height="0.16" Width="1.212" />
-      </MemberNameLabel>
     </AssociationLine>
     <Lollipop Orientation="Bottom" Position="0.184" />
   </Class>

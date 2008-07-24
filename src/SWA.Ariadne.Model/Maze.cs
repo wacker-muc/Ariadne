@@ -876,6 +876,9 @@ namespace SWA.Ariadne.Model
             this.reservedAreas.Clear();
             this.outlineShape = null;
 
+            this.Irregular = data.IrregularMaze;
+            this.Irregularity = data.Irregularity;
+
             // Decode(data.Code);
         }
 

@@ -69,14 +69,14 @@ namespace SWA.Ariadne.Gui
 
             #region Set the minimum and maximum values of NumericUpDownControls.
 
-            this.squareWidthNumericUpDown.Minimum = MazeUserControl.MinSquareWidth;
-            this.squareWidthNumericUpDown.Maximum = MazeUserControl.MaxSquareWidth;
-            this.pathWidthNumericUpDown.Minimum = MazeUserControl.MinPathWidth;
-            this.pathWidthNumericUpDown.Maximum = MazeUserControl.MaxPathWidth;
-            this.wallWidthNumericUpDown.Minimum = MazeUserControl.MinWallWidth;
-            this.wallWidthNumericUpDown.Maximum = MazeUserControl.MaxWallWidth;
-            this.gridWidthNumericUpDown.Minimum = MazeUserControl.MinGridWidth;
-            this.gridWidthNumericUpDown.Maximum = MazeUserControl.MaxGridWidth;
+            this.squareWidthNumericUpDown.Minimum = MazePainter.MinSquareWidth;
+            this.squareWidthNumericUpDown.Maximum = MazePainter.MaxSquareWidth;
+            this.pathWidthNumericUpDown.Minimum = MazePainter.MinPathWidth;
+            this.pathWidthNumericUpDown.Maximum = MazePainter.MaxPathWidth;
+            this.wallWidthNumericUpDown.Minimum = MazePainter.MinWallWidth;
+            this.wallWidthNumericUpDown.Maximum = MazePainter.MaxWallWidth;
+            this.gridWidthNumericUpDown.Minimum = MazePainter.MinGridWidth;
+            this.gridWidthNumericUpDown.Maximum = MazePainter.MaxGridWidth;
 
             #endregion
 
@@ -274,7 +274,7 @@ namespace SWA.Ariadne.Gui
                     
                     int squareWidth, pathWidth, wallWidth;
                     bool visibleWalls = (data.WallVisibility != AriadneSettingsData.WallVisibilityEnum.Never);
-                    MazeUserControl.SuggestWidths(data.GridWidth, visibleWalls, out squareWidth, out pathWidth, out wallWidth);
+                    MazePainter.SuggestWidths(data.GridWidth, visibleWalls, out squareWidth, out pathWidth, out wallWidth);
 
                     data.WallWidth = wallWidth;
                     data.SquareWidth = squareWidth;
@@ -289,13 +289,13 @@ namespace SWA.Ariadne.Gui
                 {
                     data.AutoSquareWidth = gridWithModifiedManually;
                     data.PathWidth = Math.Min(data.PathWidth, data.SquareWidth);
-                    data.GridWidth = Math.Min(data.SquareWidth + data.WallWidth, MazeUserControl.MaxGridWidth);
+                    data.GridWidth = Math.Min(data.SquareWidth + data.WallWidth, MazePainter.MaxGridWidth);
                     data.WallWidth = data.GridWidth - data.SquareWidth;
                 }
                 if (data.WallWidthModified)
                 {
                     data.AutoWallWidth = gridWithModifiedManually;
-                    data.GridWidth = Math.Min(data.SquareWidth + data.WallWidth, MazeUserControl.MaxGridWidth);
+                    data.GridWidth = Math.Min(data.SquareWidth + data.WallWidth, MazePainter.MaxGridWidth);
                     data.SquareWidth = data.GridWidth - data.WallWidth;
                 }
 
