@@ -310,6 +310,8 @@ namespace SWA.Ariadne.Gui
         /// <param name="maze"></param>
         public override void MakeReservedAreas(Maze maze)
         {
+            base.MakeReservedAreas(maze);
+
             #region Info Panel (and other controls)
 
             for (int i = 0; i < placeholderControls.Count; i++)
