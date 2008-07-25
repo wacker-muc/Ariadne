@@ -79,6 +79,8 @@ namespace SWA.Ariadne.Model
         /// </summary>
         private List<Rectangle> reservedAreas = new List<Rectangle>();
 
+        private OutlineShape reservedShape = null;
+
         /// <summary>
         /// Most of the outline of this shape will be turned into closed walls.
         /// </summary>
@@ -155,6 +157,19 @@ namespace SWA.Ariadne.Model
             set { irregularity = value; }
         }
         private int irregularity = 80;
+
+        #endregion
+
+        #region Delegates
+
+        /// <summary>
+        /// A delegate type that implements the OutlineShape behavior.
+        /// Returns true if the square at (x, y) is inside of the shape, false otherwise.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        private delegate bool InsideShapeDelegate(int x, int y);
 
         #endregion
 
@@ -245,6 +260,7 @@ namespace SWA.Ariadne.Model
             clone.direction = this.direction;
             clone.seed = this.seed;
             clone.reservedAreas = this.reservedAreas;
+            clone.reservedShape = this.reservedShape;
 
             clone.CreateSquares();
 
@@ -371,6 +387,15 @@ namespace SWA.Ariadne.Model
             }
 
             return false;
+        }
+
+        public bool ReserveShape(OutlineShape shape)
+        {
+            // TODO: Test if the remaining area is still connected.
+
+            this.reservedShape = shape;
+
+            return true;
         }
 
         public void CreateMaze()
@@ -564,9 +589,11 @@ namespace SWA.Ariadne.Model
 
         private void BuildMaze()
         {
-            FixBorderWalls();
             FixReservedAreas();
-            FixOutlineShapes();
+            FixReservedShape();
+            CloseWallsAroundReservedAreas();
+            FixOutlineShape();
+            FixBorderWalls();
 
             // We hold a number of active squares in a stack.
             // Make the initial capacity sufficient to hold all squares.
@@ -698,14 +725,27 @@ namespace SWA.Ariadne.Model
 
         /// <summary>
         /// Put closed walls around the maze.
+        /// Next to reserved squares, the walls will be open instead of closed.
         /// </summary>
         private void FixBorderWalls()
         {
-            CloseWalls(0, xSize, 0, ySize, MazeSquare.WallState.WS_CLOSED);
+            int x1 = 0, x2 = xSize - 1, y1 = 0, y2 = ySize - 1;
+            MazeSquare.WallState open = MazeSquare.WallState.WS_OPEN, closed = MazeSquare.WallState.WS_CLOSED;
+
+            for (int x = 0; x < xSize; x++)
+            {
+                this.squares[x, y1][MazeSquare.WallPosition.WP_N] = (this.squares[x, y1].isReserved ? open : closed);
+                this.squares[x, y2][MazeSquare.WallPosition.WP_S] = (this.squares[x, y2].isReserved ? open : closed);
+            }
+            for (int y = 0; y < ySize; y++)
+            {
+                this.squares[x1, y][MazeSquare.WallPosition.WP_W] = (this.squares[x1, y].isReserved ? open : closed);
+                this.squares[x2, y][MazeSquare.WallPosition.WP_E] = (this.squares[x2, y].isReserved ? open : closed);
+            }
         }
 
         /// <summary>
-        /// Mark the squares inside the reserved areas and put walls around them.
+        /// Mark the squares inside the reserved areas.
         /// </summary>
         private void FixReservedAreas()
         {
@@ -719,8 +759,37 @@ namespace SWA.Ariadne.Model
                     }
                 }
 
+#if false
                 // Close the walls around the area but open the walls on the border.
                 CloseWalls(rect.Left, rect.Right, rect.Top, rect.Bottom, MazeSquare.WallState.WS_OPEN);
+#endif
+            }
+        }
+
+        /// <summary>
+        /// Mark the squares inside the reserved shape.
+        /// </summary>
+        /// Note: This method must not be called before FixReservedAreas().
+        private void FixReservedShape()
+        {
+            if (reservedShape != null)
+            {
+                for (int x = 0; x < this.XSize; x++)
+                {
+                    for (int y = 0; y < this.YSize; y++)
+                    {
+                        if (reservedShape[x, y] == true)
+                        {
+                            this.squares[x, y].isReserved = true;
+                        }
+                    }
+                }
+
+#if false
+                FixOutline(reservedShape, MazeSquare.WallState.WS_CLOSED);
+#endif
+
+                // TODO: open the walls on the border if touched by the reserved shape.
             }
         }
 
@@ -751,13 +820,27 @@ namespace SWA.Ariadne.Model
         }
 
         /// <summary>
+        /// Put closed walls around the reserved areas.
+        /// </summary>
+        private void CloseWallsAroundReservedAreas()
+        {
+            // We need a test that regards the reserved squares as the "inside" of a shape.
+            InsideShapeDelegate test = delegate(int x, int y) { return this.squares[x, y].isReserved; };
+            
+            this.FixOutline(test, MazeSquare.WallState.WS_CLOSED);
+        }
+
+        /// <summary>
         /// Mark the defined outline walls.
         /// </summary>
-        private void FixOutlineShapes()
+        private void FixOutlineShape()
         {
             if (outlineShape != null)
             {
-                FixOutline(outlineShape);
+                // We need a test for the "inside" of an OutlineShape.
+                InsideShapeDelegate test = delegate(int x, int y) { return outlineShape[x, y]; };
+
+                FixOutline(test, MazeSquare.WallState.WS_OUTLINE);
             }
         }
 
@@ -769,17 +852,18 @@ namespace SWA.Ariadne.Model
         /// A two dimensional array.  The dimensions must not be greater than the maze itself.
         /// true means "inside", false means "outside".
         /// </param>
-        private void FixOutline(OutlineShape shape)
+        private void FixOutline(InsideShapeDelegate shapeTest, MazeSquare.WallState wallState)
         {
             for (int x = 0; x < xSize; x++)
             {
                 for (int y1 = 0, y2 = 1; y2 < ySize; y1++, y2++)
                 {
-                    bool b1 = shape[x, y1], b2 = shape[x, y2];
-                    if (b1 != b2 && this.squares[x, y1][MazeSquare.WallPosition.WP_S] == MazeSquare.WallState.WS_MAYBE)
+                    bool b1 = shapeTest(x, y1), b2 = shapeTest(x, y2);
+                    bool bothReserved = (this[x, y1].isReserved && this[x, y2].isReserved);
+                    if (b1 != b2 && !bothReserved && this[x, y1][MazeSquare.WallPosition.WP_S] == MazeSquare.WallState.WS_MAYBE)
                     {
-                        this.squares[x, y1][MazeSquare.WallPosition.WP_S] = MazeSquare.WallState.WS_OUTLINE;
-                        this.squares[x, y2][MazeSquare.WallPosition.WP_N] = MazeSquare.WallState.WS_OUTLINE;
+                        this[x, y1][MazeSquare.WallPosition.WP_S] = wallState;
+                        this[x, y2][MazeSquare.WallPosition.WP_N] = wallState;
                     }
                 }
             }
@@ -787,11 +871,12 @@ namespace SWA.Ariadne.Model
             {
                 for (int x1 = 0, x2 = 1; x2 < xSize; x1++, x2++)
                 {
-                    bool b1 = shape[x1, y], b2 = shape[x2, y];
-                    if (b1 != b2 && this.squares[x1, y][MazeSquare.WallPosition.WP_E] == MazeSquare.WallState.WS_MAYBE)
+                    bool b1 = shapeTest(x1, y), b2 = shapeTest(x2, y);
+                    bool bothReserved = (this[x1, y].isReserved && this[x2, y].isReserved);
+                    if (b1 != b2 && !bothReserved && this[x1, y][MazeSquare.WallPosition.WP_E] == MazeSquare.WallState.WS_MAYBE)
                     {
-                        this.squares[x1, y][MazeSquare.WallPosition.WP_E] = MazeSquare.WallState.WS_OUTLINE;
-                        this.squares[x2, y][MazeSquare.WallPosition.WP_W] = MazeSquare.WallState.WS_OUTLINE;
+                        this[x1, y][MazeSquare.WallPosition.WP_E] = wallState;
+                        this[x2, y][MazeSquare.WallPosition.WP_W] = wallState;
                     }
                 }
             }
