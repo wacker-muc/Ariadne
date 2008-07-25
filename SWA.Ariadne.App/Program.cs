@@ -35,7 +35,7 @@ namespace SWA.Ariadne.App
                         break;
                     case "/s":
                         // Show screensaver form
-                        Application.Run(new ScreenSaverForm());
+                        Application.Run(new ScreenSaverForm(true));
                         break;
                     default:
                         MessageBox.Show("Invalid command line argument: " + arg, "Invalid Command Line Argument", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -45,7 +45,7 @@ namespace SWA.Ariadne.App
             else
             {
 #if false
-                ScreenSaverForm form = new ScreenSaverForm();
+                ScreenSaverForm form = new ScreenSaverForm(false);
                 Application.Run(form);
 #else
                 // If no arguments were passed in, run as a regular application.

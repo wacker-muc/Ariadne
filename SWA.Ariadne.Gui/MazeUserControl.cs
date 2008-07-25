@@ -331,7 +331,10 @@ namespace SWA.Ariadne.Gui
             painter.OnPaint(this.PaintImages, true);
 
             // If a new maze has been painted, the caption needs to be updated.
-            MazeForm.UpdateCaption();
+            if (MazeForm != null)
+            {
+                MazeForm.UpdateCaption();
+            }
         }
 
         /// <summary>
