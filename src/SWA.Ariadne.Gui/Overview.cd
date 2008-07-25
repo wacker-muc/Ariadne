@@ -20,6 +20,7 @@
       <Method Name="FillCaption" Hidden="true" />
       <Method Name="FillStatusMessage" Hidden="true" />
       <Method Name="FixStateDependantControls" Hidden="true" />
+      <Method Name="GetImage" Hidden="true" />
       <Method Name="InitializeComponent" Hidden="true" />
       <Field Name="lapSeconds" Hidden="true" />
       <Field Name="lapStartTime" Hidden="true" />
@@ -40,6 +41,7 @@
       <Method Name="OnRepeat" Hidden="true" />
       <Method Name="OnRepeatTimer" Hidden="true" />
       <Method Name="OnReset" Hidden="true" />
+      <Method Name="OnShowDropDownMenu" Hidden="true" />
       <Method Name="OnStart" Hidden="true" />
       <Field Name="openArenaMenuItem" Hidden="true" />
       <Field Name="pauseLabel" Hidden="true" />
@@ -70,6 +72,7 @@
     </Members>
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Properties" Collapsed="true" />
     </Compartments>
     <NestedTypes>
       <Enum Name="SWA.Ariadne.Gui.AriadneFormBase.SolverState" Collapsed="true">
@@ -81,10 +84,10 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="SWA.Ariadne.Gui.MazeForm">
-    <Position X="4.75" Y="3.5" Width="1.5" />
+    <Position X="4.75" Y="3.5" Width="1.75" />
     <TypeIdentifier>
       <FileName>MazeForm.cs</FileName>
-      <HashCode>AAAgAAAAAaAAAAAAAASCgAASAAgAQAAAAAAIACIgAAA=</HashCode>
+      <HashCode>AAAgAAAAAaAAAAAAAASCgAASgAgAQAAAAAAIACIgAAA=</HashCode>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Field Name="solverController" />
@@ -101,14 +104,15 @@
       <Method Name="InitializeComponent2" Hidden="true" />
       <Property Name="MazeControlProperties" Hidden="true" />
       <Method Name="MazeForm" Hidden="true" />
+      <Method Name="MazeForm_Load" Hidden="true" />
       <Field Name="mazeUserControl" Hidden="true" />
       <Property Name="SolverController" Hidden="true" />
       <Method Name="strategy_SelectedIndexChanged" Hidden="true" />
     </Members>
     <AssociationLine Name="solverController" Type="SWA.Ariadne.Gui.SolverController" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="5.312" Y="3.5" />
-        <Point X="5.312" Y="3.334" />
+        <Point X="5.406" Y="3.5" />
+        <Point X="5.406" Y="3.334" />
         <Point X="7" Y="3.334" />
       </Path>
     </AssociationLine>
@@ -117,59 +121,40 @@
     <Position X="0.5" Y="0.5" Width="1.75" />
     <TypeIdentifier>
       <FileName>MazeUserControl.cs</FileName>
-      <HashCode>AgTgIDEATCISNAAyBAagAAKWUhHECKAoABOwrDoCkhw=</HashCode>
+      <HashCode>AgTAICAASCIAJAAwBAagAACWUgDEAAAoAAMwjDICkgI=</HashCode>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="MazeForm" />
     </ShowAsAssociation>
     <Members>
       <Method Name="AddImage" Hidden="true" />
-      <Method Name="AdjustPathWidth" Hidden="true" />
-      <Field Name="backwardColor" Hidden="true" />
-      <Field Name="backwardPen" Hidden="true" />
       <Field Name="components" Hidden="true" />
       <Method Name="Dispose" Hidden="true" />
-      <Method Name="DrawAliveSquare" Hidden="true" />
       <Method Name="DrawDeadSquare" Hidden="true" />
       <Method Name="DrawPath" Hidden="true" />
       <Method Name="DrawSolvedPath" Hidden="true" />
       <Method Name="FillParametersInto" Hidden="true" />
       <Method Name="FindImages" Hidden="true" />
       <Method Name="FinishPath" Hidden="true" />
-      <Method Name="FitMazeHeight" Hidden="true" />
-      <Method Name="FitMazeWidth" Hidden="true" />
-      <Field Name="forwardColor" Hidden="true" />
-      <Field Name="forwardPen" Hidden="true" />
-      <Field Name="gBuffer" Hidden="true" />
-      <Field Name="gridWidth" Hidden="true" />
+      <Property Name="gridWidth" Hidden="true" />
       <Method Name="InitializeComponent" Hidden="true" />
-      <Field Name="maze" Hidden="true" />
+      <Property Name="maze" Hidden="true" />
       <Method Name="MazeUserControl" Hidden="true" />
       <Method Name="OnPaint" Hidden="true" />
-      <Method Name="PaintBorder" Hidden="true" />
-      <Method Name="PaintEndpoints" Hidden="true" />
       <Method Name="PaintImages" Hidden="true" />
       <Method Name="PaintMaze" Hidden="true" />
-      <Method Name="PaintPathDot" Hidden="true" />
-      <Method Name="PaintOutlineShape" Hidden="true" />
-      <Method Name="PaintSquare" Hidden="true" />
-      <Method Name="PaintWalls" Hidden="true" />
-      <Field Name="pathWidth" Hidden="true" />
       <Method Name="PrepareImages" Hidden="true" />
       <Method Name="ReserveAreaForImages" Hidden="true" />
       <Method Name="ReserveAreasForImages" Hidden="true" />
       <Method Name="Reset" Hidden="true" />
       <Method Name="SetGraphics" Hidden="true" />
       <Method Name="Setup" Hidden="true" />
-      <Field Name="squareWidth" Hidden="true" />
       <Method Name="TakeParametersFrom" Hidden="true" />
-      <Field Name="wallColor" Hidden="true" />
-      <Field Name="wallPen" Hidden="true" />
-      <Field Name="wallWidth" Hidden="true" />
+      <Property Name="wallWidth" Hidden="true" />
       <Method Name="XCoordinate" Hidden="true" />
-      <Field Name="xOffset" Hidden="true" />
+      <Property Name="xOffset" Hidden="true" />
       <Method Name="YCoordinate" Hidden="true" />
-      <Field Name="yOffset" Hidden="true" />
+      <Property Name="yOffset" Hidden="true" />
     </Members>
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
@@ -376,7 +361,6 @@
     <TypeIdentifier />
     <Members>
       <Property Name="BlinkingCounter" Hidden="true" />
-      <Method Name="DrawAliveSquare" Hidden="true" />
       <Method Name="DrawDeadSquare" Hidden="true" />
       <Method Name="DrawPath" Hidden="true" />
     </Members>

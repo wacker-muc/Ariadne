@@ -61,7 +61,10 @@ namespace SWA.Ariadne.Gui
                 this.mazeUserControl as IMazeControl,
                 this.visitedProgressBar.Control as ProgressBar
             );
+        }
 
+        private void MazeForm_Load(object sender, EventArgs e)
+        {
             this.OnNew(null, null);
         }
 

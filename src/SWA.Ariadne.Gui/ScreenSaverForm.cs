@@ -27,6 +27,7 @@ namespace SWA.Ariadne.Gui
         #region Member variables
 
         private bool previewMode = false;
+        private bool fullScreenMode = true;
         private IntPtr parentHwnd = new IntPtr(0);
 
         private Random random;
@@ -45,12 +46,13 @@ namespace SWA.Ariadne.Gui
 
         #region Constructor
 
-        public ScreenSaverForm()
+        public ScreenSaverForm(bool fullScreenMode)
         {
             InitializeComponent();
 
             random = RandomFactory.CreateRandom();
 
+            this.fullScreenMode = fullScreenMode;
             this.ShowInTaskbar = false;
             this.DoubleBuffered = false;
 
@@ -96,6 +98,7 @@ namespace SWA.Ariadne.Gui
 
             // set the preview mode flag
             previewMode = true;
+            fullScreenMode = false;
             ShowInTaskbar = false;
 
             // prevent an 
@@ -131,7 +134,10 @@ namespace SWA.Ariadne.Gui
         {
             if (!previewMode)
             {
-                SetupScreenSaver();
+                if (fullScreenMode)
+                {
+                    SetupScreenSaver();
+                }
             }
 
             // Switch auto repeat mode on.
@@ -139,9 +145,18 @@ namespace SWA.Ariadne.Gui
 
             if (! previewMode)
             {
-                // Let the MazeUserControl cover the whole form.
-                this.mazeUserControl.Location = new Point(0, 0);
-                this.mazeUserControl.Size = this.Size;
+                if (fullScreenMode)
+                {
+                    // Let the MazeUserControl cover the whole form.
+                    this.mazeUserControl.Location = new Point(0, 0);
+                    this.mazeUserControl.Size = this.Size;
+                }
+                else
+                {
+                    // Let the MazeUserControl cover most of the form.
+                    this.mazeUserControl.Location = new Point(0, 0);
+                    this.mazeUserControl.Size = this.DisplayRectangle.Size;
+                }
                 this.mazeUserControl.BringToFront();
 
                 // Other optional controls need to be displayed in front of the maze.
@@ -157,6 +172,13 @@ namespace SWA.Ariadne.Gui
 
         protected override void OnNew(object sender, EventArgs e)
         {
+            // Discard this call until ScreenSaverForm_Load() has been executed.
+            // Note: The repeatMode flag is initially false and will be set above.
+            if (this.repeatMode == false)
+            {
+                return;
+            }
+
             // Quit if dialog is dismissed.  Check this periodically.
             if (previewMode && !IsWindowVisible(parentHwnd))
             {
