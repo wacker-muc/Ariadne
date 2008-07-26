@@ -348,7 +348,7 @@ namespace SWA.Ariadne.Settings
             get { return outlineKind; }
             set { outlineKind = value; }
         }
-        private OutlineKindEnum outlineKind;
+        private OutlineKindEnum outlineKind = OutlineKindEnum.None;
 
         public int OutlineOffCenter
         {
