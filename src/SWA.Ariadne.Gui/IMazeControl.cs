@@ -7,7 +7,6 @@ namespace SWA.Ariadne.Gui
     public interface IMazeControl
         : IMazeControlProperties
         , IMazeControlSetup
-        , IMazeDrawer
         , IAriadneSettingsSource
     {
     }

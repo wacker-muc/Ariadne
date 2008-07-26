@@ -56,7 +56,7 @@ namespace SWA.Ariadne.Gui
             mazeUserControl.PaintMaze();
 
             // Solve the maze.
-            IMazeSolver solver = SolverFactory.CreateDefaultSolver(mazeUserControl.Maze, mazeUserControl);
+            IMazeSolver solver = SolverFactory.CreateDefaultSolver(mazeUserControl.Maze, mazeUserControl.MazeDrawer);
             solver.Reset();
             solver.Solve();
         }
