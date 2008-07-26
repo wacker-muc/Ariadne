@@ -35,6 +35,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DeadEndChecker.cs" />
+    <Compile Include="EmbeddedMaze.cs" />
     <Compile Include="Maze.cs" />
     <Compile Include="MazeCode.cs" />
     <Compile Include="MazeDimensions.cs" />

@@ -71,6 +71,57 @@ namespace SWA.Ariadne.Model
         }
         #endregion
 
+        #region Maze ID: Constants variables and properties
+
+        /// <summary>
+        /// Used to distinguish a primary (host) maze and several embedded mazes.
+        /// 0: This square is reserved.
+        /// 1: Belongs to the primary maze.
+        /// >1: Belongs to an embedded maze.
+        /// </summary>
+        internal int MazeId
+        {
+            get
+            {
+                return this.mazeId;
+            }
+            set
+            {
+                if (value >= PrimaryMazeId && value <= MaxMazeId)
+                {
+                    this.mazeId = value;
+                }
+                else
+                {
+                    throw new Exception("invalid MazeId value" + value.ToString());
+                }
+            }
+        }
+
+        private int mazeId;
+
+        /// <summary>
+        /// Number of valid maze IDs, including the reserved ID.
+        /// </summary>
+        public const int MazeIdRange = 8;
+
+        /// <summary>
+        /// Maximum maze ID (primary and embedded).
+        /// </summary>
+        public const int MaxMazeId = MazeIdRange - 1;
+
+        /// <summary>
+        /// Maze ID assigned to reserved squares.
+        /// </summary>
+        public const int ReservedMazeId = 0;
+
+        /// <summary>
+        /// Maze ID of the primary maze.
+        /// </summary>
+        public const int PrimaryMazeId = 1;
+
+        #endregion
+
         /// <summary>
         /// Used while building: Square is connected to the maze.
         /// </summary>
@@ -79,7 +130,21 @@ namespace SWA.Ariadne.Model
         /// <summary>
         /// Used while building: Square will not be used.
         /// </summary>
-        internal bool isReserved = false;
+        internal bool isReserved
+        {
+            get { return (mazeId == ReservedMazeId); }
+            set
+            {
+                if (value == true)
+                {
+                    this.mazeId = ReservedMazeId;
+                }
+                else
+                {
+                    throw new Exception("The reserved state cannot be cleared.");
+                }
+            }
+        }
 
         /// <summary>
         /// Used while solving: Square has been visited.
@@ -91,12 +156,10 @@ namespace SWA.Ariadne.Model
         /// </summary>
         private MazeSquare[] neighbors = new MazeSquare[WP_NUM];
 
-        /// <summary>
-        /// Maze coordinates.
-        /// </summary>
+        #region Maze coordinates
+
         private int xPos, yPos;
         
-        #region Properties
         public int XPos
         {
             get { return this.xPos; }
@@ -105,6 +168,7 @@ namespace SWA.Ariadne.Model
         {
             get { return this.yPos; }
         }
+
         #endregion
 
         #endregion
@@ -118,6 +182,7 @@ namespace SWA.Ariadne.Model
         {
             this.xPos = xPos;
             this.yPos = yPos;
+            this.mazeId = PrimaryMazeId;
 
             for (int i = 0; i < WP_NUM; i++)
             {
