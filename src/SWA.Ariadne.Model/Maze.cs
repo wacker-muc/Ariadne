@@ -23,19 +23,28 @@ namespace SWA.Ariadne.Model
         private MazeCode codeObj;
 
         /// <summary>
-        /// Maze dimension: number of squares.
+        /// The primary maze has ID = 1.
         /// </summary>
-        private int xSize, ySize;
-        #region Properties
+        protected virtual int MazeId
+        {
+            get { return MazeSquare.PrimaryMazeId; }
+        }
+
+        /// <summary>
+        /// Maze dimension: number of rows.
+        /// </summary>
         public int YSize
         {
             get { return ySize; }
         }
+        /// <summary>
+        /// Maze dimension: number of columns.
+        /// </summary>
         public int XSize
         {
             get { return xSize; }
         }
-        #endregion
+        protected int xSize, ySize;
 
         /// <summary>
         /// Coordinates of the start and end point of the path through the maze.
@@ -51,12 +60,6 @@ namespace SWA.Ariadne.Model
             get { return direction; }
         }
 
-
-        /// <summary>
-        /// A source of random numbers.
-        /// </summary>
-        private Random random;
-
         /// <summary>
         /// The source of random numbers specific to this maze.
         /// </summary>
@@ -64,22 +67,33 @@ namespace SWA.Ariadne.Model
         {
             get { return this.random; }
         }
+        protected Random random;
 
         /// <summary>
         /// The seed used to initialize this.random.
         /// </summary>
-        private int seed;
         public int Seed
         {
             get { return seed; }
         }
+        private int seed;
 
         /// <summary>
         /// Position and dimensions of some reserved areas.
         /// </summary>
         private List<Rectangle> reservedAreas = new List<Rectangle>();
 
+        /// <summary>
+        /// A reserved area defined by the inside of an OutlineShape.
+        /// </summary>
         private OutlineShape reservedShape = null;
+
+        /// <summary>
+        /// The shapes of some EmbeddedMazes (before they are actually created).
+        /// </summary>
+        private List<OutlineShape> embeddedMazeShapes = new List<OutlineShape>();
+
+        private List<EmbeddedMaze> embeddedMazes = new List<EmbeddedMaze>();
 
         /// <summary>
         /// Most of the outline of this shape will be turned into closed walls.
@@ -100,23 +114,31 @@ namespace SWA.Ariadne.Model
         /// <summary>
         /// The maze is formed by a two-dimensional array of squares.
         /// </summary>
-        private MazeSquare[,] squares;
-        #region Properties
-        public MazeSquare this[int x, int y]
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        public virtual MazeSquare this[int x, int y]
         {
             get { return squares[x, y]; }
         }
-        #endregion
+        private MazeSquare[,] squares;
 
-        public int CountSquares
+        /// <summary>
+        /// Returns the number of squares that are not reserved.
+        /// This includes the squares of embedded mazes.
+        /// </summary>
+        public virtual int CountSquares
         {
             get
             {
                 int result = xSize * ySize;
                 
-                foreach (Rectangle rect in reservedAreas)
+                foreach (MazeSquare sq in squares)
                 {
-                    result -= rect.Width * rect.Height;
+                    if (sq.isReserved)
+                    {
+                        --result;
+                    }
                 }
 
                 return result;
@@ -261,6 +283,15 @@ namespace SWA.Ariadne.Model
             clone.seed = this.seed;
             clone.reservedAreas = this.reservedAreas;
             clone.reservedShape = this.reservedShape;
+            clone.embeddedMazeShapes = this.embeddedMazeShapes;
+            clone.embeddedMazes = new List<EmbeddedMaze>(embeddedMazes.Count);
+            foreach (EmbeddedMaze em in embeddedMazes)
+            {
+#if false
+                // TODO: em.Clone(clone)
+                clone.embeddedMazes.Add((EmbeddedMaze)em.Clone());
+#endif
+            }
 
             clone.CreateSquares();
 
@@ -398,11 +429,39 @@ namespace SWA.Ariadne.Model
             return true;
         }
 
+        public bool AddEmbeddedMaze(OutlineShape shape)
+        {
+            this.embeddedMazeShapes.Add(shape);
+            return true;
+        }
+
         public void CreateMaze()
         {
-            this.CreateSquares();
-            this.BuildMaze();
-            this.PlaceEndpoints();
+            // Create all MazeSquare objects.
+            CreateSquares();
+
+            // Fix reserved areas.
+            FixReservedAreas();
+            FixReservedShape();
+            CloseWallsAroundReservedAreas(); // TODO: This might be discarded.
+            
+            // Divide the area into a main maze and several embedded mazes.
+            FixEmbeddedMazes();
+            
+            // Put walls around the outline shape and the whole maze.
+            FixOutlineShape();
+            FixBorderWalls();
+
+            // Construct the inner walls of the main maze and choose a start and tartget square.
+            BuildMaze();
+            PlaceEndpoints();
+
+            // Do the same for all embedded mazes.
+            foreach (EmbeddedMaze m in this.embeddedMazes)
+            {
+                m.BuildMaze();
+                m.PlaceEndpoints();
+            }
         }
 
         private void CreateSquares()
@@ -521,9 +580,9 @@ namespace SWA.Ariadne.Model
 
                 #region Reject unusable squares
 
-                // Verify that the endpoints are not in the restricted area.
+                // Verify that the endpoints are actually part of this maze.
                 //
-                reject = (squares[xStart,yStart].isReserved || squares[xEnd,yEnd].isReserved);
+                reject = (this[xStart, yStart].MazeId != this.MazeId || this[xEnd, yEnd].MazeId != this.MazeId);
 
                 // Verify that the squares are not aligned against the intended travel direction.
                 // This also eliminates two other cases: same square and squares outside the maze.
@@ -536,7 +595,7 @@ namespace SWA.Ariadne.Model
                 // Prefer real dead ends.
                 // Reject an end point with less than three walls (with probability 90%).
                 //
-                if ((CountClosedWalls(squares[xEnd, yEnd]) < MazeSquare.WP_NUM - 1) && (random.Next(100) < 90))
+                if ((CountClosedWalls(this[xEnd, yEnd]) < MazeSquare.WP_NUM - 1) && (random.Next(100) < 90))
                 {
                     reject = true;
                 }
@@ -589,12 +648,6 @@ namespace SWA.Ariadne.Model
 
         private void BuildMaze()
         {
-            FixReservedAreas();
-            FixReservedShape();
-            CloseWallsAroundReservedAreas();
-            FixOutlineShape();
-            FixBorderWalls();
-
             // We hold a number of active squares in a stack.
             // Make the initial capacity sufficient to hold all squares.
             //
@@ -610,7 +663,7 @@ namespace SWA.Ariadne.Model
                 int x = random.Next(xSize);
                 int y = random.Next(ySize);
                 MazeSquare sq = this[x, y];
-                if (!sq.isReserved)
+                if (sq.MazeId == this.MazeId)
                 {
                     sq.isConnected = true;
                     stack.Push(sq);
@@ -636,7 +689,7 @@ namespace SWA.Ariadne.Model
                         case MazeSquare.WallState.WS_MAYBE:
                             MazeSquare sq = sq0.NeighborSquare(wp);
 
-                            if (sq.isConnected || sq.isReserved)
+                            if (sq.isConnected || sq.MazeId != sq0.MazeId)
                             {
                                 sq0[wp] = sq[MazeSquare.OppositeWall(wp)] = MazeSquare.WallState.WS_CLOSED;
                             }
@@ -755,7 +808,7 @@ namespace SWA.Ariadne.Model
                 {
                     for (int y = rect.Top; y < rect.Bottom; y++)
                     {
-                        this[x, y].isReserved = true;
+                        this.squares[x, y].isReserved = true;
                     }
                 }
 
@@ -884,6 +937,29 @@ namespace SWA.Ariadne.Model
 
         #endregion
 
+        #region Building embedded mazes
+
+        private void FixEmbeddedMazes()
+        {
+            for (int i = 0; i < embeddedMazeShapes.Count; i++)
+            {
+                int embeddedMazeId = this.MazeId + 1 + i;
+
+                if (embeddedMazeId > MazeSquare.MaxMazeId)
+                {
+                    break;
+                }
+
+                EmbeddedMaze embeddedMaze = new EmbeddedMaze(this, embeddedMazeId, embeddedMazeShapes[i]);
+
+                this.embeddedMazes.Add(embeddedMaze);
+            }
+
+            // TODO: Make sure that every maze is totally connected.
+        }
+
+        #endregion
+
         #region Auxiliary methods
 
         private static int CountClosedWalls(MazeSquare sq)
@@ -960,6 +1036,8 @@ namespace SWA.Ariadne.Model
 
             this.reservedAreas.Clear();
             this.outlineShape = null;
+            this.embeddedMazeShapes.Clear();
+            this.embeddedMazes.Clear();
 
             this.Irregular = data.IrregularMaze;
             this.Irregularity = data.Irregularity;
