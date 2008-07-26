@@ -28,6 +28,11 @@ namespace SWA.Ariadne.Gui
         private IMazeControl mazeControl;
 
         /// <summary>
+        /// The MazePainter.
+        /// </summary>
+        private IMazeDrawer mazeDrawer;
+
+        /// <summary>
         /// The control displaying the number of visited squares.
         /// </summary>
         private ProgressBar visitedProgressBar;
@@ -68,10 +73,11 @@ namespace SWA.Ariadne.Gui
         /// <summary>
         /// Constructor.
         /// </summary>
-        public SolverController(IMazeForm mazeForm, IMazeControl mazeControl, ProgressBar visitedProgressBar)
+        public SolverController(IMazeForm mazeForm, IMazeControl mazeControl, IMazeDrawer mazeDrawer, ProgressBar visitedProgressBar)
         {
             this.mazeForm = mazeForm;
             this.mazeControl = mazeControl;
+            this.mazeDrawer = mazeDrawer;
             this.visitedProgressBar = visitedProgressBar;
         }
 
@@ -123,7 +129,7 @@ namespace SWA.Ariadne.Gui
             {
                 // If strategyName is a valid solver type name:
                 Type strategy = SolverFactory.SolverType(strategyName);
-                solver = SolverFactory.CreateSolver(strategy, mazeControl.Maze, mazeControl);
+                solver = SolverFactory.CreateSolver(strategy, mazeControl.Maze, mazeDrawer);
                 if (isEfficient)
                 {
                     solver.MakeEfficient();
@@ -132,7 +138,7 @@ namespace SWA.Ariadne.Gui
             catch (ArgumentOutOfRangeException)
             {
                 // Otherwise (strategy name is "any"):
-                solver = SolverFactory.CreateSolver(mazeControl.Maze, mazeControl);
+                solver = SolverFactory.CreateSolver(mazeControl.Maze, mazeDrawer);
             }
             
             #endregion
@@ -172,7 +178,7 @@ namespace SWA.Ariadne.Gui
             bool forward;
 
             solver.Step(out sq1, out sq2, out forward);
-            mazeControl.DrawStep(sq1, sq2, forward);
+            mazeDrawer.DrawStep(sq1, sq2, forward);
 
             if (forward)
             {
@@ -190,7 +196,7 @@ namespace SWA.Ariadne.Gui
             if (mazeControl.Maze.IsSolved)
             {
                 FinishPath();
-                mazeControl.DrawSolvedPath(solutionPath);
+                mazeDrawer.DrawSolvedPath(solutionPath);
                 currentBackwardSquare = null;
             }
         }
@@ -200,7 +206,7 @@ namespace SWA.Ariadne.Gui
         /// </summary>
         public void FinishPath()
         {
-            mazeControl.FinishPath(currentBackwardSquare);
+            mazeDrawer.FinishPath(currentBackwardSquare);
             currentBackwardSquare = null;
         }
 
@@ -259,11 +265,11 @@ namespace SWA.Ariadne.Gui
         {
             get
             {
-                return mazeControl.BlinkingCounter;
+                return mazeDrawer.BlinkingCounter;
             }
             set
             {
-                mazeControl.BlinkingCounter = value;
+                mazeDrawer.BlinkingCounter = value;
             }
         }
 

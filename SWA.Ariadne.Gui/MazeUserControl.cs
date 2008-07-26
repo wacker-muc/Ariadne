@@ -20,17 +20,27 @@ namespace SWA.Ariadne.Gui
         /// <summary>
         /// The MazePainter responsible for all painting activities.
         /// </summary>
+        public IMazeDrawer MazeDrawer
+        {
+            get { return this.painter; }
+        }
         private MazePainter painter;
 
+        /// <summary>
+        /// The Maze that is displayed in this control.
+        /// </summary>
         public Maze Maze
         {
             get { return painter.Maze; }
         }
-        private Maze maze
-        {
-            // TODO: remove this property
-            get { return painter.Maze; }
-        }
+
+#if false
+        /// <summary>
+        /// Besides the main maze, there may be other embedded or included mazes.
+        /// Each has its own MazePainter.
+        /// </summary>
+        private List<MazePainter> painters = new List<MazePainter>();
+#endif
 
         private AriadneSettingsData settingsData;
 
@@ -44,17 +54,6 @@ namespace SWA.Ariadne.Gui
         private int gridWidth { get { return painter.GridWidth; } }
         private int xOffset { get { return painter.XOffset; } }
         private int yOffset { get { return painter.YOffset; } }
-
-        /// <summary>
-        /// A counter that switches the end square between two states:
-        /// When it is 0 or another even number, it is painted normally (red).
-        /// When it is an odd number, it is painted invisible (black).
-        /// </summary>
-        public int BlinkingCounter
-        {
-            get { return painter.BlinkingCounter; }
-            set { painter.BlinkingCounter = value; }
-        }
 
         /// <summary>
         /// A list of (scaled) images that will be painted in reserved areas of the maze.
@@ -219,17 +218,17 @@ namespace SWA.Ariadne.Gui
             w = 1 + XCoordinate(coveringControl.Right - 1, false) - x;
             h = 1 + YCoordinate(coveringControl.Bottom - 1, false) - y;
 
-            if (0 < x && x + w < maze.XSize)
+            if (0 < x && x + w < Maze.XSize)
             {
                 w = 1 + (coveringControl.Width + wallWidth + 6) / gridWidth;
             }
-            if (0 < y && y + h < maze.YSize)
+            if (0 < y && y + h < Maze.YSize)
             {
                 h = 1 + (coveringControl.Height + wallWidth + 6) / gridWidth;
             }
 
 
-            bool result = maze.ReserveRectangle(x, y, w, h);
+            bool result = Maze.ReserveRectangle(x, y, w, h);
 
             // Move the control into the center of the reserved area.
             if (result)
@@ -245,12 +244,12 @@ namespace SWA.Ariadne.Gui
                 int cx = coveringControl.Left;
                 int cy = coveringControl.Top;
 
-                if (0 < x && x + w < maze.XSize)
+                if (0 < x && x + w < Maze.XSize)
                 {
                     cx = this.Location.X + xOffset + x * gridWidth;
                     cx += 1 + (w * gridWidth - wallWidth - coveringControl.Width) / 2;
                 }
-                if (0 < y && y + h < maze.YSize)
+                if (0 < y && y + h < Maze.YSize)
                 {
                     cy = this.Location.Y + yOffset + y * gridWidth;
                     cy += 1 + (h * gridWidth - wallWidth - coveringControl.Height) / 2;
@@ -293,7 +292,7 @@ namespace SWA.Ariadne.Gui
             //this.BackColor = Color.Black;
             painter.Reset();
 
-            this.BlinkingCounter = 0;
+            painter.BlinkingCounter = 0;
 
             if (allowUpdates)
             {
@@ -358,60 +357,6 @@ namespace SWA.Ariadne.Gui
             }
         }
 
-        /// <summary>
-        /// Paints a section of the path between the given (adjoining) squares.
-        /// </summary>
-        /// <param name="sq1"></param>
-        /// <param name="sq2"></param>
-        /// <param name="forward"></param>
-        public void DrawStep(MazeSquare sq1, MazeSquare sq2, bool forward)
-        {
-            painter.DrawStep(sq1, sq2, forward);
-        }
-
-        /// <summary>
-        /// Paints a dot (in the forward color) at the given square.
-        /// Renders the GraphicsBuffer.
-        /// </summary>
-        /// <param name="sq">when null, no dot is drawn</param>
-        public void FinishPath(MazeSquare sq)
-        {
-            painter.FinishPath(sq);
-
-#if false
-            // Finally, update the display.
-            this.Update();
-#endif
-        }
-
-        /// <summary>
-        /// Paints the path between all MazeSquares in the given list in the backward color.
-        /// </summary>
-        /// <param name="path">List of MazeSquares starting at a dead end and ending at a branching square (not dead)</param>
-        /// <param name="forward"></param>
-        public void DrawPath(List<MazeSquare> path, bool forward)
-        {
-            painter.DrawPath(path, forward);
-        }
-
-        /// <summary>
-        /// Draws a highlighted path between the given squares.
-        /// </summary>
-        /// <param name="path"></param>
-        public void DrawSolvedPath(List<MazeSquare> path)
-        {
-            painter.DrawSolvedPath(path);
-        }
-
-        /// <summary>
-        /// Paints a square to mark it as "dead".
-        /// </summary>
-        /// <param name="sq"></param>
-        public void DrawDeadSquare(MazeSquare sq)
-        {
-            painter.DrawDeadSquare(sq);
-        }
-
         #endregion
 
         #region Support for saving image files
@@ -439,7 +384,7 @@ namespace SWA.Ariadne.Gui
             Bitmap result = new Bitmap(imgSize.Width, imgSize.Height, pxlFormat);
 
             // Make sure the end square is painted solid.
-            this.BlinkingCounter = 0;
+            painter.BlinkingCounter = 0;
 
             // Grab the painted maze from the screen.
             // Note: I've found no way to get access to the contents of the BufferedGraphics.
@@ -476,7 +421,7 @@ namespace SWA.Ariadne.Gui
             #region Do the equivalent of Setup() with the modified parameters.
 
             // CreateMaze()
-            MazeForm.MakeReservedAreas(maze);
+            MazeForm.MakeReservedAreas(Maze);
             this.ReserveAreasForImages(data);
             this.AddOutlineShape(data);
             Maze.CreateMaze();
@@ -515,7 +460,7 @@ namespace SWA.Ariadne.Gui
 
             #region Determine number of images to be placed into reserved areas.
 
-            Random r = maze.Random;
+            Random r = Maze.Random;
             int n, nMin, nMax = count;
 
             if (nMax <= 2)
@@ -604,7 +549,7 @@ namespace SWA.Ariadne.Gui
             availableImages.AddRange(SWA.Utilities.Directory.Find(folderPath, "*.png", true));
 
             List<string> result = new List<string>(count);
-            Random r = maze.Random;
+            Random r = Maze.Random;
 
             // Shorten the list of recently used images.
             // Make sure the list does not get too short.
@@ -642,7 +587,7 @@ namespace SWA.Ariadne.Gui
             int sqH = (img.Height + 8 + this.wallWidth) / this.gridWidth + 1;
 
             Rectangle rect;
-            if (maze.ReserveRectangle(sqW, sqH, 2, out rect))
+            if (Maze.ReserveRectangle(sqW, sqH, 2, out rect))
             {
                 // Remember the image data and location.  It will be painted in PaintMaze().
                 int x = rect.X * gridWidth + xOffset + (rect.Width * gridWidth - img.Width) / 2;
@@ -663,7 +608,7 @@ namespace SWA.Ariadne.Gui
 
         private void AddOutlineShape(AriadneSettingsData data)
         {
-            Random r = maze.Random;
+            Random r = Maze.Random;
 
             double offCenter = data.OutlineOffCenter / 100.0;
             double size = data.OutlineSize / 100.0;
@@ -700,7 +645,7 @@ namespace SWA.Ariadne.Gui
             if (shapeBuilderDelegate != null)
             {
                 OutlineShape shape = OutlineShape.Instance(r, shapeBuilderDelegate, XSize, YSize, offCenter, size);
-                maze.OutlineShape = shape;
+                Maze.OutlineShape = shape;
             }
         }
 

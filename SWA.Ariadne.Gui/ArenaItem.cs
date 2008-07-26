@@ -53,6 +53,7 @@ namespace SWA.Ariadne.Gui
             this.solverController = new SolverController(
                 this as IMazeForm,
                 this.MazeUserControl as IMazeControl,
+                this.MazeUserControl.MazeDrawer,
                 this.visitedProgressBar as ProgressBar
             );
         }

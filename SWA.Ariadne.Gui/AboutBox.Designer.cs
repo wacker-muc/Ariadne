@@ -154,7 +154,6 @@ namespace SWA.Ariadne.Gui
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.mazeUserControl.BackColor = System.Drawing.Color.Black;
-            this.mazeUserControl.BlinkingCounter = 0;
             this.mazeUserControl.Location = new System.Drawing.Point(12, 12);
             this.mazeUserControl.Name = "mazeUserControl";
             this.mazeUserControl.Size = new System.Drawing.Size(339, 157);
