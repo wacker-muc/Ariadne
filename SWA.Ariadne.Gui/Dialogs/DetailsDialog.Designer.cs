@@ -31,8 +31,11 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.components = new System.ComponentModel.Container();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.layoutPage = new System.Windows.Forms.TabPage();
+            this.wallVisibilityGroupBox = new System.Windows.Forms.GroupBox();
+            this.wallVisibilityRadioButtonWhenVisited = new System.Windows.Forms.RadioButton();
+            this.wallVisibilityRadioButtonNever = new System.Windows.Forms.RadioButton();
+            this.wallVisibilityRadioButtonAlways = new System.Windows.Forms.RadioButton();
             this.squareWidthNumericUpDown = new System.Windows.Forms.NumericUpDown();
-            this.dataBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.pathWidthNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.wallWidthNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.gridWidthNumericUpDown = new System.Windows.Forms.NumericUpDown();
@@ -58,10 +61,6 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.label14 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
-            this.backwardColorLabel = new SWA.Ariadne.Settings.ColorLabel();
-            this.forwardColorLabel = new SWA.Ariadne.Settings.ColorLabel();
-            this.refBColorLabel = new SWA.Ariadne.Settings.ColorLabel();
-            this.refAColorLabel = new SWA.Ariadne.Settings.ColorLabel();
             this.shapePage = new System.Windows.Forms.TabPage();
             this.irregularityNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.label29 = new System.Windows.Forms.Label();
@@ -111,14 +110,16 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.label24 = new System.Windows.Forms.Label();
             this.label23 = new System.Windows.Forms.Label();
             this.imageFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.wallVisibilityGroupBox = new System.Windows.Forms.GroupBox();
-            this.wallVisibilityRadioButtonAlways = new System.Windows.Forms.RadioButton();
-            this.wallVisibilityRadioButtonNever = new System.Windows.Forms.RadioButton();
-            this.wallVisibilityRadioButtonWhenVisited = new System.Windows.Forms.RadioButton();
+            this.asEmbeddedMazeCheckBox = new System.Windows.Forms.CheckBox();
+            this.dataBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.backwardColorLabel = new SWA.Ariadne.Settings.ColorLabel();
+            this.forwardColorLabel = new SWA.Ariadne.Settings.ColorLabel();
+            this.refBColorLabel = new SWA.Ariadne.Settings.ColorLabel();
+            this.refAColorLabel = new SWA.Ariadne.Settings.ColorLabel();
             this.tabControl1.SuspendLayout();
             this.layoutPage.SuspendLayout();
+            this.wallVisibilityGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.squareWidthNumericUpDown)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pathWidthNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.wallWidthNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridWidthNumericUpDown)).BeginInit();
@@ -133,7 +134,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.outlineKindPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.offCenterNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sizeNumericUpDown)).BeginInit();
-            this.wallVisibilityGroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -178,6 +179,51 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.layoutPage.Text = "Layout";
             this.layoutPage.UseVisualStyleBackColor = true;
             // 
+            // wallVisibilityGroupBox
+            // 
+            this.wallVisibilityGroupBox.Controls.Add(this.wallVisibilityRadioButtonWhenVisited);
+            this.wallVisibilityGroupBox.Controls.Add(this.wallVisibilityRadioButtonNever);
+            this.wallVisibilityGroupBox.Controls.Add(this.wallVisibilityRadioButtonAlways);
+            this.wallVisibilityGroupBox.Location = new System.Drawing.Point(173, 84);
+            this.wallVisibilityGroupBox.Name = "wallVisibilityGroupBox";
+            this.wallVisibilityGroupBox.Size = new System.Drawing.Size(73, 74);
+            this.wallVisibilityGroupBox.TabIndex = 100;
+            this.wallVisibilityGroupBox.TabStop = false;
+            this.wallVisibilityGroupBox.Text = "Paint walls";
+            // 
+            // wallVisibilityRadioButtonWhenVisited
+            // 
+            this.wallVisibilityRadioButtonWhenVisited.AutoSize = true;
+            this.wallVisibilityRadioButtonWhenVisited.Location = new System.Drawing.Point(7, 52);
+            this.wallVisibilityRadioButtonWhenVisited.Name = "wallVisibilityRadioButtonWhenVisited";
+            this.wallVisibilityRadioButtonWhenVisited.Size = new System.Drawing.Size(55, 17);
+            this.wallVisibilityRadioButtonWhenVisited.TabIndex = 2;
+            this.wallVisibilityRadioButtonWhenVisited.TabStop = true;
+            this.wallVisibilityRadioButtonWhenVisited.Text = "visited";
+            this.wallVisibilityRadioButtonWhenVisited.UseVisualStyleBackColor = true;
+            // 
+            // wallVisibilityRadioButtonNever
+            // 
+            this.wallVisibilityRadioButtonNever.AutoSize = true;
+            this.wallVisibilityRadioButtonNever.Location = new System.Drawing.Point(7, 34);
+            this.wallVisibilityRadioButtonNever.Name = "wallVisibilityRadioButtonNever";
+            this.wallVisibilityRadioButtonNever.Size = new System.Drawing.Size(52, 17);
+            this.wallVisibilityRadioButtonNever.TabIndex = 1;
+            this.wallVisibilityRadioButtonNever.TabStop = true;
+            this.wallVisibilityRadioButtonNever.Text = "never";
+            this.wallVisibilityRadioButtonNever.UseVisualStyleBackColor = true;
+            // 
+            // wallVisibilityRadioButtonAlways
+            // 
+            this.wallVisibilityRadioButtonAlways.AutoSize = true;
+            this.wallVisibilityRadioButtonAlways.Location = new System.Drawing.Point(7, 16);
+            this.wallVisibilityRadioButtonAlways.Name = "wallVisibilityRadioButtonAlways";
+            this.wallVisibilityRadioButtonAlways.Size = new System.Drawing.Size(57, 17);
+            this.wallVisibilityRadioButtonAlways.TabIndex = 0;
+            this.wallVisibilityRadioButtonAlways.TabStop = true;
+            this.wallVisibilityRadioButtonAlways.Text = "always";
+            this.wallVisibilityRadioButtonAlways.UseVisualStyleBackColor = true;
+            // 
             // squareWidthNumericUpDown
             // 
             this.squareWidthNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.dataBindingSource, "SquareWidth", true));
@@ -202,11 +248,6 @@ namespace SWA.Ariadne.Gui.Dialogs
             0,
             0});
             this.squareWidthNumericUpDown.Click += new System.EventHandler(this.OnClickImmediateUpdate);
-            // 
-            // dataBindingSource
-            // 
-            this.dataBindingSource.DataSource = typeof(SWA.Ariadne.Settings.AriadneSettingsData);
-            this.dataBindingSource.CurrentItemChanged += new System.EventHandler(this.OnDataChanged);
             // 
             // pathWidthNumericUpDown
             // 
@@ -513,54 +554,6 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.label11.Size = new System.Drawing.Size(67, 13);
             this.label11.TabIndex = 4;
             this.label11.Text = "Reference A";
-            // 
-            // backwardColorLabel
-            // 
-            this.backwardColorLabel.BackColor = System.Drawing.SystemColors.Window;
-            this.backwardColorLabel.DataBindings.Add(new System.Windows.Forms.Binding("BackColor", this.dataBindingSource, "BackwardColor", true));
-            this.backwardColorLabel.ForeColor = System.Drawing.Color.Black;
-            this.backwardColorLabel.Location = new System.Drawing.Point(91, 113);
-            this.backwardColorLabel.Name = "backwardColorLabel";
-            this.backwardColorLabel.Size = new System.Drawing.Size(134, 20);
-            this.backwardColorLabel.TabIndex = 11;
-            this.backwardColorLabel.Text = "h = 000, s = 0,00, b = 1,00";
-            this.backwardColorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // forwardColorLabel
-            // 
-            this.forwardColorLabel.BackColor = System.Drawing.SystemColors.Window;
-            this.forwardColorLabel.DataBindings.Add(new System.Windows.Forms.Binding("BackColor", this.dataBindingSource, "ForwardColor", true));
-            this.forwardColorLabel.ForeColor = System.Drawing.Color.Black;
-            this.forwardColorLabel.Location = new System.Drawing.Point(91, 87);
-            this.forwardColorLabel.Name = "forwardColorLabel";
-            this.forwardColorLabel.Size = new System.Drawing.Size(134, 20);
-            this.forwardColorLabel.TabIndex = 10;
-            this.forwardColorLabel.Text = "h = 000, s = 0,00, b = 1,00";
-            this.forwardColorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // refBColorLabel
-            // 
-            this.refBColorLabel.BackColor = System.Drawing.Color.DarkSlateBlue;
-            this.refBColorLabel.DataBindings.Add(new System.Windows.Forms.Binding("BackColor", this.dataBindingSource, "ReferenceColor2", true));
-            this.refBColorLabel.ForeColor = System.Drawing.Color.White;
-            this.refBColorLabel.Location = new System.Drawing.Point(91, 55);
-            this.refBColorLabel.Name = "refBColorLabel";
-            this.refBColorLabel.Size = new System.Drawing.Size(134, 20);
-            this.refBColorLabel.TabIndex = 9;
-            this.refBColorLabel.Text = "h = 248, s = 0,39, b = 0,39";
-            this.refBColorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // refAColorLabel
-            // 
-            this.refAColorLabel.BackColor = System.Drawing.Color.Gold;
-            this.refAColorLabel.DataBindings.Add(new System.Windows.Forms.Binding("BackColor", this.dataBindingSource, "ReferenceColor1", true));
-            this.refAColorLabel.ForeColor = System.Drawing.Color.Black;
-            this.refAColorLabel.Location = new System.Drawing.Point(91, 29);
-            this.refAColorLabel.Name = "refAColorLabel";
-            this.refAColorLabel.Size = new System.Drawing.Size(134, 20);
-            this.refAColorLabel.TabIndex = 8;
-            this.refAColorLabel.Text = "h = 051, s = 1,00, b = 0,50";
-            this.refAColorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // shapePage
             // 
@@ -937,6 +930,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             // outlinesPage
             // 
+            this.outlinesPage.Controls.Add(this.asEmbeddedMazeCheckBox);
             this.outlinesPage.Controls.Add(this.outlineKindPanel);
             this.outlinesPage.Controls.Add(this.visibleOutlinesCheckBox);
             this.outlinesPage.Controls.Add(this.setOutlinesButton);
@@ -1083,7 +1077,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.visibleOutlinesCheckBox.Location = new System.Drawing.Point(19, 198);
             this.visibleOutlinesCheckBox.Name = "visibleOutlinesCheckBox";
             this.visibleOutlinesCheckBox.Size = new System.Drawing.Size(55, 17);
-            this.visibleOutlinesCheckBox.TabIndex = 91;
+            this.visibleOutlinesCheckBox.TabIndex = 99;
             this.visibleOutlinesCheckBox.Text = "visible";
             this.visibleOutlinesCheckBox.UseVisualStyleBackColor = true;
             // 
@@ -1175,50 +1169,69 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.label23.Text = "%";
             this.label23.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // wallVisibilityGroupBox
+            // asEmbeddedMazeCheckBox
             // 
-            this.wallVisibilityGroupBox.Controls.Add(this.wallVisibilityRadioButtonWhenVisited);
-            this.wallVisibilityGroupBox.Controls.Add(this.wallVisibilityRadioButtonNever);
-            this.wallVisibilityGroupBox.Controls.Add(this.wallVisibilityRadioButtonAlways);
-            this.wallVisibilityGroupBox.Location = new System.Drawing.Point(173, 84);
-            this.wallVisibilityGroupBox.Name = "wallVisibilityGroupBox";
-            this.wallVisibilityGroupBox.Size = new System.Drawing.Size(73, 74);
-            this.wallVisibilityGroupBox.TabIndex = 100;
-            this.wallVisibilityGroupBox.TabStop = false;
-            this.wallVisibilityGroupBox.Text = "Paint walls";
+            this.asEmbeddedMazeCheckBox.AutoSize = true;
+            this.asEmbeddedMazeCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.dataBindingSource, "AsEmbeddedMaze", true));
+            this.asEmbeddedMazeCheckBox.Location = new System.Drawing.Point(19, 175);
+            this.asEmbeddedMazeCheckBox.Name = "asEmbeddedMazeCheckBox";
+            this.asEmbeddedMazeCheckBox.Size = new System.Drawing.Size(118, 17);
+            this.asEmbeddedMazeCheckBox.TabIndex = 95;
+            this.asEmbeddedMazeCheckBox.Text = "as embedded maze";
+            this.asEmbeddedMazeCheckBox.UseVisualStyleBackColor = true;
             // 
-            // wallVisibilityRadioButtonAlways
+            // dataBindingSource
             // 
-            this.wallVisibilityRadioButtonAlways.AutoSize = true;
-            this.wallVisibilityRadioButtonAlways.Location = new System.Drawing.Point(7, 16);
-            this.wallVisibilityRadioButtonAlways.Name = "wallVisibilityRadioButtonAlways";
-            this.wallVisibilityRadioButtonAlways.Size = new System.Drawing.Size(57, 17);
-            this.wallVisibilityRadioButtonAlways.TabIndex = 0;
-            this.wallVisibilityRadioButtonAlways.TabStop = true;
-            this.wallVisibilityRadioButtonAlways.Text = "always";
-            this.wallVisibilityRadioButtonAlways.UseVisualStyleBackColor = true;
+            this.dataBindingSource.DataSource = typeof(SWA.Ariadne.Settings.AriadneSettingsData);
+            this.dataBindingSource.CurrentItemChanged += new System.EventHandler(this.OnDataChanged);
             // 
-            // wallVisibilityRadioButtonNever
+            // backwardColorLabel
             // 
-            this.wallVisibilityRadioButtonNever.AutoSize = true;
-            this.wallVisibilityRadioButtonNever.Location = new System.Drawing.Point(7, 34);
-            this.wallVisibilityRadioButtonNever.Name = "wallVisibilityRadioButtonNever";
-            this.wallVisibilityRadioButtonNever.Size = new System.Drawing.Size(52, 17);
-            this.wallVisibilityRadioButtonNever.TabIndex = 1;
-            this.wallVisibilityRadioButtonNever.TabStop = true;
-            this.wallVisibilityRadioButtonNever.Text = "never";
-            this.wallVisibilityRadioButtonNever.UseVisualStyleBackColor = true;
+            this.backwardColorLabel.BackColor = System.Drawing.SystemColors.Window;
+            this.backwardColorLabel.DataBindings.Add(new System.Windows.Forms.Binding("BackColor", this.dataBindingSource, "BackwardColor", true));
+            this.backwardColorLabel.ForeColor = System.Drawing.Color.Black;
+            this.backwardColorLabel.Location = new System.Drawing.Point(91, 113);
+            this.backwardColorLabel.Name = "backwardColorLabel";
+            this.backwardColorLabel.Size = new System.Drawing.Size(134, 20);
+            this.backwardColorLabel.TabIndex = 11;
+            this.backwardColorLabel.Text = "h = 000, s = 0,00, b = 1,00";
+            this.backwardColorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // wallVisibilityRadioButtonWhenVisited
+            // forwardColorLabel
             // 
-            this.wallVisibilityRadioButtonWhenVisited.AutoSize = true;
-            this.wallVisibilityRadioButtonWhenVisited.Location = new System.Drawing.Point(7, 52);
-            this.wallVisibilityRadioButtonWhenVisited.Name = "wallVisibilityRadioButtonWhenVisited";
-            this.wallVisibilityRadioButtonWhenVisited.Size = new System.Drawing.Size(55, 17);
-            this.wallVisibilityRadioButtonWhenVisited.TabIndex = 2;
-            this.wallVisibilityRadioButtonWhenVisited.TabStop = true;
-            this.wallVisibilityRadioButtonWhenVisited.Text = "visited";
-            this.wallVisibilityRadioButtonWhenVisited.UseVisualStyleBackColor = true;
+            this.forwardColorLabel.BackColor = System.Drawing.SystemColors.Window;
+            this.forwardColorLabel.DataBindings.Add(new System.Windows.Forms.Binding("BackColor", this.dataBindingSource, "ForwardColor", true));
+            this.forwardColorLabel.ForeColor = System.Drawing.Color.Black;
+            this.forwardColorLabel.Location = new System.Drawing.Point(91, 87);
+            this.forwardColorLabel.Name = "forwardColorLabel";
+            this.forwardColorLabel.Size = new System.Drawing.Size(134, 20);
+            this.forwardColorLabel.TabIndex = 10;
+            this.forwardColorLabel.Text = "h = 000, s = 0,00, b = 1,00";
+            this.forwardColorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // refBColorLabel
+            // 
+            this.refBColorLabel.BackColor = System.Drawing.Color.DarkSlateBlue;
+            this.refBColorLabel.DataBindings.Add(new System.Windows.Forms.Binding("BackColor", this.dataBindingSource, "ReferenceColor2", true));
+            this.refBColorLabel.ForeColor = System.Drawing.Color.White;
+            this.refBColorLabel.Location = new System.Drawing.Point(91, 55);
+            this.refBColorLabel.Name = "refBColorLabel";
+            this.refBColorLabel.Size = new System.Drawing.Size(134, 20);
+            this.refBColorLabel.TabIndex = 9;
+            this.refBColorLabel.Text = "h = 248, s = 0,39, b = 0,39";
+            this.refBColorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // refAColorLabel
+            // 
+            this.refAColorLabel.BackColor = System.Drawing.Color.Gold;
+            this.refAColorLabel.DataBindings.Add(new System.Windows.Forms.Binding("BackColor", this.dataBindingSource, "ReferenceColor1", true));
+            this.refAColorLabel.ForeColor = System.Drawing.Color.Black;
+            this.refAColorLabel.Location = new System.Drawing.Point(91, 29);
+            this.refAColorLabel.Name = "refAColorLabel";
+            this.refAColorLabel.Size = new System.Drawing.Size(134, 20);
+            this.refAColorLabel.TabIndex = 8;
+            this.refAColorLabel.Text = "h = 051, s = 1,00, b = 0,50";
+            this.refAColorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // DetailsDialog
             // 
@@ -1236,8 +1249,9 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.tabControl1.ResumeLayout(false);
             this.layoutPage.ResumeLayout(false);
             this.layoutPage.PerformLayout();
+            this.wallVisibilityGroupBox.ResumeLayout(false);
+            this.wallVisibilityGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.squareWidthNumericUpDown)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pathWidthNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.wallWidthNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridWidthNumericUpDown)).EndInit();
@@ -1257,8 +1271,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.outlineKindPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.offCenterNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sizeNumericUpDown)).EndInit();
-            this.wallVisibilityGroupBox.ResumeLayout(false);
-            this.wallVisibilityGroupBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataBindingSource)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1351,5 +1364,6 @@ namespace SWA.Ariadne.Gui.Dialogs
         private System.Windows.Forms.RadioButton wallVisibilityRadioButtonWhenVisited;
         private System.Windows.Forms.RadioButton wallVisibilityRadioButtonNever;
         private System.Windows.Forms.RadioButton wallVisibilityRadioButtonAlways;
+        private System.Windows.Forms.CheckBox asEmbeddedMazeCheckBox;
     }
 }

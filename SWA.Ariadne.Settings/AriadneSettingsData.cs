@@ -364,6 +364,13 @@ namespace SWA.Ariadne.Settings
         }
         private int outlineSize;
 
+        public bool AsEmbeddedMaze
+        {
+            get { return asEmbeddedMaze; }
+            set { asEmbeddedMaze = value; }
+        }
+        private bool asEmbeddedMaze;
+
         public bool VisibleOutlines
         {
             get { return visibleOutlines; }

@@ -190,6 +190,11 @@ namespace SWA.Ariadne.Gui.Mazes
         public bool HasBuffer { get { return (gBuffer != null); } }
         public bool HasBufferAlternate { get { return (gBufferAlternate != null); } }
 
+        /// <summary>
+        /// These MazePainters paint to the same Graphics object.
+        /// </summary>
+        private List<MazePainter> sharedPainters = new List<MazePainter>();
+
         #endregion
 
         #region Constructor and Initialization
@@ -435,7 +440,10 @@ namespace SWA.Ariadne.Gui.Mazes
         /// </summary>
         public void Reset()
         {
-            maze.Reset();
+            if (maze != null)
+            {
+                maze.Reset();
+            }
 
             this.wallPen = new Pen(wallColor, wallWidth);
             this.forwardPen = new Pen(forwardColor, pathWidth);
@@ -451,6 +459,40 @@ namespace SWA.Ariadne.Gui.Mazes
                 gBuffer.Dispose();
                 gBuffer = null;
             }
+
+            // Forward this message to the shared painters.
+            foreach (MazePainter item in sharedPainters)
+            {
+                item.gBuffer = null;
+                item.Reset();
+            }
+        }
+
+        #endregion
+
+        #region Support for embedded mazes
+
+        public MazePainter CreateSharedPainter(Maze embeddedMaze)
+        {
+            // The new MazePainter should not have a client.
+            // The client related behavior is a task of the main MazePainter.
+            MazePainter result = new MazePainter(this.targetGraphics, this.targetRectangle, null);
+
+            // The maze should have the same layout.
+            // Note: The path color will be different.
+            result.Setup(this.squareWidth, this.wallWidth, this.pathWidth);
+            result.xOffset = this.xOffset;
+            result.yOffset = this.yOffset;
+            result.Reset();
+
+            // We don't create a new maze but use the given one.
+            result.maze = embeddedMaze;
+
+            // Add the shared painter to our list and let it share our BufferedGraphics.
+            this.sharedPainters.Add(result);
+            result.gBuffer = this.gBuffer;
+
+            return result;
         }
 
         #endregion
@@ -479,6 +521,13 @@ namespace SWA.Ariadne.Gui.Mazes
 
                     gBuffer = gBufferAlternate;
                     gBufferAlternate = null;
+
+                    // Let all shared painters use the new graphics object.
+                    foreach (MazePainter item in sharedPainters)
+                    {
+                        item.gBuffer = this.gBuffer;
+                        item.gBufferAlternate = null;
+                    }
                 }
                 else
                 {
@@ -500,6 +549,13 @@ namespace SWA.Ariadne.Gui.Mazes
             gBuffer = CreateGraphicsBuffer();
             Graphics g = gBuffer.Graphics;
             PaintMaze(g, painterDelegate);
+
+            // Let all shared painters use the new graphics object.
+            foreach (MazePainter item in sharedPainters)
+            {
+                item.gBuffer = this.gBuffer;
+                item.gBufferAlternate = null;
+            }
         }
 
         /// <summary>
@@ -895,6 +951,10 @@ namespace SWA.Ariadne.Gui.Mazes
         public void TakeParametersFrom(AriadneSettingsData data)
         {
             this.settingsData = data;
+
+            // The currently installed shared painters are no longer valid.
+            // New shared painters may be installed by the caller.
+            this.sharedPainters.Clear();
 
             #region Take parameters concerning this MazePainter.
 

@@ -102,6 +102,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             data.OutlineKind = AriadneSettingsData.OutlineKindEnum.None;
             data.OutlineOffCenter = (int)this.offCenterNumericUpDown.Value;
             data.OutlineSize = (int)this.sizeNumericUpDown.Value;
+            data.AsEmbeddedMaze = this.asEmbeddedMazeCheckBox.Checked;
             data.VisibleOutlines = this.visibleOutlinesCheckBox.Checked;
 
             #endregion

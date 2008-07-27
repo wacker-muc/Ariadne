@@ -54,7 +54,7 @@ namespace SWA.Ariadne.Logic
         };
         public static string EfficientPrefix = "Efficient";
 
-        public static Type SolverType(string name)
+        private static Type SolverType(string name)
         {
             foreach (Type t in SolverTypes)
             {
@@ -63,7 +63,7 @@ namespace SWA.Ariadne.Logic
                     return t;
                 }
             }
-            throw new ArgumentOutOfRangeException("name", name, "No such Solver type.");
+            return null;
         }
 
         /// <summary>
@@ -72,6 +72,7 @@ namespace SWA.Ariadne.Logic
         /// <param name="solverType"></param>
         /// <param name="maze"></param>
         /// <returns></returns>
+        /// TODO: Make this method private.
         public static IMazeSolver CreateSolver(Type solverType, Maze maze, IMazeDrawer mazeDrawer)
         {
             IMazeSolver result = (IMazeSolver)solverType.GetConstructor(
@@ -85,10 +86,11 @@ namespace SWA.Ariadne.Logic
 
         /// <summary>
         /// Returns a new MazeSolver.
-        /// A (reasonably) intelligent strategy.
+        /// A (reasonably) intelligent strategy is chosen randomly.
         /// </summary>
         /// <param name="maze"></param>
         /// <returns></returns>
+        /// TODO: Make this method private.
         public static IMazeSolver CreateSolver(Maze maze, IMazeDrawer mazeDrawer)
         {
             Random r = RandomFactory.CreateRandom();
@@ -120,6 +122,40 @@ namespace SWA.Ariadne.Logic
 
                 return result;
             }
+        }
+
+        /// <summary>
+        /// Returns a new MazeSolver.
+        /// If the strategyName is valid, that type is created; otherwise a random type is returned.
+        /// </summary>
+        public static IMazeSolver CreateSolver(string strategyName, Maze maze, IMazeDrawer mazeDrawer)
+        {
+            IMazeSolver result;
+            bool isEfficient = false;
+
+            if (strategyName.StartsWith(EfficientPrefix))
+            {
+                strategyName = strategyName.Substring(EfficientPrefix.Length);
+                isEfficient = true;
+            }
+
+            Type strategy = SolverFactory.SolverType(strategyName);
+            if (strategy != null)
+            {
+                // If strategyName is a valid solver type name:
+                result = SolverFactory.CreateSolver(strategy, maze, mazeDrawer);
+                if (isEfficient)
+                {
+                    result.MakeEfficient();
+                }
+            }
+            else
+            {
+                // Otherwise (strategy name is "any"):
+                result = SolverFactory.CreateSolver(maze, mazeDrawer);
+            }
+
+            return result;
         }
 
         /// <summary>
