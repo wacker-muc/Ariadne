@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
-namespace SWA.Ariadne.Gui
+namespace SWA.Ariadne.Gui.Dialogs
 {
     public partial class AboutDetailsForm : Form
     {

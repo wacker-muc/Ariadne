@@ -7,6 +7,8 @@ using System.Text;
 using System.Windows.Forms;
 using SWA.Ariadne.Logic;
 using SWA.Ariadne.Settings;
+using SWA.Ariadne.Gui.Mazes;
+using SWA.Ariadne.Ctrl;
 
 namespace SWA.Ariadne.Gui
 {
@@ -178,10 +180,10 @@ namespace SWA.Ariadne.Gui
         /// <summary>
         /// Enables or disables some controls depending on whether we are Ready or not.
         /// </summary>
-        public void FixStateDependantControls(AriadneFormBase.SolverState state)
+        public void FixStateDependantControls(SWA.Ariadne.Logic.SolverState state)
         {
-            bool enabled = (state == AriadneFormBase.SolverState.Ready
-                         || state == AriadneFormBase.SolverState.Finished);
+            bool enabled = (state == SWA.Ariadne.Logic.SolverState.Ready
+                         || state == SWA.Ariadne.Logic.SolverState.Finished);
 
             strategyComboBox.Enabled = enabled;
         }

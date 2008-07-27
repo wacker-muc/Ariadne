@@ -9,13 +9,13 @@ using SWA.Ariadne.Outlines;
 using SWA.Ariadne.Logic;
 using SWA.Ariadne.Settings;
 
-namespace SWA.Ariadne.Gui
+namespace SWA.Ariadne.Gui.Mazes
 {
     /// <summary>
     /// The MazePainter is responsible for the painting operations in a MazeUserControl.
     /// It only needs the control's Graphics object but none of its Control abilities.
     /// </summary>
-    internal class MazePainter
+    public class MazePainter
         : IMazeDrawer
         , IAriadneSettingsSource
     {
@@ -77,7 +77,7 @@ namespace SWA.Ariadne.Gui
         #region Member variables
 
         // TODO: remove this variable
-        private System.Windows.Forms.UserControl client;
+        private IMazePainterClient client;
 
         public readonly bool screenSaverPreviewMode = false;
         private Graphics targetGraphics;
@@ -198,11 +198,11 @@ namespace SWA.Ariadne.Gui
         /// Create a MazePainter that paints into the given client control.
         /// </summary>
         /// <param name="client"></param>
-        public MazePainter(System.Windows.Forms.UserControl client)
+        public MazePainter(Graphics graphics, Rectangle rectangle, IMazePainterClient client)
         {
             this.client = client;
-            this.targetGraphics = client.CreateGraphics();
-            this.targetRectangle = client.DisplayRectangle;
+            this.targetGraphics = graphics;
+            this.targetRectangle = rectangle;
             this.screenSaverPreviewMode = false;
         }
 
@@ -247,7 +247,7 @@ namespace SWA.Ariadne.Gui
         /// <param name="pathWidth"></param>
         /// <param name="wallWidth"></param>
         /// TODO: Move this code into a MazeDimension class.
-        internal static void SuggestWidths(int gridWidth, bool visibleWalls, out int squareWidth, out int pathWidth, out int wallWidth)
+        public static void SuggestWidths(int gridWidth, bool visibleWalls, out int squareWidth, out int pathWidth, out int wallWidth)
         {
             if (visibleWalls)
             {

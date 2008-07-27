@@ -10,10 +10,11 @@ using SWA.Ariadne.Outlines;
 using SWA.Ariadne.Logic;
 using SWA.Ariadne.Settings;
 
-namespace SWA.Ariadne.Gui
+namespace SWA.Ariadne.Gui.Mazes
 {
     public partial class MazeUserControl : UserControl
         , IMazeControl
+        , IMazePainterClient
     {
         #region Member variables
 
@@ -84,7 +85,7 @@ namespace SWA.Ariadne.Gui
         /// </summary>
         private bool allowUpdates = true;
 
-        internal IMazeForm MazeForm
+        public IMazeForm MazeForm
         {
             get { return this.mazeForm; }
             set { this.mazeForm = value; }
@@ -98,7 +99,7 @@ namespace SWA.Ariadne.Gui
         public MazeUserControl()
         {
             InitializeComponent();
-            this.painter = new MazePainter(this);
+            this.painter = new MazePainter(this.CreateGraphics(), this.DisplayRectangle, this as IMazePainterClient);
         }
 
         /// <summary>
@@ -106,7 +107,7 @@ namespace SWA.Ariadne.Gui
         /// </summary>
         /// <param name="g"></param>
         /// <param name="rect"></param>
-        internal void SetGraphics(Graphics g, Rectangle rect)
+        public void SetGraphics(Graphics g, Rectangle rect)
         {
 #if false // TODO: false
             this.Size = new Size(rect.Width, rect.Height);
@@ -203,7 +204,7 @@ namespace SWA.Ariadne.Gui
         /// </summary>
         /// <param name="coveringControl"></param>
         /// <exception cref="ArgumentException">The given Control has a differnent Parent.</exception>
-        internal bool ReserveArea(Control coveringControl)
+        public bool ReserveArea(Control coveringControl)
         {
             if (coveringControl.Parent != this.Parent)
             {
@@ -304,7 +305,7 @@ namespace SWA.Ariadne.Gui
             if (this.ParentForm.WindowState == FormWindowState.Minimized)
             {
                 // TODO: Reset() is called twice but should be called only once.
-                this.PaintMaze();
+                painter.PaintMaze(this.PaintImages);
             }
         }
 
@@ -336,14 +337,16 @@ namespace SWA.Ariadne.Gui
             }
         }
 
+#if true
         /// <summary>
         /// Creates the GraphicsBuffer and draws the static maze.
         /// </summary>
         /// TODO: remove this method
-        internal void PaintMaze()
+        public void PaintMaze()
         {
             painter.PaintMaze(this.PaintImages);
         }
+#endif
 
         /// <summary>
         /// Paints the images into their reserved areas.
@@ -365,7 +368,7 @@ namespace SWA.Ariadne.Gui
         /// Returns a Bitmap image of the maze.
         /// </summary>
         /// <returns></returns>
-        internal Image GetImage()
+        public Image GetImage()
         {
             // TODO: use painter's dimensions
 

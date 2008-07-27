@@ -71,6 +71,24 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWA.Ariadne.Outlines", "SWA
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWA.Ariadne.Gui.Dialogs", "SWA.Ariadne.Gui\Dialogs\SWA.Ariadne.Gui.Dialogs.csproj", "{518B57D2-7D57-4967-B3F6-A054F67D36CD}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWA.Ariadne.Gui.Mazes", "SWA.Ariadne.Gui\Mazes\SWA.Ariadne.Gui.Mazes.csproj", "{50B4A98B-F9F6-48B9-BF2E-0CD78368565D}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWA.Ariadne.Ctrl", "SWA.Ariadne.Ctrl\SWA.Ariadne.Ctrl.csproj", "{351936CC-5AD5-45DF-AC9C-903964E29DDB}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = SWA.Ariadne.vsmdi
@@ -120,6 +138,18 @@ Global
 		{9751AAAE-B751-451E-BA8C-FBD55234FE56}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9751AAAE-B751-451E-BA8C-FBD55234FE56}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9751AAAE-B751-451E-BA8C-FBD55234FE56}.Release|Any CPU.Build.0 = Release|Any CPU
+		{518B57D2-7D57-4967-B3F6-A054F67D36CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{518B57D2-7D57-4967-B3F6-A054F67D36CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{518B57D2-7D57-4967-B3F6-A054F67D36CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{518B57D2-7D57-4967-B3F6-A054F67D36CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50B4A98B-F9F6-48B9-BF2E-0CD78368565D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50B4A98B-F9F6-48B9-BF2E-0CD78368565D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50B4A98B-F9F6-48B9-BF2E-0CD78368565D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50B4A98B-F9F6-48B9-BF2E-0CD78368565D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{351936CC-5AD5-45DF-AC9C-903964E29DDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{351936CC-5AD5-45DF-AC9C-903964E29DDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{351936CC-5AD5-45DF-AC9C-903964E29DDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{351936CC-5AD5-45DF-AC9C-903964E29DDB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

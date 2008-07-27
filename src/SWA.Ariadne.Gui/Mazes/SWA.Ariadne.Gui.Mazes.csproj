@@ -4,12 +4,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{A758D7B7-1BDB-496A-A86E-34E7F8EACCAD}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <ProjectGuid>{50B4A98B-F9F6-48B9-BF2E-0CD78368565D}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SWA.Ariadne.App</RootNamespace>
-    <AssemblyName>Ariadne</AssemblyName>
-    <ApplicationIcon>Resources\AriadneIcon_32x32.ico</ApplicationIcon>
+    <RootNamespace>SWA.Ariadne.Gui.Mazes</RootNamespace>
+    <AssemblyName>SWA.Ariadne.Gui.Mazes</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,51 +30,59 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
+    <Compile Include="IMazeControl.cs" />
+    <Compile Include="IMazeControlProperties.cs" />
+    <Compile Include="IMazeControlSetup.cs" />
+    <Compile Include="IMazeForm.cs" />
+    <Compile Include="IMazePainterClient.cs" />
+    <Compile Include="MazePainter.cs" />
+    <Compile Include="MazeUserControl.cs">
+      <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="MazeUserControl.designer.cs">
+      <DependentUpon>MazeUserControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SWA.Ariadne.Gui\Dialogs\SWA.Ariadne.Gui.Dialogs.csproj">
-      <Project>{518B57D2-7D57-4967-B3F6-A054F67D36CD}</Project>
-      <Name>SWA.Ariadne.Gui.Dialogs</Name>
+    <ProjectReference Include="..\..\SWA.Ariadne.Logic\SWA.Ariadne.Logic.csproj">
+      <Project>{EC6BE5F7-D763-413C-AA2E-2AF5358C5315}</Project>
+      <Name>SWA.Ariadne.Logic</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SWA.Ariadne.Gui\Mazes\SWA.Ariadne.Gui.Mazes.csproj">
-      <Project>{50B4A98B-F9F6-48B9-BF2E-0CD78368565D}</Project>
-      <Name>SWA.Ariadne.Gui.Mazes</Name>
+    <ProjectReference Include="..\..\SWA.Ariadne.Model\SWA.Ariadne.Model.csproj">
+      <Project>{1ECDFF25-8784-44B4-B4DA-25B20F1DF7EC}</Project>
+      <Name>SWA.Ariadne.Model</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SWA.Ariadne.Gui\SWA.Ariadne.Gui.csproj">
-      <Project>{A80F9F95-5756-44BE-96D3-BB1950937A50}</Project>
-      <Name>SWA.Ariadne.Gui</Name>
+    <ProjectReference Include="..\..\SWA.Ariadne.Outlines\SWA.Ariadne.Outlines.csproj">
+      <Project>{9751AAAE-B751-451E-BA8C-FBD55234FE56}</Project>
+      <Name>SWA.Ariadne.Outlines</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SWA.Ariadne.Settings\SWA.Ariadne.Settings.csproj">
+      <Project>{30293912-CD50-4ECE-B51A-CD89890186F8}</Project>
+      <Name>SWA.Ariadne.Settings</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SWA.Utilities\SWA.Utilities.csproj">
+      <Project>{5947CDF1-FDE4-4B7C-9420-0A4DF039B5AB}</Project>
+      <Name>SWA.Utilities</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Properties\Resources.resx">
+    <EmbeddedResource Include="MazeUserControl.resx">
+      <DependentUpon>MazeUserControl.cs</DependentUpon>
       <SubType>Designer</SubType>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\AriadneIcon_32x32.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
-  -->
   <Target Name="AfterBuild">
-    <Copy SourceFiles="$(TargetDir)\$(TargetName).exe" DestinationFiles="$(TargetDir)\$(TargetName).scr" SkipUnchangedFiles="true" />
   </Target>
+  -->
 </Project>

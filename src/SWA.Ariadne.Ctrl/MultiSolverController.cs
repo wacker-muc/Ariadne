@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using SWA.Ariadne.Gui.Mazes;
 
-namespace SWA.Ariadne.Gui
+namespace SWA.Ariadne.Ctrl
 {
     public class MultiSolverController
         : ISolverController
@@ -43,12 +44,12 @@ namespace SWA.Ariadne.Gui
 
         #region List behavior
 
-        internal void Add(ISolverController item)
+        public void Add(ISolverController item)
         {
             list.Add(item);
         }
 
-        internal void Remove(ISolverController item)
+        public void Remove(ISolverController item)
         {
             list.Remove(item);
         }

@@ -6,8 +6,9 @@ using System.Text;
 using System.Windows.Forms;
 using SWA.Ariadne.Model;
 using SWA.Ariadne.Logic;
+using SWA.Ariadne.Gui.Mazes;
 
-namespace SWA.Ariadne.Gui
+namespace SWA.Ariadne.Ctrl
 {
     /// <summary>
     /// A controller for a MazeSolver and a MazeControl.

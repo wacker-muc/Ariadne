@@ -59,6 +59,7 @@
     <Compile Include="RoundRobinFlooder.cs" />
     <Compile Include="SolverBase.cs" />
     <Compile Include="SolverFactory.cs" />
+    <Compile Include="SolverState.cs" />
     <Compile Include="ThickestBranchFlooder.cs" />
     <Compile Include="ThinnestBranchFlooder.cs" />
   </ItemGroup>

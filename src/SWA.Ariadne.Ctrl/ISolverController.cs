@@ -1,5 +1,5 @@
 ﻿using System;
-namespace SWA.Ariadne.Gui
+namespace SWA.Ariadne.Ctrl
 {
     public interface ISolverController
     {

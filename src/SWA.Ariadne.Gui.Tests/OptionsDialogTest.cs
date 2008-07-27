@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Windows.Forms;
 using SWA.Ariadne.Gui;
+using SWA.Ariadne.Gui.Dialogs;
 
 namespace SWA.Ariadne.Gui.Tests
 {
