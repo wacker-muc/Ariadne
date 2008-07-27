@@ -24,11 +24,6 @@ namespace SWA.Ariadne.Ctrl
         private IMazeForm mazeForm;
 
         /// <summary>
-        /// The control displaying the maze.
-        /// </summary>
-        private IMazeControl mazeControl;
-
-        /// <summary>
         /// The MazePainter.
         /// </summary>
         private IMazeDrawer mazeDrawer;
@@ -62,10 +57,20 @@ namespace SWA.Ariadne.Ctrl
             get { return countSteps; }
         }
 
+        private Maze Maze
+        {
+            get { return mazeDrawer.Maze; }
+        }
+
         /// <summary>
         /// The square that was last visited in backward direction.
         /// </summary>
         private MazeSquare currentBackwardSquare = null;
+
+        /// <summary>
+        /// Each EmbeddedMaze of our Maze gets its own EmbeddedSolverController.
+        /// </summary>
+        private List<EmbeddedSolverController> embeddedControllers = new List<EmbeddedSolverController>();
 
         #endregion
 
@@ -74,10 +79,9 @@ namespace SWA.Ariadne.Ctrl
         /// <summary>
         /// Constructor.
         /// </summary>
-        public SolverController(IMazeForm mazeForm, IMazeControl mazeControl, IMazeDrawer mazeDrawer, ProgressBar visitedProgressBar)
+        public SolverController(IMazeForm mazeForm, IMazeDrawer mazeDrawer, ProgressBar visitedProgressBar)
         {
             this.mazeForm = mazeForm;
-            this.mazeControl = mazeControl;
             this.mazeDrawer = mazeDrawer;
             this.visitedProgressBar = visitedProgressBar;
         }
@@ -89,7 +93,11 @@ namespace SWA.Ariadne.Ctrl
         public void Reset()
         {
             ReleaseResources();
-            visitedProgressBar.Value = 0;
+
+            if (visitedProgressBar != null)
+            {
+                visitedProgressBar.Value = 0;
+            }
         }
 
         /// <summary>
@@ -99,6 +107,7 @@ namespace SWA.Ariadne.Ctrl
         {
             solver = null;
             solutionPath = null;
+            embeddedControllers.Clear();
         }
 
         /// <summary>
@@ -107,7 +116,16 @@ namespace SWA.Ariadne.Ctrl
         public void ResetCounters()
         {
             countSteps = countForward = countBackward = 0;
-            visitedProgressBar.PerformStep(); // start square
+            if (visitedProgressBar != null)
+            {
+                visitedProgressBar.PerformStep(); // start square
+            }
+
+            // Prepare embedded solvers.
+            foreach (EmbeddedSolverController item in embeddedControllers)
+            {
+                item.ResetCounters();
+            }
         }
 
         /// <summary>
@@ -115,40 +133,44 @@ namespace SWA.Ariadne.Ctrl
         /// </summary>
         public void PrepareForStart()
         {
-            #region Prepare the solver.
-
-            string strategyName = mazeForm.StrategyName;
-            bool isEfficient = false;
-
-            if (strategyName.StartsWith(SolverFactory.EfficientPrefix))
+            // Prepare the solver.
+            if (mazeForm != null)
             {
-                strategyName = strategyName.Substring(SolverFactory.EfficientPrefix.Length);
-                isEfficient = true;
+                solver = SolverFactory.CreateSolver(mazeForm.StrategyName, this.Maze, mazeDrawer);
+            }
+            else
+            {
+                solver = SolverFactory.CreateSolver(this.Maze, mazeDrawer);
             }
 
-            try
-            {
-                // If strategyName is a valid solver type name:
-                Type strategy = SolverFactory.SolverType(strategyName);
-                solver = SolverFactory.CreateSolver(strategy, mazeControl.Maze, mazeDrawer);
-                if (isEfficient)
-                {
-                    solver.MakeEfficient();
-                }
-            }
-            catch (ArgumentOutOfRangeException)
-            {
-                // Otherwise (strategy name is "any"):
-                solver = SolverFactory.CreateSolver(mazeControl.Maze, mazeDrawer);
-            }
-            
-            #endregion
+            // Prepare the solution path.
+            solutionPath = SolverFactory.SolutionPath(this.Maze);
 
-            #region Prepare the solution path.
-            
-            solutionPath = SolverFactory.SolutionPath(mazeControl.Maze);
-            
-            #endregion
+            // If our Maze has embedded mazes, we need to supply them with embedded solvers.
+            CreateEmbeddedSolvers();
+
+            // Prepare embedded solvers.
+            foreach (EmbeddedSolverController item in embeddedControllers)
+            {
+                item.PrepareForStart();
+            }
+        }
+
+        /// <summary>
+        /// Create controllers for our maze's embedded mazes.
+        /// </summary>
+        private void CreateEmbeddedSolvers()
+        {
+            foreach (Maze embeddedMaze in Maze.EmbeddedMazes)
+            {
+                MazePainter thisPainter = this.mazeDrawer as MazePainter; // TODO: avoid this upcast
+                MazePainter embeddedPainter = thisPainter.CreateSharedPainter(embeddedMaze);
+                EmbeddedSolverController embeddedController = new EmbeddedSolverController(this, embeddedPainter);
+                this.embeddedControllers.Add(embeddedController);
+
+                // TODO: use random values
+                embeddedController.StartDelayRelativeDistance = 1.0;
+            }
         }
 
         public void Start()
@@ -157,7 +179,10 @@ namespace SWA.Ariadne.Ctrl
             {
                 PrepareForStart();
             }
-            this.mazeForm.UpdateCaption();
+            if (mazeForm != null)
+            {
+                mazeForm.UpdateCaption();
+            }
         }
 
         #endregion
@@ -170,9 +195,15 @@ namespace SWA.Ariadne.Ctrl
         /// </summary>
         public void DoStep()
         {
-            if (mazeControl.Maze.IsSolved)
+            if (this.Maze.IsSolved)
             {
                 return;
+            }
+
+            // Forward the message to the embedded controllers.
+            foreach (EmbeddedSolverController item in embeddedControllers)
+            {
+                item.DoStep();
             }
 
             MazeSquare sq1, sq2;
@@ -184,7 +215,10 @@ namespace SWA.Ariadne.Ctrl
             if (forward)
             {
                 ++countForward;
-                visitedProgressBar.PerformStep(); // next visited square
+                if (visitedProgressBar != null)
+                {
+                    visitedProgressBar.PerformStep(); // next visited square
+                }
             }
             else
             {
@@ -194,7 +228,7 @@ namespace SWA.Ariadne.Ctrl
 
             currentBackwardSquare = (forward ? null : sq2);
 
-            if (mazeControl.Maze.IsSolved)
+            if (this.Maze.IsSolved)
             {
                 FinishPath();
                 mazeDrawer.DrawSolvedPath(solutionPath);
@@ -207,6 +241,12 @@ namespace SWA.Ariadne.Ctrl
         /// </summary>
         public void FinishPath()
         {
+            // Forward the message to the embedded controllers.
+            foreach (EmbeddedSolverController item in embeddedControllers)
+            {
+                item.FinishPath();
+            }
+
             mazeDrawer.FinishPath(currentBackwardSquare);
             currentBackwardSquare = null;
         }
@@ -220,7 +260,10 @@ namespace SWA.Ariadne.Ctrl
         /// </summary>
         public void UpdateStatusLine()
         {
-            mazeForm.UpdateStatusLine();
+            if (mazeForm != null)
+            {
+                mazeForm.UpdateStatusLine();
+            }
         }
 
         /// <summary>

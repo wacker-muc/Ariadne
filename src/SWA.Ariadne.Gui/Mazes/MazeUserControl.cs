@@ -648,7 +648,14 @@ namespace SWA.Ariadne.Gui.Mazes
             if (shapeBuilderDelegate != null)
             {
                 OutlineShape shape = OutlineShape.Instance(r, shapeBuilderDelegate, XSize, YSize, offCenter, size);
-                Maze.OutlineShape = shape;
+                if (data.AsEmbeddedMaze)
+                {
+                    Maze.AddEmbeddedMaze(shape);
+                }
+                else
+                {
+                    Maze.OutlineShape = shape;
+                }
             }
         }
 

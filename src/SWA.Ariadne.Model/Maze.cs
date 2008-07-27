@@ -93,6 +93,21 @@ namespace SWA.Ariadne.Model
         /// </summary>
         private List<OutlineShape> embeddedMazeShapes = new List<OutlineShape>();
 
+        /// <summary>
+        /// The EmbeddedMazes sharing this Maze's coordinate system.
+        /// </summary>
+        public List<Maze> EmbeddedMazes
+        {
+            get
+            {
+                List<Maze> result = new List<Maze>(embeddedMazes.Count);
+                foreach (Maze item in embeddedMazes)
+                {
+                    result.Add(item);
+                }
+                return result;
+            }
+        }
         private List<EmbeddedMaze> embeddedMazes = new List<EmbeddedMaze>();
 
         /// <summary>
@@ -124,20 +139,22 @@ namespace SWA.Ariadne.Model
         private MazeSquare[,] squares;
 
         /// <summary>
-        /// Returns the number of squares that are not reserved.
-        /// This includes the squares of embedded mazes.
+        /// Returns the number of squares that are part of this maze.
         /// </summary>
-        public virtual int CountSquares
+        public int CountSquares
         {
             get
             {
-                int result = xSize * ySize;
-                
-                foreach (MazeSquare sq in squares)
+                int result = 0;
+
+                for (int x = 0; x < xSize; x++)
                 {
-                    if (sq.isReserved)
+                    for (int y = 0; y < ySize; y++)
                     {
-                        --result;
+                        if (this[x, y].MazeId == this.MazeId)
+                        {
+                            ++result;
+                        }
                     }
                 }
 
@@ -506,6 +523,9 @@ namespace SWA.Ariadne.Model
         /// </summary>
         private void PlaceEndpoints()
         {
+            // The endpoints should be placed close to the border of the maze's bounding box.
+            Rectangle bbox = this.GetBoundingBox();
+
             bool reject = true;
             while (reject)
             {
@@ -519,12 +539,12 @@ namespace SWA.Ariadne.Model
                     case MazeSquare.WallPosition.WP_N:
                     case MazeSquare.WallPosition.WP_S:
                         // vertical
-                        edgeWidth = 2 + ySize * 2 / 100;
+                        edgeWidth = 2 + bbox.Height * 2 / 100;
                         break;
                     case MazeSquare.WallPosition.WP_E:
                     case MazeSquare.WallPosition.WP_W:
                         // horizontal
-                        edgeWidth = 2 + xSize * 2 / 100;
+                        edgeWidth = 2 + bbox.Width * 2 / 100;
                         break;
                 }
 
@@ -550,31 +570,31 @@ namespace SWA.Ariadne.Model
                 {
                     case MazeSquare.WallPosition.WP_N:
                         // start at bottom, end at top
-                        xStart = random.Next(xSize);
-                        yStart = greaterRow = ySize - 1 - edgeDistStart;
-                        xEnd = random.Next(xSize);
-                        yEnd = lesserRow = edgeDistEnd;
+                        xStart = bbox.Left + random.Next(bbox.Width);
+                        yStart = greaterRow = bbox.Bottom - 1 - edgeDistStart;
+                        xEnd = bbox.Left + random.Next(bbox.Width);
+                        yEnd = lesserRow = bbox.Top + edgeDistEnd;
                         break;
                     case MazeSquare.WallPosition.WP_E:
                         // start at left, end at right
-                        xStart = lesserRow = edgeDistEnd;
-                        yStart = random.Next(ySize);
-                        xEnd = greaterRow = xSize - 1 - edgeDistStart;
-                        yEnd = random.Next(ySize);
+                        xStart = lesserRow = bbox.Left + edgeDistEnd;
+                        yStart = bbox.Top + random.Next(bbox.Height);
+                        xEnd = greaterRow = bbox.Right - 1 - edgeDistStart;
+                        yEnd = bbox.Top + random.Next(bbox.Height);
                         break;
                     case MazeSquare.WallPosition.WP_S:
                         // start at top, end at bottom
-                        xStart = random.Next(xSize);
-                        yStart = lesserRow = edgeDistEnd;
-                        xEnd = random.Next(xSize);
-                        yEnd = greaterRow = ySize - 1 - edgeDistStart;
+                        xStart = bbox.Left + random.Next(bbox.Width);
+                        yStart = lesserRow = bbox.Top + edgeDistEnd;
+                        xEnd = bbox.Left + random.Next(bbox.Width);
+                        yEnd = greaterRow = bbox.Bottom - 1 - edgeDistStart;
                         break;
                     case MazeSquare.WallPosition.WP_W:
                         // start at right, end at left
-                        xStart = greaterRow = xSize - 1 - edgeDistStart;
-                        yStart = random.Next(ySize);
-                        xEnd = lesserRow = edgeDistEnd;
-                        yEnd = random.Next(ySize);
+                        xStart = greaterRow = bbox.Right - 1 - edgeDistStart;
+                        yStart = bbox.Top + random.Next(bbox.Height);
+                        xEnd = lesserRow = bbox.Left + edgeDistEnd;
+                        yEnd = bbox.Top + random.Next(bbox.Height);
                         break;
                 }
 
@@ -605,6 +625,34 @@ namespace SWA.Ariadne.Model
         }
 
         /// <summary>
+        /// Returns a rectangle that tightly includes the squares of this maze.
+        /// Usually, the bounding box covers the whole maze area.
+        /// The bounding box may be smaller for an embedded maze or when there are reserved areas on the border.
+        /// </summary>
+        /// <returns></returns>
+        /// Note: This code is not very efficient, but it is not executed very often, either.
+        private Rectangle GetBoundingBox()
+        {
+            int xMin = xSize, xMax = 0, yMin = ySize, yMax = 0;
+
+            for (int x = 0; x < xSize; x++)
+            {
+                for (int y = 0; y < ySize; y++)
+                {
+                    if (this[x, y].MazeId == this.MazeId)
+                    {
+                        xMin = Math.Min(xMin, x);
+                        xMax = Math.Max(xMax, x);
+                        yMin = Math.Min(yMin, y);
+                        yMax = Math.Max(yMax, y);
+                    }
+                }
+            }
+
+            return new Rectangle(xMin, yMin, xMax - xMin + 1, yMax - yMin + 1);
+        }
+
+        /// <summary>
         /// Reset to the initial state (before the maze is solved).
         /// </summary>
         public void Reset()
@@ -614,7 +662,7 @@ namespace SWA.Ariadne.Model
             {
                 for (int y = 0; y < ySize; y++)
                 {
-                    squares[x, y].isVisited = false;
+                    this[x, y].isVisited = false;
                 }
             }
         }
@@ -629,7 +677,7 @@ namespace SWA.Ariadne.Model
         /// <returns></returns>
         public bool IsSolved
         {
-            get { return (squares[xEnd, yEnd].isVisited); }
+            get { return (this[xEnd, yEnd].isVisited); }
         }
 
         public MazeSquare StartSquare

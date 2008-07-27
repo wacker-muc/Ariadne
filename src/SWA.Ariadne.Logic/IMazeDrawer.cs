@@ -51,5 +51,10 @@ namespace SWA.Ariadne.Logic
         /// When it is an odd number, it is painted invisible (black).
         /// </summary>
         int BlinkingCounter { get; set; }
+
+        /// <summary>
+        /// The Maze object.
+        /// </summary>
+        Maze Maze { get; }
     }
 }

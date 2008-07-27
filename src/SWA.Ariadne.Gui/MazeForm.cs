@@ -60,7 +60,6 @@ namespace SWA.Ariadne.Gui
             // Create a SolverController.
             this.solverController = new SolverController(
                 this as IMazeForm,
-                this.mazeUserControl as IMazeControl,
                 this.mazeUserControl.MazeDrawer,
                 this.visitedProgressBar.Control as ProgressBar
             );
