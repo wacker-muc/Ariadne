@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using SWA.Ariadne.Model;
 using SWA.Ariadne.Logic;
 using SWA.Ariadne.Settings;
+using SWA.Ariadne.Gui.Dialogs;
 
 namespace SWA.Ariadne.Gui
 {
@@ -15,14 +16,14 @@ namespace SWA.Ariadne.Gui
     /// Base class for Ariadne Form windows.
     /// </summary>
     public partial class AriadneFormBase : Form
-        , IMazeForm
+        , SWA.Ariadne.Gui.Mazes.IMazeForm
     {
         #region Member variables
 
         /// <summary>
         /// The object that accepts the MazeControl commands.
         /// </summary>
-        protected virtual IMazeControlProperties MazeControlProperties
+        protected virtual SWA.Ariadne.Gui.Mazes.IMazeControlProperties MazeControlProperties
         {
             get { return null; }
         }
@@ -30,7 +31,7 @@ namespace SWA.Ariadne.Gui
         /// <summary>
         /// The object that accepts the SolverController commands.
         /// </summary>
-        protected virtual ISolverController SolverController
+        protected virtual SWA.Ariadne.Ctrl.ISolverController SolverController
         {
             get { return null; }
         }
@@ -39,7 +40,7 @@ namespace SWA.Ariadne.Gui
         /// <summary>
         /// The object that accepts the AriadneSettingsSource commands.
         /// </summary>
-        protected virtual IAriadneSettingsSource AriadneSettingsSource
+        protected virtual SWA.Ariadne.Settings.IAriadneSettingsSource AriadneSettingsSource
         {
             get { return null; }
         }
@@ -885,17 +886,6 @@ namespace SWA.Ariadne.Gui
             double scheduledSteps = (relevantSeconds * stepsPerSecond) + stepsBeforeRateChange;
 
             return (CountSteps < 1 + scheduledSteps);
-        }
-
-        /// <summary>
-        /// The states a SolverController may be in.
-        /// </summary>
-        public enum SolverState
-        {
-            Ready,
-            Running,
-            Paused,
-            Finished,
         }
 
         /// <summary>

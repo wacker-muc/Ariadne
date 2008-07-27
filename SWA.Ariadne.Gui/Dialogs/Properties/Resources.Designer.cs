@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SWA.Ariadne.Gui.Properties {
+namespace SWA.Ariadne.Gui.Dialogs.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace SWA.Ariadne.Gui.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SWA.Ariadne.Gui.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SWA.Ariadne.Gui.Dialogs.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -60,66 +60,59 @@ namespace SWA.Ariadne.Gui.Properties {
             }
         }
         
-        internal static System.Drawing.Bitmap ButtonAbout {
+        /// <summary>
+        ///   Looks up a localized string similar to -----------------------------------------------------------------------
+        ///
+        ///   ====================
+        ///   Feature Log: Ariadne
+        ///   ====================
+        ///
+        ///Copyright (c) Stephan Wacker, 2008
+        ///
+        ///-----------------------------------------------------------------------
+        ///
+        ///Version 3.1
+        ///
+        /// * Function Outline Shapes: apply a distortion function to the coordinate system
+        /// * Action: save image of the maze into a file
+        ///
+        ///-----------------------------------------------------------------------
+        ///
+        ///Version 3.0 -- r205
+        ///
+        /// *  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string FeatureLog {
             get {
-                object obj = ResourceManager.GetObject("ButtonAbout", resourceCulture);
+                return ResourceManager.GetString("FeatureLog", resourceCulture);
+            }
+        }
+        
+        internal static System.Drawing.Bitmap ImageStephan_64x64 {
+            get {
+                object obj = ResourceManager.GetObject("ImageStephan_64x64", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap ButtonArena {
+        /// <summary>
+        ///   Looks up a localized string similar to -----------------------------------------------------------------------
+        ///
+        ///   =================
+        ///   Overview: Ariadne
+        ///   =================
+        ///
+        ///Copyright (c) Stephan Wacker, 2008
+        ///
+        ///-----------------------------------------------------------------------
+        ///
+        ///The Ariadne application builds and solves a variety of maze puzzles.  When running as a regular application (Ariadne.exe), you can control the maze layout, its shape, additional content etc.  The Ariadne.scr file can be installed as a screen saver.
+        ///
+        ///[Ari [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Overview {
             get {
-                object obj = ResourceManager.GetObject("ButtonArena", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ButtonDetails {
-            get {
-                object obj = ResourceManager.GetObject("ButtonDetails", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ButtonNew {
-            get {
-                object obj = ResourceManager.GetObject("ButtonNew", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ButtonPause {
-            get {
-                object obj = ResourceManager.GetObject("ButtonPause", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ButtonRepeat {
-            get {
-                object obj = ResourceManager.GetObject("ButtonRepeat", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ButtonReset {
-            get {
-                object obj = ResourceManager.GetObject("ButtonReset", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ButtonStart {
-            get {
-                object obj = ResourceManager.GetObject("ButtonStart", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap ButtonStep {
-            get {
-                object obj = ResourceManager.GetObject("ButtonStep", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ResourceManager.GetString("Overview", resourceCulture);
             }
         }
     }

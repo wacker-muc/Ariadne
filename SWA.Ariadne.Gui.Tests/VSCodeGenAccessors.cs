@@ -49,9 +49,9 @@ internal class BaseAccessor {
 [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TestTools.UnitTestGeneration", "1.0.0.0")]
 internal class SWA_Ariadne_Gui_OptionsDialogAccessor : BaseAccessor {
     
-    protected static Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType m_privateType = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType(typeof(global::SWA.Ariadne.Gui.OptionsDialog));
+    protected static Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType m_privateType = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType(typeof(global::SWA.Ariadne.Gui.Dialogs.OptionsDialog));
     
-    internal SWA_Ariadne_Gui_OptionsDialogAccessor(global::SWA.Ariadne.Gui.OptionsDialog target) : 
+    internal SWA_Ariadne_Gui_OptionsDialogAccessor(global::SWA.Ariadne.Gui.Dialogs.OptionsDialog target) : 
             base(target, m_privateType) {
     }
     

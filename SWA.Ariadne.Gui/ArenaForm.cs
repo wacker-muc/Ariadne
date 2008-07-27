@@ -7,6 +7,8 @@ using System.Text;
 using System.Windows.Forms;
 using SWA.Ariadne.Model;
 using SWA.Ariadne.Settings;
+using SWA.Ariadne.Ctrl;
+using SWA.Ariadne.Gui.Mazes;
 
 namespace SWA.Ariadne.Gui
 {
@@ -14,17 +16,17 @@ namespace SWA.Ariadne.Gui
     /// A Windows Form that displays a grid of MazeUserControls.
     /// </summary>
     public partial class ArenaForm : AriadneFormBase
-        , IMazeControlProperties
-        , IAriadneSettingsSource
+        , SWA.Ariadne.Gui.Mazes.IMazeControlProperties
+        , SWA.Ariadne.Settings.IAriadneSettingsSource
     {
         #region Member variables and properties
 
         /// <summary>
         /// The object that accepts the MazeControlProperties commands.
         /// </summary>
-        protected override IMazeControlProperties MazeControlProperties
+        protected override SWA.Ariadne.Gui.Mazes.IMazeControlProperties MazeControlProperties
         {
-            get { return this as IMazeControlProperties; }
+            get { return this as SWA.Ariadne.Gui.Mazes.IMazeControlProperties; }
         }
 
         /// <summary>
@@ -32,15 +34,15 @@ namespace SWA.Ariadne.Gui
         /// </summary>
         protected override ISolverController SolverController
         {
-            get { return (this.solverController); }
+            get { return this.solverController as ISolverController; }
         }
 
         /// <summary>
         /// The object that accepts the AriadneSettingsSource commands.
         /// </summary>
-        protected override IAriadneSettingsSource AriadneSettingsSource
+        protected override SWA.Ariadne.Settings.IAriadneSettingsSource AriadneSettingsSource
         {
-            get { return (this as IAriadneSettingsSource); }
+            get { return (this as SWA.Ariadne.Settings.IAriadneSettingsSource); }
         }
 
         /// <summary>
@@ -191,7 +193,7 @@ namespace SWA.Ariadne.Gui
         /// <param name="e"></param>
         protected override void OnNew(object sender, EventArgs e)
         {
-            if (State != SolverState.Ready)
+            if (State != SWA.Ariadne.Logic.SolverState.Ready)
             {
                 OnReset(sender, e);
             }
@@ -240,7 +242,7 @@ namespace SWA.Ariadne.Gui
             get { return "Arena[" + this.Items.Count.ToString() + "]"; }
         }
 
-        public override void FixStateDependantControls(SolverState state)
+        public override void FixStateDependantControls(SWA.Ariadne.Logic.SolverState state)
         {
             base.FixStateDependantControls(state);
 
@@ -271,7 +273,7 @@ namespace SWA.Ariadne.Gui
         /// Fill all modifyable parameters into the given data object.
         /// </summary>
         /// <param name="data"></param>
-        public void FillParametersInto(AriadneSettingsData data)
+        public void FillParametersInto(SWA.Ariadne.Settings.AriadneSettingsData data)
         {
             TemplateMazeUserControl.FillParametersInto(data);
         }
@@ -280,7 +282,7 @@ namespace SWA.Ariadne.Gui
         /// Take all modifyable parameters from the given data object.
         /// </summary>
         /// <param name="data"></param>
-        public void TakeParametersFrom(AriadneSettingsData data)
+        public void TakeParametersFrom(SWA.Ariadne.Settings.AriadneSettingsData data)
         {
             TemplateMazeUserControl.TakeParametersFrom(data);
             DistributeTemplateParameters();

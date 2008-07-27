@@ -43,6 +43,10 @@
     <Compile Include="VSCodeGenAccessors.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SWA.Ariadne.Gui\Dialogs\SWA.Ariadne.Gui.Dialogs.csproj">
+      <Project>{518B57D2-7D57-4967-B3F6-A054F67D36CD}</Project>
+      <Name>SWA.Ariadne.Gui.Dialogs</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SWA.Ariadne.Gui\SWA.Ariadne.Gui.csproj">
       <Project>{A80F9F95-5756-44BE-96D3-BB1950937A50}</Project>
       <Name>SWA.Ariadne.Gui</Name>

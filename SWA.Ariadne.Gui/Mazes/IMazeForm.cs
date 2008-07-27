@@ -1,7 +1,8 @@
 ﻿using System;
 using SWA.Ariadne.Model;
+using SWA.Ariadne.Logic;
 
-namespace SWA.Ariadne.Gui
+namespace SWA.Ariadne.Gui.Mazes
 {
     /// <summary>
     /// A MazeUserControl will try to call these methods of its ParentForm.
@@ -12,6 +13,6 @@ namespace SWA.Ariadne.Gui
         void UpdateStatusLine();
         void UpdateCaption();
         string StrategyName { get; }
-        void FixStateDependantControls(AriadneFormBase.SolverState state);
+        void FixStateDependantControls(SolverState state);
     }
 }

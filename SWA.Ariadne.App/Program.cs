@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using Microsoft.Win32;
 using SWA.Ariadne.Gui;
+using SWA.Ariadne.Gui.Dialogs;
 
 namespace SWA.Ariadne.App
 {

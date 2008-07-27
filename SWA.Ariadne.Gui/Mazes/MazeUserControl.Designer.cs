@@ -1,4 +1,4 @@
-namespace SWA.Ariadne.Gui
+namespace SWA.Ariadne.Gui.Mazes
 {
     partial class MazeUserControl
     {

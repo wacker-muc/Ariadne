@@ -30,7 +30,7 @@ namespace SWA.Ariadne.Gui
         {
             this.statusLabel = new System.Windows.Forms.Label();
             this.visitedProgressBar = new System.Windows.Forms.ProgressBar();
-            this.mazeUserControl = new SWA.Ariadne.Gui.MazeUserControl();
+            this.mazeUserControl = new SWA.Ariadne.Gui.Mazes.MazeUserControl();
             this.strategyComboBox = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
@@ -91,7 +91,7 @@ namespace SWA.Ariadne.Gui
 
         #endregion
 
-        private MazeUserControl mazeUserControl;
+        private SWA.Ariadne.Gui.Mazes.MazeUserControl mazeUserControl;
         private System.Windows.Forms.Label statusLabel;
         private System.Windows.Forms.ProgressBar visitedProgressBar;
         private System.Windows.Forms.ComboBox strategyComboBox;

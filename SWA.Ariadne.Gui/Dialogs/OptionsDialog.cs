@@ -8,7 +8,7 @@ using System.Windows.Forms;
 using Microsoft.Win32;
 using SWA.Ariadne.Settings;
 
-namespace SWA.Ariadne.Gui
+namespace SWA.Ariadne.Gui.Dialogs
 {
     public partial class OptionsDialog : Form
     {

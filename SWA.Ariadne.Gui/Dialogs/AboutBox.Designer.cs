@@ -1,4 +1,4 @@
-namespace SWA.Ariadne.Gui
+namespace SWA.Ariadne.Gui.Dialogs
 {
     partial class AboutBox
     {
@@ -36,7 +36,7 @@ namespace SWA.Ariadne.Gui
             this.labelProductName = new System.Windows.Forms.Label();
             this.moreButton = new System.Windows.Forms.Button();
             this.authorButton = new System.Windows.Forms.Button();
-            this.mazeUserControl = new SWA.Ariadne.Gui.MazeUserControl();
+            this.mazeUserControl = new SWA.Ariadne.Gui.Mazes.MazeUserControl();
             this.outerAboutPanel.SuspendLayout();
             this.innerAboutPanel.SuspendLayout();
             this.SuspendLayout();
@@ -130,7 +130,7 @@ namespace SWA.Ariadne.Gui
             // authorButton
             // 
             this.authorButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.authorButton.BackgroundImage = global::SWA.Ariadne.Gui.Properties.Resources.ImageStephan_64x64;
+            this.authorButton.BackgroundImage = global::SWA.Ariadne.Gui.Dialogs.Properties.Resources.ImageStephan_64x64;
             this.authorButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.authorButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.authorButton.FlatAppearance.BorderSize = 0;
@@ -185,7 +185,7 @@ namespace SWA.Ariadne.Gui
 
         #endregion
 
-        private MazeUserControl mazeUserControl;
+        private SWA.Ariadne.Gui.Mazes.MazeUserControl mazeUserControl;
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.Panel outerAboutPanel;
         private System.Windows.Forms.Panel innerAboutPanel;

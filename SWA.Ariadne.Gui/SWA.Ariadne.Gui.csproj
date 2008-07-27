@@ -36,18 +36,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AboutBox.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="AboutBox.Designer.cs">
-      <DependentUpon>AboutBox.cs</DependentUpon>
-    </Compile>
-    <Compile Include="AboutDetailsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="AboutDetailsForm.Designer.cs">
-      <DependentUpon>AboutDetailsForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="ArenaForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -66,50 +54,13 @@
     <Compile Include="AriadneFormBase.designer.cs">
       <DependentUpon>AriadneFormBase.cs</DependentUpon>
     </Compile>
-    <Compile Include="DetailsDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="DetailsDialog.Designer.cs">
-      <DependentUpon>DetailsDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="IMazeControl.cs" />
-    <Compile Include="IMazeControlProperties.cs" />
-    <Compile Include="IMazeControlSetup.cs" />
-    <Compile Include="IMazeForm.cs" />
-    <Compile Include="ISolverController.cs" />
     <Compile Include="MazeForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MazeForm.Designer.cs">
       <DependentUpon>MazeForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="MazePainter.cs">
-    </Compile>
-    <Compile Include="MazeUserControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="MazeUserControl.Designer.cs">
-      <DependentUpon>MazeUserControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MultiSolverController.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="OptionsDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="OptionsDialog.Designer.cs">
-      <DependentUpon>OptionsDialog.cs</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="AboutBox.resx">
-      <DependentUpon>AboutBox.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="AboutDetailsForm.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>AboutDetailsForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="ArenaForm.resx">
       <DependentUpon>ArenaForm.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -122,21 +73,9 @@
       <DependentUpon>AriadneFormBase.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="DetailsDialog.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>DetailsDialog.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="MazeForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>MazeForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MazeUserControl.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>MazeUserControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="OptionsDialog.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>OptionsDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <SubType>Designer</SubType>
@@ -159,11 +98,12 @@
     <Compile Include="ScreenSaverForm.Designer.cs">
       <DependentUpon>ScreenSaverForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SolverController.cs">
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SWA.Ariadne.Ctrl\SWA.Ariadne.Ctrl.csproj">
+      <Project>{351936CC-5AD5-45DF-AC9C-903964E29DDB}</Project>
+      <Name>SWA.Ariadne.Ctrl</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SWA.Ariadne.Logic\SWA.Ariadne.Logic.csproj">
       <Project>{EC6BE5F7-D763-413C-AA2E-2AF5358C5315}</Project>
       <Name>SWA.Ariadne.Logic</Name>
@@ -183,6 +123,14 @@
     <ProjectReference Include="..\SWA.Utilities\SWA.Utilities.csproj">
       <Project>{5947CDF1-FDE4-4B7C-9420-0A4DF039B5AB}</Project>
       <Name>SWA.Utilities</Name>
+    </ProjectReference>
+    <ProjectReference Include="Dialogs\SWA.Ariadne.Gui.Dialogs.csproj">
+      <Project>{518B57D2-7D57-4967-B3F6-A054F67D36CD}</Project>
+      <Name>SWA.Ariadne.Gui.Dialogs</Name>
+    </ProjectReference>
+    <ProjectReference Include="Mazes\SWA.Ariadne.Gui.Mazes.csproj">
+      <Project>{50B4A98B-F9F6-48B9-BF2E-0CD78368565D}</Project>
+      <Name>SWA.Ariadne.Gui.Mazes</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -206,7 +154,6 @@
     <Content Include="Resources\ButtonRepeat.png">
     </Content>
     <Content Include="Resources\Overview.txt" />
-    <None Include="Resources\ImageStephan_64x64.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

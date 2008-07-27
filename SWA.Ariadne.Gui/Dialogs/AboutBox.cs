@@ -6,11 +6,13 @@ using System.Windows.Forms;
 using System.Reflection;
 using SWA.Ariadne.Logic;
 using SWA.Ariadne.Model;
+using SWA.Ariadne.Gui.Mazes;
+using SWA.Ariadne.Ctrl;
 
-namespace SWA.Ariadne.Gui
+namespace SWA.Ariadne.Gui.Dialogs
 {
     public partial class AboutBox : Form
-        , IMazeForm
+        , SWA.Ariadne.Gui.Mazes.IMazeForm
     {
         #region Member variables
 
@@ -110,7 +112,7 @@ namespace SWA.Ariadne.Gui
         /// <summary>
         /// Enables or disables some controls depending on whether we are Ready or not.
         /// </summary>
-        public virtual void FixStateDependantControls(AriadneFormBase.SolverState state)
+        public virtual void FixStateDependantControls(SolverState state)
         {
             // do nothing
         }
