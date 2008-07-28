@@ -155,7 +155,7 @@ namespace SWA.Ariadne.Gui.Mazes
         public void PrepareAlternateBuffer()
         {
             // An alternate buffer must only be prepared when the previous maze is solved.
-            if (Maze != null && Maze.IsSolved != true)
+            if (Maze != null && Maze.IsFinished != true)
             {
                 return;
             }
@@ -663,9 +663,9 @@ namespace SWA.Ariadne.Gui.Mazes
 
         #region IMazeControl implementation
 
-        public bool IsSolved
+        public bool IsFinished
         {
-            get { return (painter.HasBufferAlternate ? true : Maze == null ? false : Maze.IsSolved); }
+            get { return (painter.HasBufferAlternate ? true : Maze == null ? false : Maze.IsFinished); }
         }
 
         public int XSize

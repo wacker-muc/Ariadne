@@ -147,6 +147,15 @@ namespace SWA.Ariadne.Gui.Mazes
                 return blinkingCounter;
             }
             set {
+                // Forward this message to the shared painters.
+                if (value > 0)
+                {
+                    foreach (MazePainter item in sharedPainters)
+                    {
+                        item.BlinkingCounter = value;
+                    }
+                }
+
                 blinkingCounter = value;
                 if (gBuffer != null)
                 {
