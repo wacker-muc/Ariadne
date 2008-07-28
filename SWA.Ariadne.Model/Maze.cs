@@ -677,7 +677,25 @@ namespace SWA.Ariadne.Model
         /// <returns></returns>
         public bool IsSolved
         {
-            get { return (this[xEnd, yEnd].isVisited); }
+            get { return (EndSquare.isVisited); }
+        }
+
+        /// <summary>
+        /// Returns true if this maze and all embedded mazes have been solved.
+        /// </summary>
+        public bool IsFinished
+        {
+            get
+            {
+                bool result = this.IsSolved;
+
+                foreach (Maze item in embeddedMazes)
+                {
+                    result &= item.IsSolved;
+                }
+
+                return result;
+            }
         }
 
         public MazeSquare StartSquare

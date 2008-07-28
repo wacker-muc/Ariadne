@@ -195,15 +195,15 @@ namespace SWA.Ariadne.Ctrl
         /// </summary>
         public void DoStep()
         {
-            if (this.Maze.IsSolved)
-            {
-                return;
-            }
-
             // Forward the message to the embedded controllers.
             foreach (EmbeddedSolverController item in embeddedControllers)
             {
                 item.DoStep();
+            }
+
+            if (this.Maze.IsSolved)
+            {
+                return;
             }
 
             MazeSquare sq1, sq2;

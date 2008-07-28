@@ -323,7 +323,7 @@ namespace SWA.Ariadne.Gui
                 stepTimer.Enabled = false;
                 // State looks like Paused but this will be changed back at the end.
 
-                if (!MazeControlProperties.IsSolved)
+                if (!MazeControlProperties.IsFinished)
                 {
                     /* On a small maze or at low step rate, a few steps will be sufficient.
                      * 
@@ -361,7 +361,7 @@ namespace SWA.Ariadne.Gui
             finally
             {
                 // Either restart or delete the timer.
-                if (!MazeControlProperties.IsSolved)
+                if (!MazeControlProperties.IsFinished)
                 {
                     stepTimer.Enabled = true;
                     // State is Running.
@@ -896,7 +896,7 @@ namespace SWA.Ariadne.Gui
             get
             {
                 // If the maze is solved, we are Finished.
-                if (MazeControlProperties.IsSolved)
+                if (MazeControlProperties.IsFinished)
                 {
                     return SolverState.Finished;
                 }

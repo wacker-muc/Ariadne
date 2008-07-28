@@ -6,7 +6,7 @@ namespace SWA.Ariadne.Gui.Mazes
     public interface IMazeControlProperties
     {
         string Code { get; }
-        bool IsSolved { get; }
+        bool IsFinished { get; }
         Maze Maze { get; }
         int XSize { get; }
         int YSize { get; }

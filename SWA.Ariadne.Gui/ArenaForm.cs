@@ -293,13 +293,13 @@ namespace SWA.Ariadne.Gui
 
         #region IMazeControlProperties implementation
 
-        public bool IsSolved
+        public bool IsFinished
         {
             get 
             {
                 foreach (ArenaItem item in Items)
                 {
-                    if (!item.MazeUserControl.IsSolved)
+                    if (!item.MazeUserControl.IsFinished)
                     {
                         return false;
                     }
