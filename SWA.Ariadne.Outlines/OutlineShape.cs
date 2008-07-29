@@ -10,34 +10,28 @@ namespace SWA.Ariadne.Outlines
     /// When used by the maze builder, the walls on the contour line should all be closed
     /// (with the exception of a single entry).
     /// </summary>
-    public class OutlineShape
+    public abstract class OutlineShape
     {
         #region Member variables and Properties
 
-        public virtual bool this[int x, int y]
-        {
-            get { return squares[x, y]; }
-        }
-        private bool[,] squares;
+        /// <summary>
+        /// Nominal size of the shape.
+        /// </summary>
+        private int xSize, ySize;
+
+        public abstract bool this[int x, int y] { get; }
 
         #endregion
 
         #region Constructor
 
-        private OutlineShape(int xSize, int ySize)
+        protected OutlineShape(int xSize, int ySize)
         {
-            this.squares = new bool[xSize, ySize];
-        }
-
-        /// <summary>
-        /// Constructor for derived classes.
-        /// </summary>
-        protected OutlineShape()
-        {
+            this.xSize = xSize;
+            this.ySize = ySize;
         }
 
         #endregion
-
         #region Static methods for creating OutlineShapes
 
         public delegate OutlineShape OutlineShapeBuilder(Random r, int xSize, int ySize, double centerX, double centerY, double radius);
@@ -180,7 +174,7 @@ namespace SWA.Ariadne.Outlines
             char[] shapeCharacters = { 'C', 'O', 'S', 'V', 'X', '3', '6', '8', '9', '?', };
             char ch = shapeCharacters[r.Next(shapeCharacters.Length)];
 
-            return Char(xSize, ySize, centerX, centerY, shapeSize, ch, fontFamily);
+            return ExplicitOutlineShape.Char(xSize, ySize, centerX, centerY, shapeSize, ch, fontFamily);
         }
 
         /// <summary>
@@ -209,7 +203,7 @@ namespace SWA.Ariadne.Outlines
             };
             char ch = shapeCharacters[r.Next(shapeCharacters.Length)];
 
-            return Char(xSize, ySize, centerX, centerY, shapeSize, ch, fontFamily);
+            return ExplicitOutlineShape.Char(xSize, ySize, centerX, centerY, shapeSize, ch, fontFamily);
         }
 
         /// <summary>
@@ -226,6 +220,39 @@ namespace SWA.Ariadne.Outlines
         {
             return BitmapOutlineShape.Random(r, xSize, ySize, centerX, centerX, shapeSize);
         }
+        #endregion
+
+        #region OutlineShape implementation
+
+        /// <summary>
+        /// Returns a rectangle that tightly includes the shape.
+        /// </summary>
+        /// Note: This code is not very efficient, but it is not executed very often, either.
+        /// Note: See also Maze.GetBoundingBox()
+        public Rectangle BoundingBox
+        {
+            get
+            {
+                int xMin = xSize, xMax = 0, yMin = ySize, yMax = 0;
+
+                for (int x = 0; x < xSize; x++)
+                {
+                    for (int y = 0; y < ySize; y++)
+                    {
+                        if (this[x, y] == true)
+                        {
+                            xMin = Math.Min(xMin, x);
+                            xMax = Math.Max(xMax, x);
+                            yMin = Math.Min(yMin, y);
+                            yMax = Math.Max(yMax, y);
+                        }
+                    }
+                }
+
+                return new Rectangle(xMin, yMin, xMax - xMin + 1, yMax - yMin + 1);
+            }
+        }
+
         #endregion
 
         #region Auxiliary methods
@@ -257,160 +284,6 @@ namespace SWA.Ariadne.Outlines
 
             // Multiply with the requested ratio.
             sz *= shapeSize;
-        }
-
-        /// <summary>
-        /// Create an outline shape from the given character and font family.
-        /// </summary>
-        /// <param name="xSize">width of the created shape</param>
-        /// <param name="ySize">height of the created shape</param>
-        /// <param name="centerX">X coordinate, relative to total width; 0.0 = top, 1.0 = bottom</param>
-        /// <param name="centerY">Y coordinate, relative to total height; 0.0 = left, 1.0 = right</param>
-        /// <param name="shapeSize">size, relative to distance of center from the border; 1.0 will touch the border</param>
-        /// <param name="ch"></param>
-        /// <param name="fontFamily"></param>
-        /// <returns></returns>
-        private static OutlineShape Char(int xSize, int ySize, double centerX, double centerY, double shapeSize, char ch, FontFamily fontFamily)
-        {
-            OutlineShape result = new OutlineShape(xSize, ySize);
-
-            double xc, yc, sz;
-            ConvertParameters(xSize, ySize, centerX, centerY, shapeSize, out xc, out yc, out sz);
-            sz *= 2; // sz is not used as a radius but as the character height
-
-            #region Draw the given character into an image (white on black).
-
-            StringFormat stringFormat = new StringFormat();
-            stringFormat.Alignment = StringAlignment.Center;
-            stringFormat.LineAlignment = StringAlignment.Center;
-
-            int enlargement = 3;
-            int imgXSize = enlargement * xSize, imgYSize = enlargement * ySize;
-            Bitmap img = new Bitmap(imgXSize, imgYSize);
-            Graphics g = Graphics.FromImage(img);
-            Font font = new Font(fontFamily, (float)(enlargement * sz), FontStyle.Bold);
-            g.DrawRectangle(Pens.Black, 0, 0, imgXSize, imgXSize);
-            g.DrawString(new string(ch, 1), font, Brushes.White, new RectangleF(0, 0, imgXSize, (int)(1.20 * imgYSize)), stringFormat);
-
-            #endregion
-
-            #region Scale the image so that the covered area is of the requested size.
-
-            int imgXCenter, imgYCenter;
-            ScaleImage(ref img, sz, out imgXCenter, out imgYCenter);
-
-            int imgXOffset = imgXCenter - (int)xc;
-            int imgYOffset = imgYCenter - (int)yc;
-
-            #endregion
-
-            for (int x = 0; x < xSize; x++)
-            {
-                for (int y = 0; y < ySize; y++)
-                {
-                    int imgX = x + imgXOffset, imgY = y + imgYOffset;
-
-                    if (imgX < 0 || imgX >= img.Width || imgY < 0 || imgY >= img.Height)
-                    {
-                        // result.squares[x, y] = false;
-                    }
-                    else if (img.GetPixel(imgX, imgY).GetBrightness() > 0.5)
-                    {
-                        result.squares[x, y] = true;
-                    }
-                }
-            }
-            return result;
-        }
-
-        /// <summary>
-        /// Scale the given image so that the painted area's larger dimension is equal to size.
-        /// </summary>
-        /// <param name="img"></param>
-        /// <param name="sz">desired size of the covered area</param>
-        /// <param name="imgXCenter">center of the covered area</param>
-        /// <param name="imgYCenter">center of the covered area</param>
-        private static void ScaleImage(ref Bitmap img, double sz, out int imgXCenter, out int imgYCenter)
-        {
-            int imgXMin, imgXMax, imgYMin, imgYMax;
-            int x, y;
-            bool found;
-
-            #region Find imgXMin
-            for (x = 0, found = false; x < img.Width && !found; x++)
-            {
-                for (y = 0; y < img.Height; y++)
-                {
-                    if (img.GetPixel(x, y).GetBrightness() > 0.5)
-                    {
-                        found = true;
-                        break;
-                    }
-                }
-            }
-            imgXMin = x;
-            #endregion
-
-            if (!found)
-            {
-                imgXCenter = imgYCenter = 0;
-                return;
-            }
-
-            #region Find imgXMax
-            for (x = img.Width - 1, found = false; x > imgXMin && !found; x--)
-            {
-                for (y = 0; y < img.Height; y++)
-                {
-                    if (img.GetPixel(x, y).GetBrightness() > 0.5)
-                    {
-                        found = true;
-                        break;
-                    }
-                }
-            }
-            imgXMax = x;
-            #endregion
-
-            #region Find imgYMin
-            for (y = 0, found = false; y < img.Height && !found; y++)
-            {
-                for (x = 0; x < img.Width; x++)
-                {
-                    if (img.GetPixel(x, y).GetBrightness() > 0.5)
-                    {
-                        found = true;
-                        break;
-                    }
-                }
-            }
-            imgYMin = y;
-            #endregion
-
-            #region Find imgYMax
-            for (y = img.Height - 1, found = false; y > imgYMin && !found; y--)
-            {
-                for (x = 0; x < img.Width; x++)
-                {
-                    if (img.GetPixel(x, y).GetBrightness() > 0.5)
-                    {
-                        found = true;
-                        break;
-                    }
-                }
-            }
-            imgYMax = y;
-            #endregion
-
-            #region Scale image so that the larger dimension of the painted area is equal to sz
-
-            double scale = sz / Math.Max(imgXMax - imgXMin, imgYMax - imgYMin);
-            img = new Bitmap(img, new Size((int)(img.Width * scale), (int)(img.Height * scale)));
-
-            imgXCenter = (int)((imgXMin + imgXMax) * scale / 2.0);
-            imgYCenter = (int)((imgYMin + imgYMax) * scale / 2.0);
-
-            #endregion
         }
 
         #endregion

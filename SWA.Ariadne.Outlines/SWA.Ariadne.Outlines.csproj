@@ -37,6 +37,7 @@
     <Compile Include="BitmapOutlineShape.cs" />
     <Compile Include="CircleOutlineShape.cs" />
     <Compile Include="DiamondOutlineShape.cs" />
+    <Compile Include="ExplicitOutlineShape.cs" />
     <Compile Include="FractalOutlineShape.cs" />
     <Compile Include="FunctionOutlineShape.cs" />
     <Compile Include="PolygonOutlineShape.cs" />

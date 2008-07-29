@@ -632,6 +632,7 @@ namespace SWA.Ariadne.Model
         /// </summary>
         /// <returns></returns>
         /// Note: This code is not very efficient, but it is not executed very often, either.
+        /// Note: See also OutlineShape.GetBoundingBox()
         private Rectangle GetBoundingBox()
         {
             int xMin = xSize, xMax = 0, yMin = ySize, yMax = 0;
