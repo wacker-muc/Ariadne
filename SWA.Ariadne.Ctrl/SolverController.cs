@@ -207,10 +207,13 @@ namespace SWA.Ariadne.Ctrl
         /// </summary>
         private void CreateEmbeddedSolvers()
         {
+            MazePainter thisPainter = this.mazeDrawer as MazePainter; // TODO: avoid this upcast
+            thisPainter.ClearSharedPainters();
+
             foreach (Maze embeddedMaze in Maze.EmbeddedMazes)
             {
-                MazePainter thisPainter = this.mazeDrawer as MazePainter; // TODO: avoid this upcast
                 MazePainter embeddedPainter = thisPainter.CreateSharedPainter(embeddedMaze);
+                embeddedPainter.BlinkingCounter = -1;
                 EmbeddedSolverController embeddedController = new EmbeddedSolverController(this, embeddedPainter);
                 this.embeddedControllers.Add(embeddedController);
 
