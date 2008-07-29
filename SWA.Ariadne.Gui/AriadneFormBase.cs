@@ -346,9 +346,9 @@ namespace SWA.Ariadne.Gui
 
                     while (elapsed.TotalMilliseconds < maxMillisecondsPerTimerEvent && this.IsBehindSchedule())
                     {
-                        for (int steps = 0; steps < maxStepsBetweenRedraw && this.IsBehindSchedule(); ++steps)
+                        for (int steps = 0; steps < maxStepsBetweenRedraw && this.IsBehindSchedule(); )
                         {
-                            SolverController.DoStep();
+                            steps += SolverController.DoStep();
                         }
 
                         // Render the executed steps.

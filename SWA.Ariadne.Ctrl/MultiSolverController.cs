@@ -103,13 +103,18 @@ namespace SWA.Ariadne.Ctrl
 
         #region Solver methods
 
-        public void DoStep()
+        public int DoStep()
         {
+            int result = 0;
+
             foreach (SolverController item in list)
             {
-                item.DoStep();
+                int itemSteps = item.DoStep();
+                result = Math.Max(result, itemSteps);
             }
             ++countSteps;
+
+            return result;
         }
 
         public void FinishPath()

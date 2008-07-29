@@ -82,7 +82,7 @@ namespace SWA.Ariadne.Model
 
         /// <summary>
         /// Returns a measure of the distance of the given square from the maze's end square.
-        /// The distance is the length of a trjectory that passes only through "alive" squares.
+        /// The distance is the length of a trajectory that passes only through "alive" squares.
         /// </summary>
         /// <param name="sq"></param>
         /// <returns>-1 if the given square is dead; >=0 otherwise</returns>
@@ -97,6 +97,29 @@ namespace SWA.Ariadne.Model
                 return mazeExtension[sq.XPos, sq.YPos].trajectoryDistance;
             }
         }
+
+        /// <summary>
+        /// When true, all embedded mazes should share one DeadEndChecker.
+        /// When false, each maze should have its own DeadEndChecker.
+        /// </summary>
+        public bool IncludeEmbeddedMazes
+        {
+            get { return includeEmbeddedMazes; }
+            set { includeEmbeddedMazes = value; }
+        }
+        private bool includeEmbeddedMazes = false; // TODO: true; (will break the checker algorithm!)
+
+        /// <summary>
+        /// When true, the areas of other mazes are considered dead ends from the beginning.
+        /// When false, they are handled as possible trajectories (but never painted as dead).
+        /// </summary>
+        /// Note: The combination (IncludeEmbeddedMazes == true) && (ConsiderOtherMazesDeadEnds == true) is invalid.
+        public bool ConsiderOtherMazesDeadEnds
+        {
+            get { return (considerOtherMazesDeadEnds && !includeEmbeddedMazes); }
+            set { considerOtherMazesDeadEnds = value; }
+        }
+        private bool considerOtherMazesDeadEnds = false;
 
         /// <summary>
         /// Returns true if the given square is marked as dead.
@@ -170,7 +193,7 @@ namespace SWA.Ariadne.Model
                     // extendedSquare:
                     sqe.extendedSquare = sq;
 
-                    if (sq.isReserved)
+                    if (ConsiderOtherMazesDeadEnds ? sq.MazeId != maze.MazeId : sq.isReserved)
                     {
                         // isDeadEnd:
                         sqe.isDeadEnd = true;
@@ -196,10 +219,6 @@ namespace SWA.Ariadne.Model
                     }
                 }
             }
-
-            // Mark start square as visited.
-            mazeExtension[maze.StartSquare.XPos, maze.StartSquare.YPos].isDeadEnd = true;
-            mazeExtension[maze.StartSquare.XPos, maze.StartSquare.YPos].trajectoryDistance = -1;
         }
 
         /// <summary>
@@ -208,11 +227,16 @@ namespace SWA.Ariadne.Model
         /// <param name="maze"></param>
         private void InitializeTrajectoryDistances(Maze maze)
         {
-            MazeSquareExtension sqe = mazeExtension[maze.EndSquare.XPos, maze.EndSquare.YPos];
-            sqe.trajectoryDistance = 0;
-
             List<MazeSquareExtension> list = new List<MazeSquareExtension>();
-            list.Add(sqe);
+
+            InitializeEndpoints(maze, list);
+            if (IncludeEmbeddedMazes)
+            {
+                foreach (Maze item in maze.EmbeddedMazes)
+                {
+                    InitializeEndpoints(item, list);
+                }
+            }
 
             while (list.Count > 0)
             {
@@ -262,6 +286,19 @@ namespace SWA.Ariadne.Model
                     sqe1.trajectoryDistance *= -1;
                 }
             }
+        }
+
+        private void InitializeEndpoints(Maze maze, List<MazeSquareExtension> endSquares)
+        {
+            // Mark start square as visited.
+            MazeSquareExtension sqeStart = mazeExtension[maze.StartSquare.XPos, maze.StartSquare.YPos];
+            sqeStart.isDeadEnd = true;
+            sqeStart.trajectoryDistance = -1;
+
+            // Add end square to the list.
+            MazeSquareExtension sqeEnd = mazeExtension[maze.EndSquare.XPos, maze.EndSquare.YPos];
+            sqeEnd.trajectoryDistance = 0;
+            endSquares.Add(sqeEnd);
         }
 
         #endregion
@@ -339,7 +376,10 @@ namespace SWA.Ariadne.Model
                 if (sqe2.trajectoryDistance < 0 && !sqe2.isDeadEnd)
                 {
                     sqe2.isDeadEnd = true;
-                    result.Add(sqe2.extendedSquare);
+                    if (IncludeEmbeddedMazes || sqe2.extendedSquare.MazeId == sq.MazeId)
+                    {
+                        result.Add(sqe2.extendedSquare);
+                    }
                 }
             }
 
@@ -631,6 +671,24 @@ namespace SWA.Ariadne.Model
             #endregion
 
             return true;
+        }
+
+        #endregion
+
+        #region Auxiliary methods
+
+        public override string ToString()
+        {
+            int n = 0;
+
+            foreach (MazeSquareExtension sqe in this.mazeExtension)
+            {
+                if (sqe.isDeadEnd)
+                {
+                    n++;
+                }
+            }
+            return string.Format("{0} - {1} dead squares", mazeExtension.ToString(), n);
         }
 
         #endregion

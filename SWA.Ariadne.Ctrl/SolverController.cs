@@ -52,12 +52,30 @@ namespace SWA.Ariadne.Ctrl
         /// <summary>
         /// Number of executed steps.
         /// </summary>
-        public long CountSteps
+        public virtual long CountSteps
         {
-            get { return countSteps; }
+            get
+            {
+                long result = countSteps;
+
+                foreach (SolverController item in embeddedControllers)
+                {
+                    if (RunParallelSolvers)
+                    {
+                        // TODO: consider steps before item has really started
+                        result = Math.Max(result, item.CountSteps);
+                    }
+                    else
+                    {
+                        result += item.CountSteps;
+                    }
+                }
+
+                return result;
+            }
         }
 
-        private Maze Maze
+        public Maze Maze
         {
             get { return mazeDrawer.Maze; }
         }
@@ -71,6 +89,28 @@ namespace SWA.Ariadne.Ctrl
         /// Each EmbeddedMaze of our Maze gets its own EmbeddedSolverController.
         /// </summary>
         private List<EmbeddedSolverController> embeddedControllers = new List<EmbeddedSolverController>();
+
+        /// <summary>
+        /// Determines which controller will do the next step.
+        /// 0: this controller;
+        /// >0: one of the embedded controllers
+        /// <0: all controllers in parallel
+        /// </summary>
+        private int doStepTurn = 0;
+
+        public bool RunParallelSolvers
+        {
+            get { return (this.doStepTurn < 0); }
+        }
+
+        /// <summary>
+        /// Returns true if this controller is ready to execute another step.
+        /// Doesn't consider the embedded controllers' state.
+        /// </summary>
+        public virtual bool IsActive
+        {
+            get { return (this.Maze.IsSolved == false); }
+        }
 
         #endregion
 
@@ -154,6 +194,12 @@ namespace SWA.Ariadne.Ctrl
             {
                 item.PrepareForStart();
             }
+
+            // After all controllers have been created, some resources need to be shared with the master controller.
+            if (this.Maze.MazeId == MazeSquare.PrimaryMazeId)
+            {
+                CoordinateEmbeddedControllers(this);
+            }
         }
 
         /// <summary>
@@ -169,7 +215,29 @@ namespace SWA.Ariadne.Ctrl
                 this.embeddedControllers.Add(embeddedController);
 
                 // TODO: use random values
-                embeddedController.StartDelayRelativeDistance = 1.0;
+                embeddedController.StartDelayRelativeDistance = 0.5;
+            }
+        }
+
+        /// <summary>
+        /// Coordinate shared resources of embedded objects with the master object.
+        /// E.g. all solvers should share a common DeadEndChecker.
+        /// </summary>
+        /// <param name="masterCtrl"></param>
+        private void CoordinateEmbeddedControllers(SolverController masterCtrl)
+        {
+            if (masterCtrl != this)
+            {
+                // Use the same progress bar.
+                this.visitedProgressBar = masterCtrl.visitedProgressBar;
+
+                // Coordinate our solver with the master solver.
+                this.solver.CoordinateWithMaster(masterCtrl.solver);
+            }
+
+            foreach (SolverController ctrl in embeddedControllers)
+            {
+                ctrl.CoordinateEmbeddedControllers(masterCtrl);
             }
         }
 
@@ -192,18 +260,35 @@ namespace SWA.Ariadne.Ctrl
         /// <summary>
         /// Advance a single step.
         /// The travelled steps are not rendered until FinishPath() is called.
+        /// Returns the number of steps actually executed.
         /// </summary>
-        public void DoStep()
+        /// <returns></returns>
+        public int DoStep()
         {
-            // Forward the message to the embedded controllers.
-            foreach (EmbeddedSolverController item in embeddedControllers)
+            int result = 0;
+
+            if (RunParallelSolvers)
             {
-                item.DoStep();
+                // All controllers run in parallel.
+                // Forward the message to the embedded controllers.
+                foreach (EmbeddedSolverController item in embeddedControllers)
+                {
+                    result += item.DoStep();
+                }
+            }
+            else
+            {
+                SolverController ctrl = ChooseDueController();
+
+                if (ctrl != this)
+                {
+                    return ctrl.DoStep();
+                }
             }
 
             if (this.Maze.IsSolved)
             {
-                return;
+                return result;
             }
 
             MazeSquare sq1, sq2;
@@ -218,6 +303,12 @@ namespace SWA.Ariadne.Ctrl
                 if (visitedProgressBar != null)
                 {
                     visitedProgressBar.PerformStep(); // next visited square
+                }
+
+                // Let all embedded controllers know how far we have advanced.
+                foreach (EmbeddedSolverController ctrl in embeddedControllers)
+                {
+                    ctrl.HostStep(sq2);
                 }
             }
             else
@@ -234,6 +325,32 @@ namespace SWA.Ariadne.Ctrl
                 mazeDrawer.DrawSolvedPath(solutionPath);
                 currentBackwardSquare = null;
             }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Returns the controller who should execute the next step.
+        /// Finished and not ready controllers are skipped.
+        /// Increments this.doStepTurn.
+        /// </summary>
+        /// <returns></returns>
+        private SolverController ChooseDueController()
+        {
+            SolverController result = null;
+
+            for (int n = 0; n <= embeddedControllers.Count; n++)
+            {
+                result = (doStepTurn == 0 ? this : embeddedControllers[doStepTurn - 1]);
+                doStepTurn = (doStepTurn + 1) % (embeddedControllers.Count + 1);
+
+                if (result.IsActive)
+                {
+                    break;
+                }
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -275,8 +392,8 @@ namespace SWA.Ariadne.Ctrl
         {
             if (countSteps > 0)
             {
-                string steps = (countSteps == 1 ? "step" : "steps");
-                message.Append(countSteps.ToString("#,##0") + " " + steps);
+                string steps = (CountSteps == 1 ? "step" : "steps");
+                message.Append(CountSteps.ToString("#,##0") + " " + steps);
 
                 if (countBackward > 0)
                 {
