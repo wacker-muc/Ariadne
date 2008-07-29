@@ -155,6 +155,7 @@ namespace SWA.Ariadne.Outlines
         /// <param name="shapeSize">size, relative to distance of center from the border; 1.0 will touch the border</param>
         /// Note: The constructor must be public as it is invoked via reflection.
         public FunctionOutlineShape(int xSize, int ySize, double centerX, double centerY, double shapeSize, MethodInfo function, int symmetryRotation)
+            : base(xSize, ySize)
         {
             double xc, yc, sz;
             ConvertParameters(xSize, ySize, centerX, centerY, shapeSize, out xc, out yc, out sz);
