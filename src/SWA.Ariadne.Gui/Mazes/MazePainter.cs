@@ -148,6 +148,12 @@ namespace SWA.Ariadne.Gui.Mazes
                 return blinkingCounter;
             }
             set {
+                // Ignore this message if we have not been properly started.
+                if (blinkingCounter < 0 && value != 0)
+                {
+                    return;
+                }
+
                 // Forward this message to the shared painters.
                 if (value > 0)
                 {
@@ -158,7 +164,8 @@ namespace SWA.Ariadne.Gui.Mazes
                 }
 
                 blinkingCounter = value;
-                if (gBuffer != null)
+
+                if (blinkingCounter > 0 && gBuffer != null)
                 {
                     PaintEndpoints(gBuffer.Graphics);
                     gBuffer.Render();
@@ -530,6 +537,11 @@ namespace SWA.Ariadne.Gui.Mazes
             return result;
         }
 
+        public void ClearSharedPainters()
+        {
+            sharedPainters.Clear();
+        }
+
         #endregion
 
         #region Painting methods
@@ -781,6 +793,12 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <param name="g"></param>
         private void PaintEndpoints(Graphics g)
         {
+            // Activare the blinkingCounter, if necessary.
+            if (BlinkingCounter < 0)
+            {
+                BlinkingCounter = 0;
+            }
+
             PaintSquare(g, this.StartSquareBrush, maze.StartSquare.XPos, maze.StartSquare.YPos);
             PaintSquare(g, this.EndSquareBrush, maze.EndSquare.XPos, maze.EndSquare.YPos);
         }

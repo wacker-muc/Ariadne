@@ -12,7 +12,7 @@ Version 3.1
 
  * Function Outline Shapes: apply a distortion function to the coordinate system
  * Action: save image of the maze into a file
- * Maze: optionally build embedded mazes that are solved independently
+ * Maze: optionally build embedded mazes that are solved independantly
 
 -----------------------------------------------------------------------
 
