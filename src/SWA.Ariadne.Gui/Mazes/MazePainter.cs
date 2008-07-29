@@ -8,6 +8,7 @@ using SWA.Ariadne.Model;
 using SWA.Ariadne.Outlines;
 using SWA.Ariadne.Logic;
 using SWA.Ariadne.Settings;
+using SWA.Utilities;
 
 namespace SWA.Ariadne.Gui.Mazes
 {
@@ -492,6 +493,31 @@ namespace SWA.Ariadne.Gui.Mazes
             result.Setup(this.squareWidth, this.wallWidth, this.pathWidth);
             result.xOffset = this.xOffset;
             result.yOffset = this.yOffset;
+
+            // Switch colors until they are sufficiently different.
+            while (true)
+            {
+                float f0 = this.forwardColor.GetHue();
+                float f1 = result.forwardColor.GetHue();
+                float b0 = this.backwardColor.GetHue();
+                float b1 = result.backwardColor.GetHue();
+
+                if (true
+                    && ColorBuilder.HueDifference(f0, f1) >= 0.10 * ColorBuilder.MaxHue     // both forward colors
+                    && ColorBuilder.HueDifference(f0, b1) >= 0.10 * ColorBuilder.MaxHue     // forward and backward colors
+                    && ColorBuilder.HueDifference(b0, f1) >= 0.10 * ColorBuilder.MaxHue     // forward and backward colors
+                    && ColorBuilder.HueDifference(b0, b1) >= 0.05 * ColorBuilder.MaxHue     // both backward colors
+                    )
+                {
+                    break;
+                }
+                else
+                {
+                    ColorBuilder.SuggestColors(MinColor, MaxColor, out result.forwardColor, out result.backwardColor);
+                }
+            }
+
+            // Finish the initialization.
             result.Reset();
 
             // We don't create a new maze but use the given one.

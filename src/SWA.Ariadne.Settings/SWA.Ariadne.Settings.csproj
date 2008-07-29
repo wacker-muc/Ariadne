@@ -36,7 +36,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AriadneSettingsData.cs" />
-    <Compile Include="ColorBuilder.cs" />
     <Compile Include="ColorLabel.cs">
       <SubType>Component</SubType>
     </Compile>

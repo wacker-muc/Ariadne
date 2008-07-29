@@ -18,7 +18,7 @@ namespace SWA.Ariadne.Model
         /// <summary>
         /// Embedded mazes have an ID > 1.
         /// </summary>
-        protected override int MazeId
+        public override int MazeId
         {
             get { return mazeId; }
         }

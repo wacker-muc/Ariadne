@@ -34,6 +34,20 @@ namespace SWA.Ariadne.Logic
         }
 
         /// <summary>
+        /// Coordinate shared resources of this solver with the master solver.
+        /// </summary>
+        /// <param name="iMazeSolver"></param>
+        public void CoordinateWithMaster(IMazeSolver masterSolver)
+        {
+            // Use the same shared DeadEndChecker.
+            DeadEndChecker sharedChecker = (masterSolver as SolverBase).deadEndChecker;
+            if (deadEndChecker != null && sharedChecker != null && sharedChecker.IncludeEmbeddedMazes)
+            {
+                deadEndChecker = sharedChecker;
+            }
+        }
+
+        /// <summary>
         /// Returns true if this MazeSolver can detect areas unreachable the end square.
         /// </summary>
         public bool IsEfficientSolver

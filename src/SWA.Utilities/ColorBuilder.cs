@@ -154,5 +154,22 @@ namespace SWA.Ariadne.Settings
 
             #endregion
         }
+
+        /// <summary>
+        /// Returns the (absolute) difference of two hue values.
+        /// The result is between 0.0 and 0.5 * MaxHue.
+        /// </summary>
+        /// <param name="f0"></param>
+        /// <param name="f1"></param>
+        /// <returns></returns>
+        public static float HueDifference(float a, float b)
+        {
+            float result = Math.Abs(a - b);
+            if (result > ColorBuilder.MaxHue / 2)
+            {
+                result = ColorBuilder.MaxHue - result;
+            }
+            return result;
+        }
     }
 }

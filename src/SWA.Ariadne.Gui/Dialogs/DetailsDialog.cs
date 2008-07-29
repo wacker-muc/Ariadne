@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using SWA.Ariadne.Gui.Mazes;
 using SWA.Ariadne.Settings;
+using SWA.Utilities;
 
 namespace SWA.Ariadne.Gui.Dialogs
 {

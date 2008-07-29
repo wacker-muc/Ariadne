@@ -5,7 +5,7 @@ namespace SWA.Ariadne.Ctrl
     {
         int BlinkingCounter { get; set; }
         long CountSteps { get; }
-        void DoStep();
+        int DoStep();
         void FillStatusMessage(System.Text.StringBuilder message);
         void FinishPath();
         void PrepareForStart();

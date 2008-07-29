@@ -25,7 +25,7 @@ namespace SWA.Ariadne.Model
         /// <summary>
         /// The primary maze has ID = 1.
         /// </summary>
-        protected virtual int MazeId
+        public virtual int MazeId
         {
             get { return MazeSquare.PrimaryMazeId; }
         }
@@ -139,7 +139,8 @@ namespace SWA.Ariadne.Model
         private MazeSquare[,] squares;
 
         /// <summary>
-        /// Returns the number of squares that are part of this maze.
+        /// Returns the number of squares in this maze.
+        /// Includes the squares od embedded mazes.
         /// </summary>
         public int CountSquares
         {
@@ -151,7 +152,7 @@ namespace SWA.Ariadne.Model
                 {
                     for (int y = 0; y < ySize; y++)
                     {
-                        if (this[x, y].MazeId == this.MazeId)
+                        if (this[x, y].isReserved == false)
                         {
                             ++result;
                         }
