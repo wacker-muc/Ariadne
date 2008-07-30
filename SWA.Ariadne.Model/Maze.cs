@@ -200,19 +200,6 @@ namespace SWA.Ariadne.Model
 
         #endregion
 
-        #region Delegates
-
-        /// <summary>
-        /// A delegate type that implements the OutlineShape behavior.
-        /// Returns true if the square at (x, y) is inside of the shape, false otherwise.
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns></returns>
-        private delegate bool InsideShapeDelegate(int x, int y);
-
-        #endregion
-
         #region Constructor
 
         /// <summary>
@@ -946,7 +933,7 @@ namespace SWA.Ariadne.Model
         private void CloseWallsAroundReservedAreas()
         {
             // We need a test that regards the reserved squares as the "inside" of a shape.
-            InsideShapeDelegate test = delegate(int x, int y) { return this.squares[x, y].isReserved; };
+            OutlineShape.InsideShapeDelegate test = delegate(int x, int y) { return this.squares[x, y].isReserved; };
             
             this.FixOutline(test, MazeSquare.WallState.WS_CLOSED);
         }
@@ -958,11 +945,17 @@ namespace SWA.Ariadne.Model
         {
             if (outlineShape != null)
             {
-                // We need a test for the "inside" of an OutlineShape.
-                InsideShapeDelegate test = delegate(int x, int y) { return outlineShape[x, y]; };
-
-                FixOutline(test, MazeSquare.WallState.WS_OUTLINE);
+                OutlineShape shape = outlineShape;
+                FixOutline(shape);
             }
+        }
+
+        private void FixOutline(OutlineShape shape)
+        {
+            // We need a test for the "inside" of an OutlineShape.
+            OutlineShape.InsideShapeDelegate test = delegate(int x, int y) { return shape[x, y]; };
+
+            FixOutline(test, MazeSquare.WallState.WS_OUTLINE);
         }
 
         /// <summary>
@@ -973,7 +966,7 @@ namespace SWA.Ariadne.Model
         /// A two dimensional array.  The dimensions must not be greater than the maze itself.
         /// true means "inside", false means "outside".
         /// </param>
-        private void FixOutline(InsideShapeDelegate shapeTest, MazeSquare.WallState wallState)
+        private void FixOutline(OutlineShape.InsideShapeDelegate shapeTest, MazeSquare.WallState wallState)
         {
             for (int x = 0; x < xSize; x++)
             {
@@ -1007,6 +1000,10 @@ namespace SWA.Ariadne.Model
 
         #region Building embedded mazes
 
+        /// <summary>
+        /// Creates the embedded mazes, as defined in embeddedMazeShapes.
+        /// </summary>
+        /// Note: The algorithm must provide that all mazes (main and embedded) are totally connected.
         private void FixEmbeddedMazes()
         {
             for (int i = 0; i < embeddedMazeShapes.Count; i++)
@@ -1018,12 +1015,36 @@ namespace SWA.Ariadne.Model
                     break;
                 }
 
-                EmbeddedMaze embeddedMaze = new EmbeddedMaze(this, embeddedMazeId, embeddedMazeShapes[i]);
+                // We need a test that regards the reserved squares and current embedded mazes as the "inside" of a shape.
+                // The border of the main maze must also not be covered.
+                OutlineShape.InsideShapeDelegate test = delegate(int x, int y)
+                {
+                    // TODO: This should not always be necessary.
+                    if (x - 2 < 0 || x + 2 >= this.XSize || y - 2 < 0 || y + 2 >= this.YSize)
+                    {
+                        return true;
+                    }
+                    return (this.squares[x, y].MazeId != MazeSquare.PrimaryMazeId);
+                };
 
-                this.embeddedMazes.Add(embeddedMaze);
+                OutlineShape originalShape = embeddedMazeShapes[i];
+                OutlineShape connectedShape = originalShape.ConnectedSubset(test).Closure();
+
+                // TODO: Cut off parts of the main maze should be added to the connectedShape.
+
+                // Discard the shape if the connected subset is too small.
+                if (connectedShape.Area >= 0.3 * originalShape.Area)
+                {
+                    EmbeddedMaze embeddedMaze = new EmbeddedMaze(this, embeddedMazeId, connectedShape);
+                    this.embeddedMazes.Add(embeddedMaze);
+                }
+
+                if (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_OUTLINE_SHAPES, true))
+                {
+                    // The disconnected and enclosed parts of the original shape are handled as a regular outline shape.
+                    FixOutline(originalShape);
+                }
             }
-
-            // TODO: Make sure that every maze is totally connected.
         }
 
         #endregion

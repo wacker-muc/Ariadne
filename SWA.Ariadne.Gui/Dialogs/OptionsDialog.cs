@@ -86,6 +86,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             checkBoxPaintAllWalls.Checked = RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_PAINT_ALL_WALLS, true);
             checkBoxOutlineShapes.Checked = RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_OUTLINE_SHAPES, false);
             checkBoxIrregularMazes.Checked = RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_IRREGULAR_MAZES, false);
+            checkBoxMultipleMazes.Checked = RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_MULTIPLE_MAZES, false);
         }
 
         private void SaveSettings()
@@ -108,6 +109,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             key.SetValue(RegisteredOptions.OPT_PAINT_ALL_WALLS, (Int32)(checkBoxPaintAllWalls.Checked ? 1 : 0), RegistryValueKind.DWord);
             key.SetValue(RegisteredOptions.OPT_OUTLINE_SHAPES, (Int32)(checkBoxOutlineShapes.Checked ? 1 : 0), RegistryValueKind.DWord);
             key.SetValue(RegisteredOptions.OPT_IRREGULAR_MAZES, (Int32)(checkBoxIrregularMazes.Checked ? 1 : 0), RegistryValueKind.DWord);
+            key.SetValue(RegisteredOptions.OPT_MULTIPLE_MAZES, (Int32)(checkBoxMultipleMazes.Checked ? 1 : 0), RegistryValueKind.DWord);
         }
     }
 }

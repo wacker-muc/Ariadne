@@ -5,19 +5,23 @@ using System.Drawing;
 
 namespace SWA.Ariadne.Outlines
 {
-    class ExplicitOutlineShape : OutlineShape
+    /// <summary>
+    /// An OutlineShape that is based on a two dimensional array of boolean values.
+    /// The values can be set and cleared explicitely.
+    /// </summary>
+    internal class ExplicitOutlineShape : OutlineShape
     {
         #region Member variables and Properties
 
         public override bool this[int x, int y]
         {
-            get { return squares[x, y]; }
+            get { return (squares[x, y] != 0); }
         }
         public void SetValue(int x, int y, bool value)
         {
-            this.squares[x, y] = value;
+            this.squares[x, y] = (value == true ? (byte)1 : (byte)0);
         }
-        private bool[,] squares;
+        private byte[,] squares;
 
         #endregion
 
@@ -26,19 +30,194 @@ namespace SWA.Ariadne.Outlines
         public ExplicitOutlineShape(int xSize, int ySize)
             : base(xSize, ySize)
         {
-            this.squares = new bool[xSize, ySize];
+            this.squares = new byte[xSize, ySize];
         }
 
-        public ExplicitOutlineShape(int xSize, int ySize, OutlineShape template)
-            : this(xSize, ySize)
+        public ExplicitOutlineShape(OutlineShape template)
+            : this(template.XSize, template.YSize)
         {
-            for (int x = 0; x < xSize; x++)
+            for (int x = 0; x < this.XSize; x++)
             {
-                for (int y = 0; y < ySize; y++)
+                for (int y = 0; y < this.YSize; y++)
                 {
-                    this.squares[x, y] = template[x, y];
+                    this.SetValue(x, y, template[x, y]);
                 }
             }
+        }
+
+        public ExplicitOutlineShape(OutlineShape template, InsideShapeDelegate isReserved)
+            : this(template.XSize, template.YSize)
+        {
+            for (int x = 0; x < this.XSize; x++)
+            {
+                for (int y = 0; y < this.YSize; y++)
+                {
+                    this.SetValue(x, y, (template[x, y] && !isReserved(x, y)));
+                }
+            }
+        }
+
+        #endregion
+
+        #region OutlineShape implementation
+
+        /// <summary>
+        /// Returns the largest subset of the template shape whose squares are all connected to each other.
+        /// </summary>
+        /// <param name="template"></param>
+        /// <param name="isReserved"></param>
+        /// <returns></returns>
+        public static OutlineShape ConnectedSubset(OutlineShape template, InsideShapeDelegate isReserved)
+        {
+            ExplicitOutlineShape result = new ExplicitOutlineShape(template, isReserved);
+
+            #region Scan the shape for connected areas.
+
+            byte subsetId = 1;
+            int largestAreaSize = 0;
+            byte largestAreaId = 0;
+
+            for (int x = 0; x < result.XSize; x++)
+            {
+                for (int y = 0; y < result.YSize; y++)
+                {
+                    if (result.squares[x, y] == 1 && subsetId < byte.MaxValue)
+                    {
+                        int areaSize = result.FillSubset(x, y, ++subsetId);
+                        if (areaSize > largestAreaSize)
+                        {
+                            largestAreaSize = areaSize;
+                            largestAreaId = subsetId;
+                        }
+                    }
+                }
+            }
+
+            #endregion
+
+            #region Leave only the largest subset, eliminate all others.
+
+            for (int x = 0; x < result.XSize; x++)
+            {
+                for (int y = 0; y < result.YSize; y++)
+                {
+                    result.SetValue(x, y, (result.squares[x, y] == largestAreaId));
+                }
+            }
+
+            #endregion
+
+            return result;
+        }
+
+        /// <summary>
+        /// Returns the template shape, augmented by all totally enclosed areas.
+        /// </summary>
+        /// <param name="template"></param>
+        /// <returns></returns>
+        public static OutlineShape Closure(OutlineShape template)
+        {
+            ExplicitOutlineShape result = new ExplicitOutlineShape(template.Inverse());
+
+            #region Scan all outside areas.
+
+            byte outsideId = 2;
+            int x0 = 0, x1 = result.XSize - 1, y0 = 0, y1 = result.YSize - 1;
+
+            for (int x = 0; x < result.XSize; x++)
+            {
+                if (result.squares[x, y0] == 1)
+                {
+                    result.FillSubset(x, y0, outsideId);
+                }
+                if (result.squares[x, y1] == 1)
+                {
+                    result.FillSubset(x, y1, outsideId);
+                }
+            }
+            for (int y = 0; y < result.YSize; y++)
+            {
+                if (result.squares[x0, y] == 1)
+                {
+                    result.FillSubset(x0, y, outsideId);
+                }
+                if (result.squares[x1, y] == 1)
+                {
+                    result.FillSubset(x1, y, outsideId);
+                }
+            }
+
+            #endregion
+
+            #region Add the areas which were not reached.
+
+            for (int x = 0; x < result.XSize; x++)
+            {
+                for (int y = 0; y < result.YSize; y++)
+                {
+                    // 0: square is part of the template (not part of its inverse)
+                    // 1: square is not part of the template, but was not reached
+                    result.SetValue(x, y, (result.squares[x, y] <= 1));
+                }
+            }
+
+            #endregion
+
+            return result;
+        }
+
+        /// <summary>
+        /// Mark all squares connected to (x, y) with the given ID.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="id">a unique subset id greater than 1</param>
+        /// <returns>number of squares in the subset</returns>
+        private int FillSubset(int x, int y, byte id)
+        {
+            int result = 0;
+
+            // Use an array of (x, y) coordinates large enough to add all squares of the shape.
+            // Only squares with value == 1 are added, the value is then changed to the given ID.
+            // Thus, no square will be added twice.
+            int[] xp = new int[XSize * YSize], yp = new int[XSize * YSize];
+            int k = 0, n = 0;
+
+            // Add the given square to the list.
+            if (squares[x, y] == 1)
+            {
+                xp[n] = x; yp[n] = y; n++;
+                squares[x, y] = id; result++;
+            }
+
+            // Scan all squares in the list.
+            while (k < n)
+            {
+                x = xp[k]; y = yp[k]; k++;
+
+                if (x > 0 && squares[x - 1, y] == 1)
+                {
+                    xp[n] = x - 1; yp[n] = y; n++;
+                    squares[x - 1, y] = id; result++;
+                }
+                if (x + 1 < XSize && squares[x + 1, y] == 1)
+                {
+                    xp[n] = x + 1; yp[n] = y; n++;
+                    squares[x + 1, y] = id; result++;
+                }
+                if (y > 0 && squares[x, y - 1] == 1)
+                {
+                    xp[n] = x; yp[n] = y - 1; n++;
+                    squares[x, y - 1] = id; result++;
+                }
+                if (y + 1 < YSize && squares[x, y + 1] == 1)
+                {
+                    xp[n] = x; yp[n] = y + 1; n++;
+                    squares[x, y + 1] = id; result++;
+                }
+            }
+
+            return result;
         }
 
         #endregion

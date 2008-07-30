@@ -19,6 +19,16 @@ namespace SWA.Ariadne.Outlines
         /// </summary>
         private int xSize, ySize;
 
+        internal int XSize
+        {
+            get { return this.xSize; }
+        }
+
+        internal int YSize
+        {
+            get { return this.ySize; }
+        }
+
         public abstract bool this[int x, int y] { get; }
 
         #endregion
@@ -32,6 +42,20 @@ namespace SWA.Ariadne.Outlines
         }
 
         #endregion
+
+        #region Delegates
+
+        /// <summary>
+        /// A delegate type that implements the OutlineShape behavior.
+        /// Returns true if the square at (x, y) is inside of the shape, false otherwise.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        public delegate bool InsideShapeDelegate(int x, int y);
+
+        #endregion
+
         #region Static methods for creating OutlineShapes
 
         public delegate OutlineShape OutlineShapeBuilder(Random r, int xSize, int ySize, double centerX, double centerY, double radius);
@@ -253,6 +277,54 @@ namespace SWA.Ariadne.Outlines
             }
         }
 
+        /// <summary>
+        /// Returns the number of squares that are covered be the shape.
+        /// </summary>
+        public int Area
+        {
+            get
+            {
+                int result = 0;
+
+                for (int x = 0; x < xSize; x++)
+                {
+                    for (int y = 0; y < ySize; y++)
+                    {
+                        if (this[x, y] == true)
+                        {
+                            ++result;
+                        }
+                    }
+                }
+
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// Returns the largest subset of this shape whose squares are all connected to each other.
+        /// </summary>
+        /// <returns></returns>
+        public OutlineShape ConnectedSubset(InsideShapeDelegate isReserved)
+        {
+            return ExplicitOutlineShape.ConnectedSubset(this, isReserved);
+        }
+
+        /// <summary>
+        /// Returns this shape, augmented by all totally enclosed areas.
+        /// </summary>
+        /// <returns></returns>
+        public OutlineShape Closure()
+        {
+            return ExplicitOutlineShape.Closure(this);
+        }
+
+        public OutlineShape Inverse()
+        {
+            InsideShapeDelegate test = delegate(int x, int y) { return !this[x, y]; };
+            return new DelegateOutlineShape(this.XSize, this.YSize, test);
+        }
+
         #endregion
 
         #region Auxiliary methods
@@ -284,6 +356,15 @@ namespace SWA.Ariadne.Outlines
 
             // Multiply with the requested ratio.
             sz *= shapeSize;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0}: [{1}x{2}], bbox = {3}, area = {4}",
+                this.GetType().ToString(),
+                this.XSize, this.YSize,
+                this.BoundingBox.ToString(),
+                this.Area);
         }
 
         #endregion

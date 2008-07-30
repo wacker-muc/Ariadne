@@ -48,10 +48,11 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.selectImageFolderButton = new System.Windows.Forms.Button();
             this.imageFolderTextBox = new System.Windows.Forms.TextBox();
             this.tabPageExtras = new System.Windows.Forms.TabPage();
+            this.checkBoxPaintAllWalls = new System.Windows.Forms.CheckBox();
             this.checkBoxIrregularMazes = new System.Windows.Forms.CheckBox();
             this.checkBoxOutlineShapes = new System.Windows.Forms.CheckBox();
             this.imageFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.checkBoxPaintAllWalls = new System.Windows.Forms.CheckBox();
+            this.checkBoxMultipleMazes = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPageGeneral.SuspendLayout();
             this.tabPageImages.SuspendLayout();
@@ -317,6 +318,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             // tabPageExtras
             // 
+            this.tabPageExtras.Controls.Add(this.checkBoxMultipleMazes);
             this.tabPageExtras.Controls.Add(this.checkBoxPaintAllWalls);
             this.tabPageExtras.Controls.Add(this.checkBoxIrregularMazes);
             this.tabPageExtras.Controls.Add(this.checkBoxOutlineShapes);
@@ -327,6 +329,20 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.tabPageExtras.TabIndex = 2;
             this.tabPageExtras.Text = "Extras";
             this.tabPageExtras.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxPaintAllWalls
+            // 
+            this.checkBoxPaintAllWalls.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBoxPaintAllWalls.AutoSize = true;
+            this.checkBoxPaintAllWalls.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.checkBoxPaintAllWalls.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.checkBoxPaintAllWalls.Location = new System.Drawing.Point(75, 8);
+            this.checkBoxPaintAllWalls.Name = "checkBoxPaintAllWalls";
+            this.checkBoxPaintAllWalls.Size = new System.Drawing.Size(92, 17);
+            this.checkBoxPaintAllWalls.TabIndex = 1;
+            this.checkBoxPaintAllWalls.Text = "Paint all Walls";
+            this.checkBoxPaintAllWalls.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.checkBoxPaintAllWalls.UseVisualStyleBackColor = true;
             // 
             // checkBoxIrregularMazes
             // 
@@ -356,19 +372,19 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.checkBoxOutlineShapes.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.checkBoxOutlineShapes.UseVisualStyleBackColor = true;
             // 
-            // checkBoxPaintAllWalls
+            // checkBoxMultipleMazes
             // 
-            this.checkBoxPaintAllWalls.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.checkBoxPaintAllWalls.AutoSize = true;
-            this.checkBoxPaintAllWalls.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.checkBoxPaintAllWalls.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.checkBoxPaintAllWalls.Location = new System.Drawing.Point(75, 8);
-            this.checkBoxPaintAllWalls.Name = "checkBoxPaintAllWalls";
-            this.checkBoxPaintAllWalls.Size = new System.Drawing.Size(92, 17);
-            this.checkBoxPaintAllWalls.TabIndex = 1;
-            this.checkBoxPaintAllWalls.Text = "Paint all Walls";
-            this.checkBoxPaintAllWalls.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.checkBoxPaintAllWalls.UseVisualStyleBackColor = true;
+            this.checkBoxMultipleMazes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBoxMultipleMazes.AutoSize = true;
+            this.checkBoxMultipleMazes.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.checkBoxMultipleMazes.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.checkBoxMultipleMazes.Location = new System.Drawing.Point(37, 77);
+            this.checkBoxMultipleMazes.Name = "checkBoxMultipleMazes";
+            this.checkBoxMultipleMazes.Size = new System.Drawing.Size(130, 17);
+            this.checkBoxMultipleMazes.TabIndex = 4;
+            this.checkBoxMultipleMazes.Text = "Create Multiple Mazes";
+            this.checkBoxMultipleMazes.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.checkBoxMultipleMazes.UseVisualStyleBackColor = true;
             // 
             // OptionsDialog
             // 
@@ -426,6 +442,7 @@ namespace SWA.Ariadne.Gui.Dialogs
         private System.Windows.Forms.CheckBox checkBoxOutlineShapes;
         private System.Windows.Forms.CheckBox checkBoxIrregularMazes;
         private System.Windows.Forms.CheckBox checkBoxPaintAllWalls;
+        private System.Windows.Forms.CheckBox checkBoxMultipleMazes;
 
     }
 }
