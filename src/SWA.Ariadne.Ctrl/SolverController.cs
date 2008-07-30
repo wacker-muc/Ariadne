@@ -340,6 +340,11 @@ namespace SWA.Ariadne.Ctrl
         /// <returns></returns>
         private SolverController ChooseDueController()
         {
+            if (embeddedControllers.Count == 0)
+            {
+                return this;
+            }
+
             SolverController result = null;
 
             for (int n = 0; n <= embeddedControllers.Count; n++)

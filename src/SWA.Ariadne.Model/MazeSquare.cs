@@ -237,7 +237,7 @@ namespace SWA.Ariadne.Model
 
         public override string ToString()
         {
-            return XPos.ToString() + "/" + YPos.ToString();
+            return string.Format("{0}/{1}: {2}", XPos.ToString(), YPos.ToString(), MazeId);
         }
 
         #endregion 

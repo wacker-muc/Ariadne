@@ -332,8 +332,19 @@ namespace SWA.Ariadne.Gui
                 }
                 mazeUserControl.ReserveAreaForImages();
 
-                // Outline shapes.
-                this.AddOutlineShape();
+                bool hasEmbeddedShape = false;
+
+                if (!hasEmbeddedShape)
+                {
+                    // Embedded mazes.
+                    hasEmbeddedShape |= this.AddEmbeddedMaze();
+                }
+
+                if (!hasEmbeddedShape)
+                {
+                    // Outline shapes.
+                    hasEmbeddedShape |= this.AddOutlineShape();
+                }
 
                 // Irregular maze shapes.
                 if (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_IRREGULAR_MAZES, false) && random.Next(100) < 5) // TODO: 10%
@@ -360,9 +371,49 @@ namespace SWA.Ariadne.Gui
         }
 
         /// <summary>
+        /// Add an embedded maze.
+        /// </summary>
+        private bool AddEmbeddedMaze()
+        {
+            int percentage = (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_MULTIPLE_MAZES, false) ? 10 : 0);
+            Random r = RandomFactory.CreateRandom();
+            if (r.Next(100) < percentage)
+            {
+                OutlineShape shape = null;
+                int area = mazeUserControl.Maze.XSize * mazeUserControl.Maze.YSize;
+                int minArea = (int)(0.1 * area), maxArea = (int)(0.5 * area);
+
+                while (true)
+                {
+                    shape = OutlineShape.RandomInstance(r, mazeUserControl.Maze.XSize, mazeUserControl.Maze.YSize, 0.2, 1.2);
+
+                    // Discard shapes that are too small or too large.
+                    if (minArea > shape.Area || shape.Area > maxArea)
+                    {
+                        continue;
+                    }
+
+                    // Discard shapes that cover the whole maze.
+                    if (shape.BoundingBox.Width >= mazeUserControl.Maze.XSize || shape.BoundingBox.Height >= mazeUserControl.Maze.YSize)
+                    {
+                        continue;
+                    }
+
+                    break; // Terminate the loop.
+                }
+
+                mazeUserControl.Maze.AddEmbeddedMaze(shape);
+
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Add an outline shape to the maze.
         /// </summary>
-        private void AddOutlineShape()
+        private bool AddOutlineShape()
         {
             int percentage = (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_OUTLINE_SHAPES, false) ? 66 : 0);
             Random r = RandomFactory.CreateRandom();
@@ -370,7 +421,11 @@ namespace SWA.Ariadne.Gui
             {
                 OutlineShape shape = OutlineShape.RandomInstance(r, mazeUserControl.Maze.XSize, mazeUserControl.Maze.YSize, 0.3, 0.7);
                 mazeUserControl.Maze.OutlineShape = shape;
+
+                return true;
             }
+
+            return false;
         }
 
         /// <summary>
