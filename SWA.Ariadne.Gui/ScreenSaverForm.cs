@@ -385,7 +385,7 @@ namespace SWA.Ariadne.Gui
 
                 while (true)
                 {
-                    shape = OutlineShape.RandomInstance(r, mazeUserControl.Maze.XSize, mazeUserControl.Maze.YSize, 0.2, 1.2);
+                    shape = OutlineShape.RandomInstance(r, mazeUserControl.Maze.XSize, mazeUserControl.Maze.YSize, 0.2, 1.0);
 
                     // Discard shapes that are too small or too large.
                     if (minArea > shape.Area || shape.Area > maxArea)

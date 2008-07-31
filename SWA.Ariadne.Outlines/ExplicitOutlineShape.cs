@@ -65,7 +65,7 @@ namespace SWA.Ariadne.Outlines
         /// Returns the largest subset of the template shape whose squares are all connected to each other.
         /// </summary>
         /// <param name="template"></param>
-        /// <param name="isReserved"></param>
+        /// <param name="isReserved">defines the maze's reserved areas</param>
         /// <returns></returns>
         public static OutlineShape ConnectedSubset(OutlineShape template, InsideShapeDelegate isReserved)
         {
@@ -114,10 +114,31 @@ namespace SWA.Ariadne.Outlines
         /// Returns the template shape, augmented by all totally enclosed areas.
         /// </summary>
         /// <param name="template"></param>
+        /// <param name="isReserved">defines the maze's reserved areas</param>
         /// <returns></returns>
-        public static OutlineShape Closure(OutlineShape template)
+        public static OutlineShape Closure(OutlineShape template, InsideShapeDelegate isReserved)
         {
             ExplicitOutlineShape result = new ExplicitOutlineShape(template.Inverse());
+
+            #region Scan and mark the reserved areas.
+
+            if (isReserved != null)
+            {
+                byte reservedId = 3;
+
+                for (int x = 0; x < result.XSize; x++)
+                {
+                    for (int y = 0; y < result.YSize; y++)
+                    {
+                        if (isReserved(x, y))
+                        {
+                            result.squares[x, y] = reservedId;
+                        }
+                    }
+                }
+            }
+
+            #endregion
 
             #region Scan all outside areas.
 

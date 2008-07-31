@@ -327,6 +327,11 @@ namespace SWA.Ariadne.Ctrl
                 FinishPath();
                 mazeDrawer.DrawSolvedPath(solutionPath);
                 currentBackwardSquare = null;
+
+                if (this.Maze.MazeId != MazeSquare.PrimaryMazeId)
+                {
+                    mazeDrawer.DrawRemainingSquares();
+                }
             }
 
             return result;

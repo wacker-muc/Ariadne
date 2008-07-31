@@ -513,7 +513,7 @@ namespace SWA.Ariadne.Gui.Mazes
                     && ColorBuilder.HueDifference(f0, f1) >= 0.10 * ColorBuilder.MaxHue     // both forward colors
                     && ColorBuilder.HueDifference(f0, b1) >= 0.10 * ColorBuilder.MaxHue     // forward and backward colors
                     && ColorBuilder.HueDifference(b0, f1) >= 0.10 * ColorBuilder.MaxHue     // forward and backward colors
-                    && ColorBuilder.HueDifference(b0, b1) >= 0.05 * ColorBuilder.MaxHue     // both backward colors
+                    && ColorBuilder.HueDifference(b0, b1) >= 0.07 * ColorBuilder.MaxHue     // both backward colors
                     )
                 {
                     break;
@@ -626,6 +626,7 @@ namespace SWA.Ariadne.Gui.Mazes
                 if (settingsData != null && settingsData.VisibleOutlines)
                 {
                     PaintOutlineShape(g);
+                    PaintEmbeddedMazes(g);
                 }
 
                 switch (this.WallVisibility)
@@ -652,6 +653,10 @@ namespace SWA.Ariadne.Gui.Mazes
             catch (MissingMethodException) { }
         }
 
+        /// <summary>
+        /// Paint the squares of the outline shape in a dark blue background color.
+        /// </summary>
+        /// <param name="g"></param>
         private void PaintOutlineShape(Graphics g)
         {
             if (maze.OutlineShape == null)
@@ -659,18 +664,47 @@ namespace SWA.Ariadne.Gui.Mazes
                 return;
             }
 
+            OutlineShape.InsideShapeDelegate test = delegate(int x, int y) { return maze.OutlineShape[x, y]; };
+            Color shapeColor = Color.FromArgb(0, 0, 50); // dark blue
+
+            PaintShape(g, test, shapeColor);
+        }
+
+        /// <summary>
+        /// Paint the squares of the embedded mazes in a dark red background color.
+        /// </summary>
+        /// <param name="g"></param>
+        private void PaintEmbeddedMazes(Graphics g)
+        {
+            foreach (Maze item in maze.EmbeddedMazes)
+            {
+                OutlineShape.InsideShapeDelegate test = delegate(int x, int y) { return maze[x, y].MazeId == item.MazeId; };
+                Color shapeColor = Color.FromArgb(50, 0, 0); // dark red
+
+                PaintShape(g, test, shapeColor);
+            }
+        }
+
+        /// <summary>
+        /// Paint the shape as defined by the insideShapeTest delegate with the given color.
+        /// </summary>
+        /// <param name="g"></param>
+        /// <param name="test"></param>
+        /// <param name="shapeBrush"></param>
+        private void PaintShape(Graphics g, OutlineShape.InsideShapeDelegate insideShapeTest, Color shapeColor)
+        {
             // Temporarily set zero width walls; thus, the squares will be drawn seamlessly.
             int savedWallWidth = wallWidth;
             wallWidth = 0;
             squareWidth = gridWidth;
 
-            Color shapeColor = Color.FromArgb(0, 0, 50); // dark blue
             Brush shapeBrush = new SolidBrush(shapeColor);
+
             for (int x = 0; x < maze.XSize; x++)
             {
                 for (int y = 0; y < maze.YSize; y++)
                 {
-                    if (maze.OutlineShape[x, y] == true)
+                    if (insideShapeTest(x, y) == true)
                     {
                         this.PaintSquare(g, shapeBrush, x, y);
                     }
@@ -966,6 +1000,27 @@ namespace SWA.Ariadne.Gui.Mazes
         public void DrawDeadSquare(MazeSquare sq)
         {
             PaintPathDot(sq, deadEndBrush);
+        }
+
+        /// <summary>
+        /// Highlights the squares that have not been visited.
+        /// </summary>
+        public void DrawRemainingSquares()
+        {
+            Color color = ColorBuilder.ConvertHSBToColor(backwardColor.GetHue(), backwardColor.GetSaturation(), deadEndColor.GetBrightness());
+            Brush brush = new SolidBrush(color);
+            brush = new SolidBrush(backwardColor);
+
+            for (int x = 0; x < maze.XSize; x++)
+            {
+                for (int y = 0; y < maze.YSize; y++)
+                {
+                    if (maze[x, y].MazeId == maze.MazeId && !maze[x, y].isVisited)
+                    {
+                        PaintPathDot(maze[x, y], brush);
+                    }
+                }
+            }
         }
 
         #endregion

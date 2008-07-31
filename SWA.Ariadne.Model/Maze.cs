@@ -1016,8 +1016,13 @@ namespace SWA.Ariadne.Model
                 }
 
                 // We need a test that regards the reserved squares and current embedded mazes as the "inside" of a shape.
-                // The border of the main maze must also not be covered.
-                OutlineShape.InsideShapeDelegate test = delegate(int x, int y)
+                OutlineShape.InsideShapeDelegate regularTest = delegate(int x, int y)
+                {
+                    return (this.squares[x, y].MazeId != MazeSquare.PrimaryMazeId);
+                };
+
+                // This test ensures that the border of the main maze must also not be covered.
+                OutlineShape.InsideShapeDelegate conservativeTest = delegate(int x, int y)
                 {
                     // TODO: This should not always be necessary.
                     if (x - 2 < 0 || x + 2 >= this.XSize || y - 2 < 0 || y + 2 >= this.YSize)
@@ -1028,7 +1033,7 @@ namespace SWA.Ariadne.Model
                 };
 
                 OutlineShape originalShape = embeddedMazeShapes[i];
-                OutlineShape connectedShape = originalShape.ConnectedSubset(test).Closure();
+                OutlineShape connectedShape = originalShape.ConnectedSubset(conservativeTest).Closure(regularTest);
 
                 // TODO: Cut off parts of the main maze should be added to the connectedShape.
 
