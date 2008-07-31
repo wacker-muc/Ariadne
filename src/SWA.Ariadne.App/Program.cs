@@ -32,7 +32,10 @@ namespace SWA.Ariadne.App
                         {
                             Application.Run(new ScreenSaverForm(args[1]));
                         }
-                        catch(Exception) { }
+                        catch(Exception)
+                        {
+                            Application.Exit();
+                        }
                         break;
                     case "/s":
                         // Show screensaver form

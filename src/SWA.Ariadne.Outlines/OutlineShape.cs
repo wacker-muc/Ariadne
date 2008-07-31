@@ -316,7 +316,18 @@ namespace SWA.Ariadne.Outlines
         /// <returns></returns>
         public OutlineShape Closure()
         {
-            return ExplicitOutlineShape.Closure(this);
+            return ExplicitOutlineShape.Closure(this, null);
+        }
+
+        /// <summary>
+        /// Returns this shape, augmented by all totally enclosed areas.
+        /// Reserved areas define additional borders around enclosed areas.
+        /// </summary>
+        /// <param name="isReserved">defines the maze's reserved areas</param>
+        /// <returns></returns>
+        public OutlineShape Closure(InsideShapeDelegate isReserved)
+        {
+            return ExplicitOutlineShape.Closure(this, isReserved);
         }
 
         public OutlineShape Inverse()

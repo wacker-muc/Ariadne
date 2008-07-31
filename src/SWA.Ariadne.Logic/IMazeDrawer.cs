@@ -32,6 +32,11 @@ namespace SWA.Ariadne.Logic
         void DrawSolvedPath(List<MazeSquare> path);
 
         /// <summary>
+        /// Highlights the squares that have not been visited.
+        /// </summary>
+        void DrawRemainingSquares();
+
+        /// <summary>
         /// Paints a dot (in the forward color) at the given square.
         /// Renders the GraphicsBuffer.
         /// </summary>

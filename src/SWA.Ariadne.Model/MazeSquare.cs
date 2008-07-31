@@ -79,7 +79,7 @@ namespace SWA.Ariadne.Model
         /// 1: Belongs to the primary maze.
         /// >1: Belongs to an embedded maze.
         /// </summary>
-        internal int MazeId
+        public int MazeId
         {
             get
             {
