@@ -19,6 +19,7 @@ namespace SWA.Ariadne.Model
             Straights,
             Circles,
             Zigzags,
+            Other,
         }
 
         protected readonly Kind kind;
@@ -112,9 +113,11 @@ namespace SWA.Ariadne.Model
         /// <returns></returns>
         private static IrregularMazeShape SimpleInstance(Random r, Maze maze)
         {
-            int choice = r.Next(20);
+            int choice = r.Next(25);
 
             //choice = 17 + r.Next(3);
+            //choice = 20 + r.Next(5);
+            //choice = 25 + r.Next(1);
 
             // For PreferPathsRelativeToReferenceSquare: number of x and y partitions.
             int p = (choice % 2 == 0 ? 1 : 4), q = (choice % 2 == 0 ? 1 : 3);
@@ -170,6 +173,23 @@ namespace SWA.Ariadne.Model
                 case 19:
                     // Scattered four quadrants
                     return new PreferPathsRelativeToReferenceSquare(maze, (maze.XSize * maze.YSize) / (16 * 16), false, false, true, r);
+
+                case 20:
+                case 21:
+                    // Horizontal or vertical lines
+                    return new PreferAxis(choice % 2 == 0);
+
+                case 22:
+                case 23:
+                    // Diagonal lines
+                    return new PreferDiagonal(choice % 2 == 0);
+
+                case 24:
+                    // Six different patterns in a 3x2 array
+                    return new SixFields(maze, r);
+
+                case 25:
+                    return new PreferSimilarGrid(maze, r.Next(3, 6), r.Next(3, 6));
             }
         }
 
@@ -325,6 +345,65 @@ namespace SWA.Ariadne.Model
             }
         }
 
+        /// <summary>
+        /// Prefers either horizontal or vertical directions.
+        /// </summary>
+        protected class PreferAxis : IrregularMazeShape
+        {
+            private readonly bool horizontal;
+
+            public PreferAxis(bool horizontal)
+                : base(Kind.Straights)
+            {
+                this.horizontal = horizontal;
+            }
+
+            public override bool[] PreferredDirections(MazeSquare sq)
+            {
+                bool[] result = new bool[4];
+
+                result[(int)MazeSquare.WallPosition.WP_N] = (this.horizontal == false);
+                result[(int)MazeSquare.WallPosition.WP_S] = (this.horizontal == false);
+                result[(int)MazeSquare.WallPosition.WP_E] = (this.horizontal == true);
+                result[(int)MazeSquare.WallPosition.WP_W] = (this.horizontal == true);
+
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// Prefers one of the two diagonal directions.
+        /// </summary>
+        protected class PreferDiagonal : IrregularMazeShape
+        {
+            private readonly bool firstQuadrant;
+
+            public PreferDiagonal(bool firstQuadrant)
+                : base(Kind.Zigzags)
+            {
+                this.firstQuadrant = firstQuadrant;
+            }
+
+            public override bool[] PreferredDirections(MazeSquare sq)
+            {
+                bool[] result = new bool[4];
+                bool evenCoordinates = ((sq.XPos + sq.YPos) % 2 == 0);
+
+                result[(int)MazeSquare.WallPosition.WP_E] = (evenCoordinates == this.firstQuadrant);
+                result[(int)MazeSquare.WallPosition.WP_W] = (evenCoordinates != this.firstQuadrant);
+                result[(int)MazeSquare.WallPosition.WP_N] = (evenCoordinates == true);
+                result[(int)MazeSquare.WallPosition.WP_S] = (evenCoordinates == false);
+
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// In these shapes, the preferred direction is determined relative to a reference square.
+        /// The direction may be approximately parallel or vertical to the line connecting the tested
+        /// square with the reference square.
+        /// The resulting shape may look circular or rectangular.
+        /// </summary>
         protected class PreferPathsRelativeToReferenceSquare : IrregularMazeShape
         {
             private int xSize, ySize;
@@ -561,6 +640,67 @@ namespace SWA.Ariadne.Model
             }
         }
 
+        /// <summary>
+        /// The same (regular) pattern is repeated in a grid.
+        /// </summary>
+        protected class PreferSimilarGrid : IrregularMazeShape
+        {
+            Maze maze;
+            int gridWidth, gridHeight;
+
+            public PreferSimilarGrid(Maze maze, int gridWidth, int gridHeight)
+                : base(Kind.Other)
+            {
+                this.maze = maze;
+                this.gridWidth = gridWidth;
+                this.gridHeight = gridHeight;
+            }
+
+            public override bool[] PreferredDirections(MazeSquare sq)
+            {
+                // A measure of how many template squares' wall are already open.
+                // When positive, this square's wall should also be open.
+                double[] openTemplates = new double[4];
+
+                for (int x = sq.XPos % gridWidth; x < maze.XSize; x += gridWidth)
+                {
+                    for (int y = sq.YPos % gridHeight; x < maze.YSize; x += gridHeight)
+                    {
+                        for (MazeSquare.WallPosition p = MazeSquare.WP_MIN; p <= MazeSquare.WP_MAX; p++)
+                        {
+                            double dx = x - sq.XPos, dy = y - sq.YPos, d = Math.Sqrt(dx * dx + dy * dy);
+                            double increment = 0;
+                            switch (maze[x, y][p])
+                            {
+                                case MazeSquare.WallState.WS_OPEN:
+                                    increment = +1.0 / d;
+                                    break;
+                                case MazeSquare.WallState.WS_CLOSED:
+                                case MazeSquare.WallState.WS_OUTLINE:
+                                    increment = -1.0 / d;
+                                    break;
+                                default:
+                                case MazeSquare.WallState.WS_MAYBE:
+                                    increment = +0.1 / d;
+                                    break;
+                            }
+                            openTemplates[(int)p] += increment;
+                        }
+                    }
+                }
+
+                bool[] result = new bool[4];
+                for (int p = 0; p < 4; p++)
+                {
+                    result[p] = (openTemplates[p] >= 0);
+                }
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// Two different irregular shapes on the inside and outside of an outline shape.
+        /// </summary>
         protected class MixedIrregularMazeShape : IrregularMazeShape
         {
             #region Member variables
@@ -589,6 +729,70 @@ namespace SWA.Ariadne.Model
                 {
                     return outside.PreferredDirections(sq);
                 }
+            }
+        }
+
+        /// <summary>
+        /// A 3x2 array of different irregular shapes.
+        /// </summary>
+        protected class SixFields : IrregularMazeShape
+        {
+            #region Member variables
+
+            Maze maze;
+            IrregularMazeShape[,] fields;
+
+            #endregion
+
+            public SixFields(Maze maze, Random r)
+                : base(Kind.Mixed)
+            {
+                IrregularMazeShape[] opts = new IrregularMazeShape[]
+                {
+                    new PreferAxis(true),
+                    new PreferAxis(false),
+                    new PreferDiagonal(true),
+                    new PreferDiagonal(false),
+                    new PreferStraightPaths(),
+                    new PreferAngledPaths(),
+                    new PreferUndulatingPaths(),
+                };
+
+                this.maze = maze;
+                this.fields = new IrregularMazeShape[3, 2];
+
+                for (int i = 0; i < fields.GetLength(0); i++)
+                {
+                    for (int j = 0; j < fields.GetLength(1); j++)
+                    {
+                        do
+                        {
+                            this.fields[i, j] = opts[r.Next(opts.Length)];
+                        } while (false
+                              || (i > 0 && this.fields[i, j] == this.fields[i - 1, j])
+                              || (j > 0 && this.fields[i, j] == this.fields[i, j - 1])
+                        );
+                    }
+                }
+            }
+
+            /// <summary>
+            /// Returns the preferred directions, as determined by one of the fields.
+            /// </summary>
+            /// <param name="sq"></param>
+            /// <returns></returns>
+            public override bool[] PreferredDirections(MazeSquare sq)
+            {
+                // Size of one field.
+                int m = ((this.maze.XSize - 1) / this.fields.GetLength(0)) + 1;
+                int n = ((this.maze.YSize - 1) / this.fields.GetLength(1)) + 1;
+
+                // Index of this field.
+                int i = sq.XPos / m;
+                int j = sq.YPos / n;
+
+                IrregularMazeShape shape = this.fields[i, j];
+                return shape.PreferredDirections(sq);
             }
         }
 
