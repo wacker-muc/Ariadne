@@ -39,13 +39,28 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="OptionsDialogTest.cs" />
+    <Compile Include="PreviewTestForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PreviewTestForm.Designer.cs">
+      <DependentUpon>PreviewTestForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScreenSaverFormTest.cs" />
     <Compile Include="VSCodeGenAccessors.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SWA.Ariadne.Ctrl\SWA.Ariadne.Ctrl.csproj">
+      <Project>{351936CC-5AD5-45DF-AC9C-903964E29DDB}</Project>
+      <Name>SWA.Ariadne.Ctrl</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SWA.Ariadne.Gui\Dialogs\SWA.Ariadne.Gui.Dialogs.csproj">
       <Project>{518B57D2-7D57-4967-B3F6-A054F67D36CD}</Project>
       <Name>SWA.Ariadne.Gui.Dialogs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SWA.Ariadne.Gui\Mazes\SWA.Ariadne.Gui.Mazes.csproj">
+      <Project>{50B4A98B-F9F6-48B9-BF2E-0CD78368565D}</Project>
+      <Name>SWA.Ariadne.Gui.Mazes</Name>
     </ProjectReference>
     <ProjectReference Include="..\SWA.Ariadne.Gui\SWA.Ariadne.Gui.csproj">
       <Project>{A80F9F95-5756-44BE-96D3-BB1950937A50}</Project>
@@ -59,6 +74,10 @@
       <Project>{1ECDFF25-8784-44B4-B4DA-25B20F1DF7EC}</Project>
       <Name>SWA.Ariadne.Model</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SWA.Ariadne.Outlines\SWA.Ariadne.Outlines.csproj">
+      <Project>{9751AAAE-B751-451E-BA8C-FBD55234FE56}</Project>
+      <Name>SWA.Ariadne.Outlines</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SWA.Ariadne.Settings\SWA.Ariadne.Settings.csproj">
       <Project>{30293912-CD50-4ECE-B51A-CD89890186F8}</Project>
       <Name>SWA.Ariadne.Settings</Name>
@@ -67,6 +86,12 @@
       <Project>{5947CDF1-FDE4-4B7C-9420-0A4DF039B5AB}</Project>
       <Name>SWA.Utilities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="PreviewTestForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>PreviewTestForm.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
 </Project>

@@ -21,7 +21,7 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <summary>
         /// The MazePainter responsible for all painting activities.
         /// </summary>
-        public IMazeDrawer MazeDrawer
+        public MazePainter MazePainter
         {
             get { return this.painter; }
         }
@@ -114,7 +114,11 @@ namespace SWA.Ariadne.Gui.Mazes
             this.Location = rect.Location;
 #endif
 
+#if false
             this.painter = new MazePainter(g, rect);
+#else
+            this.painter.Reconfigure(g, rect);
+#endif
         }
 
         public void Setup(int squareWidth, int wallWidth, int pathWidth)
