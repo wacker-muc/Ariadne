@@ -63,22 +63,24 @@ namespace SWA.Ariadne.Outlines
         public static OutlineShapeBuilder RandomOutlineShapeBuilder(Random r)
         {
             OutlineShapeBuilder[] shapeBuilderDelegates = {
-                    OutlineShape.Circle,
-                    OutlineShape.Diamond,
-                    OutlineShape.Polygon,
-                    OutlineShape.Function,
-                    OutlineShape.Character,
-                    OutlineShape.Symbol,
-                    OutlineShape.Bitmap,
-                };
+                OutlineShape.Circle,
+                OutlineShape.Diamond,
+                OutlineShape.Polygon,
+                OutlineShape.Function,
+                OutlineShape.Character,
+                OutlineShape.Symbol,
+                OutlineShape.Bitmap,
+                OutlineShape.PinstripeGrid,
+            };
             int[] ratios = { // (number of items) * (novelty value) / (easyness of recognition)
                      1 * 20 / 3,
                      1 *  5 / 4,
                     (10 + 8 + 6 + 4 + 2) * 8 / 3,
                     (3 * 8 + 2) * 12 / 2,
-                    10 * 10 / 2,
+                    15 * 10 / 2,
                      8 * 15 / 2,
                     25 * 15 / 1,
+                     3 *  8 / 2,
                 };
             
             int n = 0;
@@ -248,6 +250,41 @@ namespace SWA.Ariadne.Outlines
         {
             return BitmapOutlineShape.Random(r, xSize, ySize, centerX, centerX, shapeSize);
         }
+
+        /// <summary>
+        /// Create an outline shape.
+        /// </summary>
+        /// <param name="r"></param>
+        /// <param name="xSize"></param>
+        /// <param name="ySize"></param>
+        /// <param name="centerX"></param>
+        /// <param name="centerY"></param>
+        /// <param name="shapeSize"></param>
+        /// <returns></returns>
+        public static OutlineShape PinstripeGrid(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
+        {
+            int gridWidth = 1 + r.Next(3, 20), gridHeight = 1 + r.Next(3, 20);
+            switch (r.Next(3))
+            {
+                case 0:
+                    // Disable vertical grid.
+                    gridWidth = xSize + 4;
+                    break;
+                case 1:
+                    // Disable horizontal grid.
+                    gridHeight = ySize + 4;
+                    break;
+            }
+            int xOrigin = (xSize - gridWidth) / 2, yOrigin = (ySize - gridHeight) / 2;
+
+            InsideShapeDelegate test = delegate(int x, int y)
+            {
+                return ((x - xOrigin) % gridWidth == 0 || (y - yOrigin) % gridHeight == 0);
+            };
+
+            return new DelegateOutlineShape(xSize, ySize, test);
+        }
+
         #endregion
 
         #region OutlineShape implementation
