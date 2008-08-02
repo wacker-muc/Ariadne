@@ -195,7 +195,11 @@ namespace SWA.Ariadne.Outlines
         public static OutlineShape Character(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
         {
             FontFamily fontFamily = new FontFamily("Helvetica");
-            char[] shapeCharacters = { 'C', 'O', 'S', 'V', 'X', '3', '6', '8', '9', '?', };
+            char[] shapeCharacters = {
+                'C', 'O', 'S', 'V', 'X',            // no vertical or horizontal lines
+                '3', '6', '8', '9', '?',            // no vertical or horizontal lines
+                'K', 'R', 'Z', 'A', 'G',            // some vertical or horizontal lines
+            };
             char ch = shapeCharacters[r.Next(shapeCharacters.Length)];
 
             return ExplicitOutlineShape.Char(xSize, ySize, centerX, centerY, shapeSize, ch, fontFamily);

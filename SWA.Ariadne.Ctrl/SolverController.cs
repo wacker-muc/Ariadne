@@ -26,7 +26,7 @@ namespace SWA.Ariadne.Ctrl
         /// <summary>
         /// The MazePainter.
         /// </summary>
-        private IMazeDrawer mazeDrawer;
+        private MazePainter mazePainter;
 
         /// <summary>
         /// The control displaying the number of visited squares.
@@ -77,7 +77,7 @@ namespace SWA.Ariadne.Ctrl
 
         public Maze Maze
         {
-            get { return mazeDrawer.Maze; }
+            get { return mazePainter.Maze; }
         }
 
         /// <summary>
@@ -119,10 +119,10 @@ namespace SWA.Ariadne.Ctrl
         /// <summary>
         /// Constructor.
         /// </summary>
-        public SolverController(IMazeForm mazeForm, IMazeDrawer mazeDrawer, ProgressBar visitedProgressBar)
+        public SolverController(IMazeForm mazeForm, MazePainter mazePainter, ProgressBar visitedProgressBar)
         {
             this.mazeForm = mazeForm;
-            this.mazeDrawer = mazeDrawer;
+            this.mazePainter = mazePainter;
             this.visitedProgressBar = visitedProgressBar;
         }
 
@@ -176,11 +176,11 @@ namespace SWA.Ariadne.Ctrl
             // Prepare the solver.
             if (mazeForm != null)
             {
-                solver = SolverFactory.CreateSolver(mazeForm.StrategyName, this.Maze, mazeDrawer);
+                solver = SolverFactory.CreateSolver(mazeForm.StrategyName, this.Maze, mazePainter);
             }
             else
             {
-                solver = SolverFactory.CreateSolver(this.Maze, mazeDrawer);
+                solver = SolverFactory.CreateSolver(this.Maze, mazePainter);
             }
 
             // Prepare the solution path.
@@ -207,12 +207,11 @@ namespace SWA.Ariadne.Ctrl
         /// </summary>
         private void CreateEmbeddedSolvers()
         {
-            MazePainter thisPainter = this.mazeDrawer as MazePainter; // TODO: avoid this upcast
-            thisPainter.ClearSharedPainters();
+            this.mazePainter.ClearSharedPainters();
 
             foreach (Maze embeddedMaze in Maze.EmbeddedMazes)
             {
-                MazePainter embeddedPainter = thisPainter.CreateSharedPainter(embeddedMaze);
+                MazePainter embeddedPainter = this.mazePainter.CreateSharedPainter(embeddedMaze);
                 embeddedPainter.BlinkingCounter = -1;
                 EmbeddedSolverController embeddedController = new EmbeddedSolverController(this, embeddedPainter);
                 this.embeddedControllers.Add(embeddedController);
@@ -298,7 +297,7 @@ namespace SWA.Ariadne.Ctrl
             bool forward;
 
             solver.Step(out sq1, out sq2, out forward);
-            mazeDrawer.DrawStep(sq1, sq2, forward);
+            mazePainter.DrawStep(sq1, sq2, forward);
 
             if (forward)
             {
@@ -325,12 +324,12 @@ namespace SWA.Ariadne.Ctrl
             if (this.Maze.IsSolved)
             {
                 FinishPath();
-                mazeDrawer.DrawSolvedPath(solutionPath);
+                mazePainter.DrawSolvedPath(solutionPath);
                 currentBackwardSquare = null;
 
                 if (this.Maze.MazeId != MazeSquare.PrimaryMazeId)
                 {
-                    mazeDrawer.DrawRemainingSquares();
+                    mazePainter.DrawRemainingSquares();
                 }
             }
 
@@ -377,7 +376,7 @@ namespace SWA.Ariadne.Ctrl
                 item.FinishPath();
             }
 
-            mazeDrawer.FinishPath(currentBackwardSquare);
+            mazePainter.FinishPath(currentBackwardSquare);
             currentBackwardSquare = null;
         }
 
@@ -439,11 +438,11 @@ namespace SWA.Ariadne.Ctrl
         {
             get
             {
-                return mazeDrawer.BlinkingCounter;
+                return mazePainter.BlinkingCounter;
             }
             set
             {
-                mazeDrawer.BlinkingCounter = value;
+                mazePainter.BlinkingCounter = value;
             }
         }
 

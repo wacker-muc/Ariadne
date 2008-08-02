@@ -91,8 +91,8 @@ namespace SWA.Ariadne.Ctrl
 
         #region Constructor
 
-        public EmbeddedSolverController(SolverController hostController, SWA.Ariadne.Logic.IMazeDrawer mazeDrawer)
-            : base(null, mazeDrawer, null)
+        public EmbeddedSolverController(SolverController hostController, SWA.Ariadne.Gui.Mazes.MazePainter mazePainter)
+            : base(null, mazePainter, null)
         {
             this.hostController = hostController;
             this.startDelayRelativeDistance = 1.0;

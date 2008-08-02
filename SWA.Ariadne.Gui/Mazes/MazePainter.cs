@@ -80,7 +80,7 @@ namespace SWA.Ariadne.Gui.Mazes
         // TODO: remove this variable
         private IMazePainterClient client;
 
-        public readonly bool screenSaverPreviewMode = false;
+        public /* TODO: readonly */ bool screenSaverPreviewMode = false;
         private Graphics targetGraphics;
         private Rectangle targetRectangle;
 
@@ -239,6 +239,20 @@ namespace SWA.Ariadne.Gui.Mazes
             this.client = null;
             this.targetGraphics = graphics;
             this.targetRectangle = rectangle;
+            this.screenSaverPreviewMode = true;
+        }
+
+        /// <summary>
+        /// Replaces the parameters passed to the constructor with new values.
+        /// </summary>
+        /// <param name="g"></param>
+        /// <param name="rect"></param>
+        /// TODO: Try to call the constructor with correct values in the first place.
+        internal void Reconfigure(Graphics g, Rectangle rect)
+        {
+            this.client = null;
+            this.targetGraphics = g;
+            this.targetRectangle = rect;
             this.screenSaverPreviewMode = true;
         }
 
@@ -496,12 +510,12 @@ namespace SWA.Ariadne.Gui.Mazes
             MazePainter result = new MazePainter(this.targetGraphics, this.targetRectangle, null);
 
             // The maze should have the same layout.
-            // Note: The path color will be different.
             result.Setup(this.squareWidth, this.wallWidth, this.pathWidth);
             result.xOffset = this.xOffset;
             result.yOffset = this.yOffset;
+            result.wallVisibility = this.WallVisibility;
 
-            // Switch colors until they are sufficiently different.
+            // Switch path colors until they are sufficiently different.
             while (true)
             {
                 float f0 = this.forwardColor.GetHue();
