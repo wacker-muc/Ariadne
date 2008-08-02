@@ -50,6 +50,7 @@ In an irregular maze, some directions are preferred over other directions when o
    * Prefer straight paths: A wall opposite an open wall should also be open.
    * Prefer angled paths: A wall opposite an open wall should be closed.
    * Prefer undulating paths, e.g. east - north - east - south - east - north - etc.
+   * Prefer horizontal or diagonal lines.
    * Patterns that form structures relative to one or more reference points (usually the center of all or part of the maze):
       * Circles around the reference point.
       * Squares around the reference point.
@@ -85,6 +86,7 @@ Usually, an Outline Shape is one contiguous shape, like a circle, a square or an
    * Characters and Symbols from fonts at a very large size.
    * Bitmaps that are stored as black-and-white image resources.
       * Geographical structures like continents and countries.
+   * One square wide stripes (pin stripes) - vertical, horizontal or in a grid.
 
 While the patterns evoked by an Irregular Maze Builder come from following preferred directions (if possible), the rules defined by an Outline Shape are very strict.  They take precedence over the irregular preferences.
 
@@ -158,15 +160,16 @@ Efficient solvers often run for long stretches without error (i.e. without leavi
    * [3] Paint walls always / never / when visited.
    * Display images from a user specified directory.
    * Display a run-time statistics panel.
-   * [20] Build mazes with irregular wall patterns.
-   * Apply two mixed irregular patterns or apply the pattern to part of the maze only.
-   * [15] Build a continuous wall around an outline shape.
+   * [28] Build mazes with irregular wall patterns.
+      * [2.5] Apply two mixed irregular patterns or apply the pattern to part of the maze only.
+   * [16] Build a continuous wall around an outline shape.
+      * [1.75] Build a second maze inside the outline shape.
    * [16] Different solver strategies.
    * [2] Let an efficient solver detect dead end areas.
    
 That gives a large number of pattern or style combinations:
 
-    3 x (1+20) x (1+15) x 16 x 2  =  32,256
+    3 x (1+28) x 2.5 x (1+16) x 1.75 x 16 x 2  =  194,880
 
 The exact application of each variant is often determined by random parameter values:  Some shapes are generated dynamically, some solvers choose arbitrary paths and the maze builder generates random patterns of walls.
 
