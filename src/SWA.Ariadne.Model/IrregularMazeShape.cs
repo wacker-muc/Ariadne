@@ -35,7 +35,19 @@ namespace SWA.Ariadne.Model
 
         #endregion
 
-        #region Abstract methods, implemented by derived classes.
+        #region Abstract and virtual methods, implemented by derived classes.
+
+        /// <summary>
+        /// Returns the probability with which the irregular shape should be applied.
+        /// Usually, the given percentage is returned unmodified.
+        /// A particular shape may, however, return a different (higher) value.
+        /// </summary>
+        /// <param name="p">the user chosen percentage (or a default value)</param>
+        /// <returns></returns>
+        public virtual int ApplicationPercentage(int p)
+        {
+            return p;
+        }
 
         /// <summary>
         /// Returns an array four boolean values, indexed by the MazeSquare.WallPosition constants.
@@ -113,11 +125,12 @@ namespace SWA.Ariadne.Model
         /// <returns></returns>
         private static IrregularMazeShape SimpleInstance(Random r, Maze maze)
         {
-            int choice = r.Next(25);
+            int choice = r.Next(26);
 
             //choice = 17 + r.Next(3);
             //choice = 20 + r.Next(5);
             //choice = 25 + r.Next(1);
+            //choice = 23 + r.Next(3);
 
             // For PreferPathsRelativeToReferenceSquare: number of x and y partitions.
             int p = (choice % 2 == 0 ? 1 : 4), q = (choice % 2 == 0 ? 1 : 3);
@@ -189,7 +202,8 @@ namespace SWA.Ariadne.Model
                     return new SixFields(maze, r);
 
                 case 25:
-                    return new PreferSimilarGrid(maze, r.Next(3, 6), r.Next(3, 6));
+                    // Repeating patterns in a small grid
+                    return new PreferSimilarGrid(maze, r.Next(2, 4), r.Next(2, 4));
             }
         }
 
@@ -358,6 +372,17 @@ namespace SWA.Ariadne.Model
                 this.horizontal = horizontal;
             }
 
+            /// <summary>
+            /// This shape is very dominant.
+            /// Returns a value smaller than p.
+            /// </summary>
+            /// <param name="p"></param>
+            /// <returns></returns>
+            public override int ApplicationPercentage(int p)
+            {
+                return p * 8 / 10;
+            }
+
             public override bool[] PreferredDirections(MazeSquare sq)
             {
                 bool[] result = new bool[4];
@@ -382,6 +407,17 @@ namespace SWA.Ariadne.Model
                 : base(Kind.Zigzags)
             {
                 this.firstQuadrant = firstQuadrant;
+            }
+
+            /// <summary>
+            /// This shape is very dominant.
+            /// Returns a value smaller than p.
+            /// </summary>
+            /// <param name="p"></param>
+            /// <returns></returns>
+            public override int ApplicationPercentage(int p)
+            {
+                return p * 8 / 10;
             }
 
             public override bool[] PreferredDirections(MazeSquare sq)
@@ -656,6 +692,17 @@ namespace SWA.Ariadne.Model
                 this.gridHeight = gridHeight;
             }
 
+            /// <summary>
+            /// This shape is too subtle to be detected if it is not applied in every square.
+            /// Returns the maximum value 100.
+            /// </summary>
+            /// <param name="p"></param>
+            /// <returns></returns>
+            public override int ApplicationPercentage(int p)
+            {
+                return 100;
+            }
+
             public override bool[] PreferredDirections(MazeSquare sq)
             {
                 // A measure of how many template squares' wall are already open.
@@ -666,10 +713,48 @@ namespace SWA.Ariadne.Model
                 {
                     for (int y = sq.YPos % gridHeight; x < maze.YSize; x += gridHeight)
                     {
+                        #region Skip the square that is being evaluated.
+                        if (x == sq.XPos && y == sq.YPos)
+                        {
+                            continue;
+                        }
+                        #endregion
+
                         for (MazeSquare.WallPosition p = MazeSquare.WP_MIN; p <= MazeSquare.WP_MAX; p++)
                         {
+                            #region Skip this wall if it is the maze border or a reserved area border.
+
+                            bool skip = false;
+
+                            switch (p)
+                            {
+                                case MazeSquare.WallPosition.WP_W:
+                                    skip = (x == 0 || maze[x - 1, y].isReserved);
+                                    break;
+                                case MazeSquare.WallPosition.WP_E:
+                                    skip = (x + 1 == maze.XSize || maze[x + 1, y].isReserved);
+                                    break;
+                                case MazeSquare.WallPosition.WP_N:
+                                    skip = (y == 0 || maze[x, y - 1].isReserved);
+                                    break;
+                                case MazeSquare.WallPosition.WP_S:
+                                    skip = (y + 1 == maze.YSize || maze[x, y + 1].isReserved);
+                                    break;
+                            }
+
+                            if (skip)
+                            {
+                                continue;
+                            }
+
+                            #endregion
+
                             double dx = x - sq.XPos, dy = y - sq.YPos, d = Math.Sqrt(dx * dx + dy * dy);
                             double increment = 0;
+                            
+                            // Let the influence of farther regions decrease rather slowly.
+                            d = Math.Log(d, Math.E);
+
                             switch (maze[x, y][p])
                             {
                                 case MazeSquare.WallState.WS_OPEN:
