@@ -798,7 +798,8 @@ namespace SWA.Ariadne.Model
                 }
 
                 // Use only preferred wall positions.
-                if (unresolvedWalls.Count > 1 && irregularMazeShape != null && (random.Next(100) < this.irregularity))
+                if (unresolvedWalls.Count > 1 && irregularMazeShape != null
+                    && (random.Next(100) < irregularMazeShape.ApplicationPercentage(this.irregularity)))
                 {
                     bool[] preferredPositions = irregularMazeShape.PreferredDirections(sq0);
                     List<MazeSquare.WallPosition> preferredWalls = new List<MazeSquare.WallPosition>(unresolvedWalls.Count);
