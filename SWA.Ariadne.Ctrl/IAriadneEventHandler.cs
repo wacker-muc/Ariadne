@@ -10,14 +10,6 @@ namespace SWA.Ariadne.Ctrl
     public interface IAriadneEventHandler
     {
         /// <summary>
-        /// Called when the controller state is changed.
-        /// </summary>
-        /// <param name="state"></param>
-        /// TODO: Rename to StateHasChanged and call more often.
-        /// TODO: Remove state parameter.
-        void FixStateDependantControls(SWA.Ariadne.Logic.SolverState state);
-
-        /// <summary>
         /// Called when starting a new run.
         /// </summary>
         /// <param name="sender"></param>
@@ -32,7 +24,6 @@ namespace SWA.Ariadne.Ctrl
         /// <summary>
         /// Called when the controller has been reset.
         /// </summary>
-        /// TODO: Call this from FixStateDependantControls().
         void ResetCounters();
         
         /// <summary>

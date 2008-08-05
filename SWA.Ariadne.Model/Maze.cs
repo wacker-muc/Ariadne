@@ -1036,8 +1036,6 @@ namespace SWA.Ariadne.Model
                 OutlineShape originalShape = embeddedMazeShapes[i];
                 OutlineShape connectedShape = originalShape.ConnectedSubset(conservativeTest).Closure(regularTest);
 
-                // TODO: Cut off parts of the main maze should be added to the connectedShape.
-
                 // Discard the shape if the connected subset is too small.
                 if (connectedShape.Area >= 0.3 * originalShape.Area)
                 {

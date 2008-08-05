@@ -312,12 +312,6 @@ namespace SWA.Ariadne.Model
         /// <returns>a list of dead end squares</returns>
         public List<MazeSquare> Visit(MazeSquare sq)
         {
-            return Visit(sq, null);
-        }
-
-        // TODO: remove the parameter confirmedSquaresResult
-        public List<MazeSquare> Visit(MazeSquare sq, List<MazeSquare> confirmedSquaresResult)
-        {
             List<MazeSquare> result = new List<MazeSquare>();
             MazeSquareExtension sqe = mazeExtension[sq.XPos, sq.YPos];
 
@@ -380,24 +374,6 @@ namespace SWA.Ariadne.Model
                     {
                         result.Add(sqe2.extendedSquare);
                     }
-                }
-            }
-
-#if false
-            // TODO: disable this debug code
-            Console.Out.WriteLine("Visited {0} : {1} uncertain and {2} confirmed squares.",
-                                  sq.ToString(), uncertainSquares.Count, confirmedSquares.Count);
-#endif
-
-            if (confirmedSquaresResult != null)
-            {
-                foreach (MazeSquareExtension csqe in confirmedSquares)
-                {
-                    if (csqe.distanceChanged)
-                    {
-                        confirmedSquaresResult.Add(csqe.extendedSquare);
-                    }
-                    csqe.distanceChanged = false;
                 }
             }
 

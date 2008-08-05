@@ -36,10 +36,6 @@ namespace SWA.Ariadne.Gui
         {
             get { return this.solverController; }
         }
-
-        /// <summary>
-        /// The SolverController.
-        /// </summary>
         private SolverController solverController;
 
         #endregion
@@ -178,17 +174,6 @@ namespace SWA.Ariadne.Gui
 
                 return result;
             }
-        }
-
-        /// <summary>
-        /// Enables or disables some controls depending on whether we are Ready or not.
-        /// </summary>
-        public void FixStateDependantControls(SWA.Ariadne.Logic.SolverState state)
-        {
-            bool enabled = (state == SWA.Ariadne.Logic.SolverState.Ready
-                         || state == SWA.Ariadne.Logic.SolverState.Finished);
-
-            strategyComboBox.Enabled = enabled;
         }
 
         #endregion

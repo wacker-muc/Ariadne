@@ -67,7 +67,6 @@ namespace SWA.Ariadne.Outlines
 
         /// <summary>
         /// One of four orientations of the coordinate system.
-        /// TODO: eight orientations
         /// For value 0, the function is called with parameters f(r, phi) instead of f(x, y).
         /// </summary>
         private int symmetryRotation;

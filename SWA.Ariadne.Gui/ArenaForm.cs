@@ -236,16 +236,6 @@ namespace SWA.Ariadne.Gui
             get { return "Arena[" + this.Items.Count.ToString() + "]"; }
         }
 
-        public override void FixStateDependantControls(SWA.Ariadne.Logic.SolverState state)
-        {
-            base.FixStateDependantControls(state);
-
-            foreach (ArenaItem item in Items)
-            {
-                item.FixStateDependantControls(state);
-            }
-        }
-
         /// <summary>
         /// Reset step and runtime counters.
         /// </summary>

@@ -87,7 +87,13 @@ namespace SWA.Ariadne.Ctrl
         {
             get
             {
-                if (Maze != null)
+                if (mazePainter.HasBufferAlternate)
+                {
+                    // When the mazePainter has prepared an alternate buffer, its maze is already the new maze.
+                    // TODO: Avoid this quirk.
+                    return true;
+                }
+                else if (Maze != null)
                 {
                     return Maze.IsFinished;
                 }
@@ -204,7 +210,7 @@ namespace SWA.Ariadne.Ctrl
             }
             else
             {
-                solver = SolverFactory.CreateSolver(this.Maze, mazePainter);
+                solver = SolverFactory.CreateSolver(null, this.Maze, mazePainter);
             }
 
             // Prepare the solution path.
@@ -240,8 +246,7 @@ namespace SWA.Ariadne.Ctrl
                 EmbeddedSolverController embeddedController = new EmbeddedSolverController(this, embeddedPainter);
                 this.embeddedControllers.Add(embeddedController);
 
-                // TODO: use random values
-                embeddedController.StartDelayRelativeDistance = 0.5;
+                embeddedController.StartDelayRelativeDistance = 0.2 + 0.4 * Maze.Random.NextDouble(); ;
             }
         }
 

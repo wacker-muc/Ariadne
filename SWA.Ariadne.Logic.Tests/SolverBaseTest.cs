@@ -108,7 +108,7 @@ namespace SWA.Ariadne.Logic.Tests
             {
                 Maze maze = SolverFactoryTest.NewMaze();
                 IMazeDrawer mazeDrawer = null;
-                IMazeSolver target = SolverFactory.CreateSolver(solverType, maze, mazeDrawer);
+                IMazeSolver target = SWA_Ariadne_Logic_SolverFactoryAccessor.CreateSolver(solverType, maze, mazeDrawer);
                 target.Solve();
 
                 Assert.IsTrue(maze.IsSolved, testObject + ": " + target.GetType().Name + " did not solve the maze.");

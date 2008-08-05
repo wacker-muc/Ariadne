@@ -118,4 +118,64 @@ internal class SWA_Ariadne_Logic_SolverBaseAccessor : BaseAccessor {
         return ret;
     }
 }
+[System.Diagnostics.DebuggerStepThrough()]
+[System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TestTools.UnitTestGeneration", "1.0.0.0")]
+internal class SWA_Ariadne_Logic_SolverFactoryAccessor : BaseAccessor {
+    
+    protected static Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType m_privateType = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType(typeof(global::SWA.Ariadne.Logic.SolverFactory));
+    
+    internal SWA_Ariadne_Logic_SolverFactoryAccessor() : 
+            base(m_privateType) {
+    }
+    
+    internal static global::System.Type[] solverTypes {
+        get {
+            global::System.Type[] ret = ((global::System.Type[])(m_privateType.GetStaticField("solverTypes")));
+            return ret;
+        }
+        set {
+            m_privateType.SetStaticField("solverTypes", value);
+        }
+    }
+    
+    internal static global::System.Type[] noEfficientSolverTypes {
+        get {
+            global::System.Type[] ret = ((global::System.Type[])(m_privateType.GetStaticField("noEfficientSolverTypes")));
+            return ret;
+        }
+        set {
+            m_privateType.SetStaticField("noEfficientSolverTypes", value);
+        }
+    }
+    
+    internal static string EfficientPrefix {
+        get {
+            string ret = ((string)(m_privateType.GetStaticField("EfficientPrefix")));
+            return ret;
+        }
+        set {
+            m_privateType.SetStaticField("EfficientPrefix", value);
+        }
+    }
+    
+    internal static global::System.Type SolverType(string name) {
+        object[] args = new object[] {
+                name};
+        global::System.Type ret = ((global::System.Type)(m_privateType.InvokeStatic("SolverType", new System.Type[] {
+                    typeof(string)}, args)));
+        return ret;
+    }
+    
+    internal static global::SWA.Ariadne.Logic.IMazeSolver CreateSolver(global::System.Type solverType, global::SWA.Ariadne.Model.Maze maze, global::SWA.Ariadne.Logic.IMazeDrawer mazeDrawer) {
+        object[] args = new object[] {
+                solverType,
+                maze,
+                mazeDrawer};
+        global::SWA.Ariadne.Logic.IMazeSolver ret = ((global::SWA.Ariadne.Logic.IMazeSolver)(m_privateType.InvokeStatic("CreateSolver", new System.Type[] {
+                    typeof(global::System.Type),
+                    typeof(global::SWA.Ariadne.Model.Maze),
+                    typeof(global::SWA.Ariadne.Logic.IMazeDrawer)}, args)));
+        return ret;
+    }
+}
 }

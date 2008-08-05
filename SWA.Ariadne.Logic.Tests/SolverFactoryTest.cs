@@ -99,7 +99,7 @@ namespace SWA.Ariadne.Logic.Tests
 
             Maze maze = NewMaze();
             IMazeDrawer mazeDrawer = null;
-            IMazeSolver actual = SolverFactory.CreateSolver(maze, mazeDrawer);
+            IMazeSolver actual = SolverFactory.CreateSolver(null, maze, mazeDrawer);
 
             Assert.IsInstanceOfType(actual, typeof(IMazeSolver), testObject + " did not return an instanze of IMazeSolver");
         }
@@ -116,7 +116,7 @@ namespace SWA.Ariadne.Logic.Tests
             {
                 Maze maze = NewMaze();
                 IMazeDrawer mazeDrawer = null;
-                IMazeSolver actual = SolverFactory.CreateSolver(solverType, maze, mazeDrawer);
+                IMazeSolver actual = SWA_Ariadne_Logic_SolverFactoryAccessor.CreateSolver(solverType, maze, mazeDrawer);
 
                 Assert.IsInstanceOfType(actual, typeof(IMazeSolver), testObject + " did not return an instanze of IMazeSolver");
                 Assert.IsInstanceOfType(actual, solverType, testObject + " did not return the given type");

@@ -120,7 +120,7 @@ namespace SWA.Ariadne.Gui
 
                 // Create the first maze and allocate a graphics buffer.
                 mazeUserControl.Setup(5, 2, 3);
-                mazeUserControl.PaintMaze();
+                mazeUserControl.MazePainter.PaintMaze(null);
             }
         }
 
@@ -349,7 +349,7 @@ namespace SWA.Ariadne.Gui
                 }
 
                 // Irregular maze shapes.
-                if (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_IRREGULAR_MAZES, false) && random.Next(100) < 5) // TODO: 10%
+                if (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_IRREGULAR_MAZES, false) && random.Next(100) < 10)
                 {
                     maze.Irregular = true;
                     maze.Irregularity = 80;

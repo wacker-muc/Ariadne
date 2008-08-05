@@ -13,6 +13,5 @@ namespace SWA.Ariadne.Gui.Mazes
         void UpdateStatusLine();
         void UpdateCaption();
         string StrategyName { get; }
-        void FixStateDependantControls(SolverState state);
     }
 }
