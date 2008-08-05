@@ -147,16 +147,6 @@ namespace SWA.Ariadne.Gui
 
         #endregion
 
-        #region Parameter settings
-
-        // TODO: move to base class
-        protected override void strategy_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            UpdateCaption();
-        }
-
-        #endregion
-
         #endregion
 
         #region AriadneFormBase implementation
@@ -187,16 +177,6 @@ namespace SWA.Ariadne.Gui
         #endregion
 
         #region IMazeForm implementation
-
-        /// <summary>
-        /// Enables or disables some controls depending on whether we are Ready or not.
-        /// </summary>
-        public override void FixStateDependantControls(SolverState state)
-        {
-            bool enabled = (State == SolverState.Ready || State == SolverState.Finished);
-
-            strategyComboBox.Enabled = enabled;
-        }
 
         /// <summary>
         /// Reset step and runtime counters.

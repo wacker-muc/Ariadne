@@ -139,11 +139,14 @@ namespace SWA.Ariadne.Gui
                 return;
             }
 
+            // It is also not allowed while we are waiting for an automatic repetition.
+            if (ariadneController.RepeatMode == true && State == SolverState.Finished)
+            {
+                return;
+            }
+
             DetailsDialog form = new DetailsDialog(this.AriadneSettingsSource);
             form.ShowDialog(this);
-
-            // What needs to be done if the dialog has caused a State change?
-            FixStateDependantControls(this.State);
         }
 
         /// <summary>
@@ -418,9 +421,9 @@ namespace SWA.Ariadne.Gui
             UpdateCaption();
         }
 
-        protected virtual void strategy_SelectedIndexChanged(object sender, EventArgs e)
+        private void strategy_SelectedIndexChanged(object sender, EventArgs e)
         {
-            throw new Exception("The method or operation is not implemented.");
+            UpdateCaption();
         }
 
         #endregion
@@ -544,14 +547,6 @@ namespace SWA.Ariadne.Gui
 
                 return result;
             }
-        }
-
-        /// <summary>
-        /// Enables or disables some controls depending on whether we are Ready or not.
-        /// </summary>
-        public virtual void FixStateDependantControls(SolverState state)
-        {
-            // do nothing
         }
 
         #endregion

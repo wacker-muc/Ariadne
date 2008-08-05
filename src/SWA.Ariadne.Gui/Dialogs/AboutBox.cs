@@ -55,7 +55,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             mazeUserControl.Setup(5, 2, 3);
 
             // Draw the maze walls.
-            mazeUserControl.PaintMaze();
+            mazeUserControl.MazePainter.PaintMaze(null);
 
             // Solve the maze.
             IMazeSolver solver = SolverFactory.CreateDefaultSolver(mazeUserControl.Maze, mazeUserControl.MazePainter);
@@ -107,14 +107,6 @@ namespace SWA.Ariadne.Gui.Dialogs
         public string StrategyName
         {
             get { return SolverFactory.DefaultStrategy.Name; }
-        }
-
-        /// <summary>
-        /// Enables or disables some controls depending on whether we are Ready or not.
-        /// </summary>
-        public virtual void FixStateDependantControls(SolverState state)
-        {
-            // do nothing
         }
 
         #endregion

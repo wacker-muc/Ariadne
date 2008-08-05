@@ -605,7 +605,7 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <summary>
         /// Creates the GraphicsBuffer and draws the static maze.
         /// </summary>
-        internal void PaintMaze(PainterDelegate painterDelegate)
+        public void PaintMaze(PainterDelegate painterDelegate)
         {
             gBuffer = CreateGraphicsBuffer();
             Graphics g = gBuffer.Graphics;

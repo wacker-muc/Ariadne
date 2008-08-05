@@ -21,15 +21,6 @@ namespace SWA.Ariadne.Ctrl
         private IAriadneEventHandler client;
 
         /// <summary>
-        /// Returns true if the controller is finished.
-        /// </summary>
-        /// TODO: Call solverController.IsFinished directly.
-        private bool IsFinished
-        {
-            get { return this.solverController.IsFinished; }
-        }
-
-        /// <summary>
         /// The object that accepts the SolverController commands.
         /// </summary>
         private ISolverController solverController;
@@ -157,7 +148,6 @@ namespace SWA.Ariadne.Ctrl
 
             solverController.Reset();
             solverController.UpdateStatusLine();
-            client.FixStateDependantControls(this.State);
         }
 
         /// <summary>
@@ -208,8 +198,6 @@ namespace SWA.Ariadne.Ctrl
             this.finishedStrategyName = solverController.StrategyName;
 
             lapStartTime = System.DateTime.Now;
-
-            client.FixStateDependantControls(this.State);
         }
 
         /// <summary>
@@ -240,6 +228,22 @@ namespace SWA.Ariadne.Ctrl
             this.accumulatedSeconds += 1.0 / stepsPerSecond;
 
             solverController.UpdateStatusLine();
+
+            if (solverController.IsFinished)
+            {
+                Finish();
+            }
+        }
+
+        /// <summary>
+        /// Should be called when the solver is finished.
+        /// </summary>
+        private void Finish()
+        {
+            stepTimer.Stop();
+            stepTimer = null;
+            blinkTimer.Stop();
+            blinkTimer = null;
         }
 
         #endregion
@@ -267,10 +271,11 @@ namespace SWA.Ariadne.Ctrl
             try
             {
                 // Stop the timer to prevent additional events while the solver is busy.
+                // TODO: Leave the timer enabled; further events should be handled or ignored, as appropriate.
                 stepTimer.Enabled = false;
                 // State looks like Paused but this will be changed back at the end.
 
-                if (!this.IsFinished)
+                if (!solverController.IsFinished)
                 {
                     /* On a small maze or at low step rate, a few steps will be sufficient.
                      * 
@@ -308,16 +313,14 @@ namespace SWA.Ariadne.Ctrl
             finally
             {
                 // Either restart or delete the timer.
-                if (!this.IsFinished)
+                if (!solverController.IsFinished)
                 {
                     stepTimer.Enabled = true;
                     // State is Running.
                 }
                 else
                 {
-                    stepTimer = null;
-                    blinkTimer.Enabled = false;
-                    blinkTimer = null;
+                    Finish();
                     // State is Finished and may become Ready if someone creates a new Maze.
                 }
 
@@ -379,9 +382,16 @@ namespace SWA.Ariadne.Ctrl
             {
                 repeatTimer.Stop();
 
+                // Save the current timer in a local variable.
+                // Otherwise, it would be discarded in the Reset() method caused by OnNew().
+                Timer tmp = repeatTimer;
+
                 // 1. Create and draw a new maze.
                 client.OnNew(null, null); // creates a new maze, invalidates the drawing area
                 Application.DoEvents(); // paints the maze
+
+                // Re-install the saved timer variable.
+                repeatTimer = tmp;
 
                 // 2. Wait a short time before starting the solver.
                 repeatTimer.Interval = 1500; // ms
@@ -514,7 +524,7 @@ namespace SWA.Ariadne.Ctrl
             get
             {
                 // If the maze is solved, we are Finished.
-                if (this.IsFinished)
+                if (solverController.IsFinished)
                 {
                     return SolverState.Finished;
                 }

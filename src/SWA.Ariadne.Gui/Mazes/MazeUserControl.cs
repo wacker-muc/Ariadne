@@ -50,7 +50,7 @@ namespace SWA.Ariadne.Gui.Mazes
             set { painter.RandomizeWallVisibility = value; }
         }
 
-        // TODO: evaluate these properties inline
+        // These properties provide a simplified access to MazePainter properties.
         private int wallWidth { get { return painter.WallWidth; } }
         private int gridWidth { get { return painter.GridWidth; } }
         private int xOffset { get { return painter.XOffset; } }
@@ -161,11 +161,10 @@ namespace SWA.Ariadne.Gui.Mazes
                 return;
             }
 
-            // TODO: see if this variable is still required
+            // Prevent updates of the caption or status line caused by the prepared alternate maze.
             this.allowUpdates = false;
             
             this.Setup();
-
             painter.PrepareAlternateBuffer(this.PaintImages);
             
             this.allowUpdates = true;
@@ -258,8 +257,12 @@ namespace SWA.Ariadne.Gui.Mazes
             return result;
         }
 
-        // TODO: remove remaining methods
-
+        /// <summary>
+        /// Returns the maze X coordinate corresponding to the given control coordinate.
+        /// </summary>
+        /// <param name="xLocation"></param>
+        /// <param name="leftBiased"></param>
+        /// <returns></returns>
         private int XCoordinate(int xLocation, bool leftBiased)
         {
             int result = (xLocation - this.Location.X);
@@ -270,6 +273,12 @@ namespace SWA.Ariadne.Gui.Mazes
             return result;
         }
 
+        /// <summary>
+        /// Returns the maze Y coordinate corresponding to the given control coordinate.
+        /// </summary>
+        /// <param name="yLocation"></param>
+        /// <param name="leftBiased"></param>
+        /// <returns></returns>
         private int YCoordinate(int yLocation, bool topBiased)
         {
             int result = (yLocation - this.Location.Y);
@@ -308,8 +317,6 @@ namespace SWA.Ariadne.Gui.Mazes
 
         #region Painting methods
 
-        // TODO: remove remaining methods
-
         /// <summary>
         /// Paints the contents of this control by rendering the GraphicsBuffer.
         /// </summary>
@@ -331,17 +338,6 @@ namespace SWA.Ariadne.Gui.Mazes
                 MazeForm.UpdateCaption();
             }
         }
-
-#if true
-        /// <summary>
-        /// Creates the GraphicsBuffer and draws the static maze.
-        /// </summary>
-        /// TODO: remove this method
-        public void PaintMaze()
-        {
-            painter.PaintMaze(this.PaintImages);
-        }
-#endif
 
         /// <summary>
         /// Paints the images into their reserved areas.
@@ -365,8 +361,6 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <returns></returns>
         public Image GetImage()
         {
-            // TODO: use painter's dimensions
-
             int margin = 4;
             margin = Math.Max(margin, wallWidth + 2);
             margin = Math.Max(margin, gridWidth / 2);

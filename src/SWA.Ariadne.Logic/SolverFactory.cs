@@ -72,8 +72,7 @@ namespace SWA.Ariadne.Logic
         /// <param name="solverType"></param>
         /// <param name="maze"></param>
         /// <returns></returns>
-        /// TODO: Make this method private.
-        public static IMazeSolver CreateSolver(Type solverType, Maze maze, IMazeDrawer mazeDrawer)
+        private static IMazeSolver CreateSolver(Type solverType, Maze maze, IMazeDrawer mazeDrawer)
         {
             IMazeSolver result = (IMazeSolver)solverType.GetConstructor(
                 new Type[2] { typeof(Maze), typeof(IMazeDrawer) }).Invoke(
@@ -90,8 +89,7 @@ namespace SWA.Ariadne.Logic
         /// </summary>
         /// <param name="maze"></param>
         /// <returns></returns>
-        /// TODO: Make this method private.
-        public static IMazeSolver CreateSolver(Maze maze, IMazeDrawer mazeDrawer)
+        private static IMazeSolver CreateSolver(Maze maze, IMazeDrawer mazeDrawer)
         {
             Random r = RandomFactory.CreateRandom();
 
@@ -133,17 +131,20 @@ namespace SWA.Ariadne.Logic
             IMazeSolver result;
             bool isEfficient = false;
 
-            if (strategyName.StartsWith(EfficientPrefix))
+            if (strategyName != null)
             {
-                strategyName = strategyName.Substring(EfficientPrefix.Length);
-                isEfficient = true;
+                if (strategyName.StartsWith(EfficientPrefix))
+                {
+                    strategyName = strategyName.Substring(EfficientPrefix.Length);
+                    isEfficient = true;
+                }
             }
 
-            Type strategy = SolverFactory.SolverType(strategyName);
+            Type strategy = SolverType(strategyName);
             if (strategy != null)
             {
                 // If strategyName is a valid solver type name:
-                result = SolverFactory.CreateSolver(strategy, maze, mazeDrawer);
+                result = CreateSolver(strategy, maze, mazeDrawer);
                 if (isEfficient)
                 {
                     result.MakeEfficient();
@@ -152,7 +153,7 @@ namespace SWA.Ariadne.Logic
             else
             {
                 // Otherwise (strategy name is "any"):
-                result = SolverFactory.CreateSolver(maze, mazeDrawer);
+                result = CreateSolver(maze, mazeDrawer);
             }
 
             return result;
