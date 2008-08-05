@@ -81,6 +81,30 @@ namespace SWA.Ariadne.Ctrl
         }
 
         /// <summary>
+        /// Returns true if the maze has been solved.
+        /// </summary>
+        public bool IsFinished
+        {
+            get
+            {
+                if (Maze != null)
+                {
+                    return Maze.IsFinished;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+        public int BlinkingCounter
+        {
+            get { return mazePainter.BlinkingCounter; }
+            set { mazePainter.BlinkingCounter = value; }
+        }
+
+        /// <summary>
         /// The square that was last visited in backward direction.
         /// </summary>
         private MazeSquare currentBackwardSquare = null;
@@ -426,23 +450,14 @@ namespace SWA.Ariadne.Ctrl
         {
             get
             {
-                return (this.solver.IsEfficientSolver ? SolverFactory.EfficientPrefix : "") + this.solver.GetType().Name;
-            }
-        }
+                string result = null;
 
-        #endregion
+                if (this.solver != null)
+                {
+                    result = (this.solver.IsEfficientSolver ? SolverFactory.EfficientPrefix : "") + this.solver.GetType().Name;
+                }
 
-        #region MazeControl methods
-
-        public int BlinkingCounter
-        {
-            get
-            {
-                return mazePainter.BlinkingCounter;
-            }
-            set
-            {
-                mazePainter.BlinkingCounter = value;
+                return result;
             }
         }
 

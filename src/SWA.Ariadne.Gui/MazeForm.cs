@@ -33,7 +33,18 @@ namespace SWA.Ariadne.Gui
         /// </summary>
         protected override ISolverController SolverController
         {
-            get { return this.solverController; }
+            get
+            {
+                if (this.solverController == null)
+                {
+                    this.solverController = new SolverController(
+                        this as IMazeForm,
+                        this.mazeUserControl.MazePainter,
+                        this.visitedProgressBar.Control as ProgressBar
+                    );
+                }
+                return this.solverController;
+            }
         }
         private SolverController solverController;
 
@@ -56,18 +67,6 @@ namespace SWA.Ariadne.Gui
         {
             InitializeComponent();
             InitializeComponent2();
-
-            // Create a SolverController.
-            this.solverController = new SolverController(
-                this as IMazeForm,
-                this.mazeUserControl.MazePainter,
-                this.visitedProgressBar.Control as ProgressBar
-            );
-        }
-
-        private void MazeForm_Load(object sender, EventArgs e)
-        {
-            this.OnNew(null, null);
         }
 
         /// <summary>
@@ -121,7 +120,6 @@ namespace SWA.Ariadne.Gui
         protected override void OnReset(object sender, EventArgs e)
         {
             base.OnReset(sender, e);
-            this.SolverController.Reset();
             mazeUserControl.Reset();
         }
 
@@ -130,13 +128,9 @@ namespace SWA.Ariadne.Gui
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        protected override void OnNew(object sender, EventArgs e)
+        public override void OnNew(object sender, EventArgs e)
         {
-            if (State != SolverState.Ready)
-            {
-                OnReset(sender, e);
-            }
-
+            base.OnNew(sender, e);
             mazeUserControl.Setup();
             ConfigureVisitedProgressBar();
         }
@@ -155,6 +149,7 @@ namespace SWA.Ariadne.Gui
 
         #region Parameter settings
 
+        // TODO: move to base class
         protected override void strategy_SelectedIndexChanged(object sender, EventArgs e)
         {
             UpdateCaption();
@@ -206,7 +201,7 @@ namespace SWA.Ariadne.Gui
         /// <summary>
         /// Reset step and runtime counters.
         /// </summary>
-        protected override void ResetCounters()
+        public override void ResetCounters()
         {
             base.ResetCounters();
 

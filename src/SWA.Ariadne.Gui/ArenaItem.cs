@@ -165,14 +165,18 @@ namespace SWA.Ariadne.Gui
         {
             get
             {
-                try
+                string result = null;
+
+                if (result == null && this.SolverController != null)
                 {
-                    return this.SolverController.StrategyName;
+                    result = this.SolverController.StrategyName;
                 }
-                catch (NullReferenceException)
+                if (result == null && this.strategyComboBox != null && this.strategyComboBox.SelectedItem != null)
                 {
-                    return this.strategyComboBox.SelectedItem.ToString();
+                    result = this.strategyComboBox.SelectedItem.ToString();
                 }
+
+                return result;
             }
         }
 

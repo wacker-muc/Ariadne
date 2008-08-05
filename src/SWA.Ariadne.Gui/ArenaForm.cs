@@ -34,8 +34,16 @@ namespace SWA.Ariadne.Gui
         /// </summary>
         protected override ISolverController SolverController
         {
-            get { return this.solverController as ISolverController; }
+            get
+            {
+                if (this.solverController == null)
+                {
+                    this.solverController = new MultiSolverController(this as IMazeForm);
+                }
+                return this.solverController;
+            }
         }
+        private MultiSolverController solverController;
 
         /// <summary>
         /// The object that accepts the AriadneSettingsSource commands.
@@ -81,11 +89,6 @@ namespace SWA.Ariadne.Gui
             get { return TemplateItem.MazeUserControl; }
         }
 
-        /// <summary>
-        /// The SolverController.
-        /// </summary>
-        private MultiSolverController solverController;
-
         #endregion
 
         #region Constructor
@@ -94,15 +97,11 @@ namespace SWA.Ariadne.Gui
         {
             InitializeComponent();
 
-            this.solverController = new MultiSolverController(this as IMazeForm);
-
             // Start with an empty Items list.  It will be created in OnLayout().
             foreach (ArenaItem item in Items)
             {
                 this.Controls.Remove(item);
             }
-
-            OnNew(null, null);
         }
 
         #endregion
@@ -125,14 +124,14 @@ namespace SWA.Ariadne.Gui
                 ArenaItem item = new ArenaItem();
                 this.Controls.Add(item);
                 items.Add(item);
-                solverController.Add(item.SolverController);
+                ((MultiSolverController)SolverController).Add(item.SolverController);
             }
             while(items.Count > nX * nY)
             {
                 ArenaItem item = items[items.Count - 1];
                 this.Controls.Remove(item);
                 items.RemoveAt(items.Count - 1);
-                solverController.Remove(item.SolverController);
+                ((MultiSolverController)SolverController).Remove(item.SolverController);
             }
 
             #endregion
@@ -177,7 +176,6 @@ namespace SWA.Ariadne.Gui
         protected override void OnReset(object sender, EventArgs e)
         {
             base.OnReset(sender, e);
-            this.SolverController.Reset();
 
             foreach (ArenaItem item in Items)
             {
@@ -191,13 +189,9 @@ namespace SWA.Ariadne.Gui
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        protected override void OnNew(object sender, EventArgs e)
+        public override void OnNew(object sender, EventArgs e)
         {
-            if (State != SWA.Ariadne.Logic.SolverState.Ready)
-            {
-                OnReset(sender, e);
-            }
-
+            base.OnNew(sender, e);
             OnLayout();
 
             #region Setup one item and use its parameters for all other items.
@@ -255,7 +249,7 @@ namespace SWA.Ariadne.Gui
         /// <summary>
         /// Reset step and runtime counters.
         /// </summary>
-        protected override void ResetCounters()
+        public override void ResetCounters()
         {
             base.ResetCounters();
 
@@ -292,21 +286,6 @@ namespace SWA.Ariadne.Gui
         #endregion
 
         #region IMazeControlProperties implementation
-
-        public bool IsFinished
-        {
-            get 
-            {
-                foreach (ArenaItem item in Items)
-                {
-                    if (!item.MazeUserControl.IsFinished)
-                    {
-                        return false;
-                    }
-                }
-                return true;
-            }
-        }
 
         public int XSize
         {
