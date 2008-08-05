@@ -141,7 +141,7 @@ namespace SWA.Ariadne.Gui
             }
 
             // Switch auto repeat mode on.
-            this.repeatMode = true;
+            ariadneController.RepeatMode = true;
 
             if (! previewMode)
             {
@@ -166,15 +166,15 @@ namespace SWA.Ariadne.Gui
             // Select the strategyComboBox's item that chooses a random strategy.
             strategyComboBox.SelectedItem = "(any)";
 
-            this.OnNew(null, null);
+            this.OnNew(null, null); // TODO: remove this message
             this.OnStart(null, null);
         }
 
-        protected override void OnNew(object sender, EventArgs e)
+        public override void OnNew(object sender, EventArgs e)
         {
             // Discard this call until ScreenSaverForm_Load() has been executed.
             // Note: The repeatMode flag is initially false and will be set above.
-            if (this.repeatMode == false)
+            if (ariadneController.RepeatMode == false)
             {
                 return;
             }
@@ -184,6 +184,8 @@ namespace SWA.Ariadne.Gui
             {
                 Application.Exit();
             }
+
+            base.OnNew(sender, e);
 
             // Choose new locations of controls, before the maze is built.
             if (!previewMode)
@@ -437,7 +439,7 @@ namespace SWA.Ariadne.Gui
             {
                 StringBuilder message = new StringBuilder(200);
 
-                FillStatusMessage(message);
+                ariadneController.FillStatusMessage(message);
 
                 this.infoLabelStatus.Text = message.ToString();
             }

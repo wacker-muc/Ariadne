@@ -109,16 +109,7 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <param name="rect"></param>
         public void SetGraphics(Graphics g, Rectangle rect)
         {
-#if false // TODO: false
-            this.Size = new Size(rect.Width, rect.Height);
-            this.Location = rect.Location;
-#endif
-
-#if false
-            this.painter = new MazePainter(g, rect);
-#else
             this.painter.Reconfigure(g, rect);
-#endif
         }
 
         public void Setup(int squareWidth, int wallWidth, int pathWidth)
@@ -666,11 +657,6 @@ namespace SWA.Ariadne.Gui.Mazes
         #endregion
 
         #region IMazeControl implementation
-
-        public bool IsFinished
-        {
-            get { return (painter.HasBufferAlternate ? true : Maze == null ? false : Maze.IsFinished); }
-        }
 
         public int XSize
         {

@@ -27,6 +27,21 @@ namespace SWA.Ariadne.Ctrl
             get { return countSteps; }
         }
 
+        public bool IsFinished
+        {
+            get
+            {
+                foreach (ISolverController item in list)
+                {
+                    if (!item.IsFinished)
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
+
         #endregion
 
         #region Constructor

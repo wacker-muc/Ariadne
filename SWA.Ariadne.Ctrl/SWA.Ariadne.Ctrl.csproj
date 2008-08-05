@@ -34,7 +34,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AriadneController.cs">
+    </Compile>
     <Compile Include="EmbeddedSolverController.cs" />
+    <Compile Include="IAriadneEventHandler.cs" />
     <Compile Include="ISolverController.cs" />
     <Compile Include="MultiSolverController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

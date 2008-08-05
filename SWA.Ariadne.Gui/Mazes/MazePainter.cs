@@ -165,7 +165,7 @@ namespace SWA.Ariadne.Gui.Mazes
 
                 blinkingCounter = value;
 
-                if (blinkingCounter > 0 && gBuffer != null)
+                if (blinkingCounter >= 0 && gBuffer != null)
                 {
                     PaintEndpoints(gBuffer.Graphics);
                     gBuffer.Render();

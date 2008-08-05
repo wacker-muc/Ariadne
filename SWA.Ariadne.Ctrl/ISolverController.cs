@@ -8,6 +8,7 @@ namespace SWA.Ariadne.Ctrl
         int DoStep();
         void FillStatusMessage(System.Text.StringBuilder message);
         void FinishPath();
+        bool IsFinished { get; }
         void PrepareForStart();
         void ReleaseResources();
         void Reset();

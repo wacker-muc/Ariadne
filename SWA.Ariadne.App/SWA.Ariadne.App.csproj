@@ -46,6 +46,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SWA.Ariadne.Ctrl\SWA.Ariadne.Ctrl.csproj">
+      <Project>{351936CC-5AD5-45DF-AC9C-903964E29DDB}</Project>
+      <Name>SWA.Ariadne.Ctrl</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SWA.Ariadne.Gui\Dialogs\SWA.Ariadne.Gui.Dialogs.csproj">
       <Project>{518B57D2-7D57-4967-B3F6-A054F67D36CD}</Project>
       <Name>SWA.Ariadne.Gui.Dialogs</Name>
