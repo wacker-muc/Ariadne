@@ -71,6 +71,7 @@ namespace SWA.Ariadne.Outlines
                 OutlineShape.Symbol,
                 OutlineShape.Bitmap,
                 OutlineShape.PinstripeGrid,
+                OutlineShape.Tiles,
             };
             int[] ratios = { // (number of items) * (novelty value) / (easyness of recognition)
                      1 * 20 / 3,
@@ -80,12 +81,14 @@ namespace SWA.Ariadne.Outlines
                     15 * 10 / 2,
                      8 * 15 / 2,
                     25 * 15 / 1,
-                     3 *  8 / 2,
+                     3 *  8 / 3,
+                     4 * 12 / 3,
                 };
             
             int n = 0;
             foreach (int k in ratios) { n += k; }
             int p = r.Next(n);
+            //p = n - 1;
             
             OutlineShapeBuilder result = null;
             for (int i = 0; i < ratios.Length; i++)
@@ -103,10 +106,10 @@ namespace SWA.Ariadne.Outlines
         public static OutlineShape RandomInstance(Random r, int xSize, int ySize, double offCenter, double size)
         {
             OutlineShapeBuilder outlineShapeBuilder = RandomOutlineShapeBuilder(r);
-            return Instance(r, outlineShapeBuilder, xSize, ySize, offCenter, size);
+            return RandomInstance(r, outlineShapeBuilder, xSize, ySize, offCenter, size);
         }
 
-        public static OutlineShape Instance(Random r, OutlineShapeBuilder outlineShapeBuilder, int xSize, int ySize, double offCenter, double size)
+        public static OutlineShape RandomInstance(Random r, OutlineShapeBuilder outlineShapeBuilder, int xSize, int ySize, double offCenter, double size)
         {
             double centerX = 0.5, centerY = 0.5;
 
@@ -283,6 +286,21 @@ namespace SWA.Ariadne.Outlines
             };
 
             return new DelegateOutlineShape(xSize, ySize, test);
+        }
+
+        /// <summary>
+        /// Create an outline shape.
+        /// </summary>
+        /// <param name="r"></param>
+        /// <param name="xSize"></param>
+        /// <param name="ySize"></param>
+        /// <param name="centerX"></param>
+        /// <param name="centerY"></param>
+        /// <param name="shapeSize"></param>
+        /// <returns></returns>
+        public static OutlineShape Tiles(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
+        {
+            return TilesOutlineShape.RandomInstance(r, xSize, ySize);
         }
 
         #endregion
