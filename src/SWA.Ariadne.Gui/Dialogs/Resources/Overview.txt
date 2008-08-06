@@ -87,6 +87,7 @@ Usually, an Outline Shape is one contiguous shape, like a circle, a square or an
    * Bitmaps that are stored as black-and-white image resources.
       * Geographical structures like continents and countries.
    * One square wide stripes (pin stripes) - vertical, horizontal or in a grid.
+   * Tiled patterns.  These are formed of rectangular tiles with a given pattern that are placed next to each other.
 
 While the patterns evoked by an Irregular Maze Builder come from following preferred directions (if possible), the rules defined by an Outline Shape are very strict.  They take precedence over the irregular preferences.
 
@@ -171,14 +172,14 @@ Efficient solvers often run for long stretches without error (i.e. without leavi
    * Display a run-time statistics panel.
    * [26] Build mazes with irregular wall patterns.
       * [4] Apply two mixed irregular patterns or apply the pattern to part of the maze only.
-   * [16] Build a continuous wall around an outline shape.
+   * [17] Build a continuous wall around an outline shape.
       * [1.75] Build a second maze inside the outline shape.
    * [16] Different solver strategies.
    * [2] Let an efficient solver detect dead end areas.
    
 That gives a very large number of pattern or style combinations:
 
-    3 x (1 + 26x4) x (1+16) x 1.75 x 16 x 2  =  299,880
+    3 x (1 + 26x4) x (1+17) x 1.75 x 16 x 2  =  317,520
 
 The exact application of each variant is often determined by random parameter values:  Some shapes are generated dynamically, some solvers choose arbitrary paths and the maze builder generates random patterns of walls.
 
