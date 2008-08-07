@@ -342,6 +342,7 @@ namespace SWA.Ariadne.Settings
             Polygon,
             Function,
             Bitmap,
+            Tiles,
         }
         public OutlineKindEnum OutlineKind
         {
