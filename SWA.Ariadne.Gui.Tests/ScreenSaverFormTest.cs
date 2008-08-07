@@ -80,8 +80,7 @@ namespace SWA.Ariadne.Gui.Tests
         [TestMethod()]
         public void SSF_ConstructorTest_01()
         {
-            PreviewTestForm form = CreatePreviewWindow();
-            Control window = form.previewControl;
+            Form form = CreatePreviewWindow();
             string windowHandleArg = form.Handle.ToString();
 
             try
@@ -96,9 +95,16 @@ namespace SWA.Ariadne.Gui.Tests
             }
         }
 
-        private static PreviewTestForm CreatePreviewWindow()
+        private static Form CreatePreviewWindow()
         {
-            PreviewTestForm result = new PreviewTestForm();
+            Form result = new Form();
+            result.Name = result.Text = "Ariadne Preview";
+            result.ClientSize = new System.Drawing.Size(240, 180);
+            result.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            result.ControlBox = true;
+            result.MaximizeBox = false;
+            result.MinimizeBox = false;
+            result.ShowInTaskbar = false;
 
             result.Show();
 

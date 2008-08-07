@@ -435,7 +435,7 @@ namespace SWA.Ariadne.Gui
         /// </summary>
         public override void UpdateStatusLine()
         {
-            if (this.infoLabelStatus != null)
+            if (this.infoLabelStatus != null && ariadneController != null)
             {
                 StringBuilder message = new StringBuilder(200);
 

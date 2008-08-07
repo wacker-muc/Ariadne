@@ -160,13 +160,35 @@ namespace SWA.Ariadne.Gui
             form.ShowDialog();
         }
 
+        /// <summary>
+        /// Opens an Arena form.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnOpenArena(object sender, EventArgs e)
         {
-            ArenaForm arena = new ArenaForm();
-            arena.Icon = this.Icon;
-            arena.Show();
+            ArenaForm form = new ArenaForm();
+            form.Icon = this.Icon;
+            form.Show();
         }
 
+        /// <summary>
+        /// Opens a form that behaves like in screen saver mode.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnOpenScreenSaver(object sender, EventArgs e)
+        {
+            ScreenSaverForm form = new ScreenSaverForm(false);
+            form.Icon = this.Icon;
+            form.Show();
+        }
+
+        /// <summary>
+        /// Saves the currently displayed maze to a PNG file.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnSaveImage(object sender, EventArgs e)
         {
             System.Drawing.Imaging.ImageFormat imgFormat = System.Drawing.Imaging.ImageFormat.Png;
