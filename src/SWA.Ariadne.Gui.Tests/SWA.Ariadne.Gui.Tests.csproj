@@ -39,12 +39,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="OptionsDialogTest.cs" />
-    <Compile Include="PreviewTestForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="PreviewTestForm.Designer.cs">
-      <DependentUpon>PreviewTestForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScreenSaverFormTest.cs" />
     <Compile Include="VSCodeGenAccessors.cs" />
@@ -86,12 +80,6 @@
       <Project>{5947CDF1-FDE4-4B7C-9420-0A4DF039B5AB}</Project>
       <Name>SWA.Utilities</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="PreviewTestForm.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>PreviewTestForm.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
 </Project>
