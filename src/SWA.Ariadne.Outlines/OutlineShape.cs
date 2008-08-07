@@ -70,7 +70,9 @@ namespace SWA.Ariadne.Outlines
                 OutlineShape.Character,
                 OutlineShape.Symbol,
                 OutlineShape.Bitmap,
+#if false
                 OutlineShape.PinstripeGrid,
+#endif
                 OutlineShape.Tiles,
             };
             int[] ratios = { // (number of items) * (novelty value) / (easyness of recognition)
@@ -81,8 +83,10 @@ namespace SWA.Ariadne.Outlines
                     15 * 10 / 2,
                      8 * 15 / 2,
                     25 * 15 / 1,
+#if false
                      3 *  8 / 3,
-                     4 * 12 / 3,
+#endif
+                     8 * 12 / 3,
                 };
             
             int n = 0;
@@ -254,6 +258,7 @@ namespace SWA.Ariadne.Outlines
             return BitmapOutlineShape.Random(r, xSize, ySize, centerX, centerX, shapeSize);
         }
 
+#if false
         /// <summary>
         /// Create an outline shape.
         /// </summary>
@@ -287,6 +292,7 @@ namespace SWA.Ariadne.Outlines
 
             return new DelegateOutlineShape(xSize, ySize, test);
         }
+#endif
 
         /// <summary>
         /// Create an outline shape.

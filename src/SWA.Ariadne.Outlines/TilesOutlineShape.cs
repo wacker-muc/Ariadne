@@ -25,7 +25,7 @@ namespace SWA.Ariadne.Outlines
         /// <summary>
         /// The effective tile size, resulting from the repetitions.
         /// </summary>
-        int xTileSize, yTileSize;
+        private int xTileSize, yTileSize;
 
         /// <summary>
         /// Mapping of shape coordinates to tile coordinates.
@@ -42,7 +42,6 @@ namespace SWA.Ariadne.Outlines
         }
         public void SetValue(int x, int y, bool value)
         {
-            //NormalizeCoordinates(ref x, ref y);
             tile.SetValue(x, y, value);
         }
 
@@ -76,9 +75,48 @@ namespace SWA.Ariadne.Outlines
 
         public static OutlineShape RandomInstance(Random r, int xSize, int ySize)
         {
-            // TODO: implement the pinstripe grid
             // TODO: more patterns
-            return Ribbons(r, xSize, ySize);
+            switch (r.Next(1))
+            {
+                default:
+                case 0:
+                    return StripesOrGrid(r, xSize, ySize);
+                case 1:
+                    return Ribbons(r, xSize, ySize);
+            }
+        }
+
+        private static OutlineShape StripesOrGrid(Random r, int xSize, int ySize)
+        {
+            TilesOutlineShape result = new TilesOutlineShape(xSize, ySize, 2, 2);
+
+            int k = r.Next(1, 4); // 1, 2, 3
+
+            result.SetValue(0, 0, (k != 3 || r.Next(2) == 0));  // maybe a disconnected grid
+            result.SetValue(0, 1, ((k & 1) != 0));              // horizontal lines
+            result.SetValue(1, 0, ((k & 2) != 0));              // vertical lines
+            result.SetValue(1, 1, false);
+
+            result.SetRepetitions(0, 1);                        // one-square pinstripes
+            if (r.Next(0) == 0)
+            {
+                result.SetRepetitions(1, r.Next(4, 16));        // same x and y width
+            }
+            else
+            {
+                while (Math.Abs(result.xRepetitions[1] - result.yRepetitions[1]) < 5)
+                {
+                    result.SetXRepetitions(1, r.Next(4, 21));   // different x and y width
+                    result.SetYRepetitions(1, r.Next(4, 21));
+                }
+            }
+
+            if (result.tile[0, 0] == false && result.xRepetitions[1] > 7 && result.yRepetitions[1] > 7)
+            {
+                result.SetRepetitions(0, r.Next(1, 3));         // thin stripes: one or two squares
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -103,6 +141,16 @@ namespace SWA.Ariadne.Outlines
             }
 
             // result: a dense grid
+            /*
+             *   x x x x x x x x
+             *   x o x o x o x o
+             *   x x x x x x x x
+             *   x o x o x o x o
+             *   x x x x x x x x
+             *   x o x o x o x o
+             *   x x x x x x x x
+             *   x o x o x o x o
+             */
 
             #endregion
 
@@ -123,6 +171,16 @@ namespace SWA.Ariadne.Outlines
             result.SetValue(q + 1, p + 2, false);
 
             // result: four interwoven ribbons
+            /*
+             *   x x x x x x x O
+             *   x o x o x o x o
+             *   x x x O x x x x
+             *   O o x o x o O o
+             *   x x x O x x x x
+             *   x o x o x o x o
+             *   x x x x x x x O
+             *   x o O o O o x o
+             */
 
             #endregion
 
@@ -147,27 +205,34 @@ namespace SWA.Ariadne.Outlines
 
             // with one set erased: rectangular frames
             // with two sets erased: disconnected bars
+            /*
+             *   x a x x x a x o
+             *   b o b o b o b o
+             *   x a x o x a x x
+             *   o o x o x o o o
+             *   x a x o x a x x
+             *   b o b o b o b o
+             *   x a x x x a x o
+             *   x o o o o o x o
+             */
 
             #endregion
 
             #region Extend the shape width.
 
-            int r3 = r.Next(6, 21);
-            int r2 = 1 + r.Next(2);
-            int r1 = r3 / 6 + (r.Next(3) - 1);
+            int r3 = r.Next(6, 21);                 // the broad ribbon width
+            int r2 = 1 + r.Next(2);                 // the ribbon border
+            int r1 = r3 / 6 + (r.Next(3) - 1);      // the distance between parallel ribbons
 
             for (int i = 2; i < 8; i += 4)
             {
-                result.SetXRepetitions(i - 1, r1);
-                result.SetXRepetitions(i + 1, r3);
-                result.SetYRepetitions(i - 1, r1);
-                result.SetYRepetitions(i + 1, r3);
+                result.SetRepetitions(i - 1, r1);
+                result.SetRepetitions(i + 1, r3);
             }
 
             for (int i = 0; i < 8; i += 2)
             {
-                result.SetXRepetitions(i, r2);
-                result.SetYRepetitions(i, r2);
+                result.SetRepetitions(i, r2);
             }
 
             #endregion
@@ -179,14 +244,36 @@ namespace SWA.Ariadne.Outlines
 
         #region Auxiliary methods
 
+        /// <summary>
+        /// Set the repetition number of the given tile position (x coordinate).
+        /// </summary>
+        /// <param name="pos"></param>
+        /// <param name="num"></param>
         private void SetXRepetitions(int pos, int num)
         {
             xRepetitions[pos] = Math.Max(0, num);
             UpdateTileSize();
         }
 
+        /// <summary>
+        /// Set the repetition number of the given tile position (y coordinate).
+        /// </summary>
+        /// <param name="pos"></param>
+        /// <param name="num"></param>
         private void SetYRepetitions(int pos, int num)
         {
+            yRepetitions[pos] = Math.Max(0, num);
+            UpdateTileSize();
+        }
+
+        /// <summary>
+        /// Set both repetition numbers of the given tile position (x and y coordinate).
+        /// </summary>
+        /// <param name="pos"></param>
+        /// <param name="num"></param>
+        private void SetRepetitions(int pos, int num)
+        {
+            xRepetitions[pos] = Math.Max(0, num);
             yRepetitions[pos] = Math.Max(0, num);
             UpdateTileSize();
         }

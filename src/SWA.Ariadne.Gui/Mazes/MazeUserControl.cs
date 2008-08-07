@@ -633,6 +633,9 @@ namespace SWA.Ariadne.Gui.Mazes
                 case AriadneSettingsData.OutlineKindEnum.Bitmap:
                     shapeBuilderDelegate = OutlineShape.Bitmap;
                     break;
+                case AriadneSettingsData.OutlineKindEnum.Tiles:
+                    shapeBuilderDelegate = OutlineShape.Tiles;
+                    break;
             }
             if (shapeBuilderDelegate != null)
             {

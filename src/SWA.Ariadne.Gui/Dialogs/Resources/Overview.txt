@@ -69,7 +69,7 @@ This option builds continuous closed walls around invisible shapes, e.g. a circl
 
 Usually, an Outline Shape is one contiguous shape, like a circle, a square or another polygon.  However, an Outline Shape can be any pattern that defines an inside and an outside.  Separate regions are all treated the same way, i.e. they are surrounded by closed walls with a single entry.
 
-[Variants:] There are 15 types of Outline Shapes, most of them with many variants, grouped into seven mayor types:
+[Variants:] There are 17 types of Outline Shapes, most of them with many variants, grouped into seven mayor types:
 
    * A circle.
    * A diamond, i.e. a square standing on a corner.
@@ -86,8 +86,9 @@ Usually, an Outline Shape is one contiguous shape, like a circle, a square or an
    * Characters and Symbols from fonts at a very large size.
    * Bitmaps that are stored as black-and-white image resources.
       * Geographical structures like continents and countries.
-   * One square wide stripes (pin stripes) - vertical, horizontal or in a grid.
    * Tiled patterns.  These are formed of rectangular tiles with a given pattern that are placed next to each other.
+      * Horizontal, vertical and checkered grids.
+      * Rectangular frames based on a pattern of interwoven ribbons.
 
 While the patterns evoked by an Irregular Maze Builder come from following preferred directions (if possible), the rules defined by an Outline Shape are very strict.  They take precedence over the irregular preferences.
 
