@@ -49,7 +49,7 @@ namespace SWA.Ariadne.Outlines
 
         #region Constructor
 
-         TilesOutlineShape(int xSize, int ySize, int xTileSize, int yTileSize)
+        TilesOutlineShape(int xSize, int ySize, int xTileSize, int yTileSize)
             : base(xSize, ySize)
         {
             this.tile = new ExplicitOutlineShape(xTileSize, yTileSize);
@@ -73,19 +73,38 @@ namespace SWA.Ariadne.Outlines
 
         #region Static methods for creating OutlineShapes
 
+        /// <summary>
+        /// Returns one of several tiled shapes.
+        /// </summary>
+        /// <param name="r"></param>
+        /// <param name="xSize"></param>
+        /// <param name="ySize"></param>
+        /// <returns></returns>
         public static OutlineShape RandomInstance(Random r, int xSize, int ySize)
         {
             // TODO: more patterns
-            switch (r.Next(1))
+            switch (r.Next(3))
             {
                 default:
+#if true
                 case 0:
                     return StripesOrGrid(r, xSize, ySize);
                 case 1:
                     return Ribbons(r, xSize, ySize);
+#endif
+                case 2:
+                    return Pentominoes(r, xSize, ySize);
             }
         }
 
+        /// <summary>
+        /// Builds a pattern of thin lines and broad stripes (horizontal or vertical).
+        /// When the lines go in botth directions, they form a square or rectangular grid.
+        /// </summary>
+        /// <param name="r"></param>
+        /// <param name="xSize"></param>
+        /// <param name="ySize"></param>
+        /// <returns></returns>
         private static OutlineShape StripesOrGrid(Random r, int xSize, int ySize)
         {
             TilesOutlineShape result = new TilesOutlineShape(xSize, ySize, 2, 2);
@@ -120,7 +139,7 @@ namespace SWA.Ariadne.Outlines
         }
 
         /// <summary>
-        /// Builds a pattern of interwoven ribbons.
+        /// Builds a pattern of interwoven ribbons, effectually forming rectangular frames.
         /// </summary>
         /// <param name="r"></param>
         /// <param name="xSize"></param>
@@ -240,6 +259,77 @@ namespace SWA.Ariadne.Outlines
             return result;
         }
 
+        /// <summary>
+        /// Builds a pattern made of pentominoes: five adjoining squares in different arrangements.
+        /// </summary>
+        /// <param name="r"></param>
+        /// <param name="xSize"></param>
+        /// <param name="ySize"></param>
+        /// <returns></returns>
+        private static OutlineShape Pentominoes(Random r, int xSize, int ySize)
+        {
+            int squareWidth = r.Next(2, 7);
+            int xDim = 3 + xSize / (1 + squareWidth), yDim = 3 + xSize / (1 + squareWidth);
+
+            TilesOutlineShape result = new TilesOutlineShape(xSize, ySize, 1 + 2 * xDim, 1 + 2 * yDim);
+
+            PentominoPattern pentominoPattern = new PentominoPattern(r, xDim, yDim);
+
+            #region Start with filled squares in all but the (odd,odd) positions.
+
+            for (int x = 0; x < result.xTileSize; x++)
+            {
+                for (int y = 0; y < result.yTileSize; y++)
+                {
+                    result.SetValue(x, y, (x % 2 == 0 || y % 2 == 0));
+                }
+            }
+
+            // result: a dense grid
+            /*
+             *   x x x x x x x x
+             *   x o x o x o x o
+             *   x x x x x x x x
+             *   x o x o x o x o
+             *   x x x x x x x x
+             *   x o x o x o x o
+             *   x x x x x x x x
+             *   x o x o x o x o
+             */
+
+            for (int x = 1; x < xDim; x++)
+            {
+                result.SetXRepetitions(1 + 2 * x, squareWidth);
+            }
+            for (int y = 1; y < yDim; y++)
+            {
+                result.SetYRepetitions(1 + 2 * y, squareWidth);
+            }
+
+            #endregion
+
+            #region Open the positions between pentomino squares of the same id.
+
+            for (int x = 0; x < xDim; x++)
+            {
+                for (int y = 0; y < yDim; y++)
+                {
+                    if (x + 1 < xDim && pentominoPattern[x, y] == pentominoPattern[x + 1, y])
+                    {
+                        result.SetValue(2 + 2 * x, 1 + 2 * y, false);
+                    }
+                    if (y + 1 < yDim && pentominoPattern[x, y] == pentominoPattern[x, y + 1])
+                    {
+                        result.SetValue(1 + 2 * x, 2 + 2 * y, false);
+                    }
+                }
+            }
+
+            #endregion
+
+            return result;
+        }
+
         #endregion
 
         #region Auxiliary methods
@@ -302,6 +392,16 @@ namespace SWA.Ariadne.Outlines
             // Determine the origin of a tile centered in the drawing area.
             int x0 = (XSize - xTileSize) / 2, y0 = (YSize - yTileSize) / 2;
 
+            // Make sure x0 and y0 are positive.
+            if (x0 < 0)
+            {
+                x0 += xTileSize;
+            }
+            if (y0 < 0)
+            {
+                y0 += yTileSize;
+            }
+
             #region Derive the xMap and yMap of a (wrapped) tile in the top left corner of the shape.
 
             for (int xt = 0, xm = 0; xt < tile.XSize; xt++)
@@ -316,6 +416,258 @@ namespace SWA.Ariadne.Outlines
                 for (int i = 0; i < xRepetitions[yt]; i++, ym++)
                 {
                     yMap[(ym + y0) % yTileSize] = yt;
+                }
+            }
+
+            #endregion
+        }
+
+        #endregion
+
+        #region Auxiliary classes
+
+        internal class PentominoPattern
+        {
+            private int[,] squares;
+
+            public int this[int x, int y]
+            {
+                get
+                {
+                    if (x < 0 || y < 0 || x >= squares.GetLength(0) || y >= squares.GetLength(1))
+                    {
+                        return 0;
+                    }
+                    return squares[x, y]; 
+                }
+            }
+
+            #region Constructor
+
+            private PentominoPattern(int xDim, int yDim)
+            {
+                squares = new int[xDim, yDim];
+            }
+
+            public PentominoPattern(Random r, int xDim, int yDim)
+                : this(xDim, yDim)
+            {
+                int five = 5;
+                int nextId = 1;
+
+                // Four lists of square positions.
+                // Each list contains the squares with the same number of unmarked neighboring squares.
+                List<System.Drawing.Point>[] candidates = new List<System.Drawing.Point>[4];
+                for (int i = 0; i < 4; i++)
+                {
+                    candidates[i] = new List<System.Drawing.Point>(xDim * yDim / 4);
+                }
+
+                // For every id, the number of squares with that id.
+                int[] idCount = new int[(xDim+2) * (yDim+2) / (five - 1)];
+
+                // Start with the center square.
+                SetId(xDim / 2, yDim / 2, nextId++, candidates, idCount);
+
+                while (true)
+                {
+                    // Choose a candidate with minimum number of unmarked neighbors.
+                    System.Drawing.Point pt = ChooseCandidate(r, candidates);
+                    if (pt.X < 0)
+                    {
+                        break;
+                    }
+
+                    // Choose an id for the candidate.
+                    int id = ChooseId(r, pt, idCount, five, ref nextId);
+
+                    // Stop if the expected number of pentominoes is exceeded.
+                    if (id >= idCount.Length)
+                    {
+                        break;
+                    }
+
+                    SetId(pt.X, pt.Y, id, candidates, idCount);
+                }
+            }
+
+            #endregion
+
+            #region Methods
+
+            /// <summary>
+            /// The square at (x,y) gets the given id.
+            /// All neighbor squares are added to the candidates lists.
+            /// </summary>
+            /// <param name="x"></param>
+            /// <param name="y"></param>
+            /// <param name="id"></param>
+            /// <param name="candidates"></param>
+            private void SetId(int x, int y, int id, List<System.Drawing.Point>[] candidates, int[] idCount)
+            {
+                // Remove the point from its current candidate list.
+                bool found = candidates[-squares[x, y]].Remove(new System.Drawing.Point(x, y));
+
+                // Mark the point with the given id.
+                squares[x, y] = id;
+                ++idCount[id];
+
+                // Add the point's neighbors as new candidates.
+                MaybeAddCandidate(x - 1, y, candidates);
+                MaybeAddCandidate(x + 1, y, candidates);
+                MaybeAddCandidate(x, y - 1, candidates);
+                MaybeAddCandidate(x, y + 1, candidates);
+            }
+
+            /// <summary>
+            /// Add the Point (x,y) to the candidates lists.
+            /// If it is already a candidate, the point is moved to another list, as it has lost an unmarked neighbor.
+            /// </summary>
+            /// <param name="x"></param>
+            /// <param name="y"></param>
+            /// <param name="candidates"></param>
+            private void MaybeAddCandidate(int x, int y, List<System.Drawing.Point>[] candidates)
+            {
+                // Skip points outside the squares area.
+                if (x < 0 || y < 0 || x >= squares.GetLength(0) || y >= squares.GetLength(1))
+                {
+                    return;
+                }
+
+                if (squares[x, y] > 0)
+                {
+                    // Skip squares that are already marked.
+                    return;
+                }
+                else if (squares[x, y] < 0)
+                {
+                    // This square has one unmarked neighbor less.
+                    bool found = candidates[-squares[x, y]].Remove(new System.Drawing.Point(x, y));
+                    ++squares[x, y];
+                    candidates[-squares[x, y]].Add(new System.Drawing.Point(x, y));
+                }
+                else
+                {
+                    // This square is a new candidate.
+                    squares[x, y] = -3;                                 // usually 3 unmarked neighbors
+                    if (x == 0 || x + 1 == squares.GetLength(0))
+                    {
+                        squares[x, y] += 1;                             // no east/west neighbor
+                    }
+                    if (y == 0 || y + 1 == squares.GetLength(1))        // no north/south neighbor
+                    {
+                        squares[x, y] += 1;
+                    }
+                    candidates[-squares[x, y]].Add(new System.Drawing.Point(x, y));
+                }
+            }
+
+            /// <summary>
+            /// Returns a random item from one of the lists.
+            /// Prefers points with zero or one unmarked neighbor only.
+            /// </summary>
+            /// <param name="r"></param>
+            /// <param name="candidates"></param>
+            /// <returns></returns>
+            private System.Drawing.Point ChooseCandidate(Random r, List<System.Drawing.Point>[] candidates)
+            {
+                int ci = -1;
+
+                if (ci < 0 && candidates[0].Count > 0)
+                {
+                    // Choose a candidate with no unmarked neighbors.
+                    // This should never happen, as candidates with one neighbor are already handled first.
+                    ci = 0;
+                }
+
+                if (ci < 0 && candidates[1].Count > 0)
+                {
+                    // Choose a candidate with one unmarked neighbor.
+                    // This should happen before the last neighbor is chosen and marked.
+                    ci = 1;
+                }
+
+                if (ci < 0)
+                {
+                    // Choose any other candidate.
+                    int n = candidates[2].Count + candidates[3].Count;
+                    if (n > 0)
+                    {
+                        int k = r.Next(n);
+                        if (k < candidates[2].Count)
+                        {
+                            ci = 2;
+                        }
+                        else
+                        {
+                            ci = 3;
+                        }
+                    }
+                }
+
+                if (ci < 0)
+                {
+                    // All candidate lists are empty.
+                    return new System.Drawing.Point(-1, -1);
+                }
+
+                return candidates[ci][r.Next(candidates[ci].Count)];
+            }
+
+            /// <summary>
+            /// Returns the id of one of the squares next to pt.
+            /// From several choices, the one with least idCount is picked.
+            /// If the idCount is already five, the nextId is returned and incremented.
+            /// </summary>
+            /// <param name="r"></param>
+            /// <param name="pt"></param>
+            /// <param name="idCount"></param>
+            /// <param name="five"></param>
+            /// <param name="nextId"></param>
+            /// <returns></returns>
+            private int ChooseId(Random r, System.Drawing.Point pt, int[] idCount, int five, ref int nextId)
+            {
+                List<int> list = new List<int>(4);
+
+                for (int dx = -1; dx <= +1; dx++)
+                {
+                    for (int dy = -1; dy <= +1; dy++)
+                    {
+                        if ((dx != 0) != (dy != 0))
+                        {
+                            int id = this[pt.X + dx, pt.Y + dy];
+                            if (id <= 0)
+                            {
+                                continue;
+                            }
+                            else if (list.Count == 0)
+                            {
+                                list.Add(id);
+                            }
+                            else
+	                        {
+                                if (idCount[id] < idCount[list[0]])
+                                {
+                                    list.Clear();
+                                }
+                                else if (idCount[id] > idCount[list[0]])
+                                {
+                                    // skip this id
+                                    continue;
+                                }
+                                list.Add(id);
+                            }
+                        }
+                    }
+                }
+
+                if (list.Count > 0 && idCount[list[0]] < five)
+                {
+                    return list[r.Next(list.Count)];
+                }
+                else
+                {
+                    return nextId++;
                 }
             }
 
