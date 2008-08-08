@@ -57,6 +57,19 @@ namespace SWA.Ariadne.Outlines
             }
         }
 
+        public ExplicitOutlineShape(Bitmap template)
+            : this(template.Width, template.Height)
+        {
+            for (int x = 0; x < this.XSize; x++)
+            {
+                for (int y = 0; y < this.YSize; y++)
+                {
+                    // black -> true, white -> false
+                    this.SetValue(x, y, template.GetPixel(x, y).GetBrightness() <= 0.5);
+                }
+            }
+        }
+
         #endregion
 
         #region OutlineShape implementation
