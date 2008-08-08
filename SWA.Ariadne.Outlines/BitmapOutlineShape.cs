@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
-using System.Reflection;
 
 namespace SWA.Ariadne.Outlines
 {
@@ -16,33 +15,7 @@ namespace SWA.Ariadne.Outlines
         /// <summary>
         /// List of Property Methods that return bitmap images from the Resources file.
         /// </summary>
-        private static List<System.Reflection.MethodInfo> BitmapProperties;
-
-        #endregion
-
-        #region Class Constructor
-
-        static BitmapOutlineShape()
-        {
-            BitmapProperties = new List<System.Reflection.MethodInfo>();
-
-            #region Collect all (internal) Properties of the Resources type that return a Bitmap type.
-
-            Type resourcesType = typeof(Properties.Resources);
-            BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static;
-
-            foreach (System.Reflection.PropertyInfo info in resourcesType.GetProperties(flags))
-            {
-                Type propertyType = info.PropertyType;
-                Type bitmapType = typeof(Bitmap);
-                if (bitmapType.IsAssignableFrom(propertyType))
-                {
-                    BitmapProperties.Add(info.GetGetMethod(true));
-                }
-            }
-
-            #endregion
-        }
+        private static List<System.Reflection.MethodInfo> BitmapProperties = SWA.Utilities.Resources.BitmapProperties(typeof(Resources.Bitmaps));
 
         #endregion
 

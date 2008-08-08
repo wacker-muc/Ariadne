@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Drawing;
 
 namespace SWA.Ariadne.Outlines
 {
@@ -9,6 +10,15 @@ namespace SWA.Ariadne.Outlines
     /// </summary>
     internal class TilesOutlineShape : OutlineShape
     {
+        #region Class variables
+
+        /// <summary>
+        /// List of Property Methods that return bitmap images from the Resources file.
+        /// </summary>
+        private static List<System.Reflection.MethodInfo> BitmapProperties = SWA.Utilities.Resources.BitmapProperties(typeof(Resources.Tiles));
+
+        #endregion
+
         #region Member variables and Properties
 
         /// <summary>
@@ -49,7 +59,7 @@ namespace SWA.Ariadne.Outlines
 
         #region Constructor
 
-        TilesOutlineShape(int xSize, int ySize, int xTileSize, int yTileSize)
+        private TilesOutlineShape(int xSize, int ySize, int xTileSize, int yTileSize)
             : base(xSize, ySize)
         {
             this.tile = new ExplicitOutlineShape(xTileSize, yTileSize);
@@ -69,6 +79,13 @@ namespace SWA.Ariadne.Outlines
             UpdateTileSize();
         }
 
+        private TilesOutlineShape(int xSize, int ySize, Bitmap template)
+            : this(xSize, ySize, template.Width, template.Height)
+        {
+            // Replace the empty tile created in the other constructor.
+            this.tile = new ExplicitOutlineShape(template);
+        }
+
         #endregion
 
         #region Static methods for creating OutlineShapes
@@ -86,14 +103,16 @@ namespace SWA.Ariadne.Outlines
             switch (r.Next(3))
             {
                 default:
-#if true
+#if false
                 case 0:
                     return StripesOrGrid(r, xSize, ySize);
                 case 1:
                     return Ribbons(r, xSize, ySize);
-#endif
                 case 2:
                     return Pentominoes(r, xSize, ySize);
+#endif
+                case 3:
+                    return FromBitmap(r, xSize, ySize);
             }
         }
 
@@ -326,6 +345,14 @@ namespace SWA.Ariadne.Outlines
             }
 
             #endregion
+
+            return result;
+        }
+
+        private static OutlineShape FromBitmap(Random r, int xSize, int ySize)
+        {
+            Bitmap bitmap = SWA.Utilities.Resources.CreateBitmap(BitmapProperties, r);
+            TilesOutlineShape result = new TilesOutlineShape(xSize, ySize, bitmap);
 
             return result;
         }
