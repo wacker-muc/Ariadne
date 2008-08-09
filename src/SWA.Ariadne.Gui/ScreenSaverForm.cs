@@ -120,7 +120,7 @@ namespace SWA.Ariadne.Gui
 
                 // Create the first maze and allocate a graphics buffer.
                 mazeUserControl.Setup(5, 2, 3);
-                mazeUserControl.MazePainter.PaintMaze(null);
+                mazeUserControl.MazePainter.PaintMaze(null); // TODO: This is probably executed twice.
             }
         }
 
@@ -185,7 +185,7 @@ namespace SWA.Ariadne.Gui
                 Application.Exit();
             }
 
-            base.OnNew(sender, e);
+            base.OnNew(sender, e); // TODO: remove this call
 
             // Choose new locations of controls, before the maze is built.
             if (!previewMode)

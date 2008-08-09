@@ -184,6 +184,11 @@ namespace SWA.Ariadne.Gui
             form.Show();
         }
 
+        private void OnOpenScreenSaverPreview(object sender, EventArgs e)
+        {
+            ScreenSaverPreviewController.Run();
+        }
+
         /// <summary>
         /// Saves the currently displayed maze to a PNG file.
         /// </summary>
@@ -366,6 +371,16 @@ namespace SWA.Ariadne.Gui
                     OnSaveImage(sender, e);
                     e.Handled = true;
                     break;
+#if true
+                case (char)Keys.D8:
+                    OnOpenScreenSaver(sender, e);
+                    e.Handled = true;
+                    break;
+                case (char)Keys.D9:
+                    OnOpenScreenSaverPreview(sender, e);
+                    e.Handled = true;
+                    break;
+#endif
             }
         }
 
