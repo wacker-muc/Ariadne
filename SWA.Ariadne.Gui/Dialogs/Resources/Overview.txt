@@ -71,27 +71,33 @@ Usually, an Outline Shape is one contiguous shape, like a circle, a square or an
 
 [Variants:] There are 17 types of Outline Shapes, most of them with many variants, grouped into seven mayor types:
 
-   * A circle.
-   * A diamond, i.e. a square standing on a corner.
+   * A circle. [1]
+   * A diamond, i.e. a square standing on a corner. [1]
    * Symmetric polygons with three to twelve corners.
-      * In regular polygons, each corner is connected to the two neighboring corners.
-      * In star shaped polygons, each corner is connected to its second / third / n-th neighbor.
-   * Two-dimensional functions.  Unlike other shapes that have a limited size, these fill the whole plane with a certain pattern.
-      * Horizontal and vertical stripes.
-      * Checkered squares.
-      * Checkered squares that are rounded along the edges and at the corners.  These allow paths along the edges or between the diagonal corners.
+      * In regular polygons, each corner is connected to the two neighboring corners. [1]
+      * In star shaped polygons, each corner is connected to its second / third / n-th neighbor. [1]
+   * Two-dimensional functions.  Unlike other shapes that have a limited size, these fill the whole plane with a certain pattern.  Some of these shapes may be distorted in various ways.
+      * Horizontal and vertical stripes. [4]
+      * Checkered squares. [5]
+      * Checkered squares that are rounded along the edges and at the corners.  These allow paths along the edges or between the diagonal corners. [2+3]
+      * Ellipses and Hyperbolas. [2]
+      * Concentric circles. [2]
+      * Spirals. [2]
    * Fractals.
-      * The Mandelbrot set.
-      * Julia sets from generating coordinates near the border of the Mandelbrot set.  An attempt is made to avoid disconnected Julia sets that would be completely indistinguable.
-   * Characters and Symbols from fonts at a very large size.
+      * The Mandelbrot set. [1]
+      * Julia sets from generating coordinates near the border of the Mandelbrot set.  An attempt is made to avoid disconnected Julia sets that would be completely indistinguishable. [2]
+   * Characters and Symbols from fonts at a very large size. [2]
    * Bitmaps that are stored as black-and-white image resources.
-      * Geographical structures like continents and countries.
+      * Geographical structures like continents and countries. [1]
    * Tiled patterns.  These are formed of rectangular tiles with a given pattern that are placed next to each other.
-      * Horizontal, vertical and checkered grids.
-      * Rectangular frames based on a pattern of interwoven ribbons.
-      * Pentominoes inside one-line frames.
-      * Puzzle pieces.
-      * Zigzagged patterns.
+      * Horizontal, vertical and checkered grids. [2]
+      * Rectangular frames based on a pattern of interwoven ribbons. [3]
+      * I-beam shaped ribbins. [2]
+      * Pentominoes inside one-line frames. [1]
+      * Repetitions of bitmap pattern.
+        * Puzzle pieces. [1]
+        * Zigzagged patterns. [2]
+        * Various other patterns. [2]
 
 While the patterns evoked by an Irregular Maze Builder come from following preferred directions (if possible), the rules defined by an Outline Shape are very strict.  They take precedence over the irregular preferences.
 
@@ -176,14 +182,14 @@ Efficient solvers often run for long stretches without error (i.e. without leavi
    * Display a run-time statistics panel.
    * [26] Build mazes with irregular wall patterns.
       * [4] Apply two mixed irregular patterns or apply the pattern to part of the maze only.
-   * [20] Build a continuous wall around an outline shape.
-      * [1.75] Build a second maze inside the outline shape.
+   * [43] Build a continuous wall around an outline shape.
+   * [16] Build a second maze inside the outline shape.
    * [16] Different solver strategies.
    * [2] Let an efficient solver detect dead end areas.
    
 That gives a very large number of pattern or style combinations:
 
-    3 x (1 + 26x4) x (1+20) x 1.75 x 16 x 2  =  370,440
+    3 x (1 + 26x4) x (1+43+16) x 16 x 2  =  604,800
 
 The exact application of each variant is often determined by random parameter values:  Some shapes are generated dynamically, some solvers choose arbitrary paths and the maze builder generates random patterns of walls.
 

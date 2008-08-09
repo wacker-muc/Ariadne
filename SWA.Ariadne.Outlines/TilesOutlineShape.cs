@@ -121,21 +121,22 @@ namespace SWA.Ariadne.Outlines
         /// <returns></returns>
         public static OutlineShape RandomInstance(Random r, int xSize, int ySize)
         {
+#if false
+            return FromBitmap(r, xSize, ySize);
+            return Ribbons(r, xSize, ySize);
+#endif
+
             // TODO: more patterns
-            switch (r.Next(6))
+            switch (r.Next(12))
             {
                 default:
-#if true
-                case 0:
+                case 0: case 1:
                     return StripesOrGrid(r, xSize, ySize);
-                case 1:
+                case 2: case 3: case 4:
                     return Ribbons(r, xSize, ySize);
-                case 2:
+                case 5: case 6:
                     return Pentominoes(r, xSize, ySize);
-#endif
-                case 3:
-                case 4:
-                case 5:
+                case 7: case 8: case 9: case 10: case 11:
                     return FromBitmap(r, xSize, ySize);
             }
         }
@@ -182,7 +183,7 @@ namespace SWA.Ariadne.Outlines
         }
 
         /// <summary>
-        /// Builds a pattern of interwoven ribbons, effectually forming rectangular frames.
+        /// Builds a pattern of interwoven ribbons.
         /// </summary>
         /// <param name="r"></param>
         /// <param name="xSize"></param>
@@ -190,7 +191,28 @@ namespace SWA.Ariadne.Outlines
         /// <returns></returns>
         private static OutlineShape Ribbons(Random r, int xSize, int ySize)
         {
-            TilesOutlineShape result = new TilesOutlineShape(xSize, ySize, Resources.Resources.Ribbons);
+            switch (r.Next(3))
+            {
+                default:
+                case 0:
+                    return Ribbons8(r, xSize, ySize);
+                case 1:
+                    return Ribbons6(r, xSize, ySize, true);
+                case 2:
+                    return Ribbons6(r, xSize, ySize, false);
+            }
+        }
+
+        /// <summary>
+        /// Builds a pattern of interwoven ribbons, effectually forming rectangular frames.
+        /// </summary>
+        /// <param name="r"></param>
+        /// <param name="xSize"></param>
+        /// <param name="ySize"></param>
+        /// <returns></returns>
+        private static OutlineShape Ribbons8(Random r, int xSize, int ySize)
+        {
+            TilesOutlineShape result = new TilesOutlineShape(xSize, ySize, Resources.Resources.Ribbons8);
 
             #region Optionally, erase some lines completely; the shape will no longer be totally connected.
 
@@ -232,6 +254,42 @@ namespace SWA.Ariadne.Outlines
             {
                 result.SetRepetitions(i, r2);
             }
+
+            #endregion
+
+            return result;
+        }
+
+        /// <summary>
+        /// Builds a pattern of interwoven ribbons, effectually forming I-beam shapes.
+        /// </summary>
+        /// <param name="r"></param>
+        /// <param name="xSize"></param>
+        /// <param name="ySize"></param>
+        /// <param name="broadRibbon">When true/false, the middle beam is broader/slimmer than the end beams.</param>
+        /// <returns></returns>
+        private static OutlineShape Ribbons6(Random r, int xSize, int ySize, bool broadRibbon)
+        {
+            TilesOutlineShape result = new TilesOutlineShape(xSize, ySize, Resources.Resources.Ribbons6);
+
+            #region Extend the shape width.
+
+            int r1, r2;
+
+            if (broadRibbon == true)
+            {
+                r1 = r.Next(6, 21);                                 // the broad ribbon width: 6..20
+                r2 = Math.Max(1, Math.Min(3, r.Next(1 + r1 / 3)));  // the ribbon border: 1..3
+            }
+            else
+            {
+                r1 = r.Next(1, 5);                                  // the slim ribbon width / middle beam
+                r2 = r.Next(6, 11);                                 // the ribbon border / end beam
+            }
+
+            result.SetRepetitions(r2);
+            result.SetRepetitions(1, r1);
+            result.SetRepetitions(4, r1);
 
             #endregion
 
@@ -342,14 +400,12 @@ namespace SWA.Ariadne.Outlines
 
             #region Choose a scale factor.
 
-            int area = FromBitmap(2 * bitmap.Width, 2 * bitmap.Height, bitmap, RotateFlipType.RotateNoneFlipNone, 1).ConnectedSubset(null).Area;
+            int area = FromBitmap(3 * bitmap.Width, 3 * bitmap.Height, bitmap, RotateFlipType.RotateNoneFlipNone, 1).ConnectedSubset(null).Area;
             int scale = (int)Math.Round(Math.Sqrt((24 * 24) / (area * 2)));
 #if false
             System.Console.Out.WriteLine("[TilesOutlineShape.FromBitmap] area = " + area.ToString() + ", scale = " + scale.ToString());
 #endif
             scale = r.Next(1, Math.Max(1, scale) + 1);
-
-            // TODO: Use the greatest connected subset to determine the scale factor.
 
             #endregion
 

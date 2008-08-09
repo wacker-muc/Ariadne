@@ -193,13 +193,16 @@
     <None Include="Resources\Puzzle14a.png" />
     <Content Include="Resources\Puzzle16.png" />
     <None Include="Resources\Tile34_04.png" />
+    <None Include="Resources\Ribbons6.png" />
+    <None Include="Resources\Ribbons8.png" />
+    <None Include="Resources\Tile6_05.png" />
+    <None Include="Resources\Tile4_06.png" />
     <Content Include="Resources\Tile8_03.png" />
+    <None Include="Resources\Zigzag9_02.png" />
+    <None Include="Resources\Zigzag9_01.png" />
+    <None Include="Resources\Zigzag9_03.png" />
     <None Include="Resources\Tile8x32_02.png" />
-    <None Include="Resources\Ribbons.png" />
-    <None Include="Resources\Zigzag18_03.png" />
     <None Include="Resources\Zigzag18_02a.png" />
-    <None Include="Resources\Zigzag18_02.png" />
-    <None Include="Resources\Zigzag18_01.png" />
     <None Include="Resources\Puzzle16a.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

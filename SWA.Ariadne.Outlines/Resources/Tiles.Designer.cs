@@ -102,6 +102,20 @@ namespace SWA.Ariadne.Outlines.Resources {
             }
         }
         
+        internal static System.Drawing.Bitmap Tile4_06 {
+            get {
+                object obj = ResourceManager.GetObject("Tile4_06", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Tile6_05 {
+            get {
+                object obj = ResourceManager.GetObject("Tile6_05", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap Tile8_01 {
             get {
                 object obj = ResourceManager.GetObject("Tile8_01", resourceCulture);
@@ -123,20 +137,6 @@ namespace SWA.Ariadne.Outlines.Resources {
             }
         }
         
-        internal static System.Drawing.Bitmap Zigzag18_01 {
-            get {
-                object obj = ResourceManager.GetObject("Zigzag18_01", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap Zigzag18_02 {
-            get {
-                object obj = ResourceManager.GetObject("Zigzag18_02", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
         internal static System.Drawing.Bitmap Zigzag18_02a {
             get {
                 object obj = ResourceManager.GetObject("Zigzag18_02a", resourceCulture);
@@ -144,9 +144,23 @@ namespace SWA.Ariadne.Outlines.Resources {
             }
         }
         
-        internal static System.Drawing.Bitmap Zigzag18_03 {
+        internal static System.Drawing.Bitmap Zigzag9_01 {
             get {
-                object obj = ResourceManager.GetObject("Zigzag18_03", resourceCulture);
+                object obj = ResourceManager.GetObject("Zigzag9_01", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Zigzag9_02 {
+            get {
+                object obj = ResourceManager.GetObject("Zigzag9_02", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Zigzag9_03 {
+            get {
+                object obj = ResourceManager.GetObject("Zigzag9_03", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

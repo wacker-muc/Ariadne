@@ -60,9 +60,16 @@ namespace SWA.Ariadne.Outlines.Resources {
             }
         }
         
-        internal static System.Drawing.Bitmap Ribbons {
+        internal static System.Drawing.Bitmap Ribbons6 {
             get {
-                object obj = ResourceManager.GetObject("Ribbons", resourceCulture);
+                object obj = ResourceManager.GetObject("Ribbons6", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Ribbons8 {
+            get {
+                object obj = ResourceManager.GetObject("Ribbons8", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
