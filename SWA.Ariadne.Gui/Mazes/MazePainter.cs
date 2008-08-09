@@ -302,7 +302,7 @@ namespace SWA.Ariadne.Gui.Mazes
         }
 
         /// <summary>
-        /// Chooses value for the wallVisibility and gridWidth parameters.
+        /// Chooses values for the wallVisibility and gridWidth parameters.
         /// </summary>
         public void Setup()
         {
@@ -394,7 +394,7 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <summary>
         /// Construct a maze that fits into the drawing area. 
         /// </summary>
-        internal void CreateMaze(ConfigureMazeLayoutDelegate configureDelegate)
+        public void CreateMaze(ConfigureMazeLayoutDelegate configureDelegate)
         {
             // Update the client dimensions, if it was resized.
             if (client != null)
@@ -609,6 +609,7 @@ namespace SWA.Ariadne.Gui.Mazes
         {
             gBuffer = CreateGraphicsBuffer();
             Graphics g = gBuffer.Graphics;
+            g.FillRectangle(Brushes.Black, targetRectangle);
             PaintMaze(g, painterDelegate);
 
             // Let all shared painters use the new graphics object.

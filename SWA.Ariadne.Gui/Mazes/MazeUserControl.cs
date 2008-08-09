@@ -112,6 +112,7 @@ namespace SWA.Ariadne.Gui.Mazes
             this.painter.Reconfigure(g, rect);
         }
 
+        // TODO: Make this method private, then unite painter.Setup() and painter.Setup(s,w,p).
         public void Setup(int squareWidth, int wallWidth, int pathWidth)
         {
             painter.Setup(squareWidth, wallWidth, pathWidth);
@@ -134,7 +135,11 @@ namespace SWA.Ariadne.Gui.Mazes
                 return;
             }
 
+            #region Set up the painter.
+
             painter.Setup();
+
+            // TODO: Move the remaining code to painter.Setup()
 
             int wallWidth;
             int squareWidth;
@@ -142,6 +147,8 @@ namespace SWA.Ariadne.Gui.Mazes
             MazePainter.SuggestWidths(painter.GridWidth, painter.VisibleWalls, out squareWidth, out pathWidth, out wallWidth);
 
             this.Setup(squareWidth, wallWidth, pathWidth);
+
+            #endregion
         }
 
         /// <summary>

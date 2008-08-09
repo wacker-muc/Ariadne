@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using Microsoft.Win32;
 using SWA.Ariadne.Gui;
 using SWA.Ariadne.Gui.Dialogs;
+using SWA.Ariadne.Ctrl;
 
 namespace SWA.Ariadne.App
 {
@@ -30,7 +31,11 @@ namespace SWA.Ariadne.App
                         // Catch any exceptions when the preview panel is closed.
                         try
                         {
+#if false
                             Application.Run(new ScreenSaverForm(args[1]));
+#else
+                            ScreenSaverPreviewController.Run(args[1]);
+#endif
                         }
                         catch(Exception)
                         {
@@ -48,17 +53,12 @@ namespace SWA.Ariadne.App
             }
             else
             {
-#if false
-                ScreenSaverForm form = new ScreenSaverForm(false);
-                Application.Run(form);
-#else
                 // If no arguments were passed in, run as a regular application.
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Form form = new MazeForm();
                 form.Icon = Properties.Resources.AriadneIcon_32x32;
                 Application.Run(form);
-#endif
             }
         }
     }
