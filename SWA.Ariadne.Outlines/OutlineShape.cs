@@ -70,9 +70,6 @@ namespace SWA.Ariadne.Outlines
                 OutlineShape.Character,
                 OutlineShape.Symbol,
                 OutlineShape.Bitmap,
-#if false
-                OutlineShape.PinstripeGrid,
-#endif
                 OutlineShape.Tiles,
             };
             int[] ratios = { // (number of items) * (novelty value) / (easyness of recognition)
@@ -83,9 +80,6 @@ namespace SWA.Ariadne.Outlines
                     15 * 10 / 2,
                      8 * 15 / 2,
                     25 * 15 / 1,
-#if false
-                     3 *  8 / 3,
-#endif
                      8 * 12 / 3,
                 };
             
@@ -139,11 +133,7 @@ namespace SWA.Ariadne.Outlines
         /// <returns></returns>
         public static OutlineShape Circle(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
         {
-#if false
-            return FunctionOutlineShape.Random(r, xSize, ySize, centerX, centerX, shapeSize);
-#else
             return CircleOutlineShape.Create(r, xSize, ySize, centerX, centerX, shapeSize);
-#endif
         }
 
         /// <summary>
@@ -258,42 +248,6 @@ namespace SWA.Ariadne.Outlines
             return BitmapOutlineShape.Random(r, xSize, ySize, centerX, centerX, shapeSize);
         }
 
-#if false
-        /// <summary>
-        /// Create an outline shape.
-        /// </summary>
-        /// <param name="r"></param>
-        /// <param name="xSize"></param>
-        /// <param name="ySize"></param>
-        /// <param name="centerX"></param>
-        /// <param name="centerY"></param>
-        /// <param name="shapeSize"></param>
-        /// <returns></returns>
-        public static OutlineShape PinstripeGrid(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
-        {
-            int gridWidth = 1 + r.Next(3, 20), gridHeight = 1 + r.Next(3, 20);
-            switch (r.Next(3))
-            {
-                case 0:
-                    // Disable vertical grid.
-                    gridWidth = xSize + 4;
-                    break;
-                case 1:
-                    // Disable horizontal grid.
-                    gridHeight = ySize + 4;
-                    break;
-            }
-            int xOrigin = (xSize - gridWidth) / 2, yOrigin = (ySize - gridHeight) / 2;
-
-            InsideShapeDelegate test = delegate(int x, int y)
-            {
-                return ((x - xOrigin) % gridWidth == 0 || (y - yOrigin) % gridHeight == 0);
-            };
-
-            return new DelegateOutlineShape(xSize, ySize, test);
-        }
-#endif
-
         /// <summary>
         /// Create an outline shape.
         /// </summary>
@@ -399,6 +353,75 @@ namespace SWA.Ariadne.Outlines
         {
             InsideShapeDelegate test = delegate(int x, int y) { return !this[x, y]; };
             return new DelegateOutlineShape(this.XSize, this.YSize, test);
+        }
+
+        public OutlineShape RotatedOrFlipped(RotateFlipType rft)
+        {
+            // Note: flipX and flipY will be evaluated after swapping X and Y.
+            bool swapXY = false, flipX = false, flipY = false;
+
+            // Note: There are eight different rotate/flip operations but 16 names in the RotateFlipType.
+            //       Every operation has two names which give the same enum value.
+            switch (rft)
+            {
+                default:
+                case RotateFlipType.RotateNoneFlipNone:
+                //case RotateFlipType.Rotate180FlipXY:
+                    break;
+                case RotateFlipType.RotateNoneFlipX:
+                //case RotateFlipType.Rotate180FlipY:
+                    flipX = true;
+                    break;
+                case RotateFlipType.RotateNoneFlipY:
+                //case RotateFlipType.Rotate180FlipX:
+                    flipX = true;
+                    break;
+                case RotateFlipType.Rotate90FlipNone:
+                //case RotateFlipType.Rotate270FlipXY:
+                    swapXY = flipX = true;
+                    break;
+                case RotateFlipType.Rotate270FlipNone:
+                //case RotateFlipType.Rotate90FlipXY:
+                    swapXY = flipY = true;
+                    break;
+                case RotateFlipType.RotateNoneFlipXY:
+                //case RotateFlipType.Rotate180FlipNone:
+                    flipX = flipY = true;
+                    break;
+                case RotateFlipType.Rotate90FlipX:
+                //case RotateFlipType.Rotate270FlipY:
+                    swapXY = true;
+                    break;
+                case RotateFlipType.Rotate90FlipY:
+                //case RotateFlipType.Rotate270FlipX:
+                    swapXY = flipX = flipY = true;
+                    break;
+            }
+
+            int resultXSize, resultYSize;
+            if (swapXY)
+            {
+                resultXSize = this.ySize; resultYSize = this.xSize;
+            }
+            else
+            {
+                resultXSize = this.xSize; resultYSize = this.ySize;
+            }
+
+            InsideShapeDelegate test = delegate(int x, int y)
+            {
+                int xx, yy;
+
+                if (swapXY) { xx = y; yy = x; } else { xx = x; yy = y; }
+                if (flipX) { xx = this.xSize - 1 - xx; }
+                if (flipY) { yy = this.ySize - 1 - yy; }
+
+                return this[xx, yy];
+            };
+
+            // Note: We return an ExplicitOutlineShape because that is more efficiently evaluated.
+            //       The TilesOutelineShape also requires an ExplicitOutlineShape for its tile pattern.
+            return new ExplicitOutlineShape(new DelegateOutlineShape(resultXSize, resultYSize, test));
         }
 
         #endregion

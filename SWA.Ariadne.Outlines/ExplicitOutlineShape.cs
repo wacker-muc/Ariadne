@@ -52,7 +52,7 @@ namespace SWA.Ariadne.Outlines
             {
                 for (int y = 0; y < this.YSize; y++)
                 {
-                    this.SetValue(x, y, (template[x, y] && !isReserved(x, y)));
+                    this.SetValue(x, y, (template[x, y] && (isReserved == null || !isReserved(x, y))));
                 }
             }
         }

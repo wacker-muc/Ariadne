@@ -43,6 +43,10 @@ namespace SWA.Utilities
             MethodInfo method = list[r.Next(list.Count)];
             System.Drawing.Bitmap result = (System.Drawing.Bitmap)method.Invoke(null, null);
 
+#if false
+            System.Console.Out.WriteLine("[Resources.CreateBitmap] " + method.Name);
+#endif
+
             return result;
         }
     }

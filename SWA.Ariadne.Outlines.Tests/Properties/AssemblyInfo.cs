@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SWA.Ariadne.Outlines")]
+[assembly: AssemblyTitle("SWA.Ariadne.Outlines.Tests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Stephan Wacker")]
@@ -15,12 +15,12 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
-// to COM components.  If you need to access a type in this assembly from 
+// to COM componenets.  If you need to access a type in this assembly from 
 // COM, set the ComVisible attribute to true on that type.
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("e2bc8c7a-7813-4612-9508-da445d7d9439")]
+[assembly: Guid("03677d80-24e9-4daf-b527-5a12889da72d")]
 
 // Version information for an assembly consists of the following four values:
 //

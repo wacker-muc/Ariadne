@@ -49,6 +49,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Bitmaps.resx</DependentUpon>
     </Compile>
+    <Compile Include="Resources\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\Tiles.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -61,6 +66,11 @@
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Bitmaps.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Resources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Tiles.resx">
       <SubType>Designer</SubType>
@@ -177,10 +187,16 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Tile8_01.png" />
     <Content Include="Resources\Puzzle10.png" />
     <Content Include="Resources\Puzzle14.png" />
     <None Include="Resources\Puzzle14a.png" />
     <Content Include="Resources\Puzzle16.png" />
+    <None Include="Resources\Tile34_04.png" />
+    <Content Include="Resources\Tile8_03.png" />
+    <None Include="Resources\Tile8x32_02.png" />
+    <None Include="Resources\Ribbons.png" />
+    <None Include="Resources\Zigzag18_03.png" />
     <None Include="Resources\Zigzag18_02a.png" />
     <None Include="Resources\Zigzag18_02.png" />
     <None Include="Resources\Zigzag18_01.png" />
