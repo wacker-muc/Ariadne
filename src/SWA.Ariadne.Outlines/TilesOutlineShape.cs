@@ -7,6 +7,7 @@ namespace SWA.Ariadne.Outlines
 {
     /// <summary>
     /// An OutlineShape with a pattern based on repeating rectangular tiles.
+    /// One tile will be centered in the size of the OutlineShape; identical tiles will extend in all directions.
     /// </summary>
     internal class TilesOutlineShape : OutlineShape
     {
@@ -59,13 +60,41 @@ namespace SWA.Ariadne.Outlines
 
         #region Constructor
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="xSize">The overall shape size.</param>
+        /// <param name="ySize">The overall shape size.</param>
+        /// <param name="xTileSize">The pattern tile size.</param>
+        /// <param name="yTileSize">The pattern tile size.</param>
         private TilesOutlineShape(int xSize, int ySize, int xTileSize, int yTileSize)
+            : this(xSize, ySize, new ExplicitOutlineShape(xTileSize, yTileSize))
+        {
+        }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="xSize">The overall shape size.</param>
+        /// <param name="ySize">The overall shape size.</param>
+        /// <param name="template">A black and white bitmap pattern.</param>
+        private TilesOutlineShape(int xSize, int ySize, Bitmap template)
+            : this(xSize, ySize, new ExplicitOutlineShape(template))
+        {
+        }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="xSize">The overall shape size.</param>
+        /// <param name="ySize">The overall shape size.</param>
+        /// <param name="tile">A shape that will be used as the repeating tile pattern.</param>
+        private TilesOutlineShape(int xSize, int ySize, ExplicitOutlineShape tile)
             : base(xSize, ySize)
         {
-            this.tile = new ExplicitOutlineShape(xTileSize, yTileSize);
-
-            this.xRepetitions = new int[xTileSize];
-            this.yRepetitions = new int[yTileSize];
+            this.tile = tile;
+            this.xRepetitions = new int[tile.XSize];
+            this.yRepetitions = new int[tile.YSize];
 
             for (int i = 0; i < xRepetitions.Length; i++)
             {
@@ -77,13 +106,6 @@ namespace SWA.Ariadne.Outlines
             }
 
             UpdateTileSize();
-        }
-
-        private TilesOutlineShape(int xSize, int ySize, Bitmap template)
-            : this(xSize, ySize, template.Width, template.Height)
-        {
-            // Replace the empty tile created in the other constructor.
-            this.tile = new ExplicitOutlineShape(template);
         }
 
         #endregion
@@ -100,10 +122,10 @@ namespace SWA.Ariadne.Outlines
         public static OutlineShape RandomInstance(Random r, int xSize, int ySize)
         {
             // TODO: more patterns
-            switch (r.Next(3))
+            switch (r.Next(6))
             {
                 default:
-#if false
+#if true
                 case 0:
                     return StripesOrGrid(r, xSize, ySize);
                 case 1:
@@ -112,6 +134,8 @@ namespace SWA.Ariadne.Outlines
                     return Pentominoes(r, xSize, ySize);
 #endif
                 case 3:
+                case 4:
+                case 5:
                     return FromBitmap(r, xSize, ySize);
             }
         }
@@ -166,93 +190,29 @@ namespace SWA.Ariadne.Outlines
         /// <returns></returns>
         private static OutlineShape Ribbons(Random r, int xSize, int ySize)
         {
-            TilesOutlineShape result = new TilesOutlineShape(xSize, ySize, 8, 8);
+            TilesOutlineShape result = new TilesOutlineShape(xSize, ySize, Resources.Resources.Ribbons);
 
-            #region Start with filled squares in all but the (odd,odd) positions.
-
-            for (int x = 0; x < 8; x++)
-            {
-                for (int y = 0; y < 8; y++)
-                {
-                    result.SetValue(x, y, (x % 2 == 0 || y % 2 == 0));
-                }
-            }
-
-            // result: a dense grid
-            /*
-             *   x x x x x x x x
-             *   x o x o x o x o
-             *   x x x x x x x x
-             *   x o x o x o x o
-             *   x x x x x x x x
-             *   x o x o x o x o
-             *   x x x x x x x x
-             *   x o x o x o x o
-             */
-
-            #endregion
-
-            int p = 5, q = 3;
-
-            #region Erase four pairs of squares
-
-            result.SetValue(p + 2, q - 3, false);
-            result.SetValue(p + 2, q + 3, false);
-
-            result.SetValue(p - 2, q - 1, false);
-            result.SetValue(p - 2, q + 1, false);
-
-            result.SetValue(q - 3, p - 2, false);
-            result.SetValue(q + 3, p - 2, false);
-
-            result.SetValue(q - 1, p + 2, false);
-            result.SetValue(q + 1, p + 2, false);
-
-            // result: four interwoven ribbons
-            /*
-             *   x x x x x x x O
-             *   x o x o x o x o
-             *   x x x O x x x x
-             *   O o x o x o O o
-             *   x x x O x x x x
-             *   x o x o x o x o
-             *   x x x x x x x O
-             *   x o O o O o x o
-             */
-
-            #endregion
-
-            #region Optionally, erase more pairs of squares; the shape will no longer be totally connected
+            #region Optionally, erase some lines completely; the shape will no longer be totally connected.
 
             if (r.Next(2) == 0)
             {
-                for (int i = 0; i < 8; i += 2)
+                for (int i = 0; i < 8; i++)
                 {
-                    result.SetValue(q - 2, i, false);
-                    result.SetValue(q + 2, i, false);
+                    result.SetValue(1, i, false);
+                    result.SetValue(5, i, false);
                 }
             }
             if (r.Next(2) == 0)
             {
-                for (int i = 0; i < 8; i += 2)
+                for (int i = 0; i < 8; i++)
                 {
-                    result.SetValue(i, q - 2, false);
-                    result.SetValue(i, q + 2, false);
+                    result.SetValue(i, 1, false);
+                    result.SetValue(i, 5, false);
                 }
             }
 
             // with one set erased: rectangular frames
             // with two sets erased: disconnected bars
-            /*
-             *   x a x x x a x o
-             *   b o b o b o b o
-             *   x a x o x a x x
-             *   o o x o x o o o
-             *   x a x o x a x x
-             *   b o b o b o b o
-             *   x a x x x a x o
-             *   x o o o o o x o
-             */
 
             #endregion
 
@@ -349,10 +309,78 @@ namespace SWA.Ariadne.Outlines
             return result;
         }
 
+        /// <summary>
+        /// Builds a pattern from a bitmap resource.
+        /// </summary>
+        /// <param name="r"></param>
+        /// <param name="xSize"></param>
+        /// <param name="ySize"></param>
+        /// <returns></returns>
         private static OutlineShape FromBitmap(Random r, int xSize, int ySize)
         {
+            // Load a random bitmap image.
             Bitmap bitmap = SWA.Utilities.Resources.CreateBitmap(BitmapProperties, r);
-            TilesOutlineShape result = new TilesOutlineShape(xSize, ySize, bitmap);
+
+            #region Choose a rotate/flip operation.
+
+            RotateFlipType rft;
+            switch (r.Next(3))
+            {
+                default:
+                case 0:
+                    rft = RotateFlipType.RotateNoneFlipNone;
+                    break;
+                case 1:
+                    rft = RotateFlipType.Rotate90FlipNone;
+                    break;
+                case 2:
+                    rft = RotateFlipType.RotateNoneFlipX;
+                    break;
+            }
+
+            #endregion
+
+            #region Choose a scale factor.
+
+            int area = FromBitmap(2 * bitmap.Width, 2 * bitmap.Height, bitmap, RotateFlipType.RotateNoneFlipNone, 1).ConnectedSubset(null).Area;
+            int scale = (int)Math.Round(Math.Sqrt((24 * 24) / (area * 2)));
+#if false
+            System.Console.Out.WriteLine("[TilesOutlineShape.FromBitmap] area = " + area.ToString() + ", scale = " + scale.ToString());
+#endif
+            scale = r.Next(1, Math.Max(1, scale) + 1);
+
+            // TODO: Use the greatest connected subset to determine the scale factor.
+
+            #endregion
+
+            return FromBitmap(xSize, ySize, bitmap, rft, scale);
+        }
+
+        /// <summary>
+        /// Builds a pattern from the given bitmap, rotated and scaled.
+        /// </summary>
+        /// <param name="xSize"></param>
+        /// <param name="ySize"></param>
+        /// <param name="bitmap"></param>
+        /// <param name="rft"></param>
+        /// <param name="scale"></param>
+        /// <returns></returns>
+        private static OutlineShape FromBitmap(int xSize, int ySize, Bitmap bitmap, RotateFlipType rft, int scale)
+        {
+#if false
+            System.Console.Out.WriteLine("[TilesOutlineShape.FromBitmap] " + rft.ToString() + ", x" + scale.ToString());
+#endif
+
+#if false
+            // Note: Some bitmaps are useless (all black or all white) after the RotateFlip() operation!
+            Bitmap template = (Bitmap)bitmap.Clone();
+            template.RotateFlip(rft);
+            TilesOutlineShape result = new TilesOutlineShape(xSize, ySize, template);
+#else
+            OutlineShape tile = new ExplicitOutlineShape(bitmap).RotatedOrFlipped(rft);
+            TilesOutlineShape result = new TilesOutlineShape(xSize, ySize, tile as ExplicitOutlineShape);
+#endif
+            result.SetRepetitions(scale);
 
             return result;
         }
@@ -360,6 +388,8 @@ namespace SWA.Ariadne.Outlines
         #endregion
 
         #region Auxiliary methods
+
+        #region Methods for setting the repetition numbers
 
         /// <summary>
         /// Set the repetition number of the given tile position (x coordinate).
@@ -395,6 +425,55 @@ namespace SWA.Ariadne.Outlines
             UpdateTileSize();
         }
 
+        /// <summary>
+        /// Set the repetition number of all positions (x coordinate).
+        /// </summary>
+        /// <param name="num"></param>
+        private void SetXRepetitions(int num)
+        {
+            for (int i = 0; i < xRepetitions.Length; i++)
+            {
+                xRepetitions[i] = num;
+            }
+            UpdateTileSize();
+        }
+
+        /// <summary>
+        /// Set the repetition number of all positions (y coordinate).
+        /// </summary>
+        /// <param name="num"></param>
+        private void SetYRepetitions(int num)
+        {
+            for (int i = 0; i < yRepetitions.Length; i++)
+            {
+                yRepetitions[i] = num;
+            }
+            UpdateTileSize();
+        }
+
+        /// <summary>
+        /// Set the repetition number of all positions (x and y coordinates).
+        /// </summary>
+        /// <param name="num"></param>
+        private void SetRepetitions(int num)
+        {
+            for (int i = 0; i < xRepetitions.Length; i++)
+            {
+                xRepetitions[i] = num;
+            }
+            for (int i = 0; i < yRepetitions.Length; i++)
+            {
+                yRepetitions[i] = num;
+            }
+            UpdateTileSize();
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Calculates the xTileSize and yTileSize values and updates the xMap and yMap coordinate mappings.
+        /// Is called whenever the repetition numbers are changed.
+        /// </summary>
         private void UpdateTileSize()
         {
             xTileSize = yTileSize = 0;
@@ -411,6 +490,10 @@ namespace SWA.Ariadne.Outlines
             UpdateCoordinateMapping();
         }
 
+        /// <summary>
+        /// Updates the xMap and yMap coordinate mappings.
+        /// Is called whenever the repetition numbers are changed.
+        /// </summary>
         private void UpdateCoordinateMapping()
         {
             xMap = new int[xTileSize];
@@ -440,7 +523,7 @@ namespace SWA.Ariadne.Outlines
             }
             for (int yt = 0, ym = 0; yt < tile.YSize; yt++)
             {
-                for (int i = 0; i < xRepetitions[yt]; i++, ym++)
+                for (int i = 0; i < yRepetitions[yt]; i++, ym++)
                 {
                     yMap[(ym + y0) % yTileSize] = yt;
                 }

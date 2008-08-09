@@ -95,6 +95,34 @@ namespace SWA.Ariadne.Outlines.Resources {
             }
         }
         
+        internal static System.Drawing.Bitmap Tile34_04 {
+            get {
+                object obj = ResourceManager.GetObject("Tile34_04", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Tile8_01 {
+            get {
+                object obj = ResourceManager.GetObject("Tile8_01", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Tile8_03 {
+            get {
+                object obj = ResourceManager.GetObject("Tile8_03", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Tile8x32_02 {
+            get {
+                object obj = ResourceManager.GetObject("Tile8x32_02", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap Zigzag18_01 {
             get {
                 object obj = ResourceManager.GetObject("Zigzag18_01", resourceCulture);
@@ -112,6 +140,13 @@ namespace SWA.Ariadne.Outlines.Resources {
         internal static System.Drawing.Bitmap Zigzag18_02a {
             get {
                 object obj = ResourceManager.GetObject("Zigzag18_02a", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Zigzag18_03 {
+            get {
+                object obj = ResourceManager.GetObject("Zigzag18_03", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
