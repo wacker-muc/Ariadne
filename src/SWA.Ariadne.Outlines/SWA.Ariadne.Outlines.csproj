@@ -187,22 +187,27 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Tile8_01.png" />
+    <None Include="Resources\Tile01_8x8.png" />
     <Content Include="Resources\Puzzle10.png" />
     <Content Include="Resources\Puzzle14.png" />
     <None Include="Resources\Puzzle14a.png" />
     <Content Include="Resources\Puzzle16.png" />
-    <None Include="Resources\Tile34_04.png" />
+    <Content Include="Resources\Tile02_8x32.png" />
+    <Content Include="Resources\Tile03_8x8.png" />
+    <Content Include="Resources\Tile04_34x34.png" />
+    <Content Include="Resources\Tile05_6x6.png" />
+    <Content Include="Resources\Tile06_4x4.png" />
+    <Content Include="Resources\Tile07_16x10.png" />
+    <Content Include="Resources\Zigzag01_9x9.png" />
+    <Content Include="Resources\Zigzag02_9x9.png" />
+    <Content Include="Resources\Zigzag03_18x18.png" />
+    <Content Include="Resources\Zigzag03_9x9.png" />
     <None Include="Resources\Ribbons6.png" />
     <None Include="Resources\Ribbons8.png" />
-    <None Include="Resources\Tile6_05.png" />
-    <None Include="Resources\Tile4_06.png" />
-    <Content Include="Resources\Tile8_03.png" />
-    <None Include="Resources\Zigzag9_02.png" />
-    <None Include="Resources\Zigzag9_01.png" />
-    <None Include="Resources\Zigzag9_03.png" />
-    <None Include="Resources\Tile8x32_02.png" />
-    <None Include="Resources\Zigzag18_02a.png" />
+    <None Include="Resources\Stamp194x98.png" />
+    <None Include="Resources\Stamp146x195.png" />
+    <None Include="Resources\Stamp194x98_Open.png" />
+    <None Include="Resources\Stamp146x195_Open.png" />
     <None Include="Resources\Puzzle16a.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

@@ -10,6 +10,12 @@ namespace SWA.Ariadne.Ctrl
     public interface IAriadneEventHandler
     {
         /// <summary>
+        /// Called before processing every timer event.
+        /// Should return false if the event is to be ignored.
+        /// </summary>
+        bool Alive { get; }
+
+        /// <summary>
         /// Called when starting a new run.
         /// </summary>
         /// <param name="sender"></param>

@@ -14,6 +14,7 @@ namespace SWA.Ariadne.Ctrl
     /// </summary>
     public class ScreenSaverPreviewController
         : IAriadneEventHandler
+        , IMazePainterClient
     {
         #region  Use Win32 API functions for dealing with preview dialog box
 
@@ -35,6 +36,9 @@ namespace SWA.Ariadne.Ctrl
         /// A handle of the parent window, i.e. the Screen Saver Preferences dialog.
         /// </summary>
         private IntPtr parentHwnd;
+
+        private Graphics targetGraphics;
+        private Rectangle targetRectangle;
 
         /// <summary>
         /// The object controlling a running solver.
@@ -67,9 +71,9 @@ namespace SWA.Ariadne.Ctrl
             }
 
             // Create a MazePainter.
-            Graphics targetGraphics = Graphics.FromHwnd(parentHwnd);
-            Rectangle targetRectangle = new Rectangle(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
-            this.painter = new MazePainter(targetGraphics, targetRectangle);
+            this.targetGraphics = Graphics.FromHwnd(parentHwnd);
+            this.targetRectangle = new Rectangle(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
+            this.painter = new MazePainter(targetGraphics, targetRectangle, this as IMazePainterClient, true);
 
             // Create and display the first maze.
             this.OnNew(null, null);
@@ -92,10 +96,14 @@ namespace SWA.Ariadne.Ctrl
 
         private Timer supervisorTimer;
 
+        /// <summary>
+        /// Starts a timer with moderately high frequency for checking if we are still alive.
+        /// This complements the AriadneController timers that also check the Alive property.
+        /// </summary>
         private void CreateSupervisorTimer()
         {
             supervisorTimer = new Timer();
-            supervisorTimer.Interval = 20;
+            supervisorTimer.Interval = 100;
             supervisorTimer.Tick += new EventHandler(this.OnSupervisorTimer);
             supervisorTimer.Start();
         }
@@ -107,19 +115,36 @@ namespace SWA.Ariadne.Ctrl
         /// <param name="e"></param>
         private void OnSupervisorTimer(object sender, EventArgs e)
         {
-            // Quit if dialog is dismissed.  Check this periodically.
-            if (!IsWindowVisible(parentHwnd))
-            {
-                supervisorTimer.Stop();
-                painter.Reset();
-                ariadneController.Stop();
-                Application.Exit();
-            }
+            // Just evaluate the Alive property.
+            if (Alive) { }
         }
 
         #endregion
 
         #region IAriadneEventHandler Members
+
+        /// <summary>
+        /// Returns false if the window is no longer visible.
+        /// Also exits the main application loop.
+        /// </summary>
+        public bool Alive
+        {
+            get
+            {
+                // Quit if the preview dialog is dismissed.  Check this periodically.
+                if (!IsWindowVisible(parentHwnd))
+                {
+                    painter.Reset();
+                    ariadneController.Stop();
+                    Application.Exit();
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+        }
 
         /// <summary>
         /// Creates a new maze.
@@ -164,6 +189,15 @@ namespace SWA.Ariadne.Ctrl
         public void Update()
         {
             // do nothing
+        }
+
+        #endregion
+
+        #region IMazePainterClient Members
+
+        public Rectangle DisplayRectangle
+        {
+            get { return this.targetRectangle; }
         }
 
         #endregion

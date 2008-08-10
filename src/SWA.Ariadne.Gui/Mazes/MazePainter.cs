@@ -168,7 +168,10 @@ namespace SWA.Ariadne.Gui.Mazes
                 if (blinkingCounter >= 0 && gBuffer != null)
                 {
                     PaintEndpoints(gBuffer.Graphics);
-                    gBuffer.Render();
+                    if (client == null || client.Alive)
+                    {
+                        gBuffer.Render();
+                    }
                     if (client != null)
                     {
                         client.Update();
@@ -217,29 +220,15 @@ namespace SWA.Ariadne.Gui.Mazes
         #region Constructor and Initialization
 
         /// <summary>
-        /// Create a MazePainter that paints into the given client control.
+        /// Create a MazePainter that paints into the given Graphics.
         /// </summary>
         /// <param name="client"></param>
-        public MazePainter(Graphics graphics, Rectangle rectangle, IMazePainterClient client)
+        public MazePainter(Graphics graphics, Rectangle rectangle, IMazePainterClient client, bool screenSaverPreviewMode)
         {
             this.client = client;
             this.targetGraphics = graphics;
             this.targetRectangle = rectangle;
-            this.screenSaverPreviewMode = false;
-        }
-
-        /// <summary>
-        /// Create a MazePainter that paints into the given Graphics.
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="graphics"></param>
-        /// <param name="rectangle"></param>
-        public MazePainter(Graphics graphics, Rectangle rectangle)
-        {
-            this.client = null;
-            this.targetGraphics = graphics;
-            this.targetRectangle = rectangle;
-            this.screenSaverPreviewMode = true;
+            this.screenSaverPreviewMode = screenSaverPreviewMode;
         }
 
         /// <summary>
@@ -507,7 +496,7 @@ namespace SWA.Ariadne.Gui.Mazes
         {
             // The new MazePainter should not have a client.
             // The client related behavior is a task of the main MazePainter.
-            MazePainter result = new MazePainter(this.targetGraphics, this.targetRectangle, null);
+            MazePainter result = new MazePainter(this.targetGraphics, this.targetRectangle, null, false);
 
             // The maze should have the same layout.
             result.Setup(this.squareWidth, this.wallWidth, this.pathWidth);
@@ -596,7 +585,7 @@ namespace SWA.Ariadne.Gui.Mazes
                 }
             }
 
-            if (renderBuffer)
+            if (renderBuffer && (client == null || client.Alive))
             {
                 gBuffer.Render();
             }
@@ -910,7 +899,10 @@ namespace SWA.Ariadne.Gui.Mazes
             }
 
             // Render the buffered graphics to the display.
-            gBuffer.Render();
+            if (client == null || client.Alive)
+            {
+                gBuffer.Render();
+            }
 
             // Finally, update the display.
             if (client != null)

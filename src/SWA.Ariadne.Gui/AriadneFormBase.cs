@@ -469,6 +469,14 @@ namespace SWA.Ariadne.Gui
 
         #region Support for early preparations for the next start
 
+        /// <summary>
+        /// Always returns true.
+        /// </summary>
+        public bool Alive { get { return true; } }
+
+        /// <summary>
+        /// Executes some time consuming preparations before the next solver run is started.
+        /// </summary>
         public void PrepareForNextStart()
         {
             PrepareForNextStart(true);
