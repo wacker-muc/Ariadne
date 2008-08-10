@@ -99,7 +99,7 @@ namespace SWA.Ariadne.Gui.Mazes
         public MazeUserControl()
         {
             InitializeComponent();
-            this.painter = new MazePainter(this.CreateGraphics(), this.DisplayRectangle, this as IMazePainterClient);
+            this.painter = new MazePainter(this.CreateGraphics(), this.DisplayRectangle, this as IMazePainterClient, false);
         }
 
         /// <summary>
@@ -430,6 +430,18 @@ namespace SWA.Ariadne.Gui.Mazes
 
             mazeForm.UpdateStatusLine();
             mazeForm.UpdateCaption();
+        }
+
+        #endregion
+
+        #region IMazePainterClient implementation
+
+        /// <summary>
+        /// Always returns true.
+        /// </summary>
+        public bool Alive
+        {
+            get { return true; }
         }
 
         #endregion

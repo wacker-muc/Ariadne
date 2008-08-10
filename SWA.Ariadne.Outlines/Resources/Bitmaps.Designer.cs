@@ -277,6 +277,34 @@ namespace SWA.Ariadne.Outlines.Resources {
             }
         }
         
+        internal static System.Drawing.Bitmap Stamp146x195 {
+            get {
+                object obj = ResourceManager.GetObject("Stamp146x195", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Stamp146x195_Open {
+            get {
+                object obj = ResourceManager.GetObject("Stamp146x195_Open", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Stamp194x98 {
+            get {
+                object obj = ResourceManager.GetObject("Stamp194x98", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Stamp194x98_Open {
+            get {
+                object obj = ResourceManager.GetObject("Stamp194x98_Open", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap Texas {
             get {
                 object obj = ResourceManager.GetObject("Texas", resourceCulture);

@@ -10,6 +10,7 @@ namespace SWA.Ariadne.Gui.Mazes
     /// </summary>
     public interface IMazePainterClient
     {
+        bool Alive { get; }
         Rectangle DisplayRectangle { get; }
         void Update();
     }
