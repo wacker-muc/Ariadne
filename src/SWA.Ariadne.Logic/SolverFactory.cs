@@ -36,6 +36,7 @@ namespace SWA.Ariadne.Logic
             typeof(BackwardFlooder),
             typeof(ThickestBranchFlooder),
             typeof(ThinnestBranchFlooder),
+            typeof(SpreadingFlooder),
             typeof(RandomFlooder),
         };
 

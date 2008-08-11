@@ -89,6 +89,7 @@ Usually, an Outline Shape is one contiguous shape, like a circle, a square or an
    * Characters and Symbols from fonts at a very large size. [2]
    * Bitmaps that are stored as black-and-white image resources.
       * Geographical structures like continents and countries. [1]
+      * Picture frames or stamp contours. [1]
    * Tiled patterns.  These are formed of rectangular tiles with a given pattern that are placed next to each other.
       * Horizontal, vertical and checkered grids. [2]
       * Rectangular frames based on a pattern of interwoven ribbons. [3]
@@ -129,7 +130,7 @@ Walkers have no memory of visited squares; they decide soleley on their current 
 
 The visited paths are painted in two colors: Forward steps are painted in a bright color, backward steps and areas completely covered by a flooder are painted in a dull color.  Two colors with clearly different hue are selected.  When the solution path is found, it is painted in a brighter variant of the forward color.
 
-[Variants:] There are 16 "normal" maze solver strategies:
+[Variants:] There are 17 "normal" maze solver strategies:
 
    * RandomBacktracker:  The classical backtracker algorithm; it walks forward as long as possible, making random choices at a fork.  When there is no continuation, walks back to the latest fork and chooses another path that has not yet been visited (this is called "backtracking").
    * ProximityBacktracker: Another backtracker; at a fork, this one prefers the square that is nearest to the target square (measuring the geometric distance).
@@ -147,6 +148,7 @@ The visited paths are painted in two colors: Forward steps are painted in a brig
    * BackwardFlooder: This flooder works essentially like the ForwardFlooder, but it chooses the path continuation with maximal d'/d ratio.
    * ThickestBranchFlooder: This flooder is based on the maze's tree structure.  Starting with a trunk of thickness 1 and length 0, every step increases the path length by 1 and every fork divides the thickness by the number of branches.  Among the currently thickest branches, the longest one is chosen.
    * ThinnestBranchFlooder: This flooder works like the ThickestBranchFlooder with inverted logic: Among the thinnest branches, the shortest one is chosen.
+   * SpreadingFlooder: This flooder selects one of the two path ends closest to each other.
    
 [Variants:] Each of these solvers also has an "efficient" variant.  These employ an algorithm that detects dead ends and avoids these areas.  An area is identified as a dead end if the squares visited by the solver (plus any reserved areas and the maze boundary) form a closed line around it.
 
@@ -170,6 +172,8 @@ The ThickestBranchFlooder advances on a chosen branch in one run up to the next 
 
 ForwardFlooder and BackwardFlooder tend to fill the whole maze, just like a HesitatingFlooder.  That is because both solvers assign highest penalties to undesired steps near the target square: the BackwardFlooder assigns an extreme penalty (100%) to the last step onto the target square; the ForwardFlooder assigns very high penalties to backward steps close to the target.  In that situation, both solvers will visit the whole rest of the maze before doing the one highly penalized required step.
 
+In the SpreadingFlooder, the pair of paths closest to each other advances in parallel.  When one path is split or gets closer to a different path, it forms a new partnership with the other closer partner.
+
 Efficient solvers often run for long stretches without error (i.e. without leaving the correct solution path), especially towards the end.  It is not unlikely that such a run spans more than half or two thirds of the solution path.  Even perfect runs without any error at all can be observed.  Considering that an average path may have several dozen or even hundreds of forks, this is quite amazing.
 
 -----------------------------------------------------------------------
@@ -182,14 +186,14 @@ Efficient solvers often run for long stretches without error (i.e. without leavi
    * Display a run-time statistics panel.
    * [26] Build mazes with irregular wall patterns.
       * [4] Apply two mixed irregular patterns or apply the pattern to part of the maze only.
-   * [43] Build a continuous wall around an outline shape.
-   * [16] Build a second maze inside the outline shape.
-   * [16] Different solver strategies.
+   * [44] Build a continuous wall around an outline shape.
+   * [17] Build a second maze inside the outline shape.
+   * [17] Different solver strategies.
    * [2] Let an efficient solver detect dead end areas.
    
 That gives a very large number of pattern or style combinations:
 
-    3 x (1 + 26x4) x (1+43+16) x 16 x 2  =  604,800
+    3 x (1 + 26x4) x (1+44+17) x 17 x 2  =  664,020
 
 The exact application of each variant is often determined by random parameter values:  Some shapes are generated dynamically, some solvers choose arbitrary paths and the maze builder generates random patterns of walls.
 

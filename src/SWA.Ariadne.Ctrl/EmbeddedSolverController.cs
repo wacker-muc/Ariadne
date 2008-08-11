@@ -65,26 +65,12 @@ namespace SWA.Ariadne.Ctrl
         private bool waitingForStart = true;
 
         /// <summary>
-        /// Number of executed steps.
-        /// </summary>
-        public override long CountSteps
-        {
-            get
-            {
-                if (hostController.RunParallelSolvers)
-                {
-                    return base.CountSteps + this.skippedSteps;
-                }
-                else
-                {
-                    return base.CountSteps;
-                }
-            }
-        }
-
-        /// <summary>
         /// Number of steps that were skipped until the solver was really started.
         /// </summary>
+        public long SkippedSteps
+        {
+            get { return this.skippedSteps; }
+        }
         private long skippedSteps = 0;
 
         #endregion
