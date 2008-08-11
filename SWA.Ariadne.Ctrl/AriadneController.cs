@@ -524,7 +524,7 @@ namespace SWA.Ariadne.Ctrl
             get
             {
                 // If the maze is solved, we are Finished.
-                if (solverController.IsFinished)
+                if (solverController != null && solverController.IsFinished)
                 {
                     return SolverState.Finished;
                 }

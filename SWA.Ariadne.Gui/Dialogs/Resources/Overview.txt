@@ -110,7 +110,7 @@ The Outline Shapes described above can also be used to create another maze withi
 
 The Embedded Maze has its own solver (usually with a different strategy than the main maze solver).  The paths in an Embedded Maze will be painted with different colors than in the main maze.
 
-[Option:] You can select whether Embedded Mazes are generated.  If so, 10% of the screen saver mazes will contain an Embedded Maze.
+[Option:] You can select whether Embedded Mazes are generated.  If so, 15% of the screen saver mazes will contain an Embedded Maze.
 
 -----------------------------------------------------------------------
 
