@@ -20,12 +20,11 @@ namespace SWA.Ariadne.Ctrl
         /// <summary>
         /// Number of executed steps.
         /// </summary>
-        private long countSteps;
-
         public long CountSteps
         {
             get { return countSteps; }
         }
+        private long countSteps;
 
         public bool IsFinished
         {

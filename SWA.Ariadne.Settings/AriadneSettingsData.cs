@@ -446,6 +446,7 @@ namespace SWA.Ariadne.Settings
             this.OutlineOffCenter = template.OutlineOffCenter;
             this.OutlineSize = template.OutlineSize;
             this.VisibleOutlines = template.VisibleOutlines;
+            this.AsEmbeddedMaze = template.AsEmbeddedMaze;
         }
     }
 }

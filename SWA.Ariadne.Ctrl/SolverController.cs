@@ -52,18 +52,17 @@ namespace SWA.Ariadne.Ctrl
         /// <summary>
         /// Number of executed steps.
         /// </summary>
-        public virtual long CountSteps
+        public long CountSteps
         {
             get
             {
                 long result = countSteps;
 
-                foreach (SolverController item in embeddedControllers)
+                foreach (EmbeddedSolverController item in embeddedControllers)
                 {
                     if (RunParallelSolvers)
                     {
-                        // TODO: consider steps before item has really started
-                        result = Math.Max(result, item.CountSteps);
+                        result = Math.Max(result, item.CountSteps + item.SkippedSteps);
                     }
                     else
                     {
@@ -304,7 +303,10 @@ namespace SWA.Ariadne.Ctrl
                 // Forward the message to the embedded controllers.
                 foreach (EmbeddedSolverController item in embeddedControllers)
                 {
-                    result += item.DoStep();
+                    if (item.IsActive)
+                    {
+                        result += item.DoStep();
+                    }
                 }
             }
             else
@@ -327,7 +329,12 @@ namespace SWA.Ariadne.Ctrl
 
             solver.Step(out sq1, out sq2, out forward);
             mazePainter.DrawStep(sq1, sq2, forward);
+            ++result;
 
+            // Increment the step counter.
+            ++countSteps;
+
+            // Increment forward and backward counters.
             if (forward)
             {
                 ++countForward;
@@ -346,7 +353,6 @@ namespace SWA.Ariadne.Ctrl
             {
                 ++countBackward;
             }
-            ++countSteps;
 
             currentBackwardSquare = (forward ? null : sq2);
 
@@ -431,10 +437,19 @@ namespace SWA.Ariadne.Ctrl
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.Int64.ToString(System.String)")]
         public void FillStatusMessage(StringBuilder message)
         {
-            if (countSteps > 0)
+            long totalSteps = this.CountSteps;
+            long ownSteps = this.countSteps;
+            long embeddedSteps = totalSteps - ownSteps;
+
+            if (totalSteps > 0)
             {
-                string steps = (CountSteps == 1 ? "step" : "steps");
-                message.Append(CountSteps.ToString("#,##0") + " " + steps);
+                string steps = (totalSteps == 1 ? "step" : "steps");
+                message.Append(ownSteps.ToString("#,##0"));
+                if (embeddedSteps > 0)
+                {
+                    message.Append(" + " + embeddedSteps.ToString("#,##0"));
+                }
+                message.Append(" " + steps);
 
                 if (countBackward > 0)
                 {

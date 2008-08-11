@@ -60,6 +60,7 @@
     <Compile Include="SolverBase.cs" />
     <Compile Include="SolverFactory.cs" />
     <Compile Include="SolverState.cs" />
+    <Compile Include="SpreadingFlooder.cs" />
     <Compile Include="ThickestBranchFlooder.cs" />
     <Compile Include="ThinnestBranchFlooder.cs" />
   </ItemGroup>
