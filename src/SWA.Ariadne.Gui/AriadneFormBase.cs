@@ -581,7 +581,7 @@ namespace SWA.Ariadne.Gui
                 {
                     result = ariadneController.StrategyName;
                 }
-                if (result == null && strategyComboBox != null)
+                if (result == null && strategyComboBox != null && this.strategyComboBox.SelectedItem != null)
                 {
                     result = this.strategyComboBox.SelectedItem.ToString();
                 }

@@ -5,8 +5,6 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using System.Runtime.InteropServices;
-using Microsoft.Win32;
 using SWA.Ariadne.Model;
 using SWA.Ariadne.Outlines;
 using SWA.Ariadne.Settings;
@@ -15,20 +13,9 @@ namespace SWA.Ariadne.Gui
 {
     public partial class ScreenSaverForm : MazeForm
     {
-        #region  Use Win32 API functions for dealing with preview dialog box
-
-        [DllImport("user32.dll")]
-        private static extern bool GetClientRect(IntPtr hWnd, ref RECT rect);
-        [DllImport("user32.DLL", EntryPoint = "IsWindowVisible")]
-        private static extern bool IsWindowVisible(IntPtr hWnd);
-
-        #endregion
-
         #region Member variables
 
-        private bool previewMode = false;
         private bool fullScreenMode = true;
-        private IntPtr parentHwnd = new IntPtr(0);
 
         private Random random;
 
@@ -70,61 +57,22 @@ namespace SWA.Ariadne.Gui
         /// </summary>
         private void SetupScreenSaver()
         {
+#if false
             // Use double buffering to improve drawing performance
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
+#endif
             
-            // Set the application to full screen mode and hide the mouse
+            // Set the application to full screen mode and hide the mouse cursor.
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.TopMost = true;
             this.Bounds = Screen.PrimaryScreen.Bounds;
             this.WindowState = FormWindowState.Maximized;
             Cursor.Hide();
 
-            // Make this the active Form and capture the mouse
+            // Make this the active Form and capture the mouse.
             this.Activate();
             this.Capture = true;
         }
-
-        #region Preview mode constructor
-
-        private struct RECT
-        {
-            public int left, top, right, bottom;
-        }
-
-        public ScreenSaverForm(string windowHandleArg)
-        {
-            InitializeComponent();
-
-            // set the preview mode flag
-            previewMode = true;
-            fullScreenMode = false;
-            ShowInTaskbar = false;
-
-            // prevent an 
-            //outerInfoPanel = null;
-
-            parentHwnd = (IntPtr)UInt32.Parse(windowHandleArg);
-
-            RECT rect = new RECT();
-
-            // Let the mazeUserControl paint into the parent window's graphics.
-            if (GetClientRect(parentHwnd, ref rect))
-            {
-                Graphics g = Graphics.FromHwnd(parentHwnd);
-                mazeUserControl.SetGraphics(g, new Rectangle(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top));
-
-                // Hide the form.
-                this.Hide();
-                WindowState = FormWindowState.Minimized;
-
-                // Create the first maze and allocate a graphics buffer.
-                mazeUserControl.Setup(5, 2, 3);
-                mazeUserControl.MazePainter.PaintMaze(null); // TODO: This is probably executed twice.
-            }
-        }
-
-        #endregion
 
         #endregion
 
@@ -132,39 +80,27 @@ namespace SWA.Ariadne.Gui
 
         private void ScreenSaverForm_Load(object sender, EventArgs e)
         {
-            if (!previewMode)
-            {
-                if (fullScreenMode)
-                {
-                    SetupScreenSaver();
-                }
-            }
-
             // Switch auto repeat mode on.
             ariadneController.RepeatMode = true;
 
-            if (! previewMode)
+            if (fullScreenMode)
             {
-                if (fullScreenMode)
-                {
-                    // Let the MazeUserControl cover the whole form.
-                    this.mazeUserControl.Location = new Point(0, 0);
-                    this.mazeUserControl.Size = this.Size;
-                }
-                else
-                {
-                    // Let the MazeUserControl cover most of the form.
-                    this.mazeUserControl.Location = new Point(0, 0);
-                    this.mazeUserControl.Size = this.DisplayRectangle.Size;
-                }
-                this.mazeUserControl.BringToFront();
+                SetupScreenSaver();
 
-                // Other optional controls need to be displayed in front of the maze.
-                this.outerInfoPanel.BringToFront();
+                // Let the MazeUserControl cover the whole form.
+                this.mazeUserControl.Location = new Point(0, 0);
+                this.mazeUserControl.Size = this.Size;
             }
+            else
+            {
+                // Let the MazeUserControl cover most of the form.
+                this.mazeUserControl.Location = new Point(0, 0);
+                this.mazeUserControl.Size = this.DisplayRectangle.Size;
+            }
+            this.mazeUserControl.BringToFront();
 
-            // Select the strategyComboBox's item that chooses a random strategy.
-            strategyComboBox.SelectedItem = "(any)";
+            // Other optional controls need to be displayed in front of the maze.
+            this.outerInfoPanel.BringToFront();
 
             this.OnNew(null, null); // TODO: remove this message
             this.OnStart(null, null);
@@ -179,39 +115,27 @@ namespace SWA.Ariadne.Gui
                 return;
             }
 
-            // Quit if dialog is dismissed.  Check this periodically.
-            if (previewMode && !IsWindowVisible(parentHwnd))
-            {
-                Application.Exit();
-            }
-
             base.OnNew(sender, e); // TODO: remove this call
 
             // Choose new locations of controls, before the maze is built.
-            if (!previewMode)
+            if (visibleControls.Count == 0)
             {
-                if (visibleControls.Count == 0)
-                {
-                    PreparePlaceholderControls();
-                }
+                PreparePlaceholderControls();
             }
 
             // Build and display the new maze.
             base.OnNew(sender, e);
 
             // Place visible controls at the locations determined for their placeholders.
-            if (!previewMode)
+            for (int i = 0; i < visibleControls.Count; i++)
             {
-                for (int i = 0; i < visibleControls.Count; i++)
-                {
-                    Control control = visibleControls[i];
-                    Control placeholder = placeholderControls[i];
+                Control control = visibleControls[i];
+                Control placeholder = placeholderControls[i];
 
-                    control.Location = placeholder.Location;
-                    control.Visible = true;
-                    
-                    this.Controls.Remove(placeholder);
-                }
+                control.Location = placeholder.Location;
+                control.Visible = true;
+                
+                this.Controls.Remove(placeholder);
             }
         }
 
@@ -242,11 +166,8 @@ namespace SWA.Ariadne.Gui
             }
             else
             {
-                if (!previewMode)
-                {
-                    this.PrepareImages();
-                    this.PreparePlaceholderControls();
-                }
+                this.PrepareImages();
+                this.PreparePlaceholderControls();
                 base.PrepareForNextStart(baseFirst);
             }
         }
@@ -325,35 +246,32 @@ namespace SWA.Ariadne.Gui
 
             #region Images and other adornments
 
-            if (!previewMode)
+            // Images.
+            if (!mazeUserControl.HasPreparedImages)
             {
-                // Images.
-                if (!mazeUserControl.HasPreparedImages)
-                {
-                    this.PrepareImages();
-                }
-                mazeUserControl.ReserveAreaForImages();
+                this.PrepareImages();
+            }
+            mazeUserControl.ReserveAreaForImages();
 
-                bool hasEmbeddedShape = false;
+            bool hasEmbeddedShape = false;
 
-                if (!hasEmbeddedShape)
-                {
-                    // Embedded mazes.
-                    hasEmbeddedShape |= this.AddEmbeddedMaze();
-                }
+            if (!hasEmbeddedShape)
+            {
+                // Embedded mazes.
+                hasEmbeddedShape |= this.AddEmbeddedMaze();
+            }
 
-                if (!hasEmbeddedShape)
-                {
-                    // Outline shapes.
-                    hasEmbeddedShape |= this.AddOutlineShape();
-                }
+            if (!hasEmbeddedShape)
+            {
+                // Outline shapes.
+                hasEmbeddedShape |= this.AddOutlineShape();
+            }
 
-                // Irregular maze shapes.
-                if (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_IRREGULAR_MAZES, false) && random.Next(100) < 10)
-                {
-                    maze.Irregular = true;
-                    maze.Irregularity = 80;
-                }
+            // Irregular maze shapes.
+            if (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_IRREGULAR_MAZES, false) && random.Next(100) < 10)
+            {
+                maze.Irregular = true;
+                maze.Irregularity = 80;
             }
 
             #endregion
@@ -377,9 +295,8 @@ namespace SWA.Ariadne.Gui
         /// </summary>
         private bool AddEmbeddedMaze()
         {
-            int percentage = (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_MULTIPLE_MAZES, false) ? 10 : 0);
-            Random r = RandomFactory.CreateRandom();
-            if (r.Next(100) < percentage)
+            int percentage = (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_MULTIPLE_MAZES, false) ? 15 : 0);
+            if (random.Next(100) < percentage)
             {
                 OutlineShape shape = null;
                 int area = mazeUserControl.Maze.XSize * mazeUserControl.Maze.YSize;
@@ -387,7 +304,7 @@ namespace SWA.Ariadne.Gui
 
                 while (true)
                 {
-                    shape = OutlineShape.RandomInstance(r, mazeUserControl.Maze.XSize, mazeUserControl.Maze.YSize, 0.2, 1.0);
+                    shape = OutlineShape.RandomInstance(random, mazeUserControl.Maze.XSize, mazeUserControl.Maze.YSize, 0.2, 1.0);
 
                     // Discard shapes that are too small or too large.
                     if (minArea > shape.Area || shape.Area > maxArea)
@@ -418,10 +335,9 @@ namespace SWA.Ariadne.Gui
         private bool AddOutlineShape()
         {
             int percentage = (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_OUTLINE_SHAPES, false) ? 66 : 0);
-            Random r = RandomFactory.CreateRandom();
-            if (r.Next(100) < percentage)
+            if (random.Next(100) < percentage)
             {
-                OutlineShape shape = OutlineShape.RandomInstance(r, mazeUserControl.Maze.XSize, mazeUserControl.Maze.YSize, 0.3, 0.7);
+                OutlineShape shape = OutlineShape.RandomInstance(random, mazeUserControl.Maze.XSize, mazeUserControl.Maze.YSize, 0.3, 0.7);
                 mazeUserControl.Maze.OutlineShape = shape;
 
                 return true;
@@ -458,6 +374,21 @@ namespace SWA.Ariadne.Gui
                 FillCaption(caption);
 
                 this.infoLabelCaption.Text = caption.ToString();
+            }
+        }
+
+        public override string StrategyName
+        {
+            get
+            {
+                string result = null;
+
+                if (result == null && ariadneController != null)
+                {
+                    result = ariadneController.StrategyName;
+                }
+
+                return result;
             }
         }
 

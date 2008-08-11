@@ -74,6 +74,7 @@ namespace SWA.Ariadne.Gui.Tests
 
         #region Unit Tests
 
+#if false
         /// <summary>
         ///A test for ScreenSaverForm (string)
         ///</summary>
@@ -94,6 +95,7 @@ namespace SWA.Ariadne.Gui.Tests
                 Assert.Fail(e.ToString());
             }
         }
+#endif
 
         private static Form CreatePreviewWindow()
         {
