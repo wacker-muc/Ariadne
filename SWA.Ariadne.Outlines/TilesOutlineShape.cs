@@ -9,7 +9,7 @@ namespace SWA.Ariadne.Outlines
     /// An OutlineShape with a pattern based on repeating rectangular tiles.
     /// One tile will be centered in the size of the OutlineShape; identical tiles will extend in all directions.
     /// </summary>
-    internal class TilesOutlineShape : OutlineShape
+    public class TilesOutlineShape : OutlineShape
     {
         #region Class variables
 
@@ -17,6 +17,12 @@ namespace SWA.Ariadne.Outlines
         /// List of Property Methods that return bitmap images from the Resources file.
         /// </summary>
         private static List<System.Reflection.MethodInfo> BitmapProperties = SWA.Utilities.Resources.BitmapProperties(typeof(Resources.Tiles));
+
+        /// <summary>
+        /// List of Property Methods that return bitmap images from the Resources file.
+        /// These are rather small and will be used for one kind of IrregularMazeShape.
+        /// </summary>
+        private static List<System.Reflection.MethodInfo> SmallBitmapProperties = SWA.Utilities.Resources.BitmapProperties(typeof(Resources.SmallTiles));
 
         #endregion
 
@@ -119,7 +125,7 @@ namespace SWA.Ariadne.Outlines
         /// <param name="xSize"></param>
         /// <param name="ySize"></param>
         /// <returns></returns>
-        public static OutlineShape RandomInstance(Random r, int xSize, int ySize)
+        public static OutlineShape CreateInstance(Random r, int xSize, int ySize)
         {
 #if false
             return FromBitmap(r, xSize, ySize);
@@ -410,6 +416,24 @@ namespace SWA.Ariadne.Outlines
             #endregion
 
             return FromBitmap(xSize, ySize, bitmap, rft, scale);
+        }
+
+        /// <summary>
+        /// Builds a pattern from a bitmap resource.
+        /// </summary>
+        /// <param name="r"></param>
+        /// <param name="xSize"></param>
+        /// <param name="ySize"></param>
+        /// <returns></returns>
+        public static OutlineShape FromSmallBitmap(Random r)
+        {
+            // Load a random bitmap image.
+            Bitmap bitmap = SWA.Utilities.Resources.CreateBitmap(SmallBitmapProperties, r);
+
+            RotateFlipType rft = (RotateFlipType) r.Next(8);
+            int scale = 1;
+
+            return FromBitmap(bitmap.Width, bitmap.Height, bitmap, rft, scale);
         }
 
         /// <summary>

@@ -125,12 +125,12 @@ namespace SWA.Ariadne.Model
         /// <returns></returns>
         private static IrregularMazeShape SimpleInstance(Random r, Maze maze)
         {
-            int choice = r.Next(26);
+            int choice = r.Next(27);
 
             //choice = 17 + r.Next(3);
             //choice = 20 + r.Next(5);
             //choice = 25 + r.Next(1);
-            //choice = 23 + r.Next(3);
+            //choice = 23 + r.Next(4);
 
             // For PreferPathsRelativeToReferenceSquare: number of x and y partitions.
             int p = (choice % 2 == 0 ? 1 : 4), q = (choice % 2 == 0 ? 1 : 3);
@@ -204,6 +204,10 @@ namespace SWA.Ariadne.Model
                 case 25:
                     // Repeating patterns in a small grid
                     return new PreferSimilarGrid(maze, r.Next(2, 4), r.Next(2, 4));
+
+                case 26:
+                    // Periodic tilings.
+                    return new PreferTiledPattern(r);
             }
         }
 
@@ -779,6 +783,47 @@ namespace SWA.Ariadne.Model
                 {
                     result[p] = (openTemplates[p] >= 0);
                 }
+                return result;
+            }
+        }
+
+        protected class PreferTiledPattern : IrregularMazeShape
+        {
+            private OutlineShape shape;
+            bool preferStayingInside;
+
+            public PreferTiledPattern(Random r)
+                : base(Kind.Other)
+            {
+                this.shape = TilesOutlineShape.FromSmallBitmap(r);
+                this.preferStayingInside = (r.Next(2) == 0);
+            }
+
+            /// <summary>
+            /// This shape is too subtle to be detected if it is not applied in every square.
+            /// Returns the maximum value 100.
+            /// </summary>
+            /// <param name="p">The regular percentage, if not overridden.</param>
+            /// <returns></returns>
+            public override int ApplicationPercentage(int p)
+            {
+                // return (p + 110) / 2;
+                return 100;
+            }
+
+            public override bool[] PreferredDirections(MazeSquare sq)
+            {
+                bool[] result = new bool[4];
+                
+                for (int p = 0; p < 4; p++)
+                {
+                    MazeSquare sq1 = sq.NeighborSquare((MazeSquare.WallPosition)p);
+                    if (sq1 != null)
+                    {
+                        result[p] = ((shape[sq.XPos, sq.YPos] == shape[sq1.XPos, sq1.YPos]) == preferStayingInside);
+                    }
+                }
+
                 return result;
             }
         }
