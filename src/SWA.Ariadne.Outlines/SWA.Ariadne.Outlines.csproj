@@ -44,6 +44,7 @@
     <Compile Include="PolygonOutlineShape.cs" />
     <Compile Include="OutlineShape.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RectanglesOutlineShape.cs" />
     <Compile Include="Resources\Bitmaps.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -53,6 +54,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\SmallTiles.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SmallTiles.resx</DependentUpon>
     </Compile>
     <Compile Include="Resources\Tiles.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -71,6 +77,11 @@
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\SmallTiles.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SmallTiles.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Tiles.resx">
       <SubType>Designer</SubType>
@@ -198,6 +209,10 @@
     <Content Include="Resources\Tile05_6x6.png" />
     <Content Include="Resources\Tile06_4x4.png" />
     <Content Include="Resources\Tile07_16x10.png" />
+    <None Include="Resources\Tile09_4x2.png" />
+    <None Include="Resources\Tile10_6x6.png" />
+    <None Include="Resources\Tile08_4x4.png" />
+    <None Include="Resources\Tile11_4x6.png" />
     <Content Include="Resources\Zigzag01_9x9.png" />
     <Content Include="Resources\Zigzag02_9x9.png" />
     <Content Include="Resources\Zigzag03_18x18.png" />

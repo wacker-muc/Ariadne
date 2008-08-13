@@ -71,6 +71,7 @@ namespace SWA.Ariadne.Outlines
                 OutlineShape.Symbol,
                 OutlineShape.Bitmap,
                 OutlineShape.Tiles,
+                OutlineShape.Rectangles,
             };
             int[] ratios = { // (number of items) * (novelty value) / (easyness of recognition)
                      1 * 20 / 3,
@@ -81,6 +82,7 @@ namespace SWA.Ariadne.Outlines
                      8 * 15 / 2,
                     25 * 15 / 1,
                      8 * 12 / 3,
+                     2 *  8 / 3,
                 };
             
             int n = 0;
@@ -260,7 +262,12 @@ namespace SWA.Ariadne.Outlines
         /// <returns></returns>
         public static OutlineShape Tiles(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
         {
-            return TilesOutlineShape.RandomInstance(r, xSize, ySize);
+            return TilesOutlineShape.CreateInstance(r, xSize, ySize);
+        }
+
+        private static OutlineShape Rectangles(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
+        {
+            return RectanglesOutlineShape.CreateInstance(r, xSize, ySize, centerX, centerY);
         }
 
         #endregion
