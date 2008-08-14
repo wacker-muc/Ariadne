@@ -199,6 +199,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Tile01_8x8.png" />
+    <None Include="Resources\Comb03_20x20.png" />
+    <None Include="Resources\Comb02_16x16.png" />
+    <None Include="Resources\Comb01_12x12.png" />
+    <None Include="Resources\Comb04_16x12.png" />
     <Content Include="Resources\Puzzle10.png" />
     <Content Include="Resources\Puzzle14.png" />
     <None Include="Resources\Puzzle14a.png" />

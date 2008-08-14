@@ -60,6 +60,13 @@ namespace SWA.Ariadne.Outlines.Resources {
             }
         }
         
+        internal static System.Drawing.Bitmap Comb03_20x20 {
+            get {
+                object obj = ResourceManager.GetObject("Comb03_20x20", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap Ribbons6 {
             get {
                 object obj = ResourceManager.GetObject("Ribbons6", resourceCulture);

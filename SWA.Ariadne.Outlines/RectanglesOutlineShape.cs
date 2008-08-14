@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Drawing;
 
 namespace SWA.Ariadne.Outlines
 {
@@ -11,34 +12,42 @@ namespace SWA.Ariadne.Outlines
         /// </summary>
         #region Member variables and Properties
 
-        private double xCenter, yCenter;
-        private double nStripes;
+        private RectangleF nucleus;
+        private float nStripes;
         private bool crossShaped;
-        private double extendCenter;
 
         public override bool this[int x, int y]
         {
             get
             {
-                double sx, sy, s;
+                float sx, sy, s;
 
                 #region Calculate the distance from the center, relative to the distance (center..border).
 
-                if (x <= xCenter)
+                if (x < nucleus.Left)
                 {
-                    sx = (x - xCenter) / (0 - xCenter);
+                    sx = (x - nucleus.Left) / (0 - nucleus.Left);
+                }
+                else if (x > nucleus.Right)
+                {
+                    sx = (x - nucleus.Right) / (XSize - nucleus.Right);
                 }
                 else
                 {
-                    sx = (x - xCenter) / (XSize - xCenter);
+                    sx = -0.9F / nStripes;
                 }
-                if (y <= yCenter)
+
+                if (y < nucleus.Top)
                 {
-                    sy = (y - yCenter) / (0 - yCenter);
+                    sy = (y - nucleus.Top) / (0 - nucleus.Top);
+                }
+                else if (y > nucleus.Bottom)
+                {
+                    sy = (y - nucleus.Bottom) / (YSize - nucleus.Bottom);
                 }
                 else
                 {
-                    sy = (y - yCenter) / (YSize - yCenter);
+                    sy = -0.9F / nStripes;
                 }
 
                 #endregion
@@ -51,7 +60,7 @@ namespace SWA.Ariadne.Outlines
                 {
                     s = Math.Max(sx, sy);
                 }
-                int k = (int)(s * nStripes + extendCenter);
+                int k = (int)(1.0F + s * nStripes);
 
                 return (k % 2 == 0);
             }
@@ -61,14 +70,12 @@ namespace SWA.Ariadne.Outlines
 
         #region Constructor
 
-        private RectanglesOutlineShape(int xSize, int ySize, double xCenter, double yCenter, double nStripes, bool crossShaped, double extendCenter)
+        private RectanglesOutlineShape(int xSize, int ySize, RectangleF nucleus, float nStripes, bool crossShaped)
             : base(xSize, ySize)
         {
-            this.xCenter = xCenter;
-            this.yCenter = yCenter;
+            this.nucleus = nucleus;
             this.nStripes = nStripes;
             this.crossShaped = crossShaped;
-            this.extendCenter = extendCenter;
         }
 
         #endregion
@@ -84,16 +91,74 @@ namespace SWA.Ariadne.Outlines
             int stripeWidth = r.Next(2, 7);
 
             bool crossShaped = (r.Next(2) == 0);
-            double extendCenter = (crossShaped ? 0.5 : 0.25);
+            bool elongatedNucleus = (!crossShaped && (r.Next(2) == 0));
 
-            double nStripes = Math.Truncate(dc / stripeWidth);
+            float nStripes = (float)Math.Truncate(dc / stripeWidth);
 
-            // Adjust nStripes to make the center rectangle a little larger.
-            nStripes -= extendCenter;
+            // The center rectangle.
+            RectangleF nucleus = new RectangleF();
+
+            // Start with a square of size stripeWidth.
+            nucleus.X = -0.5F * stripeWidth;
+            nucleus.Y = -0.5F * stripeWidth;
+            nucleus.Width = stripeWidth;
+            nucleus.Height = stripeWidth;
+
+            // Extend the edge parallel to the larger shape dimension.
+            float aspect = (float)xSize / (float)ySize;
+
+            if (aspect > 1)
+            {
+                if (elongatedNucleus)
+                {
+                    nucleus.Width += (xSize - ySize);
+                    nucleus.X -= 0.5F * (xSize - ySize);
+                }
+                else
+                {
+                    nucleus.X *= aspect;
+                    nucleus.Width *= aspect;
+                }
+            }
+            else
+            {
+                if (elongatedNucleus)
+                {
+                    nucleus.Height += (ySize - xSize);
+                    nucleus.Y -= 0.5F * (ySize - xSize);
+                }
+                else
+                {
+                    nucleus.Y /= aspect;
+                    nucleus.Height /= aspect;
+                }
+            }
+
+            if (!crossShaped)
+            {
+                // Make the center rectangle a little larger.
+                nucleus.X -= 0.25F * stripeWidth;
+                nucleus.Y -= 0.25F * stripeWidth;
+                nucleus.Width += 0.5F * stripeWidth;
+                nucleus.Height += 0.5F * stripeWidth;
+            }
+
+#if false
+            if (crossShaped && r.Next(2) == 0)
+            {
+                // Use a zero-size nucleus.
+                nucleus = new RectangleF(0F, 0F, 0F, 0F);
+            }
+#endif
+
+            // Move the center rectangle to the given center location.
+            nucleus.X += (float)xc;
+            nucleus.Y += (float)yc;
+
             // Avoid single line artefact at x = 0 or y = 0.
-            nStripes *= 0.999;
+            nStripes *= 0.999F;
 
-            return new RectanglesOutlineShape(xSize, ySize, xc, yc, nStripes, crossShaped, extendCenter);
+            return new RectanglesOutlineShape(xSize, ySize, nucleus, nStripes, crossShaped);
         }
 
         #endregion

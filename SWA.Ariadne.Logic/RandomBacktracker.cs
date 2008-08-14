@@ -11,15 +11,6 @@ namespace SWA.Ariadne.Logic
     /// </summary>
     internal class RandomBacktracker : BacktrackerBase
     {
-        #region Member variables
-
-        /// <summary>
-        /// A source of random numbers.
-        /// </summary>
-        private Random random;
-
-        #endregion
-
         #region Constructor
 
         /// <summary>
@@ -30,7 +21,6 @@ namespace SWA.Ariadne.Logic
         public RandomBacktracker(Maze maze, IMazeDrawer mazeDrawer)
             : base(maze, mazeDrawer)
         {
-            this.random = RandomFactory.CreateRandom();
         }
 
         #endregion

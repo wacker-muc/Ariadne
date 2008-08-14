@@ -11,15 +11,6 @@ namespace SWA.Ariadne.Logic
     /// </summary>
     internal class RandomFlooder : FlooderBase
     {
-        #region Member variables
-
-        /// <summary>
-        /// A source of random numbers.
-        /// </summary>
-        private Random random = RandomFactory.CreateRandom();
-
-        #endregion
-
         #region Constructor
 
         /// <summary>

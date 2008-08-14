@@ -17,7 +17,7 @@ namespace SWA.Ariadne.Gui
 
         private bool fullScreenMode = true;
 
-        private Random random;
+        private Random random = SWA.Utilities.RandomFactory.CreateRandom();
 
         /// <summary>
         /// These controls are displayed in reserved areas of the maze.
@@ -36,8 +36,6 @@ namespace SWA.Ariadne.Gui
         public ScreenSaverForm(bool fullScreenMode)
         {
             InitializeComponent();
-
-            random = RandomFactory.CreateRandom();
 
             this.fullScreenMode = fullScreenMode;
             this.ShowInTaskbar = false;
@@ -372,6 +370,9 @@ namespace SWA.Ariadne.Gui
                 StringBuilder caption = new StringBuilder(80);
 
                 FillCaption(caption);
+
+                caption.Append(" - ");
+                caption.Append(System.DateTime.Now.ToString("t"));
 
                 this.infoLabelCaption.Text = caption.ToString();
             }

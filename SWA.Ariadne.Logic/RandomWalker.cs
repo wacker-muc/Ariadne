@@ -13,11 +13,6 @@ namespace SWA.Ariadne.Logic
     {
         #region Member variables
 
-        /// <summary>
-        /// A source of random numbers.
-        /// </summary>
-        private Random random;
-
         MazeSquare currentSquare;
 
         #endregion
@@ -32,7 +27,6 @@ namespace SWA.Ariadne.Logic
         public RandomWalker(Maze maze, IMazeDrawer mazeDrawer)
             : base(maze, mazeDrawer)
         {
-            this.random = RandomFactory.CreateRandom();
         }
 
         #endregion

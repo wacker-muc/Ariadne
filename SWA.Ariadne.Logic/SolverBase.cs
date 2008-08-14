@@ -23,6 +23,11 @@ namespace SWA.Ariadne.Logic
         protected IMazeDrawer mazeDrawer;
 
         /// <summary>
+        /// A source of random numbers.
+        /// </summary>
+        protected Random random;
+
+        /// <summary>
         /// Some ("efficient") subclasses may make use of a DeadEndChecker to avoid certain areas.
         /// </summary>
         protected DeadEndChecker deadEndChecker = null;
@@ -68,6 +73,7 @@ namespace SWA.Ariadne.Logic
         {
             this.maze = maze;
             this.mazeDrawer = mazeDrawer;
+            this.random = SWA.Utilities.RandomFactory.CreateRandom();
         }
 
         #endregion
