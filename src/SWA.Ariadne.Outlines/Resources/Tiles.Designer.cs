@@ -60,6 +60,34 @@ namespace SWA.Ariadne.Outlines.Resources {
             }
         }
         
+        internal static System.Drawing.Bitmap Comb01_12x12 {
+            get {
+                object obj = ResourceManager.GetObject("Comb01_12x12", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Comb02_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Comb02_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Comb03_20x20 {
+            get {
+                object obj = ResourceManager.GetObject("Comb03_20x20", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Comb04_16x12 {
+            get {
+                object obj = ResourceManager.GetObject("Comb04_16x12", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap Puzzle10 {
             get {
                 object obj = ResourceManager.GetObject("Puzzle10", resourceCulture);

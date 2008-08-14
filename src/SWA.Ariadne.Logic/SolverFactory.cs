@@ -92,7 +92,7 @@ namespace SWA.Ariadne.Logic
         /// <returns></returns>
         private static IMazeSolver CreateSolver(Maze maze, IMazeDrawer mazeDrawer)
         {
-            Random r = RandomFactory.CreateRandom();
+            Random r = SWA.Utilities.RandomFactory.CreateRandom();
 
             while (true)
             {

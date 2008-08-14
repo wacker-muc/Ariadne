@@ -35,11 +35,6 @@ namespace SWA.Ariadne.Logic
         private BranchExtension[,] branchExtension;
 
         /// <summary>
-        /// A source of random numbers.
-        /// </summary>
-        private Random random = RandomFactory.CreateRandom();
-
-        /// <summary>
         /// +1 (maximize thickness) or -1 (minimize thickness)
         /// </summary>
         protected int thicknessSign = +1;

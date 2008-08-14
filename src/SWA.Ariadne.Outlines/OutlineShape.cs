@@ -82,7 +82,7 @@ namespace SWA.Ariadne.Outlines
                      8 * 15 / 2,
                     25 * 15 / 1,
                      8 * 12 / 3,
-                     2 *  8 / 3,
+                     3 *  8 / 3,
                 };
             
             int n = 0;

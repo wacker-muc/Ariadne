@@ -11,6 +11,12 @@ namespace SWA.Ariadne.Outlines
     /// </summary>
     internal class ExplicitOutlineShape : OutlineShape
     {
+        #region Class variables
+
+        Random random = SWA.Utilities.RandomFactory.CreateRandom();
+
+        #endregion
+
         #region Member variables and Properties
 
         public override bool this[int x, int y]
@@ -64,8 +70,20 @@ namespace SWA.Ariadne.Outlines
             {
                 for (int y = 0; y < this.YSize; y++)
                 {
-                    // black -> true, white -> false
-                    this.SetValue(x, y, template.GetPixel(x, y).GetBrightness() <= 0.5);
+                    // black -> true, white -> false, gray -> (true | false)
+                    // 0/3 .. 1/3 .. 2/3 .. 3/3
+                    switch ((int)Math.Truncate(template.GetPixel(x, y).GetBrightness() * 0.999 * 3))
+                    {
+                        case 0:
+                            this.SetValue(x, y, true);
+                            break;
+                        case 1:
+                            this.SetValue(x, y, random.Next(2) == 0);
+                            break;
+                        case 2:
+                            this.SetValue(x, y, false);
+                            break;
+                    }
                 }
             }
         }

@@ -4,6 +4,7 @@ using System.Text;
 using System.Drawing;
 using SWA.Ariadne.Outlines;
 using SWA.Ariadne.Settings;
+using SWA.Utilities;
 
 namespace SWA.Ariadne.Model
 {

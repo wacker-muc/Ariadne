@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SWA.Ariadne.Model
+namespace SWA.Utilities
 {
     /// <summary>
     /// Creates Random number generators with distinct seeds.
