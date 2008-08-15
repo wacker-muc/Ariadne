@@ -10,7 +10,7 @@ namespace SWA.Ariadne.Outlines
     /// In a regular polygon, the edges lead from one corner to the next (closest) neighbor.
     /// In star shaped polygons, one or more corners are skipped.
     /// </summary>
-    internal class PolygonOutlineShape : OutlineShape
+    internal class PolygonOutlineShape : SmoothOutlineShape
     {
         #region Member variables and Properties
 
@@ -58,7 +58,7 @@ namespace SWA.Ariadne.Outlines
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public override bool this[int x, int y]
+        public override bool this[double x, double y]
         {
             get
             {
@@ -108,6 +108,10 @@ namespace SWA.Ariadne.Outlines
             this.corners = corners;
             this.windings = windings;
             this.slant = slant;
+
+#if true
+            System.Console.WriteLine(string.Format("PolygonOutlineShape({0}x{1} @({2:0.##},{3:0.##}), ={4:0.##})", xSize, ySize, centerX, centerY, shapeSize));
+#endif
 
             // There are 2*corners slices.
             // The full sector is a triangle formed by the center and two corners connected by an edge.
@@ -161,6 +165,57 @@ namespace SWA.Ariadne.Outlines
                 p1 = (p1 - 2 * windings + n) % n;
                 p2 = (p2 - 2 * windings + n) % n;
             }
+        }
+
+        #endregion
+
+        #region OutlineShape implementation
+
+        /// <summary>
+        /// Returns a DistortedOutlineShape based on the current shape.
+        /// If no distortion is applicable, returns the current shape unmodified.
+        /// </summary>
+        /// <param name="r"></param>
+        /// <returns></returns>
+        protected override OutlineShape DistortedCopy(Random r)
+        {
+            return this.SpiralDistortedCopy(r);
+        }
+
+        /// <summary>
+        /// Returns a DistortedOutlineShape based on the current shape and a SpiralDistortion.
+        /// A regular polygon with more than six corners is returned unmodified.
+        /// </summary>
+        /// <param name="r"></param>
+        /// <returns></returns>
+        private OutlineShape SpiralDistortedCopy(Random r)
+        {
+            if (this.windings == 1 && this.corners > 6)
+            {
+                return this;
+            }
+
+            // d: radial distance between an edge midpoint and a corner
+            double d = this.sz - this.xEdge;
+
+            // dr: the same, relative to the shape size
+            double dr = d / this.sz;
+
+            // this would wind one corner to the following corner (over the full shape size)
+            double maxSpiralWinding = (double)this.windings / (double)this.corners;
+
+            // this would wind a midpoint to a corner (over their radial distance)
+            // this is sufficient to make the corner hang over and form a hook
+            maxSpiralWinding /= (2.0 * dr);
+
+            // this will produce even stronger overhanging corners
+            maxSpiralWinding *= (this.windings == 1 ? 1.5 : 1.2);
+
+            DistortedOutlineShape.Distortion distortion = DistortedOutlineShape.SpiralDistortion(r, this.xc, this.yc, this.sz, maxSpiralWinding);
+
+            OutlineShape result = new DistortedOutlineShape(XSize, YSize, this, distortion);
+
+            return result;
         }
 
         #endregion

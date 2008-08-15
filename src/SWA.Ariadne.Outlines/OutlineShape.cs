@@ -29,6 +29,12 @@ namespace SWA.Ariadne.Outlines
             get { return this.ySize; }
         }
 
+        /// <summary>
+        /// Returns true if the given point is inside the shape.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         public abstract bool this[int x, int y] { get; }
 
         #endregion
@@ -76,7 +82,7 @@ namespace SWA.Ariadne.Outlines
             int[] ratios = { // (number of items) * (novelty value) / (easyness of recognition)
                      1 * 20 / 3,
                      1 *  5 / 4,
-                    (10 + 8 + 6 + 4 + 2) * 8 / 3,
+              (2 * (10 + 8 + 6 + 4 + 2)) * 7 / 3,
                     (3 * 8 + 2) * 12 / 2,
                     15 * 10 / 2,
                      8 * 15 / 2,
@@ -106,10 +112,11 @@ namespace SWA.Ariadne.Outlines
         public static OutlineShape RandomInstance(Random r, int xSize, int ySize, double offCenter, double size)
         {
             OutlineShapeBuilder outlineShapeBuilder = RandomOutlineShapeBuilder(r);
-            return RandomInstance(r, outlineShapeBuilder, xSize, ySize, offCenter, size);
+            bool distorted = (r.Next(100) < 33);
+            return RandomInstance(r, outlineShapeBuilder, xSize, ySize, offCenter, size, distorted);
         }
 
-        public static OutlineShape RandomInstance(Random r, OutlineShapeBuilder outlineShapeBuilder, int xSize, int ySize, double offCenter, double size)
+        public static OutlineShape RandomInstance(Random r, OutlineShapeBuilder outlineShapeBuilder, int xSize, int ySize, double offCenter, double size, bool distorted)
         {
             double centerX = 0.5, centerY = 0.5;
 
@@ -120,7 +127,26 @@ namespace SWA.Ariadne.Outlines
             // Reduce size when we are closer to the center than requested.
             double f = 1.0 - offCenter * 2.0 * (0.5 - Math.Max(Math.Abs(dx), Math.Abs(dy)));
 
-            return outlineShapeBuilder(r, xSize, ySize, centerX, centerY, size * f);
+            OutlineShape result = outlineShapeBuilder(r, xSize, ySize, centerX, centerY, size * f);
+
+            if (distorted)
+            {
+                result = result.DistortedCopy(r);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Returns a DistortedOutlineShape based on the current shape.
+        /// If no distortion is applicable, returns the current shape unmodified.
+        /// </summary>
+        /// <param name="r"></param>
+        /// <returns></returns>
+        protected virtual OutlineShape DistortedCopy(Random r)
+        {
+            // Subclasses may return something 
+            return this;
         }
 
         /// <summary>
@@ -135,7 +161,7 @@ namespace SWA.Ariadne.Outlines
         /// <returns></returns>
         public static OutlineShape Circle(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
         {
-            return CircleOutlineShape.Create(r, xSize, ySize, centerX, centerX, shapeSize);
+            return CircleOutlineShape.Create(r, xSize, ySize, centerX, centerY, shapeSize);
         }
 
         /// <summary>
@@ -150,7 +176,7 @@ namespace SWA.Ariadne.Outlines
         /// <returns></returns>
         public static OutlineShape Diamond(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
         {
-            return DiamondOutlineShape.Create(r, xSize, ySize, centerX, centerX, shapeSize);
+            return DiamondOutlineShape.Create(r, xSize, ySize, centerX, centerY, shapeSize);
         }
 
         /// <summary>
@@ -165,7 +191,7 @@ namespace SWA.Ariadne.Outlines
         /// <returns></returns>
         public static OutlineShape Polygon(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
         {
-            return PolygonOutlineShape.Random(r, xSize, ySize, centerX, centerX, shapeSize);
+            return PolygonOutlineShape.Random(r, xSize, ySize, centerX, centerY, shapeSize);
         }
 
         /// <summary>
@@ -180,7 +206,7 @@ namespace SWA.Ariadne.Outlines
         /// <returns></returns>
         public static OutlineShape Function(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
         {
-            return FunctionOutlineShape.RandomInstance(r, xSize, ySize, centerX, centerX, shapeSize);
+            return FunctionOutlineShape.RandomInstance(r, xSize, ySize, centerX, centerY, shapeSize);
         }
 
         /// <summary>
@@ -247,7 +273,7 @@ namespace SWA.Ariadne.Outlines
         /// <returns></returns>
         public static OutlineShape Bitmap(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
         {
-            return BitmapOutlineShape.Random(r, xSize, ySize, centerX, centerX, shapeSize);
+            return BitmapOutlineShape.Random(r, xSize, ySize, centerX, centerY, shapeSize);
         }
 
         /// <summary>
@@ -265,7 +291,17 @@ namespace SWA.Ariadne.Outlines
             return TilesOutlineShape.CreateInstance(r, xSize, ySize);
         }
 
-        private static OutlineShape Rectangles(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
+        /// <summary>
+        /// Create an outline shape.
+        /// </summary>
+        /// <param name="r"></param>
+        /// <param name="xSize"></param>
+        /// <param name="ySize"></param>
+        /// <param name="centerX"></param>
+        /// <param name="centerY"></param>
+        /// <param name="shapeSize"></param>
+        /// <returns></returns>
+        public static OutlineShape Rectangles(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
         {
             return RectanglesOutlineShape.CreateInstance(r, xSize, ySize, centerX, centerY);
         }

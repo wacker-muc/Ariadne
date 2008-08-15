@@ -343,6 +343,7 @@ namespace SWA.Ariadne.Settings
             Function,
             Bitmap,
             Tiles,
+            Rectangles,
         }
         public OutlineKindEnum OutlineKind
         {
@@ -364,6 +365,13 @@ namespace SWA.Ariadne.Settings
             set { outlineSize = value; }
         }
         private int outlineSize;
+
+        public bool DistortedOutlines
+        {
+            get { return distortedOutlines; }
+            set { distortedOutlines = value; }
+        }
+        private bool distortedOutlines;
 
         public bool AsEmbeddedMaze
         {
@@ -447,6 +455,7 @@ namespace SWA.Ariadne.Settings
             this.OutlineSize = template.OutlineSize;
             this.VisibleOutlines = template.VisibleOutlines;
             this.AsEmbeddedMaze = template.AsEmbeddedMaze;
+            this.DistortedOutlines = template.DistortedOutlines;
         }
     }
 }

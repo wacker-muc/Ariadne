@@ -1067,6 +1067,12 @@ namespace SWA.Ariadne.Gui.Mazes
         {
             this.settingsData = data;
 
+            // Update the client dimensions, if it was resized.
+            if (client != null)
+            {
+                this.targetRectangle = client.DisplayRectangle;
+            }
+
             // The currently installed shared painters are no longer valid.
             // New shared painters may be installed by the caller.
             this.sharedPainters.Clear();

@@ -38,6 +38,7 @@
     <Compile Include="CircleOutlineShape.cs" />
     <Compile Include="DelegateOutlineShape.cs" />
     <Compile Include="DiamondOutlineShape.cs" />
+    <Compile Include="DistortedOutlineShape.cs" />
     <Compile Include="ExplicitOutlineShape.cs" />
     <Compile Include="FractalOutlineShape.cs" />
     <Compile Include="FunctionOutlineShape.cs" />
@@ -65,6 +66,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Tiles.resx</DependentUpon>
     </Compile>
+    <Compile Include="SmoothOutlineShape.cs" />
     <Compile Include="TilesOutlineShape.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -217,6 +219,7 @@
     <None Include="Resources\Tile10_6x6.png" />
     <None Include="Resources\Tile08_4x4.png" />
     <None Include="Resources\Tile11_4x6.png" />
+    <None Include="Resources\Tile12_10x10.png" />
     <Content Include="Resources\Zigzag01_9x9.png" />
     <Content Include="Resources\Zigzag02_9x9.png" />
     <Content Include="Resources\Zigzag03_18x18.png" />

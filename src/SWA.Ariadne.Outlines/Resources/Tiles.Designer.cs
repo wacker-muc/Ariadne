@@ -172,6 +172,13 @@ namespace SWA.Ariadne.Outlines.Resources {
             }
         }
         
+        internal static System.Drawing.Bitmap Tile12_10x10 {
+            get {
+                object obj = ResourceManager.GetObject("Tile12_10x10", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap Zigzag01_9x9 {
             get {
                 object obj = ResourceManager.GetObject("Zigzag01_9x9", resourceCulture);

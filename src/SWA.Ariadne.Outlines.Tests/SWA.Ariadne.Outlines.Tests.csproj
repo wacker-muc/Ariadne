@@ -30,17 +30,41 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\..\WINDOWS\assembly\GAC_MSIL\Microsoft.VisualStudio.QualityTools.UnitTestFramework\8.0.0.0__b03f5f7f11d50a3a\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll</HintPath>
     </Reference>
+    <Reference Include="SWA.Ariadne.Logic, Version=3.1.0.244, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SWA.Ariadne.Logic\bin\Debug\SWA.Ariadne.Logic.dll</HintPath>
+    </Reference>
+    <Reference Include="SWA.Ariadne.Model, Version=3.1.0.244, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SWA.Ariadne.Model\bin\Debug\SWA.Ariadne.Model.dll</HintPath>
+    </Reference>
+    <Reference Include="SWA.Ariadne.Settings, Version=3.1.0.233, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SWA.Ariadne.Settings\bin\Debug\SWA.Ariadne.Settings.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DistortedOutlineShapeTest.cs" />
+    <Compile Include="MazeTestForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MazeTestForm.Designer.cs">
+      <DependentUpon>MazeTestForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TilesOutlineShapeTest.cs" />
     <Compile Include="VSCodeGenAccessors.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SWA.Ariadne.Gui\Mazes\SWA.Ariadne.Gui.Mazes.csproj">
+      <Project>{50B4A98B-F9F6-48B9-BF2E-0CD78368565D}</Project>
+      <Name>SWA.Ariadne.Gui.Mazes</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SWA.Ariadne.Outlines\SWA.Ariadne.Outlines.csproj">
       <Project>{9751AAAE-B751-451E-BA8C-FBD55234FE56}</Project>
       <Name>SWA.Ariadne.Outlines</Name>
@@ -49,6 +73,12 @@
       <Project>{5947CDF1-FDE4-4B7C-9420-0A4DF039B5AB}</Project>
       <Name>SWA.Utilities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="MazeTestForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>MazeTestForm.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
 </Project>
