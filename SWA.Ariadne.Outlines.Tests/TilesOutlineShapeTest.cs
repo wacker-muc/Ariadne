@@ -83,7 +83,7 @@ namespace SWA.Ariadne.Outlines.Tests
         {
             string testObject = "TOS_FromBitmapTest_01";
 
-            Bitmap bitmap = SWA_Ariadne_Outlines_Resources_TilesAccessor.Tile8x32_02;
+            Bitmap bitmap = SWA_Ariadne_Outlines_Resources_TilesAccessor.Tile02_8x32;
             RotateFlipType rft = RotateFlipType.RotateNoneFlipNone;
             int scale = 1;
 
@@ -99,7 +99,7 @@ namespace SWA.Ariadne.Outlines.Tests
         {
             string testObject = "TOS_FromBitmapTest_02";
 
-            Bitmap bitmap = SWA_Ariadne_Outlines_Resources_TilesAccessor.Tile8_03;
+            Bitmap bitmap = SWA_Ariadne_Outlines_Resources_TilesAccessor.Tile03_8x8;
             RotateFlipType rft = RotateFlipType.Rotate90FlipNone;
             int scale = 2;
 
@@ -115,7 +115,7 @@ namespace SWA.Ariadne.Outlines.Tests
         {
             string testObject = "TOS_FromBitmapTest_03";
 
-            Bitmap bitmap = SWA_Ariadne_Outlines_Resources_TilesAccessor.Tile8_01;
+            Bitmap bitmap = SWA_Ariadne_Outlines_Resources_TilesAccessor.Tile01_8x8;
             RotateFlipType rft = RotateFlipType.RotateNoneFlipNone;
             int scale = 4;
 
@@ -131,7 +131,7 @@ namespace SWA.Ariadne.Outlines.Tests
         {
             string testObject = "TOS_FromBitmapTest_04";
 
-            Bitmap bitmap = SWA_Ariadne_Outlines_Resources_TilesAccessor.Tile8_01;
+            Bitmap bitmap = SWA_Ariadne_Outlines_Resources_TilesAccessor.Tile01_8x8;
             RotateFlipType rft = RotateFlipType.RotateNoneFlipY;
             int scale = 1;
 
@@ -147,7 +147,7 @@ namespace SWA.Ariadne.Outlines.Tests
         {
             string testObject = "TOS_FromBitmapTest_05";
 
-            Bitmap bitmap = SWA_Ariadne_Outlines_Resources_TilesAccessor.Tile8_01;
+            Bitmap bitmap = SWA_Ariadne_Outlines_Resources_TilesAccessor.Tile01_8x8;
             RotateFlipType rft = RotateFlipType.RotateNoneFlipX;
             int scale = 1;
 
@@ -163,7 +163,7 @@ namespace SWA.Ariadne.Outlines.Tests
         {
             string testObject = "TOS_FromBitmapTest_06";
 
-            Bitmap bitmap = SWA_Ariadne_Outlines_Resources_TilesAccessor.Tile8_03;
+            Bitmap bitmap = SWA_Ariadne_Outlines_Resources_TilesAccessor.Tile03_8x8;
             RotateFlipType rft = RotateFlipType.RotateNoneFlipX;
             int scale = 1;
 
@@ -179,7 +179,7 @@ namespace SWA.Ariadne.Outlines.Tests
         {
             string testObject = "TOS_FromBitmapTest_07";
 
-            Bitmap bitmap = SWA_Ariadne_Outlines_Resources_TilesAccessor.Tile8_03;
+            Bitmap bitmap = SWA_Ariadne_Outlines_Resources_TilesAccessor.Tile03_8x8;
             RotateFlipType rft = RotateFlipType.RotateNoneFlipY;
             int scale = 1;
 
@@ -204,7 +204,7 @@ namespace SWA.Ariadne.Outlines.Tests
         {
             string testObject = "TOS_FromBitmapTest_08(Tile8_03)";
 
-            Bitmap bitmap = SWA_Ariadne_Outlines_Resources_TilesAccessor.Tile8_03;
+            Bitmap bitmap = SWA_Ariadne_Outlines_Resources_TilesAccessor.Tile03_8x8;
             int scale = 1;
 
             for (int i = 0; i < rftArray.Length; i++)
@@ -223,7 +223,7 @@ namespace SWA.Ariadne.Outlines.Tests
         {
             string testObject = "TOS_FromBitmapTest_09(Tile8x32_02)";
 
-            Bitmap bitmap = SWA_Ariadne_Outlines_Resources_TilesAccessor.Tile8x32_02;
+            Bitmap bitmap = SWA_Ariadne_Outlines_Resources_TilesAccessor.Tile02_8x32;
             int scale = 1;
 
             for (int i = 0; i < rftArray.Length; i++)
@@ -242,7 +242,7 @@ namespace SWA.Ariadne.Outlines.Tests
         {
             string testObject = "TOS_FromBitmapTest_10(Tile8_01)";
 
-            Bitmap bitmap = SWA_Ariadne_Outlines_Resources_TilesAccessor.Tile8_01;
+            Bitmap bitmap = SWA_Ariadne_Outlines_Resources_TilesAccessor.Tile01_8x8;
             int scale = 1;
 
             for (int i = 0; i < rftArray.Length; i++)

@@ -11,6 +11,7 @@ Copyright (c) Stephan Wacker, 2008
 Version 3.1
 
  * Function Outline Shapes: apply a distortion function to the coordinate system
+ * Polygon Outline Shapes: apply a spiral distortion
  * new Outline Shape type: repeating patterns, made of rectangular tiles
  * Action: save image of the maze into a file
  * Maze: optionally build embedded mazes that are solved independantly

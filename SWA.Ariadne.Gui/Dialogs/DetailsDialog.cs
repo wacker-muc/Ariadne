@@ -37,6 +37,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.outlineRadioButtonFunction.Tag = AriadneSettingsData.OutlineKindEnum.Function;
             this.outlineRadioButtonBitmap.Tag = AriadneSettingsData.OutlineKindEnum.Bitmap;
             this.outlineRadioButtonTiles.Tag = AriadneSettingsData.OutlineKindEnum.Tiles;
+            this.outlineRadioButtonRectangles.Tag = AriadneSettingsData.OutlineKindEnum.Rectangles;
             this.outlineRadioButtonNone.Checked = true;
 
             this.wallVisibilityRadioButtonAlways.Tag = AriadneSettingsData.WallVisibilityEnum.Always;
@@ -106,6 +107,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             data.OutlineSize = (int)this.sizeNumericUpDown.Value;
             data.AsEmbeddedMaze = this.asEmbeddedMazeCheckBox.Checked;
             data.VisibleOutlines = this.visibleOutlinesCheckBox.Checked;
+            data.DistortedOutlines = this.distortedOutlinesCheckBox.Checked;
 
             #endregion
 

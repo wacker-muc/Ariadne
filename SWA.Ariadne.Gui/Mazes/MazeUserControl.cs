@@ -655,10 +655,14 @@ namespace SWA.Ariadne.Gui.Mazes
                 case AriadneSettingsData.OutlineKindEnum.Tiles:
                     shapeBuilderDelegate = OutlineShape.Tiles;
                     break;
+                case AriadneSettingsData.OutlineKindEnum.Rectangles:
+                    shapeBuilderDelegate = OutlineShape.Rectangles;
+                    break;
             }
             if (shapeBuilderDelegate != null)
             {
-                OutlineShape shape = OutlineShape.RandomInstance(r, shapeBuilderDelegate, XSize, YSize, offCenter, size);
+                bool distorted = data.DistortedOutlines;
+                OutlineShape shape = OutlineShape.RandomInstance(r, shapeBuilderDelegate, XSize, YSize, offCenter, size, distorted);
                 if (data.AsEmbeddedMaze)
                 {
                     Maze.AddEmbeddedMaze(shape);

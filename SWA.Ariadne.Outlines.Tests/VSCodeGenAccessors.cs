@@ -464,6 +464,279 @@ internal class SWA_Ariadne_Outlines_ExplicitOutlineShapeAccessor : BaseAccessor 
 }
 [System.Diagnostics.DebuggerStepThrough()]
 [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TestTools.UnitTestGeneration", "1.0.0.0")]
+internal class SWA_Ariadne_Outlines_PolygonOutlineShapeAccessor : BaseAccessor {
+    
+    protected static Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType m_privateType = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType("SWA.Ariadne.Outlines", "SWA.Ariadne.Outlines.PolygonOutlineShape");
+    
+    internal SWA_Ariadne_Outlines_PolygonOutlineShapeAccessor(object target) : 
+            base(target, m_privateType) {
+    }
+    
+    internal int corners {
+        get {
+            int ret = ((int)(m_privateObject.GetField("corners")));
+            return ret;
+        }
+        set {
+            m_privateObject.SetField("corners", value);
+        }
+    }
+    
+    internal int windings {
+        get {
+            int ret = ((int)(m_privateObject.GetField("windings")));
+            return ret;
+        }
+        set {
+            m_privateObject.SetField("windings", value);
+        }
+    }
+    
+    internal double slant {
+        get {
+            double ret = ((double)(m_privateObject.GetField("slant")));
+            return ret;
+        }
+        set {
+            m_privateObject.SetField("slant", value);
+        }
+    }
+    
+    internal double halfSectorAngle {
+        get {
+            double ret = ((double)(m_privateObject.GetField("halfSectorAngle")));
+            return ret;
+        }
+        set {
+            m_privateObject.SetField("halfSectorAngle", value);
+        }
+    }
+    
+    internal double fullSectorAngle {
+        get {
+            double ret = ((double)(m_privateObject.GetField("fullSectorAngle")));
+            return ret;
+        }
+        set {
+            m_privateObject.SetField("fullSectorAngle", value);
+        }
+    }
+    
+    internal double sliceAngle {
+        get {
+            double ret = ((double)(m_privateObject.GetField("sliceAngle")));
+            return ret;
+        }
+        set {
+            m_privateObject.SetField("sliceAngle", value);
+        }
+    }
+    
+    internal double xEdge {
+        get {
+            double ret = ((double)(m_privateObject.GetField("xEdge")));
+            return ret;
+        }
+        set {
+            m_privateObject.SetField("xEdge", value);
+        }
+    }
+    
+    internal double xc {
+        get {
+            double ret = ((double)(m_privateObject.GetField("xc")));
+            return ret;
+        }
+        set {
+            m_privateObject.SetField("xc", value);
+        }
+    }
+    
+    internal double yc {
+        get {
+            double ret = ((double)(m_privateObject.GetField("yc")));
+            return ret;
+        }
+        set {
+            m_privateObject.SetField("yc", value);
+        }
+    }
+    
+    internal double sz {
+        get {
+            double ret = ((double)(m_privateObject.GetField("sz")));
+            return ret;
+        }
+        set {
+            m_privateObject.SetField("sz", value);
+        }
+    }
+    
+    internal int[] sliceRotationMap {
+        get {
+            int[] ret = ((int[])(m_privateObject.GetField("sliceRotationMap")));
+            return ret;
+        }
+        set {
+            m_privateObject.SetField("sliceRotationMap", value);
+        }
+    }
+    
+    internal bool this[double x, double y] {
+        get {
+            object[] args = new object[] {
+                    x,
+                    y};
+            bool ret = ((bool)(m_privateObject.GetProperty("Item", new System.Type[] {
+                        typeof(double),
+                        typeof(double)}, args)));
+            return ret;
+        }
+    }
+    
+    internal static global::SWA.Ariadne.Outlines.OutlineShape CreatePrivate(int corners, int windings, double slant, int xSize, int ySize, double centerX, double centerY, double shapeSize) {
+        object[] args = new object[] {
+                corners,
+                windings,
+                slant,
+                xSize,
+                ySize,
+                centerX,
+                centerY,
+                shapeSize};
+        Microsoft.VisualStudio.TestTools.UnitTesting.PrivateObject priv_obj = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateObject("SWA.Ariadne.Outlines", "SWA.Ariadne.Outlines.PolygonOutlineShape", new System.Type[] {
+                    typeof(int),
+                    typeof(int),
+                    typeof(double),
+                    typeof(int),
+                    typeof(int),
+                    typeof(double),
+                    typeof(double),
+                    typeof(double)}, args);
+        return ((global::SWA.Ariadne.Outlines.OutlineShape)(priv_obj.Target));
+    }
+    
+    internal void BuildSliceRotationMap() {
+        object[] args = new object[0];
+        m_privateObject.Invoke("BuildSliceRotationMap", new System.Type[0], args);
+    }
+    
+    internal static global::SWA.Ariadne.Outlines.OutlineShape Random(global::System.Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize) {
+        object[] args = new object[] {
+                r,
+                xSize,
+                ySize,
+                centerX,
+                centerY,
+                shapeSize};
+        global::SWA.Ariadne.Outlines.OutlineShape ret = ((global::SWA.Ariadne.Outlines.OutlineShape)(m_privateType.InvokeStatic("Random", new System.Type[] {
+                    typeof(global::System.Random),
+                    typeof(int),
+                    typeof(int),
+                    typeof(double),
+                    typeof(double),
+                    typeof(double)}, args)));
+        return ret;
+    }
+}
+[System.Diagnostics.DebuggerStepThrough()]
+[System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TestTools.UnitTestGeneration", "1.0.0.0")]
+internal class SWA_Ariadne_Outlines_OutlineShapeAccessor : BaseAccessor {
+    
+    protected static Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType m_privateType = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType(typeof(global::SWA.Ariadne.Outlines.OutlineShape));
+    
+    internal SWA_Ariadne_Outlines_OutlineShapeAccessor(global::SWA.Ariadne.Outlines.OutlineShape target) : 
+            base(target, m_privateType) {
+    }
+    
+    internal int xSize {
+        get {
+            int ret = ((int)(m_privateObject.GetField("xSize")));
+            return ret;
+        }
+        set {
+            m_privateObject.SetField("xSize", value);
+        }
+    }
+    
+    internal int ySize {
+        get {
+            int ret = ((int)(m_privateObject.GetField("ySize")));
+            return ret;
+        }
+        set {
+            m_privateObject.SetField("ySize", value);
+        }
+    }
+    
+    internal int XSize {
+        get {
+            int ret = ((int)(m_privateObject.GetProperty("XSize")));
+            return ret;
+        }
+    }
+    
+    internal int YSize {
+        get {
+            int ret = ((int)(m_privateObject.GetProperty("YSize")));
+            return ret;
+        }
+    }
+    
+    internal static global::SWA.Ariadne.Outlines.OutlineShape CreatePrivate(int xSize, int ySize) {
+        object[] args = new object[] {
+                xSize,
+                ySize};
+        Microsoft.VisualStudio.TestTools.UnitTesting.PrivateObject priv_obj = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateObject(typeof(global::SWA.Ariadne.Outlines.OutlineShape), new System.Type[] {
+                    typeof(int),
+                    typeof(int)}, args);
+        return ((global::SWA.Ariadne.Outlines.OutlineShape)(priv_obj.Target));
+    }
+    
+    internal static global::SWA.Ariadne.Outlines.OutlineShape Rectangles(global::System.Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize) {
+        object[] args = new object[] {
+                r,
+                xSize,
+                ySize,
+                centerX,
+                centerY,
+                shapeSize};
+        global::SWA.Ariadne.Outlines.OutlineShape ret = ((global::SWA.Ariadne.Outlines.OutlineShape)(m_privateType.InvokeStatic("Rectangles", new System.Type[] {
+                    typeof(global::System.Random),
+                    typeof(int),
+                    typeof(int),
+                    typeof(double),
+                    typeof(double),
+                    typeof(double)}, args)));
+        return ret;
+    }
+    
+    internal static void ConvertParameters(int xSize, int ySize, double centerX, double centerY, double shapeSize, out double xc, out double yc, out double sz) {
+        object[] args = new object[] {
+                xSize,
+                ySize,
+                centerX,
+                centerY,
+                shapeSize,
+                null,
+                null,
+                null};
+        m_privateType.InvokeStatic("ConvertParameters", new System.Type[] {
+                    typeof(int),
+                    typeof(int),
+                    typeof(double),
+                    typeof(double),
+                    typeof(double),
+                    typeof(double).MakeByRefType(),
+                    typeof(double).MakeByRefType(),
+                    typeof(double).MakeByRefType()}, args);
+        xc = ((double)(args[5]));
+        yc = ((double)(args[6]));
+        sz = ((double)(args[7]));
+    }
+}
+[System.Diagnostics.DebuggerStepThrough()]
+[System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TestTools.UnitTestGeneration", "1.0.0.0")]
 internal class SWA_Ariadne_Outlines_Resources_TilesAccessor : BaseAccessor {
     
     protected static Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType m_privateType = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType("SWA.Ariadne.Outlines", "SWA.Ariadne.Outlines.Resources.Tiles");
@@ -509,6 +782,34 @@ internal class SWA_Ariadne_Outlines_Resources_TilesAccessor : BaseAccessor {
         }
     }
     
+    internal static global::System.Drawing.Bitmap Comb01_12x12 {
+        get {
+            global::System.Drawing.Bitmap ret = ((global::System.Drawing.Bitmap)(m_privateType.GetStaticProperty("Comb01_12x12")));
+            return ret;
+        }
+    }
+    
+    internal static global::System.Drawing.Bitmap Comb02_16x16 {
+        get {
+            global::System.Drawing.Bitmap ret = ((global::System.Drawing.Bitmap)(m_privateType.GetStaticProperty("Comb02_16x16")));
+            return ret;
+        }
+    }
+    
+    internal static global::System.Drawing.Bitmap Comb03_20x20 {
+        get {
+            global::System.Drawing.Bitmap ret = ((global::System.Drawing.Bitmap)(m_privateType.GetStaticProperty("Comb03_20x20")));
+            return ret;
+        }
+    }
+    
+    internal static global::System.Drawing.Bitmap Comb04_16x12 {
+        get {
+            global::System.Drawing.Bitmap ret = ((global::System.Drawing.Bitmap)(m_privateType.GetStaticProperty("Comb04_16x12")));
+            return ret;
+        }
+    }
+    
     internal static global::System.Drawing.Bitmap Puzzle10 {
         get {
             global::System.Drawing.Bitmap ret = ((global::System.Drawing.Bitmap)(m_privateType.GetStaticProperty("Puzzle10")));
@@ -544,58 +845,86 @@ internal class SWA_Ariadne_Outlines_Resources_TilesAccessor : BaseAccessor {
         }
     }
     
-    internal static global::System.Drawing.Bitmap Tile34_04 {
+    internal static global::System.Drawing.Bitmap Tile01_8x8 {
         get {
-            global::System.Drawing.Bitmap ret = ((global::System.Drawing.Bitmap)(m_privateType.GetStaticProperty("Tile34_04")));
+            global::System.Drawing.Bitmap ret = ((global::System.Drawing.Bitmap)(m_privateType.GetStaticProperty("Tile01_8x8")));
             return ret;
         }
     }
     
-    internal static global::System.Drawing.Bitmap Tile8_01 {
+    internal static global::System.Drawing.Bitmap Tile02_8x32 {
         get {
-            global::System.Drawing.Bitmap ret = ((global::System.Drawing.Bitmap)(m_privateType.GetStaticProperty("Tile8_01")));
+            global::System.Drawing.Bitmap ret = ((global::System.Drawing.Bitmap)(m_privateType.GetStaticProperty("Tile02_8x32")));
             return ret;
         }
     }
     
-    internal static global::System.Drawing.Bitmap Tile8_03 {
+    internal static global::System.Drawing.Bitmap Tile03_8x8 {
         get {
-            global::System.Drawing.Bitmap ret = ((global::System.Drawing.Bitmap)(m_privateType.GetStaticProperty("Tile8_03")));
+            global::System.Drawing.Bitmap ret = ((global::System.Drawing.Bitmap)(m_privateType.GetStaticProperty("Tile03_8x8")));
             return ret;
         }
     }
     
-    internal static global::System.Drawing.Bitmap Tile8x32_02 {
+    internal static global::System.Drawing.Bitmap Tile04_34x34 {
         get {
-            global::System.Drawing.Bitmap ret = ((global::System.Drawing.Bitmap)(m_privateType.GetStaticProperty("Tile8x32_02")));
+            global::System.Drawing.Bitmap ret = ((global::System.Drawing.Bitmap)(m_privateType.GetStaticProperty("Tile04_34x34")));
             return ret;
         }
     }
     
-    internal static global::System.Drawing.Bitmap Zigzag18_01 {
+    internal static global::System.Drawing.Bitmap Tile05_6x6 {
         get {
-            global::System.Drawing.Bitmap ret = ((global::System.Drawing.Bitmap)(m_privateType.GetStaticProperty("Zigzag18_01")));
+            global::System.Drawing.Bitmap ret = ((global::System.Drawing.Bitmap)(m_privateType.GetStaticProperty("Tile05_6x6")));
             return ret;
         }
     }
     
-    internal static global::System.Drawing.Bitmap Zigzag18_02 {
+    internal static global::System.Drawing.Bitmap Tile06_4x4 {
         get {
-            global::System.Drawing.Bitmap ret = ((global::System.Drawing.Bitmap)(m_privateType.GetStaticProperty("Zigzag18_02")));
+            global::System.Drawing.Bitmap ret = ((global::System.Drawing.Bitmap)(m_privateType.GetStaticProperty("Tile06_4x4")));
             return ret;
         }
     }
     
-    internal static global::System.Drawing.Bitmap Zigzag18_02a {
+    internal static global::System.Drawing.Bitmap Tile07_16x10 {
         get {
-            global::System.Drawing.Bitmap ret = ((global::System.Drawing.Bitmap)(m_privateType.GetStaticProperty("Zigzag18_02a")));
+            global::System.Drawing.Bitmap ret = ((global::System.Drawing.Bitmap)(m_privateType.GetStaticProperty("Tile07_16x10")));
             return ret;
         }
     }
     
-    internal static global::System.Drawing.Bitmap Zigzag18_03 {
+    internal static global::System.Drawing.Bitmap Tile12_10x10 {
         get {
-            global::System.Drawing.Bitmap ret = ((global::System.Drawing.Bitmap)(m_privateType.GetStaticProperty("Zigzag18_03")));
+            global::System.Drawing.Bitmap ret = ((global::System.Drawing.Bitmap)(m_privateType.GetStaticProperty("Tile12_10x10")));
+            return ret;
+        }
+    }
+    
+    internal static global::System.Drawing.Bitmap Zigzag01_9x9 {
+        get {
+            global::System.Drawing.Bitmap ret = ((global::System.Drawing.Bitmap)(m_privateType.GetStaticProperty("Zigzag01_9x9")));
+            return ret;
+        }
+    }
+    
+    internal static global::System.Drawing.Bitmap Zigzag02_9x9 {
+        get {
+            global::System.Drawing.Bitmap ret = ((global::System.Drawing.Bitmap)(m_privateType.GetStaticProperty("Zigzag02_9x9")));
+            return ret;
+        }
+    }
+    
+    internal static global::System.Drawing.Bitmap Zigzag03_18x18 {
+        get {
+            global::System.Drawing.Bitmap ret = ((global::System.Drawing.Bitmap)(m_privateType.GetStaticProperty("Zigzag03_18x18")));
+            return ret;
+        }
+    }
+    
+    internal static global::System.Drawing.Bitmap Zigzag03_9x9 {
+        get {
+            global::System.Drawing.Bitmap ret = ((global::System.Drawing.Bitmap)(m_privateType.GetStaticProperty("Zigzag03_9x9")));
             return ret;
         }
     }
@@ -606,4 +935,181 @@ internal class SWA_Ariadne_Outlines_Resources_TilesAccessor : BaseAccessor {
         return priv_obj.Target;
     }
 }
+[System.Diagnostics.DebuggerStepThrough()]
+[System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TestTools.UnitTestGeneration", "1.0.0.0")]
+internal class SWA_Ariadne_Outlines_DistortedOutlineShapeAccessor : BaseAccessor {
+    
+    protected static Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType m_privateType = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType("SWA.Ariadne.Outlines", "SWA.Ariadne.Outlines.DistortedOutlineShape");
+    
+    internal SWA_Ariadne_Outlines_DistortedOutlineShapeAccessor(object target) : 
+            base(target, m_privateType) {
+    }
+    
+    internal global::SWA.Ariadne.Outlines.Tests.SWA_Ariadne_Outlines_SmoothOutlineShapeAccessor baseShape {
+        get {
+            object _ret_val = m_privateObject.GetField("baseShape");
+            global::SWA.Ariadne.Outlines.Tests.SWA_Ariadne_Outlines_SmoothOutlineShapeAccessor _ret = null;
+            if ((_ret_val != null)) {
+                _ret = new global::SWA.Ariadne.Outlines.Tests.SWA_Ariadne_Outlines_SmoothOutlineShapeAccessor(_ret_val);
+            }
+            global::SWA.Ariadne.Outlines.Tests.SWA_Ariadne_Outlines_SmoothOutlineShapeAccessor ret = _ret;
+            return ret;
+        }
+        set {
+            m_privateObject.SetField("baseShape", value);
+        }
+    }
+    
+    internal global::SWA.Ariadne.Outlines.Tests.SWA_Ariadne_Outlines_DistortedOutlineShape_DistortionAccessor distortion {
+        get {
+            object _ret_val = m_privateObject.GetField("distortion");
+            global::SWA.Ariadne.Outlines.Tests.SWA_Ariadne_Outlines_DistortedOutlineShape_DistortionAccessor _ret = null;
+            if ((_ret_val != null)) {
+                _ret = new global::SWA.Ariadne.Outlines.Tests.SWA_Ariadne_Outlines_DistortedOutlineShape_DistortionAccessor(new SWA_Ariadne_Outlines_DistortedOutlineShape_DistortionAccessorInvoker(((System.Delegate)(_ret_val))).Invoke);
+            }
+            global::SWA.Ariadne.Outlines.Tests.SWA_Ariadne_Outlines_DistortedOutlineShape_DistortionAccessor ret = _ret;
+            return ret;
+        }
+        set {
+            m_privateObject.SetField("distortion", value);
+        }
+    }
+    
+    internal bool this[double x, double y] {
+        get {
+            object[] args = new object[] {
+                    x,
+                    y};
+            bool ret = ((bool)(m_privateObject.GetProperty("Item", new System.Type[] {
+                        typeof(double),
+                        typeof(double)}, args)));
+            return ret;
+        }
+    }
+    
+    internal static global::SWA.Ariadne.Outlines.OutlineShape CreatePrivate(int xSize, int ySize, global::SWA.Ariadne.Outlines.Tests.SWA_Ariadne_Outlines_SmoothOutlineShapeAccessor baseShape, global::SWA.Ariadne.Outlines.Tests.SWA_Ariadne_Outlines_DistortedOutlineShape_DistortionAccessor distortion) {
+        object baseShape_val_target = null;
+        if ((baseShape != null)) {
+            baseShape_val_target = baseShape.Target;
+        }
+        Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType target_fallback1 = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType("SWA.Ariadne.Outlines", "SWA.Ariadne.Outlines.DistortedOutlineShape+Distortion");
+        object[] args = new object[] {
+                xSize,
+                ySize,
+                baseShape_val_target,
+                System.Delegate.CreateDelegate(target_fallback1.ReferencedType, new SWA_Ariadne_Outlines_DistortedOutlineShape_DistortionAccessorInvoker(distortion), "Invoke")};
+        Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType target_fallback2 = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType("SWA.Ariadne.Outlines", "SWA.Ariadne.Outlines.SmoothOutlineShape");
+        Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType target_fallback3 = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType("SWA.Ariadne.Outlines", "SWA.Ariadne.Outlines.DistortedOutlineShape+Distortion");
+        Microsoft.VisualStudio.TestTools.UnitTesting.PrivateObject priv_obj = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateObject("SWA.Ariadne.Outlines", "SWA.Ariadne.Outlines.DistortedOutlineShape", new System.Type[] {
+                    typeof(int),
+                    typeof(int),
+                    target_fallback2.ReferencedType,
+                    target_fallback3.ReferencedType}, args);
+        return ((global::SWA.Ariadne.Outlines.OutlineShape)(priv_obj.Target));
+    }
+    
+    internal static global::SWA.Ariadne.Outlines.Tests.SWA_Ariadne_Outlines_DistortedOutlineShape_DistortionAccessor SpiralDistortion(global::System.Random r, double xCenter, double yCenter, double size, double maxWindings) {
+        object[] args = new object[] {
+                r,
+                xCenter,
+                yCenter,
+                size,
+                maxWindings};
+        object _ret_val = m_privateType.InvokeStatic("SpiralDistortion", new System.Type[] {
+                    typeof(global::System.Random),
+                    typeof(double),
+                    typeof(double),
+                    typeof(double),
+                    typeof(double)}, args);
+        global::SWA.Ariadne.Outlines.Tests.SWA_Ariadne_Outlines_DistortedOutlineShape_DistortionAccessor _ret = null;
+        if ((_ret_val != null)) {
+            _ret = new global::SWA.Ariadne.Outlines.Tests.SWA_Ariadne_Outlines_DistortedOutlineShape_DistortionAccessor(new SWA_Ariadne_Outlines_DistortedOutlineShape_DistortionAccessorInvoker(((System.Delegate)(_ret_val))).Invoke);
+        }
+        global::SWA.Ariadne.Outlines.Tests.SWA_Ariadne_Outlines_DistortedOutlineShape_DistortionAccessor ret = _ret;
+        return ret;
+    }
+    
+    internal static global::SWA.Ariadne.Outlines.Tests.SWA_Ariadne_Outlines_DistortedOutlineShape_DistortionAccessor SpiralDistortion(double xCenter, double yCenter, double size, double winding) {
+        object[] args = new object[] {
+                xCenter,
+                yCenter,
+                size,
+                winding};
+        object _ret_val = m_privateType.InvokeStatic("SpiralDistortion", new System.Type[] {
+                    typeof(double),
+                    typeof(double),
+                    typeof(double),
+                    typeof(double)}, args);
+        global::SWA.Ariadne.Outlines.Tests.SWA_Ariadne_Outlines_DistortedOutlineShape_DistortionAccessor _ret = null;
+        if ((_ret_val != null)) {
+            _ret = new global::SWA.Ariadne.Outlines.Tests.SWA_Ariadne_Outlines_DistortedOutlineShape_DistortionAccessor(new SWA_Ariadne_Outlines_DistortedOutlineShape_DistortionAccessorInvoker(((System.Delegate)(_ret_val))).Invoke);
+        }
+        global::SWA.Ariadne.Outlines.Tests.SWA_Ariadne_Outlines_DistortedOutlineShape_DistortionAccessor ret = _ret;
+        return ret;
+    }
+}
+[System.Diagnostics.DebuggerStepThrough()]
+[System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TestTools.UnitTestGeneration", "1.0.0.0")]
+internal class SWA_Ariadne_Outlines_SmoothOutlineShapeAccessor : BaseAccessor {
+    
+    protected static Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType m_privateType = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType("SWA.Ariadne.Outlines", "SWA.Ariadne.Outlines.SmoothOutlineShape");
+    
+    internal SWA_Ariadne_Outlines_SmoothOutlineShapeAccessor(object target) : 
+            base(target, m_privateType) {
+    }
+    
+    internal bool this[double x, double y] {
+        get {
+            object[] args = new object[] {
+                    x,
+                    y};
+            bool ret = ((bool)(m_privateObject.GetProperty("Item", new System.Type[] {
+                        typeof(double),
+                        typeof(double)}, args)));
+            return ret;
+        }
+    }
+    
+    internal bool this[int x, int y] {
+        get {
+            object[] args = new object[] {
+                    x,
+                    y};
+            bool ret = ((bool)(m_privateObject.GetProperty("Item", new System.Type[] {
+                        typeof(int),
+                        typeof(int)}, args)));
+            return ret;
+        }
+    }
+    
+    internal static global::SWA.Ariadne.Outlines.OutlineShape CreatePrivate(int xSize, int ySize) {
+        object[] args = new object[] {
+                xSize,
+                ySize};
+        Microsoft.VisualStudio.TestTools.UnitTesting.PrivateObject priv_obj = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateObject("SWA.Ariadne.Outlines", "SWA.Ariadne.Outlines.SmoothOutlineShape", new System.Type[] {
+                    typeof(int),
+                    typeof(int)}, args);
+        return ((global::SWA.Ariadne.Outlines.OutlineShape)(priv_obj.Target));
+    }
+}
+[System.Diagnostics.DebuggerStepThrough()]
+[System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TestTools.UnitTestGeneration", "1.0.0.0")]
+internal class SWA_Ariadne_Outlines_DistortedOutlineShape_DistortionAccessorInvoker {
+    
+    private System.Delegate d;
+    
+    internal SWA_Ariadne_Outlines_DistortedOutlineShape_DistortionAccessorInvoker(System.Delegate _d) {
+        d = _d;
+    }
+    
+    internal virtual void Invoke(ref double x, ref double y) {
+        object[] args = new object[] {
+                x,
+                y};
+        d.DynamicInvoke(args);
+        x = ((double)(args[0]));
+        y = ((double)(args[1]));
+    }
+}
+delegate void SWA_Ariadne_Outlines_DistortedOutlineShape_DistortionAccessor(ref double x, ref double y);
 }

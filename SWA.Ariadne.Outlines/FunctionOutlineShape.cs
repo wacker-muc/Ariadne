@@ -11,7 +11,7 @@ namespace SWA.Ariadne.Outlines
     /// The division between inside and outside is defined by the function's roots,
     /// i.e. the contour is where the function f(x,y) becomes zero.
     /// </summary>
-    internal class FunctionOutlineShape : OutlineShape
+    internal class FunctionOutlineShape : SmoothOutlineShape
     {
         #region Class variables and class constructor
 
@@ -96,7 +96,7 @@ namespace SWA.Ariadne.Outlines
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public override bool this[int x, int y]
+        public override bool this[double x, double y]
         {
             get
             {

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -117,68 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Comb01_12x12" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Comb01_12x12.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Comb02_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Comb02_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Comb03_20x20" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Comb03_20x20.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Comb04_16x12" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Comb04_16x12.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Puzzle10" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Puzzle10.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Puzzle14" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Puzzle14.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Puzzle14a" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Puzzle14a.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Puzzle16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Puzzle16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Puzzle16a" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Puzzle16a.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Tile01_8x8" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Tile01_8x8.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Tile02_8x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Tile02_8x32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Tile03_8x8" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Tile03_8x8.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Tile04_34x34" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Tile04_34x34.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Tile05_6x6" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Tile05_6x6.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Tile06_4x4" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Tile06_4x4.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Tile07_16x10" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Tile07_16x10.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Tile12_10x10" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Tile12_10x10.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Zigzag01_9x9" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Zigzag01_9x9.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Zigzag02_9x9" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Zigzag02_9x9.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Zigzag03_18x18" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Zigzag03_18x18.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Zigzag03_9x9" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Zigzag03_9x9.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
 </root>
