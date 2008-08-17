@@ -661,8 +661,13 @@ namespace SWA.Ariadne.Gui.Mazes
             }
             if (shapeBuilderDelegate != null)
             {
-                bool distorted = data.DistortedOutlines;
-                OutlineShape shape = OutlineShape.RandomInstance(r, shapeBuilderDelegate, XSize, YSize, offCenter, size, distorted);
+                OutlineShape shape = OutlineShape.RandomInstance(r, shapeBuilderDelegate, XSize, YSize, offCenter, size);
+                
+                if (data.DistortedOutlines)
+                {
+                    shape = shape.DistortedCopy(r);
+                }
+
                 if (data.AsEmbeddedMaze)
                 {
                     Maze.AddEmbeddedMaze(shape);
