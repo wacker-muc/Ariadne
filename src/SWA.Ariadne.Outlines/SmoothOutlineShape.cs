@@ -11,6 +11,7 @@ namespace SWA.Ariadne.Outlines
     {
         /// <summary>
         /// Returns true if the given point is inside the shape.
+        /// SmoothOutlineShapes use double instead of int parameters.
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -19,6 +20,7 @@ namespace SWA.Ariadne.Outlines
 
         /// <summary>
         /// Returns true if the given point is inside the shape.
+        /// Call the method with double parameters.
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -32,5 +34,19 @@ namespace SWA.Ariadne.Outlines
             : base(xSize, ySize)
         {
         }
+
+        #region Methods for applying a distortion to the original shape
+
+        /// <summary>
+        /// Returns a DistortedOutlineShape based on the current shape and the given distortion.
+        /// </summary>
+        /// <param name="distortion"></param>
+        /// <returns></returns>
+        internal OutlineShape DistortedCopy(DistortedOutlineShape.Distortion distortion)
+        {
+            return new DistortedOutlineShape(XSize, YSize, this, distortion);
+        }
+
+        #endregion
     }
 }

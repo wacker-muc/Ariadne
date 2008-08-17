@@ -10,7 +10,7 @@ namespace SWA.Ariadne.Outlines
     /// In a regular polygon, the edges lead from one corner to the next (closest) neighbor.
     /// In star shaped polygons, one or more corners are skipped.
     /// </summary>
-    internal class PolygonOutlineShape : SmoothOutlineShape
+    internal class PolygonOutlineShape : GeometricOutlineShape
     {
         #region Member variables and Properties
 
@@ -41,11 +41,6 @@ namespace SWA.Ariadne.Outlines
         /// X coordinate of a vertical edge that separates the polygon's inside and outside.
         /// </summary>
         private double xEdge;
-
-        /// <summary>
-        /// Center and size (radius) in outline shape coordinates.
-        /// </summary>
-        protected double xc, yc, sz;
 
         /// <summary>
         /// For every slice, the number of rotations (by fullSectorAngle) to apply to the point before testing it.
@@ -103,13 +98,13 @@ namespace SWA.Ariadne.Outlines
         /// <param name="centerY">Y coordinate, relative to total height; 0.0 = left, 1.0 = right</param>
         /// <param name="shapeSize">size, relative to distance of center from the border; 1.0 will touch the border</param>
         protected PolygonOutlineShape(int corners, int windings, double slant, int xSize, int ySize, double centerX, double centerY, double shapeSize)
-            : base(xSize, ySize)
+            : base(xSize, ySize, centerX, centerY, shapeSize)
         {
             this.corners = corners;
             this.windings = windings;
             this.slant = slant;
 
-#if true
+#if false
             System.Console.WriteLine(string.Format("PolygonOutlineShape({0}x{1} @({2:0.##},{3:0.##}), ={4:0.##})", xSize, ySize, centerX, centerY, shapeSize));
 #endif
 
@@ -118,8 +113,6 @@ namespace SWA.Ariadne.Outlines
             this.sliceAngle = Math.PI / corners;
             this.halfSectorAngle = this.sliceAngle * windings;
             this.fullSectorAngle = 2.0 * halfSectorAngle;
-
-            ConvertParameters(xSize, ySize, centerX, centerY, shapeSize, out this.xc, out this.yc, out this.sz);
 
             // This is the X coordinate of the two corners of a vertical edge (after an adequate rotation).
             this.xEdge = this.sz * Math.Cos(halfSectorAngle);
@@ -177,7 +170,7 @@ namespace SWA.Ariadne.Outlines
         /// </summary>
         /// <param name="r"></param>
         /// <returns></returns>
-        protected override OutlineShape DistortedCopy(Random r)
+        public override OutlineShape DistortedCopy(Random r)
         {
             return this.SpiralDistortedCopy(r);
         }
@@ -211,11 +204,16 @@ namespace SWA.Ariadne.Outlines
             // this will produce even stronger overhanging corners
             maxSpiralWinding *= (this.windings == 1 ? 1.5 : 1.2);
 
-            DistortedOutlineShape.Distortion distortion = DistortedOutlineShape.SpiralDistortion(r, this.xc, this.yc, this.sz, maxSpiralWinding);
+            // Choose an actual winding ratio.
+            double w = (0.33 + 0.66 * r.NextDouble()) * maxSpiralWinding;
+            w = maxSpiralWinding;
+            if (r.Next(2) == 0)
+            {
+                w *= -1;
+            }
 
-            OutlineShape result = new DistortedOutlineShape(XSize, YSize, this, distortion);
-
-            return result;
+            DistortedOutlineShape.Distortion distortion = DistortedOutlineShape.SpiralDistortion(this.xc, this.yc, this.sz, w);
+            return this.DistortedCopy(distortion);
         }
 
         #endregion

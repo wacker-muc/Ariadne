@@ -7,7 +7,7 @@ namespace SWA.Ariadne.Outlines
     /// <summary>
     /// A simple OutlineShape in the form of a square standing on one of its corners.
     /// </summary>
-    internal class DiamondOutlineShape : PolygonOutlineShape
+    internal class DiamondOutlineShape : GeometricOutlineShape
     {
         #region Member variables and Properties
 
@@ -17,7 +17,7 @@ namespace SWA.Ariadne.Outlines
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public override bool this[int x, int y]
+        public override bool this[double x, double y]
         {
             get
             {
@@ -40,7 +40,7 @@ namespace SWA.Ariadne.Outlines
         /// <param name="centerY">Y coordinate, relative to total height; 0.0 = left, 1.0 = right</param>
         /// <param name="shapeSize">size, relative to distance of center from the border; 1.0 will touch the border</param>
         private DiamondOutlineShape(int xSize, int ySize, double centerX, double centerY, double shapeSize)
-            : base(4, 1, 0, xSize, ySize, centerX, centerY, shapeSize)
+            : base(xSize, ySize, centerX, centerY, shapeSize)
         {
         }
 

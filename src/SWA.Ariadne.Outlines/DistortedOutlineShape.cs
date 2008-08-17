@@ -38,38 +38,74 @@ namespace SWA.Ariadne.Outlines
 
         #region Static methods returning Distortion delegates
 
-        public static Distortion SpiralDistortion(Random r, double xCenter, double yCenter, double size, double maxWindings)
-        {
-            double winding = (0.33 + 0.66 * r.NextDouble()) * maxWindings;
-            winding = maxWindings;
-            if (r.Next(2) == 0)
-            {
-                winding *= -1;
-            }
-
-            return SpiralDistortion(xCenter, yCenter, size, winding);
-        }
-
+        /// <summary>
+        /// Affects a straight line through the given center so that it forms a spiral.
+        /// </summary>
+        /// <param name="xCenter">Center of distortion.</param>
+        /// <param name="yCenter">Center of Distortion.</param>
+        /// <param name="size">Radius of the reference circle.</param>
+        /// <param name="winding">Points on the reference circle are wound by winding*2*PI radians.</param>
+        /// <returns></returns>
         public static Distortion SpiralDistortion(double xCenter, double yCenter, double size, double winding)
         {
-#if true
+#if false
             System.Console.WriteLine(string.Format("SpiralDistortion(@({0:0.##},{1:0.##}), ={2:0.##})", xCenter, yCenter, size));
 #endif
 
             return delegate(ref double x, ref double y)
             {
-                double radius, phi;
+                double r, phi;
+                RectToLocalPolar(xCenter, yCenter, x, y, out r, out phi);
 
-                x -= xCenter;
-                y -= yCenter;
-
-                SWA.Utilities.Geometry.RectToPolar(x, y, out radius, out phi);
-                phi += radius * winding / size * 2.0 * Math.PI;
-                SWA.Utilities.Geometry.PolarToRect(radius, phi, out x, out y);
-
-                x += xCenter;
-                y += yCenter;
+                phi += r * winding / size * 2.0 * Math.PI;
+                
+                LocalPolarToRect(xCenter, yCenter, r, phi, out x, out y);
             };
+        }
+
+        /// <summary>
+        /// Affects a circle around the given center so that it is indented towards the center.
+        /// </summary>
+        /// <param name="xCenter">Center of distortion.</param>
+        /// <param name="yCenter">Center of Distortion.</param>
+        /// <param name="waveCount">There will be waveCount "corners" that are not distorted.</param>
+        /// <param name="waveShift">When 0, the points at waveShift*2*PI radians will not be distorted.</param>
+        /// <param name="minRatio">The distance from the center will be multiplied by a value between minRatio and 1.</param>
+        /// <returns></returns>
+        public static Distortion RadialWaveDistortion(double xCenter, double yCenter, int waveCount, double waveShift, double minRatio)
+        {
+            return delegate(ref double x, ref double y)
+            {
+                double r, phi;
+                RectToLocalPolar(xCenter, yCenter, x, y, out r, out phi);
+
+                phi += waveShift * 2.0 * Math.PI;
+                phi *= waveCount;
+                double k = Math.Max(-0.5, Math.Min(0.999, (1 - minRatio)));
+                double f = Math.Cos(phi);       // -1 .. +1, f(0) = +1
+                double g = 0.5 * k * (1 - f);   // 0 .. k, g(0) = 0
+                double h = 1 - g;               // 1-k .. 1, h(0) = 1
+                r /= h;
+
+                LocalPolarToRect(xCenter, yCenter, r, phi, out x, out y);
+            };
+        }
+
+        #endregion
+
+        #region Auxiliary methods
+
+        private static void RectToLocalPolar(double xCenter, double yCenter, double x, double y, out double r, out double phi)
+        {
+            SWA.Utilities.Geometry.RectToPolar(x - xCenter, y - yCenter, out r, out phi);
+        }
+
+        private static void LocalPolarToRect(double xCenter, double yCenter, double r, double phi, out double x, out double y)
+        {
+            SWA.Utilities.Geometry.PolarToRect(r, phi, out x, out y);
+
+            x += xCenter;
+            y += yCenter;
         }
 
         #endregion

@@ -66,6 +66,12 @@ namespace SWA.Ariadne.Outlines
 
         public delegate OutlineShape OutlineShapeBuilder(Random r, int xSize, int ySize, double centerX, double centerY, double radius);
 
+        /// <summary>
+        /// Returns a random OutlineShapeBuilder.
+        /// The choice is based on few characteristics of each known OutlineShapeBuilder.
+        /// </summary>
+        /// <param name="r"></param>
+        /// <returns></returns>
         public static OutlineShapeBuilder RandomOutlineShapeBuilder(Random r)
         {
             OutlineShapeBuilder[] shapeBuilderDelegates = {
@@ -80,7 +86,7 @@ namespace SWA.Ariadne.Outlines
                 OutlineShape.Rectangles,
             };
             int[] ratios = { // (number of items) * (novelty value) / (easyness of recognition)
-                     1 * 20 / 3,
+                     7 * 20 / 3,
                      1 *  5 / 4,
               (2 * (10 + 8 + 6 + 4 + 2)) * 7 / 3,
                     (3 * 8 + 2) * 12 / 2,
@@ -109,14 +115,43 @@ namespace SWA.Ariadne.Outlines
             return result;
         }
 
+        /// <summary>
+        /// Creates a shape using a random OutlineShapeBuilder.
+        /// If applicable, the shape may be distorted.
+        /// </summary>
+        /// <param name="r"></param>
+        /// <param name="xSize"></param>
+        /// <param name="ySize"></param>
+        /// <param name="offCenter"></param>
+        /// <param name="size"></param>
+        /// <returns></returns>
         public static OutlineShape RandomInstance(Random r, int xSize, int ySize, double offCenter, double size)
         {
             OutlineShapeBuilder outlineShapeBuilder = RandomOutlineShapeBuilder(r);
-            bool distorted = (r.Next(100) < 33);
-            return RandomInstance(r, outlineShapeBuilder, xSize, ySize, offCenter, size, distorted);
+
+            OutlineShape result = RandomInstance(r, outlineShapeBuilder, xSize, ySize, offCenter, size);
+
+            // If applicable, replace the shape with a distorted version.
+            if (r.Next(100) < result.DistortedPercentage(33))
+            {
+                result = result.DistortedCopy(r);
+            }
+
+            return result;
         }
 
-        public static OutlineShape RandomInstance(Random r, OutlineShapeBuilder outlineShapeBuilder, int xSize, int ySize, double offCenter, double size, bool distorted)
+        /// <summary>
+        /// Creates a shape using the given OutlineShapeBuilder.
+        /// This shape will not be distorted.
+        /// </summary>
+        /// <param name="r"></param>
+        /// <param name="outlineShapeBuilder"></param>
+        /// <param name="xSize"></param>
+        /// <param name="ySize"></param>
+        /// <param name="offCenter"></param>
+        /// <param name="size"></param>
+        /// <returns></returns>
+        public static OutlineShape RandomInstance(Random r, OutlineShapeBuilder outlineShapeBuilder, int xSize, int ySize, double offCenter, double size)
         {
             double centerX = 0.5, centerY = 0.5;
 
@@ -129,24 +164,7 @@ namespace SWA.Ariadne.Outlines
 
             OutlineShape result = outlineShapeBuilder(r, xSize, ySize, centerX, centerY, size * f);
 
-            if (distorted)
-            {
-                result = result.DistortedCopy(r);
-            }
-
             return result;
-        }
-
-        /// <summary>
-        /// Returns a DistortedOutlineShape based on the current shape.
-        /// If no distortion is applicable, returns the current shape unmodified.
-        /// </summary>
-        /// <param name="r"></param>
-        /// <returns></returns>
-        protected virtual OutlineShape DistortedCopy(Random r)
-        {
-            // Subclasses may return something 
-            return this;
         }
 
         /// <summary>
@@ -469,6 +487,33 @@ namespace SWA.Ariadne.Outlines
 
         #endregion
 
+        #region Methods for applying a distortion to the original shape
+
+        /// <summary>
+        /// Returns the percentage of instances that should be distorted.
+        /// The default implementation returns the parameter p unmodified.
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
+        protected virtual int DistortedPercentage(int p)
+        {
+            return p;
+        }
+
+        /// <summary>
+        /// Returns a DistortedOutlineShape based on the current shape.
+        /// If no distortion is applicable, returns the current shape unmodified.
+        /// </summary>
+        /// <param name="r"></param>
+        /// <returns></returns>
+        public virtual OutlineShape DistortedCopy(Random r)
+        {
+            // Subclasses may return something different.
+            return this;
+        }
+
+        #endregion
+
         #region Auxiliary methods
 
         /// <summary>
@@ -488,7 +533,7 @@ namespace SWA.Ariadne.Outlines
             xc = xSize * centerX;
             yc = ySize * centerY;
 
-            // Determine sz so that a circle would touch the nearest border.
+            // Determine sz so that a circle with radius sz would touch the nearest border.
             // If the center is beyond a border, that border is not considered.
             sz = double.MaxValue;
             if (xc > 0) sz = Math.Min(sz, xc);
