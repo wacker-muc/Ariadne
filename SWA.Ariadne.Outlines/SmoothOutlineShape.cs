@@ -20,14 +20,14 @@ namespace SWA.Ariadne.Outlines
 
         /// <summary>
         /// Returns true if the given point is inside the shape.
-        /// Call the method with double parameters.
+        /// Call the other this[,] method with double parameters.
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
         public override bool this[int x, int y]
         {
-            get { return this[(int)x, (int)y]; }
+            get { return this[(double)x, (double)y]; }
         }
 
         protected SmoothOutlineShape(int xSize, int ySize)
@@ -42,7 +42,7 @@ namespace SWA.Ariadne.Outlines
         /// </summary>
         /// <param name="distortion"></param>
         /// <returns></returns>
-        internal OutlineShape DistortedCopy(DistortedOutlineShape.Distortion distortion)
+        internal SmoothOutlineShape DistortedCopy(DistortedOutlineShape.Distortion distortion)
         {
             return new DistortedOutlineShape(XSize, YSize, this, distortion);
         }

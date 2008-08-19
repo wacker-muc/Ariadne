@@ -56,6 +56,13 @@
     <Compile Include="MazeTestForm.Designer.cs">
       <DependentUpon>MazeTestForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="PolygonOutlineShapeTest.cs" />
+    <Compile Include="PolygonTestForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PolygonTestForm.Designer.cs">
+      <DependentUpon>PolygonTestForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TilesOutlineShapeTest.cs" />
     <Compile Include="VSCodeGenAccessors.cs" />
@@ -78,6 +85,10 @@
     <EmbeddedResource Include="MazeTestForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>MazeTestForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PolygonTestForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>PolygonTestForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />

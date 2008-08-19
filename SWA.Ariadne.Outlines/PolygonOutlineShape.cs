@@ -97,25 +97,21 @@ namespace SWA.Ariadne.Outlines
         /// <param name="centerX">X coordinate, relative to total width; 0.0 = top, 1.0 = bottom</param>
         /// <param name="centerY">Y coordinate, relative to total height; 0.0 = left, 1.0 = right</param>
         /// <param name="shapeSize">size, relative to distance of center from the border; 1.0 will touch the border</param>
-        protected PolygonOutlineShape(int corners, int windings, double slant, int xSize, int ySize, double centerX, double centerY, double shapeSize)
+        public PolygonOutlineShape(int corners, int windings, double slant, int xSize, int ySize, double centerX, double centerY, double shapeSize)
             : base(xSize, ySize, centerX, centerY, shapeSize)
         {
             this.corners = corners;
             this.windings = windings;
             this.slant = slant;
 
-#if false
-            System.Console.WriteLine(string.Format("PolygonOutlineShape({0}x{1} @({2:0.##},{3:0.##}), ={4:0.##})", xSize, ySize, centerX, centerY, shapeSize));
-#endif
-
             // There are 2*corners slices.
             // The full sector is a triangle formed by the center and two corners connected by an edge.
-            this.sliceAngle = Math.PI / corners;
-            this.halfSectorAngle = this.sliceAngle * windings;
-            this.fullSectorAngle = 2.0 * halfSectorAngle;
+            this.sliceAngle = Math.PI / this.corners;
+            this.halfSectorAngle = this.sliceAngle * this.windings;
+            this.fullSectorAngle = 2.0 * this.halfSectorAngle;
 
             // This is the X coordinate of the two corners of a vertical edge (after an adequate rotation).
-            this.xEdge = this.sz * Math.Cos(halfSectorAngle);
+            this.xEdge = this.sz * Math.Cos(this.halfSectorAngle);
 
             BuildSliceRotationMap();
         }
@@ -172,7 +168,14 @@ namespace SWA.Ariadne.Outlines
         /// <returns></returns>
         public override OutlineShape DistortedCopy(Random r)
         {
-            return this.SpiralDistortedCopy(r);
+            switch (r.Next(2))
+            {
+                default:
+                case 0:
+                    return this.SpiralDistortedCopy(r);
+                case 1:
+                    return this.RadialWaveDistortedCopy(r);
+            }
         }
 
         /// <summary>
@@ -181,7 +184,7 @@ namespace SWA.Ariadne.Outlines
         /// </summary>
         /// <param name="r"></param>
         /// <returns></returns>
-        private OutlineShape SpiralDistortedCopy(Random r)
+        private SmoothOutlineShape SpiralDistortedCopy(Random r)
         {
             if (this.windings == 1 && this.corners > 6)
             {
@@ -213,6 +216,41 @@ namespace SWA.Ariadne.Outlines
             }
 
             DistortedOutlineShape.Distortion distortion = DistortedOutlineShape.SpiralDistortion(this.xc, this.yc, this.sz, w);
+            return this.DistortedCopy(distortion);
+        }
+
+        /// <summary>
+        /// Returns a DistortedOutlineShape based on the current shape and a RadialWaveDistorted.
+        /// The distortion is exactly aligned with the polygon shape.
+        /// Only the polygon edges will be bent inwards; the points will not be distorted.
+        /// </summary>
+        /// <param name="r"></param>
+        /// <returns></returns>
+        private SmoothOutlineShape RadialWaveDistortedCopy(Random r)
+        {
+            int n = this.corners;
+            int w = this.windings;
+
+            // Note: When slant = 0, our polygons are always oriented so that one edge is in the south.
+            double a;
+            if (n % 2 == 0)
+            {
+                // For multiples of 2, there is also an edge in the north.
+                // Choose a to be the negative (relative) angle of the eastern corner on that edge.
+                a = -(0.25 - 0.5 * w / n);
+            }
+            else
+            {
+                // Otherwise, one corner is in the north.
+                a = -0.25;
+            }
+            a += this.slant / (2.0 * Math.PI);
+            
+            double bMin = 0.2 + (n + w - 2) * 0.03;         // strongly bent edges
+            double bMax = 0.75 + (n - 2) * 0.01;            // slightly bent edges
+            double b = bMin + r.NextDouble() * (bMax - bMin);
+
+            DistortedOutlineShape.Distortion distortion = DistortedOutlineShape.RadialWaveDistortion(this.xc, this.yc, n, a, b);
             return this.DistortedCopy(distortion);
         }
 
