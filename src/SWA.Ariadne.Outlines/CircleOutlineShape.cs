@@ -81,7 +81,7 @@ namespace SWA.Ariadne.Outlines
         /// </summary>
         /// <param name="r"></param>
         /// <returns></returns>
-        private OutlineShape RadialWaveDistortedCopy(Random r)
+        private SmoothOutlineShape RadialWaveDistortedCopy(Random r)
         {
             int n = 3 + r.Next(6);                      // number of corners
             double a = r.NextDouble();                  // rotation, 0..1

@@ -80,13 +80,13 @@ namespace SWA.Ariadne.Outlines.Tests
         ///</summary>
         [DeploymentItem("SWA.Ariadne.Outlines.dll")]
         [TestMethod()]
-        public void DOS_ConstructorTest_01()
+        public void DOS_ManualTest_01()
         {
             int corners = 3, windings = 1;
             double slant = 0, centerX = 0.5, centerY = 0.5, shapeSize = 0.8;
             double distortionWinding = 0.25;
 
-            DistortedPolygonTest(corners, windings, slant, centerX, centerY, shapeSize, distortionWinding);
+            TestDistortedPolygon(corners, windings, slant, centerX, centerY, shapeSize, distortionWinding);
         }
 
 #if false
@@ -150,11 +150,94 @@ namespace SWA.Ariadne.Outlines.Tests
         }
 #endif
 
+        /// <summary>
+        /// A test for RadialWaveDistortion (double, double, int, double, double)
+        /// Four corners, pointing east.
+        ///</summary>
+        [DeploymentItem("SWA.Ariadne.Outlines.dll")]
+        [TestMethod()]
+        public void DOS_RadialWaveDistortionTest_01()
+        {
+            int n = 4;
+            double s = 0;
+            double m = 0.5;
+            TestRadialWaveDistortion(n, s, m);
+        }
+
+        /// <summary>
+        /// A test for RadialWaveDistortion (double, double, int, double, double)
+        /// Four corners, pointing north.
+        ///</summary>
+        [DeploymentItem("SWA.Ariadne.Outlines.dll")]
+        [TestMethod()]
+        public void DOS_RadialWaveDistortionTest_02()
+        {
+            int n = 4;
+            double s = 0.25;
+            double m = 0.5;
+            TestRadialWaveDistortion(n, s, m);
+        }
+
+        /// <summary>
+        /// A test for RadialWaveDistortion (double, double, int, double, double)
+        /// Four corners, pointing east.
+        ///</summary>
+        [DeploymentItem("SWA.Ariadne.Outlines.dll")]
+        [TestMethod()]
+        public void DOS_RadialWaveDistortionTest_03()
+        {
+            int n = 3;
+            double s = 0;
+            double m = 0.5;
+            TestRadialWaveDistortion(n, s, m);
+        }
+
+        /// <summary>
+        /// A test for RadialWaveDistortion (double, double, int, double, double)
+        /// Four corners, pointing north.
+        ///</summary>
+        [DeploymentItem("SWA.Ariadne.Outlines.dll")]
+        [TestMethod()]
+        public void DOS_RadialWaveDistortionTest_04()
+        {
+            int n = 3;
+            double s = 0.25;
+            double m = 0.5;
+            TestRadialWaveDistortion(n, s, m);
+        }
+
+        /// <summary>
+        /// A test for RadialWaveDistortion (double, double, int, double, double)
+        /// One edge is in the south.  Test the eastern corner on that edge.
+        ///</summary>
+        [DeploymentItem("SWA.Ariadne.Outlines.dll")]
+        [TestMethod()]
+        public void DOS_RadialWaveDistortionTest_05()
+        {
+            double m = 0.5;
+
+            for (int n = 3; n <= 12; n++)
+            {
+                double s = (n % 2 == 1 ? 0.25 : (n % 4 == 2 ? 0.00 : 0.5 / n));
+                string testObject = string.Format("{0}_<{1};{2:0.00}>", "RadialWaveDistortion", n, s);
+
+                SWA_Ariadne_Outlines_DistortedOutlineShape_DistortionAccessor target;
+                target = SWA_Ariadne_Outlines_DistortedOutlineShapeAccessor.RadialWaveDistortion(0, 0, n, s, m);
+
+                double x, y;
+
+                TestDistortion(testObject, target, 0, -1, 0, -2);
+
+                SWA.Utilities.Geometry.PolarToRect(1, 2.0 * Math.PI * (0.75 + 0.5 / n), out x, out y);
+                TestDistortionFixpoint(testObject, target, x, y);
+            }
+        }
+
         #endregion
 
         #region Auxiliary methods
 
-        private static void DistortedPolygonTest(int corners, int windings, double slant, double centerX, double centerY, double shapeSize, double distortionWinding)
+        private static void TestDistortedPolygon(int corners, int windings, double slant, double centerX, double centerY, double shapeSize, double distortionWinding)
         {
             string testObject = string.Format(
                 "DistortedOutlineShape: Polygon({0}) @ ({1:0.##}, {2:0.##}), Spiral({3:0.##})",
@@ -187,6 +270,45 @@ namespace SWA.Ariadne.Outlines.Tests
                 maze.OutlineShape = targetShape;
             };
             return mazeConfigurator;
+        }
+
+        private static void TestRadialWaveDistortion(int n, double s, double m)
+        {
+            double xCenter = 0;
+            double yCenter = 0;
+            string testObject = string.Format("{0}_<{1};{2:0.00}>", "RadialWaveDistortion", n, s);
+
+            SWA_Ariadne_Outlines_DistortedOutlineShape_DistortionAccessor target;
+            target = SWA_Ariadne_Outlines_DistortedOutlineShapeAccessor.RadialWaveDistortion(xCenter, yCenter, n, s, m);
+
+            double x, y;
+
+            TestDistortionFixpoint(testObject, target, 0.0, 0.0);
+
+            SWA.Utilities.Geometry.PolarToRect(1, 2.0 * Math.PI * (s + 0.0 / n), out x, out y);
+            TestDistortionFixpoint(testObject, target, x, y);
+
+            SWA.Utilities.Geometry.PolarToRect(1, 2.0 * Math.PI * (s + 1.0 / n), out x, out y);
+            TestDistortionFixpoint(testObject, target, x, y);
+
+            SWA.Utilities.Geometry.PolarToRect(1, 2.0 * Math.PI * (s + 0.5 / n), out x, out y);
+            TestDistortion(testObject, target, x, y, x / m, y / m);
+
+            SWA.Utilities.Geometry.PolarToRect(1, 2.0 * Math.PI * (s - 0.5 / n), out x, out y);
+            TestDistortion(testObject, target, x, y, x / m, y / m);
+        }
+
+        private static void TestDistortionFixpoint(string testObject, SWA_Ariadne_Outlines_DistortedOutlineShape_DistortionAccessor target, double x, double y)
+        {
+            TestDistortion(testObject + "_Fixpoint", target, x, y, x, y);
+        }
+
+        private static void TestDistortion(string testObject, SWA_Ariadne_Outlines_DistortedOutlineShape_DistortionAccessor target, double x, double y, double xExpected, double yExpected)
+        {
+            double xActual = x, yActual = y;
+            target(ref xActual, ref yActual);
+            Assert.AreEqual(xExpected, xActual, 1e-6, string.Format("{0}({1:0.00},{2:0.00}).x", testObject, x, y));
+            Assert.AreEqual(yExpected, yActual, 1e-6, string.Format("{0}({1:0.00},{2:0.00}).y", testObject, x, y));
         }
 
         #endregion

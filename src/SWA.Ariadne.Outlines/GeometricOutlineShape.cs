@@ -8,7 +8,7 @@ namespace SWA.Ariadne.Outlines
     /// Base class for outline shapes that are formed of a single geometric shape.
     /// E.g. circles, algebraic curves, polygons.
     /// </summary>
-    abstract class GeometricOutlineShape : SmoothOutlineShape
+    internal abstract class GeometricOutlineShape : SmoothOutlineShape
     {
         #region Member variables
 

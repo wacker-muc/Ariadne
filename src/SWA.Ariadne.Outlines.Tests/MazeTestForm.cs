@@ -18,7 +18,7 @@ namespace SWA.Ariadne.Outlines.Tests
 
         public delegate void MazeConfiguratorDelegate(Maze maze);
 
-        private MazeConfiguratorDelegate mazeConfigurator;
+        protected MazeConfiguratorDelegate mazeConfigurator;
 
         IMazeControl mazeControl { get { return this.mazeUserControl as IMazeControl; } }
 
@@ -33,8 +33,14 @@ namespace SWA.Ariadne.Outlines.Tests
             this.mazeConfigurator = mazeConfigurator;
 
             mazeUserControl.MazeForm = this as IMazeForm;
-            mazeControl.Setup();
-            BuildNewMaze();
+        }
+
+        /// <summary>
+        /// Default constructor for derived clases.
+        /// </summary>
+        protected MazeTestForm()
+            : this(null)
+        {
         }
 
         private void BuildNewMaze()
@@ -49,6 +55,8 @@ namespace SWA.Ariadne.Outlines.Tests
             data.GridWidth = (int)this.gridWidthNumericUpDown.Value;
             data.AutoGridWidth = false;
 
+            data.WallVisibility = (this.visibleCheckBox.Checked ? AriadneSettingsData.WallVisibilityEnum.Always : AriadneSettingsData.WallVisibilityEnum.Never);
+
             data.VisibleOutlines = true;
             data.AsEmbeddedMaze = false;
             
@@ -59,6 +67,12 @@ namespace SWA.Ariadne.Outlines.Tests
         #endregion
 
         #region Event handlers
+
+        private void MazeTestForm_Load(object sender, EventArgs e)
+        {
+            mazeControl.Setup();
+            BuildNewMaze();
+        }
 
         private void newButton_Click(object sender, EventArgs e)
         {
@@ -87,7 +101,10 @@ namespace SWA.Ariadne.Outlines.Tests
         public void MakeReservedAreas(Maze maze)
         {
             // At this point, the maze configurator can be called.
-            this.mazeConfigurator(maze);
+            if (this.mazeConfigurator != null)
+            {
+                this.mazeConfigurator(maze);
+            }
         }
 
         public void UpdateStatusLine()

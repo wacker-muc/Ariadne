@@ -48,10 +48,6 @@ namespace SWA.Ariadne.Outlines
         /// <returns></returns>
         public static Distortion SpiralDistortion(double xCenter, double yCenter, double size, double winding)
         {
-#if false
-            System.Console.WriteLine(string.Format("SpiralDistortion(@({0:0.##},{1:0.##}), ={2:0.##})", xCenter, yCenter, size));
-#endif
-
             return delegate(ref double x, ref double y)
             {
                 double r, phi;
@@ -69,7 +65,7 @@ namespace SWA.Ariadne.Outlines
         /// <param name="xCenter">Center of distortion.</param>
         /// <param name="yCenter">Center of Distortion.</param>
         /// <param name="waveCount">There will be waveCount "corners" that are not distorted.</param>
-        /// <param name="waveShift">When 0, the points at waveShift*2*PI radians will not be distorted.</param>
+        /// <param name="waveShift">When 0, the points at (2*PI)/(n*waveCount) radians will not be distorted.</param>
         /// <param name="minRatio">The distance from the center will be multiplied by a value between minRatio and 1.</param>
         /// <returns></returns>
         public static Distortion RadialWaveDistortion(double xCenter, double yCenter, int waveCount, double waveShift, double minRatio)
@@ -78,8 +74,9 @@ namespace SWA.Ariadne.Outlines
             {
                 double r, phi;
                 RectToLocalPolar(xCenter, yCenter, x, y, out r, out phi);
+                double phi0 = phi;
 
-                phi += waveShift * 2.0 * Math.PI;
+                phi -= waveShift * 2.0 * Math.PI;
                 phi *= waveCount;
                 double k = Math.Max(-0.5, Math.Min(0.999, (1 - minRatio)));
                 double f = Math.Cos(phi);       // -1 .. +1, f(0) = +1
@@ -87,7 +84,7 @@ namespace SWA.Ariadne.Outlines
                 double h = 1 - g;               // 1-k .. 1, h(0) = 1
                 r /= h;
 
-                LocalPolarToRect(xCenter, yCenter, r, phi, out x, out y);
+                LocalPolarToRect(xCenter, yCenter, r, phi0, out x, out y);
             };
         }
 
