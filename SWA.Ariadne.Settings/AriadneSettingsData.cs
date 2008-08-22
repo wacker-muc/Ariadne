@@ -344,6 +344,7 @@ namespace SWA.Ariadne.Settings
             Bitmap,
             Tiles,
             Rectangles,
+            Grid,
         }
         public OutlineKindEnum OutlineKind
         {

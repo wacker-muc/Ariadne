@@ -99,6 +99,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.distortedOutlinesCheckBox = new System.Windows.Forms.CheckBox();
             this.asEmbeddedMazeCheckBox = new System.Windows.Forms.CheckBox();
             this.outlineKindPanel = new System.Windows.Forms.Panel();
+            this.outlineRadioButtonRectangles = new System.Windows.Forms.RadioButton();
             this.outlineRadioButtonTiles = new System.Windows.Forms.RadioButton();
             this.outlineRadioButtonNone = new System.Windows.Forms.RadioButton();
             this.outlineRadioButtonRandom = new System.Windows.Forms.RadioButton();
@@ -118,7 +119,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.label24 = new System.Windows.Forms.Label();
             this.label23 = new System.Windows.Forms.Label();
             this.imageFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.outlineRadioButtonRectangles = new System.Windows.Forms.RadioButton();
+            this.outlineRadioButtonGrid = new System.Windows.Forms.RadioButton();
             this.tabControl1.SuspendLayout();
             this.layoutPage.SuspendLayout();
             this.wallVisibilityGroupBox.SuspendLayout();
@@ -1029,6 +1030,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             // outlineKindPanel
             // 
+            this.outlineKindPanel.Controls.Add(this.outlineRadioButtonGrid);
             this.outlineKindPanel.Controls.Add(this.outlineRadioButtonRectangles);
             this.outlineKindPanel.Controls.Add(this.outlineRadioButtonTiles);
             this.outlineKindPanel.Controls.Add(this.outlineRadioButtonNone);
@@ -1044,6 +1046,17 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.outlineKindPanel.Name = "outlineKindPanel";
             this.outlineKindPanel.Size = new System.Drawing.Size(244, 122);
             this.outlineKindPanel.TabIndex = 137;
+            // 
+            // outlineRadioButtonRectangles
+            // 
+            this.outlineRadioButtonRectangles.AutoSize = true;
+            this.outlineRadioButtonRectangles.Location = new System.Drawing.Point(162, 30);
+            this.outlineRadioButtonRectangles.Name = "outlineRadioButtonRectangles";
+            this.outlineRadioButtonRectangles.Size = new System.Drawing.Size(79, 17);
+            this.outlineRadioButtonRectangles.TabIndex = 7;
+            this.outlineRadioButtonRectangles.TabStop = true;
+            this.outlineRadioButtonRectangles.Text = "Rectangles";
+            this.outlineRadioButtonRectangles.UseVisualStyleBackColor = true;
             // 
             // outlineRadioButtonTiles
             // 
@@ -1261,16 +1274,16 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.label23.Text = "%";
             this.label23.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // outlineRadioButtonRectangles
+            // outlineRadioButtonGrid
             // 
-            this.outlineRadioButtonRectangles.AutoSize = true;
-            this.outlineRadioButtonRectangles.Location = new System.Drawing.Point(162, 30);
-            this.outlineRadioButtonRectangles.Name = "outlineRadioButtonRectangles";
-            this.outlineRadioButtonRectangles.Size = new System.Drawing.Size(79, 17);
-            this.outlineRadioButtonRectangles.TabIndex = 7;
-            this.outlineRadioButtonRectangles.TabStop = true;
-            this.outlineRadioButtonRectangles.Text = "Rectangles";
-            this.outlineRadioButtonRectangles.UseVisualStyleBackColor = true;
+            this.outlineRadioButtonGrid.AutoSize = true;
+            this.outlineRadioButtonGrid.Location = new System.Drawing.Point(162, 54);
+            this.outlineRadioButtonGrid.Name = "outlineRadioButtonGrid";
+            this.outlineRadioButtonGrid.Size = new System.Drawing.Size(44, 17);
+            this.outlineRadioButtonGrid.TabIndex = 11;
+            this.outlineRadioButtonGrid.TabStop = true;
+            this.outlineRadioButtonGrid.Text = "Grid";
+            this.outlineRadioButtonGrid.UseVisualStyleBackColor = true;
             // 
             // DetailsDialog
             // 
@@ -1407,5 +1420,6 @@ namespace SWA.Ariadne.Gui.Dialogs
         private System.Windows.Forms.RadioButton outlineRadioButtonTiles;
         private System.Windows.Forms.CheckBox distortedOutlinesCheckBox;
         private System.Windows.Forms.RadioButton outlineRadioButtonRectangles;
+        private System.Windows.Forms.RadioButton outlineRadioButtonGrid;
     }
 }

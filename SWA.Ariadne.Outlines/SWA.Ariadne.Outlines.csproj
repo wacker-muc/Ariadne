@@ -43,6 +43,7 @@
     <Compile Include="ExplicitOutlineShape.cs" />
     <Compile Include="FractalOutlineShape.cs" />
     <Compile Include="FunctionOutlineShape.cs" />
+    <Compile Include="GridOutlineShape.cs" />
     <Compile Include="PolygonOutlineShape.cs" />
     <Compile Include="OutlineShape.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

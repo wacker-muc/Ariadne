@@ -50,6 +50,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DistortedOutlineShapeTest.cs" />
+    <Compile Include="GridOutlineShapeTest.cs" />
+    <Compile Include="GridTestForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GridTestForm.Designer.cs">
+      <DependentUpon>GridTestForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="MazeTestForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -82,6 +89,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="GridTestForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>GridTestForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MazeTestForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>MazeTestForm.cs</DependentUpon>

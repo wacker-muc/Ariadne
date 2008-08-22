@@ -12,7 +12,9 @@ Version 3.1
 
  * Function Outline Shapes: apply a distortion function to the coordinate system
  * Polygon Outline Shapes: apply a spiral distortion
- * new Outline Shape type: repeating patterns, made of rectangular tiles
+ * new Outline Shape type Tiles: repeating patterns, made of rectangular bitmap resources
+ * new Outline Shape type Rectangles: concentric rectangles
+ * new Outline Shape type Grid: apply geometric shapes in a repeating grid
  * Action: save image of the maze into a file
  * Maze: optionally build embedded mazes that are solved independantly
  * Maze: more kinds of irregular patterns
