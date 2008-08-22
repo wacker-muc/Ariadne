@@ -39,6 +39,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.outlineRadioButtonTiles.Tag = AriadneSettingsData.OutlineKindEnum.Tiles;
             this.outlineRadioButtonRectangles.Tag = AriadneSettingsData.OutlineKindEnum.Rectangles;
             this.outlineRadioButtonGrid.Tag = AriadneSettingsData.OutlineKindEnum.Grid;
+            this.outlineRadioButtonGridElement.Tag = AriadneSettingsData.OutlineKindEnum.GridElement;
             this.outlineRadioButtonNone.Checked = true;
 
             this.wallVisibilityRadioButtonAlways.Tag = AriadneSettingsData.WallVisibilityEnum.Always;
