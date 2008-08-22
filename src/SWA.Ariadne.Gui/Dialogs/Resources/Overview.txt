@@ -96,13 +96,21 @@ Usually, an Outline Shape is one contiguous shape, like a circle, a square or an
    * Tiled patterns.  These are formed of rectangular tiles with a given pattern that are placed next to each other.
       * Horizontal, vertical and checkered grids. [2]
       * Rectangular frames based on a pattern of interwoven ribbons. [3]
-      * I-beam shaped ribbins. [2]
+      * I-beam shaped ribbons. [2]
       * Pentominoes inside one-line frames. [1]
       * Repetitions of bitmap pattern.
         * Puzzle pieces. [1]
         * Zigzagged patterns. [2]
         * Various other patterns. [2]
-   * Concentric Rectangules, either with one center near the middle of the mazeor with one center in each of the four corners. [2]
+   * Concentric Rectangules, either with one center near the middle of the maze or with one center in each of the four corners. [2]
+   * Geometric shapes arranged in a repeating Grid. [8]
+     * Simple checkered squares.
+     * Large circles, slightly smaller than the checkered squares.
+     * Large and small circles.
+     * Halfed or quartered circles. [2]
+     * Large overlapping circles almost touching each other diagonally.
+     * Rectangular lines, tightly boxed.
+     * Large circles touching each other.
 
 While the patterns evoked by an Irregular Maze Builder come from following preferred directions (if possible), the rules defined by an Outline Shape are very strict.  They take precedence over the irregular preferences.
 
@@ -190,14 +198,14 @@ Efficient solvers often run for long stretches without error (i.e. without leavi
    * Display a run-time statistics panel.
    * [27] Build mazes with irregular wall patterns.
       * [4] Apply two mixed irregular patterns or apply the pattern to part of the maze only.
-   * [47] Build a continuous wall around an outline shape.
+   * [55] Build a continuous wall around an outline shape.
    * [18] Build a second maze inside the outline shape.
    * [17] Different solver strategies.
    * [2] Let an efficient solver detect dead end areas.
    
 That gives a very large number of pattern or style combinations:
 
-    3 x (1 + 27x4) x (1+47+18) x 17 x 2  =  733,788
+    3 x (1 + 27x4) x (1+55+18) x 17 x 2  =  822,732
 
 The exact application of each variant is often determined by random parameter values:  Some shapes are generated dynamically, some solvers choose arbitrary paths and the maze builder generates random patterns of walls.
 
