@@ -661,6 +661,9 @@ namespace SWA.Ariadne.Gui.Mazes
                 case AriadneSettingsData.OutlineKindEnum.Grid:
                     shapeBuilderDelegate = OutlineShape.Grid;
                     break;
+                case AriadneSettingsData.OutlineKindEnum.GridElement:
+                    shapeBuilderDelegate = OutlineShape.GridElement;
+                    break;
             }
             if (shapeBuilderDelegate != null)
             {

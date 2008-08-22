@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Font Name="Tahoma" Size="8.25" />
+  <Class Name="SWA.Ariadne.Outlines.GridOutlineShape">
+    <Position X="6" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <FileName>GridOutlineShape.cs</FileName>
+      <HashCode>AABAAAAAABAQAAAECAAAAAACAAAAAEIAAAAwAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="baseShape" />
+    </ShowAsAssociation>
+    <Members>
+      <Method Name="GridOutlineShape" Hidden="true" />
+      <Field Name="xOffset" Hidden="true" />
+      <Field Name="yOffset" Hidden="true" />
+    </Members>
+  </Class>
+  <Class Name="SWA.Ariadne.Outlines.GridElement">
+    <Position X="2.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>GridOutlineShape.cs</FileName>
+      <HashCode>AAAAAEAABBAAAAQASAAAAEAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Members>
+      <Method Name="GridElement" Hidden="true" />
+      <Field Name="height" Hidden="true" />
+      <Field Name="width" Hidden="true" />
+    </Members>
+  </Class>
+  <Class Name="SWA.Ariadne.Outlines.TileGridElement">
+    <Position X="4" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>GridOutlineShape.cs</FileName>
+      <HashCode>AAAAAAAABBAAAAAAAAIAAEACACAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Members>
+      <Property Name="Height" Hidden="true" />
+      <Field Name="scale" Hidden="true" />
+      <Method Name="TileGridElement" Hidden="true" />
+      <Property Name="Width" Hidden="true" />
+    </Members>
+  </Class>
+  <Class Name="SWA.Ariadne.Outlines.CheckeredGridElement">
+    <Position X="0.5" Y="3.25" Width="1.75" />
+    <TypeIdentifier>
+      <FileName>GridOutlineShape.cs</FileName>
+      <HashCode>AAABAAAAABAAAAAACAAEAAIAAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Members>
+      <Method Name="CheckeredGridElement" Hidden="true" />
+      <Property Name="this" Hidden="true" />
+      <Field Name="tile" Hidden="true" />
+      <Field Name="white" Hidden="true" />
+    </Members>
+  </Class>
+  <Class Name="SWA.Ariadne.Outlines.BlackGridElement" Collapsed="true">
+    <Position X="0.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>GridOutlineShape.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SWA.Ariadne.Outlines.WhiteGridElement" Collapsed="true">
+    <Position X="2.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>GridOutlineShape.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SWA.Ariadne.Outlines.CircleGridElement" Collapsed="true">
+    <Position X="4.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>GridOutlineShape.cs</FileName>
+      <HashCode>YAAAAAAAAAAAAAAACIIAAAIAACAAAAEAAAQBAAAAAAA=</HashCode>
+    </TypeIdentifier>
+    <Members>
+      <Property Name="BoundingBox" Hidden="true" />
+      <Method Name="CircleGridElement" Hidden="true" />
+      <Method Name="InitializeMembers" Hidden="true" />
+      <Property Name="Scale" Hidden="true" />
+      <Property Name="this" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+  </Class>
+  <Class Name="SWA.Ariadne.Outlines.TightBoxesGridElement" Collapsed="true">
+    <Position X="6.5" Y="5.75" Width="2" />
+    <TypeIdentifier>
+      <FileName>GridOutlineShape.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SWA.Ariadne.Outlines.ExplicitOutlineShape" Collapsed="true">
+    <Position X="9.25" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <FileName>ExplicitOutlineShape.cs</FileName>
+      <HashCode>BAAAAAAAAAAACgAAGAAAAAAAABAEACAAAAQAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+</ClassDiagram>

@@ -7,6 +7,7 @@ namespace SWA.Ariadne.Outlines
 {
     /// <summary>
     /// An OutlineShape created by repeating a certain geometric element in a grid pattern.
+    /// Another option is to build a single grid element scaled to a desired size.
     /// </summary>
     internal class GridOutlineShape : OutlineShape
     {
@@ -14,9 +15,26 @@ namespace SWA.Ariadne.Outlines
 
         private ExplicitOutlineShape baseShape;
 
+        /// <summary>
+        /// The effective location where the baseShape should be applied.
+        /// </summary>
+        private int xOffset = 0, yOffset = 0;
+
         public override bool this[int x, int y]
         {
-            get { return baseShape[x, y]; }
+            get
+            {
+                x -= xOffset;
+                y -= yOffset;
+                if (0 <= x && x < baseShape.XSize && 0 <= y && y < baseShape.YSize)
+                {
+                    return baseShape[x, y];
+                }
+                else
+                {
+                    return false;
+                }
+            }
         }
 
         #endregion
@@ -40,8 +58,8 @@ namespace SWA.Ariadne.Outlines
         /// <param name="tile"></param>
         private void Apply(GridElement tile)
         {
-            int xRight = (XSize - tile.width) / 2;
-            int yTop = (YSize - tile.height) / 2;
+            int xRight = (XSize - tile.Width) / 2;
+            int yTop = (YSize - tile.Height) / 2;
             Apply(tile, xRight, yTop);
         }
 
@@ -72,6 +90,7 @@ namespace SWA.Ariadne.Outlines
 
         /// <summary>
         /// Returns one of several grid shapes.
+        /// The grid elements may be used at their regular size or scaled to the double size.
         /// </summary>
         /// <param name="r"></param>
         /// <param name="xSize"></param>
@@ -85,12 +104,58 @@ namespace SWA.Ariadne.Outlines
             List<TileGridElement> overlayTiles = new List<TileGridElement>();
 
             gridTile = ChooseGridElement(r, overlayTiles, out invertEveryOtherTile);
+            
+            if (r.Next(3) == 0)
+            {
+                gridTile.Scale = 2;
+            }
 
             result = CreateCheckeredInstance(xSize, ySize, gridTile, invertEveryOtherTile);
             foreach (TileGridElement overlayTile in overlayTiles)
             {
+                overlayTile.Scale = gridTile.Scale;
                 result.ApplyCheckered(overlayTile);
             }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Returns one of several grid tiles scaled to the desired size.
+        /// </summary>
+        /// <param name="r"></param>
+        /// <param name="xSize"></param>
+        /// <param name="ySize"></param>
+        /// <returns></returns>
+        public static OutlineShape CreateSingleInstance(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
+        {
+            double xc, yc, sz;
+            ConvertParameters(xSize, ySize, centerX, centerY, shapeSize, out xc, out yc, out sz);
+
+            GridOutlineShape result;
+            TileGridElement gridTile;
+            bool invertEveryOtherTile;
+            List<TileGridElement> overlayTiles = new List<TileGridElement>();
+
+            // Choose one tile element.
+            gridTile = ChooseGridElement(r, overlayTiles, out invertEveryOtherTile);
+
+            // Scale the tile so that a single instance covers a certain part of the maze.
+            gridTile.Scale = (int)Math.Min(2 * sz / gridTile.Width, 2 * sz / gridTile.Height);
+
+            // Render the tile into a shape which has exactly the tile size.
+            // Note: As the bounding box is not restricted to the tile area, a single application would neot suffice.
+            result = CreateCheckeredInstance(gridTile.Width, gridTile.Height, gridTile, true);
+
+            foreach (TileGridElement overlayTile in overlayTiles)
+            {
+                overlayTile.Scale = gridTile.Scale;
+                result.ApplyCheckered(overlayTile);
+            }
+
+            // Adjust the location where the result's baseShape should be applied.
+            result.xOffset = (int)(xc - 0.5 * gridTile.Width);
+            result.yOffset = (int)(yc - 0.5 * gridTile.Height);
 
             return result;
         }
@@ -185,7 +250,7 @@ namespace SWA.Ariadne.Outlines
                 case 13:
                 case 14:
                     width = height = r.Next(12, 24 + 1);
-                    diameter = width - 0.4;
+                    diameter = width;
 
                     // Make one side approx. 50% longer than the other.
                     // The difference should be an even number.
@@ -231,7 +296,10 @@ namespace SWA.Ariadne.Outlines
     /// </summary>
     internal abstract class GridElement
     {
-        public readonly int width, height;
+        public virtual int Width { get { return this.width; } }
+        public virtual int Height { get { return this.height; } }
+
+        private readonly int width, height;
 
         public GridElement(int width, int height)
         {
@@ -279,12 +347,26 @@ namespace SWA.Ariadne.Outlines
     internal abstract class TileGridElement : GridElement
     {
         /// <summary>
+        /// The basic pattern may be enlarged by an positive integer scale factor.
+        /// </summary>
+
+        public virtual int Scale
+        {
+            get { return this.scale; }
+            set { this.scale = Math.Max(1, value); }
+        }
+        private int scale = 1;
+
+        public override int Width { get { return scale * base.Width; } }
+        public override int Height { get { return scale * base.Height; } }
+
+        /// <summary>
         /// The area where the pattern is actually applied.
         /// This area is not necessarily confined to the tile area.
         /// </summary>
         public virtual Rectangle BoundingBox
         {
-            get { return new Rectangle(0, 0, width, height); }
+            get { return new Rectangle(0, 0, Width, Height); }
         }
 
         public TileGridElement(int width, int height)
@@ -325,16 +407,16 @@ namespace SWA.Ariadne.Outlines
         private readonly WhiteGridElement white;
 
         public CheckeredGridElement(TileGridElement tile, bool invertEveryOtherTile)
-            : base(tile.width, tile.height)
+            : base(tile.Width, tile.Height)
         {
             this.tile = tile;
             this.invertEveryOtherTile = invertEveryOtherTile;
-            this.white = new WhiteGridElement(this.width, this.height);
+            this.white = new WhiteGridElement(tile.Width, tile.Height);
         }
 
         /// <summary>
         /// Apply the tile element in a repeating grid on the whole target shape.
-        /// One tile (which will not be inverted) will be placed at the given location.
+        /// One tile (which will be inverted if invertEveryOtherTile is true) will be placed at the given location.
         /// </summary>
         /// <param name="target"></param>
         /// <param name="xRight"></param>
@@ -361,22 +443,22 @@ namespace SWA.Ariadne.Outlines
             bbox.Y += y;
 
             // Move tile location to the left/top so that the bounding box is just inside of the shape.
-            int i = bbox.Right / tile.width;
-            int j = bbox.Bottom / tile.height;
+            int i = bbox.Right / tile.Width;
+            int j = bbox.Bottom / tile.Height;
             int k = (i + j) % 2;
-            x -= i * tile.width;
-            y -= j * tile.height;
-            bbox.X -= i * tile.width;
-            bbox.Y -= j * tile.height;
+            x -= i * tile.Width;
+            y -= j * tile.Height;
+            bbox.X -= i * tile.Width;
+            bbox.Y -= j * tile.Height;
 
             // Apply the tile in all locations where the bounding box is still inside of the shape.
-            for (i = 0; bbox.Left + i * tile.width < target.XSize; i++)
+            for (i = 0; bbox.Left + i * tile.Width < target.XSize; i++)
             {
-                for (j = 0; bbox.Top + j * tile.height < target.YSize; j++)
+                for (j = 0; bbox.Top + j * tile.Height < target.YSize; j++)
                 {
-                    if (allLocations || (i + j + k) % 2 == 1)
+                    if (allLocations || (i + j + k) % 2 == 0)
                     {
-                        tile.Apply(target, x + i * tile.width, y + j * tile.height);
+                        tile.Apply(target, x + i * tile.Width, y + j * tile.Height);
                     }
                 }
             }
@@ -428,7 +510,42 @@ namespace SWA.Ariadne.Outlines
     /// </summary>
     internal class CircleGridElement : TileGridElement
     {
+        // Original parameters.
+        private readonly double diameter;
+        private readonly bool onVerticalEdge, onHorizontalEdge;
+
+        // Derived parameters.
         private double xc, yc, r;
+
+        public override int Scale
+        {
+            get
+            {
+                return base.Scale;
+            }
+            set
+            {
+                base.Scale = value;
+                InitializeMembers();
+            }
+        }
+
+        private void InitializeMembers()
+        {
+            // The relevant coordinates are 0..w-1 and 0..h-1
+            this.xc = (onVerticalEdge ? 0.0 : 0.5 * (Width - 1));
+            this.yc = (onHorizontalEdge ? 0.0 : 0.5 * (Height - 1));
+
+            this.r = 0.5 * Scale * diameter;
+
+            double kx = (xc + r) - Math.Floor(xc + r);
+            double ky = (yc + r) - Math.Floor(yc + r);
+            if (kx < 0.02 || ky < 0.02) // (xc + r) or (yc + r) is very close to an integral number
+            {
+                // The radius is decreased a bit to get a flat curve instead of a single point.
+                r -= 0.02;
+            }
+        }
 
         /// <summary>
         /// Constructs a circle centered in the tile.
@@ -452,19 +569,12 @@ namespace SWA.Ariadne.Outlines
         public CircleGridElement(int width, int height, double diameter, bool onVerticalEdge, bool onHorizontalEdge)
             : base(width, height)
         {
-            // The relevant coordinates are 0..w-1 and 0..h-1
-            this.xc = (onVerticalEdge ? 0.0 : 0.5 * (width - 1));
-            this.yc = (onHorizontalEdge ? 0.0 : 0.5 * (height - 1));
+            this.diameter = diameter;
+            this.onVerticalEdge = onVerticalEdge;
+            this.onHorizontalEdge = onHorizontalEdge;
 
-            this.r = 0.5 * diameter;
-
-            double kx = (xc + r) - Math.Floor(xc + r);
-            double ky = (yc + r) - Math.Floor(yc + r);
-            if (kx < 0.02 || ky < 0.02) // (xc + r) or (yc + r) is very close to an integral number
-            {
-                // The radius is decreased a bit to get a flat curve instead of a single point.
-                r -= 0.02;
-            }
+            // Initialize the remaining parameters.
+            InitializeMembers();
         }
 
         protected override bool this[int x, int y]
@@ -506,15 +616,16 @@ namespace SWA.Ariadne.Outlines
             {
                 // Find the closest distance to any of the tile borders.
                 int dl = x - 0;
-                int dr = width - 1 - x;
+                int dr = Width - 1 - x;
                 int dt = y - 0;
-                int db = height - 1 - y;
+                int db = Height - 1 - y;
                 int dx = Math.Min(dl, dr);
                 int dy = Math.Min(dt, db);
                 int d = Math.Min(dx, dy);
 
                 // Return alternatingly true and false.
-                return (d % 2 == 0);
+                // The outermost line should be cleared, the next line is set, etc.
+                return ((d / Scale) % 2 == 1);
             }
         }
     }

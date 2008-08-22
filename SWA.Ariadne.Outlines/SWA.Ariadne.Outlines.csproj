@@ -202,6 +202,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="GridOutlineShape.cd" />
     <None Include="Resources\Tile01_8x8.png" />
     <None Include="Resources\Comb03_20x20.png" />
     <None Include="Resources\Comb02_16x16.png" />
