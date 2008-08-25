@@ -294,9 +294,9 @@ internal class SWA_Ariadne_Model_MazeAccessor : BaseAccessor {
         }
     }
     
-    internal global::SWA.Ariadne.Model.MazeSquare.WallPosition direction {
+    internal global::SWA.Ariadne.Model.Interfaces.WallPosition direction {
         get {
-            global::SWA.Ariadne.Model.MazeSquare.WallPosition ret = ((global::SWA.Ariadne.Model.MazeSquare.WallPosition)(m_privateObject.GetField("direction")));
+            global::SWA.Ariadne.Model.Interfaces.WallPosition ret = ((global::SWA.Ariadne.Model.Interfaces.WallPosition)(m_privateObject.GetField("direction")));
             return ret;
         }
         set {
@@ -354,7 +354,7 @@ internal class SWA_Ariadne_Model_MazeAccessor : BaseAccessor {
         m_privateObject.Invoke("FixReservedAreas", new System.Type[0], args);
     }
     
-    internal void CloseWalls(int left, int right, int top, int bottom, global::SWA.Ariadne.Model.MazeSquare.WallState borderState) {
+    internal void CloseWalls(int left, int right, int top, int bottom, global::SWA.Ariadne.Model.Interfaces.WallState borderState) {
         object[] args = new object[] {
                 left,
                 right,
@@ -366,7 +366,7 @@ internal class SWA_Ariadne_Model_MazeAccessor : BaseAccessor {
                     typeof(int),
                     typeof(int),
                     typeof(int),
-                    typeof(global::SWA.Ariadne.Model.MazeSquare.WallState)}, args);
+                    typeof(global::SWA.Ariadne.Model.Interfaces.WallState)}, args);
     }
     
     internal int CountClosedWalls(global::SWA.Ariadne.Model.MazeSquare sq) {

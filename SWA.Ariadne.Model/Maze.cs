@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
+using SWA.Ariadne.Model.Interfaces;
 using SWA.Ariadne.Outlines;
 using SWA.Ariadne.Settings;
 using SWA.Utilities;
@@ -55,8 +56,8 @@ namespace SWA.Ariadne.Model
         /// <summary>
         /// Travel direction: 0..3
         /// </summary>
-        private MazeSquare.WallPosition direction;
-        internal MazeSquare.WallPosition Direction
+        private WallPosition direction;
+        internal WallPosition Direction
         {
             get { return direction; }
         }
@@ -305,7 +306,7 @@ namespace SWA.Ariadne.Model
             {
                 for (int y = 0; y < ySize; y++)
                 {
-                    for (MazeSquare.WallPosition wp = MazeSquare.WP_MIN; wp <= MazeSquare.WP_MAX; wp++)
+                    for (WallPosition wp = WallPosition.WP_MIN; wp <= WallPosition.WP_MAX; wp++)
                     {
                         clone[x, y][wp] = this[x, y][wp];
                     }
@@ -490,16 +491,16 @@ namespace SWA.Ariadne.Model
             {
                 for (int y0 = 0, y1 = 1; y1 < ySize; y0++, y1++)
                 {
-                    squares[x0, y0].SetNeighbor(MazeSquare.WallPosition.WP_S, squares[x0, y1]);
-                    squares[x0, y1].SetNeighbor(MazeSquare.WallPosition.WP_N, squares[x0, y0]);
+                    squares[x0, y0].SetNeighbor(WallPosition.WP_S, squares[x0, y1]);
+                    squares[x0, y1].SetNeighbor(WallPosition.WP_N, squares[x0, y0]);
                 }
             }
             for (int y0 = 0; y0 < ySize; y0++)
             {
                 for (int x0 = 0, x1 = 1; x1 < xSize; x0++, x1++)
                 {
-                    squares[x0, y0].SetNeighbor(MazeSquare.WallPosition.WP_E, squares[x1, y0]);
-                    squares[x1, y0].SetNeighbor(MazeSquare.WallPosition.WP_W, squares[x0, y0]);
+                    squares[x0, y0].SetNeighbor(WallPosition.WP_E, squares[x1, y0]);
+                    squares[x1, y0].SetNeighbor(WallPosition.WP_W, squares[x0, y0]);
                 }
             }
 
@@ -519,19 +520,19 @@ namespace SWA.Ariadne.Model
             while (reject)
             {
                 // Choose a travel direction (one of four)
-                this.direction = (MazeSquare.WallPosition) this.random.Next(4);
+                this.direction = (WallPosition) this.random.Next(4);
 
                 // a small portion of the maze size (in travel direction)
                 int edgeWidth = 0;
                 switch (direction)
                 {
-                    case MazeSquare.WallPosition.WP_N:
-                    case MazeSquare.WallPosition.WP_S:
+                    case WallPosition.WP_N:
+                    case WallPosition.WP_S:
                         // vertical
                         edgeWidth = 2 + bbox.Height * 2 / 100;
                         break;
-                    case MazeSquare.WallPosition.WP_E:
-                    case MazeSquare.WallPosition.WP_W:
+                    case WallPosition.WP_E:
+                    case WallPosition.WP_W:
                         // horizontal
                         edgeWidth = 2 + bbox.Width * 2 / 100;
                         break;
@@ -557,28 +558,28 @@ namespace SWA.Ariadne.Model
 
                 switch (direction)
                 {
-                    case MazeSquare.WallPosition.WP_N:
+                    case WallPosition.WP_N:
                         // start at bottom, end at top
                         xStart = bbox.Left + random.Next(bbox.Width);
                         yStart = greaterRow = bbox.Bottom - 1 - edgeDistStart;
                         xEnd = bbox.Left + random.Next(bbox.Width);
                         yEnd = lesserRow = bbox.Top + edgeDistEnd;
                         break;
-                    case MazeSquare.WallPosition.WP_E:
+                    case WallPosition.WP_E:
                         // start at left, end at right
                         xStart = lesserRow = bbox.Left + edgeDistEnd;
                         yStart = bbox.Top + random.Next(bbox.Height);
                         xEnd = greaterRow = bbox.Right - 1 - edgeDistStart;
                         yEnd = bbox.Top + random.Next(bbox.Height);
                         break;
-                    case MazeSquare.WallPosition.WP_S:
+                    case WallPosition.WP_S:
                         // start at top, end at bottom
                         xStart = bbox.Left + random.Next(bbox.Width);
                         yStart = lesserRow = bbox.Top + edgeDistEnd;
                         xEnd = bbox.Left + random.Next(bbox.Width);
                         yEnd = greaterRow = bbox.Bottom - 1 - edgeDistStart;
                         break;
-                    case MazeSquare.WallPosition.WP_W:
+                    case WallPosition.WP_W:
                         // start at right, end at left
                         xStart = greaterRow = bbox.Right - 1 - edgeDistStart;
                         yStart = bbox.Top + random.Next(bbox.Height);
@@ -604,7 +605,7 @@ namespace SWA.Ariadne.Model
                 // Prefer real dead ends.
                 // Reject an end point with less than three walls (with probability 90%).
                 //
-                if ((CountClosedWalls(this[xEnd, yEnd]) < MazeSquare.WP_NUM - 1) && (random.Next(100) < 90))
+                if ((CountClosedWalls(this[xEnd, yEnd]) < (int)WallPosition.WP_NUM - 1) && (random.Next(100) < 90))
                 {
                     reject = true;
                 }
@@ -710,7 +711,7 @@ namespace SWA.Ariadne.Model
             Stack<MazeSquare> stack = new Stack<MazeSquare>(xSize * ySize);
 
             List<MazeSquare> outlineSquares = new List<MazeSquare>();
-            List<MazeSquare.WallPosition> outlineWalls = new List<MazeSquare.WallPosition>();
+            List<WallPosition> outlineWalls = new List<WallPosition>();
 
             #region Start with a single random cell in the stack.
             
@@ -733,21 +734,21 @@ namespace SWA.Ariadne.Model
             
             while (stack.Count > 0)
             {
-                List<MazeSquare.WallPosition> unresolvedWalls = new List<MazeSquare.WallPosition>(MazeSquare.WP_NUM);
+                List<WallPosition> unresolvedWalls = new List<WallPosition>((int)WallPosition.WP_NUM);
                 MazeSquare sq0 = stack.Pop();
 
                 // Collect the unfixed walls of sq0.
                 //
-                for (MazeSquare.WallPosition wp = MazeSquare.WP_MIN; wp <= MazeSquare.WP_MAX; wp++)
+                for (WallPosition wp = WallPosition.WP_MIN; wp <= WallPosition.WP_MAX; wp++)
                 {
                     switch (sq0[wp])
                     {
-                        case MazeSquare.WallState.WS_MAYBE:
+                        case WallState.WS_MAYBE:
                             MazeSquare sq = sq0.NeighborSquare(wp);
 
                             if (sq.isConnected || sq.MazeId != sq0.MazeId)
                             {
-                                sq0[wp] = sq[MazeSquare.OppositeWall(wp)] = MazeSquare.WallState.WS_CLOSED;
+                                sq0[wp] = sq[MazeSquare.OppositeWall(wp)] = WallState.WS_CLOSED;
                             }
                             else
                             {
@@ -755,7 +756,7 @@ namespace SWA.Ariadne.Model
                             }
                             break; // WS_MAYBE
 
-                        case MazeSquare.WallState.WS_OUTLINE:
+                        case WallState.WS_OUTLINE:
                             outlineSquares.Add(sq0);
                             outlineWalls.Add(wp);
                             break; // WS_OUTLINE
@@ -774,13 +775,13 @@ namespace SWA.Ariadne.Model
                             // Select a random square with an outline wall.
                             int p = random.Next(outlineSquares.Count);
                             MazeSquare sq = outlineSquares[p];
-                            MazeSquare.WallPosition wp = outlineWalls[p];
+                            WallPosition wp = outlineWalls[p];
                             outlineSquares.RemoveAt(p);
                             outlineWalls.RemoveAt(p);
 
-                            if (sq[wp] == MazeSquare.WallState.WS_OUTLINE)
+                            if (sq[wp] == WallState.WS_OUTLINE)
                             {
-                                sq[wp] = MazeSquare.WallState.WS_MAYBE;
+                                sq[wp] = WallState.WS_MAYBE;
                                 stack.Push(sq);
                                 // This square will be used in the next iteration.
                                 break; // from while(outlineSquares)
@@ -803,8 +804,8 @@ namespace SWA.Ariadne.Model
                     && (random.Next(100) < irregularMazeShape.ApplicationPercentage(this.irregularity)))
                 {
                     bool[] preferredPositions = irregularMazeShape.PreferredDirections(sq0);
-                    List<MazeSquare.WallPosition> preferredWalls = new List<MazeSquare.WallPosition>(unresolvedWalls.Count);
-                    foreach (MazeSquare.WallPosition p in unresolvedWalls)
+                    List<WallPosition> preferredWalls = new List<WallPosition>(unresolvedWalls.Count);
+                    foreach (WallPosition p in unresolvedWalls)
                     {
                         if (preferredPositions[(int)p])
                         {
@@ -818,11 +819,11 @@ namespace SWA.Ariadne.Model
                 }
 
                 // Choose one wall.
-                MazeSquare.WallPosition wp0 = unresolvedWalls[random.Next(unresolvedWalls.Count)];
+                WallPosition wp0 = unresolvedWalls[random.Next(unresolvedWalls.Count)];
                 MazeSquare sq1 = sq0.NeighborSquare(wp0);
 
                 // Open the wall.
-                sq0[wp0] = sq1[MazeSquare.OppositeWall(wp0)] = MazeSquare.WallState.WS_OPEN;
+                sq0[wp0] = sq1[MazeSquare.OppositeWall(wp0)] = WallState.WS_OPEN;
 
                 // Add the new cell to the stack.
                 sq1.isConnected = true;
@@ -840,17 +841,17 @@ namespace SWA.Ariadne.Model
         private void FixBorderWalls()
         {
             int x1 = 0, x2 = xSize - 1, y1 = 0, y2 = ySize - 1;
-            MazeSquare.WallState open = MazeSquare.WallState.WS_OPEN, closed = MazeSquare.WallState.WS_CLOSED;
+            WallState open = WallState.WS_OPEN, closed = WallState.WS_CLOSED;
 
             for (int x = 0; x < xSize; x++)
             {
-                this.squares[x, y1][MazeSquare.WallPosition.WP_N] = (this.squares[x, y1].isReserved ? open : closed);
-                this.squares[x, y2][MazeSquare.WallPosition.WP_S] = (this.squares[x, y2].isReserved ? open : closed);
+                this.squares[x, y1][WallPosition.WP_N] = (this.squares[x, y1].isReserved ? open : closed);
+                this.squares[x, y2][WallPosition.WP_S] = (this.squares[x, y2].isReserved ? open : closed);
             }
             for (int y = 0; y < ySize; y++)
             {
-                this.squares[x1, y][MazeSquare.WallPosition.WP_W] = (this.squares[x1, y].isReserved ? open : closed);
-                this.squares[x2, y][MazeSquare.WallPosition.WP_E] = (this.squares[x2, y].isReserved ? open : closed);
+                this.squares[x1, y][WallPosition.WP_W] = (this.squares[x1, y].isReserved ? open : closed);
+                this.squares[x2, y][WallPosition.WP_E] = (this.squares[x2, y].isReserved ? open : closed);
             }
         }
 
@@ -871,7 +872,7 @@ namespace SWA.Ariadne.Model
 
 #if false
                 // Close the walls around the area but open the walls on the border.
-                CloseWalls(rect.Left, rect.Right, rect.Top, rect.Bottom, MazeSquare.WallState.WS_OPEN);
+                CloseWalls(rect.Left, rect.Right, rect.Top, rect.Bottom, WallState.WS_OPEN);
 #endif
             }
         }
@@ -896,7 +897,7 @@ namespace SWA.Ariadne.Model
                 }
 
 #if false
-                FixOutline(reservedShape, MazeSquare.WallState.WS_CLOSED);
+                FixOutline(reservedShape, WallState.WS_CLOSED);
 #endif
 
                 // TODO: open the walls on the border if touched by the reserved shape.
@@ -911,21 +912,21 @@ namespace SWA.Ariadne.Model
         /// <param name="top">top border y coordinate (inside)</param>
         /// <param name="bottom">bottom border y coordinate (outside)</param>
         /// <param name="borderState">WallState to be applied to walls on the border of the maze</param>
-        private void CloseWalls(int left, int right, int top, int bottom, MazeSquare.WallState borderState)
+        private void CloseWalls(int left, int right, int top, int bottom, WallState borderState)
         {
             for (int x = left; x < right; x++)
             {
                 int y1 = top;
                 int y2 = bottom - 1;
-                this.squares[x, y1][MazeSquare.WallPosition.WP_N] = (y1 == 0 ? borderState : MazeSquare.WallState.WS_CLOSED);
-                this.squares[x, y2][MazeSquare.WallPosition.WP_S] = (y2+1 == ySize ? borderState : MazeSquare.WallState.WS_CLOSED);
+                this.squares[x, y1][WallPosition.WP_N] = (y1 == 0 ? borderState : WallState.WS_CLOSED);
+                this.squares[x, y2][WallPosition.WP_S] = (y2+1 == ySize ? borderState : WallState.WS_CLOSED);
             }
             for (int y = top; y < bottom; y++)
             {
                 int x1 = left;
                 int x2 = right - 1;
-                this.squares[x1, y][MazeSquare.WallPosition.WP_W] = (x1 == 0 ? borderState : MazeSquare.WallState.WS_CLOSED);
-                this.squares[x2, y][MazeSquare.WallPosition.WP_E] = (x2+1 == xSize ? borderState : MazeSquare.WallState.WS_CLOSED);
+                this.squares[x1, y][WallPosition.WP_W] = (x1 == 0 ? borderState : WallState.WS_CLOSED);
+                this.squares[x2, y][WallPosition.WP_E] = (x2+1 == xSize ? borderState : WallState.WS_CLOSED);
             }
         }
 
@@ -937,7 +938,7 @@ namespace SWA.Ariadne.Model
             // We need a test that regards the reserved squares as the "inside" of a shape.
             OutlineShape.InsideShapeDelegate test = delegate(int x, int y) { return this.squares[x, y].isReserved; };
             
-            this.FixOutline(test, MazeSquare.WallState.WS_CLOSED);
+            this.FixOutline(test, WallState.WS_CLOSED);
         }
 
         /// <summary>
@@ -957,7 +958,7 @@ namespace SWA.Ariadne.Model
             // We need a test for the "inside" of an OutlineShape.
             OutlineShape.InsideShapeDelegate test = delegate(int x, int y) { return shape[x, y]; };
 
-            FixOutline(test, MazeSquare.WallState.WS_OUTLINE);
+            FixOutline(test, WallState.WS_OUTLINE);
         }
 
         /// <summary>
@@ -968,7 +969,7 @@ namespace SWA.Ariadne.Model
         /// A two dimensional array.  The dimensions must not be greater than the maze itself.
         /// true means "inside", false means "outside".
         /// </param>
-        private void FixOutline(OutlineShape.InsideShapeDelegate shapeTest, MazeSquare.WallState wallState)
+        private void FixOutline(OutlineShape.InsideShapeDelegate shapeTest, WallState wallState)
         {
             for (int x = 0; x < xSize; x++)
             {
@@ -976,10 +977,10 @@ namespace SWA.Ariadne.Model
                 {
                     bool b1 = shapeTest(x, y1), b2 = shapeTest(x, y2);
                     bool bothReserved = (this[x, y1].isReserved && this[x, y2].isReserved);
-                    if (b1 != b2 && !bothReserved && this[x, y1][MazeSquare.WallPosition.WP_S] == MazeSquare.WallState.WS_MAYBE)
+                    if (b1 != b2 && !bothReserved && this[x, y1][WallPosition.WP_S] == WallState.WS_MAYBE)
                     {
-                        this[x, y1][MazeSquare.WallPosition.WP_S] = wallState;
-                        this[x, y2][MazeSquare.WallPosition.WP_N] = wallState;
+                        this[x, y1][WallPosition.WP_S] = wallState;
+                        this[x, y2][WallPosition.WP_N] = wallState;
                     }
                 }
             }
@@ -989,10 +990,10 @@ namespace SWA.Ariadne.Model
                 {
                     bool b1 = shapeTest(x1, y), b2 = shapeTest(x2, y);
                     bool bothReserved = (this[x1, y].isReserved && this[x2, y].isReserved);
-                    if (b1 != b2 && !bothReserved && this[x1, y][MazeSquare.WallPosition.WP_E] == MazeSquare.WallState.WS_MAYBE)
+                    if (b1 != b2 && !bothReserved && this[x1, y][WallPosition.WP_E] == WallState.WS_MAYBE)
                     {
-                        this[x1, y][MazeSquare.WallPosition.WP_E] = wallState;
-                        this[x2, y][MazeSquare.WallPosition.WP_W] = wallState;
+                        this[x1, y][WallPosition.WP_E] = wallState;
+                        this[x2, y][WallPosition.WP_W] = wallState;
                     }
                 }
             }
@@ -1060,9 +1061,9 @@ namespace SWA.Ariadne.Model
         {
             int result = 0;
 
-            for (MazeSquare.WallPosition wp = MazeSquare.WP_MIN; wp <= MazeSquare.WP_MAX; wp++)
+            for (WallPosition wp = WallPosition.WP_MIN; wp <= WallPosition.WP_MAX; wp++)
             {
-                if (sq.walls[(int)wp] == MazeSquare.WallState.WS_CLOSED)
+                if (sq.walls[(int)wp] == WallState.WS_CLOSED)
                 {
                     ++result;
                 }

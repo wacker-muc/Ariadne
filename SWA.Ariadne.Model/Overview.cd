@@ -71,12 +71,12 @@
       <Field Name="yPos" Hidden="true" />
     </Members>
     <NestedTypes>
-      <Enum Name="SWA.Ariadne.Model.MazeSquare.WallPosition" Collapsed="true">
+      <Enum Name="SWA.Ariadne.Model.WallPosition" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>MazeSquare.cs</NewMemberFileName>
         </TypeIdentifier>
       </Enum>
-      <Enum Name="SWA.Ariadne.Model.MazeSquare.WallState" Collapsed="true">
+      <Enum Name="SWA.Ariadne.Model.WallState" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>MazeSquare.cs</NewMemberFileName>
         </TypeIdentifier>

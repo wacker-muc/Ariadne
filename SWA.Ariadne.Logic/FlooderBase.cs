@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using SWA.Ariadne.Model;
+using SWA.Ariadne.Model.Interfaces;
 
 namespace SWA.Ariadne.Logic
 {
@@ -113,7 +114,7 @@ namespace SWA.Ariadne.Logic
                 throw new Exception("Maze is already solved.");
             }
 
-            List<MazeSquare.WallPosition> openWalls;
+            List<WallPosition> openWalls;
 
             while (true)
             {
@@ -142,7 +143,7 @@ namespace SWA.Ariadne.Logic
             }
 
             // Select one (any) of the neighbor squares.
-            MazeSquare.WallPosition wp = SelectDirection(sq1, openWalls);
+            WallPosition wp = SelectDirection(sq1, openWalls);
 
             sq2 = sq1.NeighborSquare(wp);
             forward = true;
@@ -164,7 +165,7 @@ namespace SWA.Ariadne.Logic
         /// <param name="sq1"></param>
         /// <param name="openWalls"></param>
         /// <returns></returns>
-        protected abstract MazeSquare.WallPosition SelectDirection(MazeSquare sq1, List<MazeSquare.WallPosition> openWalls);
+        protected abstract WallPosition SelectDirection(MazeSquare sq1, List<WallPosition> openWalls);
 
         /// <summary>
         /// Lets the mazeDrawer draw the dead branch ending in the given square.

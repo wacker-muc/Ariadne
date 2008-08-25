@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using SWA.Ariadne.Model;
+using SWA.Ariadne.Model.Interfaces;
 
 namespace SWA.Ariadne.Logic
 {
@@ -36,13 +37,13 @@ namespace SWA.Ariadne.Logic
             for (int i = 0; i < list.Count; i++)
             {
                 MazeSquare sq1 = list[i];
-                List<MazeSquare.WallPosition> openWalls = OpenWalls(sq1, true);
+                List<WallPosition> openWalls = OpenWalls(sq1, true);
                 if (openWalls.Count == 0)
                 {
                     // Immediately report any dead branch.  Otherwise they would never be detected.
                     return i;
                 }
-                MazeSquare.WallPosition wp = SelectDirection(sq1, openWalls);
+                WallPosition wp = SelectDirection(sq1, openWalls);
                 MazeSquare sq2 = sq1.NeighborSquare(wp);
 
                 double d1 = Maze.Distance(referenceSquare, sq1);

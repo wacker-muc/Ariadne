@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Data;
 using System.Text;
 using SWA.Ariadne.Model;
+using SWA.Ariadne.Model.Interfaces;
 using SWA.Ariadne.Outlines;
 using SWA.Ariadne.Logic;
 using SWA.Ariadne.Settings;
@@ -739,7 +740,7 @@ namespace SWA.Ariadne.Gui.Mazes
                 int cy = yOffset + maze.YSize * gridWidth;
                 MazeSquare sq = maze[x, maze.YSize-1];
 
-                if (sq[MazeSquare.WallPosition.WP_S] == MazeSquare.WallState.WS_CLOSED)
+                if (sq[WallPosition.WP_S] == WallState.WS_CLOSED)
                 {
                     g.DrawLine(wallPen, cx, cy, cx + gridWidth, cy);
                 }
@@ -752,7 +753,7 @@ namespace SWA.Ariadne.Gui.Mazes
                 int cx = xOffset + maze.XSize * gridWidth;
                 MazeSquare sq = maze[maze.XSize-1, y];
 
-                if (sq[MazeSquare.WallPosition.WP_E] == MazeSquare.WallState.WS_CLOSED)
+                if (sq[WallPosition.WP_E] == WallState.WS_CLOSED)
                 {
                     g.DrawLine(wallPen, cx, cy, cx, cy + gridWidth);
                 }
@@ -775,13 +776,13 @@ namespace SWA.Ariadne.Gui.Mazes
                     MazeSquare sq = maze[x, y];
 
                     // Draw the west wall.
-                    if (sq[MazeSquare.WallPosition.WP_W] == MazeSquare.WallState.WS_CLOSED)
+                    if (sq[WallPosition.WP_W] == WallState.WS_CLOSED)
                     {
                         g.DrawLine(wallPen, cx, cy, cx, cy + gridWidth);
                     }
 
                     // Draw the north wall.
-                    if (sq[MazeSquare.WallPosition.WP_N] == MazeSquare.WallState.WS_CLOSED)
+                    if (sq[WallPosition.WP_N] == WallState.WS_CLOSED)
                     {
                         g.DrawLine(wallPen, cx, cy, cx + gridWidth, cy);
                     }
@@ -801,25 +802,25 @@ namespace SWA.Ariadne.Gui.Mazes
             int cy = yOffset + sq.YPos * gridWidth;
 
             // Draw the west wall.
-            if (sq[MazeSquare.WallPosition.WP_W] == MazeSquare.WallState.WS_CLOSED)
+            if (sq[WallPosition.WP_W] == WallState.WS_CLOSED)
             {
                 g.DrawLine(wallPen, cx, cy, cx, cy + gridWidth);
             }
 
             // Draw the north wall.
-            if (sq[MazeSquare.WallPosition.WP_N] == MazeSquare.WallState.WS_CLOSED)
+            if (sq[WallPosition.WP_N] == WallState.WS_CLOSED)
             {
                 g.DrawLine(wallPen, cx, cy, cx + gridWidth, cy);
             }
 
             // Draw the east wall.
-            if (sq[MazeSquare.WallPosition.WP_E] == MazeSquare.WallState.WS_CLOSED)
+            if (sq[WallPosition.WP_E] == WallState.WS_CLOSED)
             {
                 g.DrawLine(wallPen, cx + gridWidth, cy, cx + gridWidth, cy + gridWidth);
             }
 
             // Draw the south wall.
-            if (sq[MazeSquare.WallPosition.WP_S] == MazeSquare.WallState.WS_CLOSED)
+            if (sq[WallPosition.WP_S] == WallState.WS_CLOSED)
             {
                 g.DrawLine(wallPen, cx, cy + gridWidth, cx + gridWidth, cy + gridWidth);
             }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using SWA.Ariadne.Model;
+using SWA.Ariadne.Model.Interfaces;
 
 namespace SWA.Ariadne.Logic
 {
@@ -163,13 +164,13 @@ namespace SWA.Ariadne.Logic
         /// When true: Exclude neighbors that have already been visited.
         /// </param>
         /// <returns></returns>
-        protected List<MazeSquare.WallPosition> OpenWalls(MazeSquare sq, bool notVisitedOnly)
+        protected List<WallPosition> OpenWalls(MazeSquare sq, bool notVisitedOnly)
         {
-            List<MazeSquare.WallPosition> result = new List<MazeSquare.WallPosition>(MazeSquare.WP_NUM);
+            List<WallPosition> result = new List<WallPosition>((int)WallPosition.WP_NUM);
 
-            for (MazeSquare.WallPosition wp = MazeSquare.WP_MIN; wp <= MazeSquare.WP_MAX; wp++)
+            for (WallPosition wp = WallPosition.WP_MIN; wp <= WallPosition.WP_MAX; wp++)
             {
-                if (sq[wp] == MazeSquare.WallState.WS_OPEN)
+                if (sq[wp] == WallState.WS_OPEN)
                 {
                     MazeSquare sq2 = sq.NeighborSquare(wp);
 
