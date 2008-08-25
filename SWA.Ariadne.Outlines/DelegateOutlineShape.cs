@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using SWA.Ariadne.Outlines.Interfaces;
 
 namespace SWA.Ariadne.Outlines
 {

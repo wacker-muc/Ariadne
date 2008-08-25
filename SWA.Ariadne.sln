@@ -101,6 +101,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWA.Ariadne.Model.Interface
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWA.Ariadne.Outlines.Interfaces", "SWA.Ariadne.Outlines\Interfaces\SWA.Ariadne.Outlines.Interfaces.csproj", "{47F883D2-B923-4D5B-833D-AED0FEB0458F}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = SWA.Ariadne.vsmdi
@@ -170,6 +176,10 @@ Global
 		{68099984-CB47-412B-81EF-FF67FCF2A62F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68099984-CB47-412B-81EF-FF67FCF2A62F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{68099984-CB47-412B-81EF-FF67FCF2A62F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47F883D2-B923-4D5B-833D-AED0FEB0458F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47F883D2-B923-4D5B-833D-AED0FEB0458F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47F883D2-B923-4D5B-833D-AED0FEB0458F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47F883D2-B923-4D5B-833D-AED0FEB0458F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

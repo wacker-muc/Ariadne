@@ -64,7 +64,7 @@ namespace SWA.Ariadne.Model.Interfaces
     /// <summary>
     /// Comprises the methods required to build an outline shape from a Maze.
     /// </summary>
-    interface IMazeShape
+    public interface IMazeShape
     {
         bool WallIsClosed(int x, int y, WallPosition p);
     }

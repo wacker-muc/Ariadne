@@ -4,6 +4,7 @@ using System.Text;
 using System.Drawing;
 using SWA.Ariadne.Model.Interfaces;
 using SWA.Ariadne.Outlines;
+using SWA.Ariadne.Outlines.Interfaces;
 using SWA.Ariadne.Settings;
 using SWA.Utilities;
 
@@ -936,7 +937,7 @@ namespace SWA.Ariadne.Model
         private void CloseWallsAroundReservedAreas()
         {
             // We need a test that regards the reserved squares as the "inside" of a shape.
-            OutlineShape.InsideShapeDelegate test = delegate(int x, int y) { return this.squares[x, y].isReserved; };
+            InsideShapeDelegate test = delegate(int x, int y) { return this.squares[x, y].isReserved; };
             
             this.FixOutline(test, WallState.WS_CLOSED);
         }
@@ -956,7 +957,7 @@ namespace SWA.Ariadne.Model
         private void FixOutline(OutlineShape shape)
         {
             // We need a test for the "inside" of an OutlineShape.
-            OutlineShape.InsideShapeDelegate test = delegate(int x, int y) { return shape[x, y]; };
+            InsideShapeDelegate test = delegate(int x, int y) { return shape[x, y]; };
 
             FixOutline(test, WallState.WS_OUTLINE);
         }
@@ -969,7 +970,7 @@ namespace SWA.Ariadne.Model
         /// A two dimensional array.  The dimensions must not be greater than the maze itself.
         /// true means "inside", false means "outside".
         /// </param>
-        private void FixOutline(OutlineShape.InsideShapeDelegate shapeTest, WallState wallState)
+        private void FixOutline(InsideShapeDelegate shapeTest, WallState wallState)
         {
             for (int x = 0; x < xSize; x++)
             {
@@ -1019,13 +1020,13 @@ namespace SWA.Ariadne.Model
                 }
 
                 // We need a test that regards the reserved squares and current embedded mazes as the "inside" of a shape.
-                OutlineShape.InsideShapeDelegate regularTest = delegate(int x, int y)
+                InsideShapeDelegate regularTest = delegate(int x, int y)
                 {
                     return (this.squares[x, y].MazeId != MazeSquare.PrimaryMazeId);
                 };
 
                 // This test ensures that the border of the main maze must also not be covered.
-                OutlineShape.InsideShapeDelegate conservativeTest = delegate(int x, int y)
+                InsideShapeDelegate conservativeTest = delegate(int x, int y)
                 {
                     // TODO: This should not always be necessary.
                     if (x - 2 < 0 || x + 2 >= this.XSize || y - 2 < 0 || y + 2 >= this.YSize)
