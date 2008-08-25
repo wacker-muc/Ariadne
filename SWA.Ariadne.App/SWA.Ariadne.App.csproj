@@ -58,6 +58,10 @@
       <Project>{50B4A98B-F9F6-48B9-BF2E-0CD78368565D}</Project>
       <Name>SWA.Ariadne.Gui.Mazes</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SWA.Ariadne.Gui\Painters\SWA.Ariadne.Gui.Painters.csproj">
+      <Project>{603D3813-E12B-4595-B71F-14FF32ADBAEC}</Project>
+      <Name>SWA.Ariadne.Gui.Painters</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SWA.Ariadne.Gui\SWA.Ariadne.Gui.csproj">
       <Project>{A80F9F95-5756-44BE-96D3-BB1950937A50}</Project>
       <Name>SWA.Ariadne.Gui</Name>

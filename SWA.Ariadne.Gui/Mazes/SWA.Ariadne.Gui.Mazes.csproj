@@ -39,8 +39,6 @@
     <Compile Include="IMazeControlProperties.cs" />
     <Compile Include="IMazeControlSetup.cs" />
     <Compile Include="IMazeForm.cs" />
-    <Compile Include="IMazePainterClient.cs" />
-    <Compile Include="MazePainter.cs" />
     <Compile Include="MazeUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -77,6 +75,10 @@
     <ProjectReference Include="..\..\SWA.Utilities\SWA.Utilities.csproj">
       <Project>{5947CDF1-FDE4-4B7C-9420-0A4DF039B5AB}</Project>
       <Name>SWA.Utilities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Painters\SWA.Ariadne.Gui.Painters.csproj">
+      <Project>{603D3813-E12B-4595-B71F-14FF32ADBAEC}</Project>
+      <Name>SWA.Ariadne.Gui.Painters</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

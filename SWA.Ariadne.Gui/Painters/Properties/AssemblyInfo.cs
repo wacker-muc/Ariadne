@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SWA.Ariadne.Model.Interfaces")]
+[assembly: AssemblyTitle("SWA.Ariadne.Gui.Painters")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Stephan Wacker")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("299ea29d-9944-4a86-93bb-e2bd0e502e4c")]
+[assembly: Guid("345f9380-0928-44f7-99c8-3f4084d9e03b")]
 
 // Version information for an assembly consists of the following four values:
 //

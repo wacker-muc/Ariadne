@@ -11,7 +11,7 @@ using SWA.Ariadne.Logic;
 using SWA.Ariadne.Settings;
 using SWA.Utilities;
 
-namespace SWA.Ariadne.Gui.Mazes
+namespace SWA.Ariadne.Gui.Painters
 {
     /// <summary>
     /// The MazePainter is responsible for the painting operations in a MazeUserControl.
@@ -238,7 +238,7 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <param name="g"></param>
         /// <param name="rect"></param>
         /// TODO: Try to call the constructor with correct values in the first place.
-        internal void Reconfigure(Graphics g, Rectangle rect)
+        public void Reconfigure(Graphics g, Rectangle rect)
         {
             this.client = null;
             this.targetGraphics = g;
@@ -664,12 +664,12 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <param name="g"></param>
         private void PaintOutlineShape(Graphics g)
         {
-            if (maze.OutlineShape == null)
+            InsideShapeDelegate test = maze.OutlineShapeTest;
+            if (test == null)
             {
                 return;
             }
 
-            InsideShapeDelegate test = delegate(int x, int y) { return maze.OutlineShape[x, y]; };
             Color shapeColor = Color.FromArgb(0, 0, 50); // dark blue
 
             PaintShape(g, test, shapeColor);
