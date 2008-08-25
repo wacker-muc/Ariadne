@@ -62,6 +62,10 @@
       <Project>{1ECDFF25-8784-44B4-B4DA-25B20F1DF7EC}</Project>
       <Name>SWA.Ariadne.Model</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\SWA.Ariadne.Outlines\Interfaces\SWA.Ariadne.Outlines.Interfaces.csproj">
+      <Project>{47F883D2-B923-4D5B-833D-AED0FEB0458F}</Project>
+      <Name>SWA.Ariadne.Outlines.Interfaces</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\SWA.Ariadne.Outlines\SWA.Ariadne.Outlines.csproj">
       <Project>{9751AAAE-B751-451E-BA8C-FBD55234FE56}</Project>
       <Name>SWA.Ariadne.Outlines</Name>
