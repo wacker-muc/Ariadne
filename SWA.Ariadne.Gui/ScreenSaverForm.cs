@@ -17,6 +17,11 @@ namespace SWA.Ariadne.Gui
 
         private bool fullScreenMode = true;
 
+        /// <summary>
+        /// When true, the built maze should not be too complicated.
+        /// </summary>
+        private bool loadingFirstMaze = true;
+
         private Random random = SWA.Utilities.RandomFactory.CreateRandom();
 
         /// <summary>
@@ -100,8 +105,11 @@ namespace SWA.Ariadne.Gui
             // Other optional controls need to be displayed in front of the maze.
             this.outerInfoPanel.BringToFront();
 
-            this.OnNew(null, null); // TODO: remove this message
+            this.OnNew(null, null);
             this.OnStart(null, null);
+
+            // Now the first maze has been loaded.
+            this.loadingFirstMaze = false;
         }
 
         public override void OnNew(object sender, EventArgs e)
@@ -113,7 +121,7 @@ namespace SWA.Ariadne.Gui
                 return;
             }
 
-            base.OnNew(sender, e); // TODO: remove this call
+            //base.OnNew(sender, e); // TODO: remove this call
 
             // Choose new locations of controls, before the maze is built.
             if (visibleControls.Count == 0)
@@ -251,25 +259,29 @@ namespace SWA.Ariadne.Gui
             }
             mazeUserControl.ReserveAreaForImages();
 
-            bool hasEmbeddedShape = false;
-
-            if (!hasEmbeddedShape)
+            // The remaining adornments are not applied to the first maze.
+            if (loadingFirstMaze == false)
             {
-                // Embedded mazes.
-                hasEmbeddedShape |= this.AddEmbeddedMaze();
-            }
+                bool hasEmbeddedShape = false;
 
-            if (!hasEmbeddedShape)
-            {
-                // Outline shapes.
-                hasEmbeddedShape |= this.AddOutlineShape();
-            }
+                if (!hasEmbeddedShape)
+                {
+                    // Embedded mazes.
+                    hasEmbeddedShape |= this.AddEmbeddedMaze();
+                }
 
-            // Irregular maze shapes.
-            if (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_IRREGULAR_MAZES, false) && random.Next(100) < 10)
-            {
-                maze.Irregular = true;
-                maze.Irregularity = 80;
+                if (!hasEmbeddedShape)
+                {
+                    // Outline shapes.
+                    hasEmbeddedShape |= this.AddOutlineShape();
+                }
+
+                // Irregular maze shapes.
+                if (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_IRREGULAR_MAZES, false) && random.Next(100) < 10)
+                {
+                    maze.Irregular = true;
+                    maze.Irregularity = 80;
+                }
             }
 
             #endregion
