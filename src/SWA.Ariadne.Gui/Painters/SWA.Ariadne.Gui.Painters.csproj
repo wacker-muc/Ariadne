@@ -4,11 +4,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{351936CC-5AD5-45DF-AC9C-903964E29DDB}</ProjectGuid>
+    <ProjectGuid>{603D3813-E12B-4595-B71F-14FF32ADBAEC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SWA.Ariadne.Ctrl</RootNamespace>
-    <AssemblyName>SWA.Ariadne.Ctrl</AssemblyName>
+    <RootNamespace>SWA.Ariadne.Gui.Painters</RootNamespace>
+    <AssemblyName>SWA.Ariadne.Gui.Painters</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,40 +31,37 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AriadneController.cs">
-    </Compile>
-    <Compile Include="EmbeddedSolverController.cs" />
-    <Compile Include="IAriadneEventHandler.cs" />
-    <Compile Include="ISolverController.cs" />
-    <Compile Include="MultiSolverController.cs" />
+    <Compile Include="IMazePainterClient.cs" />
+    <Compile Include="MazePainter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ScreenSaverPreviewController.cs" />
-    <Compile Include="SolverController.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SWA.Ariadne.Gui\Mazes\SWA.Ariadne.Gui.Mazes.csproj">
-      <Project>{50B4A98B-F9F6-48B9-BF2E-0CD78368565D}</Project>
-      <Name>SWA.Ariadne.Gui.Mazes</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SWA.Ariadne.Gui\Painters\SWA.Ariadne.Gui.Painters.csproj">
-      <Project>{603D3813-E12B-4595-B71F-14FF32ADBAEC}</Project>
-      <Name>SWA.Ariadne.Gui.Painters</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SWA.Ariadne.Logic\SWA.Ariadne.Logic.csproj">
+    <ProjectReference Include="..\..\SWA.Ariadne.Logic\SWA.Ariadne.Logic.csproj">
       <Project>{EC6BE5F7-D763-413C-AA2E-2AF5358C5315}</Project>
       <Name>SWA.Ariadne.Logic</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SWA.Ariadne.Model\SWA.Ariadne.Model.csproj">
+    <ProjectReference Include="..\..\SWA.Ariadne.Model\Interfaces\SWA.Ariadne.Model.Interfaces.csproj">
+      <Project>{68099984-CB47-412B-81EF-FF67FCF2A62F}</Project>
+      <Name>SWA.Ariadne.Model.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SWA.Ariadne.Model\SWA.Ariadne.Model.csproj">
       <Project>{1ECDFF25-8784-44B4-B4DA-25B20F1DF7EC}</Project>
       <Name>SWA.Ariadne.Model</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SWA.Ariadne.Settings\SWA.Ariadne.Settings.csproj">
+    <ProjectReference Include="..\..\SWA.Ariadne.Outlines\Interfaces\SWA.Ariadne.Outlines.Interfaces.csproj">
+      <Project>{47F883D2-B923-4D5B-833D-AED0FEB0458F}</Project>
+      <Name>SWA.Ariadne.Outlines.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SWA.Ariadne.Settings\SWA.Ariadne.Settings.csproj">
       <Project>{30293912-CD50-4ECE-B51A-CD89890186F8}</Project>
       <Name>SWA.Ariadne.Settings</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SWA.Utilities\SWA.Utilities.csproj">
+      <Project>{5947CDF1-FDE4-4B7C-9420-0A4DF039B5AB}</Project>
+      <Name>SWA.Utilities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

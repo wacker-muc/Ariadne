@@ -5,7 +5,8 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using SWA.Ariadne.Gui.Mazes;
+//using SWA.Ariadne.Gui.Mazes;
+using SWA.Ariadne.Gui.Painters;
 using SWA.Ariadne.Settings;
 using SWA.Utilities;
 

@@ -129,6 +129,21 @@ namespace SWA.Ariadne.Model
         }
         private OutlineShape outlineShape = null;
 
+        public InsideShapeDelegate OutlineShapeTest
+        {
+            get
+            {
+                if (this.outlineShape == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    return delegate(int x, int y) { return OutlineShape[x, y]; };
+                }
+            }
+        }
+
         /// <summary>
         /// The maze is formed by a two-dimensional array of squares.
         /// </summary>
