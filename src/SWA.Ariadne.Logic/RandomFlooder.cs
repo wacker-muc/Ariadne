@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using SWA.Ariadne.Model;
+using SWA.Ariadne.Model.Interfaces;
 
 namespace SWA.Ariadne.Logic
 {
@@ -42,7 +43,7 @@ namespace SWA.Ariadne.Logic
         /// <param name="sq1"></param>
         /// <param name="openWalls"></param>
         /// <returns></returns>
-        protected override MazeSquare.WallPosition SelectDirection(MazeSquare sq1, List<MazeSquare.WallPosition> openWalls)
+        protected override WallPosition SelectDirection(MazeSquare sq1, List<WallPosition> openWalls)
         {
             return openWalls[random.Next(openWalls.Count)];
         }

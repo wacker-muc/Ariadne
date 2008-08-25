@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using SWA.Ariadne.Model.Interfaces;
 
 namespace SWA.Ariadne.Model
 {
@@ -91,25 +92,25 @@ namespace SWA.Ariadne.Model
 
                 switch (maze.Direction)
                 {
-                    case MazeSquare.WallPosition.WP_E:
+                    case WallPosition.WP_E:
                         d1 = maze.StartSquare.XPos;
                         d2 = maze.XSize - 1 - maze.EndSquare.XPos;
                         c1 = maze.StartSquare.YPos;
                         c2 = maze.EndSquare.YPos;
                         break;
-                    case MazeSquare.WallPosition.WP_W:
+                    case WallPosition.WP_W:
                         d1 = maze.EndSquare.XPos;
                         d2 = maze.XSize - 1 - maze.StartSquare.XPos;
                         c1 = maze.EndSquare.YPos;
                         c2 = maze.StartSquare.YPos;
                         break;
-                    case MazeSquare.WallPosition.WP_S:
+                    case WallPosition.WP_S:
                         d1 = maze.StartSquare.YPos;
                         d2 = maze.YSize - 1 - maze.EndSquare.YPos;
                         c1 = maze.StartSquare.XPos;
                         c2 = maze.EndSquare.XPos;
                         break;
-                    case MazeSquare.WallPosition.WP_N:
+                    case WallPosition.WP_N:
                         d1 = maze.EndSquare.YPos;
                         d2 = maze.YSize - 1 - maze.StartSquare.YPos;
                         c1 = maze.EndSquare.XPos;
@@ -132,7 +133,7 @@ namespace SWA.Ariadne.Model
                 nCode *= (dimensionsObj.MaxXSize + 1);
                 nCode += c2;
 
-                nCode *= MazeSquare.WP_NUM;
+                nCode *= (int)WallPosition.WP_NUM;
                 nCode += (int)maze.Direction;
             }
 
@@ -322,13 +323,13 @@ namespace SWA.Ariadne.Model
             {
                 #region Decoding of obsolete Version 0 parameters
 
-                MazeSquare.WallPosition direction;
+                WallPosition direction;
                 int xStart, yStart;
                 int xEnd, yEnd;
                 int d1, d2, c1, c2;
 
-                itemRange = MazeSquare.WP_NUM;
-                direction = (MazeSquare.WallPosition)(nCode % itemRange);
+                itemRange = (int)WallPosition.WP_NUM;
+                direction = (WallPosition)(nCode % itemRange);
                 nCode /= itemRange;
 
                 itemRange = dimensionsObj.MaxXSize + 1;
@@ -349,25 +350,25 @@ namespace SWA.Ariadne.Model
 
                 switch (direction)
                 {
-                    case MazeSquare.WallPosition.WP_E:
+                    case WallPosition.WP_E:
                         xStart = d1;
                         xEnd = xSize - 1 - d2;
                         yStart = c1;
                         yEnd = c2;
                         break;
-                    case MazeSquare.WallPosition.WP_W:
+                    case WallPosition.WP_W:
                         xEnd = d1;
                         xStart = xSize - 1 - d2;
                         yEnd = c1;
                         yStart = c2;
                         break;
-                    case MazeSquare.WallPosition.WP_S:
+                    case WallPosition.WP_S:
                         yStart = d1;
                         yEnd = ySize - 1 - d2;
                         xStart = c1;
                         xEnd = c2;
                         break;
-                    case MazeSquare.WallPosition.WP_N:
+                    case WallPosition.WP_N:
                         yEnd = d1;
                         yStart = ySize - 1 - d2;
                         xEnd = c1;

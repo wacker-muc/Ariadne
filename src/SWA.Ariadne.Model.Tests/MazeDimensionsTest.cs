@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Text;
 using System.Collections.Generic;
+using SWA.Ariadne.Model.Interfaces;
 
 namespace SWA.Ariadne.Model.Tests
 {
@@ -93,7 +94,7 @@ namespace SWA.Ariadne.Model.Tests
             double f5 = dimensionsObj.MaxBorderDistance + 1;
             double f6 = dimensionsObj.MaxXSize + 1;
             double f7 = dimensionsObj.MaxXSize + 1;
-            double f8 = MazeSquare.WP_NUM;
+            double f8 = (int)WallPosition.WP_NUM;
 
             double maxCodeValue = (f1 * f2 * f3 * f4 * f5 * f6 * f7 * f8) - 1;
 
@@ -121,7 +122,7 @@ namespace SWA.Ariadne.Model.Tests
             //double f5 = dimensionsObj.MaxBorderDistance + 1;
             //double f6 = dimensionsObj.MaxXSize + 1;
             //double f7 = dimensionsObj.MaxXSize + 1;
-            //double f8 = MazeSquare.WP_NUM;
+            //double f8 = WallPosition.WP_NUM;
 
             double maxCodeValue = (f1 * f2 * f3 /** f4 * f5 * f6 * f7 * f8*/) - 1;
 

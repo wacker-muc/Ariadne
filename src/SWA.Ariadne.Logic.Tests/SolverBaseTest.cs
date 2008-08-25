@@ -5,6 +5,8 @@ using System;
 using System.Text;
 using System.Collections.Generic;
 using SWA.Ariadne.Model;
+using SWA.Ariadne.Model.Interfaces;
+
 namespace SWA.Ariadne.Logic.Tests
 {
     /// <summary>
@@ -82,15 +84,20 @@ namespace SWA.Ariadne.Logic.Tests
             string testObject = "SWA.Ariadne.Logic.SolverBase.OpenWalls";
 
             MazeSquare sq = new MazeSquare(0, 0);
-            for (MazeSquare.WallPosition wp = MazeSquare.WP_MIN; wp <= MazeSquare.WP_MAX; wp++)
+            for (WallPosition wp = WallPosition.WP_MIN; wp <= WallPosition.WP_MAX; wp++)
             {
-                sq[wp] = MazeSquare.WallState.WS_CLOSED;
+                sq[wp] = WallState.WS_CLOSED;
             }
 
-            bool notVisitedOnly = false;
-            List<MazeSquare.WallPosition> actual;
+            Maze maze = new Maze(0, 0);
+            maze.CreateMaze();
+            IMazeSolver target = SolverFactory.CreateDefaultSolver(maze, null);
+            SWA_Ariadne_Logic_SolverBaseAccessor accessor = new SWA_Ariadne_Logic_SolverBaseAccessor(target);
 
-            actual = SWA_Ariadne_Logic_SolverBaseAccessor.OpenWalls(sq, notVisitedOnly);
+            bool notVisitedOnly = false;
+            List<WallPosition> actual;
+
+            actual = accessor.OpenWalls(sq, notVisitedOnly);
 
             Assert.AreEqual(0, actual.Count, testObject + " did not return the expected value.");
         }

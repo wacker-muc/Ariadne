@@ -1,67 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using SWA.Ariadne.Model.Interfaces;
 
 namespace SWA.Ariadne.Model
 {
     sealed public class MazeSquare
     {
-        #region Enumeration types
-
-        /// <summary>
-        /// Positions of the walls around a square: East, North, West, South.
-        /// </summary>
-        public enum WallPosition : int
-        {
-            /// <summary>
-            /// East.
-            /// </summary>
-            WP_E = 0,
-            /// <summary>
-            /// North.
-            /// </summary>
-            WP_N = 1,
-            /// <summary>
-            /// West.
-            /// </summary>
-            WP_W = 2,
-            /// <summary>
-            /// South.
-            /// </summary>
-            WP_S = 3,
-        }
-        public const WallPosition WP_MIN = WallPosition.WP_E;
-        public const WallPosition WP_MAX = WallPosition.WP_S;
-        public const int WP_NUM = 4;
-
-        /// <summary>
-        /// States of a wall: Open, Closed, Not determined.
-        /// </summary>
-        public enum WallState : byte
-        {
-            /// <summary>
-            /// Undetermined, needs to be initialized.
-            /// </summary>
-            WS_MAYBE = 0,
-            /// <summary>
-            /// Open wall, may be passed.
-            /// </summary>
-            WS_OPEN = 1,
-            /// <summary>
-            /// Closed wall, may not be passed.
-            /// </summary>
-            WS_CLOSED = 2,
-            /// <summary>
-            /// Undetermined, should be part of an outlined shape.
-            /// </summary>
-            WS_OUTLINE = 3,
-        }
-
-        #endregion
-
         #region Member variables and Properties
 
-        internal WallState[] walls = new WallState[WP_NUM];
+        internal WallState[] walls = new WallState[(int)WallPosition.WP_NUM];
 
         #region Properties
         public WallState this[WallPosition side]
@@ -154,7 +102,7 @@ namespace SWA.Ariadne.Model
         /// <summary>
         /// Adjoining squares in the four directions.
         /// </summary>
-        private MazeSquare[] neighbors = new MazeSquare[WP_NUM];
+        private MazeSquare[] neighbors = new MazeSquare[(int)WallPosition.WP_NUM];
 
         #region Maze coordinates
 
@@ -184,9 +132,9 @@ namespace SWA.Ariadne.Model
             this.yPos = yPos;
             this.mazeId = PrimaryMazeId;
 
-            for (int i = 0; i < WP_NUM; i++)
+            for (WallPosition wp = WallPosition.WP_MIN; wp <= WallPosition.WP_MAX; wp++)
             {
-                this.walls[i] = WallState.WS_MAYBE;
+                this.walls[(int)wp] = WallState.WS_MAYBE;
             }
         }
 
@@ -199,7 +147,7 @@ namespace SWA.Ariadne.Model
         /// </summary>
         /// <param name="side"></param>
         /// <param name="neighbor"></param>
-        internal void SetNeighbor(MazeSquare.WallPosition side, MazeSquare neighbor)
+        internal void SetNeighbor(WallPosition side, MazeSquare neighbor)
         {
             this.neighbors[(int)side] = neighbor;
         }

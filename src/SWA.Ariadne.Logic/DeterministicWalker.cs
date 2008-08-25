@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using SWA.Ariadne.Model;
+using SWA.Ariadne.Model.Interfaces;
 
 namespace SWA.Ariadne.Logic
 {
@@ -14,7 +15,7 @@ namespace SWA.Ariadne.Logic
         #region Member variables
 
         protected MazeSquare currentSquare;
-        protected MazeSquare.WallPosition currentDirection;
+        protected WallPosition currentDirection;
 
         #endregion
 
@@ -47,9 +48,9 @@ namespace SWA.Ariadne.Logic
             currentSquare.isVisited = true;
 
             // Start in an arbitrary direction (with a wall in the back).
-            for (currentDirection = MazeSquare.WP_MIN; currentDirection < MazeSquare.WP_MAX; currentDirection++)
+            for (currentDirection = WallPosition.WP_MIN; currentDirection < WallPosition.WP_MAX; currentDirection++)
             {
-                if (currentSquare[currentDirection] == MazeSquare.WallState.WS_CLOSED)
+                if (currentSquare[currentDirection] == WallState.WS_CLOSED)
                 {
                     currentDirection = MazeSquare.OppositeWall(currentDirection);
                     break;
@@ -103,9 +104,9 @@ namespace SWA.Ariadne.Logic
         /// </summary>
         protected void TurnLeft()
         {
-            if (currentDirection == MazeSquare.WP_MAX)
+            if (currentDirection == WallPosition.WP_MAX)
             {
-                currentDirection = MazeSquare.WP_MIN;
+                currentDirection = WallPosition.WP_MIN;
             }
             else
             {
@@ -118,9 +119,9 @@ namespace SWA.Ariadne.Logic
         /// </summary>
         protected void TurnRight()
         {
-            if (currentDirection == MazeSquare.WP_MIN)
+            if (currentDirection == WallPosition.WP_MIN)
             {
-                currentDirection = MazeSquare.WP_MAX;
+                currentDirection = WallPosition.WP_MAX;
             }
             else
             {
@@ -135,7 +136,7 @@ namespace SWA.Ariadne.Logic
         protected virtual bool CurrentDirectionIsInvalid()
         {
             // Check for open/closed walls.
-            if (currentSquare[currentDirection] != MazeSquare.WallState.WS_OPEN)
+            if (currentSquare[currentDirection] != WallState.WS_OPEN)
             {
                 return true;
             }

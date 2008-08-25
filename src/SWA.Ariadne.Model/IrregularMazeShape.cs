@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using SWA.Ariadne.Model.Interfaces;
 using SWA.Ariadne.Outlines;
 
 namespace SWA.Ariadne.Model
@@ -50,7 +51,7 @@ namespace SWA.Ariadne.Model
         }
 
         /// <summary>
-        /// Returns an array four boolean values, indexed by the MazeSquare.WallPosition constants.
+        /// Returns an array four boolean values, indexed by the WallPosition constants.
         /// The value is true when that wall is a preferred direction for paths from the given square.
         /// </summary>
         /// <param name="sq"></param>
@@ -295,9 +296,9 @@ namespace SWA.Ariadne.Model
             {
                 bool[] result = new bool[4];
 
-                for (MazeSquare.WallPosition wp = MazeSquare.WP_MIN; wp <= MazeSquare.WP_MAX; wp++)
+                for (WallPosition wp = WallPosition.WP_MIN; wp <= WallPosition.WP_MAX; wp++)
                 {
-                    result[(int)wp] = (sq.walls[(int)MazeSquare.OppositeWall(wp)] == MazeSquare.WallState.WS_OPEN);
+                    result[(int)wp] = (sq.walls[(int)MazeSquare.OppositeWall(wp)] == WallState.WS_OPEN);
                 }
 
                 return result;
@@ -319,9 +320,9 @@ namespace SWA.Ariadne.Model
             {
                 bool[] result = new bool[4];
 
-                for (MazeSquare.WallPosition wp = MazeSquare.WP_MIN; wp <= MazeSquare.WP_MAX; wp++)
+                for (WallPosition wp = WallPosition.WP_MIN; wp <= WallPosition.WP_MAX; wp++)
                 {
-                    result[(int)wp] = (sq.walls[(int)MazeSquare.OppositeWall(wp)] != MazeSquare.WallState.WS_OPEN);
+                    result[(int)wp] = (sq.walls[(int)MazeSquare.OppositeWall(wp)] != WallState.WS_OPEN);
                 }
 
                 return result;
@@ -346,16 +347,16 @@ namespace SWA.Ariadne.Model
                 switch (1 * (sq.XPos % 2) + 2 * (sq.YPos % 2)) // 0..3
                 {
                     case 0: // (0,0) -> (1,0)
-                        result[(int)MazeSquare.WallPosition.WP_E] = true;
+                        result[(int)WallPosition.WP_E] = true;
                         break;
                     case 1: // (1,0) -> (1,1)
-                        result[(int)MazeSquare.WallPosition.WP_S] = true;
+                        result[(int)WallPosition.WP_S] = true;
                         break;
                     case 2: // (0,1) -> (0,0)
-                        result[(int)MazeSquare.WallPosition.WP_N] = true;
+                        result[(int)WallPosition.WP_N] = true;
                         break;
                     case 3: // (1,1) -> (0,1)
-                        result[(int)MazeSquare.WallPosition.WP_W] = true;
+                        result[(int)WallPosition.WP_W] = true;
                         break;
                 }
 
@@ -391,10 +392,10 @@ namespace SWA.Ariadne.Model
             {
                 bool[] result = new bool[4];
 
-                result[(int)MazeSquare.WallPosition.WP_N] = (this.horizontal == false);
-                result[(int)MazeSquare.WallPosition.WP_S] = (this.horizontal == false);
-                result[(int)MazeSquare.WallPosition.WP_E] = (this.horizontal == true);
-                result[(int)MazeSquare.WallPosition.WP_W] = (this.horizontal == true);
+                result[(int)WallPosition.WP_N] = (this.horizontal == false);
+                result[(int)WallPosition.WP_S] = (this.horizontal == false);
+                result[(int)WallPosition.WP_E] = (this.horizontal == true);
+                result[(int)WallPosition.WP_W] = (this.horizontal == true);
 
                 return result;
             }
@@ -429,10 +430,10 @@ namespace SWA.Ariadne.Model
                 bool[] result = new bool[4];
                 bool evenCoordinates = ((sq.XPos + sq.YPos) % 2 == 0);
 
-                result[(int)MazeSquare.WallPosition.WP_E] = (evenCoordinates == this.firstQuadrant);
-                result[(int)MazeSquare.WallPosition.WP_W] = (evenCoordinates != this.firstQuadrant);
-                result[(int)MazeSquare.WallPosition.WP_N] = (evenCoordinates == true);
-                result[(int)MazeSquare.WallPosition.WP_S] = (evenCoordinates == false);
+                result[(int)WallPosition.WP_E] = (evenCoordinates == this.firstQuadrant);
+                result[(int)WallPosition.WP_W] = (evenCoordinates != this.firstQuadrant);
+                result[(int)WallPosition.WP_N] = (evenCoordinates == true);
+                result[(int)WallPosition.WP_S] = (evenCoordinates == false);
 
                 return result;
             }
@@ -598,37 +599,37 @@ namespace SWA.Ariadne.Model
 
                 if (distances[1, 0] <= d2) // straight north
                 {
-                    result[(int)MazeSquare.WallPosition.WP_N] = true;
+                    result[(int)WallPosition.WP_N] = true;
                 }
                 if (distances[0, 1] <= d2) // straight west
                 {
-                    result[(int)MazeSquare.WallPosition.WP_W] = true;
+                    result[(int)WallPosition.WP_W] = true;
                 }
                 if (distances[1, 2] <= d2) // straight south
                 {
-                    result[(int)MazeSquare.WallPosition.WP_S] = true;
+                    result[(int)WallPosition.WP_S] = true;
                 }
                 if (distances[2, 1] <= d2) // straight east
                 {
-                    result[(int)MazeSquare.WallPosition.WP_E] = true;
+                    result[(int)WallPosition.WP_E] = true;
                 }
 
                 // For approximating a diagonal connection, we follow the closer path (unless this logic is inverted).
                 if (distances[0, 0] <= d2) // north-west
                 {
-                    result[(int)((distances[1, 0] < distances[0, 1] == followDiagonals) ? MazeSquare.WallPosition.WP_N : MazeSquare.WallPosition.WP_W)] = true;
+                    result[(int)((distances[1, 0] < distances[0, 1] == followDiagonals) ? WallPosition.WP_N : WallPosition.WP_W)] = true;
                 }
                 if (distances[2, 0] <= d2) // north-east
                 {
-                    result[(int)((distances[1, 0] < distances[2, 1] == followDiagonals) ? MazeSquare.WallPosition.WP_N : MazeSquare.WallPosition.WP_E)] = true;
+                    result[(int)((distances[1, 0] < distances[2, 1] == followDiagonals) ? WallPosition.WP_N : WallPosition.WP_E)] = true;
                 }
                 if (distances[0, 2] <= d2) // south-west
                 {
-                    result[(int)((distances[1, 2] < distances[0, 1] == followDiagonals) ? MazeSquare.WallPosition.WP_S : MazeSquare.WallPosition.WP_W)] = true;
+                    result[(int)((distances[1, 2] < distances[0, 1] == followDiagonals) ? WallPosition.WP_S : WallPosition.WP_W)] = true;
                 }
                 if (distances[2, 2] <= d2) // south-east
                 {
-                    result[(int)((distances[1, 2] < distances[2, 1] == followDiagonals) ? MazeSquare.WallPosition.WP_S : MazeSquare.WallPosition.WP_E)] = true;
+                    result[(int)((distances[1, 2] < distances[2, 1] == followDiagonals) ? WallPosition.WP_S : WallPosition.WP_E)] = true;
                 }
 
                 #endregion
@@ -724,7 +725,7 @@ namespace SWA.Ariadne.Model
                         }
                         #endregion
 
-                        for (MazeSquare.WallPosition p = MazeSquare.WP_MIN; p <= MazeSquare.WP_MAX; p++)
+                        for (WallPosition p = WallPosition.WP_MIN; p <= WallPosition.WP_MAX; p++)
                         {
                             #region Skip this wall if it is the maze border or a reserved area border.
 
@@ -732,16 +733,16 @@ namespace SWA.Ariadne.Model
 
                             switch (p)
                             {
-                                case MazeSquare.WallPosition.WP_W:
+                                case WallPosition.WP_W:
                                     skip = (x == 0 || maze[x - 1, y].isReserved);
                                     break;
-                                case MazeSquare.WallPosition.WP_E:
+                                case WallPosition.WP_E:
                                     skip = (x + 1 == maze.XSize || maze[x + 1, y].isReserved);
                                     break;
-                                case MazeSquare.WallPosition.WP_N:
+                                case WallPosition.WP_N:
                                     skip = (y == 0 || maze[x, y - 1].isReserved);
                                     break;
-                                case MazeSquare.WallPosition.WP_S:
+                                case WallPosition.WP_S:
                                     skip = (y + 1 == maze.YSize || maze[x, y + 1].isReserved);
                                     break;
                             }
@@ -761,15 +762,15 @@ namespace SWA.Ariadne.Model
 
                             switch (maze[x, y][p])
                             {
-                                case MazeSquare.WallState.WS_OPEN:
+                                case WallState.WS_OPEN:
                                     increment = +1.0 / d;
                                     break;
-                                case MazeSquare.WallState.WS_CLOSED:
-                                case MazeSquare.WallState.WS_OUTLINE:
+                                case WallState.WS_CLOSED:
+                                case WallState.WS_OUTLINE:
                                     increment = -1.0 / d;
                                     break;
                                 default:
-                                case MazeSquare.WallState.WS_MAYBE:
+                                case WallState.WS_MAYBE:
                                     increment = +0.1 / d;
                                     break;
                             }
@@ -817,7 +818,7 @@ namespace SWA.Ariadne.Model
                 
                 for (int p = 0; p < 4; p++)
                 {
-                    MazeSquare sq1 = sq.NeighborSquare((MazeSquare.WallPosition)p);
+                    MazeSquare sq1 = sq.NeighborSquare((WallPosition)p);
                     if (sq1 != null)
                     {
                         result[p] = ((shape[sq.XPos, sq.YPos] == shape[sq1.XPos, sq1.YPos]) == preferStayingInside);

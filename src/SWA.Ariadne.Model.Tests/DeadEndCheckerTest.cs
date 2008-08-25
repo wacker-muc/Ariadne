@@ -5,6 +5,7 @@ using System;
 using System.Text;
 using System.Collections.Generic;
 using SWA.Ariadne.Model;
+using SWA.Ariadne.Model.Interfaces;
 
 namespace SWA.Ariadne.Model.Tests
 {
@@ -118,9 +119,9 @@ namespace SWA.Ariadne.Model.Tests
             List<MazeSquare> deadSquares;
 
             MazeSquare sq = maze.StartSquare;                                       // 2,0
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 2,1
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_W, 0);    // 1,1
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_W, 2);    // 0,1
+            deadSquares = Move(target, ref sq, WallPosition.WP_S, 0);    // 2,1
+            deadSquares = Move(target, ref sq, WallPosition.WP_W, 0);    // 1,1
+            deadSquares = Move(target, ref sq, WallPosition.WP_W, 2);    // 0,1
         }
 
         /// <summary>
@@ -137,10 +138,10 @@ namespace SWA.Ariadne.Model.Tests
             List<MazeSquare> deadSquares;
 
             MazeSquare sq = maze.StartSquare;                                       // 2,0
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 2,1
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_E, 0);    // 3,1
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_E, 0);    // 4,1
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_N, 1);    // 4,0
+            deadSquares = Move(target, ref sq, WallPosition.WP_S, 0);    // 2,1
+            deadSquares = Move(target, ref sq, WallPosition.WP_E, 0);    // 3,1
+            deadSquares = Move(target, ref sq, WallPosition.WP_E, 0);    // 4,1
+            deadSquares = Move(target, ref sq, WallPosition.WP_N, 1);    // 4,0
         }
 
         /// <summary>
@@ -157,15 +158,15 @@ namespace SWA.Ariadne.Model.Tests
             List<MazeSquare> deadSquares;
 
             MazeSquare sq = maze.StartSquare;                                       // 2,0
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 2,1
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 2,2
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 2,3
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 2,4
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 2,5
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 2,6
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 2,7
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 2,8
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 20);   // 2,9
+            deadSquares = Move(target, ref sq, WallPosition.WP_S, 0);    // 2,1
+            deadSquares = Move(target, ref sq, WallPosition.WP_S, 0);    // 2,2
+            deadSquares = Move(target, ref sq, WallPosition.WP_S, 0);    // 2,3
+            deadSquares = Move(target, ref sq, WallPosition.WP_S, 0);    // 2,4
+            deadSquares = Move(target, ref sq, WallPosition.WP_S, 0);    // 2,5
+            deadSquares = Move(target, ref sq, WallPosition.WP_S, 0);    // 2,6
+            deadSquares = Move(target, ref sq, WallPosition.WP_S, 0);    // 2,7
+            deadSquares = Move(target, ref sq, WallPosition.WP_S, 0);    // 2,8
+            deadSquares = Move(target, ref sq, WallPosition.WP_S, 20);   // 2,9
         }
 
         /// <summary>
@@ -182,16 +183,16 @@ namespace SWA.Ariadne.Model.Tests
             List<MazeSquare> deadSquares;
 
             MazeSquare sq = maze.StartSquare;                                       // 2,0
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_W, 0);    // 1,1
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 1,1
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 1,2
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 1,3
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 1,4
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 1,5
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 1,6
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 1,7
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 1,8
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 10);   // 1,9
+            deadSquares = Move(target, ref sq, WallPosition.WP_W, 0);    // 1,1
+            deadSquares = Move(target, ref sq, WallPosition.WP_S, 0);    // 1,1
+            deadSquares = Move(target, ref sq, WallPosition.WP_S, 0);    // 1,2
+            deadSquares = Move(target, ref sq, WallPosition.WP_S, 0);    // 1,3
+            deadSquares = Move(target, ref sq, WallPosition.WP_S, 0);    // 1,4
+            deadSquares = Move(target, ref sq, WallPosition.WP_S, 0);    // 1,5
+            deadSquares = Move(target, ref sq, WallPosition.WP_S, 0);    // 1,6
+            deadSquares = Move(target, ref sq, WallPosition.WP_S, 0);    // 1,7
+            deadSquares = Move(target, ref sq, WallPosition.WP_S, 0);    // 1,8
+            deadSquares = Move(target, ref sq, WallPosition.WP_S, 10);   // 1,9
         }
 
         /// <summary>
@@ -208,10 +209,10 @@ namespace SWA.Ariadne.Model.Tests
             List<MazeSquare> deadSquares;
 
             MazeSquare sq = maze.StartSquare;                                       // 2,0
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 2,1
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 2,2
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_W, 0);    // 1,2
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_W, 4);    // 0,2
+            deadSquares = Move(target, ref sq, WallPosition.WP_S, 0);    // 2,1
+            deadSquares = Move(target, ref sq, WallPosition.WP_S, 0);    // 2,2
+            deadSquares = Move(target, ref sq, WallPosition.WP_W, 0);    // 1,2
+            deadSquares = Move(target, ref sq, WallPosition.WP_W, 4);    // 0,2
         }
 
         /// <summary>
@@ -234,44 +235,44 @@ namespace SWA.Ariadne.Model.Tests
             List<MazeSquare> deadSquares;
 
             MazeSquare sq = maze.StartSquare;                                       // 4,9
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_E, 0);    // 5,9
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_E, 0);    // 6,9
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_E, 0);    // 7,9
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_N, 0);    // 7,8
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_E, 0);    // 8,8
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_E, 2);    // 9,8 !
+            deadSquares = Move(target, ref sq, WallPosition.WP_E, 0);    // 5,9
+            deadSquares = Move(target, ref sq, WallPosition.WP_E, 0);    // 6,9
+            deadSquares = Move(target, ref sq, WallPosition.WP_E, 0);    // 7,9
+            deadSquares = Move(target, ref sq, WallPosition.WP_N, 0);    // 7,8
+            deadSquares = Move(target, ref sq, WallPosition.WP_E, 0);    // 8,8
+            deadSquares = Move(target, ref sq, WallPosition.WP_E, 2);    // 9,8 !
             
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_N, 0);    // 9,7
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_N, 0);    // 9,6
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_N, 0);    // 9,5
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_N, 0);    // 9,4
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_W, 0);    // 8,4
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_W, 0);    // 7,4 !
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 7,5
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 7,6
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_W, 0);    // 6,6 !
+            deadSquares = Move(target, ref sq, WallPosition.WP_N, 0);    // 9,7
+            deadSquares = Move(target, ref sq, WallPosition.WP_N, 0);    // 9,6
+            deadSquares = Move(target, ref sq, WallPosition.WP_N, 0);    // 9,5
+            deadSquares = Move(target, ref sq, WallPosition.WP_N, 0);    // 9,4
+            deadSquares = Move(target, ref sq, WallPosition.WP_W, 0);    // 8,4
+            deadSquares = Move(target, ref sq, WallPosition.WP_W, 0);    // 7,4 !
+            deadSquares = Move(target, ref sq, WallPosition.WP_S, 0);    // 7,5
+            deadSquares = Move(target, ref sq, WallPosition.WP_S, 0);    // 7,6
+            deadSquares = Move(target, ref sq, WallPosition.WP_W, 0);    // 6,6 !
 
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_N, 0);    // 6,5
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_N, 0);    // 6,4
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_W, 0);    // 5,4 !
+            deadSquares = Move(target, ref sq, WallPosition.WP_N, 0);    // 6,5
+            deadSquares = Move(target, ref sq, WallPosition.WP_N, 0);    // 6,4
+            deadSquares = Move(target, ref sq, WallPosition.WP_W, 0);    // 5,4 !
 
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_N, 0);    // 5,3
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_N, 0);    // 5,2
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_W, 0);    // 4,2
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_W, 0);    // 3,2
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 3,3
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 3,4
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_E, 1);    // 4,4 !
+            deadSquares = Move(target, ref sq, WallPosition.WP_N, 0);    // 5,3
+            deadSquares = Move(target, ref sq, WallPosition.WP_N, 0);    // 5,2
+            deadSquares = Move(target, ref sq, WallPosition.WP_W, 0);    // 4,2
+            deadSquares = Move(target, ref sq, WallPosition.WP_W, 0);    // 3,2
+            deadSquares = Move(target, ref sq, WallPosition.WP_S, 0);    // 3,3
+            deadSquares = Move(target, ref sq, WallPosition.WP_S, 0);    // 3,4
+            deadSquares = Move(target, ref sq, WallPosition.WP_E, 1);    // 4,4 !
 
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 4,5
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 4,6
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_W, 0);    // 3,6
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 3,7
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_W, 0);    // 2,7
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 2,8
+            deadSquares = Move(target, ref sq, WallPosition.WP_S, 0);    // 4,5
+            deadSquares = Move(target, ref sq, WallPosition.WP_S, 0);    // 4,6
+            deadSquares = Move(target, ref sq, WallPosition.WP_W, 0);    // 3,6
+            deadSquares = Move(target, ref sq, WallPosition.WP_S, 0);    // 3,7
+            deadSquares = Move(target, ref sq, WallPosition.WP_W, 0);    // 2,7
+            deadSquares = Move(target, ref sq, WallPosition.WP_S, 0);    // 2,8
             Assert.AreEqual(2, sq.XPos, "current square at wrong X position");
             Assert.AreEqual(8, sq.YPos, "current square at wrong Y position");
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 14);   // 2,9 !
+            deadSquares = Move(target, ref sq, WallPosition.WP_S, 14);   // 2,9 !
         }
 
         /// <summary>
@@ -288,40 +289,40 @@ namespace SWA.Ariadne.Model.Tests
             List<MazeSquare> deadSquares;
 
             MazeSquare sq = maze.StartSquare;                                       // 2,0
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_E, 0);    // 3,0
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_E, 0);    // 4,0
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 4,1
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 4,2
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_E, 0);    // 5,2
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_E, 0);    // 6,2
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_N, 0);    // 6,1
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_W, 0);    // 5,1
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_N, 0);    // 5,0
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_E, 0);    // 6,0
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_E, 0);    // 7,0
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 7,1
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_E, 0);    // 8,1
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 8,2
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 8,3
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 8,4
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_W, 0);    // 7,4
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 7,5
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 7,6
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 7,7
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 7,8
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_E, 0);    // 8,8
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_E, 0);    // 9,8
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_N, 0);    // 9,7
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_E, 0);    // 10,7
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 0);    // 10,8
-            deadSquares = Move(target, ref sq, MazeSquare.WallPosition.WP_S, 64);   // 10,9
+            deadSquares = Move(target, ref sq, WallPosition.WP_E, 0);    // 3,0
+            deadSquares = Move(target, ref sq, WallPosition.WP_E, 0);    // 4,0
+            deadSquares = Move(target, ref sq, WallPosition.WP_S, 0);    // 4,1
+            deadSquares = Move(target, ref sq, WallPosition.WP_S, 0);    // 4,2
+            deadSquares = Move(target, ref sq, WallPosition.WP_E, 0);    // 5,2
+            deadSquares = Move(target, ref sq, WallPosition.WP_E, 0);    // 6,2
+            deadSquares = Move(target, ref sq, WallPosition.WP_N, 0);    // 6,1
+            deadSquares = Move(target, ref sq, WallPosition.WP_W, 0);    // 5,1
+            deadSquares = Move(target, ref sq, WallPosition.WP_N, 0);    // 5,0
+            deadSquares = Move(target, ref sq, WallPosition.WP_E, 0);    // 6,0
+            deadSquares = Move(target, ref sq, WallPosition.WP_E, 0);    // 7,0
+            deadSquares = Move(target, ref sq, WallPosition.WP_S, 0);    // 7,1
+            deadSquares = Move(target, ref sq, WallPosition.WP_E, 0);    // 8,1
+            deadSquares = Move(target, ref sq, WallPosition.WP_S, 0);    // 8,2
+            deadSquares = Move(target, ref sq, WallPosition.WP_S, 0);    // 8,3
+            deadSquares = Move(target, ref sq, WallPosition.WP_S, 0);    // 8,4
+            deadSquares = Move(target, ref sq, WallPosition.WP_W, 0);    // 7,4
+            deadSquares = Move(target, ref sq, WallPosition.WP_S, 0);    // 7,5
+            deadSquares = Move(target, ref sq, WallPosition.WP_S, 0);    // 7,6
+            deadSquares = Move(target, ref sq, WallPosition.WP_S, 0);    // 7,7
+            deadSquares = Move(target, ref sq, WallPosition.WP_S, 0);    // 7,8
+            deadSquares = Move(target, ref sq, WallPosition.WP_E, 0);    // 8,8
+            deadSquares = Move(target, ref sq, WallPosition.WP_E, 0);    // 9,8
+            deadSquares = Move(target, ref sq, WallPosition.WP_N, 0);    // 9,7
+            deadSquares = Move(target, ref sq, WallPosition.WP_E, 0);    // 10,7
+            deadSquares = Move(target, ref sq, WallPosition.WP_S, 0);    // 10,8
+            deadSquares = Move(target, ref sq, WallPosition.WP_S, 64);   // 10,9
         }
 
         #endregion
 
         #region Auxiliary methods
 
-        private static List<MazeSquare> Move(DeadEndChecker target, ref MazeSquare sq, MazeSquare.WallPosition direction, int expectedDeadSquaresCount)
+        private static List<MazeSquare> Move(DeadEndChecker target, ref MazeSquare sq, WallPosition direction, int expectedDeadSquaresCount)
         {
             sq = sq.NeighborSquare(direction);
             List<MazeSquare> deadSquares = target.Visit(sq);

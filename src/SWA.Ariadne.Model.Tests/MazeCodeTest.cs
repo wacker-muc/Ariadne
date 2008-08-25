@@ -6,6 +6,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using SWA.Ariadne.Model;
+using SWA.Ariadne.Model.Interfaces;
 
 namespace SWA.Ariadne.Model.Tests
 {
@@ -146,7 +147,7 @@ namespace SWA.Ariadne.Model.Tests
 
                 SWA_Ariadne_Model_MazeAccessor accessor = new SWA_Ariadne_Model_MazeAccessor(maze);
                 int seed = accessor.seed;
-                MazeSquare.WallPosition direction = accessor.direction;
+                WallPosition direction = accessor.direction;
                 int xStart = accessor.xStart;
                 int yStart = accessor.yStart;
                 int xEnd = accessor.xEnd;

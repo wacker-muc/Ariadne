@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
+using SWA.Ariadne.Model.Interfaces;
 
 namespace SWA.Ariadne.Model
 {
@@ -204,7 +205,7 @@ namespace SWA.Ariadne.Model
                         // neighbors:
                         sqe.neighbors = new List<MazeSquareExtension>(4);
 
-                        for (MazeSquare.WallPosition wp = MazeSquare.WP_MIN; wp <= MazeSquare.WP_MAX; wp++)
+                        for (WallPosition wp = WallPosition.WP_MIN; wp <= WallPosition.WP_MAX; wp++)
                         {
                             MazeSquare sq2 = sq.NeighborSquare(wp);
 

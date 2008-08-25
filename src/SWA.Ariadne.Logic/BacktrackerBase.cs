@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using SWA.Ariadne.Model;
+using SWA.Ariadne.Model.Interfaces;
 
 namespace SWA.Ariadne.Logic
 {
@@ -74,12 +75,12 @@ namespace SWA.Ariadne.Logic
             sq1 = stack.Peek();
 
             // Possible choices of open walls (not visited).
-            List<MazeSquare.WallPosition> openWalls = OpenWalls(sq1, true);
+            List<WallPosition> openWalls = OpenWalls(sq1, true);
 
             if (openWalls.Count > 0)
             {
                 // Select one of the neighbor squares.
-                MazeSquare.WallPosition wp = SelectDirection(sq1, openWalls);
+                WallPosition wp = SelectDirection(sq1, openWalls);
 
                 sq2 = sq1.NeighborSquare(wp);
                 forward = true;
@@ -104,7 +105,7 @@ namespace SWA.Ariadne.Logic
         /// <param name="sq1"></param>
         /// <param name="openWalls"></param>
         /// <returns></returns>
-        protected abstract MazeSquare.WallPosition SelectDirection(MazeSquare sq1, List<MazeSquare.WallPosition> openWalls);
+        protected abstract WallPosition SelectDirection(MazeSquare sq1, List<WallPosition> openWalls);
 
         #endregion
     }

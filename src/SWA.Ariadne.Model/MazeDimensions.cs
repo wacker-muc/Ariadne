@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using SWA.Ariadne.Model.Interfaces;
 
 namespace SWA.Ariadne.Model
 {
@@ -84,7 +85,7 @@ namespace SWA.Ariadne.Model
 
             if (codeVersion == 0)
             {
-                codeLimit /= MazeSquare.WP_NUM;
+                codeLimit /= (int)WallPosition.WP_NUM;
                 codeLimit /= (MaxBorderDistance + 1);
                 codeLimit /= (MaxBorderDistance + 1);
                 //           (MaxXSize + 1)
