@@ -5,7 +5,6 @@ using System.Drawing;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
-using SWA.Ariadne.Gui.Painters;
 using SWA.Ariadne.Model;
 using SWA.Ariadne.Outlines;
 using SWA.Ariadne.Logic;

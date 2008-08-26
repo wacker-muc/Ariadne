@@ -1342,13 +1342,13 @@ internal class SWA_Ariadne_Outlines_ExplicitOutlineShapeAccessor : BaseAccessor 
         return ((global::SWA.Ariadne.Outlines.OutlineShape)(priv_obj.Target));
     }
     
-    internal static global::SWA.Ariadne.Outlines.OutlineShape CreatePrivate(global::SWA.Ariadne.Outlines.OutlineShape template, global::SWA.Ariadne.Outlines.Interfaces.InsideShapeDelegate isReserved) {
+    internal static global::SWA.Ariadne.Outlines.OutlineShape CreatePrivate(global::SWA.Ariadne.Outlines.OutlineShape template, global::SWA.Ariadne.Outlines.OutlineShape.InsideShapeDelegate isReserved) {
         object[] args = new object[] {
                 template,
                 isReserved};
         Microsoft.VisualStudio.TestTools.UnitTesting.PrivateObject priv_obj = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateObject("SWA.Ariadne.Outlines", "SWA.Ariadne.Outlines.ExplicitOutlineShape", new System.Type[] {
                     typeof(global::SWA.Ariadne.Outlines.OutlineShape),
-                    typeof(global::SWA.Ariadne.Outlines.Interfaces.InsideShapeDelegate)}, args);
+                    typeof(global::SWA.Ariadne.Outlines.OutlineShape.InsideShapeDelegate)}, args);
         return ((global::SWA.Ariadne.Outlines.OutlineShape)(priv_obj.Target));
     }
     
@@ -1360,23 +1360,23 @@ internal class SWA_Ariadne_Outlines_ExplicitOutlineShapeAccessor : BaseAccessor 
         return ((global::SWA.Ariadne.Outlines.OutlineShape)(priv_obj.Target));
     }
     
-    internal static global::SWA.Ariadne.Outlines.OutlineShape ConnectedSubset(global::SWA.Ariadne.Outlines.OutlineShape template, global::SWA.Ariadne.Outlines.Interfaces.InsideShapeDelegate isReserved) {
+    internal static global::SWA.Ariadne.Outlines.OutlineShape ConnectedSubset(global::SWA.Ariadne.Outlines.OutlineShape template, global::SWA.Ariadne.Outlines.OutlineShape.InsideShapeDelegate isReserved) {
         object[] args = new object[] {
                 template,
                 isReserved};
         global::SWA.Ariadne.Outlines.OutlineShape ret = ((global::SWA.Ariadne.Outlines.OutlineShape)(m_privateType.InvokeStatic("ConnectedSubset", new System.Type[] {
                     typeof(global::SWA.Ariadne.Outlines.OutlineShape),
-                    typeof(global::SWA.Ariadne.Outlines.Interfaces.InsideShapeDelegate)}, args)));
+                    typeof(global::SWA.Ariadne.Outlines.OutlineShape.InsideShapeDelegate)}, args)));
         return ret;
     }
     
-    internal static global::SWA.Ariadne.Outlines.OutlineShape Closure(global::SWA.Ariadne.Outlines.OutlineShape template, global::SWA.Ariadne.Outlines.Interfaces.InsideShapeDelegate isReserved) {
+    internal static global::SWA.Ariadne.Outlines.OutlineShape Closure(global::SWA.Ariadne.Outlines.OutlineShape template, global::SWA.Ariadne.Outlines.OutlineShape.InsideShapeDelegate isReserved) {
         object[] args = new object[] {
                 template,
                 isReserved};
         global::SWA.Ariadne.Outlines.OutlineShape ret = ((global::SWA.Ariadne.Outlines.OutlineShape)(m_privateType.InvokeStatic("Closure", new System.Type[] {
                     typeof(global::SWA.Ariadne.Outlines.OutlineShape),
-                    typeof(global::SWA.Ariadne.Outlines.Interfaces.InsideShapeDelegate)}, args)));
+                    typeof(global::SWA.Ariadne.Outlines.OutlineShape.InsideShapeDelegate)}, args)));
         return ret;
     }
     

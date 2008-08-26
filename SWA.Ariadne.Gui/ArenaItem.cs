@@ -8,7 +8,6 @@ using System.Windows.Forms;
 using SWA.Ariadne.Logic;
 using SWA.Ariadne.Settings;
 using SWA.Ariadne.Gui.Mazes;
-using SWA.Ariadne.Gui.Painters;
 using SWA.Ariadne.Ctrl;
 
 namespace SWA.Ariadne.Gui
