@@ -10,7 +10,7 @@ Copyright (c) Stephan Wacker, 2008
 
 Version 3.2
 
- * ...
+ * new Outline Shape type Maze: using the walls of another maze
 
 -----------------------------------------------------------------------
 

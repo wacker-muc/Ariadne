@@ -346,6 +346,7 @@ namespace SWA.Ariadne.Settings
             Rectangles,
             Grid,
             GridElement,
+            Maze,
         }
         public OutlineKindEnum OutlineKind
         {

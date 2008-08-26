@@ -28,10 +28,9 @@ namespace SWA.Ariadne.Model.Interfaces
         /// </summary>
         WP_S = 3,
 
-        WP_MIN = WallPosition.WP_E,
-        WP_MAX = WallPosition.WP_S,
+        WP_MIN = WP_E,
+        WP_MAX = WP_S,
         WP_NUM = WP_MAX + 1,
-
     }
 
     /// <summary>
@@ -64,12 +63,15 @@ namespace SWA.Ariadne.Model.Interfaces
     /// <summary>
     /// Comprises the methods required to build an outline shape from a Maze.
     /// </summary>
-    interface IMazeShape
+    /// TODO: Consider underlying maze's reserved areas.
+    public interface IMazeShape
     {
+        int XSize { get; }
+        int YSize { get; }
         bool WallIsClosed(int x, int y, WallPosition p);
     }
 
-    delegate IMazeShape OutlineMazeBuilder(int width, int height);
+    public delegate IMazeShape MazeShapeBuilder(int width, int height);
 
     #endregion
 }
