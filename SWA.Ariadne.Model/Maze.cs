@@ -1141,5 +1141,15 @@ namespace SWA.Ariadne.Model
         }
 
         #endregion
+
+        #region Class constructor
+
+        static Maze()
+        {
+            // Wake up and initialize the MazeShape class.
+            MazeShape.Touch();
+        }
+
+        #endregion
     }
 }

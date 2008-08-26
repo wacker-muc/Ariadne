@@ -344,7 +344,7 @@ namespace SWA.Ariadne.Gui
         /// </summary>
         private bool AddOutlineShape()
         {
-            int percentage = (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_OUTLINE_SHAPES, false) ? 66 : 0);
+            int percentage = (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_OUTLINE_SHAPES, false) ? 80 : 0);
             if (random.Next(100) < percentage)
             {
                 OutlineShape shape = OutlineShape.RandomInstance(random, mazeUserControl.Maze.XSize, mazeUserControl.Maze.YSize, 0.3, 0.7);

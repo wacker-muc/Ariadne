@@ -70,7 +70,7 @@ This option builds continuous closed walls around invisible shapes, e.g. a circl
 
 Usually, an Outline Shape is one contiguous shape, like a circle, a square or another polygon.  However, an Outline Shape can be any pattern that defines an inside and an outside.  Separate regions are all treated the same way, i.e. they are surrounded by closed walls with a single entry.
 
-[Variants:] There are 17 types of Outline Shapes, most of them with many variants, grouped into seven mayor types:
+[Variants:] There are 64 kinds of Outline Shapes, most of them with many variants, grouped into twelve mayor types:
 
    * A circle. [1]
    * A diamond, i.e. a square standing on a corner. [1]
@@ -112,10 +112,11 @@ Usually, an Outline Shape is one contiguous shape, like a circle, a square or an
      * Rectangular lines, tightly boxed. [1]
      * Large circles touching each other horizontally or vertically. [1]
    * The same Grid elements can also be enlarged and applied only once. [8]
+   * The walls of another maze. [1]
 
 While the patterns evoked by an Irregular Maze Builder come from following preferred directions (if possible), the rules defined by an Outline Shape are very strict.  They take precedence over the irregular preferences.
 
-[Option:] You can select whether Outline Shapes are placed into the maze.  If so, 66% of the screen saver mazes will contain an Outline Shape.
+[Option:] You can select whether Outline Shapes are placed into the maze.  If so, 80% of the screen saver mazes will contain an Outline Shape.
 
     Embedded Mazes
     --------------
@@ -199,14 +200,14 @@ Efficient solvers often run for long stretches without error (i.e. without leavi
    * Display a run-time statistics panel.
    * [27] Build mazes with irregular wall patterns.
       * [4] Apply two mixed irregular patterns or apply the pattern to part of the maze only.
-   * [63] Build a continuous wall around an outline shape.
+   * [64] Build a continuous wall around an outline shape.
    * [20] Build a second maze inside the outline shape.
    * [17] Different solver strategies.
    * [2] Let an efficient solver detect dead end areas.
    
 That gives a very large number of pattern or style combinations:
 
-    3 x (1 + 27x4) x (1+63+20) x 17 x 2  =  933,912
+    3 x (1 + 27x4) x (1+64+20) x 17 x 2  =  945,030
 
 The exact application of each variant is often determined by random parameter values:  Some shapes are generated dynamically, some solvers choose arbitrary paths and the maze builder generates random patterns of walls.
 

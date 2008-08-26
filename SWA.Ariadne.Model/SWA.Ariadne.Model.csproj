@@ -39,6 +39,7 @@
     <Compile Include="Maze.cs" />
     <Compile Include="MazeCode.cs" />
     <Compile Include="MazeDimensions.cs" />
+    <Compile Include="MazeShape.cs" />
     <Compile Include="MazeSquare.cs" />
     <Compile Include="IrregularMazeShape.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
