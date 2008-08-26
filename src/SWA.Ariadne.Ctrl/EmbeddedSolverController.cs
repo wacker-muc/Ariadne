@@ -77,7 +77,7 @@ namespace SWA.Ariadne.Ctrl
 
         #region Constructor
 
-        public EmbeddedSolverController(SolverController hostController, SWA.Ariadne.Gui.Painters.MazePainter mazePainter)
+        public EmbeddedSolverController(SolverController hostController, SWA.Ariadne.Gui.Mazes.MazePainter mazePainter)
             : base(null, mazePainter, null)
         {
             this.hostController = hostController;

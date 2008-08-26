@@ -6,12 +6,12 @@ using System.Data;
 using System.Text;
 using SWA.Ariadne.Model;
 using SWA.Ariadne.Model.Interfaces;
-using SWA.Ariadne.Outlines.Interfaces;
+using SWA.Ariadne.Outlines;
 using SWA.Ariadne.Logic;
 using SWA.Ariadne.Settings;
 using SWA.Utilities;
 
-namespace SWA.Ariadne.Gui.Painters
+namespace SWA.Ariadne.Gui.Mazes
 {
     /// <summary>
     /// The MazePainter is responsible for the painting operations in a MazeUserControl.
@@ -238,7 +238,7 @@ namespace SWA.Ariadne.Gui.Painters
         /// <param name="g"></param>
         /// <param name="rect"></param>
         /// TODO: Try to call the constructor with correct values in the first place.
-        public void Reconfigure(Graphics g, Rectangle rect)
+        internal void Reconfigure(Graphics g, Rectangle rect)
         {
             this.client = null;
             this.targetGraphics = g;
@@ -664,12 +664,12 @@ namespace SWA.Ariadne.Gui.Painters
         /// <param name="g"></param>
         private void PaintOutlineShape(Graphics g)
         {
-            InsideShapeDelegate test = maze.OutlineShapeTest;
-            if (test == null)
+            if (maze.OutlineShape == null)
             {
                 return;
             }
 
+            OutlineShape.InsideShapeDelegate test = delegate(int x, int y) { return maze.OutlineShape[x, y]; };
             Color shapeColor = Color.FromArgb(0, 0, 50); // dark blue
 
             PaintShape(g, test, shapeColor);
@@ -683,7 +683,7 @@ namespace SWA.Ariadne.Gui.Painters
         {
             foreach (Maze item in maze.EmbeddedMazes)
             {
-                InsideShapeDelegate test = delegate(int x, int y) { return maze[x, y].MazeId == item.MazeId; };
+                OutlineShape.InsideShapeDelegate test = delegate(int x, int y) { return maze[x, y].MazeId == item.MazeId; };
                 Color shapeColor = Color.FromArgb(50, 0, 0); // dark red
 
                 PaintShape(g, test, shapeColor);
@@ -696,7 +696,7 @@ namespace SWA.Ariadne.Gui.Painters
         /// <param name="g"></param>
         /// <param name="test"></param>
         /// <param name="shapeBrush"></param>
-        private void PaintShape(Graphics g, InsideShapeDelegate insideShapeTest, Color shapeColor)
+        private void PaintShape(Graphics g, OutlineShape.InsideShapeDelegate insideShapeTest, Color shapeColor)
         {
             // Temporarily set zero width walls; thus, the squares will be drawn seamlessly.
             int savedWallWidth = wallWidth;

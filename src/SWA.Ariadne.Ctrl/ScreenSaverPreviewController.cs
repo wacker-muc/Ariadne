@@ -4,8 +4,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Runtime.InteropServices;
-//using SWA.Ariadne.Gui.Mazes;
-using SWA.Ariadne.Gui.Painters;
+using SWA.Ariadne.Gui.Mazes;
 
 namespace SWA.Ariadne.Ctrl
 {

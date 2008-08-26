@@ -79,14 +79,6 @@
       <Project>{50B4A98B-F9F6-48B9-BF2E-0CD78368565D}</Project>
       <Name>SWA.Ariadne.Gui.Mazes</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SWA.Ariadne.Gui\Painters\SWA.Ariadne.Gui.Painters.csproj">
-      <Project>{603D3813-E12B-4595-B71F-14FF32ADBAEC}</Project>
-      <Name>SWA.Ariadne.Gui.Painters</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SWA.Ariadne.Outlines\Interfaces\SWA.Ariadne.Outlines.Interfaces.csproj">
-      <Project>{47F883D2-B923-4D5B-833D-AED0FEB0458F}</Project>
-      <Name>SWA.Ariadne.Outlines.Interfaces</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SWA.Ariadne.Outlines\SWA.Ariadne.Outlines.csproj">
       <Project>{9751AAAE-B751-451E-BA8C-FBD55234FE56}</Project>
       <Name>SWA.Ariadne.Outlines</Name>
