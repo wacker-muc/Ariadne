@@ -197,9 +197,9 @@
     <None Include="Resources\Spain.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SWA.Ariadne.Model\Interfaces\SWA.Ariadne.Model.Interfaces.csproj">
-      <Project>{68099984-CB47-412B-81EF-FF67FCF2A62F}</Project>
-      <Name>SWA.Ariadne.Model.Interfaces</Name>
+    <ProjectReference Include="..\SWA.Ariadne.Settings\SWA.Ariadne.Settings.csproj">
+      <Project>{30293912-CD50-4ECE-B51A-CD89890186F8}</Project>
+      <Name>SWA.Ariadne.Settings</Name>
     </ProjectReference>
     <ProjectReference Include="..\SWA.Utilities\SWA.Utilities.csproj">
       <Project>{5947CDF1-FDE4-4B7C-9420-0A4DF039B5AB}</Project>
