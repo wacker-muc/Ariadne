@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+/* Note: This namespace is part of the SWA.Ariadne.Settings project.
+ *       Creating a separate project for these few definitions would not be adequate.
+ */
 namespace SWA.Ariadne.Model.Interfaces
 {
     #region Enumeration types

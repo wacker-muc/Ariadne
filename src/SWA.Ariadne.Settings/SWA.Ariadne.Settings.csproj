@@ -43,6 +43,7 @@
       <DependentUpon>ColorLabel.cs</DependentUpon>
     </Compile>
     <Compile Include="IAriadneSettingsSource.cs" />
+    <Compile Include="IMazeShape.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegisteredOptions.cs">
     </Compile>

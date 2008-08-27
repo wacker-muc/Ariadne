@@ -54,10 +54,6 @@
       <Project>{EC6BE5F7-D763-413C-AA2E-2AF5358C5315}</Project>
       <Name>SWA.Ariadne.Logic</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\SWA.Ariadne.Model\Interfaces\SWA.Ariadne.Model.Interfaces.csproj">
-      <Project>{68099984-CB47-412B-81EF-FF67FCF2A62F}</Project>
-      <Name>SWA.Ariadne.Model.Interfaces</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\SWA.Ariadne.Model\SWA.Ariadne.Model.csproj">
       <Project>{1ECDFF25-8784-44B4-B4DA-25B20F1DF7EC}</Project>
       <Name>SWA.Ariadne.Model</Name>
