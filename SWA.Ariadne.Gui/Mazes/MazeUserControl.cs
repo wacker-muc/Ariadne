@@ -448,6 +448,10 @@ namespace SWA.Ariadne.Gui.Mazes
 
         #region Placement of images
 
+        /// <summary>
+        /// Reserves areas for the number of images given in the AriadneSettingsData.
+        /// </summary>
+        /// <param name="data"></param>
         private void ReserveAreasForImages(AriadneSettingsData data)
         {
             int count = data.ImageNumber;
@@ -458,13 +462,30 @@ namespace SWA.Ariadne.Gui.Mazes
             ReserveAreaForImages(count, minSize, maxSize, imageFolder);
         }
 
+        /// <summary>
+        /// Prepares the given number of images and reserves an area for each of them.
+        /// </summary>
+        /// <param name="count"></param>
+        /// <param name="minSize"></param>
+        /// <param name="maxSize"></param>
+        /// <param name="imageFolder"></param>
         public void ReserveAreaForImages(int count, int minSize, int maxSize, string imageFolder)
         {
-            PrepareImages(count, minSize, maxSize, imageFolder);
+            PrepareImages(count, minSize, maxSize, imageFolder, false);
             ReserveAreaForImages();
         }
 
-        public void PrepareImages(int count, int minSize, int maxSize, string imageFolder)
+        /// <summary>
+        /// Puts the given number of images from the given path into the this.images list.
+        /// Images that are wider or higher than maxSize are scaled down
+        /// so that the larger dimension is between minSize and maxSize.
+        /// </summary>
+        /// <param name="count"></param>
+        /// <param name="minSize"></param>
+        /// <param name="maxSize"></param>
+        /// <param name="imageFolder"></param>
+        /// <param name="quickSearch">when true, not all available image file types are considered</param>
+        public void PrepareImages(int count, int minSize, int maxSize, string imageFolder, bool quickSearch)
         {
             images.Clear();
             imageLocations.Clear();
@@ -494,7 +515,7 @@ namespace SWA.Ariadne.Gui.Mazes
 
             #endregion
 
-            foreach (string imagePath in FindImages(imageFolder, n))
+            foreach (string imagePath in FindImages(imageFolder, n, quickSearch))
             {
                 try
                 {
@@ -530,6 +551,10 @@ namespace SWA.Ariadne.Gui.Mazes
             }
         }
 
+        /// <summary>
+        /// Reserves an area for each of the prepared images (as found in this.images).
+        /// If no free area is found for an image, it is discarded.
+        /// </summary>
         public void ReserveAreaForImages()
         {
             if (this.HasPreparedImages)
@@ -546,7 +571,15 @@ namespace SWA.Ariadne.Gui.Mazes
             }
         }
 
-        private List<string> FindImages(string folderPath, int count)
+        /// <summary>
+        /// Returns a list of file names in or below the given path.
+        /// Only the following image file types are considered: JPG, GIF, PNG.
+        /// </summary>
+        /// <param name="folderPath"></param>
+        /// <param name="count"></param>
+        /// <param name="quickSearch">when true, only JPG files are considered (if there are at least 100 of them)</param>
+        /// <returns></returns>
+        private List<string> FindImages(string folderPath, int count, bool quickSearch)
         {
             if (folderPath == null || count < 1)
             {
@@ -556,8 +589,12 @@ namespace SWA.Ariadne.Gui.Mazes
             List<string> availableImages = new List<string>();
 
             availableImages.AddRange(SWA.Utilities.Directory.Find(folderPath, "*.jpg", true));
-            availableImages.AddRange(SWA.Utilities.Directory.Find(folderPath, "*.gif", true));
-            availableImages.AddRange(SWA.Utilities.Directory.Find(folderPath, "*.png", true));
+
+            if (quickSearch == false || availableImages.Count < 100)
+            {
+                availableImages.AddRange(SWA.Utilities.Directory.Find(folderPath, "*.gif", true));
+                availableImages.AddRange(SWA.Utilities.Directory.Find(folderPath, "*.png", true));
+            }
 
             List<string> result = new List<string>(count);
             Random r = Maze.Random;
@@ -592,6 +629,13 @@ namespace SWA.Ariadne.Gui.Mazes
             return result;
         }
 
+        /// <summary>
+        /// Reserves a rectangular area for the given image in this.Maze.
+        /// The chosen location is remembered in this.imageLocations.
+        /// Returns true if the reservation was successful.
+        /// </summary>
+        /// <param name="img"></param>
+        /// <returns></returns>
         private bool AddImage(Image img)
         {
             int sqW = (img.Width + 8 + this.wallWidth) / this.gridWidth + 1;

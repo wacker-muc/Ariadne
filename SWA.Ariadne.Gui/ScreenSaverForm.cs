@@ -297,7 +297,7 @@ namespace SWA.Ariadne.Gui
             int maxSize = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_MAX_SIZE, 400);
             string imageFolder = RegisteredOptions.GetStringSetting(RegisteredOptions.OPT_IMAGE_FOLDER);
 
-            mazeUserControl.PrepareImages(count, minSize, maxSize, imageFolder);
+            mazeUserControl.PrepareImages(count, minSize, maxSize, imageFolder, this.loadingFirstMaze);
         }
 
         /// <summary>
