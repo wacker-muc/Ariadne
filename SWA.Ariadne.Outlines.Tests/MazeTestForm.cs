@@ -8,10 +8,11 @@ using System.Windows.Forms;
 using SWA.Ariadne.Gui.Mazes;
 using SWA.Ariadne.Model;
 using SWA.Ariadne.Settings;
+using SWA.Ariadne.Gui.Tests;
 
 namespace SWA.Ariadne.Outlines.Tests
 {
-    public partial class MazeTestForm : Form
+    public partial class MazeTestForm : TestForm
         , IMazeForm
     {
         #region Delegates, Member Variables, Properties
