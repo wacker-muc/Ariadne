@@ -75,6 +75,10 @@
     <Compile Include="VSCodeGenAccessors.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SWA.Ariadne.Gui.Tests\SWA.Ariadne.Gui.Tests.csproj">
+      <Project>{CE03ED2F-A466-4933-8240-3A7F51913974}</Project>
+      <Name>SWA.Ariadne.Gui.Tests</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SWA.Ariadne.Gui\Mazes\SWA.Ariadne.Gui.Mazes.csproj">
       <Project>{50B4A98B-F9F6-48B9-BF2E-0CD78368565D}</Project>
       <Name>SWA.Ariadne.Gui.Mazes</Name>
