@@ -28,7 +28,7 @@ namespace SWA.Ariadne.Gui.Mazes
         private static int GetBlurDistance(Color backgroundColor)
         {
             float b = backgroundColor.GetBrightness();
-            return (int)(b * b * BlurDistance);
+            return (int)(Math.Sqrt(b) * BlurDistance);
         }
 
         /// <summary>
@@ -197,9 +197,11 @@ namespace SWA.Ariadne.Gui.Mazes
                     return GetMask_OutlineScanA(image, backgroundColor, fuzziness, out boundingBox);
                 case 3:
                     return GetMask_OutlineScanB(image, backgroundColor, fuzziness, out boundingBox);
-                default:
                 case 4:
                     return GetMask_BlockScan(image, backgroundColor, fuzziness, out boundingBox);
+                default:
+                case 5:
+                    return GetMask_ContourScan(image, backgroundColor, fuzziness, out boundingBox);
             }
         }
 
@@ -209,6 +211,7 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <param name="col1"></param>
         /// <param name="col2"></param>
         /// <returns></returns>
+        /// TODO: Make this an object method; compare with backgroundColor and test against fuzziness.
         private static float ColorDistance(Color col1, Color col2)
         {
 #if false
