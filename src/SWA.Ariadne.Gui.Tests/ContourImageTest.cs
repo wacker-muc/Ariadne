@@ -89,6 +89,448 @@ namespace SWA.Ariadne.Gui.Tests
             Assert.AreEqual(DialogResult.OK, result, testObject);
         }
 
+        /// <summary>
+        ///A test for PrepareInfluenceRegions (int)
+        ///</summary>
+        [DeploymentItem("SWA.Ariadne.Gui.Mazes.dll")]
+        [TestMethod()]
+        public void CI_PrepareInfluenceRegionsTest_01()
+        {
+            string testObject = "Distance from contour pixel";
+            int radius = SWA_Ariadne_Gui_Mazes_ContourImageAccessor.ContourDistance;
+            int influenceRange = radius + 1;
+
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.PrepareInfluenceRegions(influenceRange);
+
+            int dyN = SWA_Ariadne_Gui_Mazes_ContourImageAccessor.NbDY[SWA_Ariadne_Gui_Mazes_ContourImageAccessor.NbN];
+            int dyS = -dyN;
+            int dxW = SWA_Ariadne_Gui_Mazes_ContourImageAccessor.NbDX[SWA_Ariadne_Gui_Mazes_ContourImageAccessor.NbW];
+            int dxE = -dxW;
+
+            int nbL = SWA_Ariadne_Gui_Mazes_ContourImageAccessor.NbW;
+            int nbR = SWA_Ariadne_Gui_Mazes_ContourImageAccessor.NbS;
+
+            TestInfluence(testObject, nbL, nbR, radius * dxE, 0);       // E
+            TestInfluence(testObject, nbL, nbR, radius * dxE, dyN);     // E + 1px N
+            TestNoInfluence(testObject, nbL, nbR, radius * dxE, dyS);   // E + 1Px S
+
+            TestInfluence(testObject, nbL, nbR, 0, radius * dyN);       // N
+            TestInfluence(testObject, nbL, nbR, dxE, radius * dyN);     // N + 1px E
+            TestNoInfluence(testObject, nbL, nbR, dxW, radius * dyN);   // N + 1px W
+        }
+
+        /// <summary>
+        ///A test for PrepareInfluenceRegions (int)
+        ///</summary>
+        [DeploymentItem("SWA.Ariadne.Gui.Mazes.dll")]
+        [TestMethod()]
+        public void CI_PrepareInfluenceRegionsTest_02()
+        {
+            string testObject = "Distance from contour pixel";
+            int radius = SWA_Ariadne_Gui_Mazes_ContourImageAccessor.ContourDistance;
+            int influenceRange = radius + 1;
+
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.PrepareInfluenceRegions(influenceRange);
+
+            int dyN = SWA_Ariadne_Gui_Mazes_ContourImageAccessor.NbDY[SWA_Ariadne_Gui_Mazes_ContourImageAccessor.NbN];
+            int dyS = -dyN;
+            int dxW = SWA_Ariadne_Gui_Mazes_ContourImageAccessor.NbDX[SWA_Ariadne_Gui_Mazes_ContourImageAccessor.NbW];
+            int dxE = -dxW;
+
+            int nbL = SWA_Ariadne_Gui_Mazes_ContourImageAccessor.NbW;
+            int nbR = SWA_Ariadne_Gui_Mazes_ContourImageAccessor.NbE;
+
+            TestInfluence(testObject, nbL, nbR, 0, radius * dyN);       // N
+            TestNoInfluence(testObject, nbL, nbR, dxW, radius * dyN);   // N + 1px W
+            TestNoInfluence(testObject, nbL, nbR, dxE, radius * dyN);   // N + 1px E
+        }
+
+        #region Unit tests for ScanObject()
+
+        /// <summary>
+        ///A test for ScanObject (Bitmap, int, int, Color, float, int[,], List&lt;int&gt;[])
+        ///</summary>
+        [DeploymentItem("SWA.Ariadne.Gui.Mazes.dll")]
+        [TestMethod()]
+        public void CI_ScanObjectTest_01_Rectangle()
+        {
+            string testObject = "ControurImage.ScanObject";
+
+            Color backgroundColor = Color.Black;
+            Color foregroundColor = Color.White;
+            Brush fgBrush = new SolidBrush(foregroundColor);
+            Pen fgPen = new Pen(fgBrush, 1);
+
+            Bitmap image = new Bitmap(63, 63);
+            Graphics g = Graphics.FromImage(image);
+            g.FillRectangle(new SolidBrush(backgroundColor), 0, 0, image.Width, image.Height);
+
+            // When painting into the image, leave an outer frame of 16 pixels free.
+
+            int cx = (image.Width + 1) / 2, cy = (image.Height + 1) / 2;
+            Rectangle rect = new Rectangle(cx - 8, cy - 4, 16, 8);
+            g.FillRectangle(fgBrush, rect);
+            testObject += "(Rectangle " + rect.ToString() + ")";
+
+            TestScan(testObject, image, backgroundColor, 1);
+        }
+
+        /// <summary>
+        ///A test for ScanObject (Bitmap, int, int, Color, float, int[,], List&lt;int&gt;[])
+        ///</summary>
+        [DeploymentItem("SWA.Ariadne.Gui.Mazes.dll")]
+        [TestMethod()]
+        public void CI_ScanObjectTest_02_Ellipse()
+        {
+            string testObject = "ControurImage.ScanObject";
+
+            Color backgroundColor = Color.Black;
+            Color foregroundColor = Color.White;
+            Brush fgBrush = new SolidBrush(foregroundColor);
+            Pen fgPen = new Pen(fgBrush, 1);
+
+            Bitmap image = new Bitmap(63, 63);
+            Graphics g = Graphics.FromImage(image);
+            g.FillRectangle(new SolidBrush(backgroundColor), 0, 0, image.Width, image.Height);
+
+            // When painting into the image, leave an outer frame of 16 pixels free.
+
+            int cx = (image.Width + 1) / 2, cy = (image.Height + 1) / 2;
+            Rectangle rect = new Rectangle(cx - 8, cy - 4, 16, 8);
+            g.FillEllipse(fgBrush, rect);
+            testObject += "(Ellipse " + rect.ToString() + ")";
+
+            TestScan(testObject, image, backgroundColor, 1);
+        }
+
+        /// <summary>
+        ///A test for ScanObject (Bitmap, int, int, Color, float, int[,], List&lt;int&gt;[])
+        ///</summary>
+        [DeploymentItem("SWA.Ariadne.Gui.Mazes.dll")]
+        [TestMethod()]
+        public void CI_ScanObjectTest_03_FlatDiamond()
+        {
+            string testObject = "ControurImage.ScanObject";
+
+            Color backgroundColor = Color.Black;
+            Color foregroundColor = Color.White;
+            Brush fgBrush = new SolidBrush(foregroundColor);
+            Pen fgPen = new Pen(fgBrush, 1);
+
+            Bitmap image = new Bitmap(63, 63);
+            Graphics g = Graphics.FromImage(image);
+            g.FillRectangle(new SolidBrush(backgroundColor), 0, 0, image.Width, image.Height);
+
+            // When painting into the image, leave an outer frame of 16 pixels free.
+
+            int cx = (image.Width + 1) / 2, cy = (image.Height + 1) / 2;
+            Rectangle rect = new Rectangle(cx - 12, cy - 4, 24, 8);
+            Point pE = new Point(rect.Right - 1, (rect.Top + rect.Bottom) / 2);
+            Point pN = new Point((rect.Left + rect.Right) / 2, rect.Top);
+            Point pW = new Point(rect.Left, (rect.Top + rect.Bottom) / 2);
+            Point pS = new Point((rect.Left + rect.Right) / 2, rect.Bottom - 1);
+            g.FillPolygon(fgBrush, new Point[] { pE, pN, pW, pS });
+            testObject += "(Diamond " + rect.ToString() + ")";
+
+            TestScan(testObject, image, backgroundColor, 1);
+        }
+
+        /// <summary>
+        ///A test for ScanObject (Bitmap, int, int, Color, float, int[,], List&lt;int&gt;[])
+        ///</summary>
+        [DeploymentItem("SWA.Ariadne.Gui.Mazes.dll")]
+        [TestMethod()]
+        public void CI_ScanObjectTest_04_SlimDiamond()
+        {
+            string testObject = "ControurImage.ScanObject";
+
+            Color backgroundColor = Color.Black;
+            Color foregroundColor = Color.White;
+            Brush fgBrush = new SolidBrush(foregroundColor);
+            Pen fgPen = new Pen(fgBrush, 1);
+
+            Bitmap image = new Bitmap(63, 63);
+            Graphics g = Graphics.FromImage(image);
+            g.FillRectangle(new SolidBrush(backgroundColor), 0, 0, image.Width, image.Height);
+
+            // When painting into the image, leave an outer frame of 16 pixels free.
+
+            int cx = (image.Width + 1) / 2, cy = (image.Height + 1) / 2;
+            Rectangle rect = new Rectangle(cx - 4, cy - 12, 8, 24);
+            Point pE = new Point(rect.Right - 1, (rect.Top + rect.Bottom) / 2);
+            Point pN = new Point((rect.Left + rect.Right) / 2, rect.Top);
+            Point pW = new Point(rect.Left, (rect.Top + rect.Bottom) / 2);
+            Point pS = new Point((rect.Left + rect.Right) / 2, rect.Bottom - 1);
+            g.FillPolygon(fgBrush, new Point[] { pE, pN, pW, pS });
+            testObject += "(Diamond " + rect.ToString() + ")";
+
+            TestScan(testObject, image, backgroundColor, 1);
+        }
+
+        /// <summary>
+        ///A test for ScanObject (Bitmap, int, int, Color, float, int[,], List&lt;int&gt;[])
+        ///</summary>
+        [DeploymentItem("SWA.Ariadne.Gui.Mazes.dll")]
+        [TestMethod()]
+        public void CI_ScanObjectTest_05_VerticalLine()
+        {
+            string testObject = "ControurImage.ScanObject";
+
+            Color backgroundColor = Color.Black;
+            Color foregroundColor = Color.White;
+            Brush fgBrush = new SolidBrush(foregroundColor);
+            Pen fgPen = new Pen(fgBrush, 1);
+
+            Bitmap image = new Bitmap(63, 63);
+            Graphics g = Graphics.FromImage(image);
+            g.FillRectangle(new SolidBrush(backgroundColor), 0, 0, image.Width, image.Height);
+
+            // When painting into the image, leave an outer frame of 16 pixels free.
+
+            int cx = (image.Width + 1) / 2, cy = (image.Height + 1) / 2;
+            Rectangle rect = new Rectangle(cx - 8, cy - 4, 16, 8);
+            Point pE = new Point(rect.Right - 1, (rect.Top + rect.Bottom) / 2);
+            Point pN = new Point((rect.Left + rect.Right) / 2, rect.Top);
+            Point pW = new Point(rect.Left, (rect.Top + rect.Bottom) / 2);
+            Point pS = new Point((rect.Left + rect.Right) / 2, rect.Bottom - 1);
+            g.DrawLine(fgPen, pN, pS);
+
+            testObject += "(VerticalLine " + pN.ToString() + "-" + pS.ToString() + ")";
+
+            TestScan(testObject, image, backgroundColor, 1);
+        }
+
+        /// <summary>
+        ///A test for ScanObject (Bitmap, int, int, Color, float, int[,], List&lt;int&gt;[])
+        ///</summary>
+        [DeploymentItem("SWA.Ariadne.Gui.Mazes.dll")]
+        [TestMethod()]
+        public void CI_ScanObjectTest_06_HorizontalLine()
+        {
+            string testObject = "ControurImage.ScanObject";
+
+            Color backgroundColor = Color.Black;
+            Color foregroundColor = Color.White;
+            Brush fgBrush = new SolidBrush(foregroundColor);
+            Pen fgPen = new Pen(fgBrush, 1);
+
+            Bitmap image = new Bitmap(63, 63);
+            Graphics g = Graphics.FromImage(image);
+            g.FillRectangle(new SolidBrush(backgroundColor), 0, 0, image.Width, image.Height);
+
+            // When painting into the image, leave an outer frame of 16 pixels free.
+
+            int cx = (image.Width + 1) / 2, cy = (image.Height + 1) / 2;
+            Rectangle rect = new Rectangle(cx - 8, cy - 4, 16, 8);
+            Point pE = new Point(rect.Right - 1, (rect.Top + rect.Bottom) / 2);
+            Point pN = new Point((rect.Left + rect.Right) / 2, rect.Top);
+            Point pW = new Point(rect.Left, (rect.Top + rect.Bottom) / 2);
+            Point pS = new Point((rect.Left + rect.Right) / 2, rect.Bottom - 1);
+            g.DrawLine(fgPen, pW, pE);
+
+            testObject += "(HorizontalLine " + pW.ToString() + "-" + pE.ToString() + ")";
+
+            TestScan(testObject, image, backgroundColor, 1);
+        }
+
+        /// <summary>
+        ///A test for ScanObject (Bitmap, int, int, Color, float, int[,], List&lt;int&gt;[])
+        ///</summary>
+        [DeploymentItem("SWA.Ariadne.Gui.Mazes.dll")]
+        [TestMethod()]
+        public void CI_ScanObjectTest_07_UprightCross()
+        {
+            string testObject = "ControurImage.ScanObject";
+
+            Color backgroundColor = Color.Black;
+            Color foregroundColor = Color.White;
+            Brush fgBrush = new SolidBrush(foregroundColor);
+            Pen fgPen = new Pen(fgBrush, 1);
+
+            Bitmap image = new Bitmap(63, 63);
+            Graphics g = Graphics.FromImage(image);
+            g.FillRectangle(new SolidBrush(backgroundColor), 0, 0, image.Width, image.Height);
+
+            // When painting into the image, leave an outer frame of 16 pixels free.
+
+            int cx = (image.Width + 1) / 2, cy = (image.Height + 1) / 2;
+            Rectangle rect = new Rectangle(cx - 8, cy - 4, 16, 8);
+            Point pE = new Point(rect.Right - 1, (rect.Top + rect.Bottom) / 2);
+            Point pN = new Point((rect.Left + rect.Right) / 2, rect.Top);
+            Point pW = new Point(rect.Left, (rect.Top + rect.Bottom) / 2);
+            Point pS = new Point((rect.Left + rect.Right) / 2, rect.Bottom - 1);
+            g.DrawLine(fgPen, pN, pS);
+            g.DrawLine(fgPen, pW, pE);
+
+            testObject += "(UprightCross " + rect.ToString() + ")";
+
+            TestScan(testObject, image, backgroundColor, 1);
+        }
+
+        /// <summary>
+        ///A test for ScanObject (Bitmap, int, int, Color, float, int[,], List&lt;int&gt;[])
+        ///</summary>
+        [DeploymentItem("SWA.Ariadne.Gui.Mazes.dll")]
+        [TestMethod()]
+        public void CI_ScanObjectTest_08_DiagonalCross()
+        {
+            string testObject = "ControurImage.ScanObject";
+
+            Color backgroundColor = Color.Black;
+            Color foregroundColor = Color.White;
+            Brush fgBrush = new SolidBrush(foregroundColor);
+            Pen fgPen = new Pen(fgBrush, 1);
+
+            Bitmap image = new Bitmap(63, 63);
+            Graphics g = Graphics.FromImage(image);
+            g.FillRectangle(new SolidBrush(backgroundColor), 0, 0, image.Width, image.Height);
+
+            // When painting into the image, leave an outer frame of 16 pixels free.
+
+            int cx = (image.Width + 1) / 2, cy = (image.Height + 1) / 2;
+            Rectangle rect = new Rectangle(cx - 8, cy - 4, 16, 8);
+            Point pE = new Point(rect.Right - 1, (rect.Top + rect.Bottom) / 2);
+            Point pN = new Point((rect.Left + rect.Right) / 2, rect.Top);
+            Point pW = new Point(rect.Left, (rect.Top + rect.Bottom) / 2);
+            Point pS = new Point((rect.Left + rect.Right) / 2, rect.Bottom - 1);
+            Point pNW = new Point(rect.Left, rect.Top);
+            Point pNE = new Point(rect.Right - 1, rect.Top);
+            Point pSW = new Point(rect.Left, rect.Bottom - 1);
+            Point pSE = new Point(rect.Right - 1, rect.Bottom - 1);
+            g.DrawLine(fgPen, pNE, pSW);
+            g.DrawLine(fgPen, pNW, pSE);
+
+            testObject += "(DiagonalCross " + rect.ToString() + ")";
+
+            TestScan(testObject, image, backgroundColor, 2);
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Auxiliary methods
+
+        private static void TestInfluence(string testObject, int nbL, int nbR, int x, int y)
+        {
+            testObject += string.Format("<{0},{1}>: [{2},{3}]", nbL, nbR, x, y);
+            int d2 = SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InfluenceD2(nbL, nbR, x, y);
+            Assert.IsTrue(d2 < int.MaxValue, testObject + " should be influenced");
+            Assert.AreEqual(x * x + y * y, d2, testObject + " is not correct");
+        }
+
+        private static void TestNoInfluence(string testObject, int nbL, int nbR, int x, int y)
+        {
+            testObject += string.Format("<{0},{1}>: [{2},{3}]", nbL, nbR, x, y);
+            int d2 = SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InfluenceD2(nbL, nbR, x, y);
+            Assert.IsFalse(d2 < int.MaxValue, testObject + " should not be influence");
+        }
+
+        private static void TestScan(string testObject, Bitmap image, Color backgroundColor, int maxContourScanRegions)
+        {
+            for (int y = 0; y < image.Height; y++)
+            {
+                TestScan(testObject, image, backgroundColor, y, maxContourScanRegions);
+            }
+        }
+
+        private static void TestScan(string testObject, Bitmap image, Color backgroundColor, int y0, int maxContourScanRegions)
+        {
+            testObject += " @ " + y0.ToString();
+            float fuzziness = 0.1F;
+
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.PrepareInfluenceRegions(SWA_Ariadne_Gui_Mazes_ContourImageAccessor.GetFrameWidth(backgroundColor));
+
+            #region Find the leftmost object pixel on the scan line at y0.
+
+            int x0 = 0;
+            while (SWA_Ariadne_Gui_Mazes_ContourImageAccessor.ColorDistance(image.GetPixel(x0, y0), backgroundColor) <= fuzziness)
+            {
+                x0++;
+                if (x0 >= image.Width)
+                {
+                    return;
+                }
+            }
+
+            #endregion
+
+            #region Prepare required data structures.
+
+            int[,] dist2ToImage = new int[image.Width, image.Height];
+            for (int x = 0; x < image.Width; x++)
+            {
+                for (int y = 0; y < image.Height; y++)
+                {
+                    dist2ToImage[x, y] = int.MaxValue;
+                }
+            }
+
+            List<int>[] contourXs = new List<int>[image.Height];
+            for (int i = 0; i < image.Height; i++)
+            {
+                // Create the list.
+                contourXs[i] = new List<int>(5);
+                // Add a termination point that is outside of the scanned image.
+                contourXs[i].Add(image.Width);
+            }
+
+            #endregion
+
+            bool found = SWA_Ariadne_Gui_Mazes_ContourImageAccessor.ScanObject(image, x0, y0, backgroundColor, fuzziness, dist2ToImage, contourXs);
+
+            // Test if the contour map is well formed.
+
+            for (int i = 0; i < image.Height; i++)
+            {
+                int nEntries = contourXs[i].Count;
+                int m = nEntries % 2;
+                Assert.AreEqual(1, m, testObject + string.Format(" - contourXs[{0}] must be an odd number: {1}", i, nEntries));
+
+                int nRegions = (nEntries - 1) / 2;
+                Assert.IsTrue(nRegions <= maxContourScanRegions, testObject + string.Format(" - contourXs[{0}] regions = {1} must be less than {2}", i, nRegions, maxContourScanRegions));
+            }
+
+            // Test if the contour map is complete.
+            int imageArea = ImageArea(image, backgroundColor, fuzziness);
+            int contourArea = ContourArea(contourXs);
+            Assert.AreEqual(imageArea, contourArea, testObject + string.Format(" - contour area and image must be equal"));
+        }
+
+        private static int ImageArea(Bitmap image, Color backgroundColor, float fuzziness)
+        {
+            int result = 0;
+
+            for (int y = 0; y < image.Height; y++)
+            {
+                for (int x = 0; x < image.Width; x++)
+                {
+                    if (Math.Abs(image.GetPixel(x, y).GetBrightness() - backgroundColor.GetBrightness()) > fuzziness)
+                    {
+                        result++;
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        private static int ContourArea(List<int>[] contourXs)
+        {
+            int result = 0;
+
+            for (int i = 0; i < contourXs.Length; i++)
+            {
+                for (int p = 0; p + 1 < contourXs[i].Count; p += 2)
+                {
+                    int w = contourXs[i][p + 1] - contourXs[i][p] + 1;
+                    result += w;
+                }
+            }
+
+            return result;
+        }
+
         #endregion
     }
 }

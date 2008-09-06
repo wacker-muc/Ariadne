@@ -343,4 +343,719 @@ internal class SWA_Ariadne_Gui_OptionsDialogAccessor : BaseAccessor {
         m_privateObject.Invoke("InitializeComponent", new System.Type[0], args);
     }
 }
+[System.Diagnostics.DebuggerStepThrough()]
+[System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TestTools.UnitTestGeneration", "1.0.0.0")]
+internal class SWA_Ariadne_Gui_Mazes_ContourImageAccessor : BaseAccessor {
+    
+    protected static Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType m_privateType = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType(typeof(global::SWA.Ariadne.Gui.Mazes.ContourImage));
+    
+    internal SWA_Ariadne_Gui_Mazes_ContourImageAccessor(global::SWA.Ariadne.Gui.Mazes.ContourImage target) : 
+            base(target, m_privateType) {
+    }
+    
+    internal static int ContourDistance {
+        get {
+            int ret = ((int)(m_privateType.GetStaticField("ContourDistance")));
+            return ret;
+        }
+        set {
+            m_privateType.SetStaticField("ContourDistance", value);
+        }
+    }
+    
+    internal static int BlurDistance {
+        get {
+            int ret = ((int)(m_privateType.GetStaticField("BlurDistance")));
+            return ret;
+        }
+        set {
+            m_privateType.SetStaticField("BlurDistance", value);
+        }
+    }
+    
+    internal static int NbE {
+        get {
+            int ret = ((int)(m_privateType.GetStaticField("NbE")));
+            return ret;
+        }
+        set {
+            m_privateType.SetStaticField("NbE", value);
+        }
+    }
+    
+    internal static int NbNE {
+        get {
+            int ret = ((int)(m_privateType.GetStaticField("NbNE")));
+            return ret;
+        }
+        set {
+            m_privateType.SetStaticField("NbNE", value);
+        }
+    }
+    
+    internal static int NbN {
+        get {
+            int ret = ((int)(m_privateType.GetStaticField("NbN")));
+            return ret;
+        }
+        set {
+            m_privateType.SetStaticField("NbN", value);
+        }
+    }
+    
+    internal static int NbNW {
+        get {
+            int ret = ((int)(m_privateType.GetStaticField("NbNW")));
+            return ret;
+        }
+        set {
+            m_privateType.SetStaticField("NbNW", value);
+        }
+    }
+    
+    internal static int NbW {
+        get {
+            int ret = ((int)(m_privateType.GetStaticField("NbW")));
+            return ret;
+        }
+        set {
+            m_privateType.SetStaticField("NbW", value);
+        }
+    }
+    
+    internal static int NbSW {
+        get {
+            int ret = ((int)(m_privateType.GetStaticField("NbSW")));
+            return ret;
+        }
+        set {
+            m_privateType.SetStaticField("NbSW", value);
+        }
+    }
+    
+    internal static int NbS {
+        get {
+            int ret = ((int)(m_privateType.GetStaticField("NbS")));
+            return ret;
+        }
+        set {
+            m_privateType.SetStaticField("NbS", value);
+        }
+    }
+    
+    internal static int NbSE {
+        get {
+            int ret = ((int)(m_privateType.GetStaticField("NbSE")));
+            return ret;
+        }
+        set {
+            m_privateType.SetStaticField("NbSE", value);
+        }
+    }
+    
+    internal static int[] NbDX {
+        get {
+            int[] ret = ((int[])(m_privateType.GetStaticField("NbDX")));
+            return ret;
+        }
+        set {
+            m_privateType.SetStaticField("NbDX", value);
+        }
+    }
+    
+    internal static int[] NbDY {
+        get {
+            int[] ret = ((int[])(m_privateType.GetStaticField("NbDY")));
+            return ret;
+        }
+        set {
+            m_privateType.SetStaticField("NbDY", value);
+        }
+    }
+    
+    internal static int[,] Nb {
+        get {
+            int[,] ret = ((int[,])(m_privateType.GetStaticField("Nb")));
+            return ret;
+        }
+        set {
+            m_privateType.SetStaticField("Nb", value);
+        }
+    }
+    
+    internal static ushort E {
+        get {
+            ushort ret = ((ushort)(m_privateType.GetStaticField("E")));
+            return ret;
+        }
+        set {
+            m_privateType.SetStaticField("E", value);
+        }
+    }
+    
+    internal static ushort N {
+        get {
+            ushort ret = ((ushort)(m_privateType.GetStaticField("N")));
+            return ret;
+        }
+        set {
+            m_privateType.SetStaticField("N", value);
+        }
+    }
+    
+    internal static ushort W {
+        get {
+            ushort ret = ((ushort)(m_privateType.GetStaticField("W")));
+            return ret;
+        }
+        set {
+            m_privateType.SetStaticField("W", value);
+        }
+    }
+    
+    internal static ushort S {
+        get {
+            ushort ret = ((ushort)(m_privateType.GetStaticField("S")));
+            return ret;
+        }
+        set {
+            m_privateType.SetStaticField("S", value);
+        }
+    }
+    
+    internal static ushort NE {
+        get {
+            ushort ret = ((ushort)(m_privateType.GetStaticField("NE")));
+            return ret;
+        }
+        set {
+            m_privateType.SetStaticField("NE", value);
+        }
+    }
+    
+    internal static ushort NW {
+        get {
+            ushort ret = ((ushort)(m_privateType.GetStaticField("NW")));
+            return ret;
+        }
+        set {
+            m_privateType.SetStaticField("NW", value);
+        }
+    }
+    
+    internal static ushort SW {
+        get {
+            ushort ret = ((ushort)(m_privateType.GetStaticField("SW")));
+            return ret;
+        }
+        set {
+            m_privateType.SetStaticField("SW", value);
+        }
+    }
+    
+    internal static ushort SE {
+        get {
+            ushort ret = ((ushort)(m_privateType.GetStaticField("SE")));
+            return ret;
+        }
+        set {
+            m_privateType.SetStaticField("SE", value);
+        }
+    }
+    
+    internal static ushort C {
+        get {
+            ushort ret = ((ushort)(m_privateType.GetStaticField("C")));
+            return ret;
+        }
+        set {
+            m_privateType.SetStaticField("C", value);
+        }
+    }
+    
+    internal static ushort QNW {
+        get {
+            ushort ret = ((ushort)(m_privateType.GetStaticField("QNW")));
+            return ret;
+        }
+        set {
+            m_privateType.SetStaticField("QNW", value);
+        }
+    }
+    
+    internal static ushort QNE {
+        get {
+            ushort ret = ((ushort)(m_privateType.GetStaticField("QNE")));
+            return ret;
+        }
+        set {
+            m_privateType.SetStaticField("QNE", value);
+        }
+    }
+    
+    internal static ushort QSW {
+        get {
+            ushort ret = ((ushort)(m_privateType.GetStaticField("QSW")));
+            return ret;
+        }
+        set {
+            m_privateType.SetStaticField("QSW", value);
+        }
+    }
+    
+    internal static ushort QSE {
+        get {
+            ushort ret = ((ushort)(m_privateType.GetStaticField("QSE")));
+            return ret;
+        }
+        set {
+            m_privateType.SetStaticField("QSE", value);
+        }
+    }
+    
+    internal static ushort LH {
+        get {
+            ushort ret = ((ushort)(m_privateType.GetStaticField("LH")));
+            return ret;
+        }
+        set {
+            m_privateType.SetStaticField("LH", value);
+        }
+    }
+    
+    internal static ushort LV {
+        get {
+            ushort ret = ((ushort)(m_privateType.GetStaticField("LV")));
+            return ret;
+        }
+        set {
+            m_privateType.SetStaticField("LV", value);
+        }
+    }
+    
+    internal static ushort HN {
+        get {
+            ushort ret = ((ushort)(m_privateType.GetStaticField("HN")));
+            return ret;
+        }
+        set {
+            m_privateType.SetStaticField("HN", value);
+        }
+    }
+    
+    internal static ushort HS {
+        get {
+            ushort ret = ((ushort)(m_privateType.GetStaticField("HS")));
+            return ret;
+        }
+        set {
+            m_privateType.SetStaticField("HS", value);
+        }
+    }
+    
+    internal static ushort HE {
+        get {
+            ushort ret = ((ushort)(m_privateType.GetStaticField("HE")));
+            return ret;
+        }
+        set {
+            m_privateType.SetStaticField("HE", value);
+        }
+    }
+    
+    internal static ushort HW {
+        get {
+            ushort ret = ((ushort)(m_privateType.GetStaticField("HW")));
+            return ret;
+        }
+        set {
+            m_privateType.SetStaticField("HW", value);
+        }
+    }
+    
+    internal static int GetBlurDistance(global::System.Drawing.Color backgroundColor) {
+        object[] args = new object[] {
+                backgroundColor};
+        int ret = ((int)(m_privateType.InvokeStatic("GetBlurDistance", new System.Type[] {
+                    typeof(global::System.Drawing.Color)}, args)));
+        return ret;
+    }
+    
+    internal static int GetFrameWidth(global::System.Drawing.Color backgroundColor) {
+        object[] args = new object[] {
+                backgroundColor};
+        int ret = ((int)(m_privateType.InvokeStatic("GetFrameWidth", new System.Type[] {
+                    typeof(global::System.Drawing.Color)}, args)));
+        return ret;
+    }
+    
+    internal static global::System.Drawing.Color GuessBackgroundColor(global::System.Drawing.Bitmap image, float fuzziness, out float share) {
+        object[] args = new object[] {
+                image,
+                fuzziness,
+                null};
+        global::System.Drawing.Color ret = ((global::System.Drawing.Color)(m_privateType.InvokeStatic("GuessBackgroundColor", new System.Type[] {
+                    typeof(global::System.Drawing.Bitmap),
+                    typeof(float),
+                    typeof(float).MakeByRefType()}, args)));
+        share = ((float)(args[2]));
+        return ret;
+    }
+    
+    internal static global::System.Drawing.Bitmap Copy(global::System.Drawing.Image image, global::System.Drawing.Color backgroundColor) {
+        object[] args = new object[] {
+                image,
+                backgroundColor};
+        global::System.Drawing.Bitmap ret = ((global::System.Drawing.Bitmap)(m_privateType.InvokeStatic("Copy", new System.Type[] {
+                    typeof(global::System.Drawing.Image),
+                    typeof(global::System.Drawing.Color)}, args)));
+        return ret;
+    }
+    
+    internal static global::System.Drawing.Bitmap GetMask(global::System.Drawing.Bitmap image, global::System.Drawing.Color backgroundColor, float fuzziness, out global::System.Drawing.Rectangle boundingBox, int algorithm) {
+        object[] args = new object[] {
+                image,
+                backgroundColor,
+                fuzziness,
+                null,
+                algorithm};
+        global::System.Drawing.Bitmap ret = ((global::System.Drawing.Bitmap)(m_privateType.InvokeStatic("GetMask", new System.Type[] {
+                    typeof(global::System.Drawing.Bitmap),
+                    typeof(global::System.Drawing.Color),
+                    typeof(float),
+                    typeof(global::System.Drawing.Rectangle).MakeByRefType(),
+                    typeof(int)}, args)));
+        boundingBox = ((global::System.Drawing.Rectangle)(args[3]));
+        return ret;
+    }
+    
+    internal static float ColorDistance(global::System.Drawing.Color col1, global::System.Drawing.Color col2) {
+        object[] args = new object[] {
+                col1,
+                col2};
+        float ret = ((float)(m_privateType.InvokeStatic("ColorDistance", new System.Type[] {
+                    typeof(global::System.Drawing.Color),
+                    typeof(global::System.Drawing.Color)}, args)));
+        return ret;
+    }
+    
+    internal static void ApplyMask(global::System.Drawing.Bitmap image, global::System.Drawing.Bitmap mask) {
+        object[] args = new object[] {
+                image,
+                mask};
+        m_privateType.InvokeStatic("ApplyMask", new System.Type[] {
+                    typeof(global::System.Drawing.Bitmap),
+                    typeof(global::System.Drawing.Bitmap)}, args);
+    }
+    
+    internal static global::System.Drawing.Bitmap Crop(global::System.Drawing.Bitmap image, global::System.Drawing.Rectangle srcRect) {
+        object[] args = new object[] {
+                image,
+                srcRect};
+        global::System.Drawing.Bitmap ret = ((global::System.Drawing.Bitmap)(m_privateType.InvokeStatic("Crop", new System.Type[] {
+                    typeof(global::System.Drawing.Bitmap),
+                    typeof(global::System.Drawing.Rectangle)}, args)));
+        return ret;
+    }
+    
+    internal static global::System.Drawing.Bitmap GetMask_BlockScan(global::System.Drawing.Bitmap image, global::System.Drawing.Color backgroundColor, float fuzziness, out global::System.Drawing.Rectangle boundingBox) {
+        object[] args = new object[] {
+                image,
+                backgroundColor,
+                fuzziness,
+                null};
+        global::System.Drawing.Bitmap ret = ((global::System.Drawing.Bitmap)(m_privateType.InvokeStatic("GetMask_BlockScan", new System.Type[] {
+                    typeof(global::System.Drawing.Bitmap),
+                    typeof(global::System.Drawing.Color),
+                    typeof(float),
+                    typeof(global::System.Drawing.Rectangle).MakeByRefType()}, args)));
+        boundingBox = ((global::System.Drawing.Rectangle)(args[3]));
+        return ret;
+    }
+    
+    internal static global::System.Drawing.Bitmap GetMask_CompleteScan(global::System.Drawing.Bitmap image, global::System.Drawing.Color backgroundColor, float fuzziness, out global::System.Drawing.Rectangle boundingBox) {
+        object[] args = new object[] {
+                image,
+                backgroundColor,
+                fuzziness,
+                null};
+        global::System.Drawing.Bitmap ret = ((global::System.Drawing.Bitmap)(m_privateType.InvokeStatic("GetMask_CompleteScan", new System.Type[] {
+                    typeof(global::System.Drawing.Bitmap),
+                    typeof(global::System.Drawing.Color),
+                    typeof(float),
+                    typeof(global::System.Drawing.Rectangle).MakeByRefType()}, args)));
+        boundingBox = ((global::System.Drawing.Rectangle)(args[3]));
+        return ret;
+    }
+    
+    internal static int InfluenceD2(int nbL, int nbR, int x, int y) {
+        object[] args = new object[] {
+                nbL,
+                nbR,
+                x,
+                y};
+        int ret = ((int)(m_privateType.InvokeStatic("InfluenceD2", new System.Type[] {
+                    typeof(int),
+                    typeof(int),
+                    typeof(int),
+                    typeof(int)}, args)));
+        return ret;
+    }
+    
+    internal static void PrepareInfluenceRegions(int influenceRange) {
+        object[] args = new object[] {
+                influenceRange};
+        m_privateType.InvokeStatic("PrepareInfluenceRegions", new System.Type[] {
+                    typeof(int)}, args);
+    }
+    
+    internal static global::System.Drawing.Bitmap GetMask_ContourScan(global::System.Drawing.Bitmap image, global::System.Drawing.Color backgroundColor, float fuzziness, out global::System.Drawing.Rectangle boundingBox) {
+        object[] args = new object[] {
+                image,
+                backgroundColor,
+                fuzziness,
+                null};
+        global::System.Drawing.Bitmap ret = ((global::System.Drawing.Bitmap)(m_privateType.InvokeStatic("GetMask_ContourScan", new System.Type[] {
+                    typeof(global::System.Drawing.Bitmap),
+                    typeof(global::System.Drawing.Color),
+                    typeof(float),
+                    typeof(global::System.Drawing.Rectangle).MakeByRefType()}, args)));
+        boundingBox = ((global::System.Drawing.Rectangle)(args[3]));
+        return ret;
+    }
+    
+    internal static bool ScanObject(global::System.Drawing.Bitmap image, int x0, int y0, global::System.Drawing.Color backgroundColor, float fuzziness, int[,] dist2ToImage, System.Collections.Generic.List<int>[] contourXs) {
+        object[] args = new object[] {
+                image,
+                x0,
+                y0,
+                backgroundColor,
+                fuzziness,
+                dist2ToImage,
+                contourXs};
+        bool ret = ((bool)(m_privateType.InvokeStatic("ScanObject", new System.Type[] {
+                    typeof(global::System.Drawing.Bitmap),
+                    typeof(int),
+                    typeof(int),
+                    typeof(global::System.Drawing.Color),
+                    typeof(float),
+                    typeof(int).MakeArrayType(2),
+                    typeof(System.Collections.Generic.List<int>).MakeArrayType()}, args)));
+        return ret;
+    }
+    
+    internal static void InsertContourPoint(System.Collections.Generic.List<int> contourX, int x) {
+        object[] args = new object[] {
+                contourX,
+                x};
+        m_privateType.InvokeStatic("InsertContourPoint", new System.Type[] {
+                    typeof(System.Collections.Generic.List<int>),
+                    typeof(int)}, args);
+    }
+    
+    internal static void LeftNeighbor(global::System.Drawing.Bitmap image, global::System.Drawing.Color backgroundColor, float fuzziness, int x, int y, int nbR, out int nbL, out int xL, out int yL) {
+        object[] args = new object[] {
+                image,
+                backgroundColor,
+                fuzziness,
+                x,
+                y,
+                nbR,
+                null,
+                null,
+                null};
+        m_privateType.InvokeStatic("LeftNeighbor", new System.Type[] {
+                    typeof(global::System.Drawing.Bitmap),
+                    typeof(global::System.Drawing.Color),
+                    typeof(float),
+                    typeof(int),
+                    typeof(int),
+                    typeof(int),
+                    typeof(int).MakeByRefType(),
+                    typeof(int).MakeByRefType(),
+                    typeof(int).MakeByRefType()}, args);
+        nbL = ((int)(args[6]));
+        xL = ((int)(args[7]));
+        yL = ((int)(args[8]));
+    }
+    
+    internal static void RightNeighbor(global::System.Drawing.Bitmap image, global::System.Drawing.Color backgroundColor, float fuzziness, int x, int y, int nbL, out int nbR, out int xR, out int yR) {
+        object[] args = new object[] {
+                image,
+                backgroundColor,
+                fuzziness,
+                x,
+                y,
+                nbL,
+                null,
+                null,
+                null};
+        m_privateType.InvokeStatic("RightNeighbor", new System.Type[] {
+                    typeof(global::System.Drawing.Bitmap),
+                    typeof(global::System.Drawing.Color),
+                    typeof(float),
+                    typeof(int),
+                    typeof(int),
+                    typeof(int),
+                    typeof(int).MakeByRefType(),
+                    typeof(int).MakeByRefType(),
+                    typeof(int).MakeByRefType()}, args);
+        nbR = ((int)(args[6]));
+        xR = ((int)(args[7]));
+        yR = ((int)(args[8]));
+    }
+    
+    internal static global::System.Drawing.Bitmap GetMask_OutlineScanA(global::System.Drawing.Bitmap image, global::System.Drawing.Color backgroundColor, float fuzziness, out global::System.Drawing.Rectangle boundingBox) {
+        object[] args = new object[] {
+                image,
+                backgroundColor,
+                fuzziness,
+                null};
+        global::System.Drawing.Bitmap ret = ((global::System.Drawing.Bitmap)(m_privateType.InvokeStatic("GetMask_OutlineScanA", new System.Type[] {
+                    typeof(global::System.Drawing.Bitmap),
+                    typeof(global::System.Drawing.Color),
+                    typeof(float),
+                    typeof(global::System.Drawing.Rectangle).MakeByRefType()}, args)));
+        boundingBox = ((global::System.Drawing.Rectangle)(args[3]));
+        return ret;
+    }
+    
+    internal static global::System.Drawing.Bitmap GetMask_OutlineScanB(global::System.Drawing.Bitmap image, global::System.Drawing.Color backgroundColor, float fuzziness, out global::System.Drawing.Rectangle boundingBox) {
+        object[] args = new object[] {
+                image,
+                backgroundColor,
+                fuzziness,
+                null};
+        global::System.Drawing.Bitmap ret = ((global::System.Drawing.Bitmap)(m_privateType.InvokeStatic("GetMask_OutlineScanB", new System.Type[] {
+                    typeof(global::System.Drawing.Bitmap),
+                    typeof(global::System.Drawing.Color),
+                    typeof(float),
+                    typeof(global::System.Drawing.Rectangle).MakeByRefType()}, args)));
+        boundingBox = ((global::System.Drawing.Rectangle)(args[3]));
+        return ret;
+    }
+    
+    internal static void ScanHemisphere(ushort[,] pattern, ushort hMask, ushort hPattern, int x0, int x1, int y1, int y0, int[,] dist2ToImage, int dist) {
+        object[] args = new object[] {
+                pattern,
+                hMask,
+                hPattern,
+                x0,
+                x1,
+                y1,
+                y0,
+                dist2ToImage,
+                dist};
+        m_privateType.InvokeStatic("ScanHemisphere", new System.Type[] {
+                    typeof(ushort).MakeArrayType(2),
+                    typeof(ushort),
+                    typeof(ushort),
+                    typeof(int),
+                    typeof(int),
+                    typeof(int),
+                    typeof(int),
+                    typeof(int).MakeArrayType(2),
+                    typeof(int)}, args);
+    }
+    
+    internal static void ScanOctantsAndDiagonal(ushort[,] pattern, ushort qMask, int x0, int x1, int y0, int y1, int[,] dist2ToImage, int dist) {
+        object[] args = new object[] {
+                pattern,
+                qMask,
+                x0,
+                x1,
+                y0,
+                y1,
+                dist2ToImage,
+                dist};
+        m_privateType.InvokeStatic("ScanOctantsAndDiagonal", new System.Type[] {
+                    typeof(ushort).MakeArrayType(2),
+                    typeof(ushort),
+                    typeof(int),
+                    typeof(int),
+                    typeof(int),
+                    typeof(int),
+                    typeof(int).MakeArrayType(2),
+                    typeof(int)}, args);
+    }
+    
+    internal static void ScanQuadrant(ushort[,] pattern, ushort qMask, int x0, int x1, int y0, int y1, int[,] dist2ToImage, int dist) {
+        object[] args = new object[] {
+                pattern,
+                qMask,
+                x0,
+                x1,
+                y0,
+                y1,
+                dist2ToImage,
+                dist};
+        m_privateType.InvokeStatic("ScanQuadrant", new System.Type[] {
+                    typeof(ushort).MakeArrayType(2),
+                    typeof(ushort),
+                    typeof(int),
+                    typeof(int),
+                    typeof(int),
+                    typeof(int),
+                    typeof(int).MakeArrayType(2),
+                    typeof(int)}, args);
+    }
+    
+    internal static void ScanDiagonal(ushort[,] pattern, ushort qMask, int x0, int x1, int y0, int y1, int[,] dist2ToImage, int dist) {
+        object[] args = new object[] {
+                pattern,
+                qMask,
+                x0,
+                x1,
+                y0,
+                y1,
+                dist2ToImage,
+                dist};
+        m_privateType.InvokeStatic("ScanDiagonal", new System.Type[] {
+                    typeof(ushort).MakeArrayType(2),
+                    typeof(ushort),
+                    typeof(int),
+                    typeof(int),
+                    typeof(int),
+                    typeof(int),
+                    typeof(int).MakeArrayType(2),
+                    typeof(int)}, args);
+    }
+    
+    internal static void ExtractPattern(global::System.Drawing.Bitmap image, global::System.Drawing.Color backgroundColor, float fuzziness, ushort[,] pattern, int[,] dist2ToImage) {
+        object[] args = new object[] {
+                image,
+                backgroundColor,
+                fuzziness,
+                pattern,
+                dist2ToImage};
+        m_privateType.InvokeStatic("ExtractPattern", new System.Type[] {
+                    typeof(global::System.Drawing.Bitmap),
+                    typeof(global::System.Drawing.Color),
+                    typeof(float),
+                    typeof(ushort).MakeArrayType(2),
+                    typeof(int).MakeArrayType(2)}, args);
+    }
+    
+    internal static void NormalizePattern(ushort[,] pattern) {
+        object[] args = new object[] {
+                pattern};
+        m_privateType.InvokeStatic("NormalizePattern", new System.Type[] {
+                    typeof(ushort).MakeArrayType(2)}, args);
+    }
+    
+    internal static global::System.Drawing.Bitmap GetMask_SimpleScan(global::System.Drawing.Bitmap image, global::System.Drawing.Color backgroundColor, float fuzziness, out global::System.Drawing.Rectangle boundingBox) {
+        object[] args = new object[] {
+                image,
+                backgroundColor,
+                fuzziness,
+                null};
+        global::System.Drawing.Bitmap ret = ((global::System.Drawing.Bitmap)(m_privateType.InvokeStatic("GetMask_SimpleScan", new System.Type[] {
+                    typeof(global::System.Drawing.Bitmap),
+                    typeof(global::System.Drawing.Color),
+                    typeof(float),
+                    typeof(global::System.Drawing.Rectangle).MakeByRefType()}, args)));
+        boundingBox = ((global::System.Drawing.Rectangle)(args[3]));
+        return ret;
+    }
+}
 }

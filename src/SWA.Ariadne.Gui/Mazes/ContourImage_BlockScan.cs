@@ -420,9 +420,9 @@ namespace SWA.Ariadne.Gui.Mazes
             int coreLeft = borderWidth, coreRight = image.Width - borderWidth;
             int coreTop = borderWidth, coreBottom = image.Height - borderWidth;
 
-            // The image is scanned by scanning it with a window centered around the current pixel
+            // The image is scanned with a window centered around the current pixel
             // and comprising all pixels closer than the countourDist plus blurDist.
-            int scanRadius = contourDist + blurDist;
+            int scanRadius = contourDist + blurDist - 1;
             int scanDiameter = 2 * scanRadius; // see also BlockScanList() constructor
 
             // The image pixels within the scan window are kept in a list ordered by increasing distance from the focus point.
