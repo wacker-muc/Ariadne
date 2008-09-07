@@ -67,14 +67,16 @@ namespace SWA.Ariadne.Gui.Mazes
 
         /// <summary>
         /// Returns the squared distance a contour pixel has
-        /// on a point located at (x, y) relatively to that pixel
-        /// when the pixel lies between two other pixelsin the given neighbor locations.
+        /// from a point located at (x, y) relatively to that pixel.
+        /// Returns int.MaxValue if the given point is not influenced by the pixel
+        /// but by one of the given neighbor pixels.
         /// </summary>
         /// <param name="nbL">left neighbor</param>
         /// <param name="nbR">right neighbor</param>
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
+        /// Note: This method is only used by Unit Tests.
         private static int InfluenceD2(int nbL, int nbR, int x, int y)
         {
             foreach (RelativePoint rp in influenceRegions[nbL, nbR])
@@ -87,6 +89,48 @@ namespace SWA.Ariadne.Gui.Mazes
             return int.MaxValue;
         }
 
+        /// <summary>
+        /// For each combination of a next left and next right neighbor of a pixel,
+        /// the borderLimit is the set of points on the left and right edge of the influenceRegion.
+        /// </summary>
+        private static List<RelativePoint>[,]
+            leftBorderLimits = new List<RelativePoint>[8, 8],
+            rightBorderLimits = new List<RelativePoint>[8, 8];
+
+        /// <summary>
+        /// Returns -1/+1 if the point at x, y is on the left/right border of the influence region
+        /// defined by the given two neighbor directions.
+        /// Returns 0 otherwise.
+        /// </summary>
+        /// <param name="nbL"></param>
+        /// <param name="nbR"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        /// Note: This method is only used by Unit Tests.
+        private static int BorderLimitType(int nbL, int nbR, int x, int y)
+        {
+            foreach (RelativePoint rp in leftBorderLimits[nbL, nbR])
+            {
+                if ((rp.rx == x) && (rp.ry == y))
+                {
+                    return -1;
+                }
+            }
+            foreach (RelativePoint rp in rightBorderLimits[nbL, nbR])
+            {
+                if ((rp.rx == x) && (rp.ry == y))
+                {
+                    return +1;
+                }
+            }
+            return 0;
+        }
+
+        /// <summary>
+        /// Set up the influenceRegions and associated data for a given influence range.
+        /// </summary>
+        /// <param name="influenceRange"></param>
         private static void PrepareInfluenceRegions(int influenceRange)
         {
             int range2Max = influenceRange * influenceRange;
@@ -106,14 +150,8 @@ namespace SWA.Ariadne.Gui.Mazes
                 {
                     int dxL = NbDX[nbL], dyL = NbDY[nbL];
 
-#if false
-                    // Beginning at nbR, turn by the half angle between left and right.
-                    int nbI = (nbR + ((nbL - nbR + 8) % 8) / 2) % 8;
-#else
                     // Beginning at nbR, turn by the half angle between left and right.
                     int nbI = (nbL + ((nbR - nbL + 8) % 8) / 2) % 8;
-#endif
-                    //if (nbR == nbL) { nbI = (nbI + 4) % 8; }
                     int dxI = NbDX[nbI], dyI = NbDY[nbI];
 
                     // Avoid a situation where nbR and nbI lie exactly on opposite sides of the contour pixel.
@@ -121,31 +159,104 @@ namespace SWA.Ariadne.Gui.Mazes
                     {
                         // As the original pixel was opposite nbR, we subtract the nbL vector,
                         // thus placing it on the diagonal.
+                        // Note: This point is still sufficiently close to the focus pixel.
                         dxI -= dxL;
                         dyI -= dyL;
                     }
 
-                    influenceRegions[nbL, nbR] = new List<RelativePoint>();
+                    #region Calculate the influence region for the current left and right neighbor.
 
+                    influenceRegions[nbL, nbR] = new List<RelativePoint>();
+                    leftBorderLimits[nbL, nbR] = new List<RelativePoint>();
+                    rightBorderLimits[nbL, nbR] = new List<RelativePoint>();
+
+                    // For each scan line: Leftmost and rightmost point in the influence region.
+                    // Use index [dy + influenceRange].
+                    // Enter dx + influenceRange which is > 0.
+                    int[] leftLimits = new int[2 * influenceRange], rightLimits = new int[2 * influenceRange];
+
+#if false
                     for (int dx = -(influenceRange - 1); dx <= +(influenceRange - 1); dx++)
                     {
+#else
+                    // We want to traverse dx from the center outwards,
+                    // facilitating the registry of left and right limits.
+                    for (int i = 1; i < 2 * influenceRange; i++)
+                    {
+                        // 0, 1, -1, 2, -2, ..., r-1, -(r-1)
+                        int dx = (i / 2) * (i % 2 == 0 ? +1 : -1);
+#endif
+
+#if false
                         for (int dy = -(influenceRange - 1); dy <= +(influenceRange - 1); dy++)
                         {
+#else
+                        for (int j = 1; j < 2 * influenceRange; j++)
+                        {
+                            // 0, 1, -1, 2, -2, ..., r-1, -(r-1)
+                            int dy = (j / 2) * (j % 2 == 0 ? +1 : -1);
+#endif
                             // Get the distance to the three points.
                             int d2 = dx * dx + dy * dy;
                             int d2L = (dx - dxL) * (dx - dxL) + (dy - dyL) * (dy - dyL);
                             int d2R = (dx - dxR) * (dx - dxR) + (dy - dyR) * (dy - dyR);
                             int d2I = (dx - dxI) * (dx - dxI) + (dy - dyI) * (dy - dyI);
 
-                            // Check if the center pixel is closest to the point.
-                            // For equal distance, the left neighbor should dominate.
-                            // Only distances in the relevant range are recorded.
-                            if (d2 < d2L && d2 <= d2R && d2 < d2I && range2Min <= d2 && d2 <= range2Max)
+                            if (range2Min <= d2 && d2 <= range2Max)
                             {
-                                influenceRegions[nbL, nbR].Add(new RelativePoint(dx, dy, d2));
+                                // This value will be entered into the left/right limits if the current point is in the influence region.
+                                int limitsEntry = dx + influenceRange;
+
+                                // Check if the center pixel is closest to the point.
+                                // For equal distance, the left neighbor should dominate.
+                                // Only distances in the relevant range are recorded.
+                                if (d2 < d2L && d2 <= d2R && d2 < d2I)
+                                {
+                                    influenceRegions[nbL, nbR].Add(new RelativePoint(dx, dy, d2));
+                                }
+                                else
+                                {
+                                    // Overwrite and remove a previous entry in the left/right limits.
+                                    limitsEntry = -1;
+                                }
+
+                                if (dx < 0)
+                                {
+                                    leftLimits[dy + influenceRange] = limitsEntry;
+                                }
+                                if (dx > 0)
+                                {
+                                    rightLimits[dy + influenceRange] = limitsEntry;
+                                }
                             }
                         }
                     }
+
+                    #endregion
+
+                    #region Transfer information from the locally collected left and right limits to the static variables.
+
+                    for (int i = 0; i < 2 * influenceRange; i++)
+                    {
+                        int dx = leftLimits[i] - influenceRange;
+                        int dy = i - influenceRange;
+                        int d2 = dx * dx + dy * dy;
+
+                        if (leftLimits[i] > 0)
+                        {
+                            leftBorderLimits[nbL, nbR].Add(new RelativePoint(dx, dy, d2));
+                        }
+
+                        dx = rightLimits[i] - influenceRange;
+                        d2 = dx * dx + dy * dy;
+
+                        if (rightLimits[i] > 0)
+                        {
+                            rightBorderLimits[nbL, nbR].Add(new RelativePoint(dx, dy, d2));
+                        }
+                    }
+
+                    #endregion
                 }
             }
         }
@@ -191,13 +302,26 @@ namespace SWA.Ariadne.Gui.Mazes
 
             // All points on the contour of an object are collected in scan switch lines.
             List<int>[] contourXs = new List<int>[image.Height];
+
+            // The points on the outside border of the objects' influence regions are collected in scan switch lines.
+            List<int>[] borderXs = new List<int>[image.Height];
+            // We need to distinguish between left and right points; true is left and false is right.
+            List<bool>[] borderXsLR = new List<bool>[image.Height];
+
+            #region Initialize contourXs and borderXs.
             for (int i = 0; i < image.Height; i++)
             {
-                // Create the list.
+                // Create the lists.
                 contourXs[i] = new List<int>(5);
-                // Add a termination point that is outside of the scanned image.
+                borderXs[i] = new List<int>(5);
+                borderXsLR[i] = new List<bool>(5);
+
+                // Add termination points that are border of the scanned image.
                 contourXs[i].Add(image.Width);
+                borderXs[i].Add(image.Width);
+                borderXsLR[i].Add(true);
             }
+            #endregion
 
             #endregion
 
@@ -208,7 +332,6 @@ namespace SWA.Ariadne.Gui.Mazes
             const int dsMin = 2;
 
             int nObjects = 0;
-            int nMaxObjects = 20;
 
             // Apply horizontal scan lines in decreasing distance.
             // The generated y values are:
@@ -218,18 +341,8 @@ namespace SWA.Ariadne.Gui.Mazes
             //   ds = 16: 7, 23, ...
             for (int ds = dsMax; ds >= 2 * dsMin; ds /= 2)
             {
-                if (nObjects > nMaxObjects)
-                {
-                    break;
-                }
-
                 for (int y = ds / 2 - 1; y < image.Height; y += ds)
                 {
-                    if (nObjects > nMaxObjects)
-                    {
-                        break;
-                    }
-                    
                     // Current index in contourXs[y].
                     int c = 0;
                     // X coordinate of the first known object on the Y scan line.
@@ -237,39 +350,25 @@ namespace SWA.Ariadne.Gui.Mazes
 
                     for (int x = 1; x < image.Width; x += 1)
                     {
-                        if (nObjects > nMaxObjects)
-                        {
-                            break;
-                        }
-
-#if false
-                        if (dist2ToImage[x, y] <= range2Max)
-                        {
-                            // There is an object that was already processed.
-                            // TODO: Test must be refined for objects smaller than blurDist.
-                            // TODO: Use the information in contourXs.
-                            break;
-                        }
-#else
                         if (x == x1)
                         {
                             // We have reached the contour of a known object.
                             // Skip to the next contour point.
                             x = contourXs[y][++c];      // Contour point where the scan line leaves the object.
-                            x1 = contourXs[y][c + 1];   // Contour point of next object or terminator image.Width.
+                            x1 = contourXs[y][++c];     // Contour point of next object or terminator image.Width.
                             continue;
                         }
-#endif
+
                         if (ColorDistance(image.GetPixel(x, y), backgroundColor) > fuzziness)
                         {
-                            if (ScanObject(image, x, y, backgroundColor, fuzziness, dist2ToImage, contourXs))
+                            if (ScanObject(image, x, y, backgroundColor, fuzziness, dist2ToImage, contourXs, borderXs, borderXsLR))
                             {
                                 ++nObjects;
 
                                 // Make X advance to the contour point where the scan line leaves the object.
                                 // The new object's contour point (x, y) is at the current c position.
                                 x = contourXs[y][++c];      // Contour point where the scan line leaves the object.
-                                x1 = contourXs[y][c + 1];   // Contour point of next object or terminator image.Width.
+                                x1 = contourXs[y][++c];     // Contour point of next object or terminator image.Width.
                             }
                         }
                     }
@@ -277,6 +376,12 @@ namespace SWA.Ariadne.Gui.Mazes
             }
 
             #endregion
+
+            // Normalize the collected border scan lines.
+            EliminateOverlaps(borderXs, borderXsLR);
+
+            // Eliminate enclosed regions from border scan lines.
+            EliminateInsideRegions(borderXs, borderXsLR);
 
             // TODO: fill inside of objects, using the contourXs.
 
@@ -341,28 +446,12 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <param name="fuzziness"></param>
         /// <param name="dist2ToImage"></param>
         /// <param name="controurXs"></param>
-        private static bool ScanObject(Bitmap image, int x0, int y0, Color backgroundColor, float fuzziness, int[,] dist2ToImage, List<int>[] contourXs)
+        /// <param name="borderXs"></param>
+        /// <param name="borderXsLR"></param>
+        private static bool ScanObject(Bitmap image, int x0, int y0, Color backgroundColor, float fuzziness, int[,] dist2ToImage, List<int>[] contourXs, List<int>[] borderXs, List<bool>[] borderXsLR)
         {
             #region Choose an initial focus point with a left and right neighbor.
 
-#if false
-            // Use the start point as the focus point's right neighbor.
-            int xR = x0, yR = y0;
-
-            // The (first) left neighbor is the initial focus point.
-            int nb0, x, y;
-            LeftNeighbor(image, backgroundColor, fuzziness, xR, yR, NbW, out nb0, out x, out y);
-            if (nb0 == NbW)
-            {
-                // There is no neighbor pixel.  One-pixel objects are ignored.
-                return false;
-            }
-            int nbR = (nb0 + 4) % 8;
-
-            // The second left neighbor is the focus point's left neighbor.
-            int nbL, xL, yL;
-            LeftNeighbor(image, backgroundColor, fuzziness, x, y, nbR, out nbL, out xL, out yL);
-#else
             // Use the start point as the focus point.
             int x = x0, y = y0;
 
@@ -378,12 +467,6 @@ namespace SWA.Ariadne.Gui.Mazes
             // Determine left neighbor.
             int nbL, xL, yL;
             LeftNeighbor(image, backgroundColor, fuzziness, x, y, nbR, out nbL, out xL, out yL);
-#endif
-
-#if false
-            // Number of recently passed points on the same scan line.
-            int nHorizintalStretch = 0;
-#endif
 
             #endregion
 
@@ -391,52 +474,12 @@ namespace SWA.Ariadne.Gui.Mazes
             // (x,y) will be processed first; we are finished when we return to the same pixel in the same direction.
             int x1 = x, y1 = y, nb1 = nbL;
 
+            #region Scan the outside contour of the object.
+
             do
             {
-#if false // TODO: false
-                string msg = string.Format("[{0},{1}] -{2}-> [{3},{4}]", x, y, nbL, xL, yL);
-                System.Console.WriteLine(msg);
-#endif
-
                 #region Register the contour point in the ordered list of X coordinates.
 
-#if false
-                if (y != yR)        // On a different scan line: insert a new contour point.
-                {
-                    contourXs[y].Insert(p, x);
-                    if (yL == yR)
-                    {
-                        // We're just touching the scan line; add a second (exit) point.
-                        contourXs[y].Insert(p, x);
-                    }
-                    nHorizintalStretch = 1;
-                }
-                else if (nHorizintalStretch < 2)
-                {
-                    // Add a second point on this scan line.
-                    contourXs[y].Insert(p, x);
-                    ++nHorizintalStretch;
-                }
-                else if (nHorizintalStretch > 2 && x > xR)
-                {
-                    // Special case of a very fine needle at the beginning of the contour.
-                    // Wait until y changes or we move backwards to the left.
-                    if (yL < y || xL <= x)
-                    {
-                        contourXs[y].Insert(p, x);
-                        // The second point on this contour line is the initial (xR, yR) which will be processed last.
-                        nHorizintalStretch = 1;
-                    }
-                }
-                else if (x < xR)    // On the same scan line, moving left: update the left contour point.
-                {
-                    contourXs[y][p] = x;
-                }
-                else                // On the same scan line, moving right: update the right contour point.
-                {
-                    contourXs[y][p - 1] = x;
-                }
-#else
                 switch (nbR * 8 + nbL)
                 {
                     case (NbW * 8 + NbE):       //  R o L
@@ -544,7 +587,6 @@ namespace SWA.Ariadne.Gui.Mazes
                         // do nothing; this is an impossible contour sequence
                         break;
                 }
-#endif
 
                 #endregion
 
@@ -558,6 +600,18 @@ namespace SWA.Ariadne.Gui.Mazes
                     }
                 }
 
+                // Enter the focus point's border points into the respective border scan lines.
+                foreach (RelativePoint rp in leftBorderLimits[nbL, nbR])
+                {
+                    int i = x + rp.rx, j = y + rp.ry;
+                    InsertBorderPoint(borderXs[j], borderXsLR[j], i, true);
+                }
+                foreach (RelativePoint rp in rightBorderLimits[nbL, nbR])
+                {
+                    int i = x + rp.rx, j = y + rp.ry;
+                    InsertBorderPoint(borderXs[j], borderXsLR[j], i, false);
+                }
+
                 // Advance the focus to the next contour pixel.
                 xR = x; yR = y; nbR = (nbL + 4) % 8;
                 x = xL; y = yL;
@@ -565,8 +619,12 @@ namespace SWA.Ariadne.Gui.Mazes
 
             } while (x != x1 || y != y1 || nb1 != nbL);
 
+            #endregion
+
             return true;
         }
+
+        #region Methods for managing the contour points.
 
         private static void InsertContourPoint(List<int> contourX, int x)
         {
@@ -584,6 +642,64 @@ namespace SWA.Ariadne.Gui.Mazes
                 }
             }
         }
+
+        #endregion
+
+        #region Methods for managing the border points.
+
+        private static void InsertBorderPoint(List<int> borderX, List<bool> borderLR, int x, bool leftOrRight)
+        {
+            // Position where the border point will be entered into borderXs[y].
+            int p;
+
+            // Find the position p with x < borderX[p].
+            // Note: As there is a terminator entry image.Width, we will not leave the valid index range.
+            for (p = 0; ; p++)
+            {
+                // On the same X position, left borders should be inserted first so that they can be successfully eliminated.
+                if (x < borderX[p] || x == borderX[p] && leftOrRight == true)
+                {
+                    borderX.Insert(p, x);
+                    borderLR.Insert(p, leftOrRight);
+                    break;
+                }
+            }
+        }
+
+        private static void EliminateOverlaps(List<int>[] borderXs, List<bool>[] borderXsLR)
+        {
+            for (int j = 0; j < borderXs.Length; j++)
+            {
+                for (int n = 0, p = borderXs[j].Count - 2, q = -1; p >= 0; p--)
+                {
+                    if (borderXsLR[j][p] == false /*right*/)
+                    {
+                        if (++n == 2)
+                        {
+                            q = p;
+                        }
+                    }
+                    else
+                    {
+                        if (--n == 1)
+                        {
+                            // Eliminate the points in the overlapped region p .. q.
+                            borderXs[j].RemoveRange(p, q - p + 1);
+                            borderXsLR[j].RemoveRange(p, q - p + 1);
+                        }
+                    }
+                }
+            }
+        }
+
+        private static void EliminateInsideRegions(List<int>[] borderXs, List<bool>[] borderXsLR)
+        {
+            // throw new Exception("The method or operation is not implemented.");
+        }
+
+        #endregion
+
+        #region Methods for following an object contour.
 
         /// <summary>
         /// Locates the left neighbor of a contour pixel that is also on the object contour.
@@ -646,5 +762,7 @@ namespace SWA.Ariadne.Gui.Mazes
                 }
             }
         }
+
+        #endregion
     }
 }
