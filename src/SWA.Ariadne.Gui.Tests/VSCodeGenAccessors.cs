@@ -862,6 +862,24 @@ internal class SWA_Ariadne_Gui_Mazes_ContourImageAccessor : BaseAccessor {
         return ret;
     }
     
+    internal static void InitializeScanLines(int width, int height, out System.Collections.Generic.List<int>[] contourXs, out System.Collections.Generic.List<int>[] borderXs, out System.Collections.Generic.List<bool>[] borderXsLR) {
+        object[] args = new object[] {
+                width,
+                height,
+                null,
+                null,
+                null};
+        m_privateType.InvokeStatic("InitializeScanLines", new System.Type[] {
+                    typeof(int),
+                    typeof(int),
+                    typeof(System.Collections.Generic.List<int>).MakeArrayType().MakeByRefType(),
+                    typeof(System.Collections.Generic.List<int>).MakeArrayType().MakeByRefType(),
+                    typeof(System.Collections.Generic.List<bool>).MakeArrayType().MakeByRefType()}, args);
+        contourXs = ((System.Collections.Generic.List<int>[])(args[2]));
+        borderXs = ((System.Collections.Generic.List<int>[])(args[3]));
+        borderXsLR = ((System.Collections.Generic.List<bool>[])(args[4]));
+    }
+    
     internal static void InsertContourPoint(System.Collections.Generic.List<int> contourX, int x) {
         object[] args = new object[] {
                 contourX,
@@ -893,13 +911,18 @@ internal class SWA_Ariadne_Gui_Mazes_ContourImageAccessor : BaseAccessor {
                     typeof(System.Collections.Generic.List<bool>).MakeArrayType()}, args);
     }
     
-    internal static void EliminateInsideRegions(System.Collections.Generic.List<int>[] borderXs, System.Collections.Generic.List<bool>[] borderXsLR) {
+    internal static int EliminateInsideRegions(System.Collections.Generic.List<int>[] borderXs, System.Collections.Generic.List<bool>[] borderXsLR, int y0, int sy) {
         object[] args = new object[] {
                 borderXs,
-                borderXsLR};
-        m_privateType.InvokeStatic("EliminateInsideRegions", new System.Type[] {
+                borderXsLR,
+                y0,
+                sy};
+        int ret = ((int)(m_privateType.InvokeStatic("EliminateInsideRegions", new System.Type[] {
                     typeof(System.Collections.Generic.List<int>).MakeArrayType(),
-                    typeof(System.Collections.Generic.List<bool>).MakeArrayType()}, args);
+                    typeof(System.Collections.Generic.List<bool>).MakeArrayType(),
+                    typeof(int),
+                    typeof(int)}, args)));
+        return ret;
     }
     
     internal static void LeftNeighbor(global::System.Drawing.Bitmap image, global::System.Drawing.Color backgroundColor, float fuzziness, int x, int y, int nbR, out int nbL, out int xL, out int yL) {

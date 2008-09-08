@@ -167,6 +167,12 @@ namespace SWA.Ariadne.Gui.Mazes
             width += 2 * frameWidth;
             height += 2 * frameWidth;
 
+            // Extend the image by another two pixels.
+            // Thus, even the frame won't touch the border.
+            // Otherwise, the contour scan could fail and interpret disparate outside regions as included inside regions.
+            width += 2;
+            height += 2;
+
             // Create a new Bitmap with the same resolution as the original image.
             Bitmap result = new Bitmap(width, height, Graphics.FromImage(image));
             Graphics g = Graphics.FromImage(result);
