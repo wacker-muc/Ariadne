@@ -21,11 +21,24 @@ namespace SWA.Ariadne.Outlines
 
         public override bool this[int x, int y]
         {
-            get { return (squares[x, y] != 0); }
+            get
+            {
+                if (0 <= x && x < this.XSize && 0 <= y && y < this.YSize)
+                {
+                    return (squares[x, y] != 0);
+                }
+                else
+                {
+                    return false;
+                }
+            }
         }
         public void SetValue(int x, int y, bool value)
         {
-            this.squares[x, y] = (value == true ? (byte)1 : (byte)0);
+            if (0 <= x && x < this.XSize && 0 <= y && y < this.YSize)
+            {
+                this.squares[x, y] = (value == true ? (byte)1 : (byte)0);
+            }
         }
         private byte[,] squares;
 
