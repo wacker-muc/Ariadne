@@ -24,16 +24,7 @@ namespace SWA.Ariadne.Outlines
         {
             get
             {
-                x -= xOffset;
-                y -= yOffset;
-                if (0 <= x && x < baseShape.XSize && 0 <= y && y < baseShape.YSize)
-                {
-                    return baseShape[x, y];
-                }
-                else
-                {
-                    return false;
-                }
+                return baseShape[x - xOffset, y - xOffset];
             }
         }
 
@@ -332,10 +323,7 @@ namespace SWA.Ariadne.Outlines
         /// <param name="y"></param>
         protected void Invert(ExplicitOutlineShape target, int x, int y)
         {
-            if (0 <= x && x < target.XSize && 0 <= y && y < target.YSize)
-            {
-                target.SetValue(x, y, !target[x, y]);
-            }
+            target.SetValue(x, y, !target[x, y]);
         }
     }
 
