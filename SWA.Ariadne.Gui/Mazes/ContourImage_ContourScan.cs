@@ -301,27 +301,15 @@ namespace SWA.Ariadne.Gui.Mazes
             #endregion
 
             // All points on the contour of an object are collected in scan switch lines.
-            List<int>[] contourXs = new List<int>[image.Height];
+            List<int>[] contourXs;
 
             // The points on the outside border of the objects' influence regions are collected in scan switch lines.
-            List<int>[] borderXs = new List<int>[image.Height];
+            List<int>[] borderXs;
             // We need to distinguish between left and right points; true is left and false is right.
-            List<bool>[] borderXsLR = new List<bool>[image.Height];
+            List<bool>[] borderXsLR;
 
-            #region Initialize contourXs and borderXs.
-            for (int i = 0; i < image.Height; i++)
-            {
-                // Create the lists.
-                contourXs[i] = new List<int>(5);
-                borderXs[i] = new List<int>(5);
-                borderXsLR[i] = new List<bool>(5);
-
-                // Add termination points that are border of the scanned image.
-                contourXs[i].Add(image.Width);
-                borderXs[i].Add(image.Width);
-                borderXsLR[i].Add(true);
-            }
-            #endregion
+            // Create the scan line lists and add the required terminator entries.
+            InitializeScanLines(image.Width, image.Height, out contourXs, out borderXs, out borderXsLR);
 
             #endregion
 
@@ -381,7 +369,7 @@ namespace SWA.Ariadne.Gui.Mazes
             EliminateOverlaps(borderXs, borderXsLR);
 
             // Eliminate enclosed regions from border scan lines.
-            EliminateInsideRegions(borderXs, borderXsLR);
+            EliminateInsideRegions(borderXs, borderXsLR, dsMin - 1, dsMin);
 
             // TODO: fill inside of objects, using the contourXs.
 
@@ -626,6 +614,32 @@ namespace SWA.Ariadne.Gui.Mazes
 
         #region Methods for managing the contour points.
 
+        private static void InitializeScanLines(int width, int height, out List<int>[] contourXs, out List<int>[] borderXs, out List<bool>[] borderXsLR)
+        {
+            contourXs = new List<int>[height];
+            borderXs = new List<int>[height];
+            borderXsLR = new List<bool>[height];
+
+            for (int i = 0; i < contourXs.Length; i++)
+            {
+                // Create the lists.
+                contourXs[i] = new List<int>(16);
+                borderXs[i] = new List<int>(16);
+                borderXsLR[i] = new List<bool>(16);
+
+                // Add termination points that are beyond the regular scan line.
+
+                // One terminator for the contour.
+                contourXs[i].Add(width + 1);
+
+                // Two terminators for the border.
+                borderXs[i].Add(-2);
+                borderXsLR[i].Add(false);
+                borderXs[i].Add(width + 1);
+                borderXsLR[i].Add(true);
+            }
+        }
+
         private static void InsertContourPoint(List<int> contourX, int x)
         {
             // Position where the contour point will be entered into contourXs[y].
@@ -647,6 +661,13 @@ namespace SWA.Ariadne.Gui.Mazes
 
         #region Methods for managing the border points.
 
+        /// <summary>
+        /// Inserts the given point into the given border scan line.
+        /// </summary>
+        /// <param name="borderX"></param>
+        /// <param name="borderLR"></param>
+        /// <param name="x"></param>
+        /// <param name="leftOrRight"></param>
         private static void InsertBorderPoint(List<int> borderX, List<bool> borderLR, int x, bool leftOrRight)
         {
             // Position where the border point will be entered into borderXs[y].
@@ -666,11 +687,20 @@ namespace SWA.Ariadne.Gui.Mazes
             }
         }
 
+        /// <summary>
+        /// Removes all but the first level of left-right border pairs.
+        /// </summary>
+        /// <param name="borderXs">
+        /// Pairs of borders that are enclosed within other, outer borders will be removed.
+        /// </param>
+        /// <param name="borderXsLR">
+        /// Will also be shortened and converted to an alternating sequence of left and right borders.
+        /// </param>
         private static void EliminateOverlaps(List<int>[] borderXs, List<bool>[] borderXsLR)
         {
             for (int j = 0; j < borderXs.Length; j++)
             {
-                for (int n = 0, p = borderXs[j].Count - 2, q = -1; p >= 0; p--)
+                for (int n = 0, p = borderXs[j].Count - 2, q = -1; p >= 1; p--)
                 {
                     if (borderXsLR[j][p] == false /*right*/)
                     {
@@ -692,9 +722,198 @@ namespace SWA.Ariadne.Gui.Mazes
             }
         }
 
-        private static void EliminateInsideRegions(List<int>[] borderXs, List<bool>[] borderXsLR)
+        /// <summary>
+        /// Identifies and eliminates areas in or between the objects defined by the scan lines
+        /// that are completely enclosed by the objects.
+        /// Note: The shape described in borderXs must not touch any border;
+        ///       otherwise cut off areas will be considered "inside" and eliminated.
+        /// </summary>
+        /// <param name="borderXs">list of normalized scan lines</param>
+        /// <param name="borderXsLR">alternating left and right</param>
+        /// <param name="y0">index of first valid scan line</param>
+        /// <param name="sy">step between consecutive valid scan lines</param>
+        /// <returns>number of inside regions found</returns>
+        private static int EliminateInsideRegions(List<int>[] borderXs, List<bool>[] borderXsLR, int y0, int sy)
         {
-            // throw new Exception("The method or operation is not implemented.");
+            #region Create local data structures.
+
+            /* Unresolved enclosed areas up to the current scan line.
+             * 
+             * The Points in this data structure are interpreted like this:
+             * y = index in a list or array of scan lines.
+             * x = index within the scan line; references the first of a pair of start .. end positions on the scan line.
+             * 
+             * scanLineReferenceGroups[i] is a list of scan line references that belong to the same (potentially) enclosed area.
+             */
+            List<List<Point>> scanLineReferenceGroups = new List<List<Point>>();
+
+            /* Unresolved enclosed areas on current and previous scan line.
+             * The two lists are used alternatingly; saPrev and saCurr are the indices.
+             * 
+             * The Points in this data structure are interpreted like this:
+             * y = index in scanLineReferenceGroups, ID of that group.
+             * x = index within the scan line; references the first of a pair of start .. end positions on the scan line.
+             */
+            List<Point>[] scanAreas = new List<Point>[2];
+            int saPrev = 0, saCurr = 1;
+            scanAreas[0] = new List<Point>();
+            scanAreas[1] = new List<Point>();
+
+            /* Effective ID of a reference group.
+             * When two areas are found to be connected, the one with the greater ID will be united with the other group.
+             * For independent groups, unitedGroupIds[i] == i.
+             */
+            List<int> unitedGroupIds = new List<int>();
+
+            #endregion
+
+            #region Set up a group referencing the outside region.
+
+            // Add all outside areas on the first scan line to a first reference group.
+            // As the scan line is normalized, these areas are between even and odd positions.
+            int outsideGroupId = scanLineReferenceGroups.Count; // == 0
+            unitedGroupIds.Add(outsideGroupId);
+            scanLineReferenceGroups.Add(new List<Point>((borderXs[y0].Count - 1) / 2));
+            for (int p = 0, q = 1; q < borderXs[y0].Count; p += 2, q += 2)
+            {
+                int xp = borderXs[y0][p], xq = borderXs[y0][q];
+                scanLineReferenceGroups[outsideGroupId].Add(new Point(p, y0));
+                scanAreas[saPrev].Add(new Point(p, outsideGroupId));
+            }
+
+            #endregion
+
+            #region Collect the inside areas of all following scan lines in reference groups.
+
+            for (int y = y0 + sy; y < borderXs.Length; y += sy)
+            {
+                int a = 0;                  // index into scanAreas[saPrev]
+                Point pa = scanAreas[saPrev][a];
+                int i = pa.X, j = i + 1;    // indices into borderXs
+                // Note that the x coordinates are those of the object; the spaces between are two pixels smaller.
+                int xi = borderXs[y - sy][i] + 1, xj = borderXs[y - sy][j] - 1;
+
+                // Process the areas between objects on the current scan line.
+                // As the scan line is normalized, these areas are between even and odd positions.
+                for (int p = 0, q = 1; q < borderXs[y].Count; p += 2, q += 2)
+                {
+                    int xp = borderXs[y][p] + 1, xq = borderXs[y][q] - 1;
+
+                    // Advance the previous line's scan area until it lies at or before this line's area.
+                    // Note: The last (outside) area on the previous line extends to the right image border.
+                    while (xp > xj)
+                    {
+                        pa = scanAreas[saPrev][++a];
+                        i = pa.X; j = i + 1;
+                        xi = borderXs[y - sy][i] + 1; xj = borderXs[y - sy][j] - 1;
+                    }
+
+                    // Determine which group the current area should belong to.
+                    int groupId;
+                    if (xi <= xq) // The two areas overlap: xp <= xi <= xq <= xj.
+                    {
+                        // Add this area to the previous area's group.
+                        groupId = pa.Y;
+                    }
+                    else
+                    {
+                        // Open a new group.
+                        groupId = scanLineReferenceGroups.Count;
+                        unitedGroupIds.Add(groupId);
+                        scanLineReferenceGroups.Add(new List<Point>((borderXs[y].Count - 1) / 2));
+                    }
+
+                    // Add the current area to the selected group.
+                    scanLineReferenceGroups[groupId].Add(new Point(p, y));
+                    scanAreas[saCurr].Add(new Point(p, groupId));
+
+                    // See if other areas on the previous line also overlap with the current area.
+                    while (a + 1 < scanAreas[saPrev].Count)
+                    {
+                        int a1 = a + 1;
+                        Point pa1 = scanAreas[saPrev][a1];
+                        int i1 = pa1.X, j1 = i1 + 1;
+                        int xi1 = borderXs[y - sy][i1] + 1, xj1 = borderXs[y - sy][j1] - 1;
+
+                        if (xi1 <= xq)
+                        {
+                            // Unite the two areas' groups.
+                            int id1 = pa1.Y;
+                            if (groupId < id1)
+                            {
+                                unitedGroupIds[id1] = groupId;
+                            }
+                            else if (id1 < groupId)
+                            {
+                                unitedGroupIds[groupId] = groupId = id1;
+                            }
+                            else
+                            {
+                                // Do nothing; these separate areas already belong to the same group.
+                            }
+
+                            // Advance on the previous scan line.
+                            a = a1; pa = pa1; i = i1; j = j1; xi = xi1; xj = xj1;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
+
+                // Swap the two scan line indices.
+                int saTmp = saPrev;
+                saPrev = saCurr;
+                saCurr = saTmp;
+                scanAreas[saCurr].Clear();
+            }
+
+            #endregion
+
+            #region Mark the areas of all inside groups for elimination.
+
+            int result = 0;
+
+            for (int g = 0; g < scanLineReferenceGroups.Count; g++)
+            {
+                // Determine effective group id.
+                int id = g; while (unitedGroupIds[id] < id) { id = unitedGroupIds[id]; }
+                if (id == outsideGroupId)
+                {
+                    continue;
+                }
+
+                if (unitedGroupIds[g] == g)
+                {
+                    ++result;
+                }
+
+                foreach (Point slr in scanLineReferenceGroups[g])
+                {
+                    int y = slr.Y, p = slr.X, q = p + 1;
+
+                    // Reverse the scan line point's orientation: R..L -> L..R.
+                    borderXsLR[y][p] = !borderXsLR[y][p]; // true
+                    borderXsLR[y][q] = !borderXsLR[y][q]; // false
+                }
+            }
+
+            /* As all reference groups other than the outside group have been marked for elimination,
+             * only the outside group will be left over.
+             * The resulting borderXs define a single connected object shape without inclusions.
+             */
+
+            #endregion
+
+            if (result > 0)
+            {
+                // The LR sense of all identified inside regions have been swapped.
+                // Now they look like overlapped object regions and may be eliminated using the overlap method.
+                EliminateOverlaps(borderXs, borderXsLR);
+            }
+
+            return result;
         }
 
         #endregion
