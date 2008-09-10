@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace SWA.Ariadne.Gui.Mazes
 {
@@ -288,17 +289,7 @@ namespace SWA.Ariadne.Gui.Mazes
 
             // For every pixel: distance to closest non-background pixel.
             // Actually, the value is the squared length of the diagonal distance.
-            int[,] dist2ToImage = new int[image.Width, image.Height];
-
-            #region Initialize dist2ToImage.
-            for (int x = 0; x < image.Width; x++)
-            {
-                for (int y = 0; y < image.Height; y++)
-                {
-                    dist2ToImage[x, y] = int.MaxValue;
-                }
-            }
-            #endregion
+            int[,] dist2ToImage;
 
             // All points on the contour of an object are collected in scan switch lines.
             List<int>[] contourXs;
@@ -307,6 +298,9 @@ namespace SWA.Ariadne.Gui.Mazes
             List<int>[] borderXs;
             // We need to distinguish between left and right points; true is left and false is right.
             List<bool>[] borderXsLR;
+
+            // Create and initialize the dist2Image array.
+            InitializeDist2ToImage(image.Width, image.Height, out dist2ToImage);
 
             // Create the scan line lists and add the required terminator entries.
             InitializeScanLines(image.Width, image.Height, out contourXs, out borderXs, out borderXsLR);
@@ -369,9 +363,32 @@ namespace SWA.Ariadne.Gui.Mazes
             EliminateOverlaps(borderXs, borderXsLR);
 
             // Eliminate enclosed regions from border scan lines.
+#if false
             EliminateInsideRegions(borderXs, borderXsLR, dsMin - 1, dsMin);
+#else
+            EliminateInsideRegions(borderXs, borderXsLR, 0, 1);
+#endif
 
-            // TODO: fill inside of objects, using the contourXs.
+#if false
+            // Fill inside of objects, using the contourXs.
+            Brush insideBrush = new SolidBrush(transparent);
+            GraphicsPath contourPath = GetPath(contourXs);
+            gMask.FillPath(insideBrush, contourPath);
+#endif
+
+            // Fill outside of objects, using the borderXs.
+            Brush outsideBrush = new SolidBrush(black);
+#if false
+            GraphicsPath borderPath = GetPath(borderXs);
+            gMask.FillPath(outsideBrush, outsideBrush);
+#else
+#if false
+            Point[] borderPoints = GetBorderPoints(borderXs);
+            gMask.FillPolygon(outsideBrush, porderPoints);
+#else
+            FillOutside(gMask, black, borderXs);
+#endif
+#endif
 
             #region Set the color of all mask pixels to black with an appropriate transparency; determine the bounding box.
 
@@ -593,11 +610,22 @@ namespace SWA.Ariadne.Gui.Mazes
                 {
                     int i = x + rp.rx, j = y + rp.ry;
                     InsertBorderPoint(borderXs[j], borderXsLR[j], i, true);
+#if true
+                    // Add another symmetrical border point to keep the LR balance.
+                    // Note: If this border point is not relevant, it will be safely eliminated later.
+                    // TODO: Sometimes, this helps but sometimes it creates completeley useless results!?!
+                    i -= 2 * rp.rx;
+                    InsertBorderPoint(borderXs[j], borderXsLR[j], i, false);
+#endif
                 }
                 foreach (RelativePoint rp in rightBorderLimits[nbL, nbR])
                 {
                     int i = x + rp.rx, j = y + rp.ry;
                     InsertBorderPoint(borderXs[j], borderXsLR[j], i, false);
+#if true
+                    i -= 2 * rp.rx;
+                    InsertBorderPoint(borderXs[j], borderXsLR[j], i, true);
+#endif
                 }
 
                 // Advance the focus to the next contour pixel.
@@ -612,7 +640,20 @@ namespace SWA.Ariadne.Gui.Mazes
             return true;
         }
 
-        #region Methods for managing the contour points.
+        #region Methods for initializing the data structures.
+
+        private static void InitializeDist2ToImage(int width, int height, out int[,] dist2ToImage)
+        {
+            dist2ToImage = new int[width, height];
+
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    dist2ToImage[x, y] = int.MaxValue;
+                }
+            }
+        }
 
         private static void InitializeScanLines(int width, int height, out List<int>[] contourXs, out List<int>[] borderXs, out List<bool>[] borderXsLR)
         {
@@ -627,7 +668,7 @@ namespace SWA.Ariadne.Gui.Mazes
                 borderXs[i] = new List<int>(16);
                 borderXsLR[i] = new List<bool>(16);
 
-                // Add termination points that are beyond the regular scan line.
+                // Add termination points that are well beyond the regular scan line.
 
                 // One terminator for the contour.
                 contourXs[i].Add(width + 1);
@@ -639,6 +680,11 @@ namespace SWA.Ariadne.Gui.Mazes
                 borderXsLR[i].Add(true);
             }
         }
+
+        #endregion
+
+
+        #region Methods for managing the contour points.
 
         private static void InsertContourPoint(List<int> contourX, int x)
         {
@@ -978,6 +1024,31 @@ namespace SWA.Ariadne.Gui.Mazes
                 if (cd > fuzziness)
                 {
                     break;
+                }
+            }
+        }
+
+        #endregion
+
+        #region Fill operations.
+
+        private static void FillOutside(Graphics g, Color color, List<int>[] borderXs)
+        {
+            FillOutside_Simple(g, color, borderXs);
+        }
+
+        private static void FillOutside_Simple(Graphics g, Color color, List<int>[] borderXs)
+        {
+            Pen pen = new Pen(new SolidBrush(color));
+            pen.StartCap = pen.EndCap = LineCap.Flat;
+            pen.Width = 1;
+
+            for (int y = 0; y < borderXs.Length; y++)
+            {
+                for (int p = 0, q = p + 1; q < borderXs[y].Count; p += 2, q += 2)
+                {
+                    int x0 = borderXs[y][p] + 1, x1 = borderXs[y][q] - 1;
+                    g.DrawLine(pen, x0, y, x1, y);
                 }
             }
         }

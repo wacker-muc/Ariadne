@@ -862,6 +862,18 @@ internal class SWA_Ariadne_Gui_Mazes_ContourImageAccessor : BaseAccessor {
         return ret;
     }
     
+    internal static void InitializeDist2ToImage(int width, int height, out int[,] dist2ToImage) {
+        object[] args = new object[] {
+                width,
+                height,
+                null};
+        m_privateType.InvokeStatic("InitializeDist2ToImage", new System.Type[] {
+                    typeof(int),
+                    typeof(int),
+                    typeof(int).MakeArrayType(2).MakeByRefType()}, args);
+        dist2ToImage = ((int[,])(args[2]));
+    }
+    
     internal static void InitializeScanLines(int width, int height, out System.Collections.Generic.List<int>[] contourXs, out System.Collections.Generic.List<int>[] borderXs, out System.Collections.Generic.List<bool>[] borderXsLR) {
         object[] args = new object[] {
                 width,
@@ -975,6 +987,28 @@ internal class SWA_Ariadne_Gui_Mazes_ContourImageAccessor : BaseAccessor {
         nbR = ((int)(args[6]));
         xR = ((int)(args[7]));
         yR = ((int)(args[8]));
+    }
+    
+    internal static void FillOutside(global::System.Drawing.Graphics g, global::System.Drawing.Color color, System.Collections.Generic.List<int>[] borderXs) {
+        object[] args = new object[] {
+                g,
+                color,
+                borderXs};
+        m_privateType.InvokeStatic("FillOutside", new System.Type[] {
+                    typeof(global::System.Drawing.Graphics),
+                    typeof(global::System.Drawing.Color),
+                    typeof(System.Collections.Generic.List<int>).MakeArrayType()}, args);
+    }
+    
+    internal static void FillOutside_Simple(global::System.Drawing.Graphics g, global::System.Drawing.Color color, System.Collections.Generic.List<int>[] borderXs) {
+        object[] args = new object[] {
+                g,
+                color,
+                borderXs};
+        m_privateType.InvokeStatic("FillOutside_Simple", new System.Type[] {
+                    typeof(global::System.Drawing.Graphics),
+                    typeof(global::System.Drawing.Color),
+                    typeof(System.Collections.Generic.List<int>).MakeArrayType()}, args);
     }
     
     internal static global::System.Drawing.Bitmap GetMask_OutlineScanA(global::System.Drawing.Bitmap image, global::System.Drawing.Color backgroundColor, float fuzziness, out global::System.Drawing.Rectangle boundingBox) {
