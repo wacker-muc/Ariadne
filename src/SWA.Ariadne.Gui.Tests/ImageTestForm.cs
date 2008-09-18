@@ -27,6 +27,7 @@ namespace SWA.Ariadne.Gui.Tests
             string imagePath = SelectImage(r);
             Image image = Image.FromFile(imagePath);
             this.imageButton.Image = image;
+            this.imagePathTextBox.Text = imagePath;
         }
 
         private static string SelectImage(Random r)

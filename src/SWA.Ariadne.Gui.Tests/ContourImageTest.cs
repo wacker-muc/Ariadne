@@ -89,7 +89,7 @@ namespace SWA.Ariadne.Gui.Tests
             Assert.AreEqual(DialogResult.OK, result, testObject);
         }
 
-        #region Tests for PrepareInfluenceRegion()
+        #region Unit tests for PrepareInfluenceRegion()
 
         /// <summary>
         ///A test for PrepareInfluenceRegions (int)
@@ -98,7 +98,7 @@ namespace SWA.Ariadne.Gui.Tests
         [TestMethod()]
         public void CI_PrepareInfluenceRegionsTest_01()
         {
-            string testObject = "Distance from contour pixel";
+            string testObject = "Distance from object pixel";
             int radius = SWA_Ariadne_Gui_Mazes_ContourImageAccessor.ContourDistance;
             int influenceRange = radius + 1;
 
@@ -128,7 +128,7 @@ namespace SWA.Ariadne.Gui.Tests
         [TestMethod()]
         public void CI_PrepareInfluenceRegionsTest_02()
         {
-            string testObject = "Distance from contour pixel";
+            string testObject = "Distance from object pixel";
             int radius = SWA_Ariadne_Gui_Mazes_ContourImageAccessor.ContourDistance;
             int influenceRange = radius + 1;
 
@@ -490,8 +490,8 @@ namespace SWA.Ariadne.Gui.Tests
 
             // Prepare data structures used in the test.
             int width = 1000, height = 1;
-            List<int>[] contourXs, borderXs;
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InitializeScanLines(width, height, out contourXs, out borderXs);
+            List<int>[] objectXs, contourXs, borderXs;
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InitializeScanLines(width, height, out objectXs, out contourXs, out borderXs);
             List<int> borderX = borderXs[0];
 
             SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderX, 100, 900);
@@ -512,8 +512,8 @@ namespace SWA.Ariadne.Gui.Tests
 
             // Prepare data structures used in the test.
             int width = 1000, height = 1;
-            List<int>[] contourXs, borderXs;
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InitializeScanLines(width, height, out contourXs, out borderXs);
+            List<int>[] objectXs, contourXs, borderXs;
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InitializeScanLines(width, height, out objectXs, out contourXs, out borderXs);
             List<int> borderX = borderXs[0];
 
             SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderX, 100, 300);
@@ -536,8 +536,8 @@ namespace SWA.Ariadne.Gui.Tests
 
             // Prepare data structures used in the test.
             int width = 1000, height = 1;
-            List<int>[] contourXs, borderXs;
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InitializeScanLines(width, height, out contourXs, out borderXs);
+            List<int>[] objectXs, contourXs, borderXs;
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InitializeScanLines(width, height, out objectXs, out contourXs, out borderXs);
             List<int> borderX = borderXs[0];
 
             SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderX, 100, 400);
@@ -558,8 +558,8 @@ namespace SWA.Ariadne.Gui.Tests
 
             // Prepare data structures used in the test.
             int width = 1000, height = 1;
-            List<int>[] contourXs, borderXs;
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InitializeScanLines(width, height, out contourXs, out borderXs);
+            List<int>[] objectXs, contourXs, borderXs;
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InitializeScanLines(width, height, out objectXs, out contourXs, out borderXs);
             List<int> borderX = borderXs[0];
 
             SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderX, 100, 300);
@@ -588,8 +588,8 @@ namespace SWA.Ariadne.Gui.Tests
 
             // Prepare data structures used in the test.
             int width = 1000, height = 1;
-            List<int>[] contourXs, borderXs;
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InitializeScanLines(width, height, out contourXs, out borderXs);
+            List<int>[] objectXs, contourXs, borderXs;
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InitializeScanLines(width, height, out objectXs, out contourXs, out borderXs);
             List<int> borderX = borderXs[0];
 
             SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderX, 100, 300);
@@ -611,8 +611,8 @@ namespace SWA.Ariadne.Gui.Tests
 
             // Prepare data structures used in the test.
             int width = 1000, height = 1;
-            List<int>[] contourXs, borderXs;
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InitializeScanLines(width, height, out contourXs, out borderXs);
+            List<int>[] objectXs, contourXs, borderXs;
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InitializeScanLines(width, height, out objectXs, out contourXs, out borderXs);
             List<int> borderX = borderXs[0];
 
             SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderX, 501, 900);
@@ -634,8 +634,8 @@ namespace SWA.Ariadne.Gui.Tests
 
             // Prepare data structures used in the test.
             int width = 1000, height = 1;
-            List<int>[] contourXs, borderXs;
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InitializeScanLines(width, height, out contourXs, out borderXs);
+            List<int>[] objectXs, contourXs, borderXs;
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InitializeScanLines(width, height, out objectXs, out contourXs, out borderXs);
             List<int> borderX = borderXs[0];
 
             SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderX, 100, 300);
@@ -672,9 +672,9 @@ namespace SWA.Ariadne.Gui.Tests
             SWA_Ariadne_Gui_Mazes_ContourImageAccessor.PrepareInfluenceRegions(contourDist + blurDist);
 
             int[,] dist2ToImage;
-            List<int>[] contourXs, borderXs;
+            List<int>[] objectXs, contourXs, borderXs;
             SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InitializeDist2ToImage(image.Width, image.Height, out dist2ToImage);
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InitializeScanLines(width, height, out contourXs, out borderXs);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InitializeScanLines(width, height, out objectXs, out contourXs, out borderXs);
 
             #region Create a complicated pattern of border scan lines.
 
@@ -701,7 +701,7 @@ namespace SWA.Ariadne.Gui.Tests
 
                 #endregion
 
-                SWA_Ariadne_Gui_Mazes_ContourImageAccessor.ScanObject(image, x0, y0, backgroundColor, fuzziness, dist2ToImage, contourXs, borderXs);
+                SWA_Ariadne_Gui_Mazes_ContourImageAccessor.ScanObject(image, x0, y0, backgroundColor, fuzziness, dist2ToImage, objectXs, contourXs, borderXs);
             }
 
             #endregion
@@ -722,8 +722,8 @@ namespace SWA.Ariadne.Gui.Tests
             string testObject = "EliminateInsideRegions";
 
             int width = 11, height = 10, sy = 1, y0 = sy - 1;
-            List<int>[] contourXs, borderXs;
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InitializeScanLines(width, height, out contourXs, out borderXs);
+            List<int>[] objectXs, contourXs, borderXs;
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InitializeScanLines(width, height, out objectXs, out contourXs, out borderXs);
 
             int y = y0;
             // nothing
@@ -764,8 +764,8 @@ namespace SWA.Ariadne.Gui.Tests
             string testObject = "EliminateInsideRegions";
 
             int width = 11, height = 10, sy = 1, y0 = sy - 1;
-            List<int>[] contourXs, borderXs;
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InitializeScanLines(width, height, out contourXs, out borderXs);
+            List<int>[] objectXs, contourXs, borderXs;
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InitializeScanLines(width, height, out objectXs, out contourXs, out borderXs);
 
             int y = y0;
             // nothing
@@ -809,8 +809,8 @@ namespace SWA.Ariadne.Gui.Tests
             string testObject = "EliminateInsideRegions";
 
             int width = 11, height = 10, sy = 1, y0 = sy - 1;
-            List<int>[] contourXs, borderXs;
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InitializeScanLines(width, height, out contourXs, out borderXs);
+            List<int>[] objectXs, contourXs, borderXs;
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InitializeScanLines(width, height, out objectXs, out contourXs, out borderXs);
 
             int y = y0;
             // nothing
@@ -904,31 +904,34 @@ namespace SWA.Ariadne.Gui.Tests
 
             int width = image.Width, height = image.Height;
             int[,] dist2ToImage;
-            List<int>[] contourXs, borderXs;
+            List<int>[] objectXs, contourXs, borderXs;
             SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InitializeDist2ToImage(width, height, out dist2ToImage);
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InitializeScanLines(width, height, out contourXs, out borderXs);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InitializeScanLines(width, height, out objectXs, out contourXs, out borderXs);
 
             #endregion
 
-            bool found = SWA_Ariadne_Gui_Mazes_ContourImageAccessor.ScanObject(image, x0, y0, backgroundColor, fuzziness, dist2ToImage, contourXs, borderXs);
+            bool found = SWA_Ariadne_Gui_Mazes_ContourImageAccessor.ScanObject(image, x0, y0, backgroundColor, fuzziness, dist2ToImage, objectXs, contourXs, borderXs);
 
-            #region Test if the contour map is well formed.
+            #region Test if the object map is well formed.
             for (int i = 0; i < height; i++)
             {
-                int nEntries = contourXs[i].Count;
+                int nEntries = objectXs[i].Count;
                 int m = nEntries % 2;
-                Assert.AreEqual(1, m, testObject + string.Format(" - contourXs[{0}] must be an odd number: {1}", i, nEntries));
+                Assert.AreEqual(1, m, testObject + string.Format(" - objectXs[{0}] must be an odd number: {1}", i, nEntries));
 
                 int nRegions = (nEntries - 1) / 2;
-                Assert.IsTrue(nRegions <= maxContourScanRegions, testObject + string.Format(" - contourXs[{0}] regions = {1} must be less than {2}", i, nRegions, maxContourScanRegions));
+                Assert.IsTrue(nRegions <= maxContourScanRegions, testObject + string.Format(" - objectXs[{0}] regions = {1} must be less than {2}", i, nRegions, maxContourScanRegions));
             }
             #endregion
 
-            #region Test if the contour map is complete.
+            #region Test if the object map is complete.
             int imageArea = ImageArea(image, backgroundColor, fuzziness);
-            int contourArea = ContourArea(contourXs);
-            Assert.AreEqual(imageArea, contourArea, testObject + string.Format(" - contour area and image must be equal"));
+            int objectArea = ObjectArea(objectXs);
+            Assert.AreEqual(imageArea, objectArea, testObject + string.Format(" - object area and image area must be equal"));
             #endregion
+
+            // Test if the contour map is well formed.
+            TestBorderScanlines(testObject, contourXs);
 
             // Test if the border map is well formed.
             TestBorderScanlines(testObject, borderXs);
@@ -952,15 +955,15 @@ namespace SWA.Ariadne.Gui.Tests
             return result;
         }
 
-        private static int ContourArea(List<int>[] contourXs)
+        private static int ObjectArea(List<int>[] objectXs)
         {
             int result = 0;
 
-            for (int i = 0; i < contourXs.Length; i++)
+            for (int i = 0; i < objectXs.Length; i++)
             {
-                for (int p = 0; p + 1 < contourXs[i].Count; p += 2)
+                for (int p = 0; p + 1 < objectXs[i].Count; p += 2)
                 {
-                    int w = contourXs[i][p + 1] - contourXs[i][p] + 1;
+                    int w = objectXs[i][p + 1] - objectXs[i][p] + 1;
                     result += w;
                 }
             }
@@ -1001,11 +1004,6 @@ namespace SWA.Ariadne.Gui.Tests
                     Assert.IsTrue(xp <= xq, testLine + string.Format(" must be sorted: [{0}] = {1}, [{2}] = {3}", p, xp, q, xq));
                     Assert.IsTrue(xp <  xq, testLine + string.Format(" must be unique: [{0}] = {1}, [{2}] = {3}", p, xp, q, xq));
                 }
-
-                /*
-                int nRegions = (nEntries - 1) / 2;
-                Assert.IsTrue(nRegions <= maxContourScanRegions, testObject + string.Format(" - contourXs[{0}] regions = {1} must be less than {2}", i, nRegions, maxContourScanRegions));
-                 */
             }
         }
 

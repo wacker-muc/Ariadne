@@ -115,7 +115,7 @@ namespace SWA.Ariadne.Gui.Tests
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(692, 547);
+            this.ClientSize = new System.Drawing.Size(692, 573);
             this.Controls.Add(this.groupBox3);
             this.Name = "ContourImageTestForm";
             this.Text = "ContourImageTestForm";
@@ -125,6 +125,7 @@ namespace SWA.Ariadne.Gui.Tests
             this.groupBox3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.algorithmNumericUpDown)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 

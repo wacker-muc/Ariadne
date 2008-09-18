@@ -92,11 +92,21 @@ namespace SWA.Ariadne.Gui.Mazes
 
         /// <summary>
         /// For each combination of a next left and next right neighbor of a pixel,
-        /// the borderLimit is the set of points on the left and right edge of the influenceRegion.
+        /// the borderLimit is the set of points on the left and right (outside) edge of the influenceRegion.
         /// </summary>
+        /// TODO: Combine into one set of borderLimits.
         private static List<RelativePoint>[,]
             leftBorderLimits = new List<RelativePoint>[8, 8],
             rightBorderLimits = new List<RelativePoint>[8, 8];
+
+        /// <summary>
+        /// For each combination of a next left and next right neighbor of a pixel,
+        /// the contourLimit is the set of points on the left and right (inside) edge of the influenceRegion.
+        /// </summary>
+        /// TODO: Combine into one set of borderLimits.
+        private static List<RelativePoint>[,]
+            leftContourLimits = new List<RelativePoint>[8, 8],
+            rightContourLimits = new List<RelativePoint>[8, 8];
 
         /// <summary>
         /// Returns -1/+1 if the point at x, y is on the left/right border of the influence region
@@ -180,11 +190,14 @@ namespace SWA.Ariadne.Gui.Mazes
                     influenceRegions[nbL, nbR] = new List<RelativePoint>();
                     leftBorderLimits[nbL, nbR] = new List<RelativePoint>();
                     rightBorderLimits[nbL, nbR] = new List<RelativePoint>();
+                    leftContourLimits[nbL, nbR] = new List<RelativePoint>();
+                    rightContourLimits[nbL, nbR] = new List<RelativePoint>();
 
                     // For each scan line: Leftmost and rightmost point in the influence region.
                     // Use index [dy + influenceRange].
                     // Enter dx + influenceRange which is > 0.
-                    int[] leftLimits = new int[2 * influenceRange], rightLimits = new int[2 * influenceRange];
+                    int[] leftLimitsB = new int[2 * influenceRange], rightLimitsB = new int[2 * influenceRange];
+                    int[] leftLimitsC = new int[2 * influenceRange], rightLimitsC = new int[2 * influenceRange];
 
 #if false
                     for (int dx = -(influenceRange - 1); dx <= +(influenceRange - 1); dx++)
@@ -213,31 +226,49 @@ namespace SWA.Ariadne.Gui.Mazes
                             int d2R = (dx - dxR) * (dx - dxR) + (dy - dyR) * (dy - dyR);
                             int d2I = (dx - dxI) * (dx - dxI) + (dy - dyI) * (dy - dyI);
 
-                            if (range2Min <= d2 && d2 <= range2Max)
+                            if (d2 <= range2Max)
                             {
                                 // This value will be entered into the left/right limits if the current point is in the influence region.
-                                int limitsEntry = dx + influenceRange;
+                                int borderLimitsEntry = dx + influenceRange;
+                                int contourLimitsEntry = -1;
 
                                 // Check if the center pixel is closest to the point.
                                 // For equal distance, the left neighbor should dominate.
                                 // Only distances in the relevant range are recorded.
                                 if (d2 < d2L && d2 <= d2R && d2 < d2I)
                                 {
-                                    influenceRegions[nbL, nbR].Add(new RelativePoint(dx, dy, d2));
+                                    if (range2Min <= d2)
+                                    {
+                                        // The point is partially influenced.
+                                        influenceRegions[nbL, nbR].Add(new RelativePoint(dx, dy, d2));
+                                    }
+                                    else
+                                    {
+                                        // The point is fully influenced.
+                                        contourLimitsEntry = dx + influenceRange;
+                                    }
                                 }
                                 else
                                 {
-                                    // Overwrite and remove a previous entry in the left/right limits.
-                                    limitsEntry = -1;
+                                    // Overwrite and remove a previous entry in the left/right border limits.
+                                    borderLimitsEntry = -1;
                                 }
 
                                 if (dx < 0)
                                 {
-                                    leftLimits[dy + influenceRange] = limitsEntry;
+                                    leftLimitsB[dy + influenceRange] = borderLimitsEntry;
+                                    if (d2 < range2Min)
+                                    {
+                                        leftLimitsC[dy + influenceRange] = contourLimitsEntry;
+                                    }
                                 }
                                 if (dx > 0)
                                 {
-                                    rightLimits[dy + influenceRange] = limitsEntry;
+                                    rightLimitsB[dy + influenceRange] = borderLimitsEntry;
+                                    if (d2 < range2Min)
+                                    {
+                                        rightLimitsC[dy + influenceRange] = contourLimitsEntry;
+                                    }
                                 }
                             }
                         }
@@ -249,21 +280,34 @@ namespace SWA.Ariadne.Gui.Mazes
 
                     for (int i = 0; i < 2 * influenceRange; i++)
                     {
-                        int dx = leftLimits[i] - influenceRange;
                         int dy = i - influenceRange;
-                        int d2 = dx * dx + dy * dy;
 
-                        if (leftLimits[i] > 0)
+                        if (leftLimitsB[i] > 0)
                         {
+                            int dx = leftLimitsB[i] - influenceRange;
+                            int d2 = dx * dx + dy * dy;
                             leftBorderLimits[nbL, nbR].Add(new RelativePoint(dx, dy, d2));
                         }
 
-                        dx = rightLimits[i] - influenceRange;
-                        d2 = dx * dx + dy * dy;
-
-                        if (rightLimits[i] > 0)
+                        if (rightLimitsB[i] > 0)
                         {
+                            int dx = rightLimitsB[i] - influenceRange;
+                            int d2 = dx * dx + dy * dy;
                             rightBorderLimits[nbL, nbR].Add(new RelativePoint(dx, dy, d2));
+                        }
+
+                        if (leftLimitsC[i] > 0)
+                        {
+                            int dx = leftLimitsC[i] - influenceRange;
+                            int d2 = dx * dx + dy * dy;
+                            leftContourLimits[nbL, nbR].Add(new RelativePoint(dx, dy, d2));
+                        }
+
+                        if (rightLimitsC[i] > 0)
+                        {
+                            int dx = rightLimitsC[i] - influenceRange;
+                            int d2 = dx * dx + dy * dy;
+                            rightContourLimits[nbL, nbR].Add(new RelativePoint(dx, dy, d2));
                         }
                     }
 
@@ -285,6 +329,12 @@ namespace SWA.Ariadne.Gui.Mazes
             leftBorderLimits[NbE, NbW].Add(new RelativePoint(0, dyS, dyS * dyS));
             rightBorderLimits[NbW, NbE].Add(new RelativePoint(0, dyN, dyN * dyN));
             rightBorderLimits[NbE, NbW].Add(new RelativePoint(0, dyS, dyS * dyS));
+
+            dyS = ContourDistance - 1; dyN = -dyS;
+            leftContourLimits[NbW, NbE].Add(new RelativePoint(0, dyN, dyN * dyN));
+            leftContourLimits[NbE, NbW].Add(new RelativePoint(0, dyS, dyS * dyS));
+            rightContourLimits[NbW, NbE].Add(new RelativePoint(0, dyN, dyN * dyN));
+            rightContourLimits[NbE, NbW].Add(new RelativePoint(0, dyS, dyS * dyS));
 
             #endregion
         }
@@ -318,8 +368,8 @@ namespace SWA.Ariadne.Gui.Mazes
             // Actually, the value is the squared length of the diagonal distance.
             int[,] dist2ToImage;
 
-            // All points on the contour of an object are collected in scan switch lines.
-            List<int>[] contourXs;
+            // All points on the immediate contour of an object are collected in scan switch lines.
+            List<int>[] objectXs;
 
             // The points on the outside border of the objects' influence regions are collected in scan switch lines.
             // On the scan line, the points are sorted by (unique) increasing X values.
@@ -327,11 +377,14 @@ namespace SWA.Ariadne.Gui.Mazes
             // Between these, the points mark pairs of Left and Right borders.
             List<int>[] borderXs;
 
+            // The points on the extended contour (the region with 100% influence) are also collected in scan switch lines.
+            List<int>[] contourXs;
+
             // Create and initialize the dist2Image array.
             InitializeDist2ToImage(image.Width, image.Height, out dist2ToImage);
 
             // Create the scan line lists and add the required terminator entries.
-            InitializeScanLines(image.Width, image.Height, out contourXs, out borderXs);
+            InitializeScanLines(image.Width, image.Height, out objectXs, out contourXs, out borderXs);
 
             #endregion
 
@@ -353,10 +406,10 @@ namespace SWA.Ariadne.Gui.Mazes
             {
                 for (int y = ds / 2 - 1; y < image.Height; y += ds)
                 {
-                    // Current index in contourXs[y].
+                    // Current index in objectXs[y].
                     int c = 0;
                     // X coordinate of the first known object on the Y scan line.
-                    int x1 = contourXs[y][c];
+                    int x1 = objectXs[y][c];
 
                     for (int x = 1; x < image.Width; x += 1)
                     {
@@ -364,21 +417,21 @@ namespace SWA.Ariadne.Gui.Mazes
                         {
                             // We have reached the contour of a known object.
                             // Skip to the next contour point.
-                            x = contourXs[y][++c];      // Contour point where the scan line leaves the object.
-                            x1 = contourXs[y][++c];     // Contour point of next object or terminator image.Width.
+                            x = objectXs[y][++c];       // Point where the scan line leaves the object.
+                            x1 = objectXs[y][++c];      // Point of next object or terminator image.Width.
                             continue;
                         }
 
                         if (ColorDistance(image.GetPixel(x, y), backgroundColor) > fuzziness)
                         {
-                            if (ScanObject(image, x, y, backgroundColor, fuzziness, dist2ToImage, contourXs, borderXs))
+                            if (ScanObject(image, x, y, backgroundColor, fuzziness, dist2ToImage, objectXs, contourXs, borderXs))
                             {
                                 ++nObjects;
 
-                                // Make X advance to the contour point where the scan line leaves the object.
-                                // The new object's contour point (x, y) is at the current c position.
-                                x = contourXs[y][++c];      // Contour point where the scan line leaves the object.
-                                x1 = contourXs[y][++c];     // Contour point of next object or terminator image.Width.
+                                // Make X advance to the object point where the scan line leaves the object.
+                                // The new object's point (x, y) is at the current c position.
+                                x = objectXs[y][++c];       // Point where the scan line leaves the object.
+                                x1 = objectXs[y][++c];      // Point on next object or terminator image.Width.
                             }
                         }
                     }
@@ -387,15 +440,9 @@ namespace SWA.Ariadne.Gui.Mazes
 
             #endregion
 
-            // Eliminate enclosed regions from border scan lines.
+            // Eliminate enclosed regions from border and contour scan lines.
             EliminateInsideRegions(borderXs, 0, 1);
-
-#if false
-            // Fill inside of objects, using the contourXs.
-            Brush insideBrush = new SolidBrush(transparent);
-            GraphicsPath contourPath = GetPath(contourXs);
-            gMask.FillPath(insideBrush, contourPath);
-#endif
+            EliminateInsideRegions(contourXs, 0, 1);
 
             // Fill outside of objects, using the borderXs.
             FillOutside(gMask, black, borderXs);
@@ -405,22 +452,59 @@ namespace SWA.Ariadne.Gui.Mazes
             // Coordinates of the bounding box.
             int bbxMin = int.MaxValue, bbxMax = int.MinValue, bbyMin = bbxMin, bbyMax = bbxMax;
 
-            for (int x = 0; x < image.Width; x++)
+            for (int y = 0; y < image.Height; y++)
             {
-                for (int y = 0; y < image.Height; y++)
+                if (borderXs[y].Count < 4) // not inside the border of any object
                 {
+                    continue;
+                }
+
+                // Only process regions on the scan line that are
+                //  * inside the borderXs and
+                //  * outside the contourXs.
+                int b = 2, xb = borderXs[y][b]; // right end of the first border region
+                int c = 1, xc = contourXs[y][c]; // left end of the first contour region
+
+                for (int x = borderXs[y][1]; x < image.Width; x++)
+                {
+                    if (x >= xc) // At the left end of a contour region.
+                    {
+                        // Skip to the right end of the contour region.
+                        // Note: This is still inside the current border region.
+                        x = contourXs[y][++c];
+                        xc = contourXs[y][++c];
+                        continue;
+                    }
+
+                    if (x > xb) // Beyond the right end of a border region.
+                    {
+                        if (b + 2 >= borderXs[y].Count) // This was the last border region.
+                        {
+                            break;
+                        }
+
+                        // Skip before the left end of the following inside border region.
+                        // Note: This is still outside of the following contour region.
+                        x = borderXs[y][++b] - 1;
+                        xb = borderXs[y][++b];
+                        continue;
+                    }
+
                     double dist = Math.Sqrt(dist2ToImage[x, y]);
                     Color maskColor;
 
                     if (dist > contourDist + blurDist)
                     {
+#if false
                         maskColor = black;
-#if true
-                        continue; // TODO: remove this line
+#else
+                        // This pixel will also be filled with black as part of the area outside the influence border.
+                        continue;
 #endif
                     }
                     else
                     {
+                        // TODO: Calculate bbox directly ffom borderXs.
                         bbxMin = Math.Min(bbxMin, x);
                         bbxMax = Math.Max(bbxMax, x);
                         bbyMin = Math.Min(bbyMin, y);
@@ -428,7 +512,12 @@ namespace SWA.Ariadne.Gui.Mazes
 
                         if (dist <= contourDist)
                         {
+#if false
                             maskColor = transparent;
+#else
+                            // The mask's default color is already transparent.
+                            continue;
+#endif
                         }
                         else
                         {
@@ -460,9 +549,10 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <param name="backgroundColor"></param>
         /// <param name="fuzziness"></param>
         /// <param name="dist2ToImage"></param>
-        /// <param name="controurXs"></param>
+        /// <param name="objectXs"></param>
+        /// <param name="contourXs"></param>
         /// <param name="borderXs"></param>
-        private static bool ScanObject(Bitmap image, int x0, int y0, Color backgroundColor, float fuzziness, int[,] dist2ToImage, List<int>[] contourXs, List<int>[] borderXs)
+        private static bool ScanObject(Bitmap image, int x0, int y0, Color backgroundColor, float fuzziness, int[,] dist2ToImage, List<int>[] objectXs, List<int>[] contourXs, List<int>[] borderXs)
         {
             #region Choose an initial focus point with a left and right neighbor.
 
@@ -492,7 +582,7 @@ namespace SWA.Ariadne.Gui.Mazes
 
             do
             {
-                #region Register the contour point in the ordered list of X coordinates.
+                #region Register the object point in the ordered list of X coordinates.
 
                 switch (nbR * 8 + nbL)
                 {
@@ -522,7 +612,7 @@ namespace SWA.Ariadne.Gui.Mazes
                     case (NbE * 8 + NbS):
                     case (NbE * 8 + NbSE):
                     case (NbE * 8 + NbE):
-                        InsertContourPoint(contourXs[y], x);
+                        InsertObjectPoint(objectXs[y], x);
                         break;
 
                     case (NbS * 8 + NbNE):      //
@@ -533,7 +623,7 @@ namespace SWA.Ariadne.Gui.Mazes
                     case (NbN * 8 + NbS):
                     case (NbN * 8 + NbSE):
                     case (NbN * 8 + NbE):
-                        InsertContourPoint(contourXs[y], x);
+                        InsertObjectPoint(objectXs[y], x);
                         break;
 
                     case (NbNW * 8 + NbSW):     //
@@ -544,7 +634,7 @@ namespace SWA.Ariadne.Gui.Mazes
                     case (NbSE * 8 + NbN):
                     case (NbSE * 8 + NbNW):
                     case (NbSE * 8 + NbW):
-                        InsertContourPoint(contourXs[y], x);
+                        InsertObjectPoint(objectXs[y], x);
                         break;
 
                     case (NbSW * 8 + NbNE):     //
@@ -555,7 +645,7 @@ namespace SWA.Ariadne.Gui.Mazes
                     case (NbNE * 8 + NbS):
                     case (NbNE * 8 + NbSE):
                     case (NbNE * 8 + NbE):
-                        InsertContourPoint(contourXs[y], x);
+                        InsertObjectPoint(objectXs[y], x);
                         break;
 
                     case (NbNW * 8 + NbNE):     //
@@ -564,22 +654,22 @@ namespace SWA.Ariadne.Gui.Mazes
                     case (NbSE * 8 + NbSW):     //
                     case (NbSE * 8 + NbS):
                     case (NbSE * 8 + NbSE):
-                        InsertContourPoint(contourXs[y], x);
-                        InsertContourPoint(contourXs[y], x);
+                        InsertObjectPoint(objectXs[y], x);
+                        InsertObjectPoint(objectXs[y], x);
                         break;
 
                     case (NbSW * 8 + NbSW):     //    o
                     case (NbNE * 8 + NbNE):     //  R
-                        InsertContourPoint(contourXs[y], x);
-                        InsertContourPoint(contourXs[y], x);
+                        InsertObjectPoint(objectXs[y], x);
+                        InsertObjectPoint(objectXs[y], x);
                         break;
 
                     case (NbS * 8 + NbSW):      //
                     case (NbS * 8 + NbS):       //    o
                     case (NbN * 8 + NbNE):      //  L R
                     case (NbN * 8 + NbN):       //
-                        InsertContourPoint(contourXs[y], x);
-                        InsertContourPoint(contourXs[y], x);
+                        InsertObjectPoint(objectXs[y], x);
+                        InsertObjectPoint(objectXs[y], x);
                         break;
 
                     case (NbW * 8 + NbSW):      //
@@ -624,7 +714,17 @@ namespace SWA.Ariadne.Gui.Mazes
                     InsertBorderPoints(borderXs[y + rp.ry], x - rp.rx, x + rp.rx);
                 }
 
-                // Advance the focus to the next contour pixel.
+                // Enter the focus point's contour points into the respective contour scan lines.
+                foreach (RelativePoint rp in leftContourLimits[nbL, nbR])
+                {
+                    InsertBorderPoints(contourXs[y + rp.ry], x + rp.rx, x - rp.rx);
+                }
+                foreach (RelativePoint rp in rightContourLimits[nbL, nbR])
+                {
+                    InsertBorderPoints(contourXs[y + rp.ry], x - rp.rx, x + rp.rx);
+                }
+
+                // Advance the focus to the next object pixel.
                 xR = x; yR = y; nbR = (nbL + 4) % 8;
                 x = xL; y = yL;
                 LeftNeighbor(image, backgroundColor, fuzziness, x, y, nbR, out nbL, out xL, out yL);
@@ -651,20 +751,26 @@ namespace SWA.Ariadne.Gui.Mazes
             }
         }
 
-        private static void InitializeScanLines(int width, int height, out List<int>[] contourXs, out List<int>[] borderXs)
+        private static void InitializeScanLines(int width, int height, out List<int>[] objectXs, out List<int>[] contourXs, out List<int>[] borderXs)
         {
+            objectXs = new List<int>[height];
             contourXs = new List<int>[height];
             borderXs = new List<int>[height];
 
-            for (int i = 0; i < contourXs.Length; i++)
+            for (int i = 0; i < objectXs.Length; i++)
             {
                 // Create the lists.
+                objectXs[i] = new List<int>(16);
                 contourXs[i] = new List<int>(16);
                 borderXs[i] = new List<int>(16);
 
                 // Add termination points that are well beyond the regular scan line.
 
-                // One terminator for the contour.
+                // One terminator for the object.
+                objectXs[i].Add(width + 1);
+
+                // Two terminators for the contour.
+                contourXs[i].Add(-2);
                 contourXs[i].Add(width + 1);
 
                 // Two terminators for the border.
@@ -676,20 +782,20 @@ namespace SWA.Ariadne.Gui.Mazes
         #endregion
 
 
-        #region Methods for managing the contour points.
+        #region Methods for managing the object points.
 
-        private static void InsertContourPoint(List<int> contourX, int x)
+        private static void InsertObjectPoint(List<int> objectX, int x)
         {
-            // Position where the contour point will be entered into contourXs[y].
+            // Position where the contour point will be entered into objectXs[y].
             int p;
 
-            // Find the position p with x < contourX[p].
+            // Find the position p with x < objectX[p].
             // Note: As there is a terminator entry image.Width, we will not leave the valid index range.
             for (p = 0; ; p++)
             {
-                if (x < contourX[p])
+                if (x < objectX[p])
                 {
-                    contourX.Insert(p, x);
+                    objectX.Insert(p, x);
                     break;
                 }
             }
@@ -697,7 +803,7 @@ namespace SWA.Ariadne.Gui.Mazes
 
         #endregion
 
-        #region Methods for managing the border points.
+        #region Methods for managing the border and contour points.
 
         /// <summary>
         /// Inserts the given points into the given border scan line.
@@ -822,7 +928,7 @@ namespace SWA.Ariadne.Gui.Mazes
                 {
                     int xp = borderXs[y][p] + 1, xq = borderXs[y][q] - 1;
 
-                    // Advance the previous line's scan area until it lies at or before this line's area.
+                    // Advance the previous line's scan area until it lies at or ahead of this line's area.
                     // Note: The last (outside) area on the previous line extends to the right image border.
                     while (xp > xj)
                     {
@@ -864,17 +970,23 @@ namespace SWA.Ariadne.Gui.Mazes
 
                         if (xi1 <= xq)
                         {
-                            // Unite the two areas' groups.
+                            // Get the other area's group ID.
                             int id1 = pa1.Y;
+
+                            // Use the effective group IDs.
+                            while (unitedGroupIds[id1] < id1) { id1 = unitedGroupIds[id1]; }
+                            while (unitedGroupIds[groupId] < groupId) { groupId = unitedGroupIds[groupId]; }
+
+                            // Unite the two areas' groups.
                             if (groupId < id1)
                             {
-                                unitedGroupIds[id1] = groupId;
                                 SWA.Utilities.Log.WriteLine(string.Format("uniting group {0} with {1} on line {2}", id1, groupId, y));
+                                unitedGroupIds[id1] = groupId;
                             }
                             else if (id1 < groupId)
                             {
-                                unitedGroupIds[groupId] = groupId = id1;
                                 SWA.Utilities.Log.WriteLine(string.Format("uniting group {1} with {0} on line {2}", id1, groupId, y));
+                                unitedGroupIds[groupId] = groupId = id1;
                             }
                             else
                             {
@@ -923,6 +1035,17 @@ namespace SWA.Ariadne.Gui.Mazes
                 foreach (Point slr in scanLineReferenceGroups[g])
                 {
                     int y = slr.Y, p = slr.X, q = p + 1;
+
+#if true // TODO: false
+                    if (p % 2 != 0)
+                    {
+                        throw new Exception(string.Format("invalid scan line index: p = {0} in line {1} must not be odd", p, y));
+                    }
+                    if (q >= borderXs[y].Count - 1)
+                    {
+                        throw new Exception(string.Format("invalid scan line index: q = {0} in line {1} is at/beyond the right end {2}", q, y, borderXs[y].Count));
+                    }
+#endif
 
                     // Mark the two RL points for deletion.
                     borderXs[y][p] = -1;
@@ -1036,8 +1159,8 @@ namespace SWA.Ariadne.Gui.Mazes
 
         private static void FillOutside_Simple(Graphics g, Color color, List<int>[] borderXs)
         {
-            Pen pen = new Pen(new SolidBrush(color));
-            pen.StartCap = pen.EndCap = LineCap.Flat;
+            Pen pen = new Pen(color);
+            pen.StartCap = pen.EndCap = LineCap.Square;
             pen.Width = 1;
 
             for (int y = 0; y < borderXs.Length; y++)
