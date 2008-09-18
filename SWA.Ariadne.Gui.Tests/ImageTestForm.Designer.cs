@@ -31,6 +31,7 @@ namespace SWA.Ariadne.Gui.Tests
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.newImageButton = new System.Windows.Forms.Button();
             this.imageButton = new System.Windows.Forms.Button();
+            this.imagePathTextBox = new System.Windows.Forms.TextBox();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -64,24 +65,39 @@ namespace SWA.Ariadne.Gui.Tests
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.imageButton.Location = new System.Drawing.Point(13, 13);
             this.imageButton.Name = "imageButton";
-            this.imageButton.Size = new System.Drawing.Size(524, 522);
+            this.imageButton.Size = new System.Drawing.Size(524, 524);
             this.imageButton.TabIndex = 8;
             this.imageButton.Text = "(image)";
             this.imageButton.UseVisualStyleBackColor = true;
+            // 
+            // imagePathTextBox
+            // 
+            this.imagePathTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.imagePathTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.imagePathTextBox.Location = new System.Drawing.Point(13, 543);
+            this.imagePathTextBox.Name = "imagePathTextBox";
+            this.imagePathTextBox.ReadOnly = true;
+            this.imagePathTextBox.Size = new System.Drawing.Size(667, 20);
+            this.imagePathTextBox.TabIndex = 9;
+            this.imagePathTextBox.TabStop = false;
             // 
             // ImageTestForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(692, 547);
+            this.ClientSize = new System.Drawing.Size(692, 573);
+            this.Controls.Add(this.imagePathTextBox);
             this.Controls.Add(this.imageButton);
             this.Controls.Add(this.groupBox2);
             this.Name = "ImageTestForm";
             this.Text = "ImageTestForm";
             this.Controls.SetChildIndex(this.groupBox2, 0);
             this.Controls.SetChildIndex(this.imageButton, 0);
+            this.Controls.SetChildIndex(this.imagePathTextBox, 0);
             this.groupBox2.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -90,5 +106,6 @@ namespace SWA.Ariadne.Gui.Tests
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button newImageButton;
         protected System.Windows.Forms.Button imageButton;
+        private System.Windows.Forms.TextBox imagePathTextBox;
     }
 }
