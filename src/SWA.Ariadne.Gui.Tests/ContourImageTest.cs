@@ -6,6 +6,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using SWA.Ariadne.Gui.Mazes;
 
 namespace SWA.Ariadne.Gui.Tests
 {
@@ -146,6 +147,130 @@ namespace SWA.Ariadne.Gui.Tests
             TestNoInfluence(testObject, nbL, nbR, dxW, radius * dyN);   // N + 1px W
             TestNoInfluence(testObject, nbL, nbR, dxE, radius * dyN);   // N + 1px E
         }
+
+#if false
+        /// <summary>
+        ///A test for PrepareInfluenceRegions (int)
+        ///</summary>
+        [DeploymentItem("SWA.Ariadne.Gui.Mazes.dll")]
+        [TestMethod()]
+        public void CI_PrepareInfluenceRegionsTest_03_BorderLimits()
+        {
+            string testObject = "borderLimits";
+            int radius = SWA_Ariadne_Gui_Mazes_ContourImageAccessor.ContourDistance;
+            int influenceRange = radius + 1;
+
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.PrepareInfluenceRegions(influenceRange);
+
+            // Verify that rx is always >= 0.
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    List<ContourImage.RelativePoint> list = SWA_Ariadne_Gui_Mazes_ContourImageAccessor.borderLimits[i, j];
+                    foreach (ContourImage.RelativePoint pt in list)
+                    {
+                        Assert.IsTrue(pt.rx >= 0, testObject + " rx must be positive");
+                    }
+                }
+            }
+        }
+#endif
+
+#if false
+        /// <summary>
+        ///A test for PrepareInfluenceRegions (int)
+        ///</summary>
+        [DeploymentItem("SWA.Ariadne.Gui.Mazes.dll")]
+        [TestMethod()]
+        public void CI_PrepareInfluenceRegionsTest_04_ContourLimits()
+        {
+            string testObject = "contourLimits";
+            int radius = SWA_Ariadne_Gui_Mazes_ContourImageAccessor.ContourDistance;
+            int influenceRange = radius + 1;
+
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.PrepareInfluenceRegions(influenceRange);
+
+            // Verify that rx is always >= 0.
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    List<ContourImage.RelativePoint> list = SWA_Ariadne_Gui_Mazes_ContourImageAccessor.contourLimits[i, j];
+                    foreach (ContourImage.RelativePoint pt in list)
+                    {
+                        Assert.IsTrue(pt.rx >= 0, testObject + " rx must be positive");
+                    }
+                }
+            }
+        }
+#endif
+
+#if false
+        /// <summary>
+        ///A test for PrepareInfluenceRegions (int)
+        ///</summary>
+        [DeploymentItem("SWA.Ariadne.Gui.Mazes.dll")]
+        [TestMethod()]
+        public void CI_PrepareInfluenceRegionsTest_05_BorderLimits()
+        {
+            string testObject = "borderLimits";
+            int radius = SWA_Ariadne_Gui_Mazes_ContourImageAccessor.ContourDistance;
+            int influenceRange = radius + 1;
+
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.PrepareInfluenceRegions(influenceRange);
+
+            // Verify that an application of the borderLimits gives the same scan lines as applying leftBorderLimits and rightBorderLimits.
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    #region Prepare required data structures.
+
+                    int width = 2 * influenceRange + 1, height = 2 * influenceRange + 1;
+                    int x = (width + 1) / 2, y = (height + 1) / 2;
+                    List<int>[] objectXs, contourXs, borderXs;
+                    List<int>[] objectXsLR, contourXsLR, borderXsLR;
+                    SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InitializeScanLines(width, height, out objectXs, out contourXs, out borderXs);
+                    SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InitializeScanLines(width, height, out objectXsLR, out contourXsLR, out borderXsLR);
+
+                    #endregion
+
+                    // Apply the (single) list to borderXs.
+                    List<ContourImage.RelativePoint> list = SWA_Ariadne_Gui_Mazes_ContourImageAccessor.borderLimits[i, j];
+                    foreach (ContourImage.RelativePoint rp in list)
+                    {
+                        SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderXs[y + rp.ry], x - rp.rx, x + rp.rx);
+                    }
+
+                    // Apply the left and right lists to borderXsLR.
+                    list = SWA_Ariadne_Gui_Mazes_ContourImageAccessor.leftBorderLimits[i, j];
+                    foreach (ContourImage.RelativePoint rp in list)
+                    {
+                        SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderXsLR[y + rp.ry], x + rp.rx, x - rp.rx);
+                    }
+                    list = SWA_Ariadne_Gui_Mazes_ContourImageAccessor.rightBorderLimits[i, j];
+                    foreach (ContourImage.RelativePoint rp in list)
+                    {
+                        SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderXsLR[y + rp.ry], x - rp.rx, x + rp.rx);
+                    }
+
+                    // Compare the resulting scan lines.
+                    for (y = 0; y < height; y++)
+                    {
+                        string testLine = testObject + string.Format("[{0},{1}][{2}]", i, j, y);
+                        List<int> expected = borderXsLR[y], actual = borderXs[y];
+                        Assert.AreEqual(expected.Count, actual.Count, testLine + " different count");
+
+                        for (int p = 0; p < expected.Count; p++)
+                        {
+                            Assert.AreEqual(expected[p], actual[p], testLine + " different entry");
+                        }
+                    }
+                }
+            }
+        }
+#endif
 
         #endregion
 
@@ -828,7 +953,7 @@ namespace SWA.Ariadne.Gui.Tests
 
             y += sy;
             SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderXs[y], 1, 2);
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderXs[y], 5, 4);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderXs[y], 4, 5);
             SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderXs[y], 8, 9);
 
             y += sy;
@@ -859,8 +984,10 @@ namespace SWA.Ariadne.Gui.Tests
             Assert.IsTrue(d2 < int.MaxValue, testObject + " should be influenced");
             Assert.AreEqual(x * x + y * y, d2, testObject + " is not correct");
 
+#if false
             int btActual = SWA_Ariadne_Gui_Mazes_ContourImageAccessor.BorderLimitType(nbL, nbR, x, y);
             Assert.AreEqual(btExpected, btActual, testObject + " has the wrong border type");
+#endif
         }
 
         private static void TestNoInfluence(string testObject, int nbL, int nbR, int x, int y)
@@ -931,10 +1058,10 @@ namespace SWA.Ariadne.Gui.Tests
             #endregion
 
             // Test if the contour map is well formed.
-            TestBorderScanlines(testObject, contourXs);
+            TestBorderScanlines(testObject + " - contourXs", contourXs);
 
             // Test if the border map is well formed.
-            TestBorderScanlines(testObject, borderXs);
+            TestBorderScanlines(testObject + " - borderXs", borderXs);
         }
 
         private static int ImageArea(Bitmap image, Color backgroundColor, float fuzziness)
@@ -991,7 +1118,7 @@ namespace SWA.Ariadne.Gui.Tests
 
             for (int i = 0; i < height; i++)
             {
-                string testLine = testObject + string.Format(" - borderXs[{0}]", i);
+                string testLine = testObject + string.Format("[{0}]", i);
 
                 int nEntries = borderXs[i].Count;
                 int m = nEntries % 2;
@@ -1002,7 +1129,9 @@ namespace SWA.Ariadne.Gui.Tests
                     int q = p + 1;
                     int xp = borderXs[i][p], xq = borderXs[i][q];
                     Assert.IsTrue(xp <= xq, testLine + string.Format(" must be sorted: [{0}] = {1}, [{2}] = {3}", p, xp, q, xq));
+#if false
                     Assert.IsTrue(xp <  xq, testLine + string.Format(" must be unique: [{0}] = {1}, [{2}] = {3}", p, xp, q, xq));
+#endif
                 }
             }
         }

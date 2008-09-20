@@ -20,6 +20,7 @@ namespace SWA.Ariadne.Gui.Mazes
             /// <summary>
             /// Distance from the contour pixel, squared.
             /// </summary>
+            /// TODO: Work with the resulting alpha value a = 255 * sqrt(d2).
             public readonly int d2;
 
             public RelativePoint(int rx, int ry, int d2)
@@ -92,22 +93,19 @@ namespace SWA.Ariadne.Gui.Mazes
 
         /// <summary>
         /// For each combination of a next left and next right neighbor of a pixel,
-        /// the borderLimit is the set of points on the left and right (outside) edge of the influenceRegion.
+        /// the borderLimit is the set of points on the left and/or right (outside) edge of the influenceRegion.
         /// </summary>
-        /// TODO: Combine into one set of borderLimits.
-        private static List<RelativePoint>[,]
-            leftBorderLimits = new List<RelativePoint>[8, 8],
-            rightBorderLimits = new List<RelativePoint>[8, 8];
+        /// Note: As these points are applied symmetrically on the left and right, only non-negative values are stored.
+        private static List<RelativePoint>[,] borderLimits = new List<RelativePoint>[8, 8];
 
         /// <summary>
         /// For each combination of a next left and next right neighbor of a pixel,
-        /// the contourLimit is the set of points on the left and right (inside) edge of the influenceRegion.
+        /// the contourLimit is the set of points on the left and/or right (inside) edge of the influenceRegion.
         /// </summary>
-        /// TODO: Combine into one set of borderLimits.
-        private static List<RelativePoint>[,]
-            leftContourLimits = new List<RelativePoint>[8, 8],
-            rightContourLimits = new List<RelativePoint>[8, 8];
+        /// Note: As these points are applied symmetrically on the left and right, only non-negative values are stored.
+        private static List<RelativePoint>[,] contourLimits = new List<RelativePoint>[8, 8];
 
+#if false
         /// <summary>
         /// Returns -1/+1 if the point at x, y is on the left/right border of the influence region
         /// defined by the given two neighbor directions.
@@ -140,6 +138,7 @@ namespace SWA.Ariadne.Gui.Mazes
 
             return result;
         }
+#endif
 
         /// <summary>
         /// Set up the influenceRegions and associated data for a given influence range.
@@ -185,13 +184,11 @@ namespace SWA.Ariadne.Gui.Mazes
                         dyI -= dyL;
                     }
 
-                    #region Calculate the influence region for the current left and right neighbor.
+                    #region Calculate the influence region, contour and border limits for the current left and right neighbor.
 
                     influenceRegions[nbL, nbR] = new List<RelativePoint>();
-                    leftBorderLimits[nbL, nbR] = new List<RelativePoint>();
-                    rightBorderLimits[nbL, nbR] = new List<RelativePoint>();
-                    leftContourLimits[nbL, nbR] = new List<RelativePoint>();
-                    rightContourLimits[nbL, nbR] = new List<RelativePoint>();
+                    borderLimits[nbL, nbR] = new List<RelativePoint>();
+                    contourLimits[nbL, nbR] = new List<RelativePoint>();
 
                     // For each scan line: Leftmost and rightmost point in the influence region.
                     // Use index [dy + influenceRange].
@@ -199,27 +196,20 @@ namespace SWA.Ariadne.Gui.Mazes
                     int[] leftLimitsB = new int[2 * influenceRange], rightLimitsB = new int[2 * influenceRange];
                     int[] leftLimitsC = new int[2 * influenceRange], rightLimitsC = new int[2 * influenceRange];
 
-#if false
-                    for (int dx = -(influenceRange - 1); dx <= +(influenceRange - 1); dx++)
-                    {
-#else
                     // We want to traverse dx from the center outwards,
                     // facilitating the registry of left and right limits.
                     for (int i = 1; i < 2 * influenceRange; i++)
                     {
                         // 0, 1, -1, 2, -2, ..., r-1, -(r-1)
                         int dx = (i / 2) * (i % 2 == 0 ? +1 : -1);
-#endif
+                        int dxAbs = Math.Abs(dx) + influenceRange; // TODO: rename
 
-#if false
-                        for (int dy = -(influenceRange - 1); dy <= +(influenceRange - 1); dy++)
-                        {
-#else
                         for (int j = 1; j < 2 * influenceRange; j++)
                         {
                             // 0, 1, -1, 2, -2, ..., r-1, -(r-1)
                             int dy = (j / 2) * (j % 2 == 0 ? +1 : -1);
-#endif
+                            int dyAbs = dy + influenceRange; // TODO: rename
+
                             // Get the distance to the three points.
                             int d2 = dx * dx + dy * dy;
                             int d2L = (dx - dxL) * (dx - dxL) + (dy - dyL) * (dy - dyL);
@@ -229,7 +219,7 @@ namespace SWA.Ariadne.Gui.Mazes
                             if (d2 <= range2Max)
                             {
                                 // This value will be entered into the left/right limits if the current point is in the influence region.
-                                int borderLimitsEntry = dx + influenceRange;
+                                int borderLimitsEntry = dxAbs;
                                 int contourLimitsEntry = -1;
 
                                 // Check if the center pixel is closest to the point.
@@ -245,7 +235,7 @@ namespace SWA.Ariadne.Gui.Mazes
                                     else
                                     {
                                         // The point is fully influenced.
-                                        contourLimitsEntry = dx + influenceRange;
+                                        contourLimitsEntry = dxAbs;
                                     }
                                 }
                                 else
@@ -282,32 +272,18 @@ namespace SWA.Ariadne.Gui.Mazes
                     {
                         int dy = i - influenceRange;
 
-                        if (leftLimitsB[i] > 0)
+                        if (leftLimitsB[i] > 0 || rightLimitsB[i] > 0)
                         {
-                            int dx = leftLimitsB[i] - influenceRange;
+                            int dx = Math.Max(leftLimitsB[i], rightLimitsB[i]) - influenceRange;
                             int d2 = dx * dx + dy * dy;
-                            leftBorderLimits[nbL, nbR].Add(new RelativePoint(dx, dy, d2));
+                            borderLimits[nbL, nbR].Add(new RelativePoint(dx, dy, d2));
                         }
 
-                        if (rightLimitsB[i] > 0)
+                        if (leftLimitsC[i] > 0 || rightLimitsC[i] > 0)
                         {
-                            int dx = rightLimitsB[i] - influenceRange;
+                            int dx = Math.Max(leftLimitsC[i], rightLimitsC[i]) - influenceRange;
                             int d2 = dx * dx + dy * dy;
-                            rightBorderLimits[nbL, nbR].Add(new RelativePoint(dx, dy, d2));
-                        }
-
-                        if (leftLimitsC[i] > 0)
-                        {
-                            int dx = leftLimitsC[i] - influenceRange;
-                            int d2 = dx * dx + dy * dy;
-                            leftContourLimits[nbL, nbR].Add(new RelativePoint(dx, dy, d2));
-                        }
-
-                        if (rightLimitsC[i] > 0)
-                        {
-                            int dx = rightLimitsC[i] - influenceRange;
-                            int d2 = dx * dx + dy * dy;
-                            rightContourLimits[nbL, nbR].Add(new RelativePoint(dx, dy, d2));
+                            contourLimits[nbL, nbR].Add(new RelativePoint(dx, dy, d2));
                         }
                     }
 
@@ -325,16 +301,12 @@ namespace SWA.Ariadne.Gui.Mazes
 
             // Add a single border pixel right above or below the horizontal directions.
             int dyS = influenceRange - 1, dyN = -dyS;
-            leftBorderLimits[NbW, NbE].Add(new RelativePoint(0, dyN, dyN * dyN));
-            leftBorderLimits[NbE, NbW].Add(new RelativePoint(0, dyS, dyS * dyS));
-            rightBorderLimits[NbW, NbE].Add(new RelativePoint(0, dyN, dyN * dyN));
-            rightBorderLimits[NbE, NbW].Add(new RelativePoint(0, dyS, dyS * dyS));
+            borderLimits[NbW, NbE].Add(new RelativePoint(0, dyN, dyN * dyN));
+            borderLimits[NbE, NbW].Add(new RelativePoint(0, dyS, dyS * dyS));
 
             dyS = ContourDistance - 1; dyN = -dyS;
-            leftContourLimits[NbW, NbE].Add(new RelativePoint(0, dyN, dyN * dyN));
-            leftContourLimits[NbE, NbW].Add(new RelativePoint(0, dyS, dyS * dyS));
-            rightContourLimits[NbW, NbE].Add(new RelativePoint(0, dyN, dyN * dyN));
-            rightContourLimits[NbE, NbW].Add(new RelativePoint(0, dyS, dyS * dyS));
+            contourLimits[NbW, NbE].Add(new RelativePoint(0, dyN, dyN * dyN));
+            contourLimits[NbE, NbW].Add(new RelativePoint(0, dyS, dyS * dyS));
 
             #endregion
         }
@@ -705,21 +677,13 @@ namespace SWA.Ariadne.Gui.Mazes
                 }
 
                 // Enter the focus point's border points into the respective border scan lines.
-                foreach (RelativePoint rp in leftBorderLimits[nbL, nbR])
-                {
-                    InsertBorderPoints(borderXs[y + rp.ry], x + rp.rx, x - rp.rx);
-                }
-                foreach (RelativePoint rp in rightBorderLimits[nbL, nbR])
+                foreach (RelativePoint rp in borderLimits[nbL, nbR])
                 {
                     InsertBorderPoints(borderXs[y + rp.ry], x - rp.rx, x + rp.rx);
                 }
 
                 // Enter the focus point's contour points into the respective contour scan lines.
-                foreach (RelativePoint rp in leftContourLimits[nbL, nbR])
-                {
-                    InsertBorderPoints(contourXs[y + rp.ry], x + rp.rx, x - rp.rx);
-                }
-                foreach (RelativePoint rp in rightContourLimits[nbL, nbR])
+                foreach (RelativePoint rp in contourLimits[nbL, nbR])
                 {
                     InsertBorderPoints(contourXs[y + rp.ry], x - rp.rx, x + rp.rx);
                 }
@@ -813,6 +777,13 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <param name="xR">right border point</param>
         private static void InsertBorderPoints(List<int> borderX, int xL, int xR)
         {
+#if true // TODO: false
+            if (xL > xR)
+            {
+                throw new ArgumentException("must be ordered", "xL <= xR");
+            }
+#endif
+
             // Position where the border points fit into borderX.
             int q = 2;      // A right border point position.
 
