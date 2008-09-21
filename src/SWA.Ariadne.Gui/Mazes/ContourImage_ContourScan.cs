@@ -416,6 +416,20 @@ namespace SWA.Ariadne.Gui.Mazes
             EliminateInsideRegions(borderXs, 0, 1);
             EliminateInsideRegions(contourXs, 0, 1);
 
+            // Contour derived from object.
+            DrawContour(result, contourXs, Color.Red);
+
+            // Derive another set of contourXs scan lines from the borderXs.
+            List<int>[] insetBorderXs;
+            ShrinkRegion(borderXs, out insetBorderXs, blurDist + contourDist / 2);
+
+            // Contour derived from border.
+            DrawContour(result, insetBorderXs, Color.Blue);
+
+            // The contourXs contour keeps the exact contour around the object untouched.
+            // The insetBorderXs contour avoids entering into areas enclosed by the border (and a blurred contour) only.
+            UniteScanLines(insetBorderXs, contourXs);
+
             // Fill outside of objects, using the borderXs.
             FillOutside(gMask, black, borderXs);
 
@@ -506,7 +520,24 @@ namespace SWA.Ariadne.Gui.Mazes
 
             #endregion
 
+            // Border.
+            DrawContour(result, borderXs, Color.Cyan);
+
             return result;
+        }
+
+        private static void DrawContour(Bitmap mask, List<int>[] scanLines, Color color)
+        {
+#if false // TODO: false; used for debugging only
+            for (int y = 0; y < scanLines.Length; y++)
+            {
+                for (int p = 1; p < scanLines[y].Count - 1; p++)
+                {
+                    int x = scanLines[y][p];
+                    mask.SetPixel(x, y, color);
+                }
+            }
+#endif
         }
 
         /// <summary>
@@ -745,7 +776,6 @@ namespace SWA.Ariadne.Gui.Mazes
 
         #endregion
 
-
         #region Methods for managing the object points.
 
         private static void InsertObjectPoint(List<int> objectX, int x)
@@ -777,7 +807,7 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <param name="xR">right border point</param>
         private static void InsertBorderPoints(List<int> borderX, int xL, int xR)
         {
-#if true // TODO: false
+#if false // TODO: false
             if (xL > xR)
             {
                 throw new ArgumentException("must be ordered", "xL <= xR");
@@ -1007,7 +1037,7 @@ namespace SWA.Ariadne.Gui.Mazes
                 {
                     int y = slr.Y, p = slr.X, q = p + 1;
 
-#if true // TODO: false
+#if false // TODO: false
                     if (p % 2 != 0)
                     {
                         throw new Exception(string.Format("invalid scan line index: p = {0} in line {1} must not be odd", p, y));
@@ -1051,6 +1081,153 @@ namespace SWA.Ariadne.Gui.Mazes
             SWA.Utilities.Log.WriteLine("} EliminateInsideRegions <<<");
 
             return result;
+        }
+
+        private static void ShrinkRegion(List<int>[] borderXs, out List<int>[] contourXs, int margin)
+        {
+            contourXs = new List<int>[borderXs.Length];
+            int xMin = borderXs[0][0], xMax = borderXs[0][borderXs[0].Count - 1];
+
+            // Start with the border scan lines, indented left and right by the margin distance.
+            for (int i = 0; i < contourXs.Length; i++)
+            {
+                contourXs[i] = new List<int>(borderXs[i].Count);
+                contourXs[i].Add(xMin);
+                contourXs[i].Add(xMax);
+
+                for (int p = 1, q = p + 1; q < borderXs[i].Count; p += 2, q += 2)
+                {
+                    int xp = borderXs[i][p] + margin, xq = borderXs[i][q] - margin;
+                    if (xp <= xq)
+                    {
+                        InsertBorderPoints(contourXs[i], borderXs[i][p] + margin, borderXs[i][q] - margin);
+                    }
+                }
+            }
+
+            // Overlay the border scan lines, translated by all points on a circle of radius margin.
+            int d2Max = (margin + 1) * (margin + 1) - 1;
+            for (int dx = 0, dy = margin; dx <= dy; dx++)
+            {
+                // Four octants, close to Y axis.
+                IntersectScanLines(borderXs, contourXs, +dx, +dy);
+                IntersectScanLines(borderXs, contourXs, +dx, -dy);
+                IntersectScanLines(borderXs, contourXs, -dx, +dy);
+                IntersectScanLines(borderXs, contourXs, -dx, -dy);
+
+                // Four octants, close to X axis.
+                IntersectScanLines(borderXs, contourXs, +dy, +dx);
+                IntersectScanLines(borderXs, contourXs, +dy, -dx);
+                IntersectScanLines(borderXs, contourXs, -dy, +dx);
+                IntersectScanLines(borderXs, contourXs, -dy, -dx);
+
+                // Advance south if we would leave the circle.
+                if ((dx + 1) * (dx + 1) + dy * dy > d2Max)
+                {
+                    dy -= 1;
+                }
+            }
+        }
+
+        private static void IntersectScanLines(List<int>[] borderXs, List<int>[] contourXs, int dx, int dy)
+        {
+            IntersectScanLines(borderXs, contourXs, dx, dy, 1);
+        }
+
+        private static void UniteScanLines(List<int>[] borderXs, List<int>[] contourXs)
+        {
+            // Uniting the regions on two scan lines is like intersecting the gaps inbetween them.  :-)
+            IntersectScanLines(borderXs, contourXs, 0, 0, 0);
+        }
+
+        private static void IntersectScanLines(List<int>[] borderXs, List<int>[] contourXs, int dx, int dy, int p0)
+        {
+            for (int yc = 0, yb = yc - dy; yc < contourXs.Length; yc++, yb++)
+            {
+                // Skip empty contour scan lines.
+                if (contourXs[yc].Count <= 2)
+                {
+                    continue;
+                }
+
+                if (yb < 0 || yb >= borderXs.Length || borderXs[yb].Count <= 2)
+                {
+                    if (p0 % 2 == 1)
+                    {
+                        // Clear the contour scan line.
+                        contourXs[yc].RemoveRange(1, contourXs[yc].Count - 2);
+                    }
+                    continue;
+                }
+
+                int pb = p0, pc = p0, qb = pb + 1, qc = pc + 1; // left and right margin of first region
+                int bl = borderXs[yb][pb] + dx, br = borderXs[yb][qb] + dx;
+                int cl = contourXs[yc][pc], cr = contourXs[yc][qc];
+
+                while (true)
+                {
+                    if (cr < bl) // c left of b
+                    {
+                        // Remove the current contour region.
+                        contourXs[yc].RemoveRange(pc, 2);
+                        if (qc >= contourXs[yc].Count) // behind last contour region
+                        {
+                            break;
+                        }
+                        cl = contourXs[yc][pc]; cr = contourXs[yc][qc];
+
+                        continue;
+                    }
+                    else if (br < cl) // b left of c
+                    {
+                        // Advance to the next border region.
+                        pb += 2; qb += 2;
+                        if (qb >= borderXs[yb].Count) // behind last border region
+                        {
+                            // Remove the current and all other remaining contour regions.
+                            contourXs[yc].RemoveRange(pc, contourXs[yc].Count - qc);
+                            break;
+                        }
+                        bl = borderXs[yb][pb] + dx; br = borderXs[yb][qb] + dx;
+
+                        continue;
+                    }
+
+                    if (cl < bl)
+                    {
+                        // Adjust the left margin of this contour region.
+                        contourXs[yc][pc] = cl = bl;
+                    }
+
+                    if (br < cr) // c extends to the right of b
+                    {
+                        // Split this contour region.
+                        contourXs[yc].InsertRange(pc + 2, new int[] {
+                            br, // split location, will be corrected in the following iterations
+                            cr, // current right margin
+                        });
+                        contourXs[yc][qc] = cr = br; // split location
+
+                        // Advance to the next border region.
+                        pb += 2; qb += 2;
+                        if (qb >= borderXs[yb].Count) // behind last border region
+                        {
+                            // Remove the remaining contour regions.
+                            contourXs[yc].RemoveRange(pc + 2, contourXs[yc].Count - qc - 2);
+                            break;
+                        }
+                        bl = borderXs[yb][pb] + dx; br = borderXs[yb][qb] + dx;
+                    }
+
+                    // Advance to the next contour region.
+                    pc += 2; qc += 2;
+                    if (qc >= contourXs[yc].Count) // behind last contour region
+                    {
+                        break;
+                    }
+                    cl = contourXs[yc][pc]; cr = contourXs[yc][qc];
+                }
+            }
         }
 
         #endregion
@@ -1139,6 +1316,11 @@ namespace SWA.Ariadne.Gui.Mazes
                 for (int p = 0, q = p + 1; q < borderXs[y].Count; p += 2, q += 2)
                 {
                     int x0 = borderXs[y][p] + 1, x1 = borderXs[y][q] - 1;
+                    if (x0 == x1)
+                    {
+                        // Single dots are not drawn properly. :-(
+                        x1 += 1;
+                    }
                     g.DrawLine(pen, x0, y, x1, y);
                 }
             }
