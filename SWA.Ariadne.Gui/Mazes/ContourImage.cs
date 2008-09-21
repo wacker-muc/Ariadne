@@ -10,7 +10,6 @@ namespace SWA.Ariadne.Gui.Mazes
     /// The contour of the image is extended by 16 pixels.
     /// If the background is not black (or very dark), the contour edge is further extended by a blurred region.
     /// </summary>
-    /// TODO: Extend template so that contour scans cannot leave the range.
     /// TODO: Eliminate tests with iLimit and jLimit.
     /// TODO: Apply bounding box to template in an early stage.
     /// TODO: Collect pixels in lists of identical patterns, then process these lists uniformly.
@@ -72,7 +71,7 @@ namespace SWA.Ariadne.Gui.Mazes
             Bitmap result = Copy(template, backgroundColor);
 
             Rectangle bbox;
-            fuzziness = 0.10F;
+            fuzziness = 0.03F;
             mask = GetMask(result, backgroundColor, fuzziness, out bbox, algorithm);
             ApplyMask(result, mask);
 
