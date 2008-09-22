@@ -802,20 +802,6 @@ internal class SWA_Ariadne_Gui_Mazes_ContourImageAccessor : BaseAccessor {
         return ret;
     }
     
-    internal static int BorderLimitType(int nbL, int nbR, int x, int y) {
-        object[] args = new object[] {
-                nbL,
-                nbR,
-                x,
-                y};
-        int ret = ((int)(m_privateType.InvokeStatic("BorderLimitType", new System.Type[] {
-                    typeof(int),
-                    typeof(int),
-                    typeof(int),
-                    typeof(int)}, args)));
-        return ret;
-    }
-    
     internal static void PrepareInfluenceRegions(int influenceRange) {
         object[] args = new object[] {
                 influenceRange};
@@ -838,7 +824,37 @@ internal class SWA_Ariadne_Gui_Mazes_ContourImageAccessor : BaseAccessor {
         return ret;
     }
     
-    internal static bool ScanObject(global::System.Drawing.Bitmap image, int x0, int y0, global::System.Drawing.Color backgroundColor, float fuzziness, int[,] dist2ToImage, System.Collections.Generic.List<int>[] objectXs, System.Collections.Generic.List<int>[] contourXs, System.Collections.Generic.List<int>[] borderXs) {
+    internal static void PaintGradient(int[,] dist2ToImage, System.Collections.Generic.List<int>[] border, System.Collections.Generic.List<int>[] contour, global::System.Drawing.Bitmap bitmap, int contourDist, int blurDist, global::System.Drawing.Color black) {
+        object[] args = new object[] {
+                dist2ToImage,
+                border,
+                contour,
+                bitmap,
+                contourDist,
+                blurDist,
+                black};
+        m_privateType.InvokeStatic("PaintGradient", new System.Type[] {
+                    typeof(int).MakeArrayType(2),
+                    typeof(System.Collections.Generic.List<int>).MakeArrayType(),
+                    typeof(System.Collections.Generic.List<int>).MakeArrayType(),
+                    typeof(global::System.Drawing.Bitmap),
+                    typeof(int),
+                    typeof(int),
+                    typeof(global::System.Drawing.Color)}, args);
+    }
+    
+    internal static void DrawContour(global::System.Drawing.Bitmap mask, System.Collections.Generic.List<int>[] scanLines, global::System.Drawing.Color color) {
+        object[] args = new object[] {
+                mask,
+                scanLines,
+                color};
+        m_privateType.InvokeStatic("DrawContour", new System.Type[] {
+                    typeof(global::System.Drawing.Bitmap),
+                    typeof(System.Collections.Generic.List<int>).MakeArrayType(),
+                    typeof(global::System.Drawing.Color)}, args);
+    }
+    
+    internal static bool ScanObject(global::System.Drawing.Bitmap image, int x0, int y0, global::System.Drawing.Color backgroundColor, float fuzziness, int[,] dist2ToImage, System.Collections.Generic.List<int>[] inside, System.Collections.Generic.List<int>[] contour, System.Collections.Generic.List<int>[] border) {
         object[] args = new object[] {
                 image,
                 x0,
@@ -846,9 +862,9 @@ internal class SWA_Ariadne_Gui_Mazes_ContourImageAccessor : BaseAccessor {
                 backgroundColor,
                 fuzziness,
                 dist2ToImage,
-                objectXs,
-                contourXs,
-                borderXs};
+                inside,
+                contour,
+                border};
         bool ret = ((bool)(m_privateType.InvokeStatic("ScanObject", new System.Type[] {
                     typeof(global::System.Drawing.Bitmap),
                     typeof(int),
@@ -874,7 +890,7 @@ internal class SWA_Ariadne_Gui_Mazes_ContourImageAccessor : BaseAccessor {
         dist2ToImage = ((int[,])(args[2]));
     }
     
-    internal static void InitializeScanLines(int width, int height, out System.Collections.Generic.List<int>[] objectXs, out System.Collections.Generic.List<int>[] contourXs, out System.Collections.Generic.List<int>[] borderXs) {
+    internal static void InitializeScanLines(int width, int height, out System.Collections.Generic.List<int>[] inside, out System.Collections.Generic.List<int>[] contour, out System.Collections.Generic.List<int>[] border) {
         object[] args = new object[] {
                 width,
                 height,
@@ -887,34 +903,34 @@ internal class SWA_Ariadne_Gui_Mazes_ContourImageAccessor : BaseAccessor {
                     typeof(System.Collections.Generic.List<int>).MakeArrayType().MakeByRefType(),
                     typeof(System.Collections.Generic.List<int>).MakeArrayType().MakeByRefType(),
                     typeof(System.Collections.Generic.List<int>).MakeArrayType().MakeByRefType()}, args);
-        objectXs = ((System.Collections.Generic.List<int>[])(args[2]));
-        contourXs = ((System.Collections.Generic.List<int>[])(args[3]));
-        borderXs = ((System.Collections.Generic.List<int>[])(args[4]));
+        inside = ((System.Collections.Generic.List<int>[])(args[2]));
+        contour = ((System.Collections.Generic.List<int>[])(args[3]));
+        border = ((System.Collections.Generic.List<int>[])(args[4]));
     }
     
-    internal static void InsertObjectPoint(System.Collections.Generic.List<int> objectX, int x) {
+    internal static void InsertObjectPoint(System.Collections.Generic.List<int> scanLine, int x) {
         object[] args = new object[] {
-                objectX,
+                scanLine,
                 x};
         m_privateType.InvokeStatic("InsertObjectPoint", new System.Type[] {
                     typeof(System.Collections.Generic.List<int>),
                     typeof(int)}, args);
     }
     
-    internal static void InsertBorderPoints(System.Collections.Generic.List<int> borderX, int xL, int xR) {
+    internal static void InsertPair(System.Collections.Generic.List<int> scanLine, int xL, int xR) {
         object[] args = new object[] {
-                borderX,
+                scanLine,
                 xL,
                 xR};
-        m_privateType.InvokeStatic("InsertBorderPoints", new System.Type[] {
+        m_privateType.InvokeStatic("InsertPair", new System.Type[] {
                     typeof(System.Collections.Generic.List<int>),
                     typeof(int),
                     typeof(int)}, args);
     }
     
-    internal static int EliminateInsideRegions(System.Collections.Generic.List<int>[] borderXs, int y0, int sy) {
+    internal static int EliminateInsideRegions(System.Collections.Generic.List<int>[] scanLines, int y0, int sy) {
         object[] args = new object[] {
-                borderXs,
+                scanLines,
                 y0,
                 sy};
         int ret = ((int)(m_privateType.InvokeStatic("EliminateInsideRegions", new System.Type[] {
@@ -922,6 +938,53 @@ internal class SWA_Ariadne_Gui_Mazes_ContourImageAccessor : BaseAccessor {
                     typeof(int),
                     typeof(int)}, args)));
         return ret;
+    }
+    
+    internal static System.Collections.Generic.List<int>[] ShrinkRegion(System.Collections.Generic.List<int>[] scanLines, int margin) {
+        object[] args = new object[] {
+                scanLines,
+                margin};
+        System.Collections.Generic.List<int>[] ret = ((System.Collections.Generic.List<int>[])(m_privateType.InvokeStatic("ShrinkRegion", new System.Type[] {
+                    typeof(System.Collections.Generic.List<int>).MakeArrayType(),
+                    typeof(int)}, args)));
+        return ret;
+    }
+    
+    internal static void IntersectScanLines(System.Collections.Generic.List<int>[] source, System.Collections.Generic.List<int>[] target, int dx, int dy) {
+        object[] args = new object[] {
+                source,
+                target,
+                dx,
+                dy};
+        m_privateType.InvokeStatic("IntersectScanLines", new System.Type[] {
+                    typeof(System.Collections.Generic.List<int>).MakeArrayType(),
+                    typeof(System.Collections.Generic.List<int>).MakeArrayType(),
+                    typeof(int),
+                    typeof(int)}, args);
+    }
+    
+    internal static void UniteScanLines(System.Collections.Generic.List<int>[] source, System.Collections.Generic.List<int>[] target) {
+        object[] args = new object[] {
+                source,
+                target};
+        m_privateType.InvokeStatic("UniteScanLines", new System.Type[] {
+                    typeof(System.Collections.Generic.List<int>).MakeArrayType(),
+                    typeof(System.Collections.Generic.List<int>).MakeArrayType()}, args);
+    }
+    
+    internal static void IntersectScanLines(System.Collections.Generic.List<int>[] source, System.Collections.Generic.List<int>[] target, int dx, int dy, int p0) {
+        object[] args = new object[] {
+                source,
+                target,
+                dx,
+                dy,
+                p0};
+        m_privateType.InvokeStatic("IntersectScanLines", new System.Type[] {
+                    typeof(System.Collections.Generic.List<int>).MakeArrayType(),
+                    typeof(System.Collections.Generic.List<int>).MakeArrayType(),
+                    typeof(int),
+                    typeof(int),
+                    typeof(int)}, args);
     }
     
     internal static void LeftNeighbor(global::System.Drawing.Bitmap image, global::System.Drawing.Color backgroundColor, float fuzziness, int x, int y, int nbR, out int nbL, out int xL, out int yL) {
@@ -976,26 +1039,34 @@ internal class SWA_Ariadne_Gui_Mazes_ContourImageAccessor : BaseAccessor {
         yR = ((int)(args[8]));
     }
     
-    internal static void FillOutside(global::System.Drawing.Graphics g, global::System.Drawing.Color color, System.Collections.Generic.List<int>[] borderXs) {
+    internal static void FillOutside(global::System.Drawing.Graphics g, global::System.Drawing.Color color, System.Collections.Generic.List<int>[] scanLines) {
         object[] args = new object[] {
                 g,
                 color,
-                borderXs};
+                scanLines};
         m_privateType.InvokeStatic("FillOutside", new System.Type[] {
                     typeof(global::System.Drawing.Graphics),
                     typeof(global::System.Drawing.Color),
                     typeof(System.Collections.Generic.List<int>).MakeArrayType()}, args);
     }
     
-    internal static void FillOutside_Simple(global::System.Drawing.Graphics g, global::System.Drawing.Color color, System.Collections.Generic.List<int>[] borderXs) {
+    internal static void FillOutside_Simple(global::System.Drawing.Graphics g, global::System.Drawing.Color color, System.Collections.Generic.List<int>[] scanLines) {
         object[] args = new object[] {
                 g,
                 color,
-                borderXs};
+                scanLines};
         m_privateType.InvokeStatic("FillOutside_Simple", new System.Type[] {
                     typeof(global::System.Drawing.Graphics),
                     typeof(global::System.Drawing.Color),
                     typeof(System.Collections.Generic.List<int>).MakeArrayType()}, args);
+    }
+    
+    internal static global::System.Drawing.Rectangle BoundingBox(System.Collections.Generic.List<int>[] scanLines) {
+        object[] args = new object[] {
+                scanLines};
+        global::System.Drawing.Rectangle ret = ((global::System.Drawing.Rectangle)(m_privateType.InvokeStatic("BoundingBox", new System.Type[] {
+                    typeof(System.Collections.Generic.List<int>).MakeArrayType()}, args)));
+        return ret;
     }
     
     internal static global::System.Drawing.Bitmap GetMask_OutlineScanA(global::System.Drawing.Bitmap image, global::System.Drawing.Color backgroundColor, float fuzziness, out global::System.Drawing.Rectangle boundingBox) {

@@ -240,19 +240,19 @@ namespace SWA.Ariadne.Gui.Tests
                     List<ContourImage.RelativePoint> list = SWA_Ariadne_Gui_Mazes_ContourImageAccessor.borderLimits[i, j];
                     foreach (ContourImage.RelativePoint rp in list)
                     {
-                        SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderXs[y + rp.ry], x - rp.rx, x + rp.rx);
+                        SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderXs[y + rp.ry], x - rp.rx, x + rp.rx);
                     }
 
                     // Apply the left and right lists to borderXsLR.
                     list = SWA_Ariadne_Gui_Mazes_ContourImageAccessor.leftBorderLimits[i, j];
                     foreach (ContourImage.RelativePoint rp in list)
                     {
-                        SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderXsLR[y + rp.ry], x + rp.rx, x - rp.rx);
+                        SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderXsLR[y + rp.ry], x + rp.rx, x - rp.rx);
                     }
                     list = SWA_Ariadne_Gui_Mazes_ContourImageAccessor.rightBorderLimits[i, j];
                     foreach (ContourImage.RelativePoint rp in list)
                     {
-                        SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderXsLR[y + rp.ry], x - rp.rx, x + rp.rx);
+                        SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderXsLR[y + rp.ry], x - rp.rx, x + rp.rx);
                     }
 
                     // Compare the resulting scan lines.
@@ -602,16 +602,16 @@ namespace SWA.Ariadne.Gui.Tests
 
         #endregion
 
-        #region Unit tests for InsertBorderPoints()
+        #region Unit tests for InsertPair()
 
         /// <summary>
-        ///A test for InsertBorderPoints ()
+        ///A test for InsertPair ()
         ///</summary>
         [DeploymentItem("SWA.Ariadne.Gui.Mazes.dll")]
         [TestMethod()]
-        public void CI_InsertBorderPointsTest_01()
+        public void CI_InsertPairTest_01()
         {
-            string testObject = "InsertBorderPoints";
+            string testObject = "InsertPair";
 
             // Prepare data structures used in the test.
             int width = 1000, height = 1;
@@ -619,21 +619,21 @@ namespace SWA.Ariadne.Gui.Tests
             SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InitializeScanLines(width, height, out objectXs, out contourXs, out borderXs);
             List<int> borderX = borderXs[0];
 
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderX, 100, 900);
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderX, 200, 800);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderX, 100, 900);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderX, 200, 800);
 
             int[] expectedPoints = { 100, 900 };
-            TestInsertBorderPoints(testObject, borderXs, expectedPoints);
+            TestInsertPair(testObject, borderXs, expectedPoints);
         }
 
         /// <summary>
-        ///A test for InsertBorderPoints ()
+        ///A test for InsertPair ()
         ///</summary>
         [DeploymentItem("SWA.Ariadne.Gui.Mazes.dll")]
         [TestMethod()]
-        public void CI_InsertBorderPointsTest_02()
+        public void CI_InsertPairTest_02()
         {
-            string testObject = "InsertBorderPoints";
+            string testObject = "InsertPair";
 
             // Prepare data structures used in the test.
             int width = 1000, height = 1;
@@ -641,23 +641,23 @@ namespace SWA.Ariadne.Gui.Tests
             SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InitializeScanLines(width, height, out objectXs, out contourXs, out borderXs);
             List<int> borderX = borderXs[0];
 
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderX, 100, 300);
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderX, 500, 700);
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderX, 700, 900);
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderX, 300, 500);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderX, 100, 300);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderX, 500, 700);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderX, 700, 900);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderX, 300, 500);
 
             int[] expectedPoints = { 100, 900 };
-            TestInsertBorderPoints(testObject, borderXs, expectedPoints);
+            TestInsertPair(testObject, borderXs, expectedPoints);
         }
 
         /// <summary>
-        ///A test for InsertBorderPoints ()
+        ///A test for InsertPair ()
         ///</summary>
         [DeploymentItem("SWA.Ariadne.Gui.Mazes.dll")]
         [TestMethod()]
-        public void CI_InsertBorderPointsTest_03()
+        public void CI_InsertPairTest_03()
         {
-            string testObject = "InsertBorderPoints";
+            string testObject = "InsertPair";
 
             // Prepare data structures used in the test.
             int width = 1000, height = 1;
@@ -665,21 +665,21 @@ namespace SWA.Ariadne.Gui.Tests
             SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InitializeScanLines(width, height, out objectXs, out contourXs, out borderXs);
             List<int> borderX = borderXs[0];
 
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderX, 100, 400);
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderX, 500, 900);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderX, 100, 400);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderX, 500, 900);
 
             int[] expectedPoints = { 100, 400, 500, 900 };
-            TestInsertBorderPoints(testObject, borderXs, expectedPoints);
+            TestInsertPair(testObject, borderXs, expectedPoints);
         }
 
         /// <summary>
-        ///A test for InsertBorderPoints ()
+        ///A test for InsertPair ()
         ///</summary>
         [DeploymentItem("SWA.Ariadne.Gui.Mazes.dll")]
         [TestMethod()]
-        public void CI_InsertBorderPointsTest_04()
+        public void CI_InsertPairTest_04()
         {
-            string testObject = "InsertBorderPoints";
+            string testObject = "InsertPair";
 
             // Prepare data structures used in the test.
             int width = 1000, height = 1;
@@ -687,29 +687,29 @@ namespace SWA.Ariadne.Gui.Tests
             SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InitializeScanLines(width, height, out objectXs, out contourXs, out borderXs);
             List<int> borderX = borderXs[0];
 
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderX, 100, 300);
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderX, 500, 700);
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderX, 700, 900);
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderX, 300, 500);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderX, 100, 300);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderX, 500, 700);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderX, 700, 900);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderX, 300, 500);
 
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderX, 100, 900);
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderX, 400, 600);
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderX, 600, 800);
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderX, 400, 800);
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderX, 550, 850);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderX, 100, 900);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderX, 400, 600);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderX, 600, 800);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderX, 400, 800);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderX, 550, 850);
 
             int[] expectedPoints = { 100, 900 };
-            TestInsertBorderPoints(testObject, borderXs, expectedPoints);
+            TestInsertPair(testObject, borderXs, expectedPoints);
         }
 
         /// <summary>
-        ///A test for InsertBorderPoints ()
+        ///A test for InsertPair ()
         ///</summary>
         [DeploymentItem("SWA.Ariadne.Gui.Mazes.dll")]
         [TestMethod()]
-        public void CI_InsertBorderPointsTest_05()
+        public void CI_InsertPairTest_05()
         {
-            string testObject = "InsertBorderPoints";
+            string testObject = "InsertPair";
 
             // Prepare data structures used in the test.
             int width = 1000, height = 1;
@@ -717,22 +717,22 @@ namespace SWA.Ariadne.Gui.Tests
             SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InitializeScanLines(width, height, out objectXs, out contourXs, out borderXs);
             List<int> borderX = borderXs[0];
 
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderX, 100, 300);
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderX, 301, 500);
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderX, 501, 900);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderX, 100, 300);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderX, 301, 500);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderX, 501, 900);
 
             int[] expectedPoints = { 100, 900 };
-            TestInsertBorderPoints(testObject, borderXs, expectedPoints);
+            TestInsertPair(testObject, borderXs, expectedPoints);
         }
 
         /// <summary>
-        ///A test for InsertBorderPoints ()
+        ///A test for InsertPair ()
         ///</summary>
         [DeploymentItem("SWA.Ariadne.Gui.Mazes.dll")]
         [TestMethod()]
-        public void CI_InsertBorderPointsTest_06()
+        public void CI_InsertPairTest_06()
         {
-            string testObject = "InsertBorderPoints";
+            string testObject = "InsertPair";
 
             // Prepare data structures used in the test.
             int width = 1000, height = 1;
@@ -740,22 +740,22 @@ namespace SWA.Ariadne.Gui.Tests
             SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InitializeScanLines(width, height, out objectXs, out contourXs, out borderXs);
             List<int> borderX = borderXs[0];
 
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderX, 501, 900);
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderX, 301, 500);
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderX, 100, 300);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderX, 501, 900);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderX, 301, 500);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderX, 100, 300);
 
             int[] expectedPoints = { 100, 900 };
-            TestInsertBorderPoints(testObject, borderXs, expectedPoints);
+            TestInsertPair(testObject, borderXs, expectedPoints);
         }
 
         /// <summary>
-        ///A test for InsertBorderPoints ()
+        ///A test for InsertPair ()
         ///</summary>
         [DeploymentItem("SWA.Ariadne.Gui.Mazes.dll")]
         [TestMethod()]
-        public void CI_InsertBorderPointsTest_07()
+        public void CI_InsertPairTest_07()
         {
-            string testObject = "InsertBorderPoints";
+            string testObject = "InsertPair";
 
             // Prepare data structures used in the test.
             int width = 1000, height = 1;
@@ -763,20 +763,20 @@ namespace SWA.Ariadne.Gui.Tests
             SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InitializeScanLines(width, height, out objectXs, out contourXs, out borderXs);
             List<int> borderX = borderXs[0];
 
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderX, 100, 300);
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderX, 501, 900);
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderX, 301, 500);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderX, 100, 300);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderX, 501, 900);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderX, 301, 500);
 
             int[] expectedPoints = { 100, 900 };
-            TestInsertBorderPoints(testObject, borderXs, expectedPoints);
+            TestInsertPair(testObject, borderXs, expectedPoints);
         }
 
         /// <summary>
-        ///A test for InsertBorderPoints ()
+        ///A test for InsertPair ()
         ///</summary>
         [DeploymentItem("SWA.Ariadne.Gui.Mazes.dll")]
         [TestMethod()]
-        public void CI_InsertBorderPointsTest_08_ThickLines()
+        public void CI_InsertPairTest_08_ThickLines()
         {
             string testObject = "ContourImage.ScanObject";
 
@@ -854,24 +854,24 @@ namespace SWA.Ariadne.Gui.Tests
             // nothing
 
             y += sy;
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderXs[y], 4, 6);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderXs[y], 4, 6);
 
             y += sy;
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderXs[y], 2, 7);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderXs[y], 2, 7);
 
             y += sy;
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderXs[y], 1, 2);
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderXs[y], 4, 5);
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderXs[y], 7, 8);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderXs[y], 1, 2);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderXs[y], 4, 5);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderXs[y], 7, 8);
 
             y += sy;
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderXs[y], 1, 2);
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderXs[y], 8, 9);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderXs[y], 1, 2);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderXs[y], 8, 9);
 
             y += sy;
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderXs[y], 1, 2);
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderXs[y], 4, 4);
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderXs[y], 7, 8);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderXs[y], 1, 2);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderXs[y], 4, 4);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderXs[y], 7, 8);
 
             int insideRegionsExpected = 0;
             int insideRegionsActual = SWA_Ariadne_Gui_Mazes_ContourImageAccessor.EliminateInsideRegions(borderXs, y0, sy);
@@ -896,27 +896,27 @@ namespace SWA.Ariadne.Gui.Tests
             // nothing
 
             y += sy;
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderXs[y], 4, 6);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderXs[y], 4, 6);
 
             y += sy;
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderXs[y], 2, 7);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderXs[y], 2, 7);
 
             y += sy;
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderXs[y], 1, 2);
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderXs[y], 4, 5);
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderXs[y], 7, 8);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderXs[y], 1, 2);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderXs[y], 4, 5);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderXs[y], 7, 8);
 
             y += sy;
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderXs[y], 1, 2);
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderXs[y], 8, 9);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderXs[y], 1, 2);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderXs[y], 8, 9);
 
             y += sy;
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderXs[y], 1, 2);
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderXs[y], 4, 4);
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderXs[y], 7, 8);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderXs[y], 1, 2);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderXs[y], 4, 4);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderXs[y], 7, 8);
 
             y += sy;
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderXs[y], 2, 7);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderXs[y], 2, 7);
 
             int insideRegionsExpected = 1;
             int insideRegionsActual = SWA_Ariadne_Gui_Mazes_ContourImageAccessor.EliminateInsideRegions(borderXs, y0, sy);
@@ -941,28 +941,28 @@ namespace SWA.Ariadne.Gui.Tests
             // nothing
 
             y += sy;
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderXs[y], 4, 6);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderXs[y], 4, 6);
 
             y += sy;
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderXs[y], 2, 7);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderXs[y], 2, 7);
 
             y += sy;
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderXs[y], 1, 2);
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderXs[y], 4, 5);
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderXs[y], 7, 8);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderXs[y], 1, 2);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderXs[y], 4, 5);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderXs[y], 7, 8);
 
             y += sy;
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderXs[y], 1, 2);
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderXs[y], 4, 5);
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderXs[y], 8, 9);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderXs[y], 1, 2);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderXs[y], 4, 5);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderXs[y], 8, 9);
 
             y += sy;
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderXs[y], 1, 2);
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderXs[y], 4, 4);
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderXs[y], 7, 8);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderXs[y], 1, 2);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderXs[y], 4, 4);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderXs[y], 7, 8);
 
             y += sy;
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderXs[y], 2, 7);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderXs[y], 2, 7);
 
             int insideRegionsExpected = 2;
             int insideRegionsActual = SWA_Ariadne_Gui_Mazes_ContourImageAccessor.EliminateInsideRegions(borderXs, y0, sy);
@@ -1100,10 +1100,10 @@ namespace SWA.Ariadne.Gui.Tests
 
         private static void InsertBorderLR(List<int> borderX, List<bool> borderLR, int left, int right)
         {
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertBorderPoints(borderX, left, right);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InsertPair(borderX, left, right);
         }
 
-        private static void TestInsertBorderPoints(string testObject, List<int>[] borderXs, int[] expectedPoints)
+        private static void TestInsertPair(string testObject, List<int>[] borderXs, int[] expectedPoints)
         {
             Assert.AreEqual(expectedPoints.Length + 2, borderXs[0].Count, testObject + " left a wrong number of points");
             for (int i = 0; i < expectedPoints.Length; i++)
