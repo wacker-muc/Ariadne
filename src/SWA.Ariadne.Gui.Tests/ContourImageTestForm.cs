@@ -40,8 +40,8 @@ namespace SWA.Ariadne.Gui.Tests
 
             DateTime start = DateTime.Now;
 
-            int algorithm = (int)this.algorithmNumericUpDown.Value;
-            processed = ContourImage.CreateFrom(template, out mask, algorithm);
+            ContourImage ci = new ContourImage(template);
+            processed = ci.ProcessedImage;
 
             TimeSpan t = DateTime.Now - start;
             int ms = (int)t.TotalMilliseconds;

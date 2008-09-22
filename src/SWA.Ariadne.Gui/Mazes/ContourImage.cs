@@ -11,7 +11,7 @@ namespace SWA.Ariadne.Gui.Mazes
         #region Constants
 
         private const int ContourDistance = 16;
-        private const int BlurDistance = 12;
+        private const int BlurDistanceMax = 12;
 
         #endregion
 
@@ -128,41 +128,6 @@ namespace SWA.Ariadne.Gui.Mazes
         /// </summary>
         /// Note: As these points are applied symmetrically on the left and right, only non-negative values are stored.
         private static List<RelativePoint>[,] contourLimits = new List<RelativePoint>[8, 8];
-
-#if false
-        /// <summary>
-        /// Returns -1/+1 if the point at x, y is on the left/right border of the influence region
-        /// defined by the given two neighbor directions.
-        /// Returns 0 otherwise.
-        /// </summary>
-        /// <param name="nbL"></param>
-        /// <param name="nbR"></param>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns></returns>
-        /// Note: This method is only used by Unit Tests.
-        private static int BorderLimitType(int nbL, int nbR, int x, int y)
-        {
-            int result = 0;
-
-            foreach (RelativePoint rp in leftBorderLimits[nbL, nbR])
-            {
-                if ((rp.rx == x) && (rp.ry == y))
-                {
-                    result--;
-                }
-            }
-            foreach (RelativePoint rp in rightBorderLimits[nbL, nbR])
-            {
-                if ((rp.rx == x) && (rp.ry == y))
-                {
-                    result++;
-                }
-            }
-
-            return result;
-        }
-#endif
 
         /// <summary>
         /// Set up the influenceRegions and associated data for a given influence range.
@@ -337,30 +302,76 @@ namespace SWA.Ariadne.Gui.Mazes
 
         #endregion
 
-        #region Properties.
+        #region Member variables and Properties.
+
+        private Color backgroundColor;
 
         /// <summary>
-        /// Returns the width of a region around the image that should be blurred gradually
+        /// Gets the width of a region around the image that should be blurred gradually
         /// from the background color to complete black.
         /// </summary>
-        /// <param name="backgroundColor">The darker the background, the smaller the result.</param>
         /// <returns></returns>
-        private static int GetBlurDistance(Color backgroundColor)
+        private int BlurDistance
         {
-            float b = backgroundColor.GetBrightness();
-            return (int)(Math.Sqrt(b) * BlurDistance);
+            get
+            {
+                float b = backgroundColor.GetBrightness();
+                return (int)(Math.Sqrt(b) * BlurDistanceMax);
+            }
         }
 
         /// <summary>
-        /// Returns the width of a region around the image that should not be completely black.
+        /// Gets the width of a region around the image that should not be completely black.
         /// That is the ContourDistance plus the BlurDistance for the given background color.
         /// </summary>
-        /// <param name="backgroundColor"></param>
         /// <returns></returns>
-        private static int GetFrameWidth(Color backgroundColor)
+        private int FrameWidth
         {
-            return ContourDistance + GetBlurDistance(backgroundColor);
+            get
+            {
+                return ContourDistance + BlurDistance;
+            }
         }
+
+        /// <summary>
+        /// The image that was given in the constructor.
+        /// </summary>
+        private Bitmap template;
+
+        /// <summary>
+        /// The mask that is applied to the template image.
+        /// Black mask pixels represent the template's background.
+        /// </summary>
+        private Bitmap mask;
+
+        /// <summary>
+        /// A Graphics object associated with the mask.
+        /// </summary>
+        private Graphics gMask;
+
+        /// <summary>
+        /// Gets the processed template image.
+        /// Background areas at a certain distance from the image objects are painted black.
+        /// </summary>
+        public Image ProcessedImage
+        {
+            get
+            {
+                if (image == null)
+                {
+                    CreateImage();
+
+                    Rectangle bbox = CreateMask(0.03F);
+                    ApplyMask();
+
+                    image = Crop(image, bbox);
+                    mask = Crop(mask, bbox);
+                }
+
+                return image; 
+            }
+        }
+        private Bitmap image;
 
         #endregion
 
@@ -374,36 +385,24 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <param name="template">the original image</param>
         /// <param name="mask">will be set to the mask that was applied to the template</param>
         /// <returns></returns>
-        public static Image CreateFrom(Image template, out Bitmap mask)
+        public ContourImage(Image template)
         {
             float fuzziness = 0.05F;
-            float share;
 
-            Bitmap bitmapTemplate = template as Bitmap;
-            if (bitmapTemplate == null)
+            this.template = template as Bitmap;
+            if (this.template == null)
             {
-                bitmapTemplate = new Bitmap(template);
+                this.template = new Bitmap(template);
             }
 
-            Color backgroundColor = GuessBackgroundColor(bitmapTemplate, fuzziness, out share);
+            float share = GuessBackgroundColor(fuzziness);
 
             if (share < 0.8F)
             {
-                mask = null;
-                return template;
+                this.mask = null;
+                this.image = this.template;
+                return;
             }
-
-            Bitmap result = Copy(template, backgroundColor);
-
-            Rectangle bbox;
-            fuzziness = 0.03F;
-            mask = GetMask(result, backgroundColor, fuzziness, out bbox);
-            ApplyMask(result, mask);
-
-            result = Crop(result, bbox);
-            mask = Crop(mask, bbox);
-
-            return result;
         }
 
         #endregion
@@ -411,18 +410,17 @@ namespace SWA.Ariadne.Gui.Mazes
         #region Methods for identifying non-background objects in an image.
 
         /// <summary>
-        /// Returns a bitmap to be applied to the given image.
+        /// Builds the bitmap mask to be applied to the template image.
         /// Areas dominated by the background color will be black.
         /// Other areas will be transparent.
+        /// Returns the resulting area that is not completely masked.
         /// </summary>
-        /// <param name="image"></param>
-        /// <param name="backgroundColor"></param>
-        /// <param name="boundingBox">resulting area that is not completely masked</param>
-        /// <returns></returns>
-        private static Bitmap GetMask(Bitmap image, Color backgroundColor, float fuzziness, out Rectangle boundingBox)
+        /// <param name="fuzziness"></param>
+        /// 
+        private Rectangle CreateMask(float fuzziness)
         {
             int contourDist = ContourDistance;
-            int blurDist = GetBlurDistance(backgroundColor);
+            int blurDist = BlurDistance;
 
             #region Create the result bitmap.
 
@@ -431,9 +429,9 @@ namespace SWA.Ariadne.Gui.Mazes
             Color transparent = Color.FromArgb(0, black);
 
             // Create a new Bitmap with the same resolution as the original image.
-            Bitmap result = new Bitmap(image.Width, image.Height, Graphics.FromImage(image));
-            Graphics gMask = Graphics.FromImage(result);
-            gMask.FillRectangle(new SolidBrush(transparent), 0, 0, result.Width, result.Height);
+            this.mask = new Bitmap(image.Width, image.Height, Graphics.FromImage(image));
+            this.gMask = Graphics.FromImage(mask);
+            gMask.FillRectangle(new SolidBrush(transparent), 0, 0, mask.Width, mask.Height);
 
             #endregion
 
@@ -500,9 +498,9 @@ namespace SWA.Ariadne.Gui.Mazes
                             continue;
                         }
 
-                        if (ColorDistance(image.GetPixel(x, y), backgroundColor) > fuzziness)
+                        if (ColorDistance(image.GetPixel(x, y)) > fuzziness)
                         {
-                            if (ScanObject(image, x, y, backgroundColor, fuzziness, dist2ToImage, inside, contour, border))
+                            if (ScanObject(x, y, fuzziness, dist2ToImage, inside, contour, border))
                             {
                                 ++nObjects;
 
@@ -522,32 +520,29 @@ namespace SWA.Ariadne.Gui.Mazes
             EliminateInsideRegions(border, 0, 1);
             EliminateInsideRegions(contour, 0, 1);
 
-            // Determine the bounding box.
-            boundingBox = BoundingBox(border);
-
             // Contour derived from object.
-            DrawContour(result, contour, Color.Red);
+            DrawContour(contour, Color.Red);
 
             // Derive another set of scan lines from the border, closer to the object.
             List<int>[] insetBorder = ShrinkRegion(border, blurDist + contourDist / 2);
 
             // Contour derived from border.
-            DrawContour(result, insetBorder, Color.Blue);
+            DrawContour(insetBorder, Color.Blue);
 
             // The contour keeps the area around the object untouched.
             // The insetBorder avoids entering into areas enclosed by the border (and a blurred contour) only.
             UniteScanLines(insetBorder, contour);
 
             // Fill outside of objects, using the border.
-            FillOutside(gMask, black, border);
+            FillOutside(black, border);
 
             // Set the color of the mask pixels between border and contour to black with an appropriate transparency.
-            PaintGradient(dist2ToImage, border, contour, result, contourDist, blurDist, black);
+            PaintGradient(dist2ToImage, border, contour, contourDist, blurDist, black);
 
             // Border.
-            DrawContour(result, border, Color.Cyan);
+            DrawContour(border, Color.Cyan);
 
-            return result;
+            return BoundingBox(border);
         }
 
         /// <summary>
@@ -556,16 +551,14 @@ namespace SWA.Ariadne.Gui.Mazes
         /// The influence regions of all contour pixels are applied to the dist2Image map.
         /// Returns true if a sufficiently large object was detected.
         /// </summary>
-        /// <param name="image"></param>
         /// <param name="x0"></param>
         /// <param name="y0"></param>
-        /// <param name="backgroundColor"></param>
         /// <param name="fuzziness"></param>
         /// <param name="dist2ToImage"></param>
         /// <param name="inside"></param>
         /// <param name="contour"></param>
         /// <param name="border"></param>
-        private static bool ScanObject(Bitmap image, int x0, int y0, Color backgroundColor, float fuzziness, int[,] dist2ToImage, List<int>[] inside, List<int>[] contour, List<int>[] border)
+        private bool ScanObject(int x0, int y0, float fuzziness, int[,] dist2ToImage, List<int>[] inside, List<int>[] contour, List<int>[] border)
         {
             #region Choose an initial focus point with a left and right neighbor.
 
@@ -574,7 +567,7 @@ namespace SWA.Ariadne.Gui.Mazes
 
             // Determine right neighbor.
             int nbR, xR, yR;
-            RightNeighbor(image, backgroundColor, fuzziness, x, y, NbW, out nbR, out xR, out yR);
+            RightNeighbor(fuzziness, x, y, NbW, out nbR, out xR, out yR);
             if (nbR == NbW)
             {
                 // There is no neighbor pixel.  One-pixel objects are ignored.
@@ -583,7 +576,7 @@ namespace SWA.Ariadne.Gui.Mazes
 
             // Determine left neighbor.
             int nbL, xL, yL;
-            LeftNeighbor(image, backgroundColor, fuzziness, x, y, nbR, out nbL, out xL, out yL);
+            LeftNeighbor(fuzziness, x, y, nbR, out nbL, out xL, out yL);
 
             #endregion
 
@@ -732,7 +725,7 @@ namespace SWA.Ariadne.Gui.Mazes
                 // Advance the focus to the next object pixel.
                 xR = x; yR = y; nbR = (nbL + 4) % 8;
                 x = xL; y = yL;
-                LeftNeighbor(image, backgroundColor, fuzziness, x, y, nbR, out nbL, out xL, out yL);
+                LeftNeighbor(fuzziness, x, y, nbR, out nbL, out xL, out yL);
 
             } while (x != x1 || y != y1 || nb1 != nbL);
 
@@ -748,8 +741,6 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <summary>
         /// Locates the left neighbor of a contour pixel that is also on the object contour.
         /// </summary>
-        /// <param name="image"></param>
-        /// <param name="backgroundColor"></param>
         /// <param name="fuzziness"></param>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -757,7 +748,7 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <param name="nbL"></param>
         /// <param name="xL"></param>
         /// <param name="yL"></param>
-        private static void LeftNeighbor(Bitmap image, Color backgroundColor, float fuzziness, int x, int y, int nbR, out int nbL, out int xL, out int yL)
+        private void LeftNeighbor(float fuzziness, int x, int y, int nbR, out int nbL, out int xL, out int yL)
         {
             xL = yL = 0; // make compiler happy
             for (nbL = (nbR + 1) % 8; ; nbL = (nbL + 1) % 8)
@@ -768,7 +759,7 @@ namespace SWA.Ariadne.Gui.Mazes
                     break; // We have completed the circle.
                 }
 
-                float cd = ColorDistance(image.GetPixel(xL, yL), backgroundColor);
+                float cd = ColorDistance(image.GetPixel(xL, yL));
                 if (cd > fuzziness)
                 {
                     break;
@@ -779,8 +770,6 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <summary>
         /// Locates the right neighbor of a contour pixel that is also on the object contour.
         /// </summary>
-        /// <param name="image"></param>
-        /// <param name="backgroundColor"></param>
         /// <param name="fuzziness"></param>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -788,7 +777,7 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <param name="nbR"></param>
         /// <param name="xR"></param>
         /// <param name="yR"></param>
-        private static void RightNeighbor(Bitmap image, Color backgroundColor, float fuzziness, int x, int y, int nbL, out int nbR, out int xR, out int yR)
+        private void RightNeighbor(float fuzziness, int x, int y, int nbL, out int nbR, out int xR, out int yR)
         {
             xR = yR = 0; // make compiler happy
             for (nbR = (nbL - 1 + 8) % 8; ; nbR = (nbR - 1 + 8) % 8)
@@ -799,7 +788,7 @@ namespace SWA.Ariadne.Gui.Mazes
                     break; // We have completed the circle.
                 }
 
-                float cd = ColorDistance(image.GetPixel(xR, yR), backgroundColor);
+                float cd = ColorDistance(image.GetPixel(xR, yR));
                 if (cd > fuzziness)
                 {
                     break;
@@ -1294,31 +1283,30 @@ namespace SWA.Ariadne.Gui.Mazes
         #region Image related methods.
 
         /// <summary>
-        /// Returns the color that is dominant in the image border (width: 2 pixels).
+        /// Determines the color that is dominant in the template image border (width: 2 pixels).
+        /// Returns the ratio of background color pixels among all pixels (0.0 .. 1.0)
         /// </summary>
-        /// <param name="image"></param>
         /// <param name="fuzziness">maximum color distance that is considered equal to the dominant color</param>
-        /// <param name="share">out: ratio of background color pixels among all pixels (0.0 .. 1.0)</param>
         /// <returns></returns>
-        private static Color GuessBackgroundColor(Bitmap image, float fuzziness, out float share)
+        private float GuessBackgroundColor(float fuzziness)
         {
             int borderWidth = 2;
-            int xMin = 0, xMax = image.Width - 1;
-            int yMin = 0, yMax = image.Height - 1;
+            int xMin = 0, xMax = template.Width - 1;
+            int yMin = 0, yMax = template.Height - 1;
 
             #region Collect a sample of pixels near the image border.
 
-            List<Color> pixels = new List<Color>(borderWidth * (image.Width + image.Height));
+            List<Color> pixels = new List<Color>(borderWidth * (template.Width + template.Height));
 
-            for (int x = 0; x < image.Width; x += 1 + x % 7)
+            for (int x = 0; x < template.Width; x += 1 + x % 7)
             {
-                pixels.Add(image.GetPixel(x, yMin + (x + 0) % borderWidth));
-                pixels.Add(image.GetPixel(x, yMax - (x + 1) % borderWidth));
+                pixels.Add(template.GetPixel(x, yMin + (x + 0) % borderWidth));
+                pixels.Add(template.GetPixel(x, yMax - (x + 1) % borderWidth));
             }
-            for (int y = 0 + borderWidth; y < image.Height - borderWidth; y += 1 + y % 5)
+            for (int y = 0 + borderWidth; y < template.Height - borderWidth; y += 1 + y % 5)
             {
-                pixels.Add(image.GetPixel(xMin + (y + 0) % borderWidth, y));
-                pixels.Add(image.GetPixel(xMax - (y + 1) % borderWidth, y));
+                pixels.Add(template.GetPixel(xMin + (y + 0) % borderWidth, y));
+                pixels.Add(template.GetPixel(xMax - (y + 1) % borderWidth, y));
             }
 
             #endregion
@@ -1336,7 +1324,7 @@ namespace SWA.Ariadne.Gui.Mazes
             }
 
             int n = pixels.Count;
-            Color result = Color.FromArgb(rSum / n, gSum / n, bSum / n);
+            this.backgroundColor = Color.FromArgb(rSum / n, gSum / n, bSum / n);
 
             #endregion
 
@@ -1346,13 +1334,13 @@ namespace SWA.Ariadne.Gui.Mazes
 
             foreach (Color px in pixels)
             {
-                if (ColorDistance(result, px) <= fuzziness)
+                if (ColorDistance(px) <= fuzziness)
                 {
                     ++nShare;
                 }
             }
 
-            share = (float)nShare / (float)pixels.Count;
+            float result = (float)nShare / (float)pixels.Count;
 
             #endregion
 
@@ -1360,35 +1348,32 @@ namespace SWA.Ariadne.Gui.Mazes
         }
 
         /// <summary>
+        /// Compares the given color with the backgroundColor.
         /// Returns a value between 0.0 (identical colors) and 1.0 (opposite colors).
         /// </summary>
-        /// <param name="col1"></param>
-        /// <param name="col2"></param>
+        /// <param name="color"></param>
         /// <returns></returns>
-        /// TODO: Make this an object method; compare with backgroundColor and test against fuzziness.
-        private static float ColorDistance(Color col1, Color col2)
+        private float ColorDistance(Color color)
         {
-            int dr = Math.Abs(col1.R - col2.R);
-            int dg = Math.Abs(col1.G - col2.G);
-            int db = Math.Abs(col1.B - col2.B);
+            int dr = Math.Abs(color.R - backgroundColor.R);
+            int dg = Math.Abs(color.G - backgroundColor.G);
+            int db = Math.Abs(color.B - backgroundColor.B);
 
             return (float)Math.Max(dr, Math.Max(dg, db)) / 255.0F;
         }
 
         /// <summary>
-        /// Copies the given image into a Bitmap that is augmented with a background color frame.
+        /// Copies the template image into a Bitmap image that is augmented with a background color frame.
         /// Thus, all image pixels are located at least GetFrameWidth() from the result's border.
         /// </summary>
         /// <param name="image"></param>
-        /// <param name="backgroundColor"></param>
-        /// <returns></returns>
-        private static Bitmap Copy(Image image, Color backgroundColor)
+        private void CreateImage()
         {
-            int width = image.Width, height = image.Height;
+            int width = template.Width, height = template.Height;
 
             // Extend the image with a frame of the background color.
             // Thus, all parts of the image are at least that far away from the border.
-            int frameWidth = GetFrameWidth(backgroundColor);
+            int frameWidth = FrameWidth;
             width += 2 * frameWidth;
             height += 2 * frameWidth;
 
@@ -1399,20 +1384,16 @@ namespace SWA.Ariadne.Gui.Mazes
             height += 2;
 
             // Create a new Bitmap with the same resolution as the original image.
-            Bitmap result = new Bitmap(width, height, Graphics.FromImage(image));
-            Graphics g = Graphics.FromImage(result);
-            g.FillRectangle(new SolidBrush(backgroundColor), new Rectangle(0, 0, result.Width, result.Height));
-            g.DrawImageUnscaled(image, frameWidth, frameWidth);
-
-            return result;
+            this.image = new Bitmap(width, height, Graphics.FromImage(template));
+            Graphics g = Graphics.FromImage(image);
+            g.FillRectangle(new SolidBrush(backgroundColor), new Rectangle(0, 0, image.Width, image.Height));
+            g.DrawImageUnscaled(template, frameWidth, frameWidth);
         }
 
         /// <summary>
-        /// Draws the given mask over the given image.
+        /// Draws the mask over the image.
         /// </summary>
-        /// <param name="image"></param>
-        /// <param name="mask"></param>
-        private static void ApplyMask(Bitmap image, Bitmap mask)
+        private void ApplyMask()
         {
             Graphics g = Graphics.FromImage(image);
             g.DrawImageUnscaled(mask, 0, 0);
@@ -1447,12 +1428,7 @@ namespace SWA.Ariadne.Gui.Mazes
 
         #region Mask related methods.
 
-        private static void FillOutside(Graphics g, Color color, List<int>[] scanLines)
-        {
-            FillOutside_Simple(g, color, scanLines);
-        }
-
-        private static void FillOutside_Simple(Graphics g, Color color, List<int>[] scanLines)
+        private void FillOutside(Color color, List<int>[] scanLines)
         {
             Pen pen = new Pen(color);
             pen.StartCap = pen.EndCap = LineCap.Square;
@@ -1468,7 +1444,7 @@ namespace SWA.Ariadne.Gui.Mazes
                         // Single dots are not drawn properly. :-(
                         x1 += 1;
                     }
-                    g.DrawLine(pen, x0, y, x1, y);
+                    gMask.DrawLine(pen, x0, y, x1, y);
                 }
             }
         }
@@ -1491,9 +1467,9 @@ namespace SWA.Ariadne.Gui.Mazes
             return new Rectangle(bbxMin, bbyMin, bbxMax - bbxMin + 1, bbyMax - bbyMin + 1);
         }
 
-        private static void PaintGradient(int[,] dist2ToImage, List<int>[] border, List<int>[] contour, Bitmap bitmap, int contourDist, int blurDist, Color black)
+        private void PaintGradient(int[,] dist2ToImage, List<int>[] border, List<int>[] contour, int contourDist, int blurDist, Color black)
         {
-            for (int y = 0; y < bitmap.Height; y++)
+            for (int y = 0; y < mask.Height; y++)
             {
                 if (border[y].Count < 4) // not inside the border of any object
                 {
@@ -1506,7 +1482,7 @@ namespace SWA.Ariadne.Gui.Mazes
                 int b = 2, xb = border[y][b]; // right end of the first border region
                 int c = 1, xc = contour[y][c]; // left end of the first contour region
 
-                for (int x = border[y][1]; x < bitmap.Width; x++)
+                for (int x = border[y][1]; x < mask.Width; x++)
                 {
                     if (x >= xc) // At the left end of a contour region.
                     {
@@ -1561,18 +1537,17 @@ namespace SWA.Ariadne.Gui.Mazes
                         }
                     }
 
-                    bitmap.SetPixel(x, y, maskColor);
+                    mask.SetPixel(x, y, maskColor);
                 }
             }
         }
 
         /// <summary>
-        /// Paints the pixels marked by points on the given scanLines in the given color.
+        /// Paints into the mask the pixels marked by points on the given scanLines in the given color.
         /// </summary>
-        /// <param name="mask"></param>
         /// <param name="scanLines"></param>
         /// <param name="color"></param>
-        private static void DrawContour(Bitmap mask, List<int>[] scanLines, Color color)
+        private void DrawContour(List<int>[] scanLines, Color color)
         {
 #if false // TODO: false; used for debugging only
             for (int y = 0; y < scanLines.Length; y++)

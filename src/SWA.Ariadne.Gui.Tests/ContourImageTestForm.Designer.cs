@@ -31,11 +31,8 @@ namespace SWA.Ariadne.Gui.Tests
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label3 = new System.Windows.Forms.Label();
             this.timeLabel = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.algorithmNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.showContourButton = new System.Windows.Forms.Button();
             this.groupBox3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.algorithmNumericUpDown)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox3
@@ -43,8 +40,6 @@ namespace SWA.Ariadne.Gui.Tests
             this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox3.Controls.Add(this.label3);
             this.groupBox3.Controls.Add(this.timeLabel);
-            this.groupBox3.Controls.Add(this.label1);
-            this.groupBox3.Controls.Add(this.algorithmNumericUpDown);
             this.groupBox3.Controls.Add(this.showContourButton);
             this.groupBox3.Location = new System.Drawing.Point(552, 208);
             this.groupBox3.Name = "groupBox3";
@@ -75,32 +70,6 @@ namespace SWA.Ariadne.Gui.Tests
             this.timeLabel.Text = "00000";
             this.timeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(15, 58);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(50, 13);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Algorithm";
-            // 
-            // algorithmNumericUpDown
-            // 
-            this.algorithmNumericUpDown.Location = new System.Drawing.Point(71, 55);
-            this.algorithmNumericUpDown.Maximum = new decimal(new int[] {
-            9,
-            0,
-            0,
-            0});
-            this.algorithmNumericUpDown.Name = "algorithmNumericUpDown";
-            this.algorithmNumericUpDown.Size = new System.Drawing.Size(38, 20);
-            this.algorithmNumericUpDown.TabIndex = 1;
-            this.algorithmNumericUpDown.Value = new decimal(new int[] {
-            9,
-            0,
-            0,
-            0});
-            // 
             // showContourButton
             // 
             this.showContourButton.Location = new System.Drawing.Point(15, 19);
@@ -123,7 +92,6 @@ namespace SWA.Ariadne.Gui.Tests
             this.Controls.SetChildIndex(this.groupBox3, 0);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.algorithmNumericUpDown)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -133,8 +101,6 @@ namespace SWA.Ariadne.Gui.Tests
 
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Button showContourButton;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.NumericUpDown algorithmNumericUpDown;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label timeLabel;
     }
