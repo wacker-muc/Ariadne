@@ -36,11 +36,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ContourImage.cs" />
-    <Compile Include="ContourImage_BlockScan.cs" />
-    <Compile Include="ContourImage_CompleteScan.cs" />
-    <Compile Include="ContourImage_ContourScan.cs" />
-    <Compile Include="ContourImage_OutlineScan.cs" />
-    <Compile Include="ContourImage_SimpleScan.cs" />
     <Compile Include="IMazeControl.cs" />
     <Compile Include="IMazeControlProperties.cs" />
     <Compile Include="IMazeControlSetup.cs" />
