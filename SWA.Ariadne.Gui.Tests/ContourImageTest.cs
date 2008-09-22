@@ -793,7 +793,7 @@ namespace SWA.Ariadne.Gui.Tests
             Graphics g = Graphics.FromImage(image);
 
             int contourDist = SWA_Ariadne_Gui_Mazes_ContourImageAccessor.ContourDistance;
-            int blurDist = SWA_Ariadne_Gui_Mazes_ContourImageAccessor.GetBlurDistance(backgroundColor);
+            int blurDist = SWA_Ariadne_Gui_Mazes_ContourImageAccessor.BlurDistanceMax;
             SWA_Ariadne_Gui_Mazes_ContourImageAccessor.PrepareInfluenceRegions(contourDist + blurDist);
 
             int[,] dist2ToImage;
@@ -803,7 +803,6 @@ namespace SWA.Ariadne.Gui.Tests
 
             #region Create a complicated pattern of border scan lines.
 
-            float fuzziness = 0.1F;
             Point[] points = {
                 new Point(50, 50), new Point(250, 250),
                 new Point(200, 100), new Point(100, 200),
@@ -814,22 +813,27 @@ namespace SWA.Ariadne.Gui.Tests
             for (int i = 0, j = i + 1; j < points.Length; i++, j++)
             {
                 g.DrawLine(fgPen, points[i], points[j]);
-
-                int y0 = (points[i].Y + points[j].Y) / 2;
-                #region Find the leftmost object pixel on the scan line at y0.
-
-                int x0 = 0;
-                while (SWA_Ariadne_Gui_Mazes_ContourImageAccessor.ColorDistance(image.GetPixel(x0, y0), backgroundColor) <= fuzziness)
-                {
-                    x0++;
-                }
-
-                #endregion
-
-                SWA_Ariadne_Gui_Mazes_ContourImageAccessor.ScanObject(image, x0, y0, backgroundColor, fuzziness, dist2ToImage, objectXs, contourXs, borderXs);
             }
 
             #endregion
+
+            ContourImage target = new ContourImage(image);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor accessor = new SWA_Ariadne_Gui_Mazes_ContourImageAccessor(target);
+            accessor.image = image;
+
+            int y0 = image.Height / 2;
+            #region Find the leftmost object pixel on the scan line at y0.
+
+            int x0 = 0;
+            float fuzziness = 0.1F;
+            while (accessor.ColorDistance(image.GetPixel(x0, y0)) <= fuzziness)
+            {
+                x0++;
+            }
+
+            #endregion
+
+            accessor.ScanObject(x0, y0, fuzziness, dist2ToImage, objectXs, contourXs, borderXs);
 
             TestBorderScanlines(testObject, borderXs);
         }
@@ -1011,12 +1015,17 @@ namespace SWA.Ariadne.Gui.Tests
             testObject += " @ " + y0.ToString();
             float fuzziness = 0.1F;
 
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.PrepareInfluenceRegions(SWA_Ariadne_Gui_Mazes_ContourImageAccessor.GetFrameWidth(backgroundColor));
+            int frameWidth = SWA_Ariadne_Gui_Mazes_ContourImageAccessor.ContourDistance;
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.PrepareInfluenceRegions(frameWidth);
+
+            ContourImage target = new ContourImage(image);
+            SWA_Ariadne_Gui_Mazes_ContourImageAccessor accessor = new SWA_Ariadne_Gui_Mazes_ContourImageAccessor(target);
+            accessor.image = image;
 
             #region Find the leftmost object pixel on the scan line at y0.
 
             int x0 = 0;
-            while (SWA_Ariadne_Gui_Mazes_ContourImageAccessor.ColorDistance(image.GetPixel(x0, y0), backgroundColor) <= fuzziness)
+            while (accessor.ColorDistance(image.GetPixel(x0, y0)) <= fuzziness)
             {
                 x0++;
                 if (x0 >= image.Width)
@@ -1037,7 +1046,7 @@ namespace SWA.Ariadne.Gui.Tests
 
             #endregion
 
-            bool found = SWA_Ariadne_Gui_Mazes_ContourImageAccessor.ScanObject(image, x0, y0, backgroundColor, fuzziness, dist2ToImage, objectXs, contourXs, borderXs);
+            accessor.ScanObject(x0, y0, fuzziness, dist2ToImage, objectXs, contourXs, borderXs);
 
             #region Test if the object map is well formed.
             for (int i = 0; i < height; i++)
