@@ -825,7 +825,7 @@ namespace SWA.Ariadne.Gui.Tests
             #region Find the leftmost object pixel on the scan line at y0.
 
             int x0 = 0;
-            float fuzziness = 0.1F;
+            int fuzziness = (int)(0.1F * SWA_Ariadne_Gui_Mazes_ContourImageAccessor.MaxColorDistance);
             while (accessor.ColorDistance(image.GetPixel(x0, y0)) <= fuzziness)
             {
                 x0++;
@@ -1013,7 +1013,7 @@ namespace SWA.Ariadne.Gui.Tests
         private static void TestScan(string testObject, Bitmap image, Color backgroundColor, int y0, int maxContourScanRegions)
         {
             testObject += " @ " + y0.ToString();
-            float fuzziness = 0.1F;
+            int fuzziness = (int)(0.1F * SWA_Ariadne_Gui_Mazes_ContourImageAccessor.MaxColorDistance);
 
             int frameWidth = SWA_Ariadne_Gui_Mazes_ContourImageAccessor.ContourDistance;
             SWA_Ariadne_Gui_Mazes_ContourImageAccessor.PrepareInfluenceRegions(frameWidth);
@@ -1061,7 +1061,7 @@ namespace SWA.Ariadne.Gui.Tests
             #endregion
 
             #region Test if the object map is complete.
-            int imageArea = ImageArea(image, backgroundColor, fuzziness);
+            int imageArea = ImageArea(image, backgroundColor, (float)fuzziness / SWA_Ariadne_Gui_Mazes_ContourImageAccessor.MaxColorDistance);
             int objectArea = ObjectArea(objectXs);
             Assert.AreEqual(imageArea, objectArea, testObject + string.Format(" - object area and image area must be equal"));
             #endregion
