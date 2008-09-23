@@ -92,6 +92,7 @@ namespace SWA.Ariadne.Gui.Tests
 
         #region Unit tests for PrepareInfluenceRegion()
 
+#if false
         /// <summary>
         ///A test for PrepareInfluenceRegions (int)
         ///</summary>
@@ -121,7 +122,9 @@ namespace SWA.Ariadne.Gui.Tests
             TestInfluence(testObject, nbL, nbR, dxE, radius * dyN, 0);  // N + 1px E
             TestNoInfluence(testObject, nbL, nbR, dxW, radius * dyN);   // N + 1px W
         }
+#endif
 
+#if false
         /// <summary>
         ///A test for PrepareInfluenceRegions (int)
         ///</summary>
@@ -147,6 +150,7 @@ namespace SWA.Ariadne.Gui.Tests
             TestNoInfluence(testObject, nbL, nbR, dxW, radius * dyN);   // N + 1px W
             TestNoInfluence(testObject, nbL, nbR, dxE, radius * dyN);   // N + 1px E
         }
+#endif
 
 #if false
         /// <summary>
@@ -796,9 +800,8 @@ namespace SWA.Ariadne.Gui.Tests
             int blurDist = SWA_Ariadne_Gui_Mazes_ContourImageAccessor.BlurDistanceMax;
             SWA_Ariadne_Gui_Mazes_ContourImageAccessor.PrepareInfluenceRegions(contourDist + blurDist);
 
-            int[,] dist2ToImage;
+            int[,] alpha = new int[width, height];
             List<int>[] objectXs, contourXs, borderXs;
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InitializeDist2ToImage(image.Width, image.Height, out dist2ToImage);
             SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InitializeScanLines(width, height, out objectXs, out contourXs, out borderXs);
 
             #region Create a complicated pattern of border scan lines.
@@ -833,7 +836,7 @@ namespace SWA.Ariadne.Gui.Tests
 
             #endregion
 
-            accessor.ScanObject(x0, y0, fuzziness, dist2ToImage, objectXs, contourXs, borderXs);
+            accessor.ScanObject(x0, y0, fuzziness, alpha, objectXs, contourXs, borderXs);
 
             TestBorderScanlines(testObject, borderXs);
         }
@@ -980,6 +983,7 @@ namespace SWA.Ariadne.Gui.Tests
 
         #region Auxiliary methods
 
+#if false
         private static void TestInfluence(string testObject, int nbL, int nbR, int x, int y, int btExpected)
         {
             testObject += string.Format("<{0},{1}>: [{2},{3}]", nbL, nbR, x, y);
@@ -993,7 +997,9 @@ namespace SWA.Ariadne.Gui.Tests
             Assert.AreEqual(btExpected, btActual, testObject + " has the wrong border type");
 #endif
         }
+#endif
 
+#if false
         private static void TestNoInfluence(string testObject, int nbL, int nbR, int x, int y)
         {
             testObject += string.Format("<{0},{1}>: [{2},{3}]", nbL, nbR, x, y);
@@ -1001,6 +1007,7 @@ namespace SWA.Ariadne.Gui.Tests
 
             Assert.IsFalse(d2 < int.MaxValue, testObject + " should not be influence");
         }
+#endif
 
         private static void TestScan(string testObject, Bitmap image, Color backgroundColor, int maxContourScanRegions)
         {
@@ -1039,14 +1046,13 @@ namespace SWA.Ariadne.Gui.Tests
             #region Prepare required data structures.
 
             int width = image.Width, height = image.Height;
-            int[,] dist2ToImage;
+            int[,] alpha = new int[width, height];
             List<int>[] objectXs, contourXs, borderXs;
-            SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InitializeDist2ToImage(width, height, out dist2ToImage);
             SWA_Ariadne_Gui_Mazes_ContourImageAccessor.InitializeScanLines(width, height, out objectXs, out contourXs, out borderXs);
 
             #endregion
 
-            accessor.ScanObject(x0, y0, fuzziness, dist2ToImage, objectXs, contourXs, borderXs);
+            accessor.ScanObject(x0, y0, fuzziness, alpha, objectXs, contourXs, borderXs);
 
             #region Test if the object map is well formed.
             for (int i = 0; i < height; i++)
