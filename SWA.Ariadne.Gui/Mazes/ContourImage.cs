@@ -12,6 +12,7 @@ namespace SWA.Ariadne.Gui.Mazes
 
         private const int ContourDistance = 16;
         private const int BlurDistanceMax = 12;
+        private const int MaxColorDistance = 255;
 
         #endregion
 
@@ -305,6 +306,7 @@ namespace SWA.Ariadne.Gui.Mazes
         #region Member variables and Properties.
 
         private Color backgroundColor;
+        int bgR, bgG, bgB;
 
         /// <summary>
         /// Gets the width of a region around the image that should be blurred gradually
@@ -361,7 +363,8 @@ namespace SWA.Ariadne.Gui.Mazes
                 {
                     CreateImage();
 
-                    Rectangle bbox = CreateMask(0.03F);
+                    int fuzziness = (int)(0.03 * MaxColorDistance);
+                    Rectangle bbox = CreateMask(fuzziness);
                     ApplyMask();
 
                     image = Crop(image, bbox);
@@ -387,7 +390,7 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <returns></returns>
         public ContourImage(Image template)
         {
-            float fuzziness = 0.05F;
+            int fuzziness = (int)(0.05 * MaxColorDistance);
 
             this.template = template as Bitmap;
             if (this.template == null)
@@ -417,7 +420,7 @@ namespace SWA.Ariadne.Gui.Mazes
         /// </summary>
         /// <param name="fuzziness"></param>
         /// 
-        private Rectangle CreateMask(float fuzziness)
+        private Rectangle CreateMask(int fuzziness)
         {
             int contourDist = ContourDistance;
             int blurDist = BlurDistance;
@@ -429,9 +432,10 @@ namespace SWA.Ariadne.Gui.Mazes
             Color transparent = Color.FromArgb(0, black);
 
             // Create a new Bitmap with the same resolution as the original image.
-            this.mask = new Bitmap(image.Width, image.Height, Graphics.FromImage(image));
+            int width = image.Width, height = image.Height;
+            this.mask = new Bitmap(width, height, Graphics.FromImage(image));
             this.gMask = Graphics.FromImage(mask);
-            gMask.FillRectangle(new SolidBrush(transparent), 0, 0, mask.Width, mask.Height);
+            gMask.FillRectangle(new SolidBrush(transparent), 0, 0, width, height);
 
             #endregion
 
@@ -457,10 +461,10 @@ namespace SWA.Ariadne.Gui.Mazes
             List<int>[] contour;
 
             // Create and initialize the dist2Image array.
-            InitializeDist2ToImage(image.Width, image.Height, out dist2ToImage);
+            InitializeDist2ToImage(width, height, out dist2ToImage);
 
             // Create the scan line lists and add the required terminator entries.
-            InitializeScanLines(image.Width, image.Height, out inside, out contour, out border);
+            InitializeScanLines(width, height, out inside, out contour, out border);
 
             #endregion
 
@@ -468,7 +472,7 @@ namespace SWA.Ariadne.Gui.Mazes
 
             // Maximum and minimum distance between scan lines.
             const int dsMax = 16 * 1024;
-            const int dsMin = 2;
+            const int dsMin = 4;
 
             int nObjects = 0;
 
@@ -480,16 +484,16 @@ namespace SWA.Ariadne.Gui.Mazes
             //   ds = 16: 7, 23, ...
             for (int ds = dsMax; ds >= 2 * dsMin; ds /= 2)
             {
-                for (int y = ds / 2 - 1; y < image.Height; y += ds)
+                for (int y = ds / 2 - 1; y < height; y += ds)
                 {
                     // Current index in inside[y].
                     int i = 0;
                     // X coordinate of the first known object on the Y scan line.
                     int x1 = inside[y][i];
 
-                    for (int x = 1; x < image.Width; x += 1)
+                    for (int x = 1; x < width; x += 1)
                     {
-                        if (x == x1)
+                        if (x >= x1)
                         {
                             // We have reached the contour of a known object.
                             // Skip to the next contour point.
@@ -558,7 +562,7 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <param name="inside"></param>
         /// <param name="contour"></param>
         /// <param name="border"></param>
-        private bool ScanObject(int x0, int y0, float fuzziness, int[,] dist2ToImage, List<int>[] inside, List<int>[] contour, List<int>[] border)
+        private bool ScanObject(int x0, int y0, int fuzziness, int[,] dist2ToImage, List<int>[] inside, List<int>[] contour, List<int>[] border)
         {
             #region Choose an initial focus point with a left and right neighbor.
 
@@ -748,7 +752,7 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <param name="nbL"></param>
         /// <param name="xL"></param>
         /// <param name="yL"></param>
-        private void LeftNeighbor(float fuzziness, int x, int y, int nbR, out int nbL, out int xL, out int yL)
+        private void LeftNeighbor(int fuzziness, int x, int y, int nbR, out int nbL, out int xL, out int yL)
         {
             xL = yL = 0; // make compiler happy
             for (nbL = (nbR + 1) % 8; ; nbL = (nbL + 1) % 8)
@@ -759,8 +763,7 @@ namespace SWA.Ariadne.Gui.Mazes
                     break; // We have completed the circle.
                 }
 
-                float cd = ColorDistance(image.GetPixel(xL, yL));
-                if (cd > fuzziness)
+                if (ColorDistance(image.GetPixel(xL, yL)) > fuzziness)
                 {
                     break;
                 }
@@ -777,7 +780,7 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <param name="nbR"></param>
         /// <param name="xR"></param>
         /// <param name="yR"></param>
-        private void RightNeighbor(float fuzziness, int x, int y, int nbL, out int nbR, out int xR, out int yR)
+        private void RightNeighbor(int fuzziness, int x, int y, int nbL, out int nbR, out int xR, out int yR)
         {
             xR = yR = 0; // make compiler happy
             for (nbR = (nbL - 1 + 8) % 8; ; nbR = (nbR - 1 + 8) % 8)
@@ -788,8 +791,7 @@ namespace SWA.Ariadne.Gui.Mazes
                     break; // We have completed the circle.
                 }
 
-                float cd = ColorDistance(image.GetPixel(xR, yR));
-                if (cd > fuzziness)
+                if (ColorDistance(image.GetPixel(xR, yR)) > fuzziness)
                 {
                     break;
                 }
@@ -1190,90 +1192,94 @@ namespace SWA.Ariadne.Gui.Mazes
 
         private static void IntersectScanLines(List<int>[] source, List<int>[] target, int dx, int dy, int p0)
         {
-            for (int yc = 0, yb = yc - dy; yc < target.Length; yc++, yb++)
+            for (int yt = 0, ys = yt - dy; yt < target.Length; yt++, ys++)
             {
+                int tc = target[yt].Count;
+
                 // Skip empty target scan lines.
-                if (target[yc].Count <= 2)
+                if (tc <= 2)
                 {
                     continue;
                 }
 
-                if (yb < 0 || yb >= source.Length || source[yb].Count <= 2)
+                if (ys < 0 || ys >= source.Length || source[ys].Count <= 2)
                 {
                     if (p0 % 2 == 1)
                     {
                         // Clear the target scan line.
-                        target[yc].RemoveRange(1, target[yc].Count - 2);
+                        target[yt].RemoveRange(1, tc - 2);
                     }
                     continue;
                 }
 
-                int pb = p0, pc = p0, qb = pb + 1, qc = pc + 1; // left and right margin of first region
-                int bl = source[yb][pb] + dx, br = source[yb][qb] + dx;
-                int cl = target[yc][pc], cr = target[yc][qc];
+                int sc = source[ys].Count;
+
+                int ps = p0, pt = p0, qs = ps + 1, qt = pt + 1; // left and right margin of first region
+                int sl = source[ys][ps] + dx, sr = source[ys][qs] + dx;
+                int tl = target[yt][pt], tr = target[yt][qt];
 
                 while (true)
                 {
-                    if (cr < bl) // c left of b
+                    if (tr < sl) // c left of b
                     {
                         // Remove the current contour region.
-                        target[yc].RemoveRange(pc, 2);
-                        if (qc >= target[yc].Count) // behind last target region
+                        target[yt].RemoveRange(pt, 2); tc -= 2;
+                        if (qt >= tc) // behind last target region
                         {
                             break;
                         }
-                        cl = target[yc][pc]; cr = target[yc][qc];
+                        tl = target[yt][pt]; tr = target[yt][qt];
 
                         continue;
                     }
-                    else if (br < cl) // b left of c
+                    else if (sr < tl) // b left of c
                     {
                         // Advance to the next border region.
-                        pb += 2; qb += 2;
-                        if (qb >= source[yb].Count) // behind last source region
+                        ps += 2; qs += 2;
+                        if (qs >= sc) // behind last source region
                         {
                             // Remove the current and all other remaining target regions.
-                            target[yc].RemoveRange(pc, target[yc].Count - qc);
+                            target[yt].RemoveRange(pt, tc - qt);
                             break;
                         }
-                        bl = source[yb][pb] + dx; br = source[yb][qb] + dx;
+                        sl = source[ys][ps] + dx; sr = source[ys][qs] + dx;
 
                         continue;
                     }
 
-                    if (cl < bl)
+                    if (tl < sl)
                     {
                         // Adjust the left margin of this target region.
-                        target[yc][pc] = cl = bl;
+                        target[yt][pt] = tl = sl;
                     }
 
-                    if (br < cr) // c extends to the right of b
+                    if (sr < tr) // c extends to the right of b
                     {
                         // Split this contour region.
-                        target[yc].InsertRange(pc + 2, new int[] {
-                            br, // split location, will be corrected in the following iterations
-                            cr, // current right margin
-                        });
-                        target[yc][qc] = cr = br; // split location
+                        target[yt].InsertRange(pt + 2, new int[] {
+                            sr, // split location, will be corrected in the following iterations
+                            tr, // current right margin
+                        }); tc += 2;
+                        target[yt][qt] = tr = sr; // split location
 
                         // Advance to the next source region.
-                        pb += 2; qb += 2;
-                        if (qb >= source[yb].Count) // behind last source region
+                        ps += 2; qs += 2;
+                        if (qs >= sc) // behind last source region
                         {
                             // Remove the remaining target regions.
-                            target[yc].RemoveRange(pc + 2, target[yc].Count - qc - 2);
+                            target[yt].RemoveRange(pt + 2, tc - qt - 2);
                             break;
                         }
-                        bl = source[yb][pb] + dx; br = source[yb][qb] + dx;
+                        sl = source[ys][ps] + dx; sr = source[ys][qs] + dx;
                     }
 
                     // Advance to the next target region.
-                    pc += 2; qc += 2;
-                    if (qc >= target[yc].Count) // behind last target region
+                    pt += 2; qt += 2;
+                    if (qt >= tc) // behind last target region
                     {
                         break;
                     }
-                    cl = target[yc][pc]; cr = target[yc][qc];
+                    tl = target[yt][pt]; tr = target[yt][qt];
                 }
             }
         }
@@ -1288,7 +1294,7 @@ namespace SWA.Ariadne.Gui.Mazes
         /// </summary>
         /// <param name="fuzziness">maximum color distance that is considered equal to the dominant color</param>
         /// <returns></returns>
-        private float GuessBackgroundColor(float fuzziness)
+        private float GuessBackgroundColor(int fuzziness)
         {
             int borderWidth = 2;
             int xMin = 0, xMax = template.Width - 1;
@@ -1324,7 +1330,10 @@ namespace SWA.Ariadne.Gui.Mazes
             }
 
             int n = pixels.Count;
-            this.backgroundColor = Color.FromArgb(rSum / n, gSum / n, bSum / n);
+            this.bgR = rSum / n;
+            this.bgG = gSum / n;
+            this.bgB = bSum / n;
+            this.backgroundColor = Color.FromArgb(bgR, bgG, bgB);
 
             #endregion
 
@@ -1349,17 +1358,24 @@ namespace SWA.Ariadne.Gui.Mazes
 
         /// <summary>
         /// Compares the given color with the backgroundColor.
-        /// Returns a value between 0.0 (identical colors) and 1.0 (opposite colors).
+        /// Returns a value between 0 (identical colors) and 255 (opposite colors).
         /// </summary>
         /// <param name="color"></param>
         /// <returns></returns>
-        private float ColorDistance(Color color)
+        /// Note: This method is called extremely often.  Therefore, it is highly optimized.
+        private int ColorDistance(Color color)
         {
-            int dr = Math.Abs(color.R - backgroundColor.R);
-            int dg = Math.Abs(color.G - backgroundColor.G);
-            int db = Math.Abs(color.B - backgroundColor.B);
+            int colR = color.R, colG = color.G, colB = color.B;
+            int result = 0;
 
-            return (float)Math.Max(dr, Math.Max(dg, db)) / 255.0F;
+            if (colR - bgR > result) { result = colR - bgR; }
+            if (bgR - colR > result) { result = bgR - colR; }
+            if (colG - bgG > result) { result = colG - bgG; }
+            if (bgG - colG > result) { result = bgG - colG; }
+            if (colB - bgB > result) { result = colB - bgB; }
+            if (bgB - colB > result) { result = bgB - colB; }
+            
+            return result;
         }
 
         /// <summary>
