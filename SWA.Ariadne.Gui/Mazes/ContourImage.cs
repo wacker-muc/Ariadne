@@ -26,10 +26,9 @@ namespace SWA.Ariadne.Gui.Mazes
             public readonly int rx, ry;
 
             /// <summary>
-            /// Distance from the contour pixel, squared.
+            /// Alpha value to be applied to the pixel at (rx, ry).
             /// </summary>
-            /// TODO: Work with the resulting alpha value a = 255 * sqrt(d2).
-            public readonly int d2;
+            public readonly int a;
 
             /// <summary>
             /// Constructor.
@@ -37,9 +36,9 @@ namespace SWA.Ariadne.Gui.Mazes
             /// <param name="rx"></param>
             /// <param name="ry"></param>
             /// <param name="d2"></param>
-            public RelativePoint(int rx, int ry, int d2)
+            public RelativePoint(int rx, int ry, int a)
             {
-                this.rx = rx; this.ry = ry; this.d2 = d2;
+                this.rx = rx; this.ry = ry; this.a = a;
             }
 
             /// <summary>
@@ -50,12 +49,12 @@ namespace SWA.Ariadne.Gui.Mazes
             /// <param name="ry"></param>
             public RelativePoint(int rx, int ry)
             {
-                this.rx = rx; this.ry = ry; this.d2 = 0;
+                this.rx = rx; this.ry = ry; this.a = 0;
             }
 
             public override string ToString()
             {
-                return string.Format("d2({0},{1}) = {2}", rx, ry, d2);
+                return string.Format("a({0},{1}) = {2}", rx, ry, a);
             }
         }
 
@@ -93,30 +92,6 @@ namespace SWA.Ariadne.Gui.Mazes
         private static List<RelativePoint>[,] influenceRegions = new List<RelativePoint>[8, 8];
 
         /// <summary>
-        /// Returns the squared distance a contour pixel has
-        /// from a point located at (x, y) relatively to that pixel.
-        /// Returns int.MaxValue if the given point is not influenced by the pixel
-        /// but by one of the given neighbor pixels.
-        /// </summary>
-        /// <param name="nbL">left neighbor</param>
-        /// <param name="nbR">right neighbor</param>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns></returns>
-        /// Note: This method is only used by Unit Tests.
-        private static int InfluenceD2(int nbL, int nbR, int x, int y)
-        {
-            foreach (RelativePoint rp in influenceRegions[nbL, nbR])
-            {
-                if ((rp.rx == x) && (rp.ry == y))
-                {
-                    return rp.d2;
-                }
-            }
-            return int.MaxValue;
-        }
-
-        /// <summary>
         /// For each combination of a next left and next right neighbor of a pixel,
         /// the borderLimit is the set of points on the left and/or right (outside) edge of the influenceRegion.
         /// </summary>
@@ -141,10 +116,19 @@ namespace SWA.Ariadne.Gui.Mazes
             // Slightly inside the given influence range.
             int range2Max = influenceRange * influenceRange - 1;
 
-            /* Even when influenceRange = ContourDistance
+            /* Note: Even when influenceRange = ContourDistance
              * we still have at least one border pixel in the given range
              * on every scan line.
              */
+
+            // Prepare a mapping of d2 (distance-squared) values to alpha values.
+            int[] alphaMap = new int[range2Max + 1];
+            for (int d2 = range2Min; d2 <= range2Max; d2++)
+            {
+                double d = Math.Sqrt(d2);
+                int a = (int)(255 * (d - ContourDistance) / (influenceRange - ContourDistance));
+                alphaMap[d2] = a;
+            }
 
             /* Consider four points:
              * - the pixel for which an influence region is calculated, at (0, 0)
@@ -222,7 +206,7 @@ namespace SWA.Ariadne.Gui.Mazes
                                     if (range2Min <= d2)
                                     {
                                         // The point is partially influenced.
-                                        influenceRegions[nbL, nbR].Add(new RelativePoint(dx, dy, d2));
+                                        influenceRegions[nbL, nbR].Add(new RelativePoint(dx, dy, alphaMap[d2]));
                                     }
                                     else
                                     {
@@ -444,9 +428,9 @@ namespace SWA.Ariadne.Gui.Mazes
             PrepareInfluenceRegions(contourDist + blurDist);
             int range2Max = (contourDist + blurDist) * (contourDist + blurDist);
 
-            // For every pixel: distance to closest non-background pixel.
-            // Actually, the value is the squared length of the diagonal distance.
-            int[,] dist2ToImage;
+            // For every pixel: The alpha value to be used in the mask.
+            // Actually, we store (a - 256); thus, the default initial value 0 is like "extremely high".
+            int[,] alpha = new int[width, height];
 
             // All points on the immediate contour of an object are collected in scan switch lines.
             List<int>[] inside;
@@ -459,9 +443,6 @@ namespace SWA.Ariadne.Gui.Mazes
 
             // The points on the extended contour (the region with 100% influence) are also collected in scan switch lines.
             List<int>[] contour;
-
-            // Create and initialize the dist2Image array.
-            InitializeDist2ToImage(width, height, out dist2ToImage);
 
             // Create the scan line lists and add the required terminator entries.
             InitializeScanLines(width, height, out inside, out contour, out border);
@@ -504,7 +485,7 @@ namespace SWA.Ariadne.Gui.Mazes
 
                         if (ColorDistance(image.GetPixel(x, y)) > fuzziness)
                         {
-                            if (ScanObject(x, y, fuzziness, dist2ToImage, inside, contour, border))
+                            if (ScanObject(x, y, fuzziness, alpha, inside, contour, border))
                             {
                                 ++nObjects;
 
@@ -541,7 +522,7 @@ namespace SWA.Ariadne.Gui.Mazes
             FillOutside(black, border);
 
             // Set the color of the mask pixels between border and contour to black with an appropriate transparency.
-            PaintGradient(dist2ToImage, border, contour, contourDist, blurDist, black);
+            PaintGradient(alpha, border, contour, contourDist, blurDist, black);
 
             // Border.
             DrawContour(border, Color.Cyan);
@@ -551,18 +532,18 @@ namespace SWA.Ariadne.Gui.Mazes
 
         /// <summary>
         /// Scans the contour of an object starting at a given point on the contour.
-        /// [x0-1,y0] is outside and [x0,y0] is inside the image.
-        /// The influence regions of all contour pixels are applied to the dist2Image map.
+        /// (x0-1,y0) is outside and (x0,y0) is inside the image.
+        /// The influence regions of all contour pixels are applied to the alpha map.
         /// Returns true if a sufficiently large object was detected.
         /// </summary>
         /// <param name="x0"></param>
         /// <param name="y0"></param>
         /// <param name="fuzziness"></param>
-        /// <param name="dist2ToImage"></param>
+        /// <param name="alpha"></param>
         /// <param name="inside"></param>
         /// <param name="contour"></param>
         /// <param name="border"></param>
-        private bool ScanObject(int x0, int y0, int fuzziness, int[,] dist2ToImage, List<int>[] inside, List<int>[] contour, List<int>[] border)
+        private bool ScanObject(int x0, int y0, int fuzziness, int[,] alpha, List<int>[] inside, List<int>[] contour, List<int>[] border)
         {
             #region Choose an initial focus point with a left and right neighbor.
 
@@ -592,26 +573,39 @@ namespace SWA.Ariadne.Gui.Mazes
 
             do
             {
+                // Number of neighbors of the current nbL that need not be tested
+                // when we advance to the following left neighbor (see LeftNeighbor()).
+                // This number is positive when some relevant points were already tested
+                // when we advanced from nbR to the current point.
+                int skipNeighbors = 0;
+
                 #region Register the object point in the "inside" scan lines.
 
                 switch (nbR * 8 + nbL)
                 {
                     case (NbW * 8 + NbE):       //  R o L
-                    case (NbE * 8 + NbW):       //
+                    case (NbE * 8 + NbW):       //    .
                         // do nothing; we'll wait what happens next
+                        skipNeighbors = 1;
                         break;
 
                     case (NbSW * 8 + NbE):      //    o L
-                    case (NbNE * 8 + NbW):      //  R
+                    case (NbNE * 8 + NbW):      //  R .
                         // do nothing; we'll wait what happens next
+                        skipNeighbors = 1;
                         break;
 
                     case (NbW * 8 + NbSE):      //  R o
-                    case (NbE * 8 + NbNW):      //      L
-                    //
-                    case (NbSW * 8 + NbSE):     //    o
-                    case (NbNE * 8 + NbNW):     //  R   L
+                    case (NbE * 8 + NbNW):      //    . L
                         // do nothing; wait until (xL,yL) is processed in the next iteration
+                        skipNeighbors = 1;
+                        break;
+
+                    case (NbSW * 8 + NbSE):     //    o
+                    case (NbNE * 8 + NbNW):     //  R . L
+                        //                      //    .
+                        // do nothing; wait until (xL,yL) is processed in the next iteration
+                        skipNeighbors = 2;
                         break;
 
                     case (NbW * 8 + NbNE):      //
@@ -625,26 +619,40 @@ namespace SWA.Ariadne.Gui.Mazes
                         InsertObjectPoint(inside[y], x);
                         break;
 
-                    case (NbS * 8 + NbNE):      //
-                    case (NbS * 8 + NbN):       //  L L L
-                    case (NbS * 8 + NbNW):      //  L o
-                    case (NbS * 8 + NbW):       //    R
-                    case (NbN * 8 + NbSW):
-                    case (NbN * 8 + NbS):
-                    case (NbN * 8 + NbSE):
-                    case (NbN * 8 + NbE):
+                    case (NbS * 8 + NbNW):      //
+                    case (NbS * 8 + NbW):       //  L
+                    case (NbN * 8 + NbSE):      //  L o
+                    case (NbN * 8 + NbE):       //    R
                         InsertObjectPoint(inside[y], x);
                         break;
 
-                    case (NbNW * 8 + NbSW):     //
-                    case (NbNW * 8 + NbS):      //  R
-                    case (NbNW * 8 + NbSE):     //    o L
-                    case (NbNW * 8 + NbE):      //  L L L
-                    case (NbSE * 8 + NbNE):
-                    case (NbSE * 8 + NbN):
-                    case (NbSE * 8 + NbNW):
-                    case (NbSE * 8 + NbW):
+                    case (NbS * 8 + NbNE):      //
+                    case (NbS * 8 + NbN):       //    L L
+                    case (NbN * 8 + NbSW):      //    o .
+                    case (NbN * 8 + NbS):       //    R
                         InsertObjectPoint(inside[y], x);
+                        skipNeighbors = 1;
+                        break;
+
+                    case (NbNW * 8 + NbSE):     //
+                    case (NbNW * 8 + NbE):      //  R
+                    case (NbSE * 8 + NbNW):     //    o L
+                    case (NbSE * 8 + NbW):      //      L
+                        InsertObjectPoint(inside[y], x);
+                        break;
+
+                    case (NbNW * 8 + NbS):      //  R
+                    case (NbSE * 8 + NbN):      //  . o
+                    //                          //    L
+                        InsertObjectPoint(inside[y], x);
+                        skipNeighbors = 1;
+                        break;
+
+                    case (NbNW * 8 + NbSW):     //    R
+                    case (NbSE * 8 + NbNE):     //  . . o
+                    //                          //    L
+                        InsertObjectPoint(inside[y], x);
+                        skipNeighbors = 2;
                         break;
 
                     case (NbSW * 8 + NbNE):     //
@@ -708,9 +716,9 @@ namespace SWA.Ariadne.Gui.Mazes
                 foreach (RelativePoint rp in influenceRegions[nbL, nbR])
                 {
                     int i = x + rp.rx, j = y + rp.ry;
-                    if (rp.d2 < dist2ToImage[i, j])
+                    if (rp.a - 256 < alpha[i, j])
                     {
-                        dist2ToImage[i, j] = rp.d2;
+                        alpha[i, j] = rp.a - 256;
                     }
                 }
 
@@ -729,7 +737,7 @@ namespace SWA.Ariadne.Gui.Mazes
                 // Advance the focus to the next object pixel.
                 xR = x; yR = y; nbR = (nbL + 4) % 8;
                 x = xL; y = yL;
-                LeftNeighbor(fuzziness, x, y, nbR, out nbL, out xL, out yL);
+                LeftNeighbor(fuzziness, x, y, (nbR + skipNeighbors) % 8, out nbL, out xL, out yL);
 
             } while (x != x1 || y != y1 || nb1 != nbL);
 
@@ -801,19 +809,6 @@ namespace SWA.Ariadne.Gui.Mazes
         #endregion
 
         #region Methods for initializing the data structures.
-
-        private static void InitializeDist2ToImage(int width, int height, out int[,] dist2ToImage)
-        {
-            dist2ToImage = new int[width, height];
-
-            for (int x = 0; x < width; x++)
-            {
-                for (int y = 0; y < height; y++)
-                {
-                    dist2ToImage[x, y] = int.MaxValue;
-                }
-            }
-        }
 
         private static void InitializeScanLines(int width, int height, out List<int>[] inside, out List<int>[] contour, out List<int>[] border)
         {
@@ -1483,9 +1478,16 @@ namespace SWA.Ariadne.Gui.Mazes
             return new Rectangle(bbxMin, bbyMin, bbxMax - bbxMin + 1, bbyMax - bbyMin + 1);
         }
 
-        private void PaintGradient(int[,] dist2ToImage, List<int>[] border, List<int>[] contour, int contourDist, int blurDist, Color black)
+        private void PaintGradient(int[,] alpha, List<int>[] border, List<int>[] contour, int contourDist, int blurDist, Color black)
         {
-            for (int y = 0; y < mask.Height; y++)
+            Color[] aColor = new Color[256];
+            for (int a = 0; a < 256; a++)
+            {
+                aColor[a] = Color.FromArgb(a, black);
+            }
+
+            int width = mask.Width, height = mask.Height;
+            for (int y = 0; y < height; y++)
             {
                 if (border[y].Count < 4) // not inside the border of any object
                 {
@@ -1498,7 +1500,7 @@ namespace SWA.Ariadne.Gui.Mazes
                 int b = 2, xb = border[y][b]; // right end of the first border region
                 int c = 1, xc = contour[y][c]; // left end of the first contour region
 
-                for (int x = border[y][1]; x < mask.Width; x++)
+                for (int x = border[y][1]; x < width; x++)
                 {
                     if (x >= xc) // At the left end of a contour region.
                     {
@@ -1523,37 +1525,13 @@ namespace SWA.Ariadne.Gui.Mazes
                         continue;
                     }
 
-                    double dist = Math.Sqrt(dist2ToImage[x, y]);
-                    Color maskColor;
-
-                    if (dist > contourDist + blurDist)
+                    // Paint the mask pixel with its given alpha value.
+                    int a = alpha[x, y] + 256;
+                    if (0 <= a && a < 255)
                     {
-#if false
-                        maskColor = black;
-#else
-                        // This pixel will also be filled with black as part of the area outside the influence border.
-                        continue;
-#endif
+                        Color maskColor = aColor[a];
+                        mask.SetPixel(x, y, maskColor);
                     }
-                    else
-                    {
-                        if (dist <= contourDist)
-                        {
-#if false
-                            maskColor = transparent;
-#else
-                            // The mask's default color is already transparent.
-                            continue;
-#endif
-                        }
-                        else
-                        {
-                            int a = (int)(255 * (dist - contourDist) / blurDist);
-                            maskColor = Color.FromArgb(a, black);
-                        }
-                    }
-
-                    mask.SetPixel(x, y, maskColor);
                 }
             }
         }

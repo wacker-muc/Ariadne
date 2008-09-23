@@ -587,20 +587,6 @@ internal class SWA_Ariadne_Gui_Mazes_ContourImageAccessor : BaseAccessor {
         }
     }
     
-    internal static int InfluenceD2(int nbL, int nbR, int x, int y) {
-        object[] args = new object[] {
-                nbL,
-                nbR,
-                x,
-                y};
-        int ret = ((int)(m_privateType.InvokeStatic("InfluenceD2", new System.Type[] {
-                    typeof(int),
-                    typeof(int),
-                    typeof(int),
-                    typeof(int)}, args)));
-        return ret;
-    }
-    
     internal static void PrepareInfluenceRegions(int influenceRange) {
         object[] args = new object[] {
                 influenceRange};
@@ -616,12 +602,12 @@ internal class SWA_Ariadne_Gui_Mazes_ContourImageAccessor : BaseAccessor {
         return ret;
     }
     
-    internal bool ScanObject(int x0, int y0, int fuzziness, int[,] dist2ToImage, System.Collections.Generic.List<int>[] inside, System.Collections.Generic.List<int>[] contour, System.Collections.Generic.List<int>[] border) {
+    internal bool ScanObject(int x0, int y0, int fuzziness, int[,] alpha, System.Collections.Generic.List<int>[] inside, System.Collections.Generic.List<int>[] contour, System.Collections.Generic.List<int>[] border) {
         object[] args = new object[] {
                 x0,
                 y0,
                 fuzziness,
-                dist2ToImage,
+                alpha,
                 inside,
                 contour,
                 border};
@@ -678,18 +664,6 @@ internal class SWA_Ariadne_Gui_Mazes_ContourImageAccessor : BaseAccessor {
         nbR = ((int)(args[4]));
         xR = ((int)(args[5]));
         yR = ((int)(args[6]));
-    }
-    
-    internal static void InitializeDist2ToImage(int width, int height, out int[,] dist2ToImage) {
-        object[] args = new object[] {
-                width,
-                height,
-                null};
-        m_privateType.InvokeStatic("InitializeDist2ToImage", new System.Type[] {
-                    typeof(int),
-                    typeof(int),
-                    typeof(int).MakeArrayType(2).MakeByRefType()}, args);
-        dist2ToImage = ((int[,])(args[2]));
     }
     
     internal static void InitializeScanLines(int width, int height, out System.Collections.Generic.List<int>[] inside, out System.Collections.Generic.List<int>[] contour, out System.Collections.Generic.List<int>[] border) {
@@ -842,9 +816,9 @@ internal class SWA_Ariadne_Gui_Mazes_ContourImageAccessor : BaseAccessor {
         return ret;
     }
     
-    internal void PaintGradient(int[,] dist2ToImage, System.Collections.Generic.List<int>[] border, System.Collections.Generic.List<int>[] contour, int contourDist, int blurDist, global::System.Drawing.Color black) {
+    internal void PaintGradient(int[,] alpha, System.Collections.Generic.List<int>[] border, System.Collections.Generic.List<int>[] contour, int contourDist, int blurDist, global::System.Drawing.Color black) {
         object[] args = new object[] {
-                dist2ToImage,
+                alpha,
                 border,
                 contour,
                 contourDist,
