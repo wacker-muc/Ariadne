@@ -866,19 +866,24 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <param name="borderX">scan line of alternating R-LR-LR-...-L border points</param>
         /// <param name="xL">left border point</param>
         /// <param name="xR">right border point</param>
+        /// Note: This method is called very often and reasonably optimized.
         private static void InsertPair(List<int> scanLine, int xL, int xR)
         {
             // Position where the border points fit into the scanLine.
             int q = 2;      // A right border point position.
+            int xq = 0;
+
+            int count = scanLine.Count;
 
             // Find the position (p,q) where (xL .. xR) overlaps or touches (scanLine[p] .. scanLine[q]).
-            while (q < scanLine.Count && scanLine[q] < xL - 1)
+            while (q < count && (xq = scanLine[q]) < xL - 1)
             {
                 q += 2;
             }
             int p = q - 1;  // A (valid) left border point position.
+            int xp = scanLine[p];
 
-            if (xR + 1 < scanLine[p])    // no overlap; insert new LR pair
+            if (xR + 1 < xp)            // no overlap; insert new LR pair
             {
                 scanLine.Insert(p, xR);
                 scanLine.Insert(p, xL);
@@ -887,7 +892,7 @@ namespace SWA.Ariadne.Gui.Mazes
             {
                 // Find the following scan line LR pair that is still within the reach of the new LR pair.
                 int p1 = p + 2;
-                while (p1 < scanLine.Count - 2 && scanLine[p1] <= xR + 1)
+                while (p1 < count - 2 && scanLine[p1] <= xR + 1)
                 {
                     p1 += 2;
                 }
@@ -897,11 +902,12 @@ namespace SWA.Ariadne.Gui.Mazes
                 if (p1 > p)
                 {
                     scanLine.RemoveRange(q, p1 - p);
+                    xq = scanLine[q];
                 }
 
                 // Extend the current LR pair up to the the extent of the given LR pair.
-                scanLine[p] = Math.Min(scanLine[p], xL);
-                scanLine[q] = Math.Max(scanLine[q], xR);
+                if (xL < xp) { scanLine[p] = xL; }
+                if (xR > xq) { scanLine[q] = xR; }
             }
         }
 
@@ -1197,7 +1203,9 @@ namespace SWA.Ariadne.Gui.Mazes
                     continue;
                 }
 
-                if (ys < 0 || ys >= source.Length || source[ys].Count <= 2)
+                int sc;
+
+                if (ys < 0 || ys >= source.Length || (sc = source[ys].Count) <= 2)
                 {
                     if (p0 % 2 == 1)
                     {
@@ -1206,8 +1214,6 @@ namespace SWA.Ariadne.Gui.Mazes
                     }
                     continue;
                 }
-
-                int sc = source[ys].Count;
 
                 int ps = p0, pt = p0, qs = ps + 1, qt = pt + 1; // left and right margin of first region
                 int sl = source[ys][ps] + dx, sr = source[ys][qs] + dx;
