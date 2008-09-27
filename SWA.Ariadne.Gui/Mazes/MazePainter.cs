@@ -628,6 +628,13 @@ namespace SWA.Ariadne.Gui.Mazes
             // The PaintWalls() method fails in design mode.
             try
             {
+                // Call the painterDelegate first
+                // as it may also paint into areas that are later covered by the maze.
+                if (painterDelegate != null)
+                {
+                    painterDelegate(g);
+                }
+
                 if (settingsData != null && settingsData.VisibleOutlines)
                 {
                     PaintOutlineShape(g);
@@ -649,11 +656,6 @@ namespace SWA.Ariadne.Gui.Mazes
                 }
 
                 PaintEndpoints(g);
-
-                if (painterDelegate != null)
-                {
-                    painterDelegate(g);
-                }
             }
             catch (MissingMethodException) { }
         }

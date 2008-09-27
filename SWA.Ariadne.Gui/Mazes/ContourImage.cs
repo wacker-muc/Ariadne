@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using SWA.Ariadne.Outlines;
 
 namespace SWA.Ariadne.Gui.Mazes
 {
@@ -10,8 +11,13 @@ namespace SWA.Ariadne.Gui.Mazes
     {
         #region Constants
 
+#if false
         private const int ContourDistance = 16;
         private const int BlurDistanceMax = 12;
+#else
+        private const int ContourDistance =  8;
+        private const int BlurDistanceMax = 16;
+#endif
         private const int MaxColorDistance = 255;
 
         #endregion
@@ -319,10 +325,17 @@ namespace SWA.Ariadne.Gui.Mazes
             }
         }
 
+        #region Bitmaps.
+
         /// <summary>
         /// The image that was given in the constructor.
         /// </summary>
         private Bitmap template;
+
+        /// <summary>
+        /// Bounding box of the objects found in the template.
+        /// </summary>
+        private Rectangle bbox;
 
         /// <summary>
         /// The mask that is applied to the template image.
@@ -336,29 +349,115 @@ namespace SWA.Ariadne.Gui.Mazes
         private Graphics gMask;
 
         /// <summary>
-        /// Gets the processed template image.
+        /// The processed image.
+        /// </summary>
+        private Bitmap image;
+
+        #endregion
+
+        #region Scan lines.
+
+        /// <summary>
+        /// All points on the immediate contour of an object are collected in scan switch lines.
+        /// </summary>
+        List<int>[] inside;
+
+        /// <summary>
+        /// The points on the outside border of the objects' influence regions are collected in scan switch lines.
+        /// On the scan line, the points are sorted by (unique) increasing X values.
+        /// The scan line starts with one Right point and ends with one Left point outside of the image width range.
+        /// Between these, the points mark pairs of Left and Right borders.
+        /// </summary>
+        List<int>[] border;
+
+        /// <summary>
+        /// The points on the extended contour (the region with 100% influence) are also collected in scan switch lines.
+        /// </summary>
+        List<int>[] contour;
+
+        #endregion
+
+        #endregion
+
+        #region Access methods.
+
+        /// <summary>
+        /// Returns the processed template image.
         /// Background areas at a certain distance from the image objects are painted black.
         /// </summary>
-        public Image ProcessedImage
+        public Image GetProcessedImage()
         {
-            get
+            if (image == null)
             {
-                if (image == null)
+                CreateImage();
+
+                int fuzziness = (int)(0.03 * MaxColorDistance);
+                CreateMask(fuzziness);
+                ApplyMask();
+
+                this.bbox = BoundingBox(border);
+
+                image = Crop(image, bbox);
+                mask = Crop(mask, bbox);
+            }
+
+            return image; 
+        }
+
+        /// <summary>
+        /// Returns a test delegate that tells if a certain maze square is
+        /// inside or outside the processed image border.
+        /// </summary>
+        /// <param name="gridWidth"></param>
+        /// <param name="xOffset"></param>
+        /// <param name="yOffset"></param>
+        /// <returns></returns>
+        public OutlineShape.InsideShapeDelegate GetInsideTest(int gridWidth, int xOffset, int yOffset)
+        {
+            if (this.image.Equals(this.template))
+            {
+                return null;
+            }
+
+            // Make sure the image has been processed.
+            GetProcessedImage();
+
+            return delegate (int x, int y)
+            {
+                // Image coordinates of the evaluated maze square.
+                // Translations to be considered:
+                // 1) given offset of the image within the grid
+                // 2) bounding box that was used to crop the template image
+                int x0 = x * gridWidth - xOffset + bbox.Left, x1 = x0 + gridWidth - 1;
+                int y0 = y * gridWidth - yOffset + bbox.Top, y1 = y0 + gridWidth - 1;
+
+                for (int j = y0; j <= y1; j++)
                 {
-                    CreateImage();
+                    if (j < 0 || j >= border.Length)
+                    {
+                        continue;
+                    }
 
-                    int fuzziness = (int)(0.03 * MaxColorDistance);
-                    Rectangle bbox = CreateMask(fuzziness);
-                    ApplyMask();
-
-                    image = Crop(image, bbox);
-                    mask = Crop(mask, bbox);
+                    for (int p = 1, q = p + 1; q < border[j].Count; p += 2, q += 2)
+                    {
+                        if (border[j][p] > x1)
+                        {
+                            // We have passed the evaluated square.
+                            // Continue on the next scan line.
+                            break;
+                        }
+                        if (x0 <= border[j][q])
+                        {
+                            // The current scan line area intersects with the evaluated square.
+                            return true;
+                        }
+                    }
                 }
 
-                return image; 
-            }
+                // None of the border scan lines intersected with the evaluated square.
+                return false;
+            };
         }
-        private Bitmap image;
 
         #endregion
 
@@ -397,14 +496,13 @@ namespace SWA.Ariadne.Gui.Mazes
         #region Methods for identifying non-background objects in an image.
 
         /// <summary>
-        /// Builds the bitmap mask to be applied to the template image.
+        /// Builds the bitmap mask and bounding box to be applied to the template image.
         /// Areas dominated by the background color will be black.
         /// Other areas will be transparent.
-        /// Returns the resulting area that is not completely masked.
         /// </summary>
         /// <param name="fuzziness"></param>
         /// 
-        private Rectangle CreateMask(int fuzziness)
+        private void CreateMask(int fuzziness)
         {
             int contourDist = ContourDistance;
             int blurDist = BlurDistance;
@@ -432,20 +530,8 @@ namespace SWA.Ariadne.Gui.Mazes
             // Actually, we store (a - 256); thus, the default initial value 0 is like "extremely high".
             int[,] alpha = new int[width, height];
 
-            // All points on the immediate contour of an object are collected in scan switch lines.
-            List<int>[] inside;
-
-            // The points on the outside border of the objects' influence regions are collected in scan switch lines.
-            // On the scan line, the points are sorted by (unique) increasing X values.
-            // The scan line starts with one Right point and ends with one Left point outside of the image width range.
-            // Between these, the points mark pairs of Left and Right borders.
-            List<int>[] border;
-
-            // The points on the extended contour (the region with 100% influence) are also collected in scan switch lines.
-            List<int>[] contour;
-
             // Create the scan line lists and add the required terminator entries.
-            InitializeScanLines(width, height, out inside, out contour, out border);
+            InitializeScanLines(width, height);
 
             #endregion
 
@@ -485,7 +571,7 @@ namespace SWA.Ariadne.Gui.Mazes
 
                         if (ColorDistance(image.GetPixel(x, y)) > fuzziness)
                         {
-                            if (ScanObject(x, y, fuzziness, alpha, inside, contour, border))
+                            if (ScanObject(x, y, fuzziness, alpha))
                             {
                                 ++nObjects;
 
@@ -522,12 +608,10 @@ namespace SWA.Ariadne.Gui.Mazes
             FillOutside(black, border);
 
             // Set the color of the mask pixels between border and contour to black with an appropriate transparency.
-            PaintGradient(alpha, border, contour, contourDist, blurDist, black);
+            PaintGradient(alpha, contourDist, blurDist, black);
 
             // Border.
             DrawContour(border, Color.Cyan);
-
-            return BoundingBox(border);
         }
 
         /// <summary>
@@ -540,10 +624,7 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <param name="y0"></param>
         /// <param name="fuzziness"></param>
         /// <param name="alpha"></param>
-        /// <param name="inside"></param>
-        /// <param name="contour"></param>
-        /// <param name="border"></param>
-        private bool ScanObject(int x0, int y0, int fuzziness, int[,] alpha, List<int>[] inside, List<int>[] contour, List<int>[] border)
+        private bool ScanObject(int x0, int y0, int fuzziness, int[,] alpha)
         {
             #region Choose an initial focus point with a left and right neighbor.
 
@@ -810,7 +891,7 @@ namespace SWA.Ariadne.Gui.Mazes
 
         #region Methods for initializing the data structures.
 
-        private static void InitializeScanLines(int width, int height, out List<int>[] inside, out List<int>[] contour, out List<int>[] border)
+        private void InitializeScanLines(int width, int height)
         {
             inside = new List<int>[height];
             contour = new List<int>[height];
@@ -1484,7 +1565,7 @@ namespace SWA.Ariadne.Gui.Mazes
             return new Rectangle(bbxMin, bbyMin, bbxMax - bbxMin + 1, bbyMax - bbyMin + 1);
         }
 
-        private void PaintGradient(int[,] alpha, List<int>[] border, List<int>[] contour, int contourDist, int blurDist, Color black)
+        private void PaintGradient(int[,] alpha, int contourDist, int blurDist, Color black)
         {
             Color[] aColor = new Color[256];
             for (int a = 0; a < 256; a++)

@@ -99,8 +99,9 @@ namespace SWA.Ariadne.Gui.Mazes
         /// Returns the next queued image.
         /// Returns null if no valid images can be found.
         /// </summary>
+        /// <param name="r"></param>
         /// <returns></returns>
-        public ContourImage GetNext()
+        public ContourImage GetNext(Random r)
         {
             ContourImage result;
 
@@ -112,7 +113,6 @@ namespace SWA.Ariadne.Gui.Mazes
             }
             else
             {
-                Random r = RandomFactory.CreateRandom();
                 List<string> imagePaths = FindImages(imageFolder, 1, false, r);
                 if (imagePaths.Count == 0)
                 {

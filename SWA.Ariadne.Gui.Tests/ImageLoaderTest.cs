@@ -5,6 +5,7 @@ using System;
 using System.Text;
 using System.Collections.Generic;
 using System.Drawing;
+using SWA.Ariadne.Gui.Mazes;
 using SWA.Ariadne.Settings;
 
 namespace SWA.Ariadne.Gui.Tests
@@ -89,12 +90,11 @@ namespace SWA.Ariadne.Gui.Tests
 
             int queueLength = 4;
 
-            object target = SWA_Ariadne_Gui_Mazes_ImageLoaderAccessor.CreatePrivate(minSize, maxSize, imageFolder, queueLength);
-            SWA_Ariadne_Gui_Mazes_ImageLoaderAccessor accessor = new SWA_Ariadne_Gui_Mazes_ImageLoaderAccessor(target);
+            ImageLoader target = new ImageLoader(minSize, maxSize, imageFolder, queueLength);
 
             for (int i = 0; i < 20; i++)
             {
-                Image img = accessor.GetNext();
+                ContourImage img = target.GetNext(null);
                 Assert.AreNotEqual(null, img, testObject + "returned null");
             }
         }

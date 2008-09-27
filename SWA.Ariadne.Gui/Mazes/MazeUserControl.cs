@@ -242,7 +242,7 @@ namespace SWA.Ariadne.Gui.Mazes
             }
 
 
-            bool result = Maze.ReserveRectangle(x, y, w, h);
+            bool result = Maze.ReserveRectangle(x, y, w, h, null);
 
             // Move the control into the center of the reserved area.
             if (result)
@@ -366,7 +366,7 @@ namespace SWA.Ariadne.Gui.Mazes
         {
             for (int i = 0; i < images.Count; i++)
             {
-                g.DrawImage(images[i].ProcessedImage, imageLocations[i]);
+                g.DrawImage(images[i].GetProcessedImage(), imageLocations[i]);
             }
         }
 
@@ -572,7 +572,7 @@ namespace SWA.Ariadne.Gui.Mazes
             }
             for (int i = 0; i < n; i++)
             {
-                ContourImage img = imageLoader.GetNext();
+                ContourImage img = imageLoader.GetNext(r);
                 if (img != null)
                 {
                     images.Add(img);
@@ -670,16 +670,21 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <returns></returns>
         private bool AddImage(ContourImage contourImage)
         {
-            Image img = contourImage.ProcessedImage;
+            Image img = contourImage.GetProcessedImage();
             int sqW = (img.Width + 8 + this.wallWidth) / this.gridWidth + 1;
             int sqH = (img.Height + 8 + this.wallWidth) / this.gridWidth + 1;
 
+            int xOffsetImg = (sqW * gridWidth - img.Width) / 2;
+            int yOffsetImg = (sqH * gridWidth - img.Height) / 2;
+
+            OutlineShape.InsideShapeDelegate test = contourImage.GetInsideTest(gridWidth, xOffsetImg, yOffsetImg);
+
             Rectangle rect;
-            if (Maze.ReserveRectangle(sqW, sqH, 2, out rect))
+            if (Maze.ReserveRectangle(sqW, sqH, 2, test, out rect)) // TODO: provide a delegate
             {
                 // Remember the image data and location.  It will be painted in PaintMaze().
-                int x = rect.X * gridWidth + xOffset + (rect.Width * gridWidth - img.Width) / 2;
-                int y = rect.Y * gridWidth + yOffset + (rect.Height * gridWidth - img.Height) / 2;
+                int x = rect.X * gridWidth + xOffset + xOffsetImg;
+                int y = rect.Y * gridWidth + yOffset + yOffsetImg;
                 imageLocations.Add(new Rectangle(x, y, img.Width, img.Height));
                 return true;
             }

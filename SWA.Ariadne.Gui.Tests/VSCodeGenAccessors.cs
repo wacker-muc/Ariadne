@@ -557,6 +557,16 @@ internal class SWA_Ariadne_Gui_Mazes_ContourImageAccessor : BaseAccessor {
         }
     }
     
+    internal global::System.Drawing.Rectangle bbox {
+        get {
+            global::System.Drawing.Rectangle ret = ((global::System.Drawing.Rectangle)(m_privateObject.GetField("bbox")));
+            return ret;
+        }
+        set {
+            m_privateObject.SetField("bbox", value);
+        }
+    }
+    
     internal global::System.Drawing.Bitmap mask {
         get {
             global::System.Drawing.Bitmap ret = ((global::System.Drawing.Bitmap)(m_privateObject.GetField("mask")));
@@ -587,6 +597,36 @@ internal class SWA_Ariadne_Gui_Mazes_ContourImageAccessor : BaseAccessor {
         }
     }
     
+    internal System.Collections.Generic.List<int>[] inside {
+        get {
+            System.Collections.Generic.List<int>[] ret = ((System.Collections.Generic.List<int>[])(m_privateObject.GetField("inside")));
+            return ret;
+        }
+        set {
+            m_privateObject.SetField("inside", value);
+        }
+    }
+    
+    internal System.Collections.Generic.List<int>[] border {
+        get {
+            System.Collections.Generic.List<int>[] ret = ((System.Collections.Generic.List<int>[])(m_privateObject.GetField("border")));
+            return ret;
+        }
+        set {
+            m_privateObject.SetField("border", value);
+        }
+    }
+    
+    internal System.Collections.Generic.List<int>[] contour {
+        get {
+            System.Collections.Generic.List<int>[] ret = ((System.Collections.Generic.List<int>[])(m_privateObject.GetField("contour")));
+            return ret;
+        }
+        set {
+            m_privateObject.SetField("contour", value);
+        }
+    }
+    
     internal static void PrepareInfluenceRegions(int influenceRange) {
         object[] args = new object[] {
                 influenceRange};
@@ -594,31 +634,24 @@ internal class SWA_Ariadne_Gui_Mazes_ContourImageAccessor : BaseAccessor {
                     typeof(int)}, args);
     }
     
-    internal global::System.Drawing.Rectangle CreateMask(int fuzziness) {
+    internal void CreateMask(int fuzziness) {
         object[] args = new object[] {
                 fuzziness};
-        global::System.Drawing.Rectangle ret = ((global::System.Drawing.Rectangle)(m_privateObject.Invoke("CreateMask", new System.Type[] {
-                    typeof(int)}, args)));
-        return ret;
+        m_privateObject.Invoke("CreateMask", new System.Type[] {
+                    typeof(int)}, args);
     }
     
-    internal bool ScanObject(int x0, int y0, int fuzziness, int[,] alpha, System.Collections.Generic.List<int>[] inside, System.Collections.Generic.List<int>[] contour, System.Collections.Generic.List<int>[] border) {
+    internal bool ScanObject(int x0, int y0, int fuzziness, int[,] alpha) {
         object[] args = new object[] {
                 x0,
                 y0,
                 fuzziness,
-                alpha,
-                inside,
-                contour,
-                border};
+                alpha};
         bool ret = ((bool)(m_privateObject.Invoke("ScanObject", new System.Type[] {
                     typeof(int),
                     typeof(int),
                     typeof(int),
-                    typeof(int).MakeArrayType(2),
-                    typeof(System.Collections.Generic.List<int>).MakeArrayType(),
-                    typeof(System.Collections.Generic.List<int>).MakeArrayType(),
-                    typeof(System.Collections.Generic.List<int>).MakeArrayType()}, args)));
+                    typeof(int).MakeArrayType(2)}, args)));
         return ret;
     }
     
@@ -666,22 +699,13 @@ internal class SWA_Ariadne_Gui_Mazes_ContourImageAccessor : BaseAccessor {
         yR = ((int)(args[6]));
     }
     
-    internal static void InitializeScanLines(int width, int height, out System.Collections.Generic.List<int>[] inside, out System.Collections.Generic.List<int>[] contour, out System.Collections.Generic.List<int>[] border) {
+    internal void InitializeScanLines(int width, int height) {
         object[] args = new object[] {
                 width,
-                height,
-                null,
-                null,
-                null};
-        m_privateType.InvokeStatic("InitializeScanLines", new System.Type[] {
+                height};
+        m_privateObject.Invoke("InitializeScanLines", new System.Type[] {
                     typeof(int),
-                    typeof(int),
-                    typeof(System.Collections.Generic.List<int>).MakeArrayType().MakeByRefType(),
-                    typeof(System.Collections.Generic.List<int>).MakeArrayType().MakeByRefType(),
-                    typeof(System.Collections.Generic.List<int>).MakeArrayType().MakeByRefType()}, args);
-        inside = ((System.Collections.Generic.List<int>[])(args[2]));
-        contour = ((System.Collections.Generic.List<int>[])(args[3]));
-        border = ((System.Collections.Generic.List<int>[])(args[4]));
+                    typeof(int)}, args);
     }
     
     internal static void InsertObjectPoint(System.Collections.Generic.List<int> scanLine, int x) {
@@ -816,18 +840,14 @@ internal class SWA_Ariadne_Gui_Mazes_ContourImageAccessor : BaseAccessor {
         return ret;
     }
     
-    internal void PaintGradient(int[,] alpha, System.Collections.Generic.List<int>[] border, System.Collections.Generic.List<int>[] contour, int contourDist, int blurDist, global::System.Drawing.Color black) {
+    internal void PaintGradient(int[,] alpha, int contourDist, int blurDist, global::System.Drawing.Color black) {
         object[] args = new object[] {
                 alpha,
-                border,
-                contour,
                 contourDist,
                 blurDist,
                 black};
         m_privateObject.Invoke("PaintGradient", new System.Type[] {
                     typeof(int).MakeArrayType(2),
-                    typeof(System.Collections.Generic.List<int>).MakeArrayType(),
-                    typeof(System.Collections.Generic.List<int>).MakeArrayType(),
                     typeof(int),
                     typeof(int),
                     typeof(global::System.Drawing.Color)}, args);
@@ -846,9 +866,9 @@ internal class SWA_Ariadne_Gui_Mazes_ContourImageAccessor : BaseAccessor {
 [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TestTools.UnitTestGeneration", "1.0.0.0")]
 internal class SWA_Ariadne_Gui_Mazes_ImageLoaderAccessor : BaseAccessor {
     
-    protected static Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType m_privateType = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType("SWA.Ariadne.Gui.Mazes", "SWA.Ariadne.Gui.Mazes.ImageLoader");
+    protected static Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType m_privateType = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType(typeof(global::SWA.Ariadne.Gui.Mazes.ImageLoader));
     
-    internal SWA_Ariadne_Gui_Mazes_ImageLoaderAccessor(object target) : 
+    internal SWA_Ariadne_Gui_Mazes_ImageLoaderAccessor(global::SWA.Ariadne.Gui.Mazes.ImageLoader target) : 
             base(target, m_privateType) {
     }
     
@@ -932,29 +952,33 @@ internal class SWA_Ariadne_Gui_Mazes_ImageLoaderAccessor : BaseAccessor {
         }
     }
     
-    internal static object CreatePrivate(int minSize, int maxSize, string imageFolder, int queueLength) {
-        object[] args = new object[] {
-                minSize,
-                maxSize,
-                imageFolder,
-                queueLength};
-        Microsoft.VisualStudio.TestTools.UnitTesting.PrivateObject priv_obj = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateObject("SWA.Ariadne.Gui.Mazes", "SWA.Ariadne.Gui.Mazes.ImageLoader", new System.Type[] {
-                    typeof(int),
-                    typeof(int),
-                    typeof(string),
-                    typeof(int)}, args);
-        return priv_obj.Target;
-    }
-    
-    internal global::System.Drawing.Image GetNext() {
-        object[] args = new object[0];
-        global::System.Drawing.Image ret = ((global::System.Drawing.Image)(m_privateObject.Invoke("GetNext", new System.Type[0], args)));
-        return ret;
-    }
-    
     internal void LoadImages() {
         object[] args = new object[0];
         m_privateObject.Invoke("LoadImages", new System.Type[0], args);
+    }
+    
+    internal global::SWA.Ariadne.Gui.Mazes.ContourImage LoadImage(string imagePath, global::System.Random r) {
+        object[] args = new object[] {
+                imagePath,
+                r};
+        global::SWA.Ariadne.Gui.Mazes.ContourImage ret = ((global::SWA.Ariadne.Gui.Mazes.ContourImage)(m_privateObject.Invoke("LoadImage", new System.Type[] {
+                    typeof(string),
+                    typeof(global::System.Random)}, args)));
+        return ret;
+    }
+    
+    internal System.Collections.Generic.List<string> FindImages(string folderPath, int count, bool quickSearch, global::System.Random r) {
+        object[] args = new object[] {
+                folderPath,
+                count,
+                quickSearch,
+                r};
+        System.Collections.Generic.List<string> ret = ((System.Collections.Generic.List<string>)(m_privateObject.Invoke("FindImages", new System.Type[] {
+                    typeof(string),
+                    typeof(int),
+                    typeof(bool),
+                    typeof(global::System.Random)}, args)));
+        return ret;
     }
 }
 }

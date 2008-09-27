@@ -280,6 +280,8 @@ namespace SWA.Ariadne.Gui.Tests
 
         #region Unit tests for ScanObject()
 
+#if false
+
         /// <summary>
         ///A test for ScanObject (Bitmap, int, int, Color, float, int[,], List&lt;int&gt;[])
         ///</summary>
@@ -604,9 +606,13 @@ namespace SWA.Ariadne.Gui.Tests
             TestScan(testObject, image, backgroundColor, 1);
         }
 
+#endif
+
         #endregion
 
         #region Unit tests for InsertPair()
+
+#if false
 
         /// <summary>
         ///A test for InsertPair ()
@@ -840,9 +846,13 @@ namespace SWA.Ariadne.Gui.Tests
 
             TestBorderScanlines(testObject, borderXs);
         }
+#endif
+
         #endregion
 
         #region Unit tests for EliminateInsideRegions()
+
+#if false
 
         /// <summary>
         ///A test for EliminateInsideRegions (List&lt;int&gt;[], List&lt;bool&gt;[], int, int)
@@ -977,6 +987,8 @@ namespace SWA.Ariadne.Gui.Tests
             Assert.AreEqual(insideRegionsExpected, insideRegionsActual, testObject + " returned wrong number of inside regions");
         }
 
+#endif
+
         #endregion
 
         #endregion
@@ -1008,6 +1020,8 @@ namespace SWA.Ariadne.Gui.Tests
             Assert.IsFalse(d2 < int.MaxValue, testObject + " should not be influence");
         }
 #endif
+
+#if false
 
         private static void TestScan(string testObject, Bitmap image, Color backgroundColor, int maxContourScanRegions)
         {
@@ -1078,6 +1092,8 @@ namespace SWA.Ariadne.Gui.Tests
             // Test if the border map is well formed.
             TestBorderScanlines(testObject + " - borderXs", borderXs);
         }
+
+#endif
 
         private static int ImageArea(Bitmap image, Color backgroundColor, float fuzziness)
         {

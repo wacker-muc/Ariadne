@@ -41,7 +41,7 @@ namespace SWA.Ariadne.Gui.Tests
             DateTime start = DateTime.Now;
 
             ContourImage ci = new ContourImage(template);
-            processed = ci.ProcessedImage;
+            processed = ci.GetProcessedImage();
 
             TimeSpan t = DateTime.Now - start;
             int ms = (int)t.TotalMilliseconds;
