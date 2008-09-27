@@ -7,7 +7,7 @@ namespace SWA.Ariadne.Outlines
     /// <summary>
     /// An OutlineShape that is defined by a generating (delegate) function.
     /// </summary>
-    internal class DelegateOutlineShape : OutlineShape
+    public class DelegateOutlineShape : OutlineShape
     {
         #region Member variables and Properties
 

@@ -422,7 +422,9 @@ namespace SWA.Ariadne.Gui.Mazes
             // Make sure the image has been processed.
             GetProcessedImage();
 
-            return delegate (int x, int y)
+            #region Define an InsideShapeDelegate.
+
+            OutlineShape.InsideShapeDelegate insideTest = delegate (int x, int y)
             {
                 // Image coordinates of the evaluated maze square.
                 // Translations to be considered:
@@ -457,6 +459,28 @@ namespace SWA.Ariadne.Gui.Mazes
                 // None of the border scan lines intersected with the evaluated square.
                 return false;
             };
+
+            #endregion
+
+            #region Build a closed OutlineShape.
+
+            int shapeWidth = image.Width / gridWidth + 2;
+            int shapeHeight = image.Height / gridWidth + 2;
+            OutlineShape shape = new DelegateOutlineShape(shapeWidth, shapeHeight, insideTest);
+            OutlineShape closure = shape.Closure();
+
+            #endregion
+
+            #region Define an InsideShapeDelegate using the closed OutlineShape.
+
+            OutlineShape.InsideShapeDelegate result = delegate(int x, int y)
+            {
+                return closure[x, y];
+            };
+
+            #endregion
+
+            return result;
         }
 
         #endregion
