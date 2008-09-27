@@ -155,6 +155,14 @@ namespace SWA.Ariadne.Gui
             Close();
         }
 
+        private void ScreenSaverForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (mazeUserControl.ImageLoader != null)
+            {
+                mazeUserControl.ImageLoader.Shutdown();
+            }
+        }
+
         #endregion
 
         #region AriadneFormBase implementation
@@ -296,6 +304,11 @@ namespace SWA.Ariadne.Gui
             int minSize = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_MIN_SIZE, 300);
             int maxSize = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_MAX_SIZE, 400);
             string imageFolder = RegisteredOptions.GetStringSetting(RegisteredOptions.OPT_IMAGE_FOLDER);
+
+            if (this.loadingFirstMaze && count > 0)
+            {
+                mazeUserControl.ImageLoader = new SWA.Ariadne.Gui.Mazes.ImageLoader(minSize, maxSize, imageFolder, count + 2);
+            }
 
             mazeUserControl.PrepareImages(count, minSize, maxSize, imageFolder, this.loadingFirstMaze);
         }

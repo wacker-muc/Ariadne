@@ -45,6 +45,7 @@
     <Compile Include="ContourImageTestForm.Designer.cs">
       <DependentUpon>ContourImageTestForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ImageLoaderTest.cs" />
     <Compile Include="ImageTestForm.cs">
       <SubType>Form</SubType>
     </Compile>

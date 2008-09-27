@@ -842,4 +842,119 @@ internal class SWA_Ariadne_Gui_Mazes_ContourImageAccessor : BaseAccessor {
                     typeof(global::System.Drawing.Color)}, args);
     }
 }
+[System.Diagnostics.DebuggerStepThrough()]
+[System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TestTools.UnitTestGeneration", "1.0.0.0")]
+internal class SWA_Ariadne_Gui_Mazes_ImageLoaderAccessor : BaseAccessor {
+    
+    protected static Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType m_privateType = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType("SWA.Ariadne.Gui.Mazes", "SWA.Ariadne.Gui.Mazes.ImageLoader");
+    
+    internal SWA_Ariadne_Gui_Mazes_ImageLoaderAccessor(object target) : 
+            base(target, m_privateType) {
+    }
+    
+    internal string imageFolder {
+        get {
+            string ret = ((string)(m_privateObject.GetField("imageFolder")));
+            return ret;
+        }
+        set {
+            m_privateObject.SetField("imageFolder", value);
+        }
+    }
+    
+    internal int minSize {
+        get {
+            int ret = ((int)(m_privateObject.GetField("minSize")));
+            return ret;
+        }
+        set {
+            m_privateObject.SetField("minSize", value);
+        }
+    }
+    
+    internal int maxSize {
+        get {
+            int ret = ((int)(m_privateObject.GetField("maxSize")));
+            return ret;
+        }
+        set {
+            m_privateObject.SetField("maxSize", value);
+        }
+    }
+    
+    internal global::System.Collections.Queue queue {
+        get {
+            global::System.Collections.Queue ret = ((global::System.Collections.Queue)(m_privateObject.GetField("queue")));
+            return ret;
+        }
+        set {
+            m_privateObject.SetField("queue", value);
+        }
+    }
+    
+    internal int queueLength {
+        get {
+            int ret = ((int)(m_privateObject.GetField("queueLength")));
+            return ret;
+        }
+        set {
+            m_privateObject.SetField("queueLength", value);
+        }
+    }
+    
+    internal global::System.Threading.Thread thread {
+        get {
+            global::System.Threading.Thread ret = ((global::System.Threading.Thread)(m_privateObject.GetField("thread")));
+            return ret;
+        }
+        set {
+            m_privateObject.SetField("thread", value);
+        }
+    }
+    
+    internal global::System.Threading.Semaphore queueEmptySemaphore {
+        get {
+            global::System.Threading.Semaphore ret = ((global::System.Threading.Semaphore)(m_privateObject.GetField("queueEmptySemaphore")));
+            return ret;
+        }
+        set {
+            m_privateObject.SetField("queueEmptySemaphore", value);
+        }
+    }
+    
+    internal global::System.Threading.Semaphore queueFullSemaphore {
+        get {
+            global::System.Threading.Semaphore ret = ((global::System.Threading.Semaphore)(m_privateObject.GetField("queueFullSemaphore")));
+            return ret;
+        }
+        set {
+            m_privateObject.SetField("queueFullSemaphore", value);
+        }
+    }
+    
+    internal static object CreatePrivate(int minSize, int maxSize, string imageFolder, int queueLength) {
+        object[] args = new object[] {
+                minSize,
+                maxSize,
+                imageFolder,
+                queueLength};
+        Microsoft.VisualStudio.TestTools.UnitTesting.PrivateObject priv_obj = new Microsoft.VisualStudio.TestTools.UnitTesting.PrivateObject("SWA.Ariadne.Gui.Mazes", "SWA.Ariadne.Gui.Mazes.ImageLoader", new System.Type[] {
+                    typeof(int),
+                    typeof(int),
+                    typeof(string),
+                    typeof(int)}, args);
+        return priv_obj.Target;
+    }
+    
+    internal global::System.Drawing.Image GetNext() {
+        object[] args = new object[0];
+        global::System.Drawing.Image ret = ((global::System.Drawing.Image)(m_privateObject.Invoke("GetNext", new System.Type[0], args)));
+        return ret;
+    }
+    
+    internal void LoadImages() {
+        object[] args = new object[0];
+        m_privateObject.Invoke("LoadImages", new System.Type[0], args);
+    }
+}
 }

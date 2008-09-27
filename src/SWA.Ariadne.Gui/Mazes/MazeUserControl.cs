@@ -57,9 +57,19 @@ namespace SWA.Ariadne.Gui.Mazes
         private int yOffset { get { return painter.YOffset; } }
 
         /// <summary>
+        /// A source of images to be displayed.
+        /// </summary>
+        public ImageLoader ImageLoader
+        {
+            get { return imageLoader; }
+            set { imageLoader = value; }
+        }
+        private ImageLoader imageLoader;
+
+        /// <summary>
         /// A list of (scaled) images that will be painted in reserved areas of the maze.
         /// </summary>
-        private List<Image> images = new List<Image>();
+        private List<ContourImage> images = new List<ContourImage>();
 
         /// <summary>
         /// A list of locations (in graphics coordinates) where the images will be painted.
@@ -67,10 +77,12 @@ namespace SWA.Ariadne.Gui.Mazes
         /// </summary>
         private List<Rectangle> imageLocations = new List<Rectangle>();
 
+#if false
         /// <summary>
         /// A list of recently used images.  We'll try to avoid using the same images in rapid succession.
         /// </summary>
         private List<string> recentlyUsedImages = new List<string>();
+#endif
 
         /// <summary>
         /// Returns true when the list of prepared images is not empty.
@@ -354,7 +366,7 @@ namespace SWA.Ariadne.Gui.Mazes
         {
             for (int i = 0; i < images.Count; i++)
             {
-                g.DrawImage(images[i], imageLocations[i]);
+                g.DrawImage(images[i].ProcessedImage, imageLocations[i]);
             }
         }
 
@@ -416,6 +428,9 @@ namespace SWA.Ariadne.Gui.Mazes
             this.settingsData = data;
 
             painter.TakeParametersFrom(data);
+
+            // Destroy the current image loader (in case the parameters have changed).
+            this.imageLoader = null;
 
             #region Do the equivalent of Setup() with the modified parameters.
 
@@ -515,6 +530,7 @@ namespace SWA.Ariadne.Gui.Mazes
 
             #endregion
 
+#if false
             foreach (string imagePath in FindImages(imageFolder, n, quickSearch))
             {
                 try
@@ -549,6 +565,20 @@ namespace SWA.Ariadne.Gui.Mazes
                     System.Console.Out.WriteLine("failed loading image [{0}]: {1}", imagePath, e.ToString());
                 }
             }
+#else
+            if (this.imageLoader == null)
+            {
+                this.imageLoader = new ImageLoader(minSize, maxSize, imageFolder, 0);
+            }
+            for (int i = 0; i < n; i++)
+            {
+                ContourImage img = imageLoader.GetNext();
+                if (img != null)
+                {
+                    images.Add(img);
+                }
+            }
+#endif
         }
 
         /// <summary>
@@ -561,7 +591,7 @@ namespace SWA.Ariadne.Gui.Mazes
             {
                 for (int i = 0; i < images.Count; i++ )
                 {
-                    Image img = images[i];
+                    ContourImage img = images[i];
                     if (!AddImage(img))
                     {
                         images.RemoveAt(i);
@@ -571,6 +601,7 @@ namespace SWA.Ariadne.Gui.Mazes
             }
         }
 
+#if false
         /// <summary>
         /// Returns a list of file names in or below the given path.
         /// Only the following image file types are considered: JPG, GIF, PNG.
@@ -628,16 +659,18 @@ namespace SWA.Ariadne.Gui.Mazes
 
             return result;
         }
+#endif
 
         /// <summary>
         /// Reserves a rectangular area for the given image in this.Maze.
         /// The chosen location is remembered in this.imageLocations.
         /// Returns true if the reservation was successful.
         /// </summary>
-        /// <param name="img"></param>
+        /// <param name="contourImage"></param>
         /// <returns></returns>
-        private bool AddImage(Image img)
+        private bool AddImage(ContourImage contourImage)
         {
+            Image img = contourImage.ProcessedImage;
             int sqW = (img.Width + 8 + this.wallWidth) / this.gridWidth + 1;
             int sqH = (img.Height + 8 + this.wallWidth) / this.gridWidth + 1;
 
