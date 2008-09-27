@@ -412,7 +412,7 @@ namespace SWA.Ariadne.Gui.Mazes
             #region Create the result bitmap.
 
             Color black = Color.Black;
-            black = Color.Magenta; // TODO: delete this line
+            //black = Color.Magenta; // TODO: delete this line
             Color transparent = Color.FromArgb(0, black);
 
             // Create a new Bitmap with the same resolution as the original image.
