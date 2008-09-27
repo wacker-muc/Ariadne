@@ -11,6 +11,7 @@ Copyright (c) Stephan Wacker, 2008
 Version 3.2
 
  * new Outline Shape type Maze: using the walls of another maze
+ * reserve a non-rectangular maze region if an image has a large background region
 
 -----------------------------------------------------------------------
 
