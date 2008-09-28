@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using SWA.Ariadne.Gui.Mazes;
 using SWA.Ariadne.Model;
 using SWA.Ariadne.Outlines;
 using SWA.Ariadne.Settings;
@@ -49,10 +50,11 @@ namespace SWA.Ariadne.Gui
             // Initially, the (optinally) displayed controls should be invisible until the maze has been built.
             this.outerInfoPanel.Visible = false;
 
-            if (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_PAINT_ALL_WALLS, true) == false)
+            if (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_PAINT_ALL_WALLS, false) == false)
             {
                 this.mazeUserControl.RandomizeWallVisibility = true;
             }
+            ContourImage.DisplayProcessedImage = RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_IMAGE_SUBTRACT_BACKGROUND, true);
         }
 
         /// <summary>
@@ -285,7 +287,7 @@ namespace SWA.Ariadne.Gui
                 }
 
                 // Irregular maze shapes.
-                if (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_IRREGULAR_MAZES, false) && random.Next(100) < 10)
+                if (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_IRREGULAR_MAZES, true) && random.Next(100) < 10)
                 {
                     maze.Irregular = true;
                     maze.Irregularity = 80;
@@ -318,7 +320,7 @@ namespace SWA.Ariadne.Gui
         /// </summary>
         private bool AddEmbeddedMaze()
         {
-            int percentage = (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_MULTIPLE_MAZES, false) ? 15 : 0);
+            int percentage = (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_MULTIPLE_MAZES, true) ? 15 : 0);
             if (random.Next(100) < percentage)
             {
                 OutlineShape shape = null;
@@ -327,7 +329,7 @@ namespace SWA.Ariadne.Gui
 
                 while (true)
                 {
-                    shape = OutlineShape.RandomInstance(random, mazeUserControl.Maze.XSize, mazeUserControl.Maze.YSize, 0.2, 1.0);
+                    shape = RandomShape(0.2, 1.0);
 
                     // Discard shapes that are too small or too large.
                     if (minArea > shape.Area || shape.Area > maxArea)
@@ -357,16 +359,34 @@ namespace SWA.Ariadne.Gui
         /// </summary>
         private bool AddOutlineShape()
         {
-            int percentage = (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_OUTLINE_SHAPES, false) ? 80 : 0);
+            int percentage = (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_OUTLINE_SHAPES, true) ? 80 : 0);
             if (random.Next(100) < percentage)
             {
-                OutlineShape shape = OutlineShape.RandomInstance(random, mazeUserControl.Maze.XSize, mazeUserControl.Maze.YSize, 0.3, 0.7);
+                OutlineShape shape = RandomShape(0.3, 0.7);
                 mazeUserControl.Maze.OutlineShape = shape;
 
                 return true;
             }
 
             return false;
+        }
+
+        private OutlineShape RandomShape(double offCenter, double size)
+        {
+            OutlineShape result = null;
+
+            // The mazeUserControl may suggest a shape based on the displayed ContourImage.
+            if (random.Next(100) < (ContourImage.DisplayProcessedImage ? 25 : 40))
+            {
+                result = mazeUserControl.SuggestOutlineShape(random, offCenter, size);
+            }
+
+            if (result == null)
+            {
+                result = OutlineShape.RandomInstance(random, mazeUserControl.Maze.XSize, mazeUserControl.Maze.YSize, offCenter, size);
+            }
+
+            return result;
         }
 
         /// <summary>

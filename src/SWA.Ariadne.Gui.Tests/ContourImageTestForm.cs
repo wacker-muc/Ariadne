@@ -12,7 +12,6 @@ namespace SWA.Ariadne.Gui.Tests
     public partial class ContourImageTestForm : ImageTestForm
     {
         Image template, processed;
-        Bitmap mask;
 
         public ContourImageTestForm()
         {
@@ -23,7 +22,7 @@ namespace SWA.Ariadne.Gui.Tests
         protected override void newImageButton_Click(object sender, EventArgs e)
         {
             base.newImageButton_Click(sender, e);
-            template = processed = mask = null;
+            template = processed = null;
         }
 
         private void showContourButton_Click(object sender, EventArgs e)
@@ -41,7 +40,7 @@ namespace SWA.Ariadne.Gui.Tests
             DateTime start = DateTime.Now;
 
             ContourImage ci = new ContourImage(template);
-            processed = ci.GetProcessedImage();
+            processed = ci.ProcessedImage;
 
             TimeSpan t = DateTime.Now - start;
             int ms = (int)t.TotalMilliseconds;
