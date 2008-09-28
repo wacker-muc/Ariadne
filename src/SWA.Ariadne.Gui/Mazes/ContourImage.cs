@@ -405,14 +405,13 @@ namespace SWA.Ariadne.Gui.Mazes
         }
 
         /// <summary>
-        /// Returns a test delegate that tells if a certain maze square is
-        /// inside or outside the processed image border.
+        /// Returns an OutlineShape that defines the area occupied by the image objects' border.
         /// </summary>
         /// <param name="gridWidth"></param>
         /// <param name="xOffset"></param>
         /// <param name="yOffset"></param>
         /// <returns></returns>
-        public OutlineShape.InsideShapeDelegate GetInsideTest(int gridWidth, int xOffset, int yOffset)
+        public OutlineShape GetCoveredShape(int gridWidth, int wallWidth, int xOffset, int yOffset)
         {
             if (this.image.Equals(this.template))
             {
@@ -430,8 +429,12 @@ namespace SWA.Ariadne.Gui.Mazes
                 // Translations to be considered:
                 // 1) given offset of the image within the grid
                 // 2) bounding box that was used to crop the template image
-                int x0 = x * gridWidth - xOffset + bbox.Left, x1 = x0 + gridWidth - 1;
-                int y0 = y * gridWidth - yOffset + bbox.Top, y1 = y0 + gridWidth - 1;
+                // 3) half the wall width on every side
+                int x0 = x * gridWidth - xOffset + bbox.Left - wallWidth / 2, x1 = x0 + gridWidth - 1 + wallWidth;
+                int y0 = y * gridWidth - yOffset + bbox.Top - wallWidth / 2, y1 = y0 + gridWidth - 1 + wallWidth;
+
+                int coveredPixelsCount = 0;
+                int coveredPixelsLimit = 3;
 
                 for (int j = y0; j <= y1; j++)
                 {
@@ -451,12 +454,16 @@ namespace SWA.Ariadne.Gui.Mazes
                         if (x0 <= border[j][q])
                         {
                             // The current scan line area intersects with the evaluated square.
-                            return true;
+                            int n = 1 + Math.Min(border[j][q], x1) - Math.Max(border[j][p], x0);
+                            if ((coveredPixelsCount += n) > coveredPixelsLimit)
+                            {
+                                return true;
+                            }
                         }
                     }
                 }
 
-                // None of the border scan lines intersected with the evaluated square.
+                // None (or very few) of the border scan lines intersected with the evaluated square.
                 return false;
             };
 
@@ -467,16 +474,7 @@ namespace SWA.Ariadne.Gui.Mazes
             int shapeWidth = image.Width / gridWidth + 2;
             int shapeHeight = image.Height / gridWidth + 2;
             OutlineShape shape = new DelegateOutlineShape(shapeWidth, shapeHeight, insideTest);
-            OutlineShape closure = shape.Closure();
-
-            #endregion
-
-            #region Define an InsideShapeDelegate using the closed OutlineShape.
-
-            OutlineShape.InsideShapeDelegate result = delegate(int x, int y)
-            {
-                return closure[x, y];
-            };
+            OutlineShape result = shape.Closure();
 
             #endregion
 
@@ -1406,17 +1404,23 @@ namespace SWA.Ariadne.Gui.Mazes
             int xMin = 0, xMax = template.Width - 1;
             int yMin = 0, yMax = template.Height - 1;
 
+            // Some circular shapes touch the four borders in the middle region.
+            int xMid0 = template.Width * 9 / 20, xMid1 = template.Width * 11 / 20;
+            int yMid0 = template.Height * 9 / 20, yMid1 = template.Height * 11 / 20;
+
             #region Collect a sample of pixels near the image border.
 
             List<Color> pixels = new List<Color>(borderWidth * (template.Width + template.Height));
 
             for (int x = 0; x < template.Width; x += 1 + x % 7)
             {
+                if (xMid0 <= x && x <= xMid1) { continue; }
                 pixels.Add(template.GetPixel(x, yMin + (x + 0) % borderWidth));
                 pixels.Add(template.GetPixel(x, yMax - (x + 1) % borderWidth));
             }
             for (int y = 0 + borderWidth; y < template.Height - borderWidth; y += 1 + y % 5)
             {
+                if (yMid0 <= y && y <= yMid1) { continue; }
                 pixels.Add(template.GetPixel(xMin + (y + 0) % borderWidth, y));
                 pixels.Add(template.GetPixel(xMax - (y + 1) % borderWidth, y));
             }

@@ -677,10 +677,10 @@ namespace SWA.Ariadne.Gui.Mazes
             int xOffsetImg = (sqW * gridWidth - img.Width) / 2;
             int yOffsetImg = (sqH * gridWidth - img.Height) / 2;
 
-            OutlineShape.InsideShapeDelegate test = contourImage.GetInsideTest(gridWidth, xOffsetImg, yOffsetImg);
+            OutlineShape shape = contourImage.GetCoveredShape(gridWidth, wallWidth, xOffsetImg, yOffsetImg);
 
             Rectangle rect;
-            if (Maze.ReserveRectangle(sqW, sqH, 2, test, out rect)) // TODO: provide a delegate
+            if (Maze.ReserveRectangle(sqW, sqH, 2, shape, out rect))
             {
                 // Remember the image data and location.  It will be painted in PaintMaze().
                 int x = rect.X * gridWidth + xOffset + xOffsetImg;
