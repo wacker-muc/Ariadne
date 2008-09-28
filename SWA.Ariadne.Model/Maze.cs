@@ -86,9 +86,9 @@ namespace SWA.Ariadne.Model
         private List<Rectangle> reservedAreas = new List<Rectangle>();
 
         /// <summary>
-        /// For every reservedArea: A delegate that tells if a certain square should be reserved or not.
+        /// For every reservedArea: An OutlineShape that defines the area actually covered by the contour image.
         /// </summary>
-        private List<OutlineShape.InsideShapeDelegate> reservedAreaDelegates = new List<OutlineShape.InsideShapeDelegate>();
+        private List<OutlineShape> reservedAreaShapes = new List<OutlineShape>();
 
         /// <summary>
         /// A reserved area defined by the inside of an OutlineShape.
@@ -294,7 +294,7 @@ namespace SWA.Ariadne.Model
             clone.direction = this.direction;
             clone.seed = this.seed;
             clone.reservedAreas = this.reservedAreas;
-            clone.reservedAreaDelegates = this.reservedAreaDelegates;
+            clone.reservedAreaShapes = this.reservedAreaShapes;
             clone.reservedShape = this.reservedShape;
             clone.embeddedMazeShapes = this.embeddedMazeShapes;
             clone.embeddedMazes = new List<EmbeddedMaze>(embeddedMazes.Count);
@@ -350,7 +350,7 @@ namespace SWA.Ariadne.Model
         /// <param name="borderDistance">minimum number of squares between the reserved area and the maze border</param>
         /// <param name="rect"></param>
         /// <returns>true if the reservation was successful</returns>
-        public bool ReserveRectangle(int width, int height, int borderDistance, OutlineShape.InsideShapeDelegate reservedAreaDelegate, out Rectangle rect)
+        public bool ReserveRectangle(int width, int height, int borderDistance, OutlineShape shape, out Rectangle rect)
         {
             // Reject very large areas.
             if (width < 2 || height < 2 || width > xSize - Math.Max(4, 2 * borderDistance) || height > ySize - Math.Max(4, 2 * borderDistance))
@@ -366,7 +366,7 @@ namespace SWA.Ariadne.Model
                 int x = random.Next(borderDistance, xSize - width - borderDistance);
                 int y = random.Next(borderDistance, ySize - height - borderDistance);
 
-                if (ReserveRectangle(x, y, width, height, reservedAreaDelegate))
+                if (ReserveRectangle(x, y, width, height, shape))
                 {
                     rect = new Rectangle(x, y, width, height);
                     return true;
@@ -386,7 +386,7 @@ namespace SWA.Ariadne.Model
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <returns>true if the reservation was successful</returns>
-        public bool ReserveRectangle(int x, int y, int width, int height, OutlineShape.InsideShapeDelegate reservedAreaDelegate)
+        public bool ReserveRectangle(int x, int y, int width, int height, OutlineShape shape)
         {
             // Restrict to the actual maze area.
             if (x < 0)
@@ -427,7 +427,7 @@ namespace SWA.Ariadne.Model
             if (!reject)
             {
                 reservedAreas.Add(candidate);
-                reservedAreaDelegates.Add(reservedAreaDelegate);
+                reservedAreaShapes.Add(shape);
                 return true;
             }
 
@@ -870,13 +870,13 @@ namespace SWA.Ariadne.Model
             for (int i = 0; i < this.reservedAreas.Count; i++)
             {
                 Rectangle rect = this.reservedAreas[i];
-                OutlineShape.InsideShapeDelegate test = this.reservedAreaDelegates[i];
+                OutlineShape shape = this.reservedAreaShapes[i];
 
                 for (int x = rect.Left; x < rect.Right; x++)
                 {
                     for (int y = rect.Top; y < rect.Bottom; y++)
                     {
-                        if (test == null || test(x - rect.Left, y - rect.Top) == true)
+                        if (shape == null || shape[x - rect.Left, y - rect.Top] == true)
                         {
                             this.squares[x, y].isReserved = true;
                         }
@@ -1143,7 +1143,7 @@ namespace SWA.Ariadne.Model
             this.random = RandomFactory.CreateRandom(seed);
 
             this.reservedAreas.Clear();
-            this.reservedAreaDelegates.Clear();
+            this.reservedAreaShapes.Clear();
             this.outlineShape = null;
             this.embeddedMazeShapes.Clear();
             this.embeddedMazes.Clear();
