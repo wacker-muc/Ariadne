@@ -19,12 +19,12 @@ namespace SWA.Ariadne.Outlines
         /// </summary>
         private int xSize, ySize;
 
-        internal int XSize
+        public int XSize
         {
             get { return this.xSize; }
         }
 
-        internal int YSize
+        public int YSize
         {
             get { return this.ySize; }
         }
@@ -578,7 +578,7 @@ namespace SWA.Ariadne.Outlines
         /// <param name="xc"></param>
         /// <param name="yc"></param>
         /// <param name="sz"></param>
-        protected static void ConvertParameters(int xSize, int ySize, double centerX, double centerY, double shapeSize, out double xc, out double yc, out double sz)
+        public static void ConvertParameters(int xSize, int ySize, double centerX, double centerY, double shapeSize, out double xc, out double yc, out double sz)
         {
             // Determine center coordinates in the shape coordinate system.
             xc = xSize * centerX;

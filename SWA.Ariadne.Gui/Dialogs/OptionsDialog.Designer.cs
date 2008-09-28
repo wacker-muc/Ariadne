@@ -48,11 +48,12 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.selectImageFolderButton = new System.Windows.Forms.Button();
             this.imageFolderTextBox = new System.Windows.Forms.TextBox();
             this.tabPageExtras = new System.Windows.Forms.TabPage();
+            this.checkBoxMultipleMazes = new System.Windows.Forms.CheckBox();
             this.checkBoxPaintAllWalls = new System.Windows.Forms.CheckBox();
             this.checkBoxIrregularMazes = new System.Windows.Forms.CheckBox();
             this.checkBoxOutlineShapes = new System.Windows.Forms.CheckBox();
             this.imageFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.checkBoxMultipleMazes = new System.Windows.Forms.CheckBox();
+            this.subtractImagesBackgroundCheckBox = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPageGeneral.SuspendLayout();
             this.tabPageImages.SuspendLayout();
@@ -64,9 +65,9 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             // buttonOK
             // 
-            this.buttonOK.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.buttonOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.buttonOK.Location = new System.Drawing.Point(23, 139);
+            this.buttonOK.Location = new System.Drawing.Point(23, 162);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 3;
@@ -76,9 +77,9 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(114, 139);
+            this.buttonCancel.Location = new System.Drawing.Point(114, 162);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 4;
@@ -91,7 +92,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.labelCopyright.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.labelCopyright.AutoSize = true;
-            this.labelCopyright.Location = new System.Drawing.Point(71, 166);
+            this.labelCopyright.Location = new System.Drawing.Point(71, 189);
             this.labelCopyright.Name = "labelCopyright";
             this.labelCopyright.Size = new System.Drawing.Size(66, 13);
             this.labelCopyright.TabIndex = 7;
@@ -100,13 +101,16 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             // tabControl1
             // 
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPageGeneral);
             this.tabControl1.Controls.Add(this.tabPageImages);
             this.tabControl1.Controls.Add(this.tabPageExtras);
             this.tabControl1.Location = new System.Drawing.Point(0, 1);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(212, 132);
+            this.tabControl1.Size = new System.Drawing.Size(212, 155);
             this.tabControl1.TabIndex = 8;
             // 
             // tabPageGeneral
@@ -119,7 +123,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.tabPageGeneral.Location = new System.Drawing.Point(4, 22);
             this.tabPageGeneral.Name = "tabPageGeneral";
             this.tabPageGeneral.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageGeneral.Size = new System.Drawing.Size(204, 106);
+            this.tabPageGeneral.Size = new System.Drawing.Size(204, 129);
             this.tabPageGeneral.TabIndex = 0;
             this.tabPageGeneral.Text = "General";
             this.tabPageGeneral.UseVisualStyleBackColor = true;
@@ -186,6 +190,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             // tabPageImages
             // 
+            this.tabPageImages.Controls.Add(this.subtractImagesBackgroundCheckBox);
             this.tabPageImages.Controls.Add(this.imageMinSizeNumericUpDown);
             this.tabPageImages.Controls.Add(this.labelImagesMinSize);
             this.tabPageImages.Controls.Add(this.imageMaxSizeNumericUpDown);
@@ -197,7 +202,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.tabPageImages.Location = new System.Drawing.Point(4, 22);
             this.tabPageImages.Name = "tabPageImages";
             this.tabPageImages.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageImages.Size = new System.Drawing.Size(204, 106);
+            this.tabPageImages.Size = new System.Drawing.Size(204, 129);
             this.tabPageImages.TabIndex = 1;
             this.tabPageImages.Text = "Images";
             this.tabPageImages.UseVisualStyleBackColor = true;
@@ -325,10 +330,24 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.tabPageExtras.Location = new System.Drawing.Point(4, 22);
             this.tabPageExtras.Name = "tabPageExtras";
             this.tabPageExtras.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageExtras.Size = new System.Drawing.Size(204, 106);
+            this.tabPageExtras.Size = new System.Drawing.Size(204, 129);
             this.tabPageExtras.TabIndex = 2;
             this.tabPageExtras.Text = "Extras";
             this.tabPageExtras.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxMultipleMazes
+            // 
+            this.checkBoxMultipleMazes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBoxMultipleMazes.AutoSize = true;
+            this.checkBoxMultipleMazes.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.checkBoxMultipleMazes.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.checkBoxMultipleMazes.Location = new System.Drawing.Point(37, 77);
+            this.checkBoxMultipleMazes.Name = "checkBoxMultipleMazes";
+            this.checkBoxMultipleMazes.Size = new System.Drawing.Size(130, 17);
+            this.checkBoxMultipleMazes.TabIndex = 4;
+            this.checkBoxMultipleMazes.Text = "Create Multiple Mazes";
+            this.checkBoxMultipleMazes.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.checkBoxMultipleMazes.UseVisualStyleBackColor = true;
             // 
             // checkBoxPaintAllWalls
             // 
@@ -372,26 +391,23 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.checkBoxOutlineShapes.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.checkBoxOutlineShapes.UseVisualStyleBackColor = true;
             // 
-            // checkBoxMultipleMazes
+            // subtractImagesBackgroundCheckBox
             // 
-            this.checkBoxMultipleMazes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.checkBoxMultipleMazes.AutoSize = true;
-            this.checkBoxMultipleMazes.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.checkBoxMultipleMazes.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.checkBoxMultipleMazes.Location = new System.Drawing.Point(37, 77);
-            this.checkBoxMultipleMazes.Name = "checkBoxMultipleMazes";
-            this.checkBoxMultipleMazes.Size = new System.Drawing.Size(130, 17);
-            this.checkBoxMultipleMazes.TabIndex = 4;
-            this.checkBoxMultipleMazes.Text = "Create Multiple Mazes";
-            this.checkBoxMultipleMazes.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.checkBoxMultipleMazes.UseVisualStyleBackColor = true;
+            this.subtractImagesBackgroundCheckBox.AutoSize = true;
+            this.subtractImagesBackgroundCheckBox.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.subtractImagesBackgroundCheckBox.Location = new System.Drawing.Point(8, 105);
+            this.subtractImagesBackgroundCheckBox.Name = "subtractImagesBackgroundCheckBox";
+            this.subtractImagesBackgroundCheckBox.Size = new System.Drawing.Size(163, 17);
+            this.subtractImagesBackgroundCheckBox.TabIndex = 119;
+            this.subtractImagesBackgroundCheckBox.Text = "Subtract uniform background";
+            this.subtractImagesBackgroundCheckBox.UseVisualStyleBackColor = true;
             // 
             // OptionsDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(212, 181);
+            this.ClientSize = new System.Drawing.Size(212, 204);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.labelCopyright);
             this.Controls.Add(this.buttonCancel);
@@ -443,6 +459,7 @@ namespace SWA.Ariadne.Gui.Dialogs
         private System.Windows.Forms.CheckBox checkBoxIrregularMazes;
         private System.Windows.Forms.CheckBox checkBoxPaintAllWalls;
         private System.Windows.Forms.CheckBox checkBoxMultipleMazes;
+        private System.Windows.Forms.CheckBox subtractImagesBackgroundCheckBox;
 
     }
 }

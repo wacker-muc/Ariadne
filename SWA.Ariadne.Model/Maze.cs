@@ -1058,7 +1058,7 @@ namespace SWA.Ariadne.Model
                     this.embeddedMazes.Add(embeddedMaze);
                 }
 
-                if (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_OUTLINE_SHAPES, true))
+                if (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_OUTLINE_SHAPES, false))
                 {
                     // The disconnected and enclosed parts of the original shape are handled as a regular outline shape.
                     FixOutline(originalShape);

@@ -11,13 +11,8 @@ namespace SWA.Ariadne.Gui.Mazes
     {
         #region Constants
 
-#if false
-        private const int ContourDistance = 16;
-        private const int BlurDistanceMax = 12;
-#else
         private const int ContourDistance =  8;
         private const int BlurDistanceMax = 16;
-#endif
         private const int MaxColorDistance = 255;
 
         #endregion
@@ -379,30 +374,44 @@ namespace SWA.Ariadne.Gui.Mazes
 
         #endregion
 
-        #region Access methods.
+        #region Public methods and properties.
+
+        /// <summary>
+        /// Returns true if a background color has been identified and the processed image has a contour.
+        /// </summary>
+        public bool HasContour
+        {
+            get { return (this.template.Equals(this.image) == false); }
+        }
+
+        /// <summary>
+        /// Returns the template image.
+        /// </summary>
+        public Image TemplateImage
+        {
+            get { return template; }
+        }
 
         /// <summary>
         /// Returns the processed template image.
         /// Background areas at a certain distance from the image objects are painted black.
         /// </summary>
-        public Image GetProcessedImage()
+        public Image ProcessedImage
         {
-            if (image == null)
-            {
-                CreateImage();
-
-                int fuzziness = (int)(0.03 * MaxColorDistance);
-                CreateMask(fuzziness);
-                ApplyMask();
-
-                this.bbox = BoundingBox(border);
-
-                image = Crop(image, bbox);
-                mask = Crop(mask, bbox);
-            }
-
-            return image; 
+            get { return image; }
         }
+
+        public Image DisplayedImage
+        {
+            get { return (displayProcessedImage ? ProcessedImage : TemplateImage); }
+        }
+
+        public static bool DisplayProcessedImage
+        {
+            get { return displayProcessedImage; }
+            set { displayProcessedImage = value; }
+        }
+        private static bool displayProcessedImage = true;
 
         /// <summary>
         /// Returns an OutlineShape that defines the area occupied by the image objects' border.
@@ -413,17 +422,14 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <returns></returns>
         public OutlineShape GetCoveredShape(int gridWidth, int wallWidth, int xOffset, int yOffset)
         {
-            if (this.image.Equals(this.template))
+            if (!this.HasContour)
             {
                 return null;
             }
 
-            // Make sure the image has been processed.
-            GetProcessedImage();
-
             #region Define an InsideShapeDelegate.
 
-            OutlineShape.InsideShapeDelegate insideTest = delegate (int x, int y)
+            OutlineShape.InsideShapeDelegate insideBorderTest = delegate (int x, int y)
             {
                 // Image coordinates of the evaluated maze square.
                 // Translations to be considered:
@@ -473,7 +479,7 @@ namespace SWA.Ariadne.Gui.Mazes
 
             int shapeWidth = image.Width / gridWidth + 2;
             int shapeHeight = image.Height / gridWidth + 2;
-            OutlineShape shape = new DelegateOutlineShape(shapeWidth, shapeHeight, insideTest);
+            OutlineShape shape = new DelegateOutlineShape(shapeWidth, shapeHeight, insideBorderTest);
             OutlineShape result = shape.Closure();
 
             #endregion
@@ -481,17 +487,48 @@ namespace SWA.Ariadne.Gui.Mazes
             return result;
         }
 
+        /// <summary>
+        /// Returns an OutlineShape that defines the area occupied by the image objects' border.
+        /// </summary>
+        /// <param name="r"></param>
+        /// <param name="xSize"></param>
+        /// <param name="ySize"></param>
+        /// <param name="centerX"></param>
+        /// <param name="centerY"></param>
+        /// <param name="shapeSize"></param>
+        /// <returns></returns>
+        /// Note: This method is compatible with the OutlineShape.OutlineShapeBuilder delegate type.
+        public OutlineShape GetCoveredShape(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
+        {
+            double xc, yc, sz;
+            OutlineShape.ConvertParameters(xSize, ySize, centerX, centerY, shapeSize, out xc, out yc, out sz);
+
+            // Build a shape of the desired size.
+            int gridWidth = Math.Max(1, (int)(Math.Max(bbox.Width, bbox.Height) / (2.0 * sz) + 0.40));
+            OutlineShape shape = this.GetCoveredShape(gridWidth, 0, 0, 0);
+
+            #region Define an InsideShapeDelegate for the shape, centered at (xc, yc).
+
+            int xOffset = (int)(xc - shape.XSize / 2.0), yOffset = (int)(yc - shape.YSize / 2.0);
+
+            OutlineShape.InsideShapeDelegate test = delegate(int x, int y)
+            {
+                return shape[x - xOffset, y - yOffset];
+            };
+
+            #endregion
+
+            return new DelegateOutlineShape(xSize, ySize, test);
+        }
+
         #endregion
 
         #region Constructor.
 
         /// <summary>
-        /// Returns an image with the background color set to black.
-        /// The background is guessed from the pixels on the image border.
-        /// The contour of the image (without its background) is extended by ContourDistance and BlurDistance.
+        /// Constructor.
         /// </summary>
         /// <param name="template">the original image</param>
-        /// <param name="mask">will be set to the mask that was applied to the template</param>
         /// <returns></returns>
         public ContourImage(Image template)
         {
@@ -509,7 +546,18 @@ namespace SWA.Ariadne.Gui.Mazes
             {
                 this.mask = null;
                 this.image = this.template;
-                return;
+            }
+            else
+            {
+                CreateImage();
+
+                fuzziness = (int)(0.03 * MaxColorDistance);
+                CreateMask(fuzziness);
+                ApplyMask();
+
+                this.bbox = BoundingBox(border);
+                this.image = Crop(image, bbox);
+                this.mask = Crop(mask, bbox);
             }
         }
 

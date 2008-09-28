@@ -366,7 +366,7 @@ namespace SWA.Ariadne.Gui.Mazes
         {
             for (int i = 0; i < images.Count; i++)
             {
-                g.DrawImage(images[i].GetProcessedImage(), imageLocations[i]);
+                g.DrawImage(images[i].DisplayedImage, imageLocations[i]);
             }
         }
 
@@ -670,14 +670,14 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <returns></returns>
         private bool AddImage(ContourImage contourImage)
         {
-            Image img = contourImage.GetProcessedImage();
+            Image img = contourImage.DisplayedImage;
             int sqW = (img.Width + 8 + this.wallWidth) / this.gridWidth + 1;
             int sqH = (img.Height + 8 + this.wallWidth) / this.gridWidth + 1;
 
             int xOffsetImg = (sqW * gridWidth - img.Width) / 2;
             int yOffsetImg = (sqH * gridWidth - img.Height) / 2;
 
-            OutlineShape shape = contourImage.GetCoveredShape(gridWidth, wallWidth, xOffsetImg, yOffsetImg);
+            OutlineShape shape = (ContourImage.DisplayProcessedImage ? contourImage.GetCoveredShape(gridWidth, wallWidth, xOffsetImg, yOffsetImg) : null);
 
             Rectangle rect;
             if (Maze.ReserveRectangle(sqW, sqH, 2, shape, out rect))
@@ -698,6 +698,24 @@ namespace SWA.Ariadne.Gui.Mazes
         #endregion
 
         #region Placement of outline shapes
+
+        /// <summary>
+        /// Returns the shape of a ContourImage or null if none of the images has a real contour.
+        /// </summary>
+        /// <returns></returns>
+        public OutlineShape SuggestOutlineShape(Random r, double offCenter, double size)
+        {
+            foreach (ContourImage img in this.images)
+            {
+                if (img.HasContour)
+                {
+                    // Use img.GetCoveredShape() as an OutlineShapeBuilder.
+                    return OutlineShape.RandomInstance(r, img.GetCoveredShape, this.XSize, this.YSize, offCenter, size);
+                }
+            }
+
+            return null;
+        }
 
         private void AddOutlineShape(AriadneSettingsData data)
         {
