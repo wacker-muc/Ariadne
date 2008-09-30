@@ -62,11 +62,6 @@ namespace SWA.Ariadne.Gui
         /// </summary>
         private void SetupScreenSaver()
         {
-#if false
-            // Use double buffering to improve drawing performance
-            this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
-#endif
-            
             // Set the application to full screen mode and hide the mouse cursor.
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.TopMost = true;
@@ -371,12 +366,20 @@ namespace SWA.Ariadne.Gui
             return false;
         }
 
+        /// <summary>
+        /// Returns an OutlineShape for the given location and size.
+        /// If the image displayed in the maze control has a defined contour,
+        /// the shape is preferrably derived from that contour.
+        /// </summary>
+        /// <param name="offCenter"></param>
+        /// <param name="size"></param>
+        /// <returns></returns>
         private OutlineShape RandomShape(double offCenter, double size)
         {
             OutlineShape result = null;
 
             // The mazeUserControl may suggest a shape based on the displayed ContourImage.
-            if (random.Next(100) < (ContourImage.DisplayProcessedImage ? 25 : 40))
+            if (random.Next(100) < (ContourImage.DisplayProcessedImage ? 12 : 25))
             {
                 result = mazeUserControl.SuggestOutlineShape(random, offCenter, size);
             }

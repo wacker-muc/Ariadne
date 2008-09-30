@@ -547,18 +547,24 @@ namespace SWA.Ariadne.Gui.Mazes
                 this.mask = null;
                 this.image = this.template;
             }
-            else
+        }
+
+        public void ProcessImage()
+        {
+            if (image != null)
             {
-                CreateImage();
-
-                fuzziness = (int)(0.03 * MaxColorDistance);
-                CreateMask(fuzziness);
-                ApplyMask();
-
-                this.bbox = BoundingBox(border);
-                this.image = Crop(image, bbox);
-                this.mask = Crop(mask, bbox);
+                return;
             }
+
+            CreateImage();
+
+            int fuzziness = (int)(0.03 * MaxColorDistance);
+            CreateMask(fuzziness);
+            ApplyMask();
+
+            this.bbox = BoundingBox(border);
+            this.image = Crop(image, bbox);
+            this.mask = Crop(mask, bbox);
         }
 
         #endregion
