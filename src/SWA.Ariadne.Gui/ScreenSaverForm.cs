@@ -226,6 +226,24 @@ namespace SWA.Ariadne.Gui
             int yMax = this.Size.Height - yMin - control.Size.Height;
             int x = this.random.Next(xMin, xMax);
             int y = this.random.Next(yMin, yMax);
+
+            #region Try to find a Y coordinate that leaves enough room for an image.
+
+            int imgCount = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_NUMBER, 0);
+            int imgSize = 20 + RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_MAX_SIZE, 400);
+
+            for (int i = 0; i < 8; i++)
+            {
+                if (imgCount < 1 || y > imgSize || y < this.Size.Height - imgSize - control.Size.Height)
+                {
+                    break;
+                }
+
+                y = this.random.Next(yMin, yMax);
+            }
+
+            #endregion
+
             placeholder.Location = new Point(x, y);
 
             // Add the invisible placeholder control to this form.

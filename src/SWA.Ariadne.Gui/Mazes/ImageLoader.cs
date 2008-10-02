@@ -47,11 +47,6 @@ namespace SWA.Ariadne.Gui.Mazes
         /// </summary>
         private List<string> recentlyUsedImages = new List<string>();
 
-        /// <summary>
-        /// During the initial "quick search" phase, true contour images are laid aside.
-        /// </summary>
-        private Queue<ContourImage> unprocessedImages = new Queue<ContourImage>();
-
         #endregion
 
         #region Constructor.
@@ -139,122 +134,76 @@ namespace SWA.Ariadne.Gui.Mazes
         /// </summary>
         private void LoadImages()
         {
-            // Parameters for first iteration.
-            int chunkSize = 2, additionalChunkSize = 8;
-            bool quickSearch = true;
-
             Random r = RandomFactory.CreateRandom();
-            List<string> imagePaths = FindImages(imageFolder, chunkSize, quickSearch, r);
-            int pathIdx = 0;
-            int loadedImagesCount = 0;
+
+            #region Start with a few images, preferrably without a contour.
+
+            List<ContourImage> unprocessedImages = new List<ContourImage>(queueLength + 1);
+
+            foreach (string imagePath in FindImages(imageFolder, queueLength + 1, true, r))
+            {
+                ContourImage img = LoadImage(imagePath, r);
+                if (img == null)
+                {
+                    // continue;
+                }
+                else if (img.HasContour)
+                {
+                    unprocessedImages.Add(img);
+                }
+                else
+                {
+                    queueFullSemaphore.WaitOne();
+                    queue.Enqueue(img);
+                    queueEmptySemaphore.Release();
+                }
+            }
+
+            foreach (ContourImage img in unprocessedImages)
+            {
+                queueFullSemaphore.WaitOne();
+                img.ProcessImage();
+                queue.Enqueue(img);
+                queueEmptySemaphore.Release();
+            }
+
+            #endregion
+
+            #region Continuously load more images, keeping the queue full.
 
             while (true)
             {
-                // Wait while the queue contains enough items.
-                queueFullSemaphore.WaitOne();
+                int loadedImagesCount = 0;
 
-                #region Get the next image.
-
-                ContourImage img;
-
-                // After the quick search, previously laid aside images are re-activated.
-                if (!quickSearch && unprocessedImages.Count > 0)
+                foreach (string imagePath in FindImages(imageFolder, 100, false, r))
                 {
-                    img = unprocessedImages.Dequeue();
-                }
-                else
-                {
-                    #region Get a new list of image paths if the current one has been exhausted.
-
-                    if (pathIdx >= imagePaths.Count)
+                    ContourImage img = LoadImage(imagePath, r);
+                    if (img == null)
                     {
-                        #region If no image was found or loaded successfully, put a null value into the queue.
-
-                        if (loadedImagesCount == 0)
-                        {
-                            #region During the initial quick search phase, make another try.
-
-                            if (quickSearch)
-                            {
-                                if (unprocessedImages.Count > additionalChunkSize)
-                                {
-                                    // There are many unprocessed images.
-                                    // Give up the quick search, use the unprocessed images.
-                                    chunkSize = 100;
-                                    quickSearch = false;
-                                }
-                                else if (unprocessedImages.Count > 0)
-                                {
-                                    // There are a few unprocessed images.
-                                    // Continue the quick search (once).
-                                    chunkSize = additionalChunkSize;
-                                }
-                                else
-                                {
-                                    // There are no images found via the quick search.
-                                    // Continue with a thorough search.
-                                    quickSearch = false;
-                                }
-                            }
-
-                            #endregion
-
-                            else
-                            {
-                                queue.Enqueue(null);
-                                queueEmptySemaphore.Release();
-                            }
-                        }
-
-                        #endregion
-
-                        else
-                        {
-                            // Parameters for following iterations.
-                            chunkSize = 100;
-                            quickSearch = false;
-                        }
-
-                        imagePaths = FindImages(imageFolder, chunkSize, quickSearch, r);
-                        pathIdx = 0;
-                        loadedImagesCount = 0;
-
-                        // Start from the beginning of the loop.
-                        queueFullSemaphore.Release();
                         continue;
                     }
 
-                    #endregion
+                    // Wait while the queue contains enough items.
+                    queueFullSemaphore.WaitOne();
 
-                    string imagePath = imagePaths[pathIdx++];
-                    img = LoadImage(imagePath, r);
-                }
-
-                // During a quick search, the true contour images are temporarily laid aside.
-                if (quickSearch && img.HasContour)
-                {
-                    unprocessedImages.Enqueue(img);
-                    img = null;
-                }
-                else if (img != null)
-                {
+                    // Enqueue the processed image.
                     img.ProcessImage();
-                }
-
-                #endregion
-
-                if (img != null)
-                {
                     queue.Enqueue(img);
                     queueEmptySemaphore.Release();
+                    
                     ++loadedImagesCount;
                 }
-                else
+
+                // If no image was loaded successfully, enqueue a null value.
+                if (loadedImagesCount == 0)
                 {
-                    // Return the semaphore to the state before the try block.
-                    queueFullSemaphore.Release();
+                    queueFullSemaphore.WaitOne();
+                    queue.Enqueue(null);
+                    queueEmptySemaphore.Release();
                 }
             }
+
+            #endregion
         }
 
         /// <summary>
@@ -290,13 +239,7 @@ namespace SWA.Ariadne.Gui.Mazes
 
                 #endregion
 
-                #region Remove a uniform background color.
-
-                ContourImage result = new ContourImage(img);
-
-                #endregion
-
-                return result;
+                return new ContourImage(img);
             }
             catch (Exception e)
             {
