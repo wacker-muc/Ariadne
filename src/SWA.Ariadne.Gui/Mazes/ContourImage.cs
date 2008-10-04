@@ -395,17 +395,34 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <summary>
         /// Returns the processed template image.
         /// Background areas at a certain distance from the image objects are painted black.
+        /// If no defitive background color was detected, the template is returned unmodified.
         /// </summary>
         public Image ProcessedImage
         {
-            get { return image; }
+            get
+            {
+                if (image == null)
+                {
+                    ProcessImage();
+                }
+
+                return image;
+            }
         }
 
+        /// <summary>
+        /// Returns either the processed or the template image,
+        /// depending on the setting of the DisplayProcessedImage property.
+        /// </summary>
         public Image DisplayedImage
         {
             get { return (displayProcessedImage ? ProcessedImage : TemplateImage); }
         }
 
+        /// <summary>
+        /// Determines whether the template images are processed at all.
+        /// If false, the DisplayedImage property always returns the template image.
+        /// </summary>
         public static bool DisplayProcessedImage
         {
             get { return displayProcessedImage; }
@@ -549,6 +566,11 @@ namespace SWA.Ariadne.Gui.Mazes
             }
         }
 
+        /// <summary>
+        /// Calculates the ProcessedImage property.
+        /// Background pixels at a certain distance from the image "object" are rendered black.
+        /// There will be a graduated transition from the object contour to the full background black.
+        /// </summary>
         public void ProcessImage()
         {
             if (image != null)
@@ -565,6 +587,22 @@ namespace SWA.Ariadne.Gui.Mazes
             this.bbox = BoundingBox(border);
             this.image = Crop(image, bbox);
             this.mask = Crop(mask, bbox);
+
+            #region Discard processed image if it fills the enclosing rectangle (almost) completely.
+
+            int areaBbox = bbox.Width * bbox.Height;
+            int areaBorder = ScanLinesArea(border, 1);
+
+            if (areaBorder > 0.95 * areaBbox)
+            {
+                this.image = this.template;
+                this.mask = null;
+                this.inside = null;
+                this.border = null;
+                this.contour = null;
+            }
+
+            #endregion
         }
 
         #endregion
@@ -1080,8 +1118,6 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <returns>number of inside regions found</returns>
         private static int EliminateInsideRegions(List<int>[] scanLines, int y0, int sy)
         {
-            SWA.Utilities.Log.WriteLine(">>> EliminateInsideRegions {");
-
             #region Create local data structures.
 
             /* Unresolved enclosed areas up to the current scan line.
@@ -1168,15 +1204,11 @@ namespace SWA.Ariadne.Gui.Mazes
                         groupId = scanLineReferenceGroups.Count;
                         unitedGroupIds.Add(groupId);
                         scanLineReferenceGroups.Add(new List<Point>((scanLines[y].Count - 1) / 2));
-
-                        SWA.Utilities.Log.WriteLine(string.Format("creating new reference group: {0}", groupId));
                     }
 
                     // Add the current area to the selected group.
                     scanLineReferenceGroups[groupId].Add(new Point(p, y));
                     scanAreas[saCurr].Add(new Point(p, groupId));
-
-                    SWA.Utilities.Log.WriteLine(string.Format("adding region ({2},{3}) on line {1} to group {0}", groupId, y, xp, xq));
 
                     // See if other areas on the previous line also overlap with the current area.
                     while (a + 1 < scanAreas[saPrev].Count)
@@ -1198,12 +1230,10 @@ namespace SWA.Ariadne.Gui.Mazes
                             // Unite the two areas' groups.
                             if (groupId < id1)
                             {
-                                SWA.Utilities.Log.WriteLine(string.Format("uniting group {0} with {1} on line {2}", id1, groupId, y));
                                 unitedGroupIds[id1] = groupId;
                             }
                             else if (id1 < groupId)
                             {
-                                SWA.Utilities.Log.WriteLine(string.Format("uniting group {1} with {0} on line {2}", id1, groupId, y));
                                 unitedGroupIds[groupId] = groupId = id1;
                             }
                             else
@@ -1248,8 +1278,6 @@ namespace SWA.Ariadne.Gui.Mazes
                     ++result;
                 }
 
-                SWA.Utilities.Log.WriteLine(string.Format("marking inside group {0}", g));
-
                 foreach (Point slr in scanLineReferenceGroups[g])
                 {
                     int y = slr.Y, p = slr.X, q = p + 1;
@@ -1284,17 +1312,22 @@ namespace SWA.Ariadne.Gui.Mazes
                 #endregion
             }
 
-            SWA.Utilities.Log.WriteLine("} EliminateInsideRegions <<<");
-
             return result;
         }
 
+        /// <summary>
+        /// Returns a set of scan lines that are reduced by the given margin in all directions.
+        /// </summary>
+        /// <param name="scanLines"></param>
+        /// <param name="margin">Number of pixels to remove in any (radial) direction.</param>
+        /// <returns></returns>
         private static List<int>[] ShrinkRegion(List<int>[] scanLines, int margin)
         {
             List<int>[] result = new List<int>[scanLines.Length];
             int xMin = scanLines[0][0], xMax = scanLines[0][scanLines[0].Count - 1];
 
-            // Start with the border scan lines, indented left and right by the margin distance.
+            #region Start with the border scan lines, indented left and right by the margin distance.
+
             for (int i = 0; i < result.Length; i++)
             {
                 result[i] = new List<int>(scanLines[i].Count);
@@ -1311,7 +1344,10 @@ namespace SWA.Ariadne.Gui.Mazes
                 }
             }
 
-            // Overlay the border scan lines, translated by all points on a circle of radius margin.
+            #endregion
+
+            #region Overlay the border scan lines, translated by all points on a circle of radius margin.
+
             int d2Max = (margin + 1) * (margin + 1) - 1;
             for (int dx = 0, dy = margin; dx <= dy; dx++)
             {
@@ -1334,20 +1370,43 @@ namespace SWA.Ariadne.Gui.Mazes
                 }
             }
 
+            #endregion
+
             return result;
         }
 
+        /// <summary>
+        /// Modifies the target, leaving only the scan line areas where (translated) source and target overlap.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="target"></param>
+        /// <param name="dx">Distance in X direction by which the source is translated.</param>
+        /// <param name="dy">Distance in Y direction by which the source is translated.</param>
         private static void IntersectScanLines(List<int>[] source, List<int>[] target, int dx, int dy)
         {
             IntersectScanLines(source, target, dx, dy, 1);
         }
 
+        /// <summary>
+        /// Modifies the target, adding all areas from the source.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="target"></param>
         private static void UniteScanLines(List<int>[] source, List<int>[] target)
         {
             // Uniting the regions on two scan lines is like intersecting the gaps inbetween them.  :-)
             IntersectScanLines(source, target, 0, 0, 0);
         }
 
+        /// <summary>
+        /// Modifies the target, building an intersection of source and target areas.
+        /// Depending on the parameter p0, either the object areas or the gaps inbetween are intersected.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="target"></param>
+        /// <param name="dx">Distance in X direction by which the source is translated.</param>
+        /// <param name="dy">Distance in Y direction by which the source is translated.</param>
+        /// <param name="p0">When 1, areas are intersected; when 0, gaps are intersected.</param>
         private static void IntersectScanLines(List<int>[] source, List<int>[] target, int dx, int dy, int p0)
         {
             for (int yt = 0, ys = yt - dy; yt < target.Length; yt++, ys++)
@@ -1440,6 +1499,28 @@ namespace SWA.Ariadne.Gui.Mazes
                     tl = target[yt][pt]; tr = target[yt][qt];
                 }
             }
+        }
+
+        /// <summary>
+        /// Returns the number of pixels covered by the scan lines.
+        /// </summary>
+        /// <param name="scanLines"></param>
+        /// <param name="p0">Index of the left end of the first area in each scan line.</param>
+        /// <returns></returns>
+        private static int ScanLinesArea(List<int>[] scanLines, int p0)
+        {
+            int result = 0;
+
+            for (int i = 0; i < scanLines.Length; i++)
+            {
+                for (int p = p0, q = p + 1; q < scanLines[i].Count; p += 2, q += 2)
+                {
+                    int w = scanLines[i][q] - scanLines[i][p] + 1;
+                    result += w;
+                }
+            }
+
+            return result;
         }
 
         #endregion
