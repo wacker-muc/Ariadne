@@ -98,7 +98,7 @@ namespace SWA.Ariadne.Outlines
         /// <param name="centerY">Y coordinate, relative to total height; 0.0 = left, 1.0 = right</param>
         /// <param name="shapeSize">size, relative to distance of center from the border; 1.0 will touch the border</param>
         public PolygonOutlineShape(int corners, int windings, double slant, int xSize, int ySize, double centerX, double centerY, double shapeSize)
-            : base(xSize, ySize, centerX, centerY, shapeSize)
+            : base(xSize, ySize, centerX, centerY, shapeSize, true)
         {
             this.corners = corners;
             this.windings = windings;

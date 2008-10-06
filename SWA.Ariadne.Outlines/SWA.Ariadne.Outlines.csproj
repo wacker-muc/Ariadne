@@ -34,6 +34,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CirclesOutlineShape.cs" />
     <Compile Include="GeometricOutlineShape.cs" />
     <Compile Include="BitmapOutlineShape.cs" />
     <Compile Include="CircleOutlineShape.cs" />

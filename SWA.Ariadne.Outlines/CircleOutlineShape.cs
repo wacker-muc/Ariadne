@@ -44,8 +44,8 @@ namespace SWA.Ariadne.Outlines
         /// <param name="centerX">X coordinate, relative to total width; 0.0 = top, 1.0 = bottom</param>
         /// <param name="centerY">Y coordinate, relative to total height; 0.0 = left, 1.0 = right</param>
         /// <param name="shapeSize">size, relative to distance of center from the border; 1.0 will touch the border</param>
-        private CircleOutlineShape(int xSize, int ySize, double centerX, double centerY, double shapeSize)
-            : base(xSize, ySize, centerX, centerY, shapeSize)
+        internal CircleOutlineShape(int xSize, int ySize, double centerX, double centerY, double shapeSize, bool relativeCoordinates)
+            : base(xSize, ySize, centerX, centerY, shapeSize, relativeCoordinates)
         {
         }
 
@@ -99,7 +99,7 @@ namespace SWA.Ariadne.Outlines
 
         public static OutlineShape Create(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
         {
-            return new CircleOutlineShape(xSize, ySize, centerX, centerY, shapeSize);
+            return new CircleOutlineShape(xSize, ySize, centerX, centerY, shapeSize, true);
         }
 
         #endregion

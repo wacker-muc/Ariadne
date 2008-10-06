@@ -87,6 +87,7 @@ namespace SWA.Ariadne.Outlines
                 OutlineShape.Grid,
                 OutlineShape.GridElement,
                 OutlineShape.Maze,
+                OutlineShape.Circles,
             };
             int[] ratios = { // (number of items) * (novelty value) / (easyness of recognition)
                      7 * 12 / 3,
@@ -101,6 +102,7 @@ namespace SWA.Ariadne.Outlines
                      7 * 10 / 2,
                      7 *  8 / 2,
                      1 * 20 / 1,
+                     1 * 12 / 2,
                 };
             
             int n = 0;
@@ -373,6 +375,21 @@ namespace SWA.Ariadne.Outlines
         public static OutlineShape Maze(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
         {
             return MazeOutlineShape.CreateInstance(r, xSize, ySize);
+        }
+
+        /// <summary>
+        /// Create an outline shape.
+        /// </summary>
+        /// <param name="r"></param>
+        /// <param name="xSize"></param>
+        /// <param name="ySize"></param>
+        /// <param name="centerX"></param>
+        /// <param name="centerY"></param>
+        /// <param name="shapeSize"></param>
+        /// <returns></returns>
+        public static OutlineShape Circles(Random r, int xSize, int ySize, double centerX, double centerY, double shapeSize)
+        {
+            return CirclesOutlineShape.CreateInstance(r, xSize, ySize, centerX, centerY, shapeSize);
         }
 
         #endregion
