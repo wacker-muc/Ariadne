@@ -29,10 +29,20 @@ namespace SWA.Ariadne.Outlines
         /// <param name="centerX">X coordinate, relative to total width; 0.0 = top, 1.0 = bottom</param>
         /// <param name="centerY">Y coordinate, relative to total height; 0.0 = left, 1.0 = right</param>
         /// <param name="shapeSize">size, relative to distance of center from the border; 1.0 will touch the border</param>
-        protected GeometricOutlineShape(int xSize, int ySize, double centerX, double centerY, double shapeSize)
+        /// <param name="relativeCoordinates">when true, the given coordinates need to be converted to shape coordinates</param>
+        protected GeometricOutlineShape(int xSize, int ySize, double centerX, double centerY, double shapeSize, bool relativeCoordinates)
             : base(xSize, ySize)
         {
-            ConvertParameters(xSize, ySize, centerX, centerY, shapeSize, out this.xc, out this.yc, out this.sz);
+            if (relativeCoordinates)
+            {
+                ConvertParameters(xSize, ySize, centerX, centerY, shapeSize, out this.xc, out this.yc, out this.sz);
+            }
+            else
+            {
+                this.xc = centerX;
+                this.yc = centerY;
+                this.sz = shapeSize;
+            }
         }
 
         #endregion
