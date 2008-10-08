@@ -767,6 +767,12 @@ namespace SWA.Ariadne.Gui.Mazes
                 case AriadneSettingsData.OutlineKindEnum.Maze:
                     shapeBuilderDelegate = OutlineShape.Maze;
                     break;
+                case AriadneSettingsData.OutlineKindEnum.Lines:
+                    shapeBuilderDelegate = OutlineShape.Lines;
+                    break;
+                case AriadneSettingsData.OutlineKindEnum.Circles:
+                    shapeBuilderDelegate = OutlineShape.Circles;
+                    break;
             }
             if (shapeBuilderDelegate != null)
             {
