@@ -99,6 +99,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.distortedOutlinesCheckBox = new System.Windows.Forms.CheckBox();
             this.asEmbeddedMazeCheckBox = new System.Windows.Forms.CheckBox();
             this.outlineKindPanel = new System.Windows.Forms.Panel();
+            this.outlineRadioButtonMaze = new System.Windows.Forms.RadioButton();
             this.outlineRadioButtonGridElement = new System.Windows.Forms.RadioButton();
             this.outlineRadioButtonGrid = new System.Windows.Forms.RadioButton();
             this.outlineRadioButtonRectangles = new System.Windows.Forms.RadioButton();
@@ -121,7 +122,8 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.label24 = new System.Windows.Forms.Label();
             this.label23 = new System.Windows.Forms.Label();
             this.imageFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.outlineRadioButtonMaze = new System.Windows.Forms.RadioButton();
+            this.outlineRadioButtonCircles = new System.Windows.Forms.RadioButton();
+            this.outlineRadioButtonLines = new System.Windows.Forms.RadioButton();
             this.tabControl1.SuspendLayout();
             this.layoutPage.SuspendLayout();
             this.wallVisibilityGroupBox.SuspendLayout();
@@ -145,6 +147,9 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             // tabControl1
             // 
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.layoutPage);
             this.tabControl1.Controls.Add(this.colorsPage);
             this.tabControl1.Controls.Add(this.shapePage);
@@ -153,7 +158,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.tabControl1.Location = new System.Drawing.Point(12, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(268, 249);
+            this.tabControl1.Size = new System.Drawing.Size(268, 271);
             this.tabControl1.TabIndex = 0;
             // 
             // layoutPage
@@ -180,13 +185,14 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.layoutPage.Location = new System.Drawing.Point(4, 22);
             this.layoutPage.Name = "layoutPage";
             this.layoutPage.Padding = new System.Windows.Forms.Padding(3);
-            this.layoutPage.Size = new System.Drawing.Size(260, 223);
+            this.layoutPage.Size = new System.Drawing.Size(260, 245);
             this.layoutPage.TabIndex = 1;
             this.layoutPage.Text = "Layout";
             this.layoutPage.UseVisualStyleBackColor = true;
             // 
             // wallVisibilityGroupBox
             // 
+            this.wallVisibilityGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.wallVisibilityGroupBox.Controls.Add(this.wallVisibilityRadioButtonWhenVisited);
             this.wallVisibilityGroupBox.Controls.Add(this.wallVisibilityRadioButtonNever);
             this.wallVisibilityGroupBox.Controls.Add(this.wallVisibilityRadioButtonAlways);
@@ -396,6 +402,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             // resultingAreaTextBox2
             // 
+            this.resultingAreaTextBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.resultingAreaTextBox2.BackColor = System.Drawing.SystemColors.Control;
             this.resultingAreaTextBox2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.resultingAreaTextBox2.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.dataBindingSource, "ResultingArea", true));
@@ -410,6 +417,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             // label4
             // 
+            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(170, 40);
             this.label4.Name = "label4";
@@ -470,7 +478,8 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             // setLayoutButton
             // 
-            this.setLayoutButton.Location = new System.Drawing.Point(91, 194);
+            this.setLayoutButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.setLayoutButton.Location = new System.Drawing.Point(91, 216);
             this.setLayoutButton.Name = "setLayoutButton";
             this.setLayoutButton.Size = new System.Drawing.Size(75, 23);
             this.setLayoutButton.TabIndex = 99;
@@ -494,7 +503,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.colorsPage.Location = new System.Drawing.Point(4, 22);
             this.colorsPage.Name = "colorsPage";
             this.colorsPage.Padding = new System.Windows.Forms.Padding(3);
-            this.colorsPage.Size = new System.Drawing.Size(260, 223);
+            this.colorsPage.Size = new System.Drawing.Size(260, 245);
             this.colorsPage.TabIndex = 2;
             this.colorsPage.Text = "Colors";
             this.colorsPage.UseVisualStyleBackColor = true;
@@ -512,7 +521,8 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             // setColorsButton
             // 
-            this.setColorsButton.Location = new System.Drawing.Point(91, 194);
+            this.setColorsButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.setColorsButton.Location = new System.Drawing.Point(91, 216);
             this.setColorsButton.Name = "setColorsButton";
             this.setColorsButton.Size = new System.Drawing.Size(75, 23);
             this.setColorsButton.TabIndex = 100;
@@ -637,7 +647,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.shapePage.Location = new System.Drawing.Point(4, 22);
             this.shapePage.Name = "shapePage";
             this.shapePage.Padding = new System.Windows.Forms.Padding(3);
-            this.shapePage.Size = new System.Drawing.Size(260, 223);
+            this.shapePage.Size = new System.Drawing.Size(260, 245);
             this.shapePage.TabIndex = 0;
             this.shapePage.Text = "Shape";
             this.shapePage.UseVisualStyleBackColor = true;
@@ -685,6 +695,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             // resultingAreaTextBox1
             // 
+            this.resultingAreaTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.resultingAreaTextBox1.BackColor = System.Drawing.SystemColors.Control;
             this.resultingAreaTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.resultingAreaTextBox1.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.dataBindingSource, "ResultingArea", true));
@@ -699,6 +710,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             // label12
             // 
+            this.label12.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label12.AutoSize = true;
             this.label12.Location = new System.Drawing.Point(170, 40);
             this.label12.Name = "label12";
@@ -709,7 +721,8 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             // setShapeButton
             // 
-            this.setShapeButton.Location = new System.Drawing.Point(91, 194);
+            this.setShapeButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.setShapeButton.Location = new System.Drawing.Point(91, 216);
             this.setShapeButton.Name = "setShapeButton";
             this.setShapeButton.Size = new System.Drawing.Size(75, 23);
             this.setShapeButton.TabIndex = 100;
@@ -859,7 +872,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.imagesPage.Location = new System.Drawing.Point(4, 22);
             this.imagesPage.Name = "imagesPage";
             this.imagesPage.Padding = new System.Windows.Forms.Padding(3);
-            this.imagesPage.Size = new System.Drawing.Size(260, 223);
+            this.imagesPage.Size = new System.Drawing.Size(260, 245);
             this.imagesPage.TabIndex = 3;
             this.imagesPage.Text = "Images";
             this.imagesPage.UseVisualStyleBackColor = true;
@@ -979,7 +992,8 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             // setContentsButton
             // 
-            this.setContentsButton.Location = new System.Drawing.Point(91, 194);
+            this.setContentsButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.setContentsButton.Location = new System.Drawing.Point(91, 216);
             this.setContentsButton.Name = "setContentsButton";
             this.setContentsButton.Size = new System.Drawing.Size(75, 23);
             this.setContentsButton.TabIndex = 99;
@@ -1003,16 +1017,17 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.outlinesPage.Location = new System.Drawing.Point(4, 22);
             this.outlinesPage.Name = "outlinesPage";
             this.outlinesPage.Padding = new System.Windows.Forms.Padding(3);
-            this.outlinesPage.Size = new System.Drawing.Size(260, 223);
+            this.outlinesPage.Size = new System.Drawing.Size(260, 245);
             this.outlinesPage.TabIndex = 4;
             this.outlinesPage.Text = "Outlines";
             this.outlinesPage.UseVisualStyleBackColor = true;
             // 
             // distortedOutlinesCheckBox
             // 
+            this.distortedOutlinesCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.distortedOutlinesCheckBox.AutoSize = true;
             this.distortedOutlinesCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.dataBindingSource, "DistortedOutlines", true));
-            this.distortedOutlinesCheckBox.Location = new System.Drawing.Point(79, 198);
+            this.distortedOutlinesCheckBox.Location = new System.Drawing.Point(79, 220);
             this.distortedOutlinesCheckBox.Name = "distortedOutlinesCheckBox";
             this.distortedOutlinesCheckBox.Size = new System.Drawing.Size(66, 17);
             this.distortedOutlinesCheckBox.TabIndex = 93;
@@ -1021,9 +1036,10 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             // asEmbeddedMazeCheckBox
             // 
+            this.asEmbeddedMazeCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.asEmbeddedMazeCheckBox.AutoSize = true;
             this.asEmbeddedMazeCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.dataBindingSource, "AsEmbeddedMaze", true));
-            this.asEmbeddedMazeCheckBox.Location = new System.Drawing.Point(19, 175);
+            this.asEmbeddedMazeCheckBox.Location = new System.Drawing.Point(19, 197);
             this.asEmbeddedMazeCheckBox.Name = "asEmbeddedMazeCheckBox";
             this.asEmbeddedMazeCheckBox.Size = new System.Drawing.Size(118, 17);
             this.asEmbeddedMazeCheckBox.TabIndex = 91;
@@ -1032,6 +1048,11 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             // outlineKindPanel
             // 
+            this.outlineKindPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.outlineKindPanel.Controls.Add(this.outlineRadioButtonCircles);
+            this.outlineKindPanel.Controls.Add(this.outlineRadioButtonLines);
             this.outlineKindPanel.Controls.Add(this.outlineRadioButtonMaze);
             this.outlineKindPanel.Controls.Add(this.outlineRadioButtonGridElement);
             this.outlineKindPanel.Controls.Add(this.outlineRadioButtonGrid);
@@ -1048,8 +1069,19 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.outlineKindPanel.Controls.Add(this.outlineRadioButtonCircle);
             this.outlineKindPanel.Location = new System.Drawing.Point(10, 6);
             this.outlineKindPanel.Name = "outlineKindPanel";
-            this.outlineKindPanel.Size = new System.Drawing.Size(244, 122);
+            this.outlineKindPanel.Size = new System.Drawing.Size(244, 144);
             this.outlineKindPanel.TabIndex = 137;
+            // 
+            // outlineRadioButtonMaze
+            // 
+            this.outlineRadioButtonMaze.AutoSize = true;
+            this.outlineRadioButtonMaze.Location = new System.Drawing.Point(162, 99);
+            this.outlineRadioButtonMaze.Name = "outlineRadioButtonMaze";
+            this.outlineRadioButtonMaze.Size = new System.Drawing.Size(51, 17);
+            this.outlineRadioButtonMaze.TabIndex = 19;
+            this.outlineRadioButtonMaze.TabStop = true;
+            this.outlineRadioButtonMaze.Text = "Maze";
+            this.outlineRadioButtonMaze.UseVisualStyleBackColor = true;
             // 
             // outlineRadioButtonGridElement
             // 
@@ -1201,11 +1233,12 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             // visibleOutlinesCheckBox
             // 
+            this.visibleOutlinesCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.visibleOutlinesCheckBox.AutoSize = true;
             this.visibleOutlinesCheckBox.Checked = true;
             this.visibleOutlinesCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.visibleOutlinesCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.dataBindingSource, "VisibleOutlines", true));
-            this.visibleOutlinesCheckBox.Location = new System.Drawing.Point(19, 198);
+            this.visibleOutlinesCheckBox.Location = new System.Drawing.Point(19, 220);
             this.visibleOutlinesCheckBox.Name = "visibleOutlinesCheckBox";
             this.visibleOutlinesCheckBox.Size = new System.Drawing.Size(55, 17);
             this.visibleOutlinesCheckBox.TabIndex = 92;
@@ -1214,7 +1247,8 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             // setOutlinesButton
             // 
-            this.setOutlinesButton.Location = new System.Drawing.Point(179, 194);
+            this.setOutlinesButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.setOutlinesButton.Location = new System.Drawing.Point(179, 216);
             this.setOutlinesButton.Name = "setOutlinesButton";
             this.setOutlinesButton.Size = new System.Drawing.Size(75, 23);
             this.setOutlinesButton.TabIndex = 100;
@@ -1224,8 +1258,9 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             // label22
             // 
+            this.label22.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(158, 147);
+            this.label22.Location = new System.Drawing.Point(158, 169);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(27, 13);
             this.label22.TabIndex = 18;
@@ -1234,8 +1269,9 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             // label21
             // 
+            this.label21.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(16, 147);
+            this.label21.Location = new System.Drawing.Point(16, 169);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(55, 13);
             this.label21.TabIndex = 17;
@@ -1244,8 +1280,9 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             // offCenterNumericUpDown
             // 
+            this.offCenterNumericUpDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.offCenterNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.dataBindingSource, "OutlineOffCenter", true));
-            this.offCenterNumericUpDown.Location = new System.Drawing.Point(79, 144);
+            this.offCenterNumericUpDown.Location = new System.Drawing.Point(79, 166);
             this.offCenterNumericUpDown.Maximum = new decimal(new int[] {
             120,
             0,
@@ -1258,8 +1295,9 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             // sizeNumericUpDown
             // 
+            this.sizeNumericUpDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.sizeNumericUpDown.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.dataBindingSource, "OutlineSize", true));
-            this.sizeNumericUpDown.Location = new System.Drawing.Point(195, 143);
+            this.sizeNumericUpDown.Location = new System.Drawing.Point(195, 166);
             this.sizeNumericUpDown.Maximum = new decimal(new int[] {
             150,
             0,
@@ -1282,8 +1320,9 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             // label24
             // 
+            this.label24.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(124, 147);
+            this.label24.Location = new System.Drawing.Point(124, 169);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(15, 13);
             this.label24.TabIndex = 20;
@@ -1292,34 +1331,46 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             // label23
             // 
+            this.label23.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(239, 146);
+            this.label23.Location = new System.Drawing.Point(239, 169);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(15, 13);
             this.label23.TabIndex = 19;
             this.label23.Text = "%";
             this.label23.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // outlineRadioButtonMaze
+            // outlineRadioButtonCircles
             // 
-            this.outlineRadioButtonMaze.AutoSize = true;
-            this.outlineRadioButtonMaze.Location = new System.Drawing.Point(162, 99);
-            this.outlineRadioButtonMaze.Name = "outlineRadioButtonMaze";
-            this.outlineRadioButtonMaze.Size = new System.Drawing.Size(51, 17);
-            this.outlineRadioButtonMaze.TabIndex = 19;
-            this.outlineRadioButtonMaze.TabStop = true;
-            this.outlineRadioButtonMaze.Text = "Maze";
-            this.outlineRadioButtonMaze.UseVisualStyleBackColor = true;
+            this.outlineRadioButtonCircles.AutoSize = true;
+            this.outlineRadioButtonCircles.Location = new System.Drawing.Point(87, 123);
+            this.outlineRadioButtonCircles.Name = "outlineRadioButtonCircles";
+            this.outlineRadioButtonCircles.Size = new System.Drawing.Size(56, 17);
+            this.outlineRadioButtonCircles.TabIndex = 22;
+            this.outlineRadioButtonCircles.TabStop = true;
+            this.outlineRadioButtonCircles.Text = "Circles";
+            this.outlineRadioButtonCircles.UseVisualStyleBackColor = true;
+            // 
+            // outlineRadioButtonLines
+            // 
+            this.outlineRadioButtonLines.AutoSize = true;
+            this.outlineRadioButtonLines.Location = new System.Drawing.Point(11, 122);
+            this.outlineRadioButtonLines.Name = "outlineRadioButtonLines";
+            this.outlineRadioButtonLines.Size = new System.Drawing.Size(50, 17);
+            this.outlineRadioButtonLines.TabIndex = 21;
+            this.outlineRadioButtonLines.TabStop = true;
+            this.outlineRadioButtonLines.Text = "Lines";
+            this.outlineRadioButtonLines.UseVisualStyleBackColor = true;
             // 
             // DetailsDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(294, 278);
+            this.ClientSize = new System.Drawing.Size(294, 300);
             this.Controls.Add(this.tabControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.MaximumSize = new System.Drawing.Size(300, 300);
-            this.MinimumSize = new System.Drawing.Size(300, 300);
+            this.MaximumSize = new System.Drawing.Size(300, 322);
+            this.MinimumSize = new System.Drawing.Size(300, 322);
             this.Name = "DetailsDialog";
             this.ShowInTaskbar = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
@@ -1449,5 +1500,7 @@ namespace SWA.Ariadne.Gui.Dialogs
         private System.Windows.Forms.RadioButton outlineRadioButtonGrid;
         private System.Windows.Forms.RadioButton outlineRadioButtonGridElement;
         private System.Windows.Forms.RadioButton outlineRadioButtonMaze;
+        private System.Windows.Forms.RadioButton outlineRadioButtonCircles;
+        private System.Windows.Forms.RadioButton outlineRadioButtonLines;
     }
 }

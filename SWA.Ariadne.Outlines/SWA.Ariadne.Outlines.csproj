@@ -45,6 +45,7 @@
     <Compile Include="FractalOutlineShape.cs" />
     <Compile Include="FunctionOutlineShape.cs" />
     <Compile Include="GridOutlineShape.cs" />
+    <Compile Include="LinesOutlineShape.cs" />
     <Compile Include="MazeOutlineShape.cs" />
     <Compile Include="PolygonOutlineShape.cs" />
     <Compile Include="OutlineShape.cs" />

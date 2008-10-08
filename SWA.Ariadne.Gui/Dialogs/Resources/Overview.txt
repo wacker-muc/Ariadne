@@ -75,6 +75,7 @@ Usually, an Outline Shape is one contiguous shape, like a circle, a square or an
    * A circle. [1]
    * A diamond, i.e. a square standing on a corner. [1]
    * A set of overlapping circles. [1]
+   * A set of staright lines, dividing the plane. [1]
    * Symmetric polygons with three to twelve corners.
       * In regular polygons, each corner is connected to the two neighboring corners. [1]
       * In star shaped polygons, each corner is connected to its second / third / n-th neighbor. [1]
@@ -202,14 +203,14 @@ Efficient solvers often run for long stretches without error (i.e. without leavi
    * Display a run-time statistics panel.
    * [27] Build mazes with irregular wall patterns.
       * [4] Apply two mixed irregular patterns or apply the pattern to part of the maze only.
-   * [65] Build a continuous wall around an outline shape.
+   * [67] Build a continuous wall around an outline shape.
    * [20] Build a second maze inside the outline shape.
    * [17] Different solver strategies.
    * [2] Let an efficient solver detect dead end areas.
    
 That gives a very large number of pattern or style combinations:
 
-    3 x (1 + 27x4) x (1+66+20) x 17 x 2  =  967,266
+    3 x (1 + 27x4) x (1+67+20) x 17 x 2  =  978,384
 
 The exact application of each variant is often determined by random parameter values:  Some shapes are generated dynamically, some solvers choose arbitrary paths and the maze builder generates random patterns of walls.
 

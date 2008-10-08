@@ -45,6 +45,17 @@ namespace SWA.Ariadne.Outlines
             }
         }
 
+        /// <summary>
+        /// Create an OutlineShape.
+        /// Use this constructor if the shape's center and size are irrelevant.
+        /// </summary>
+        /// <param name="xSize">width of the created shape</param>
+        /// <param name="ySize">height of the created shape</param>
+        protected GeometricOutlineShape(int xSize, int ySize)
+            : this(xSize, ySize, 0.0, 0.0, 1.0, false)
+        {
+        }
+
         #endregion
     }
 }

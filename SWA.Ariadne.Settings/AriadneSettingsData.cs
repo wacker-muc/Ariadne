@@ -347,6 +347,8 @@ namespace SWA.Ariadne.Settings
             Grid,
             GridElement,
             Maze,
+            Lines,
+            Circles,
         }
         public OutlineKindEnum OutlineKind
         {
