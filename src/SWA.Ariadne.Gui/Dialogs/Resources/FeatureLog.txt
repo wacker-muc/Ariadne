@@ -15,6 +15,7 @@ Version 3.2
  * new Outline Shape type StraightLines: the plane is divided by several straight lines
  * reserve a non-rectangular maze region if an image (a Contour Image) has a large background region
  * sometimes build the Outline Shape from the Contour Image, if there is one
+ * images are loaded and processed in a background thread
 
 -----------------------------------------------------------------------
 

@@ -484,9 +484,14 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <param name="minSize"></param>
         /// <param name="maxSize"></param>
         /// <param name="imageFolder"></param>
-        public void ReserveAreaForImages(int count, int minSize, int maxSize, string imageFolder)
+        private void ReserveAreaForImages(int count, int minSize, int maxSize, string imageFolder)
         {
-            PrepareImages(count, minSize, maxSize, imageFolder, false);
+            if (this.imageLoader == null)
+            {
+                this.imageLoader = new ImageLoader(minSize, maxSize, imageFolder, 0);
+            }
+
+            PrepareImages(count);
             ReserveAreaForImages();
         }
 
@@ -496,11 +501,7 @@ namespace SWA.Ariadne.Gui.Mazes
         /// so that the larger dimension is between minSize and maxSize.
         /// </summary>
         /// <param name="count"></param>
-        /// <param name="minSize"></param>
-        /// <param name="maxSize"></param>
-        /// <param name="imageFolder"></param>
-        /// <param name="quickSearch">when true, not all available image file types are considered</param>
-        public void PrepareImages(int count, int minSize, int maxSize, string imageFolder, bool quickSearch)
+        public void PrepareImages(int count)
         {
             images.Clear();
             imageLocations.Clear();
@@ -530,46 +531,6 @@ namespace SWA.Ariadne.Gui.Mazes
 
             #endregion
 
-#if false
-            foreach (string imagePath in FindImages(imageFolder, n, quickSearch))
-            {
-                try
-                {
-                    Image img = new Bitmap(imagePath);
-
-                    #region Scale img so that its larger dimension is between the data's min and max size.
-
-                    if (img.Width > maxSize || img.Height > maxSize)
-                    {
-                        int d = r.Next(minSize, maxSize);
-                        int h = img.Height, w = img.Width;
-                        if (h > w)
-                        {
-                            w = d * w / h;
-                            h = d;
-                        }
-                        else
-                        {
-                            h = d * h / w;
-                            w = d;
-                        }
-                        img = new Bitmap(img, new Size(w, h));
-                    }
-
-                    #endregion
-
-                    images.Add(img);
-                }
-                catch (Exception e)
-                {
-                    System.Console.Out.WriteLine("failed loading image [{0}]: {1}", imagePath, e.ToString());
-                }
-            }
-#else
-            if (this.imageLoader == null)
-            {
-                this.imageLoader = new ImageLoader(minSize, maxSize, imageFolder, 0);
-            }
             for (int i = 0; i < n; i++)
             {
                 ContourImage img = imageLoader.GetNext(r);
@@ -578,7 +539,6 @@ namespace SWA.Ariadne.Gui.Mazes
                     images.Add(img);
                 }
             }
-#endif
         }
 
         /// <summary>

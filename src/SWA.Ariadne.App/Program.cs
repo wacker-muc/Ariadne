@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using SWA.Ariadne.Gui;
 using SWA.Ariadne.Gui.Dialogs;
+using SWA.Ariadne.Gui.Mazes;
 using SWA.Ariadne.Ctrl;
 
 namespace SWA.Ariadne.App
@@ -31,7 +32,9 @@ namespace SWA.Ariadne.App
                         break;
                     case "/s":
                         // Show screensaver form
-                        Application.Run(new ScreenSaverForm(true));
+                        // Create the ImageLoader as early as possible.
+                        ImageLoader imageLoader = ImageLoader.GetScreenSaverImageLoader();
+                        Application.Run(new ScreenSaverForm(true, imageLoader));
                         break;
                     default:
                         MessageBox.Show("Invalid command line argument: " + arg, "Invalid Command Line Argument", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -40,12 +43,21 @@ namespace SWA.Ariadne.App
             }
             else
             {
+#if false
+                ImageLoader imageLoader = ImageLoader.GetScreenSaverImageLoader();
+                Application.Run(new ScreenSaverForm(true, imageLoader));
+#endif
+#if true
                 // If no arguments were passed in, run as a regular application.
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Form form = new MazeForm();
                 form.Icon = Properties.Resources.AriadneIcon_32x32;
                 Application.Run(form);
+#endif
+#if false
+                (new SWA.Ariadne.Gui.Tests.ContourImageTest()).CI_ManualTest_01();
+#endif
             }
         }
     }
