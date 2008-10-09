@@ -19,6 +19,11 @@ namespace SWA.Ariadne.Gui
         private bool fullScreenMode = true;
 
         /// <summary>
+        /// An ImageLoader supplied by the main program.
+        /// </summary>
+        private ImageLoader imageLoader;
+
+        /// <summary>
         /// When true, the built maze should not be too complicated.
         /// </summary>
         private bool loadingFirstMaze = true;
@@ -39,11 +44,12 @@ namespace SWA.Ariadne.Gui
 
         #region Constructor
 
-        public ScreenSaverForm(bool fullScreenMode)
+        public ScreenSaverForm(bool fullScreenMode, ImageLoader imageLoader)
         {
             InitializeComponent();
 
             this.fullScreenMode = fullScreenMode;
+            this.imageLoader = imageLoader;
             this.ShowInTaskbar = false;
             this.DoubleBuffered = false;
 
@@ -107,7 +113,22 @@ namespace SWA.Ariadne.Gui
 
             // Now the first maze has been loaded.
             this.loadingFirstMaze = false;
+
+#if false
+            // Exit immediately when the preparations have been finished.
+            Timer t = new Timer();
+            t.Interval = 10;
+            t.Tick += new EventHandler(OnCloseTimer);
+            t.Start();
+#endif
         }
+
+#if false
+        private void OnCloseTimer(object sender, EventArgs e)
+        {
+            Close();
+        }
+#endif
 
         public override void OnNew(object sender, EventArgs e)
         {
@@ -315,17 +336,21 @@ namespace SWA.Ariadne.Gui
         /// </summary>
         private void PrepareImages()
         {
-            int count = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_NUMBER, 0);
-            int minSize = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_MIN_SIZE, 300);
-            int maxSize = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_MAX_SIZE, 400);
-            string imageFolder = RegisteredOptions.GetStringSetting(RegisteredOptions.OPT_IMAGE_FOLDER);
-
-            if (this.loadingFirstMaze && count > 0)
+            if (this.loadingFirstMaze)
             {
-                mazeUserControl.ImageLoader = new SWA.Ariadne.Gui.Mazes.ImageLoader(minSize, maxSize, imageFolder, count + 2);
+                if (this.imageLoader != null)
+                {
+                    mazeUserControl.ImageLoader = this.imageLoader;
+                }
+                else
+                {
+                    mazeUserControl.ImageLoader = ImageLoader.GetScreenSaverImageLoader();
+                }
             }
 
-            mazeUserControl.PrepareImages(count, minSize, maxSize, imageFolder, this.loadingFirstMaze);
+            // TODO: Get the count from the ImageLoader object.
+            int count = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_NUMBER, 0);
+            mazeUserControl.PrepareImages(count);
         }
 
         /// <summary>

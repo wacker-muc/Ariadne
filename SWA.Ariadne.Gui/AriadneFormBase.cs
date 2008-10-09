@@ -179,7 +179,7 @@ namespace SWA.Ariadne.Gui
         /// <param name="e"></param>
         private void OnOpenScreenSaver(object sender, EventArgs e)
         {
-            ScreenSaverForm form = new ScreenSaverForm(false);
+            ScreenSaverForm form = new ScreenSaverForm(false, null);
             form.Icon = this.Icon;
             form.Show();
         }

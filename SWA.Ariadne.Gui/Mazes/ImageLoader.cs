@@ -4,6 +4,7 @@ using System.Collections;
 using System.Text;
 using System.Drawing;
 using System.Threading;
+using SWA.Ariadne.Settings;
 using SWA.Utilities;
 
 namespace SWA.Ariadne.Gui.Mazes
@@ -72,8 +73,32 @@ namespace SWA.Ariadne.Gui.Mazes
                 this.queueEmptySemaphore = new Semaphore(0, queueLength);
                 this.queueFullSemaphore = new Semaphore(queueLength, queueLength);
 
-                thread.Priority = ThreadPriority.BelowNormal;
+                // The background thread should run with high priority until a list of image filenames
+                // has been loaded (see FindImages()).
+                thread.Priority = ThreadPriority.AboveNormal;
                 thread.Start();
+            }
+        }
+
+        /// <summary>
+        /// Returns an ImageLoader configured with the screen saver parameters from the registry
+        /// or null if the "image number" option is 0.
+        /// </summary>
+        /// <returns></returns>
+        public static ImageLoader GetScreenSaverImageLoader()
+        {
+            int count = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_NUMBER, 0);
+            int minSize = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_MIN_SIZE, 300);
+            int maxSize = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_MAX_SIZE, 400);
+            string imageFolder = RegisteredOptions.GetStringSetting(RegisteredOptions.OPT_IMAGE_FOLDER);
+
+            if (count > 0)
+            {
+                return new SWA.Ariadne.Gui.Mazes.ImageLoader(minSize, maxSize, imageFolder, count + 2);
+            }
+            else
+            {
+                return null;
             }
         }
 
@@ -271,6 +296,14 @@ namespace SWA.Ariadne.Gui.Mazes
             {
                 availableImages.AddRange(SWA.Utilities.Directory.Find(folderPath, "*.gif", true));
                 availableImages.AddRange(SWA.Utilities.Directory.Find(folderPath, "*.png", true));
+            }
+
+            // Initially, the thread was started with high priority (see the Constructor).
+            // After the list has been loaded, it shall continue with low priority.
+            if (this.thread != null)
+            {
+                thread.Priority = ThreadPriority.Lowest;
+                Thread.Sleep(0);
             }
 
             List<string> result = new List<string>(count);
