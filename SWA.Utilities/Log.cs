@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using System.Threading;
 
 namespace SWA.Utilities
 {
@@ -13,6 +14,8 @@ namespace SWA.Utilities
 
         private static string logFileName = "Ariadne.log";
         private static Log instance;
+
+        private static readonly Semaphore sema = new Semaphore(1, 1);
 
         private static Log Instance
         {
@@ -45,8 +48,17 @@ namespace SWA.Utilities
         {
             if (enabled)
             {
+                string threadName = Thread.CurrentThread.Name;
+                if (threadName == null) { threadName = "MAIN"; }
+
+                sema.WaitOne();
+                Instance.logFile.Write(threadName);
+                Instance.logFile.Write(" | ");
+                Instance.logFile.Write(DateTime.Now.ToString("HH:mm:ss.fff"));
+                Instance.logFile.Write(" | ");
                 Instance.logFile.WriteLine(text);
                 Instance.logFile.Flush();
+                sema.Release();
             }
         }
 
