@@ -12,10 +12,11 @@ Version 3.2
 
  * new Outline Shape type Maze: using the walls of another maze
  * new Outline Shape type Circles: several overlapping and intersecting circles
- * new Outline Shape type StraightLines: the plane is divided by several straight lines
+ * new Outline Shape type Lines: the plane is divided by several straight lines
  * reserve a non-rectangular maze region if an image (a Contour Image) has a large background region
  * sometimes build the Outline Shape from the Contour Image, if there is one
  * images are loaded and processed in a background thread
+ * the first few images are loaded immediately from a registry entry, without searching
 
 -----------------------------------------------------------------------
 

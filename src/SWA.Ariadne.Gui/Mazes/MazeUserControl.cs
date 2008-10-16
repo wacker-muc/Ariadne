@@ -9,6 +9,7 @@ using SWA.Ariadne.Model;
 using SWA.Ariadne.Outlines;
 using SWA.Ariadne.Logic;
 using SWA.Ariadne.Settings;
+using SWA.Utilities;
 
 namespace SWA.Ariadne.Gui.Mazes
 {
@@ -496,13 +497,12 @@ namespace SWA.Ariadne.Gui.Mazes
         }
 
         /// <summary>
-        /// Puts the given number of images from the given path into the this.images list.
-        /// Images that are wider or higher than maxSize are scaled down
-        /// so that the larger dimension is between minSize and maxSize.
+        /// Puts the given number of images into the this.images list.
         /// </summary>
         /// <param name="count"></param>
         public void PrepareImages(int count)
         {
+            //Log.WriteLine("{ PrepareImages()");
             images.Clear();
             imageLocations.Clear();
 
@@ -539,6 +539,7 @@ namespace SWA.Ariadne.Gui.Mazes
                     images.Add(img);
                 }
             }
+            //Log.WriteLine("} PrepareImages()");
         }
 
         /// <summary>

@@ -597,6 +597,7 @@ namespace SWA.Ariadne.Gui.Mazes
         /// </summary>
         public void PaintMaze(PainterDelegate painterDelegate)
         {
+            //Log.WriteLine("{ PaintMaze()");
             gBuffer = CreateGraphicsBuffer();
             Graphics g = gBuffer.Graphics;
             g.FillRectangle(Brushes.Black, targetRectangle);
@@ -608,6 +609,7 @@ namespace SWA.Ariadne.Gui.Mazes
                 item.gBuffer = this.gBuffer;
                 item.gBufferAlternate = null;
             }
+            //Log.WriteLine("} PaintMaze()");
         }
 
         /// <summary>

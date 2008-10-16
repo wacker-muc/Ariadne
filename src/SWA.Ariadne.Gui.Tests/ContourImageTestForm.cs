@@ -39,7 +39,7 @@ namespace SWA.Ariadne.Gui.Tests
 
             DateTime start = DateTime.Now;
 
-            ContourImage ci = new ContourImage(template);
+            ContourImage ci = new ContourImage(template, null);
             ci.ProcessImage();
             processed = ci.ProcessedImage;
 

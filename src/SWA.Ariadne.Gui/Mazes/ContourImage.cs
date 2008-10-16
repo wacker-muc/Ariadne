@@ -4,6 +4,7 @@ using System.Text;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using SWA.Ariadne.Outlines;
+using SWA.Utilities;
 
 namespace SWA.Ariadne.Gui.Mazes
 {
@@ -290,8 +291,29 @@ namespace SWA.Ariadne.Gui.Mazes
 
         #region Member variables and Properties.
 
+        /// <summary>
+        /// Fullly qualified filename of the image.
+        /// </summary>
+        public string Path
+        {
+            get { return path; }
+        }
+        private readonly string path;
+
+        public override string ToString()
+        {
+            if (path != null)
+            {
+                return path;
+            }
+            else
+            {
+                return base.ToString();
+            }
+        }
+
         private Color backgroundColor;
-        int bgR, bgG, bgB;
+        private int bgR, bgG, bgB;
 
         /// <summary>
         /// Gets the width of a region around the image that should be blurred gradually
@@ -546,11 +568,13 @@ namespace SWA.Ariadne.Gui.Mazes
         /// Constructor.
         /// </summary>
         /// <param name="template">the original image</param>
+        /// <param name="path">the full filename of this image</param>
         /// <returns></returns>
-        public ContourImage(Image template)
+        public ContourImage(Image template, string path)
         {
             int fuzziness = (int)(0.05 * MaxColorDistance);
 
+            this.path = path;
             this.template = template as Bitmap;
             if (this.template == null)
             {
@@ -578,6 +602,7 @@ namespace SWA.Ariadne.Gui.Mazes
                 return;
             }
 
+            //Log.WriteLine("{ ProcessImage()");
             CreateImage();
 
             int fuzziness = (int)(0.03 * MaxColorDistance);
@@ -603,6 +628,8 @@ namespace SWA.Ariadne.Gui.Mazes
             }
 
             #endregion
+
+            //Log.WriteLine("} ProcessImage()");
         }
 
         #endregion
@@ -1414,7 +1441,7 @@ namespace SWA.Ariadne.Gui.Mazes
                 int tc = target[yt].Count;
 
                 // Skip empty target scan lines.
-                if (tc <= 2)
+                if (tc <= 2 && p0 % 2 == 1)
                 {
                     continue;
                 }

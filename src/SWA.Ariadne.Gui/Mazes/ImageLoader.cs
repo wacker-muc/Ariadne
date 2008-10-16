@@ -11,6 +11,8 @@ namespace SWA.Ariadne.Gui.Mazes
 {
     public class ImageLoader
     {
+        const char PathSeparator = ';';
+
         #region Member variables.
 
         /// <summary>
@@ -76,6 +78,8 @@ namespace SWA.Ariadne.Gui.Mazes
                 // The background thread should run with high priority until a list of image filenames
                 // has been loaded (see FindImages()).
                 thread.Priority = ThreadPriority.AboveNormal;
+                thread.IsBackground = true;
+                thread.Name = "IMGL";
                 thread.Start();
             }
         }
@@ -110,6 +114,7 @@ namespace SWA.Ariadne.Gui.Mazes
             if (this.thread != null)
             {
                 thread.Abort();
+                SaveImagePaths();
                 thread.Join();
             }
         }
@@ -130,9 +135,7 @@ namespace SWA.Ariadne.Gui.Mazes
 
             if (queueLength > 0)
             {
-                queueEmptySemaphore.WaitOne();
-                result = queue.Dequeue() as ContourImage;
-                queueFullSemaphore.Release();
+                result = Dequeue();
             }
             else
             {
@@ -163,33 +166,16 @@ namespace SWA.Ariadne.Gui.Mazes
 
             #region Start with a few images, preferrably without a contour.
 
-            List<ContourImage> unprocessedImages = new List<ContourImage>(queueLength + 1);
-
-            foreach (string imagePath in FindImages(imageFolder, queueLength + 1, true, r))
+            // The saved image paths are already ordered (see SaveImagePaths()).
+            LoadAndEnqueue(r, true, LoadImagePaths());
+            
+            if (queue.Count >= queueLength)
             {
-                ContourImage img = LoadImage(imagePath, r);
-                if (img == null)
-                {
-                    // continue;
-                }
-                else if (img.HasContour)
-                {
-                    unprocessedImages.Add(img);
-                }
-                else
-                {
-                    queueFullSemaphore.WaitOne();
-                    queue.Enqueue(img);
-                    queueEmptySemaphore.Release();
-                }
+                ReduceThreadPriority();
             }
-
-            foreach (ContourImage img in unprocessedImages)
+            else
             {
-                queueFullSemaphore.WaitOne();
-                img.ProcessImage();
-                queue.Enqueue(img);
-                queueEmptySemaphore.Release();
+                LoadAndEnqueue(r, false, FindImages(imageFolder, queueLength + 1, true, r));
             }
 
             #endregion
@@ -208,27 +194,61 @@ namespace SWA.Ariadne.Gui.Mazes
                         continue;
                     }
 
-                    // Wait while the queue contains enough items.
-                    queueFullSemaphore.WaitOne();
-
-                    // Enqueue the processed image.
-                    img.ProcessImage();
-                    queue.Enqueue(img);
-                    queueEmptySemaphore.Release();
-                    
+                    Enqueue(img);
                     ++loadedImagesCount;
                 }
 
                 // If no image was loaded successfully, enqueue a null value.
                 if (loadedImagesCount == 0)
                 {
-                    queueFullSemaphore.WaitOne();
-                    queue.Enqueue(null);
-                    queueEmptySemaphore.Release();
+                    Enqueue(null);
                 }
             }
 
             #endregion
+        }
+
+        /// <summary>
+        /// Loads and enqueues all images of the given list.
+        /// </summary>
+        /// <param name="imagePaths"></param>
+        /// <param name="preserveOrder">When false, the list is reordered so that images without a contour that need not be processed come first.</param>
+        /// <param name="r"></param>
+        private void LoadAndEnqueue(Random r, bool preserveOrder, IEnumerable<string> imagePaths)
+        {
+            //Log.WriteLine("{ " + string.Format("LoadAndEnqueue({0})", imagePaths.GetType().ToString()));
+            List<ContourImage> unprocessedImages = new List<ContourImage>(queueLength + 1);
+
+            IEnumerator<string> e = imagePaths.GetEnumerator();
+            while(e.MoveNext())
+            {
+                string imagePath = e.Current;
+                ContourImage img = null;
+                
+                if (imagePath != null)
+                {
+                    img = LoadImage(imagePath, r);
+                }
+                if (img == null)
+                {
+                    // continue;
+                }
+                else if (!preserveOrder && img.HasContour)
+                {
+                    //Log.WriteLine("- LoadAndEnqueue() save contour image: " + img.ToString());
+                    unprocessedImages.Add(img);
+                }
+                else
+                {
+                    Enqueue(img);
+                }
+            }
+
+            foreach (ContourImage img in unprocessedImages)
+            {
+                Enqueue(img);
+            }
+            //Log.WriteLine("} LoadAndEnqueue()");
         }
 
         /// <summary>
@@ -241,8 +261,10 @@ namespace SWA.Ariadne.Gui.Mazes
         {
             try
             {
+                //Log.WriteLine("{ " + string.Format("LoadImage({0})", imagePath));
                 Image img = new Bitmap(imagePath);
 
+                //Log.WriteLine("- LoadImage() scale image");
                 #region Scale img so that its larger dimension is between the desired min and max size.
 
                 if (img.Width > maxSize || img.Height > maxSize)
@@ -259,18 +281,67 @@ namespace SWA.Ariadne.Gui.Mazes
                         h = d * h / w;
                         w = d;
                     }
-                    img = new Bitmap(img, new Size(w, h));
+                    Bitmap tmpImg = new Bitmap(img, new Size(w, h));
+                    img.Dispose(); // closes and unlocks the image file
+                    img = tmpImg;
                 }
 
                 #endregion
 
-                return new ContourImage(img);
+                //Log.WriteLine("- LoadImage() create contour image");
+                ContourImage result = new ContourImage(img, imagePath);
+                
+                //Log.WriteLine("} LoadImage()");
+                return result;
             }
             catch (Exception e)
             {
                 System.Console.Out.WriteLine("failed loading image [{0}]: {1}", imagePath, e.ToString());
                 return null;
             }
+        }
+
+        /// <summary>
+        /// Processes and enqueues the given image.
+        /// </summary>
+        /// <param name="img"></param>
+        private void Enqueue(ContourImage img)
+        {
+            //Log.WriteLine("{ " + string.Format("Enqueue({0})", img.ToString()));
+
+            // Wait while the queue contains enough items.
+            queueFullSemaphore.WaitOne();
+
+            if (img != null)
+            {
+                img.ProcessImage();
+            }
+
+            // Enqueue the processed image.
+            //Log.WriteLine("- Enqueue() Enqueue");
+            queue.Enqueue(img);
+            queueEmptySemaphore.Release();
+
+#if true
+            /* Continue at the lower thread priority as soon as the first image has been loaded.
+             * This assumes that a) we need only one image or b) we can easily load more images on demand.
+             * This works fine if enough images can be loaded from the saved images list.
+             * See LoadImagePaths().
+             */
+            ReduceThreadPriority();
+#endif
+            //Log.WriteLine("} Enqueue()");
+        }
+
+        private ContourImage Dequeue()
+        {
+            //Log.WriteLine("{ Dequeue()");
+            queueEmptySemaphore.WaitOne();
+            //Log.WriteLine("- Dequeue() Dequeue");
+            ContourImage result = queue.Dequeue() as ContourImage;
+            queueFullSemaphore.Release();
+            //Log.WriteLine("} Dequeue()");
+            return result;
         }
 
         /// <summary>
@@ -283,6 +354,7 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <returns></returns>
         private List<string> FindImages(string folderPath, int count, bool quickSearch, Random r)
         {
+            //Log.WriteLine("{ FindImages()");
             if (folderPath == null || count < 1)
             {
                 return new List<string>();
@@ -300,11 +372,7 @@ namespace SWA.Ariadne.Gui.Mazes
 
             // Initially, the thread was started with high priority (see the Constructor).
             // After the list has been loaded, it shall continue with low priority.
-            if (this.thread != null)
-            {
-                thread.Priority = ThreadPriority.Lowest;
-                Thread.Sleep(0);
-            }
+            ReduceThreadPriority();
 
             List<string> result = new List<string>(count);
 
@@ -335,6 +403,98 @@ namespace SWA.Ariadne.Gui.Mazes
                 availableImages.RemoveAt(p);
             }
 
+            //Log.WriteLine("} FindImages()");
+            return result;
+        }
+
+        /// <summary>
+        /// Sets the background thread priority to a minimum.
+        /// </summary>
+        private void ReduceThreadPriority()
+        {
+            ThreadPriority prio = ThreadPriority.Lowest;
+
+            if (this.thread != null && thread.Priority != prio)
+            {
+                //Log.WriteLine("{ ReduceThreadPriority() set priority");
+                thread.Priority = prio;
+                Thread.Sleep(0);
+                //Log.WriteLine("} ReduceThreadPriority()");
+            }
+        }
+
+        #endregion
+
+        #region Persistant memory of image paths.
+
+        /// <summary>
+        /// Writes the paths of all currently queued images to the registry.
+        /// These paths will be used to initialize the queue on the following run.
+        /// </summary>
+        private void SaveImagePaths()
+        {
+            //Log.WriteLine("{ SaveImagePaths()");
+
+            #region Get the paths of all currently queued images.
+
+            List<string> paths = new List<string>(queue.Count);
+
+            while (queue.Count > 0)
+            {
+                ContourImage img = Dequeue();
+
+                if (img.Path != null)
+                {
+                    if (img.HasContour)
+                    {
+                        // True contour images should be loaded last.
+                        paths.Add(img.Path);
+                    }
+                    else
+                    {
+                        // Images without a contour should be loaded first.
+                        paths.Insert(0, img.Path);
+                    }
+                }
+            }
+
+            #endregion
+
+            #region Concatenate all paths.
+
+            StringBuilder s = new StringBuilder(2048);
+
+            foreach (string path in paths)
+            {
+                //Log.WriteLine("- SaveImagePaths() " + path);
+                if (s.Length > 0) { s.Append(PathSeparator); }
+                s.Append(path.Substring(imageFolder.Length));
+            }
+
+            #endregion
+
+            Microsoft.Win32.RegistryKey key = RegisteredOptions.AppRegistryKey();
+            if (key != null)
+            {
+                key.SetValue(RegisteredOptions.SAVE_IMAGE_PATHS, s.ToString(), Microsoft.Win32.RegistryValueKind.String);
+            }
+            //Log.WriteLine("} SaveImagePaths()");
+        }
+
+        private IEnumerable<string> LoadImagePaths()
+        {
+            //Log.WriteLine("{ LoadImagePaths()");
+            string s = RegisteredOptions.GetStringSetting(RegisteredOptions.SAVE_IMAGE_PATHS);
+            string[] result = s.Split(new char[] { PathSeparator });
+
+            for (int i = 0; i < result.Length; i++)
+            {
+                result[i] = imageFolder + result[i];
+            }
+
+            recentlyUsedImages.AddRange(result);
+
+            //Log.WriteLine("} LoadImagePaths()");
             return result;
         }
 

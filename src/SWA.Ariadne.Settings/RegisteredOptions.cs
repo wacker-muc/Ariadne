@@ -22,6 +22,10 @@ namespace SWA.Ariadne.Settings
         public const string OPT_PAINT_ALL_WALLS = "paint all maze walls";
         public const string OPT_MULTIPLE_MAZES = "create multiple mazes";
 
+        // Note: The Screensaver options dialog will recreate the registry entry and store only the OPT_ values.
+        //       All other values will be lost.
+        public const string SAVE_IMAGE_PATHS = "immediate image paths";
+
         public static bool GetBoolSetting(string name, bool defaultValue)
         {
             Int32 value = (defaultValue == false ? 0 : 1);
@@ -71,6 +75,11 @@ namespace SWA.Ariadne.Settings
             return GetStringSetting(name, "");
         }
 
+        /// <summary>
+        /// Returns our RegistryKey or null if it does not exist in the Windows registry.
+        /// </summary>
+        /// <param name="initialize"></param>
+        /// <returns></returns>
         public static RegistryKey AppRegistryKey(bool initialize)
         {
             RegistryKey rootKey = Registry.CurrentUser;
@@ -78,7 +87,7 @@ namespace SWA.Ariadne.Settings
             RegistryKey result;
             try
             {
-                result = rootKey.OpenSubKey(REGISTRY_KEY);
+                result = rootKey.OpenSubKey(REGISTRY_KEY, true);
             }
             catch
             {
@@ -98,6 +107,11 @@ namespace SWA.Ariadne.Settings
             return result;
         }
 
+        /// <summary>
+        /// Returns our RegistryKey or null if it does not exist in the Windows registry.
+        /// </summary>
+        /// <param name="initialize"></param>
+        /// <returns></returns>
         public static RegistryKey AppRegistryKey()
         {
             return AppRegistryKey(false);
