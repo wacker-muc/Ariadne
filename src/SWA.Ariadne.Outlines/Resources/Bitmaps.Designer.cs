@@ -60,6 +60,13 @@ namespace SWA.Ariadne.Outlines.Resources {
             }
         }
         
+        internal static System.Drawing.Bitmap Achtung {
+            get {
+                object obj = ResourceManager.GetObject("Achtung", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap Africa {
             get {
                 object obj = ResourceManager.GetObject("Africa", resourceCulture);
@@ -88,6 +95,13 @@ namespace SWA.Ariadne.Outlines.Resources {
             }
         }
         
+        internal static System.Drawing.Bitmap Bat_02 {
+            get {
+                object obj = ResourceManager.GetObject("Bat_02", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap Bavaria {
             get {
                 object obj = ResourceManager.GetObject("Bavaria", resourceCulture);
@@ -95,9 +109,65 @@ namespace SWA.Ariadne.Outlines.Resources {
             }
         }
         
+        internal static System.Drawing.Bitmap Bishop {
+            get {
+                object obj = ResourceManager.GetObject("Bishop", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap BritishIslands {
             get {
                 object obj = ResourceManager.GetObject("BritishIslands", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Butterfly_01 {
+            get {
+                object obj = ResourceManager.GetObject("Butterfly_01", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Butterfly_02 {
+            get {
+                object obj = ResourceManager.GetObject("Butterfly_02", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Camel_01 {
+            get {
+                object obj = ResourceManager.GetObject("Camel_01", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Camel_02 {
+            get {
+                object obj = ResourceManager.GetObject("Camel_02", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Canguru_01 {
+            get {
+                object obj = ResourceManager.GetObject("Canguru_01", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Cat_01 {
+            get {
+                object obj = ResourceManager.GetObject("Cat_01", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Cat_02 {
+            get {
+                object obj = ResourceManager.GetObject("Cat_02", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -116,6 +186,13 @@ namespace SWA.Ariadne.Outlines.Resources {
             }
         }
         
+        internal static System.Drawing.Bitmap Cow_01 {
+            get {
+                object obj = ResourceManager.GetObject("Cow_01", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap Cyprus {
             get {
                 object obj = ResourceManager.GetObject("Cyprus", resourceCulture);
@@ -130,6 +207,69 @@ namespace SWA.Ariadne.Outlines.Resources {
             }
         }
         
+        internal static System.Drawing.Bitmap Delphin_01 {
+            get {
+                object obj = ResourceManager.GetObject("Delphin_01", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Dog_01 {
+            get {
+                object obj = ResourceManager.GetObject("Dog_01", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Dog_02 {
+            get {
+                object obj = ResourceManager.GetObject("Dog_02", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Dog_03 {
+            get {
+                object obj = ResourceManager.GetObject("Dog_03", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Doppelkurve {
+            get {
+                object obj = ResourceManager.GetObject("Doppelkurve", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Duck_01 {
+            get {
+                object obj = ResourceManager.GetObject("Duck_01", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Eagle_01 {
+            get {
+                object obj = ResourceManager.GetObject("Eagle_01", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap EinfahrtVerboten {
+            get {
+                object obj = ResourceManager.GetObject("EinfahrtVerboten", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Elephant_01 {
+            get {
+                object obj = ResourceManager.GetObject("Elephant_01", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap Europe {
             get {
                 object obj = ResourceManager.GetObject("Europe", resourceCulture);
@@ -137,9 +277,65 @@ namespace SWA.Ariadne.Outlines.Resources {
             }
         }
         
+        internal static System.Drawing.Bitmap Fahrrad {
+            get {
+                object obj = ResourceManager.GetObject("Fahrrad", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Fahrradweg {
+            get {
+                object obj = ResourceManager.GetObject("Fahrradweg", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap France {
             get {
                 object obj = ResourceManager.GetObject("France", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Frog_01 {
+            get {
+                object obj = ResourceManager.GetObject("Frog_01", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Frog_02 {
+            get {
+                object obj = ResourceManager.GetObject("Frog_02", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Frog_03 {
+            get {
+                object obj = ResourceManager.GetObject("Frog_03", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Fussgaenger {
+            get {
+                object obj = ResourceManager.GetObject("Fussgaenger", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Fussgaengerueberweg {
+            get {
+                object obj = ResourceManager.GetObject("Fussgaengerueberweg", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Gegenverkehr {
+            get {
+                object obj = ResourceManager.GetObject("Gegenverkehr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -154,6 +350,20 @@ namespace SWA.Ariadne.Outlines.Resources {
         internal static System.Drawing.Bitmap Greenland {
             get {
                 object obj = ResourceManager.GetObject("Greenland", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Halteverbot {
+            get {
+                object obj = ResourceManager.GetObject("Halteverbot", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Hoechstgeschwindigkeit {
+            get {
+                object obj = ResourceManager.GetObject("Hoechstgeschwindigkeit", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -175,6 +385,13 @@ namespace SWA.Ariadne.Outlines.Resources {
         internal static System.Drawing.Bitmap India {
             get {
                 object obj = ResourceManager.GetObject("India", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Interstate {
+            get {
+                object obj = ResourceManager.GetObject("Interstate", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -207,6 +424,48 @@ namespace SWA.Ariadne.Outlines.Resources {
             }
         }
         
+        internal static System.Drawing.Bitmap KFZ {
+            get {
+                object obj = ResourceManager.GetObject("KFZ", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap KFZ_Verbot {
+            get {
+                object obj = ResourceManager.GetObject("KFZ_Verbot", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap King {
+            get {
+                object obj = ResourceManager.GetObject("King", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Knight {
+            get {
+                object obj = ResourceManager.GetObject("Knight", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Kreisverkehr {
+            get {
+                object obj = ResourceManager.GetObject("Kreisverkehr", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Lizard_01 {
+            get {
+                object obj = ResourceManager.GetObject("Lizard_01", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap Madagascar {
             get {
                 object obj = ResourceManager.GetObject("Madagascar", resourceCulture);
@@ -221,9 +480,51 @@ namespace SWA.Ariadne.Outlines.Resources {
             }
         }
         
+        internal static System.Drawing.Bitmap Mindestgeschwindigkeit {
+            get {
+                object obj = ResourceManager.GetObject("Mindestgeschwindigkeit", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap NorthAmerica {
             get {
                 object obj = ResourceManager.GetObject("NorthAmerica", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap NumberedRoute {
+            get {
+                object obj = ResourceManager.GetObject("NumberedRoute", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Parkverbot {
+            get {
+                object obj = ResourceManager.GetObject("Parkverbot", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Paw_01 {
+            get {
+                object obj = ResourceManager.GetObject("Paw_01", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Paw_02 {
+            get {
+                object obj = ResourceManager.GetObject("Paw_02", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Pawn {
+            get {
+                object obj = ResourceManager.GetObject("Pawn", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -235,9 +536,65 @@ namespace SWA.Ariadne.Outlines.Resources {
             }
         }
         
+        internal static System.Drawing.Bitmap PKW {
+            get {
+                object obj = ResourceManager.GetObject("PKW", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap Poland {
             get {
                 object obj = ResourceManager.GetObject("Poland", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Queen {
+            get {
+                object obj = ResourceManager.GetObject("Queen", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Rabbit_01 {
+            get {
+                object obj = ResourceManager.GetObject("Rabbit_01", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Rabbit_02 {
+            get {
+                object obj = ResourceManager.GetObject("Rabbit_02", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Rabbit_03 {
+            get {
+                object obj = ResourceManager.GetObject("Rabbit_03", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Reiter {
+            get {
+                object obj = ResourceManager.GetObject("Reiter", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Restaurant {
+            get {
+                object obj = ResourceManager.GetObject("Restaurant", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Rook {
+            get {
+                object obj = ResourceManager.GetObject("Rook", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -256,6 +613,20 @@ namespace SWA.Ariadne.Outlines.Resources {
             }
         }
         
+        internal static System.Drawing.Bitmap Shark_01 {
+            get {
+                object obj = ResourceManager.GetObject("Shark_01", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Shark_02 {
+            get {
+                object obj = ResourceManager.GetObject("Shark_02", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap Sicily {
             get {
                 object obj = ResourceManager.GetObject("Sicily", resourceCulture);
@@ -263,16 +634,16 @@ namespace SWA.Ariadne.Outlines.Resources {
             }
         }
         
-        internal static System.Drawing.Bitmap SouthAmerica {
+        internal static System.Drawing.Bitmap SkullAndCrossbones {
             get {
-                object obj = ResourceManager.GetObject("SouthAmerica", resourceCulture);
+                object obj = ResourceManager.GetObject("SkullAndCrossbones", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap Spain {
+        internal static System.Drawing.Bitmap SouthAmerica {
             get {
-                object obj = ResourceManager.GetObject("Spain", resourceCulture);
+                object obj = ResourceManager.GetObject("SouthAmerica", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -305,6 +676,13 @@ namespace SWA.Ariadne.Outlines.Resources {
             }
         }
         
+        internal static System.Drawing.Bitmap Stop {
+            get {
+                object obj = ResourceManager.GetObject("Stop", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap Texas {
             get {
                 object obj = ResourceManager.GetObject("Texas", resourceCulture);
@@ -322,6 +700,27 @@ namespace SWA.Ariadne.Outlines.Resources {
         internal static System.Drawing.Bitmap USA {
             get {
                 object obj = ResourceManager.GetObject("USA", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Vorfahrt {
+            get {
+                object obj = ResourceManager.GetObject("Vorfahrt", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Vorfahrtsstrasse {
+            get {
+                object obj = ResourceManager.GetObject("Vorfahrtsstrasse", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap VorsichtFussgaenger {
+            get {
+                object obj = ResourceManager.GetObject("VorsichtFussgaenger", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
