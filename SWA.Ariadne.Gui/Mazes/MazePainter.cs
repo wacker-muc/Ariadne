@@ -127,6 +127,17 @@ namespace SWA.Ariadne.Gui.Mazes
         public int XOffset { get { return this.xOffset; } }
         public int YOffset { get { return this.yOffset; } }
 
+        /// <summary>
+        /// Space left around the painted maze inside the client's DisplayRectangle.
+        /// In ScreenSaver mode, this should be 0.
+        /// </summary>
+        public int Padding
+        {
+            get { return padding; }
+            set { padding = value; }
+        }
+        private int padding = 2;
+
         private static Color wallColor = Color.Gray;
         private Color forwardColor = Color.GreenYellow;
         private Color backwardColor = Color.Brown;
@@ -417,9 +428,7 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <param name="yOffset"></param>
         private void FitMazeWidth(out int width, out int xOffset)
         {
-            int w = targetRectangle.Width;
-            width = (w - this.wallWidth - 4) / this.gridWidth;
-            xOffset = (w - width * this.gridWidth) / 2;
+            FitMazeSize(targetRectangle.Width, out width, out xOffset);
         }
 
         /// <summary>
@@ -429,9 +438,32 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <param name="xOffset"></param>
         private void FitMazeHeight(out int height, out int yOffset)
         {
-            int h = targetRectangle.Height;
-            height = (h - this.wallWidth - 4) / this.gridWidth;
-            yOffset = (h - height * this.gridWidth) / 2;
+            FitMazeSize(targetRectangle.Height, out height, out yOffset);
+        }
+
+        /// <summary>
+        /// Calculate a maze size (width or height) and its offset from the given displaySize.
+        /// </summary>
+        /// <param name="displaySize"></param>
+        /// <param name="width"></param>
+        /// <param name="yOffset"></param>
+        private void FitMazeSize(int displaySize, out int mazeSize, out int offset)
+        {
+            int usableSize = displaySize - 2 * padding;
+            
+            if (this.wallWidth > 0)
+            {
+                usableSize -= this.wallWidth;
+            }
+            else
+            {
+                // Add the unused space between the painted path and the not painted wall.
+                // Note: The start or target square may be slightly cut off if it is directly on the border.
+                usableSize += (this.squareWidth - this.pathWidth);
+            }
+
+            mazeSize = usableSize / this.gridWidth;
+            offset = (displaySize - mazeSize * this.gridWidth) / 2;
         }
 
 #if false

@@ -75,6 +75,9 @@ namespace SWA.Ariadne.Gui
             this.WindowState = FormWindowState.Maximized;
             Cursor.Hide();
 
+            // Make the MazePainter use the whole screen area.
+            this.mazeUserControl.MazePainter.Padding = 0;
+
             // Make this the active Form and capture the mouse.
             this.Activate();
             this.Capture = true;

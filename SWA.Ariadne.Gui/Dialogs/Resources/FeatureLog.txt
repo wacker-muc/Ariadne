@@ -4,7 +4,7 @@
    Feature Log: Ariadne
    ====================
 
-Copyright (c) Stephan Wacker, 2008
+Copyright (c) Stephan.Wacker@web.de, 2008
 
 -----------------------------------------------------------------------
 

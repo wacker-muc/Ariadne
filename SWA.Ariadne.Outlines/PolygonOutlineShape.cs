@@ -220,7 +220,7 @@ namespace SWA.Ariadne.Outlines
         }
 
         /// <summary>
-        /// Returns a DistortedOutlineShape based on the current shape and a RadialWaveDistorted.
+        /// Returns a DistortedOutlineShape based on the current shape and a RadialWaveDistortion.
         /// The distortion is exactly aligned with the polygon shape.
         /// Only the polygon edges will be bent inwards; the points will not be distorted.
         /// </summary>
