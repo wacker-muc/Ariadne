@@ -118,6 +118,9 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="Achtung" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Achtung.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Africa" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Africa.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -130,11 +133,38 @@
   <data name="Austria" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Austria.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Bat_02" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Bat-02.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Bavaria" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Bavaria.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Bishop" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Bishop.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="BritishIslands" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>BritishIslands.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Butterfly_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Butterfly-01.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Butterfly_02" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Butterfly-02.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Camel_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Camel-01.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Camel_02" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Camel-02.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Canguru_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Canguru-01.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Cat_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Cat-01.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Cat_02" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Cat-02.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="China" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>China.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -142,23 +172,83 @@
   <data name="Corsica" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Corsica.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Cow_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Cow-01.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Cyprus" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Cyprus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="CzechRepublic" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>CzechRepublic.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Delphin_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Delphin-01.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Dog_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Dog-01.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Dog_02" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Dog-02.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Dog_03" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Dog-03.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Doppelkurve" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Doppelkurve.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Duck_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Duck-01.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Eagle_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Eagle-01.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="EinfahrtVerboten" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>EinfahrtVerboten.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Elephant_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Elephant-01.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Europe" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Europe.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Fahrrad" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Fahrrad.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Fahrradweg" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Fahrradweg.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="France" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>France.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Frog_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Frog-01.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Frog_02" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Frog-02.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Frog_03" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Frog-03.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Fussgaenger" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Fussgaenger.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Fussgaengerueberweg" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Fussgaengerueberweg.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Gegenverkehr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Gegenverkehr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Germany" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Germany.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Greenland" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Greenland.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Halteverbot" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Halteverbot.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Hoechstgeschwindigkeit" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Hoechstgeschwindigkeit.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Hungary" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Hungary.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -168,6 +258,9 @@
   </data>
   <data name="India" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>India.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Interstate" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Interstate.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Islandia" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Islandia.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -181,20 +274,80 @@
   <data name="Japan" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Japan.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="KFZ" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>KFZ.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="KFZ_Verbot" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>KFZ-Verbot.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="King" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>King.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Knight" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Knight.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Kreisverkehr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Kreisverkehr.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Lizard_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Lizard-01.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Madagascar" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Madagascar.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Mexico" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Mexico.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Mindestgeschwindigkeit" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Mindestgeschwindigkeit.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="NorthAmerica" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>NorthAmerica.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="NumberedRoute" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>NumberedRoute.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Parkverbot" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Parkverbot.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Paw_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Paw-01.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Paw_02" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Paw-02.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Pawn" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Pawn.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Peru" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Peru.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="PKW" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>PKW.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Poland" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Poland.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Queen" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Queen.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Rabbit_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Rabbit-01.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Rabbit_02" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Rabbit-02.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Rabbit_03" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Rabbit-03.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Reiter" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Reiter.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Restaurant" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Restaurant.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Rook" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Rook.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Russia" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Russia.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -202,14 +355,20 @@
   <data name="Scandinavia" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Scandinavia.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Shark_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Shark-01.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Shark_02" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Shark-02.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Sicily" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Sicily.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="SkullAndCrossbones" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>SkullAndCrossbones.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="SouthAmerica" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>SouthAmerica.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Spain" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Spain.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Stamp146x195" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Stamp146x195.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -223,6 +382,9 @@
   <data name="Stamp194x98_Open" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Stamp194x98_Open.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Stop" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Stop.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Texas" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Texas.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -231,5 +393,14 @@
   </data>
   <data name="USA" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>USA.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Vorfahrt" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Vorfahrt.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Vorfahrtsstrasse" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Vorfahrtsstrasse.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="VorsichtFussgaenger" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>VorsichtFussgaenger.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
