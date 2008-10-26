@@ -78,7 +78,7 @@ namespace SWA.Ariadne.Model
         /// <summary>
         /// Used while building: Square will not be used.
         /// </summary>
-        internal bool isReserved
+        public bool isReserved
         {
             get { return (mazeId == ReservedMazeId); }
             set
