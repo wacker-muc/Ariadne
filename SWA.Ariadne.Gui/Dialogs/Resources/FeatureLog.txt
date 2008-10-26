@@ -8,7 +8,7 @@ Copyright (c) Stephan.Wacker@web.de, 2008
 
 -----------------------------------------------------------------------
 
-Version 3.2 -- r288 -- 2008-10-26
+Version 3.2 -- r289 -- 2008-10-26
 
  * new Outline Shape type Maze: using the walls of another maze
  * new Outline Shape type Circles: several overlapping and intersecting circles

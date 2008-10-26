@@ -745,7 +745,7 @@ namespace SWA.Ariadne.Gui.Mazes
             {
                 for (int y = 0; y < maze.YSize; y++)
                 {
-                    if (insideShapeTest(x, y) == true)
+                    if (insideShapeTest(x, y) == true && ! Maze[x, y].isReserved)
                     {
                         this.PaintSquare(g, shapeBrush, x, y);
                     }
