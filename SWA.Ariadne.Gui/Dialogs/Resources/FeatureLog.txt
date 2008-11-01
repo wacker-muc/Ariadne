@@ -8,6 +8,12 @@ Copyright (c) Stephan.Wacker@web.de, 2008
 
 -----------------------------------------------------------------------
 
+Version 3.3
+
+ * during the first few seconds, the screen saver will exit upon mouse movement
+
+-----------------------------------------------------------------------
+
 Version 3.2 -- r289 -- 2008-10-26
 
  * new Outline Shape type Maze: using the walls of another maze
