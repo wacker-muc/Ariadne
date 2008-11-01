@@ -19,6 +19,14 @@ namespace SWA.Ariadne.Gui
         private bool fullScreenMode = true;
 
         /// <summary>
+        /// During the first few seconds after the screen saver has been loaded,
+        /// a MouseMove event will cause an application exit.
+        /// </summary>
+        private readonly DateTime startTime = DateTime.Now;
+        private readonly int startSeconds = 6;
+        private Point mouseLocation = new Point(-1, -1);
+
+        /// <summary>
         /// An ImageLoader supplied by the main program.
         /// </summary>
         private ImageLoader imageLoader;
@@ -173,6 +181,30 @@ namespace SWA.Ariadne.Gui
 
         private void ScreenSaverForm_MouseDown(object sender, MouseEventArgs e)
         {
+            Close();
+        }
+
+        /// <summary>
+        /// Closes the screen saver if the mouse is moved
+        /// within the first few seconds after the program has started.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ScreenSaverForm_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (mouseLocation.X < 0)
+            {
+                mouseLocation = e.Location;
+                return;
+            }
+            if (mouseLocation.X == e.Location.X && mouseLocation.Y == e.Location.Y)
+            {
+                return;
+            }
+            if ((DateTime.Now - this.startTime).TotalSeconds > this.startSeconds)
+            {
+                return;
+            }
             Close();
         }
 

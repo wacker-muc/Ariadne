@@ -1161,6 +1161,7 @@ namespace SWA.Ariadne.Model
         static Maze()
         {
             // Wake up and initialize the MazeShape class.
+            // This is required to get a valid MazeBuilder.Instance.
             MazeShape.Touch();
         }
 

@@ -65,6 +65,8 @@ namespace SWA.Ariadne.Model
 
         /// <summary>
         /// Triggers the class constructor.
+        /// This method needs to be called from another static class constructor
+        /// so that this module can be initialized before the MazeBuilder.Instance is used.
         /// </summary>
         public static void Touch()
         {
