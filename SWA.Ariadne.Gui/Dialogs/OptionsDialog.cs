@@ -68,6 +68,22 @@ namespace SWA.Ariadne.Gui.Dialogs
             }
         }
 
+        private void selectBackgroundImageFolderButton_Click(object sender, EventArgs e)
+        {
+            // Start at the path found in the registered options.
+            this.imageFolderBrowserDialog.SelectedPath = this.backgroundImageFolderTextBox.Text;
+
+            if (this.imageFolderBrowserDialog.ShowDialog() == DialogResult.OK)
+            {
+                this.backgroundImageFolderTextBox.Text = this.imageFolderBrowserDialog.SelectedPath;
+            }
+        }
+
+        private void checkBoxDifferentBackgroundImageFolder_CheckedChanged(object sender, EventArgs e)
+        {
+            this.selectBackgroundImageFolderButton.Enabled = this.backgroundImageFolderTextBox.Enabled = this.checkBoxDifferentBackgroundImageFolder.Checked;
+        }
+
         private void LoadSettings()
         {
             // General tab.
@@ -82,6 +98,24 @@ namespace SWA.Ariadne.Gui.Dialogs
             imageMaxSizeNumericUpDown.Value = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_MAX_SIZE, 180);
             imageFolderTextBox.Text = RegisteredOptions.GetStringSetting(RegisteredOptions.OPT_IMAGE_FOLDER);
             subtractImagesBackgroundCheckBox.Checked = RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_IMAGE_SUBTRACT_BACKGROUND, true);
+
+            // Background tab.
+            checkBoxBackgroundImage.Checked = RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_BACKGROUND_IMAGES, false);
+            backgroundImageFolderTextBox.Text = RegisteredOptions.GetStringSetting(RegisteredOptions.OPT_BACKGROUND_IMAGE_FOLDER);
+
+            if (backgroundImageFolderTextBox.Text == "")
+            {
+                checkBoxDifferentBackgroundImageFolder.Checked = false;
+                backgroundImageFolderTextBox.Enabled = false;
+                selectBackgroundImageFolderButton.Enabled = false;
+                backgroundImageFolderTextBox.Text = imageFolderTextBox.Text;
+            }
+            else
+            {
+                checkBoxDifferentBackgroundImageFolder.Checked = true;
+                backgroundImageFolderTextBox.Enabled = true;
+                selectBackgroundImageFolderButton.Enabled = true;
+            }
 
             // Extras tab.
             checkBoxPaintAllWalls.Checked = RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_PAINT_ALL_WALLS, false);
@@ -106,6 +140,10 @@ namespace SWA.Ariadne.Gui.Dialogs
             key.SetValue(RegisteredOptions.OPT_IMAGE_MAX_SIZE, (Int32)imageMaxSizeNumericUpDown.Value, RegistryValueKind.DWord);
             key.SetValue(RegisteredOptions.OPT_IMAGE_FOLDER, imageFolderTextBox.Text, RegistryValueKind.String);
             key.SetValue(RegisteredOptions.OPT_IMAGE_SUBTRACT_BACKGROUND, (Int32)(subtractImagesBackgroundCheckBox.Checked ? 1 : 0), RegistryValueKind.DWord);
+
+            // Background tab.
+            key.SetValue(RegisteredOptions.OPT_BACKGROUND_IMAGES, (Int32)(checkBoxBackgroundImage.Checked ? 1 : 0), RegistryValueKind.DWord);
+            key.SetValue(RegisteredOptions.OPT_BACKGROUND_IMAGE_FOLDER, (checkBoxDifferentBackgroundImageFolder.Checked ? backgroundImageFolderTextBox.Text : ""), RegistryValueKind.String);
 
             // Extras tab.
             key.SetValue(RegisteredOptions.OPT_PAINT_ALL_WALLS, (Int32)(checkBoxPaintAllWalls.Checked ? 1 : 0), RegistryValueKind.DWord);

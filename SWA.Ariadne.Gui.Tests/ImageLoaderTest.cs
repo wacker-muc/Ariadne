@@ -90,7 +90,7 @@ namespace SWA.Ariadne.Gui.Tests
 
             int queueLength = 4;
 
-            ImageLoader target = new ImageLoader(minSize, maxSize, imageFolder, queueLength);
+            ImageLoader target = new ImageLoader(minSize, maxSize, false, imageFolder, queueLength, "TEST");
 
             for (int i = 0; i < 20; i++)
             {

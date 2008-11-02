@@ -106,6 +106,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             data.ImageMinSize = (int) this.imageMinSizeNumericUpDown.Value;
             data.ImageMaxSize = (int) this.imageMaxSizeNumericUpDown.Value;
             data.ImageFolder = RegisteredOptions.GetStringSetting(RegisteredOptions.OPT_IMAGE_FOLDER);
+            data.ShowBackgroundImage = this.backgroundImageCheckBox.Checked;
 
             data.OutlineKind = AriadneSettingsData.OutlineKindEnum.None;
             data.OutlineOffCenter = (int)this.offCenterNumericUpDown.Value;

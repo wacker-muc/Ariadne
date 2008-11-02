@@ -119,6 +119,10 @@ namespace SWA.Ariadne.Gui.Mazes
         private int wallWidth = -1;
         private int gridWidth;
         private int pathWidth;
+
+        /// <summary>
+        /// Canvas coordinates of the middle of the top left wall.
+        /// </summary>
         private int xOffset, yOffset;
 
         // TODO: Collect the public dimension attributes in a single structure.
@@ -207,6 +211,40 @@ namespace SWA.Ariadne.Gui.Mazes
                 return Brushes.Black;
             }
         }
+
+        #region Background Image
+
+        /// <summary>
+        /// A source of background images.
+        /// </summary>
+        public ImageLoader BackgroundImageLoader
+        {
+            get { return backgroundImageLoader; }
+            set { backgroundImageLoader = value; }
+        }
+        private ImageLoader backgroundImageLoader;
+
+        /// <summary>
+        /// A bitmap of the size of the targetRectangle with black (or transparent) background.
+        /// One of the available packground images is painted at a random location.
+        /// Over that image, all (visible) walls are painted, as well.
+        /// Only the parts under visited squares are actually displayed.
+        /// </summary>
+        private Bitmap backgroundImage;
+
+        /// <summary>
+        /// Squares that are covered completely by the background image.
+        /// </summary>
+        private Rectangle backgroundImageRange;
+
+        private OutlineShape backgroundImageShape;
+
+        /// <summary>
+        /// True if the square's background has already been displayed.
+        /// </summary>
+        private bool[,] backgroundPainted;
+
+        #endregion
 
         /// <summary>
         /// This buffer holds the graphics and is rendered in the control.
@@ -537,6 +575,12 @@ namespace SWA.Ariadne.Gui.Mazes
             result.yOffset = this.yOffset;
             result.wallVisibility = this.WallVisibility;
 
+            // The shared painter will also share all data related to the background image.
+            result.backgroundImage = this.backgroundImage;
+            result.backgroundImageRange = this.backgroundImageRange;
+            result.backgroundImageShape = this.backgroundImageShape;
+            result.backgroundPainted = this.backgroundPainted;
+
             // Switch path colors until they are sufficiently different.
             while (true)
             {
@@ -662,11 +706,20 @@ namespace SWA.Ariadne.Gui.Mazes
             // The PaintWalls() method fails in design mode.
             try
             {
+                // Create a background image.
+                Graphics bg = CreateBackgroundImage(g);
+
                 // Call the painterDelegate first
                 // as it may also paint into areas that are later covered by the maze.
                 if (painterDelegate != null)
                 {
                     painterDelegate(g);
+#if false
+                    if (bg != null)
+                    {
+                        painterDelegate(bg);
+                    }
+#endif
                 }
 
                 if (settingsData != null && settingsData.VisibleOutlines)
@@ -675,17 +728,36 @@ namespace SWA.Ariadne.Gui.Mazes
                     PaintEmbeddedMazes(g);
                 }
 
+                // Paint the maze into the given Graphics and into the background image.
                 switch (this.WallVisibility)
                 {
                     default:
                     case AriadneSettingsData.WallVisibilityEnum.Always:
+
                         PaintBorder(g);
                         PaintWalls(g);
+
+                        if (bg != null)
+                        {
+                            PaintBorder(bg);
+                            PaintWalls(bg);
+                        }
+
                         break;
+                    
                     case AriadneSettingsData.WallVisibilityEnum.Never:
+
                         break;
+                    
                     case AriadneSettingsData.WallVisibilityEnum.WhenVisited:
+
                         PaintWalls(g, maze.StartSquare);
+
+                        if (bg != null)
+                        {
+                            PaintWalls(bg, maze.StartSquare);
+                        }
+
                         break;
                 }
 
@@ -905,8 +977,23 @@ namespace SWA.Ariadne.Gui.Mazes
             float cx2 = xOffset + gridWidth / 2.0F + sq2.XPos * gridWidth;
             float cy2 = yOffset + gridWidth / 2.0F + sq2.YPos * gridWidth;
 
-            // Draw a line from sq1 to sq2.
             Graphics g = gBuffer.Graphics;
+
+            // Draw the background image in newly visited squares.
+            if (backgroundImage != null)
+            {
+                // Maybe draw walls around the visited square.
+                if (forward && this.WallVisibility == AriadneSettingsData.WallVisibilityEnum.WhenVisited)
+                {
+                    Graphics bg = Graphics.FromImage(backgroundImage);
+                    this.PaintWalls(bg, sq2);
+                }
+
+                PaintBackgroundSquare(g, sq1);
+                PaintBackgroundSquare(g, sq2);
+            }
+
+            // Draw a line from sq1 to sq2.
             Pen p = (forward ? this.forwardPen : this.backwardPen);
             g.DrawLine(p, cx1, cy1, cx2, cy2);
 
@@ -965,11 +1052,17 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <param name="brush"></param>
         private void PaintPathDot(MazeSquare sq, Brush brush)
         {
+            Graphics g = gBuffer.Graphics;
+
+            if (PaintBackgroundSquare(g, sq))
+            {
+                // Don't paint a dot if the square is part of the background image.
+                return;
+            }
+
             float cx = xOffset + gridWidth / 2.0F + sq.XPos * gridWidth;
             float cy = yOffset + gridWidth / 2.0F + sq.YPos * gridWidth;
 
-            // Draw a dot at sq2.
-            Graphics g = gBuffer.Graphics;
             g.FillRectangle(brush, cx - pathWidth / 2.0F, cy - pathWidth / 2.0F, pathWidth, pathWidth);
         }
 
@@ -1003,6 +1096,9 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <param name="path"></param>
         public void DrawSolvedPath(List<MazeSquare> path)
         {
+            // Uncover all remaining background squares.
+            DrawRemainingBackgroundSquares(maze.MazeId);
+
             float h = forwardColor.GetHue();
             float s = MaxColor.GetSaturation();
             float b = MaxColor.GetBrightness();
@@ -1065,6 +1161,160 @@ namespace SWA.Ariadne.Gui.Mazes
                     }
                 }
             }
+        }
+
+        #endregion
+
+        #region Background image related methods.
+
+        /// <summary>
+        /// Creates a backgroundImage if there is a backgroundImageLoader.
+        /// The backgroundImage has the same size as the targetRectangle.
+        /// Returns a Graphics object that may paint into the background image.
+        /// </summary>
+        /// <returns></returns>
+        private Graphics CreateBackgroundImage(Graphics g)
+        {
+            Graphics bg = null;
+
+            if (this.backgroundImageLoader != null)
+            {
+                // Create a new Bitmap with the same resolution as the buffered graphics.
+                backgroundImage = new Bitmap(targetRectangle.Width, targetRectangle.Height, g);
+                ContourImage cImg = backgroundImageLoader.GetNext(maze.Random);
+                Image img = cImg.DisplayedImage;
+
+                #region Choose an (x, y) location of the image.
+
+                int w = backgroundImage.Width - img.Width;
+                int h = backgroundImage.Height - img.Height;
+                int xMin = Math.Min(targetRectangle.Width / 16, w / 2);
+                int yMin = Math.Min(targetRectangle.Height / 16, h / 2);
+                w -= 2 * xMin;
+                h -= 2 * yMin;
+                int x = xMin + maze.Random.Next(w);
+                int y = yMin + maze.Random.Next(h);
+
+                #endregion
+
+                #region Determine the maze area that is completely covered by the image.
+
+                int marginWidth = squareWidth + (wallWidth + 1) / 2;
+                int xSqMin = XCoordinate(x + marginWidth, true);
+                int xSqMax = XCoordinate(x + img.Width - 1 - marginWidth, false);
+                int ySqMin = YCoordinate(y + marginWidth, true);
+                int ySqMax = YCoordinate(y + img.Height - 1 - marginWidth, false);
+                this.backgroundImageRange = new Rectangle(xSqMin, ySqMin, (xSqMax - xSqMin + 1), (ySqMax - ySqMin + 1));
+
+                int xOffsetImg = x - xSqMin * gridWidth;
+                int yOffsetImg = y - ySqMin * gridWidth;
+                this.backgroundImageShape = cImg.GetCoveredShape(gridWidth, wallWidth, xOffsetImg, yOffsetImg);
+
+                #endregion
+
+                // TODO...
+                System.Drawing.Imaging.ImageAttributes attr = new System.Drawing.Imaging.ImageAttributes();
+
+                bg = Graphics.FromImage(backgroundImage);
+                bg.DrawImage(img, new Rectangle(x, y, img.Width, img.Height));
+
+                this.backgroundPainted = new bool[maze.XSize, maze.YSize];
+            }
+            else
+            {
+                this.backgroundImage = null;
+            }
+
+            return bg;
+        }
+
+        public void DrawRemainingBackgroundSquares(int mazeId)
+        {
+            Graphics g = gBuffer.Graphics;
+
+            for (int x = backgroundImageRange.Left; x < backgroundImageRange.Right; x++)
+            {
+                for (int y = backgroundImageRange.Top; y < backgroundImageRange.Bottom; y++)
+                {
+                    MazeSquare sq = maze[x, y];
+                    if (sq.MazeId == mazeId)
+                    {
+                        PaintBackgroundSquare(g, sq);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Paints a portion of the background image.
+        /// Returns true if the square is part of the background image.
+        /// </summary>
+        /// <param name="g"></param>
+        /// <param name="sq"></param>
+        /// <returns></returns>
+        private bool PaintBackgroundSquare(Graphics g, MazeSquare sq)
+        {
+            int xSq = sq.XPos, ySq = sq.YPos;
+
+            if (backgroundImage == null)
+            {
+                return false;
+            }
+            if (backgroundPainted[xSq, ySq])
+            {
+                return true;
+            }
+            if (xSq < backgroundImageRange.Left || xSq >= backgroundImageRange.Right || ySq < backgroundImageRange.Top || ySq >= backgroundImageRange.Bottom)
+            {
+                return false;
+            }
+            if (backgroundImageShape != null && !backgroundImageShape[xSq - backgroundImageRange.Left, ySq - backgroundImageRange.Top])
+            {
+                return false;
+            }
+
+            int x = xOffset + xSq * gridWidth;
+            int y = yOffset + ySq * gridWidth;
+            int w = gridWidth;
+
+            g.DrawImage(backgroundImage, x, y, new Rectangle(x, y, w, w), GraphicsUnit.Pixel);
+            backgroundPainted[xSq, ySq] = true;
+
+            return true;
+        }
+
+        #endregion
+
+        #region Coordinate system
+
+        /// <summary>
+        /// Returns the maze X coordinate corresponding to the given canvas coordinate.
+        /// </summary>
+        /// <param name="xCanvas"></param>
+        /// <param name="leftBiased"></param>
+        /// <returns></returns>
+        internal int XCoordinate(int xCanvas, bool leftBiased)
+        {
+            int result = xCanvas - xOffset;
+            result += (leftBiased ? -1 : +1) * wallWidth;
+            result /= gridWidth;
+
+            return result;
+        }
+
+        /// <summary>
+        /// Returns the maze Y coordinate corresponding to the given canvas coordinate.
+        /// </summary>
+        /// <param name="yCanvas"></param>
+        /// <param name="leftBiased"></param>
+        /// <returns></returns>
+        internal int YCoordinate(int yCanvas, bool topBiased)
+        {
+            int result = yCanvas - yOffset;
+            result += (topBiased ? -1 : +1) * wallWidth;
+            result /= gridWidth;
+
+            return result;
         }
 
         #endregion
@@ -1192,6 +1442,40 @@ namespace SWA.Ariadne.Gui.Mazes
             maze.TakeParametersFrom(data);
 
             #endregion
+
+            #region Images
+
+            if (data.ShowBackgroundImage)
+            {
+                if (this.backgroundImageLoader == null)
+                {
+                    string imageFolder = data.ImageFolder;
+                    CreateBackgroundImageLoader(imageFolder);
+                }
+            }
+            else
+            {
+                this.backgroundImageLoader = null;
+            }
+
+            // If a backgroundImageLoader exists, a backgroundImage will be created later
+            // in the PaintMaze() method.
+            this.backgroundImage = null;
+
+            #endregion
+        }
+
+        public void CreateBackgroundImageLoader(string imageFolder)
+        {
+            // Update the client dimensions, if it was resized.
+            if (client != null)
+            {
+                this.targetRectangle = client.DisplayRectangle;
+            }
+
+            int minSize = targetRectangle.Height * 2 / 3;
+            int maxSize = targetRectangle.Height * 5 / 6;
+            this.backgroundImageLoader = new ImageLoader(minSize, maxSize, true, imageFolder, 1, "BGIL");
         }
 
         #endregion

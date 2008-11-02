@@ -36,7 +36,6 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.wallVisibilityRadioButtonNever = new System.Windows.Forms.RadioButton();
             this.wallVisibilityRadioButtonAlways = new System.Windows.Forms.RadioButton();
             this.squareWidthNumericUpDown = new System.Windows.Forms.NumericUpDown();
-            this.dataBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.pathWidthNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.wallWidthNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.gridWidthNumericUpDown = new System.Windows.Forms.NumericUpDown();
@@ -62,10 +61,6 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.label14 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
-            this.backwardColorLabel = new SWA.Ariadne.Settings.ColorLabel();
-            this.forwardColorLabel = new SWA.Ariadne.Settings.ColorLabel();
-            this.refBColorLabel = new SWA.Ariadne.Settings.ColorLabel();
-            this.refAColorLabel = new SWA.Ariadne.Settings.ColorLabel();
             this.shapePage = new System.Windows.Forms.TabPage();
             this.irregularityNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.label29 = new System.Windows.Forms.Label();
@@ -99,6 +94,8 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.distortedOutlinesCheckBox = new System.Windows.Forms.CheckBox();
             this.asEmbeddedMazeCheckBox = new System.Windows.Forms.CheckBox();
             this.outlineKindPanel = new System.Windows.Forms.Panel();
+            this.outlineRadioButtonCircles = new System.Windows.Forms.RadioButton();
+            this.outlineRadioButtonLines = new System.Windows.Forms.RadioButton();
             this.outlineRadioButtonMaze = new System.Windows.Forms.RadioButton();
             this.outlineRadioButtonGridElement = new System.Windows.Forms.RadioButton();
             this.outlineRadioButtonGrid = new System.Windows.Forms.RadioButton();
@@ -122,13 +119,16 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.label24 = new System.Windows.Forms.Label();
             this.label23 = new System.Windows.Forms.Label();
             this.imageFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.outlineRadioButtonCircles = new System.Windows.Forms.RadioButton();
-            this.outlineRadioButtonLines = new System.Windows.Forms.RadioButton();
+            this.backgroundImageCheckBox = new System.Windows.Forms.CheckBox();
+            this.dataBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.backwardColorLabel = new SWA.Ariadne.Settings.ColorLabel();
+            this.forwardColorLabel = new SWA.Ariadne.Settings.ColorLabel();
+            this.refBColorLabel = new SWA.Ariadne.Settings.ColorLabel();
+            this.refAColorLabel = new SWA.Ariadne.Settings.ColorLabel();
             this.tabControl1.SuspendLayout();
             this.layoutPage.SuspendLayout();
             this.wallVisibilityGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.squareWidthNumericUpDown)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pathWidthNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.wallWidthNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridWidthNumericUpDown)).BeginInit();
@@ -143,6 +143,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.outlineKindPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.offCenterNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sizeNumericUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -260,11 +261,6 @@ namespace SWA.Ariadne.Gui.Dialogs
             0,
             0});
             this.squareWidthNumericUpDown.Click += new System.EventHandler(this.OnClickImmediateUpdate);
-            // 
-            // dataBindingSource
-            // 
-            this.dataBindingSource.DataSource = typeof(SWA.Ariadne.Settings.AriadneSettingsData);
-            this.dataBindingSource.CurrentItemChanged += new System.EventHandler(this.OnDataChanged);
             // 
             // pathWidthNumericUpDown
             // 
@@ -576,54 +572,6 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.label11.TabIndex = 4;
             this.label11.Text = "Reference A";
             // 
-            // backwardColorLabel
-            // 
-            this.backwardColorLabel.BackColor = System.Drawing.SystemColors.Window;
-            this.backwardColorLabel.DataBindings.Add(new System.Windows.Forms.Binding("BackColor", this.dataBindingSource, "BackwardColor", true));
-            this.backwardColorLabel.ForeColor = System.Drawing.Color.Black;
-            this.backwardColorLabel.Location = new System.Drawing.Point(91, 113);
-            this.backwardColorLabel.Name = "backwardColorLabel";
-            this.backwardColorLabel.Size = new System.Drawing.Size(134, 20);
-            this.backwardColorLabel.TabIndex = 11;
-            this.backwardColorLabel.Text = "h = 000, s = 0,00, b = 1,00";
-            this.backwardColorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // forwardColorLabel
-            // 
-            this.forwardColorLabel.BackColor = System.Drawing.SystemColors.Window;
-            this.forwardColorLabel.DataBindings.Add(new System.Windows.Forms.Binding("BackColor", this.dataBindingSource, "ForwardColor", true));
-            this.forwardColorLabel.ForeColor = System.Drawing.Color.Black;
-            this.forwardColorLabel.Location = new System.Drawing.Point(91, 87);
-            this.forwardColorLabel.Name = "forwardColorLabel";
-            this.forwardColorLabel.Size = new System.Drawing.Size(134, 20);
-            this.forwardColorLabel.TabIndex = 10;
-            this.forwardColorLabel.Text = "h = 000, s = 0,00, b = 1,00";
-            this.forwardColorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // refBColorLabel
-            // 
-            this.refBColorLabel.BackColor = System.Drawing.Color.DarkSlateBlue;
-            this.refBColorLabel.DataBindings.Add(new System.Windows.Forms.Binding("BackColor", this.dataBindingSource, "ReferenceColor2", true));
-            this.refBColorLabel.ForeColor = System.Drawing.Color.White;
-            this.refBColorLabel.Location = new System.Drawing.Point(91, 55);
-            this.refBColorLabel.Name = "refBColorLabel";
-            this.refBColorLabel.Size = new System.Drawing.Size(134, 20);
-            this.refBColorLabel.TabIndex = 9;
-            this.refBColorLabel.Text = "h = 248, s = 0,39, b = 0,39";
-            this.refBColorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // refAColorLabel
-            // 
-            this.refAColorLabel.BackColor = System.Drawing.Color.Gold;
-            this.refAColorLabel.DataBindings.Add(new System.Windows.Forms.Binding("BackColor", this.dataBindingSource, "ReferenceColor1", true));
-            this.refAColorLabel.ForeColor = System.Drawing.Color.Black;
-            this.refAColorLabel.Location = new System.Drawing.Point(91, 29);
-            this.refAColorLabel.Name = "refAColorLabel";
-            this.refAColorLabel.Size = new System.Drawing.Size(134, 20);
-            this.refAColorLabel.TabIndex = 8;
-            this.refAColorLabel.Text = "h = 051, s = 1,00, b = 0,50";
-            this.refAColorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // shapePage
             // 
             this.shapePage.Controls.Add(this.irregularityNumericUpDown);
@@ -860,6 +808,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             // imagesPage
             // 
+            this.imagesPage.Controls.Add(this.backgroundImageCheckBox);
             this.imagesPage.Controls.Add(this.imageMinSizeNumericUpDown);
             this.imagesPage.Controls.Add(this.label18);
             this.imagesPage.Controls.Add(this.imageMaxSizeNumericUpDown);
@@ -1071,6 +1020,28 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.outlineKindPanel.Name = "outlineKindPanel";
             this.outlineKindPanel.Size = new System.Drawing.Size(244, 144);
             this.outlineKindPanel.TabIndex = 137;
+            // 
+            // outlineRadioButtonCircles
+            // 
+            this.outlineRadioButtonCircles.AutoSize = true;
+            this.outlineRadioButtonCircles.Location = new System.Drawing.Point(87, 123);
+            this.outlineRadioButtonCircles.Name = "outlineRadioButtonCircles";
+            this.outlineRadioButtonCircles.Size = new System.Drawing.Size(56, 17);
+            this.outlineRadioButtonCircles.TabIndex = 22;
+            this.outlineRadioButtonCircles.TabStop = true;
+            this.outlineRadioButtonCircles.Text = "Circles";
+            this.outlineRadioButtonCircles.UseVisualStyleBackColor = true;
+            // 
+            // outlineRadioButtonLines
+            // 
+            this.outlineRadioButtonLines.AutoSize = true;
+            this.outlineRadioButtonLines.Location = new System.Drawing.Point(11, 122);
+            this.outlineRadioButtonLines.Name = "outlineRadioButtonLines";
+            this.outlineRadioButtonLines.Size = new System.Drawing.Size(50, 17);
+            this.outlineRadioButtonLines.TabIndex = 21;
+            this.outlineRadioButtonLines.TabStop = true;
+            this.outlineRadioButtonLines.Text = "Lines";
+            this.outlineRadioButtonLines.UseVisualStyleBackColor = true;
             // 
             // outlineRadioButtonMaze
             // 
@@ -1340,27 +1311,70 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.label23.Text = "%";
             this.label23.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // outlineRadioButtonCircles
+            // backgroundImageCheckBox
             // 
-            this.outlineRadioButtonCircles.AutoSize = true;
-            this.outlineRadioButtonCircles.Location = new System.Drawing.Point(87, 123);
-            this.outlineRadioButtonCircles.Name = "outlineRadioButtonCircles";
-            this.outlineRadioButtonCircles.Size = new System.Drawing.Size(56, 17);
-            this.outlineRadioButtonCircles.TabIndex = 22;
-            this.outlineRadioButtonCircles.TabStop = true;
-            this.outlineRadioButtonCircles.Text = "Circles";
-            this.outlineRadioButtonCircles.UseVisualStyleBackColor = true;
+            this.backgroundImageCheckBox.AutoSize = true;
+            this.backgroundImageCheckBox.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.backgroundImageCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.dataBindingSource, "ShowBackgroundImage", true));
+            this.backgroundImageCheckBox.Location = new System.Drawing.Point(21, 141);
+            this.backgroundImageCheckBox.Name = "backgroundImageCheckBox";
+            this.backgroundImageCheckBox.Size = new System.Drawing.Size(116, 17);
+            this.backgroundImageCheckBox.TabIndex = 111;
+            this.backgroundImageCheckBox.Text = "Background Image";
+            this.backgroundImageCheckBox.UseVisualStyleBackColor = true;
             // 
-            // outlineRadioButtonLines
+            // dataBindingSource
             // 
-            this.outlineRadioButtonLines.AutoSize = true;
-            this.outlineRadioButtonLines.Location = new System.Drawing.Point(11, 122);
-            this.outlineRadioButtonLines.Name = "outlineRadioButtonLines";
-            this.outlineRadioButtonLines.Size = new System.Drawing.Size(50, 17);
-            this.outlineRadioButtonLines.TabIndex = 21;
-            this.outlineRadioButtonLines.TabStop = true;
-            this.outlineRadioButtonLines.Text = "Lines";
-            this.outlineRadioButtonLines.UseVisualStyleBackColor = true;
+            this.dataBindingSource.DataSource = typeof(SWA.Ariadne.Settings.AriadneSettingsData);
+            this.dataBindingSource.CurrentItemChanged += new System.EventHandler(this.OnDataChanged);
+            // 
+            // backwardColorLabel
+            // 
+            this.backwardColorLabel.BackColor = System.Drawing.SystemColors.Window;
+            this.backwardColorLabel.DataBindings.Add(new System.Windows.Forms.Binding("BackColor", this.dataBindingSource, "BackwardColor", true));
+            this.backwardColorLabel.ForeColor = System.Drawing.Color.Black;
+            this.backwardColorLabel.Location = new System.Drawing.Point(91, 113);
+            this.backwardColorLabel.Name = "backwardColorLabel";
+            this.backwardColorLabel.Size = new System.Drawing.Size(134, 20);
+            this.backwardColorLabel.TabIndex = 11;
+            this.backwardColorLabel.Text = "h = 000, s = 0,00, b = 1,00";
+            this.backwardColorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // forwardColorLabel
+            // 
+            this.forwardColorLabel.BackColor = System.Drawing.SystemColors.Window;
+            this.forwardColorLabel.DataBindings.Add(new System.Windows.Forms.Binding("BackColor", this.dataBindingSource, "ForwardColor", true));
+            this.forwardColorLabel.ForeColor = System.Drawing.Color.Black;
+            this.forwardColorLabel.Location = new System.Drawing.Point(91, 87);
+            this.forwardColorLabel.Name = "forwardColorLabel";
+            this.forwardColorLabel.Size = new System.Drawing.Size(134, 20);
+            this.forwardColorLabel.TabIndex = 10;
+            this.forwardColorLabel.Text = "h = 000, s = 0,00, b = 1,00";
+            this.forwardColorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // refBColorLabel
+            // 
+            this.refBColorLabel.BackColor = System.Drawing.Color.DarkSlateBlue;
+            this.refBColorLabel.DataBindings.Add(new System.Windows.Forms.Binding("BackColor", this.dataBindingSource, "ReferenceColor2", true));
+            this.refBColorLabel.ForeColor = System.Drawing.Color.White;
+            this.refBColorLabel.Location = new System.Drawing.Point(91, 55);
+            this.refBColorLabel.Name = "refBColorLabel";
+            this.refBColorLabel.Size = new System.Drawing.Size(134, 20);
+            this.refBColorLabel.TabIndex = 9;
+            this.refBColorLabel.Text = "h = 248, s = 0,39, b = 0,39";
+            this.refBColorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // refAColorLabel
+            // 
+            this.refAColorLabel.BackColor = System.Drawing.Color.Gold;
+            this.refAColorLabel.DataBindings.Add(new System.Windows.Forms.Binding("BackColor", this.dataBindingSource, "ReferenceColor1", true));
+            this.refAColorLabel.ForeColor = System.Drawing.Color.Black;
+            this.refAColorLabel.Location = new System.Drawing.Point(91, 29);
+            this.refAColorLabel.Name = "refAColorLabel";
+            this.refAColorLabel.Size = new System.Drawing.Size(134, 20);
+            this.refAColorLabel.TabIndex = 8;
+            this.refAColorLabel.Text = "h = 051, s = 1,00, b = 0,50";
+            this.refAColorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // DetailsDialog
             // 
@@ -1381,7 +1395,6 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.wallVisibilityGroupBox.ResumeLayout(false);
             this.wallVisibilityGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.squareWidthNumericUpDown)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pathWidthNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.wallWidthNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridWidthNumericUpDown)).EndInit();
@@ -1401,6 +1414,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.outlineKindPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.offCenterNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sizeNumericUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataBindingSource)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1502,5 +1516,6 @@ namespace SWA.Ariadne.Gui.Dialogs
         private System.Windows.Forms.RadioButton outlineRadioButtonMaze;
         private System.Windows.Forms.RadioButton outlineRadioButtonCircles;
         private System.Windows.Forms.RadioButton outlineRadioButtonLines;
+        private System.Windows.Forms.CheckBox backgroundImageCheckBox;
     }
 }

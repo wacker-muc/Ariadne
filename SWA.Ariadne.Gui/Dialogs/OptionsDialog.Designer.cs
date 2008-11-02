@@ -39,6 +39,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.checkBoxDetailsBox = new System.Windows.Forms.CheckBox();
             this.checkBoxBlinking = new System.Windows.Forms.CheckBox();
             this.tabPageImages = new System.Windows.Forms.TabPage();
+            this.subtractImagesBackgroundCheckBox = new System.Windows.Forms.CheckBox();
             this.imageMinSizeNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.labelImagesMinSize = new System.Windows.Forms.Label();
             this.imageMaxSizeNumericUpDown = new System.Windows.Forms.NumericUpDown();
@@ -47,19 +48,24 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.labelImagesNumber = new System.Windows.Forms.Label();
             this.selectImageFolderButton = new System.Windows.Forms.Button();
             this.imageFolderTextBox = new System.Windows.Forms.TextBox();
+            this.tabPageBackground = new System.Windows.Forms.TabPage();
+            this.checkBoxDifferentBackgroundImageFolder = new System.Windows.Forms.CheckBox();
+            this.selectBackgroundImageFolderButton = new System.Windows.Forms.Button();
+            this.backgroundImageFolderTextBox = new System.Windows.Forms.TextBox();
+            this.checkBoxBackgroundImage = new System.Windows.Forms.CheckBox();
             this.tabPageExtras = new System.Windows.Forms.TabPage();
             this.checkBoxMultipleMazes = new System.Windows.Forms.CheckBox();
             this.checkBoxPaintAllWalls = new System.Windows.Forms.CheckBox();
             this.checkBoxIrregularMazes = new System.Windows.Forms.CheckBox();
             this.checkBoxOutlineShapes = new System.Windows.Forms.CheckBox();
             this.imageFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.subtractImagesBackgroundCheckBox = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPageGeneral.SuspendLayout();
             this.tabPageImages.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imageMinSizeNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageMaxSizeNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageNumberNumericUpDown)).BeginInit();
+            this.tabPageBackground.SuspendLayout();
             this.tabPageExtras.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -106,6 +112,7 @@ namespace SWA.Ariadne.Gui.Dialogs
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPageGeneral);
             this.tabControl1.Controls.Add(this.tabPageImages);
+            this.tabControl1.Controls.Add(this.tabPageBackground);
             this.tabControl1.Controls.Add(this.tabPageExtras);
             this.tabControl1.Location = new System.Drawing.Point(0, 1);
             this.tabControl1.Name = "tabControl1";
@@ -206,6 +213,17 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.tabPageImages.TabIndex = 1;
             this.tabPageImages.Text = "Images";
             this.tabPageImages.UseVisualStyleBackColor = true;
+            // 
+            // subtractImagesBackgroundCheckBox
+            // 
+            this.subtractImagesBackgroundCheckBox.AutoSize = true;
+            this.subtractImagesBackgroundCheckBox.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.subtractImagesBackgroundCheckBox.Location = new System.Drawing.Point(8, 105);
+            this.subtractImagesBackgroundCheckBox.Name = "subtractImagesBackgroundCheckBox";
+            this.subtractImagesBackgroundCheckBox.Size = new System.Drawing.Size(163, 17);
+            this.subtractImagesBackgroundCheckBox.TabIndex = 119;
+            this.subtractImagesBackgroundCheckBox.Text = "Subtract uniform background";
+            this.subtractImagesBackgroundCheckBox.UseVisualStyleBackColor = true;
             // 
             // imageMinSizeNumericUpDown
             // 
@@ -321,6 +339,70 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.imageFolderTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.imageFolderTextBox.WordWrap = false;
             // 
+            // tabPageBackground
+            // 
+            this.tabPageBackground.Controls.Add(this.checkBoxDifferentBackgroundImageFolder);
+            this.tabPageBackground.Controls.Add(this.selectBackgroundImageFolderButton);
+            this.tabPageBackground.Controls.Add(this.backgroundImageFolderTextBox);
+            this.tabPageBackground.Controls.Add(this.checkBoxBackgroundImage);
+            this.tabPageBackground.Location = new System.Drawing.Point(4, 22);
+            this.tabPageBackground.Name = "tabPageBackground";
+            this.tabPageBackground.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageBackground.Size = new System.Drawing.Size(204, 129);
+            this.tabPageBackground.TabIndex = 2;
+            this.tabPageBackground.Text = "Background";
+            this.tabPageBackground.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxDifferentBackgroundImageFolder
+            // 
+            this.checkBoxDifferentBackgroundImageFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBoxDifferentBackgroundImageFolder.AutoSize = true;
+            this.checkBoxDifferentBackgroundImageFolder.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.checkBoxDifferentBackgroundImageFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.checkBoxDifferentBackgroundImageFolder.Location = new System.Drawing.Point(61, 80);
+            this.checkBoxDifferentBackgroundImageFolder.Name = "checkBoxDifferentBackgroundImageFolder";
+            this.checkBoxDifferentBackgroundImageFolder.Size = new System.Drawing.Size(15, 14);
+            this.checkBoxDifferentBackgroundImageFolder.TabIndex = 8;
+            this.checkBoxDifferentBackgroundImageFolder.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.checkBoxDifferentBackgroundImageFolder.UseVisualStyleBackColor = true;
+            this.checkBoxDifferentBackgroundImageFolder.CheckedChanged += new System.EventHandler(this.checkBoxDifferentBackgroundImageFolder_CheckedChanged);
+            // 
+            // selectBackgroundImageFolderButton
+            // 
+            this.selectBackgroundImageFolderButton.Location = new System.Drawing.Point(6, 76);
+            this.selectBackgroundImageFolderButton.Name = "selectBackgroundImageFolderButton";
+            this.selectBackgroundImageFolderButton.Size = new System.Drawing.Size(49, 23);
+            this.selectBackgroundImageFolderButton.TabIndex = 6;
+            this.selectBackgroundImageFolderButton.Text = "Folder";
+            this.selectBackgroundImageFolderButton.UseVisualStyleBackColor = true;
+            this.selectBackgroundImageFolderButton.Click += new System.EventHandler(this.selectBackgroundImageFolderButton_Click);
+            // 
+            // backgroundImageFolderTextBox
+            // 
+            this.backgroundImageFolderTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.backgroundImageFolderTextBox.Location = new System.Drawing.Point(87, 77);
+            this.backgroundImageFolderTextBox.MaxLength = 14;
+            this.backgroundImageFolderTextBox.Name = "backgroundImageFolderTextBox";
+            this.backgroundImageFolderTextBox.Size = new System.Drawing.Size(114, 20);
+            this.backgroundImageFolderTextBox.TabIndex = 7;
+            this.backgroundImageFolderTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.backgroundImageFolderTextBox.WordWrap = false;
+            // 
+            // checkBoxBackgroundImage
+            // 
+            this.checkBoxBackgroundImage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBoxBackgroundImage.AutoSize = true;
+            this.checkBoxBackgroundImage.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.checkBoxBackgroundImage.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.checkBoxBackgroundImage.Location = new System.Drawing.Point(14, 31);
+            this.checkBoxBackgroundImage.Name = "checkBoxBackgroundImage";
+            this.checkBoxBackgroundImage.Size = new System.Drawing.Size(153, 17);
+            this.checkBoxBackgroundImage.TabIndex = 2;
+            this.checkBoxBackgroundImage.Text = "Display Background Image";
+            this.checkBoxBackgroundImage.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.checkBoxBackgroundImage.UseVisualStyleBackColor = true;
+            // 
             // tabPageExtras
             // 
             this.tabPageExtras.Controls.Add(this.checkBoxMultipleMazes);
@@ -331,7 +413,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.tabPageExtras.Name = "tabPageExtras";
             this.tabPageExtras.Padding = new System.Windows.Forms.Padding(3);
             this.tabPageExtras.Size = new System.Drawing.Size(204, 129);
-            this.tabPageExtras.TabIndex = 2;
+            this.tabPageExtras.TabIndex = 3;
             this.tabPageExtras.Text = "Extras";
             this.tabPageExtras.UseVisualStyleBackColor = true;
             // 
@@ -391,17 +473,6 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.checkBoxOutlineShapes.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.checkBoxOutlineShapes.UseVisualStyleBackColor = true;
             // 
-            // subtractImagesBackgroundCheckBox
-            // 
-            this.subtractImagesBackgroundCheckBox.AutoSize = true;
-            this.subtractImagesBackgroundCheckBox.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.subtractImagesBackgroundCheckBox.Location = new System.Drawing.Point(8, 105);
-            this.subtractImagesBackgroundCheckBox.Name = "subtractImagesBackgroundCheckBox";
-            this.subtractImagesBackgroundCheckBox.Size = new System.Drawing.Size(163, 17);
-            this.subtractImagesBackgroundCheckBox.TabIndex = 119;
-            this.subtractImagesBackgroundCheckBox.Text = "Subtract uniform background";
-            this.subtractImagesBackgroundCheckBox.UseVisualStyleBackColor = true;
-            // 
             // OptionsDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -425,6 +496,8 @@ namespace SWA.Ariadne.Gui.Dialogs
             ((System.ComponentModel.ISupportInitialize)(this.imageMinSizeNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageMaxSizeNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.imageNumberNumericUpDown)).EndInit();
+            this.tabPageBackground.ResumeLayout(false);
+            this.tabPageBackground.PerformLayout();
             this.tabPageExtras.ResumeLayout(false);
             this.tabPageExtras.PerformLayout();
             this.ResumeLayout(false);
@@ -460,6 +533,11 @@ namespace SWA.Ariadne.Gui.Dialogs
         private System.Windows.Forms.CheckBox checkBoxPaintAllWalls;
         private System.Windows.Forms.CheckBox checkBoxMultipleMazes;
         private System.Windows.Forms.CheckBox subtractImagesBackgroundCheckBox;
+        private System.Windows.Forms.TabPage tabPageBackground;
+        private System.Windows.Forms.Button selectBackgroundImageFolderButton;
+        private System.Windows.Forms.TextBox backgroundImageFolderTextBox;
+        private System.Windows.Forms.CheckBox checkBoxBackgroundImage;
+        private System.Windows.Forms.CheckBox checkBoxDifferentBackgroundImageFolder;
 
     }
 }

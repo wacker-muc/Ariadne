@@ -11,6 +11,7 @@ Copyright (c) Stephan.Wacker@web.de, 2008
 Version 3.3
 
  * during the first few seconds, the screen saver will exit upon mouse movement
+ * new Option: display a background image that is uncovered when squares are visited
 
 -----------------------------------------------------------------------
 
