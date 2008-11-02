@@ -327,6 +327,13 @@ namespace SWA.Ariadne.Settings
         }
         private string imageFolder;
 
+        public bool ShowBackgroundImage
+        {
+            get { return showBackgroundImage; }
+            set { showBackgroundImage = value; }
+        }
+        private bool showBackgroundImage;
+
         #endregion
 
         #region Outlines tab
@@ -454,6 +461,7 @@ namespace SWA.Ariadne.Settings
             this.ImageMinSize = template.ImageMinSize;
             this.ImageMaxSize = template.ImageMaxSize;
             this.ImageFolder = template.ImageFolder;
+            this.ShowBackgroundImage = template.ShowBackgroundImage;
 
             this.OutlineKind = template.OutlineKind;
             this.OutlineOffCenter = template.OutlineOffCenter;

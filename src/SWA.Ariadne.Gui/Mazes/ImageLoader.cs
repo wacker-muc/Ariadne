@@ -26,6 +26,11 @@ namespace SWA.Ariadne.Gui.Mazes
         private readonly int minSize, maxSize;
 
         /// <summary>
+        /// When true, small images are enlarged to the defined size range.
+        /// </summary>
+        private readonly bool minSizeRequired = false;
+
+        /// <summary>
         /// Synchronized queue for placing the loaded images.
         /// </summary>
         private readonly Queue queue;
@@ -59,12 +64,15 @@ namespace SWA.Ariadne.Gui.Mazes
         /// </summary>
         /// <param name="minSize"></param>
         /// <param name="maxSize"></param>
+        /// <param name="minSizeRequired"></param>
         /// <param name="imageFolder"></param>
         /// <param name="queueLength">Number of images to be pre-loaded into a queue.  If positive, the loader uses a background thread.</param>
-        public ImageLoader(int minSize, int maxSize, string imageFolder, int queueLength)
+        /// <param name="threadName">Unique name of this image loader thread.  Only used for positive queueLength.</param>
+        public ImageLoader(int minSize, int maxSize, bool minSizeRequired, string imageFolder, int queueLength, string threadName)
         {
             this.minSize = minSize;
             this.maxSize = maxSize;
+            this.minSizeRequired = minSizeRequired;
             this.imageFolder = imageFolder;
             this.queueLength = queueLength;
 
@@ -79,7 +87,7 @@ namespace SWA.Ariadne.Gui.Mazes
                 // has been loaded (see FindImages()).
                 thread.Priority = ThreadPriority.AboveNormal;
                 thread.IsBackground = true;
-                thread.Name = "IMGL";
+                thread.Name = threadName;
                 thread.Start();
             }
         }
@@ -98,7 +106,7 @@ namespace SWA.Ariadne.Gui.Mazes
 
             if (count > 0)
             {
-                return new SWA.Ariadne.Gui.Mazes.ImageLoader(minSize, maxSize, imageFolder, count + 2);
+                return new SWA.Ariadne.Gui.Mazes.ImageLoader(minSize, maxSize, false, imageFolder, count + 2, "FGIL");
             }
             else
             {
@@ -267,7 +275,18 @@ namespace SWA.Ariadne.Gui.Mazes
                 //Log.WriteLine("- LoadImage() scale image");
                 #region Scale img so that its larger dimension is between the desired min and max size.
 
+                bool resize = false;
+
                 if (img.Width > maxSize || img.Height > maxSize)
+                {
+                    resize = true;
+                }
+                if (minSizeRequired && img.Width < minSize && img.Height < minSize)
+                {
+                    resize = true;
+                }
+
+                if (resize)
                 {
                     int d = r.Next(minSize, maxSize);
                     int h = img.Height, w = img.Width;
@@ -476,7 +495,7 @@ namespace SWA.Ariadne.Gui.Mazes
             Microsoft.Win32.RegistryKey key = RegisteredOptions.AppRegistryKey();
             if (key != null)
             {
-                key.SetValue(RegisteredOptions.SAVE_IMAGE_PATHS, s.ToString(), Microsoft.Win32.RegistryValueKind.String);
+                key.SetValue(thread.Name + " " + RegisteredOptions.SAVE_IMAGE_PATHS, s.ToString(), Microsoft.Win32.RegistryValueKind.String);
             }
             //Log.WriteLine("} SaveImagePaths()");
         }
@@ -484,7 +503,7 @@ namespace SWA.Ariadne.Gui.Mazes
         private IEnumerable<string> LoadImagePaths()
         {
             //Log.WriteLine("{ LoadImagePaths()");
-            string s = RegisteredOptions.GetStringSetting(RegisteredOptions.SAVE_IMAGE_PATHS);
+            string s = RegisteredOptions.GetStringSetting(thread.Name + " " + RegisteredOptions.SAVE_IMAGE_PATHS);
             string[] result = s.Split(new char[] { PathSeparator });
 
             for (int i = 0; i < result.Length; i++)

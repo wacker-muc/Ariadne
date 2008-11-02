@@ -17,6 +17,8 @@ namespace SWA.Ariadne.Settings
         public const string OPT_IMAGE_MAX_SIZE = "image maximum size";
         public const string OPT_IMAGE_FOLDER = "image folder";
         public const string OPT_IMAGE_SUBTRACT_BACKGROUND = "subtract uniform image background color";
+        public const string OPT_BACKGROUND_IMAGES = "display background images";
+        public const string OPT_BACKGROUND_IMAGE_FOLDER = "background image folder";
         public const string OPT_OUTLINE_SHAPES = "add outline shapes";
         public const string OPT_IRREGULAR_MAZES = "build irregular mazes";
         public const string OPT_PAINT_ALL_WALLS = "paint all maze walls";

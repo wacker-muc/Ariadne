@@ -285,12 +285,7 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <returns></returns>
         private int XCoordinate(int xLocation, bool leftBiased)
         {
-            int result = (xLocation - this.Location.X);
-            result -= xOffset;
-            result += (leftBiased ? -1 : +1) * wallWidth;
-            result /= gridWidth;
-            
-            return result;
+            return painter.XCoordinate(xLocation - this.Location.X, leftBiased);
         }
 
         /// <summary>
@@ -301,12 +296,7 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <returns></returns>
         private int YCoordinate(int yLocation, bool topBiased)
         {
-            int result = (yLocation - this.Location.Y);
-            result -= yOffset;
-            result += (topBiased ? -1 : +1) * wallWidth;
-            result /= gridWidth;
-
-            return result;
+            return painter.XCoordinate(yLocation - this.Location.Y, topBiased);
         }
 
         /// <summary>
@@ -489,7 +479,7 @@ namespace SWA.Ariadne.Gui.Mazes
         {
             if (this.imageLoader == null)
             {
-                this.imageLoader = new ImageLoader(minSize, maxSize, imageFolder, 0);
+                this.imageLoader = new ImageLoader(minSize, maxSize, false, imageFolder, 0, null);
             }
 
             PrepareImages(count);

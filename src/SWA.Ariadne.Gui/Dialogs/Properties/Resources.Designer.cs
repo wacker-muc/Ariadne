@@ -67,20 +67,16 @@ namespace SWA.Ariadne.Gui.Dialogs.Properties {
         ///   Feature Log: Ariadne
         ///   ====================
         ///
-        ///Copyright (c) Stephan Wacker, 2008
+        ///Copyright (c) Stephan.Wacker@web.de, 2008
         ///
         ///-----------------------------------------------------------------------
         ///
-        ///Version 3.1
+        ///Version 3.3
         ///
-        /// * Function Outline Shapes: apply a distortion function to the coordinate system
-        /// * Action: save image of the maze into a file
+        /// * during the first few seconds, the screen saver will exit upon mouse movement
+        /// * new Option: display a background image that is uncovered when squares are visited
         ///
-        ///-----------------------------------------------------------------------
-        ///
-        ///Version 3.0 -- r205
-        ///
-        /// *  [rest of string was truncated]&quot;;.
+        ///-------------------------------------------------------- [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string FeatureLog {
             get {
@@ -102,13 +98,11 @@ namespace SWA.Ariadne.Gui.Dialogs.Properties {
         ///   Overview: Ariadne
         ///   =================
         ///
-        ///Copyright (c) Stephan Wacker, 2008
+        ///Copyright (c) Stephan.Wacker@web.de, 2008
         ///
         ///-----------------------------------------------------------------------
         ///
-        ///The Ariadne application builds and solves a variety of maze puzzles.  When running as a regular application (Ariadne.exe), you can control the maze layout, its shape, additional content etc.  The Ariadne.scr file can be installed as a screen saver.
-        ///
-        ///[Ari [rest of string was truncated]&quot;;.
+        ///The Ariadne application builds and solves a variety of maze puzzles.  a) When running as a regular application (Ariadne.exe), you can control the maze layout, its shape, additional content etc. via a &quot;Details&quot; panel.  b) The Ariadne.scr file can be  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Overview {
             get {

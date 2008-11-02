@@ -119,6 +119,17 @@ namespace SWA.Ariadne.Gui
             // Other optional controls need to be displayed in front of the maze.
             this.outerInfoPanel.BringToFront();
 
+            // Load background images.
+            if (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_BACKGROUND_IMAGES, false))
+            {
+                string imageFolder = RegisteredOptions.GetStringSetting(RegisteredOptions.OPT_BACKGROUND_IMAGE_FOLDER);
+                if (imageFolder == "")
+                {
+                    imageFolder = RegisteredOptions.GetStringSetting(RegisteredOptions.OPT_IMAGE_FOLDER);
+                }
+                this.mazeUserControl.MazePainter.CreateBackgroundImageLoader(imageFolder);
+            }
+
             this.OnNew(null, null);
             this.OnStart(null, null);
 
@@ -213,6 +224,10 @@ namespace SWA.Ariadne.Gui
             if (mazeUserControl.ImageLoader != null)
             {
                 mazeUserControl.ImageLoader.Shutdown();
+            }
+            if (mazeUserControl.MazePainter.BackgroundImageLoader != null)
+            {
+                mazeUserControl.MazePainter.BackgroundImageLoader.Shutdown();
             }
         }
 
