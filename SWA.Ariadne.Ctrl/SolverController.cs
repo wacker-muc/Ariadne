@@ -368,6 +368,13 @@ namespace SWA.Ariadne.Ctrl
                 }
             }
 
+            // Draw the background image inside the reserved areas.
+            // If the background image was covered by a ContourImage, that border will be drawn smoothly instead of jagged.
+            if (this.Maze.MazeId == MazeSquare.PrimaryMazeId && this.Maze.IsFinished)
+            {
+                mazePainter.DrawRemainingBackgroundSquares(MazeSquare.ReservedMazeId);
+            }
+
             return result;
         }
 
