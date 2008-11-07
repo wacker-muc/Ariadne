@@ -91,27 +91,27 @@ namespace SWA.Ariadne.Gui.Mazes
         /// and not by one of the neighbors.
         /// Pixels closer than ContourDistance-sqrt(2) are not recorded.
         /// </summary>
-        private static List<RelativePoint>[,] influenceRegions = new List<RelativePoint>[8, 8];
+        private List<RelativePoint>[,] influenceRegions = new List<RelativePoint>[8, 8];
 
         /// <summary>
         /// For each combination of a next left and next right neighbor of a pixel,
         /// the borderLimit is the set of points on the left and/or right (outside) edge of the influenceRegion.
         /// </summary>
         /// Note: As these points are applied symmetrically on the left and right, only non-negative values are stored.
-        private static List<RelativePoint>[,] borderLimits = new List<RelativePoint>[8, 8];
+        private List<RelativePoint>[,] borderLimits = new List<RelativePoint>[8, 8];
 
         /// <summary>
         /// For each combination of a next left and next right neighbor of a pixel,
         /// the contourLimit is the set of points on the left and/or right (inside) edge of the influenceRegion.
         /// </summary>
         /// Note: As these points are applied symmetrically on the left and right, only non-negative values are stored.
-        private static List<RelativePoint>[,] contourLimits = new List<RelativePoint>[8, 8];
+        private List<RelativePoint>[,] contourLimits = new List<RelativePoint>[8, 8];
 
         /// <summary>
         /// Set up the influenceRegions and associated data for a given influence range.
         /// </summary>
         /// <param name="influenceRange"></param>
-        private static void PrepareInfluenceRegions(int influenceRange)
+        private void PrepareInfluenceRegions(int influenceRange)
         {
             // One full pixel inside the fully covered contour range.
             int range2Min = (ContourDistance - 1) * (ContourDistance - 1);
@@ -392,6 +392,25 @@ namespace SWA.Ariadne.Gui.Mazes
         /// </summary>
         List<int>[] contour;
 
+        /// <summary>
+        /// Gets a clipping region for drawing the ProcessedImage.
+        /// </summary>
+        public Region BorderRegion
+        {
+            get
+            {
+                if (borderRegion == null)
+                {
+                    return new Region(); // infinite
+                }
+                else
+                {
+                    return borderRegion;
+                }
+            }
+        }
+        private Region borderRegion;
+
         #endregion
 
         #endregion
@@ -628,6 +647,11 @@ namespace SWA.Ariadne.Gui.Mazes
             }
 
             #endregion
+
+            if (HasContour)
+            {
+                this.borderRegion = GetBorderRegion();
+            }
 
             //Log.WriteLine("} ProcessImage()");
         }
@@ -1710,6 +1734,29 @@ namespace SWA.Ariadne.Gui.Mazes
             {
                 return image;
             }
+        }
+
+        /// <summary>
+        /// Calculates the BorderRegion property.
+        /// That can be used as a clipping region when drawing the ProcessedImage.
+        /// </summary>
+        private Region GetBorderRegion()
+        {
+            Region result = new Region();
+            result.MakeEmpty();
+
+            int dx = bbox.X, dy = bbox.Y;
+
+            for (int y = 0; y < border.Length; y++)
+            {
+                for (int p = 1, q = p + 1; q < border[y].Count; p += 2, q += 2)
+                {
+                    int xp = border[y][p], xq = border[y][q];
+                    result.Union(new Rectangle(xp - dx, y - dy, 1 + xq - xp, 1));
+                }
+            }
+
+            return result;
         }
 
         #endregion

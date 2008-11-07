@@ -714,12 +714,10 @@ namespace SWA.Ariadne.Gui.Mazes
                 if (painterDelegate != null)
                 {
                     painterDelegate(g);
-#if false
                     if (bg != null)
                     {
                         painterDelegate(bg);
                     }
-#endif
                 }
 
                 if (settingsData != null && settingsData.VisibleOutlines)

@@ -355,10 +355,18 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <param name="g"></param>
         private void PaintImages(Graphics g)
         {
+            Region clip = g.Clip;
+
             for (int i = 0; i < images.Count; i++)
             {
+                Region r = images[i].BorderRegion.Clone();
+                r.Translate(imageLocations[i].X, imageLocations[i].Y);
+                g.Clip = r;
                 g.DrawImage(images[i].DisplayedImage, imageLocations[i]);
             }
+
+            // Restore previous clip region (infinite).
+            g.Clip = clip;
         }
 
         #endregion
