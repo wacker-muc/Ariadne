@@ -504,10 +504,17 @@ namespace SWA.Ariadne.Gui.Mazes
             images.Clear();
             imageLocations.Clear();
 
+            bool haveBackgroundImage = this.MazePainter.PrepareBackgroundImage();
+
             #region Determine number of images to be placed into reserved areas.
 
             Random r = Maze.Random;
             int n, nMin, nMax = count;
+
+            if (haveBackgroundImage && r.Next(100) < 25)
+            {
+                nMax = 0;
+            }
 
             if (nMax <= 2)
             {
