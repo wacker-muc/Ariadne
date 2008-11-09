@@ -161,10 +161,11 @@ Walkers have no memory of visited squares; they decide solely on their current p
 
 The visited paths are painted in two colors: Forward steps are painted in a bright color, backward steps and areas completely covered by a flooder are painted in a dull color.  Two colors with clearly different hue are selected.  When the solution path is found, it is painted in a brighter variant of the forward color.
 
-[Variants:] There are 17 "normal" maze solver strategies:
+[Variants:] There are 19 "normal" maze solver strategies:
 
    * RandomBacktracker:  The classical backtracker algorithm; it walks forward as long as possible, making random choices at a fork.  When there is no continuation, it walks back to the latest fork and chooses another path that has not yet been visited (this is called "backtracking").
    * ProximityBacktracker: Another backtracker; at a fork, this one prefers the square that is nearest to the target square (measuring the geometric distance).
+   * OppositeBacktracker: This backtracker tries to get closest to the square directly opposite of the start square.
    * RightHandWalker: Walks through the maze while staying in touch with the right-hand wall.
    * LeftHandWalker: Walks through the maze while staying in touch with the left-hand wall.
    * RandomFlooder: The classical flooder algorithm:  For every step, choose an arbitrary open path at random.
@@ -172,6 +173,7 @@ The visited paths are painted in two colors: Forward steps are painted in a brig
    * CloseFlooder: From all currently visited paths, this flooder chooses the path closest to the start square.
    * FarFlooder: This flooder chooses the path farthest away from the start square.
    * ProximityFlooder: This flooder chooses the path closest to the target square.
+   * OppositeFlooder: This flooder chooses the path closest to the square directly opposite of the start square.
    * HesitatingFlooder: This flooder chooses the path farthest away from the target square.
    * CenterFlooder: This flooder chooses the path closest to the center of the maze.
    * CornerFlooder: This flooder chooses the path farthest away from the center of the maze.
@@ -198,6 +200,8 @@ The area visited by the RandomBacktracker (in a regular maze) is a good example 
 
 RightHandWalker and LeftHandWalker produce "inverted" paintings: One visits all areas to the right of the solution path, the other all areas to the left.
 
+OppositeBacktracker and OppositeFlooder don't know the location of the target square.  But as the start and target squares are always chosen close to opposite borders of the maze, they often produce similar results as the proximity guided solvers.
+
 Outline Shapes are completely obliterated when large sections of the maze are visited.  An efficient solver will not paint all squares in the same color and the shape will still be visible.
 
 The ThickestBranchFlooder advances on a chosen branch in one run up to the next fork; then another branch is better than the split branches at the fork.  The percieved movement is rather "jumpy", even at moderate speed.
@@ -221,12 +225,12 @@ Efficient solvers often run for long stretches without error (i.e. without leavi
       * [4] Apply two mixed irregular patterns or apply the pattern to part of the maze only.
    * [72] Build a continuous wall around an outline shape.
    * [24] Build a second embedded maze inside the outline shape.
-   * [17] Different solver strategies.
+   * [19] Different solver strategies.
    * [2] Let an efficient solver detect dead end areas.
    
 That gives a very large number of pattern or style combinations:
 
-    3 x (1 + 27x4) x (1+72+24) x 17 x 2  =  1,078,446
+    3 x (1 + 27x4) x (1+72+24) x 19 x 2  =  1,205,322
 
 The exact application of each variant is usually (with a few deterministic exceptions) influenced by random parameter values:  Outline shapes are generated dynamically, solvers choose arbitrary paths and the maze builder generates random patterns of walls.
 

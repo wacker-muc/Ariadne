@@ -10,9 +10,10 @@ Copyright (c) Stephan.Wacker@web.de, 2008
 
 Version 3.3
 
- * during the first few seconds, the screen saver will exit upon mouse movement
- * new Option: display a background image that is uncovered when squares are visited
- * new variant of MazeOutlineShape: represent underlying maze's walls and paths with the same width
+ * Screen Saver control: during the first few seconds, the screen saver will exit upon mouse movement
+ * Screen Saver option: display a background image that is uncovered when squares are visited
+ * Outline Shapes: new variant of MazeOutlineShape: represent underlying maze's walls and paths with the same width
+ * Strategies: OpposedBacktracker, OpposedFlooder
 
 -----------------------------------------------------------------------
 
