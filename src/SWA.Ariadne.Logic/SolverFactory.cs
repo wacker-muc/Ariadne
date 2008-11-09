@@ -19,6 +19,7 @@ namespace SWA.Ariadne.Logic
             get { return solverTypes; }
         }
         private static System.Type[] solverTypes = new System.Type[] {
+            typeof(OpposedBacktracker),
             typeof(ProximityBacktracker),
             typeof(RandomBacktracker),
             typeof(MasterSolver),
@@ -28,6 +29,7 @@ namespace SWA.Ariadne.Logic
             typeof(RoundRobinFlooder),
             typeof(CloseFlooder),
             typeof(FarFlooder),
+            typeof(OpposedFlooder),
             typeof(ProximityFlooder),
             typeof(HesitatingFlooder),
             typeof(CenterFlooder),
@@ -40,6 +42,11 @@ namespace SWA.Ariadne.Logic
             typeof(RandomFlooder),
         };
 
+        /// <summary>
+        /// Returns true if a DeadEndChecker may be installed in the given solverType.
+        /// </summary>
+        /// <param name="solverType"></param>
+        /// <returns></returns>
         public static bool HasEfficientVariant(System.Type solverType)
         {
             bool result = (solverType.IsSubclassOf(typeof(SolverBase)));
@@ -179,6 +186,11 @@ namespace SWA.Ariadne.Logic
             return CreateSolver(DefaultStrategy, maze, mazeDrawer);
         }
 
+        /// <summary>
+        /// Returns the list of squares on the solution path from start to end square.
+        /// </summary>
+        /// <param name="maze"></param>
+        /// <returns></returns>
         public static List<MazeSquare> SolutionPath(Maze maze)
         {
             // Note: This code must not modify the given maze.
