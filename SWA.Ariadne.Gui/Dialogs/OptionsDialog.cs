@@ -91,6 +91,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             checkBoxBlinking.Checked = RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_BLINKING, true);
             checkBoxEfficientSolvers.Checked = RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_EFFICIENT_SOLVERS, true);
             textBoxStepsPerSecond.Text = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_STEPS_PER_SECOND, 200).ToString();
+            checkBoxLogSolverStatistics.Checked = RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_LOG_SOLVER_STATISTICS, false);
 
             // Images tab.
             imageNumberNumericUpDown.Value = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_NUMBER, 0);
@@ -133,6 +134,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             key.SetValue(RegisteredOptions.OPT_BLINKING, (Int32)(checkBoxBlinking.Checked ? 1 : 0), RegistryValueKind.DWord);
             key.SetValue(RegisteredOptions.OPT_EFFICIENT_SOLVERS, (Int32)(checkBoxEfficientSolvers.Checked ? 1 : 0), RegistryValueKind.DWord);
             key.SetValue(RegisteredOptions.OPT_STEPS_PER_SECOND, Int32.Parse(textBoxStepsPerSecond.Text), RegistryValueKind.DWord);
+            key.SetValue(RegisteredOptions.OPT_LOG_SOLVER_STATISTICS, (Int32)(checkBoxLogSolverStatistics.Checked ? 1 : 0), RegistryValueKind.DWord);
 
             // Images tab.
             key.SetValue(RegisteredOptions.OPT_IMAGE_NUMBER, (Int32)imageNumberNumericUpDown.Value, RegistryValueKind.DWord);

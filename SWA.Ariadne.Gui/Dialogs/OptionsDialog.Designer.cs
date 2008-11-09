@@ -59,6 +59,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.checkBoxIrregularMazes = new System.Windows.Forms.CheckBox();
             this.checkBoxOutlineShapes = new System.Windows.Forms.CheckBox();
             this.imageFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+            this.checkBoxLogSolverStatistics = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPageGeneral.SuspendLayout();
             this.tabPageImages.SuspendLayout();
@@ -122,6 +123,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             // tabPageGeneral
             // 
+            this.tabPageGeneral.Controls.Add(this.checkBoxLogSolverStatistics);
             this.tabPageGeneral.Controls.Add(this.checkBoxEfficientSolvers);
             this.tabPageGeneral.Controls.Add(this.textBoxStepsPerSecond);
             this.tabPageGeneral.Controls.Add(this.labelStepsPerSecond);
@@ -473,6 +475,19 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.checkBoxOutlineShapes.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.checkBoxOutlineShapes.UseVisualStyleBackColor = true;
             // 
+            // checkBoxLogSolverStatistics
+            // 
+            this.checkBoxLogSolverStatistics.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBoxLogSolverStatistics.AutoSize = true;
+            this.checkBoxLogSolverStatistics.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.checkBoxLogSolverStatistics.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.checkBoxLogSolverStatistics.Location = new System.Drawing.Point(45, 103);
+            this.checkBoxLogSolverStatistics.Name = "checkBoxLogSolverStatistics";
+            this.checkBoxLogSolverStatistics.Size = new System.Drawing.Size(122, 17);
+            this.checkBoxLogSolverStatistics.TabIndex = 5;
+            this.checkBoxLogSolverStatistics.Text = "Log Solver Statistics";
+            this.checkBoxLogSolverStatistics.UseVisualStyleBackColor = true;
+            // 
             // OptionsDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -538,6 +553,7 @@ namespace SWA.Ariadne.Gui.Dialogs
         private System.Windows.Forms.TextBox backgroundImageFolderTextBox;
         private System.Windows.Forms.CheckBox checkBoxBackgroundImage;
         private System.Windows.Forms.CheckBox checkBoxDifferentBackgroundImageFolder;
+        private System.Windows.Forms.CheckBox checkBoxLogSolverStatistics;
 
     }
 }

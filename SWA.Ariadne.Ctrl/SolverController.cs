@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Text;
+using System.IO;
 using System.Windows.Forms;
 using SWA.Ariadne.Model;
 using SWA.Ariadne.Logic;
 using SWA.Ariadne.Gui.Mazes;
+using SWA.Ariadne.Settings;
 
 namespace SWA.Ariadne.Ctrl
 {
@@ -366,6 +368,11 @@ namespace SWA.Ariadne.Ctrl
                 {
                     mazePainter.DrawRemainingSquares();
                 }
+
+                if (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_LOG_SOLVER_STATISTICS, false))
+                {
+                    LogSolverStatistics();
+                }
             }
 
             // Draw the background image inside the reserved areas.
@@ -486,6 +493,37 @@ namespace SWA.Ariadne.Ctrl
 
                 return result;
             }
+        }
+
+        #endregion
+
+        #region Auxiliary methods
+
+        private void LogSolverStatistics()
+        {
+            string logFileName = "AriadneSolvers.log";
+            bool logFileExists = File.Exists(logFileName);
+            StreamWriter logFile = new StreamWriter(logFileName, true);
+            
+            if (!logFileExists)
+            {
+                logFile.WriteLine("# This file contains runtime statistics of the results achieved by the Ariadne solver strategies.");
+                logFile.WriteLine("# Each line gives the following information:");
+                logFile.WriteLine("# <{0}>: <{1}> / [<{2}>..<{3}>] = <{4}>", "strategy name", "number of forward steps", "minimum", "maximum", "ratio");
+                logFile.WriteLine("# where <ratio> is a fractional number between 0.000 and 1.000 indicating the efficiency:");
+                logFile.WriteLine("#       <ratio> = (<steps> - <minimum>) / (<maximum> - <minimum>)");
+                logFile.WriteLine("# <minimum> is the length of the solution path and <maximum> the total number of maze squares.");
+                logFile.WriteLine("# ");
+                logFile.WriteLine("# ----");
+                logFile.WriteLine("");
+            }
+
+            long steps = this.countForward;
+            int minSteps = solutionPath.Count;
+            int maxSteps = Maze.CountOwnSquares;
+            double value = (double)(steps - minSteps) / (double)(maxSteps - minSteps);
+            logFile.WriteLine("{0}: {1} / [{2}..{3}] = {4:0.000}", this.StrategyName, steps, minSteps, maxSteps, value);
+            logFile.Close();
         }
 
         #endregion
