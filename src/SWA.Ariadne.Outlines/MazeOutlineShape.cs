@@ -9,6 +9,7 @@ namespace SWA.Ariadne.Outlines
     {
         #region Member variables and Properties
 
+        private int wallWidth;
         private int gridWidth;
         private int xOffset;
         private int yOffset;
@@ -31,13 +32,13 @@ namespace SWA.Ariadne.Outlines
         /// <param name="ySize"></param>
         /// <param name="gridWidth"></param>
         /// <param name="mazeBuilder"></param>
-        private MazeOutlineShape(int xSize, int ySize, int gridWidth, MazeShapeBuilder mazeBuilder)
+        private MazeOutlineShape(int xSize, int ySize, int wallWidth, int gridWidth, MazeShapeBuilder mazeBuilder)
             : base(xSize, ySize)
         {
+            this.wallWidth = wallWidth;
             this.gridWidth = gridWidth;
 
             // Determine dimensions of a maze shape that fits tightly around the real maze.
-            int wallWidth = 1;
             int mazeWidth = (XSize - wallWidth + gridWidth - 1) / gridWidth;
             int mazeHeight = (YSize - wallWidth + gridWidth - 1) / gridWidth;
             int mazeAreaX = mazeWidth * gridWidth + wallWidth;
@@ -75,8 +76,12 @@ namespace SWA.Ariadne.Outlines
         {
             int width = maze.XSize * gridWidth;
             int height = maze.YSize * gridWidth;
-            DrawWall(xOffset + width, yOffset, 0, 1, height + 1);
-            DrawWall(xOffset, yOffset + height, 1, 0, width + 1);
+
+            for (int w = 0; w < this.wallWidth; w++)
+            {
+                DrawWall(xOffset + width + w, yOffset, 0, 1, height + wallWidth);
+                DrawWall(xOffset, yOffset + height + w, 1, 0, width + wallWidth);
+            }
         }
 
         /// <summary>
@@ -117,7 +122,10 @@ namespace SWA.Ariadne.Outlines
         /// <param name="dy">1 for a vertical wall, 0 for a horizontal wall</param>
         private void DrawWall(int x0, int y0, int dx, int dy)
         {
-            DrawWall(x0, y0, dx, dy, this.gridWidth + 1);
+            for (int w = 0; w < this.wallWidth; w++)
+            {
+                DrawWall(x0 + dy * w, y0 + dx * w, dx, dy, this.gridWidth + this.wallWidth);
+            }
         }
 
         /// <summary>
@@ -152,8 +160,21 @@ namespace SWA.Ariadne.Outlines
         /// <returns></returns>
         public static OutlineShape CreateInstance(Random r, int xSize, int ySize)
         {
-            int gridWidth = 1 + r.Next(4, 8 + 1);
-            MazeOutlineShape result = new MazeOutlineShape(xSize, ySize, gridWidth, MazeBuilder.Instance);
+            int wallWidth, gridWidth;
+
+            if (r.Next(2) == 0)
+            {
+                // One square wide walls, wide squares.
+                wallWidth = 1;
+                gridWidth = 1 + r.Next(4, 8 + 1);
+            }
+            else
+            {
+                // Walls and squares of equal width.
+                wallWidth = r.Next(1, 4 + 1);
+                gridWidth = wallWidth * 2;
+            }
+            MazeOutlineShape result = new MazeOutlineShape(xSize, ySize, wallWidth, gridWidth, MazeBuilder.Instance);
 
             // The shape is implemented in the underlying ExplicitOulineShape.
             return result.baseShape;
