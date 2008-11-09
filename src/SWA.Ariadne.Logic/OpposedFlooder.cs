@@ -21,7 +21,7 @@ namespace SWA.Ariadne.Logic
         public OpposedFlooder(Maze maze, IMazeDrawer mazeDrawer)
             : base(maze, mazeDrawer)
         {
-            this.referenceSquare = maze[maze.XSize - 1 - maze.StartSquare.XPos, maze.YSize - 1 - maze.StartSquare.YPos];
+            this.referenceSquare = maze.GetOpposedSquare(maze.StartSquare);
         }
 
         #endregion

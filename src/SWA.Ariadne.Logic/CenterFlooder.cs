@@ -21,7 +21,7 @@ namespace SWA.Ariadne.Logic
         public CenterFlooder(Maze maze, IMazeDrawer mazeDrawer)
             : base(maze, mazeDrawer)
         {
-            this.referenceSquare = maze[maze.XSize/2, maze.YSize/2];
+            this.referenceSquare = maze.GetCenterSquare();
         }
 
         #endregion
