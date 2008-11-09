@@ -706,8 +706,8 @@ namespace SWA.Ariadne.Gui.Mazes
             // The PaintWalls() method fails in design mode.
             try
             {
-                // Create a background image.
-                Graphics bg = CreateBackgroundImage(g);
+                // If there is a background image, we need to paint the maze into it, as well.
+                Graphics bg = (backgroundImage == null ? null : Graphics.FromImage(backgroundImage));
 
                 // Call the painterDelegate first
                 // as it may also paint into areas that are later covered by the maze.
@@ -722,6 +722,7 @@ namespace SWA.Ariadne.Gui.Mazes
 
                 if (settingsData != null && settingsData.VisibleOutlines)
                 {
+                    // Note: These shapes will not be drawn into the background image.
                     PaintOutlineShape(g);
                     PaintEmbeddedMazes(g);
                 }
@@ -1163,23 +1164,39 @@ namespace SWA.Ariadne.Gui.Mazes
 
         #endregion
 
-        #region Background image related methods.
+        #region Background image related methods
 
         /// <summary>
-        /// Creates a backgroundImage if there is a backgroundImageLoader.
-        /// The backgroundImage has the same size as the targetRectangle.
-        /// Returns a Graphics object that may paint into the background image.
+        /// Tries to create a background image that will be used in the current iteration.
+        /// Returns true if an image was created.
         /// </summary>
         /// <returns></returns>
-        private Graphics CreateBackgroundImage(Graphics g)
+        internal bool PrepareBackgroundImage()
         {
-            Graphics bg = null;
+            // We need a Graphics object defining the resolution of the image to be created.
+            Graphics g = targetGraphics;
+            return this.CreateBackgroundImage(g);
+        }
+
+        /// <summary>
+        /// Creates a backgroundImage (and associated data structures) if there is a backgroundImageLoader.
+        /// The backgroundImage has the same size as the targetRectangle.
+        /// Returns true if an image was created.
+        /// </summary>
+        /// <returns></returns>
+        private bool CreateBackgroundImage(Graphics g)
+        {
+            ContourImage cImg = null;
 
             if (this.backgroundImageLoader != null)
             {
+                cImg = backgroundImageLoader.GetNext(maze.Random);
+            }
+
+            if (cImg != null)
+            {
                 // Create a new Bitmap with the same resolution as the buffered graphics.
-                backgroundImage = new Bitmap(targetRectangle.Width, targetRectangle.Height, g);
-                ContourImage cImg = backgroundImageLoader.GetNext(maze.Random);
+                this.backgroundImage = new Bitmap(targetRectangle.Width, targetRectangle.Height, g);
                 Image img = cImg.DisplayedImage;
 
                 #region Choose an (x, y) location of the image.
@@ -1210,10 +1227,12 @@ namespace SWA.Ariadne.Gui.Mazes
 
                 #endregion
 
+#if false
                 // TODO...
                 System.Drawing.Imaging.ImageAttributes attr = new System.Drawing.Imaging.ImageAttributes();
+#endif
 
-                bg = Graphics.FromImage(backgroundImage);
+                Graphics bg = Graphics.FromImage(backgroundImage);
                 bg.DrawImage(img, new Rectangle(x, y, img.Width, img.Height));
 
                 this.backgroundPainted = new bool[maze.XSize, maze.YSize];
@@ -1221,19 +1240,31 @@ namespace SWA.Ariadne.Gui.Mazes
             else
             {
                 this.backgroundImage = null;
+                this.backgroundImageRange = new Rectangle();
+                this.backgroundImageShape = null;
+                this.backgroundPainted = null;
             }
 
-            return bg;
+            return (backgroundImage != null);
         }
 
+        /// <summary>
+        /// Draws the background image in all squares having the given mazeId.
+        /// Squares that have already been drawn will be skipped.
+        /// </summary>
+        /// <param name="mazeId"></param>
         public void DrawRemainingBackgroundSquares(int mazeId)
         {
             Graphics g = gBuffer.Graphics;
 
             for (int x = backgroundImageRange.Left; x < backgroundImageRange.Right; x++)
             {
+                if (x < 0 || x >= maze.XSize) { continue; }
+
                 for (int y = backgroundImageRange.Top; y < backgroundImageRange.Bottom; y++)
                 {
+                    if (y < 0 || y >= maze.YSize) { continue; }
+
                     MazeSquare sq = maze[x, y];
                     if (sq.MazeId == mazeId)
                     {
@@ -1448,7 +1479,7 @@ namespace SWA.Ariadne.Gui.Mazes
                 if (this.backgroundImageLoader == null)
                 {
                     string imageFolder = data.ImageFolder;
-                    CreateBackgroundImageLoader(imageFolder);
+                    CreateBackgroundImageLoader(imageFolder, 0);
                 }
             }
             else
@@ -1463,7 +1494,12 @@ namespace SWA.Ariadne.Gui.Mazes
             #endregion
         }
 
-        public void CreateBackgroundImageLoader(string imageFolder)
+        /// <summary>
+        /// Creates an ImageLoader for background images.
+        /// </summary>
+        /// <param name="imageFolder"></param>
+        /// <param name="percentage">when positive: percentage of mazes that will have a background image</param>
+        public void CreateBackgroundImageLoader(string imageFolder, int percentage)
         {
             // Update the client dimensions, if it was resized.
             if (client != null)
@@ -1471,9 +1507,14 @@ namespace SWA.Ariadne.Gui.Mazes
                 this.targetRectangle = client.DisplayRectangle;
             }
 
-            int minSize = targetRectangle.Height * 2 / 3;
-            int maxSize = targetRectangle.Height * 5 / 6;
+            int minSize = Math.Min(targetRectangle.Width, targetRectangle.Height) * 3 / 4;
+            int maxSize = Math.Min(targetRectangle.Width, targetRectangle.Height) * 7 / 8;
             this.backgroundImageLoader = new ImageLoader(minSize, maxSize, true, imageFolder, 1, "BGIL");
+
+            if (0 < percentage && percentage < 100)
+            {
+                BackgroundImageLoader.YieldNullPercentage = 100 - percentage;
+            }
         }
 
         #endregion

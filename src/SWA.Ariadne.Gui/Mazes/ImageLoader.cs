@@ -31,6 +31,15 @@ namespace SWA.Ariadne.Gui.Mazes
         private readonly bool minSizeRequired = false;
 
         /// <summary>
+        /// Probability for returning no image from the GetNext() method.
+        /// </summary>
+        public int YieldNullPercentage
+        {
+            set { yieldNullPercentage = value; }
+        }
+        private int yieldNullPercentage = 0;
+
+        /// <summary>
         /// Synchronized queue for placing the loaded images.
         /// </summary>
         private readonly Queue queue;
@@ -103,10 +112,13 @@ namespace SWA.Ariadne.Gui.Mazes
             int minSize = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_MIN_SIZE, 300);
             int maxSize = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_MAX_SIZE, 400);
             string imageFolder = RegisteredOptions.GetStringSetting(RegisteredOptions.OPT_IMAGE_FOLDER);
+            bool backgroundImages = RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_BACKGROUND_IMAGES, false);
 
             if (count > 0)
             {
-                return new SWA.Ariadne.Gui.Mazes.ImageLoader(minSize, maxSize, false, imageFolder, count + 2, "FGIL");
+                ImageLoader result = new ImageLoader(minSize, maxSize, false, imageFolder, count + 2, "FGIL");
+                result.YieldNullPercentage = (backgroundImages ? 5 : 0);
+                return result;
             }
             else
             {
@@ -140,6 +152,11 @@ namespace SWA.Ariadne.Gui.Mazes
         public ContourImage GetNext(Random r)
         {
             ContourImage result;
+
+            if (yieldNullPercentage > 0 && r.Next(100) < yieldNullPercentage)
+            {
+                return null;
+            }
 
             if (queueLength > 0)
             {
