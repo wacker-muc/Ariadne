@@ -237,12 +237,18 @@ namespace SWA.Ariadne.Gui.Mazes
         /// </summary>
         private Rectangle backgroundImageRange;
 
+        /// <summary>
+        /// Shape of the background image, if it has a contour.
+        /// </summary>
         private OutlineShape backgroundImageShape;
 
         /// <summary>
         /// True if the square's background has already been displayed.
         /// </summary>
         private bool[,] backgroundPainted;
+
+        delegate void BackgroundImageSetupCompletionDelegate();
+        private BackgroundImageSetupCompletionDelegate backgroundImageSetupCompletion;
 
         #endregion
 
@@ -707,7 +713,13 @@ namespace SWA.Ariadne.Gui.Mazes
             try
             {
                 // If there is a background image, we need to paint the maze into it, as well.
-                Graphics bg = (backgroundImage == null ? null : Graphics.FromImage(backgroundImage));
+                Graphics bg = null;
+
+                if (backgroundImage != null)
+                {
+                    bg = Graphics.FromImage(backgroundImage);
+                    this.backgroundImageSetupCompletion();
+                }
 
                 // Call the painterDelegate first
                 // as it may also paint into areas that are later covered by the maze.
@@ -1212,20 +1224,27 @@ namespace SWA.Ariadne.Gui.Mazes
 
                 #endregion
 
-                #region Determine the maze area that is completely covered by the image.
+                // The remainder of the background image setup can only be executed
+                // after the next maze's geometry has been chosen.
+                this.backgroundImageSetupCompletion = delegate()
+                {
+                    #region Determine the maze area that is completely covered by the image.
 
-                int marginWidth = squareWidth + (wallWidth + 1) / 2;
-                int xSqMin = XCoordinate(x + marginWidth, true);
-                int xSqMax = XCoordinate(x + img.Width - 1 - marginWidth, false);
-                int ySqMin = YCoordinate(y + marginWidth, true);
-                int ySqMax = YCoordinate(y + img.Height - 1 - marginWidth, false);
-                this.backgroundImageRange = new Rectangle(xSqMin, ySqMin, (xSqMax - xSqMin + 1), (ySqMax - ySqMin + 1));
+                    int marginWidth = squareWidth + (wallWidth + 1) / 2;
+                    int xSqMin = XCoordinate(x + marginWidth, true);
+                    int xSqMax = XCoordinate(x + img.Width - 1 - marginWidth, false);
+                    int ySqMin = YCoordinate(y + marginWidth, true);
+                    int ySqMax = YCoordinate(y + img.Height - 1 - marginWidth, false);
+                    this.backgroundImageRange = new Rectangle(xSqMin, ySqMin, (xSqMax - xSqMin + 1), (ySqMax - ySqMin + 1));
 
-                int xOffsetImg = x - xSqMin * gridWidth;
-                int yOffsetImg = y - ySqMin * gridWidth;
-                this.backgroundImageShape = cImg.GetCoveredShape(gridWidth, wallWidth, xOffsetImg, yOffsetImg);
+                    int xOffsetImg = x - xSqMin * gridWidth;
+                    int yOffsetImg = y - ySqMin * gridWidth;
+                    this.backgroundImageShape = cImg.GetCoveredShape(gridWidth, wallWidth, xOffsetImg, yOffsetImg);
 
-                #endregion
+                    #endregion
+
+                    this.backgroundPainted = new bool[maze.XSize, maze.YSize];
+                };
 
 #if false
                 // TODO...
@@ -1234,8 +1253,6 @@ namespace SWA.Ariadne.Gui.Mazes
 
                 Graphics bg = Graphics.FromImage(backgroundImage);
                 bg.DrawImage(img, new Rectangle(x, y, img.Width, img.Height));
-
-                this.backgroundPainted = new bool[maze.XSize, maze.YSize];
             }
             else
             {

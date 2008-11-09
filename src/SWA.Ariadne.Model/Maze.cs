@@ -147,7 +147,7 @@ namespace SWA.Ariadne.Model
 
         /// <summary>
         /// Returns the number of squares in this maze.
-        /// Includes the squares od embedded mazes.
+        /// Includes the squares of embedded mazes.
         /// </summary>
         public int CountSquares
         {
@@ -160,6 +160,31 @@ namespace SWA.Ariadne.Model
                     for (int y = 0; y < ySize; y++)
                     {
                         if (this[x, y].isReserved == false)
+                        {
+                            ++result;
+                        }
+                    }
+                }
+
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// Returns the number of squares in this maze.
+        /// Doesn't include the squares of embedded mazes.
+        /// </summary>
+        public int CountOwnSquares
+        {
+            get
+            {
+                int result = 0;
+
+                for (int x = 0; x < xSize; x++)
+                {
+                    for (int y = 0; y < ySize; y++)
+                    {
+                        if (this[x, y].MazeId == this.MazeId)
                         {
                             ++result;
                         }

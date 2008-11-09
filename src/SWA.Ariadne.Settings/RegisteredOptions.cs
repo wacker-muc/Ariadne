@@ -23,6 +23,7 @@ namespace SWA.Ariadne.Settings
         public const string OPT_IRREGULAR_MAZES = "build irregular mazes";
         public const string OPT_PAINT_ALL_WALLS = "paint all maze walls";
         public const string OPT_MULTIPLE_MAZES = "create multiple mazes";
+        public const string OPT_LOG_SOLVER_STATISTICS = "log solver statistics";
 
         // Note: The Screensaver options dialog will recreate the registry entry and store only the OPT_ values.
         //       All other values will be lost.
