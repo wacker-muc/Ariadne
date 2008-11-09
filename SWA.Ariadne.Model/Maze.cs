@@ -1103,6 +1103,24 @@ namespace SWA.Ariadne.Model
             return Math.Sqrt((dx * dx) + (dy * dy));
         }
 
+        /// <summary>
+        /// Returns the square in the middle of the maze's bounding box.
+        /// </summary>
+        public MazeSquare GetCenterSquare()
+        {
+            Rectangle bbox = this.GetBoundingBox();
+            return this[(bbox.Left + bbox.Right) / 2, (bbox.Top + bbox.Bottom) / 2];
+        }
+
+        /// <summary>
+        /// Returns the square diametrically opposed to the given square.
+        /// </summary>
+        public MazeSquare GetOpposedSquare(MazeSquare sq)
+        {
+            Rectangle bbox = this.GetBoundingBox();
+            return this[bbox.Right - 1 - sq.XPos, bbox.Bottom - 1 - sq.YPos];
+        }
+
         #endregion
 
         #region IAriadneSettingsSource implementation
