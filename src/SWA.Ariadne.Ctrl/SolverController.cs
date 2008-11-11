@@ -502,8 +502,10 @@ namespace SWA.Ariadne.Ctrl
         private void LogSolverStatistics()
         {
             string logFileName = "AriadneSolvers.log";
-            bool logFileExists = File.Exists(logFileName);
-            StreamWriter logFile = new StreamWriter(logFileName, true);
+            string appDir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName);
+            string logFilePath = Path.Combine(appDir, logFileName);
+            bool logFileExists = File.Exists(logFilePath);
+            StreamWriter logFile = new StreamWriter(logFilePath, true);
             
             if (!logFileExists)
             {
@@ -519,8 +521,8 @@ namespace SWA.Ariadne.Ctrl
             }
 
             long steps = this.countForward;
-            int minSteps = solutionPath.Count;
-            int maxSteps = Maze.CountOwnSquares;
+            int minSteps = solutionPath.Count - 1;
+            int maxSteps = Maze.CountOwnSquares - 1;
             double value = (double)(steps - minSteps) / (double)(maxSteps - minSteps);
             logFile.WriteLine("{0}: {1} / [{2}..{3}] = {4:0.000}", this.StrategyName, steps, minSteps, maxSteps, value);
             logFile.Close();

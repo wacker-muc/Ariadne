@@ -90,8 +90,9 @@ namespace SWA.Ariadne.Gui.Mazes
         /// </summary>
         public bool HasPreparedImages
         {
-            get { return (images.Count > 0 && imageLocations.Count == 0); }
+            get { return hasPreparedImages; }
         }
+        private bool hasPreparedImages = false;
 
         /// <summary>
         /// When false, do not update the caption or status bar.
@@ -531,7 +532,7 @@ namespace SWA.Ariadne.Gui.Mazes
             }
             else
             {
-                return;
+                n = 0;
             }
 
             #endregion
@@ -544,6 +545,8 @@ namespace SWA.Ariadne.Gui.Mazes
                     images.Add(img);
                 }
             }
+
+            this.hasPreparedImages = true;
             //Log.WriteLine("} PrepareImages()");
         }
 
@@ -565,6 +568,8 @@ namespace SWA.Ariadne.Gui.Mazes
                     }
                 }
             }
+
+            this.hasPreparedImages = false;
         }
 
 #if false
