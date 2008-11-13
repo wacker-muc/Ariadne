@@ -334,6 +334,17 @@ namespace SWA.Ariadne.Settings
         }
         private bool showBackgroundImage;
 
+        /// <summary>
+        /// When true, the MazePainter will not clear the current ImageLoader.
+        /// This setting is only used when the ArenaForm distributes the parameters from a template maze to subsidiary mazes.
+        /// </summary>
+        public bool LeaveCurrentBackgroundImageLoader
+        {
+            get { return leaveCurrentBackgroundImageLoader; }
+            set { leaveCurrentBackgroundImageLoader = value; }
+        }
+        private bool leaveCurrentBackgroundImageLoader = false;
+
         #endregion
 
         #region Outlines tab

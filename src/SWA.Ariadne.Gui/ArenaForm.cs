@@ -16,8 +16,8 @@ namespace SWA.Ariadne.Gui
     /// A Windows Form that displays a grid of MazeUserControls.
     /// </summary>
     public partial class ArenaForm : AriadneFormBase
-        , SWA.Ariadne.Gui.Mazes.IMazeControlProperties
-        , SWA.Ariadne.Settings.IAriadneSettingsSource
+        , IMazeControlProperties
+        , IAriadneSettingsSource
     {
         #region Member variables and properties
 
@@ -214,11 +214,16 @@ namespace SWA.Ariadne.Gui
             data.AutoSeed = false;
             data.AutoGridWidth = data.AutoPathWidth = false;
             data.AutoMazeHeight = data.AutoMazeWidth = true;
+            data.AutoColors = false;
+
+            // The other MazePainters should not have a local ImageLoader.
+            data.LeaveCurrentBackgroundImageLoader = true;
 
             foreach (ArenaItem item in Items)
             {
                 if (item != TemplateItem)
                 {
+                    item.MazeUserControl.MazePainter.BackgroundImageLoader = TemplateItem.MazeUserControl.MazePainter;
                     item.MazeUserControl.TakeParametersFrom(data);
                     item.Setup(false);
                 }
