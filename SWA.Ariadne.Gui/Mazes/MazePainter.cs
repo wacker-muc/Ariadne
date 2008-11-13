@@ -20,6 +20,7 @@ namespace SWA.Ariadne.Gui.Mazes
     public class MazePainter
         : IMazeDrawer
         , IAriadneSettingsSource
+        , IImageLoader
     {
         #region Constants
 
@@ -217,12 +218,17 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <summary>
         /// A source of background images.
         /// </summary>
-        public ImageLoader BackgroundImageLoader
+        public IImageLoader BackgroundImageLoader
         {
             get { return backgroundImageLoader; }
             set { backgroundImageLoader = value; }
         }
-        private ImageLoader backgroundImageLoader;
+        private IImageLoader backgroundImageLoader;
+
+        /// <summary>
+        /// The ContourImage used to create the current backgroundImage.
+        /// </summary>
+        private ContourImage backgroundContourImage;
 
         /// <summary>
         /// A bitmap of the size of the targetRectangle with black (or transparent) background.
@@ -1198,18 +1204,18 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <returns></returns>
         private bool CreateBackgroundImage(Graphics g)
         {
-            ContourImage cImg = null;
+            this.backgroundContourImage = null;
 
             if (this.backgroundImageLoader != null)
             {
-                cImg = backgroundImageLoader.GetNext(maze.Random);
+                backgroundContourImage = backgroundImageLoader.GetNext(maze.Random);
             }
 
-            if (cImg != null)
+            if (backgroundContourImage != null)
             {
                 // Create a new Bitmap with the same resolution as the buffered graphics.
                 this.backgroundImage = new Bitmap(targetRectangle.Width, targetRectangle.Height, g);
-                Image img = cImg.DisplayedImage;
+                Image img = backgroundContourImage.DisplayedImage;
 
                 #region Choose an (x, y) location of the image.
 
@@ -1219,8 +1225,8 @@ namespace SWA.Ariadne.Gui.Mazes
                 int yMin = Math.Min(targetRectangle.Height / 16, h / 2);
                 w -= 2 * xMin;
                 h -= 2 * yMin;
-                int x = xMin + maze.Random.Next(w);
-                int y = yMin + maze.Random.Next(h);
+                int x = xMin + (w <= 0 ? 0 : maze.Random.Next(w));
+                int y = yMin + (h <= 0 ? 0 : maze.Random.Next(h));
 
                 #endregion
 
@@ -1239,7 +1245,7 @@ namespace SWA.Ariadne.Gui.Mazes
 
                     int xOffsetImg = x - xSqMin * gridWidth;
                     int yOffsetImg = y - ySqMin * gridWidth;
-                    this.backgroundImageShape = cImg.GetCoveredShape(gridWidth, wallWidth, xOffsetImg, yOffsetImg);
+                    this.backgroundImageShape = backgroundContourImage.GetCoveredShape(gridWidth, wallWidth, xOffsetImg, yOffsetImg);
 
                     #endregion
 
@@ -1491,17 +1497,20 @@ namespace SWA.Ariadne.Gui.Mazes
 
             #region Images
 
-            if (data.ShowBackgroundImage)
+            if (!data.LeaveCurrentBackgroundImageLoader)
             {
-                if (this.backgroundImageLoader == null)
+                if (data.ShowBackgroundImage)
                 {
-                    string imageFolder = data.ImageFolder;
-                    CreateBackgroundImageLoader(imageFolder, 0);
+                    if (this.backgroundImageLoader == null)
+                    {
+                        string imageFolder = data.ImageFolder;
+                        CreateBackgroundImageLoader(imageFolder, 0);
+                    }
                 }
-            }
-            else
-            {
-                this.backgroundImageLoader = null;
+                else
+                {
+                    this.backgroundImageLoader = null;
+                }
             }
 
             // If a backgroundImageLoader exists, a backgroundImage will be created later
@@ -1532,6 +1541,31 @@ namespace SWA.Ariadne.Gui.Mazes
             {
                 BackgroundImageLoader.YieldNullPercentage = 100 - percentage;
             }
+        }
+
+        #endregion
+
+        #region IImageLoader Members
+
+        /// <summary>
+        /// In the context of an ArenaForm, one MazePainter may be used as a source of background images
+        /// for other MazePainters.
+        /// </summary>
+        /// <param name="r"></param>
+        /// <returns></returns>
+        public ContourImage GetNext(Random r)
+        {
+            return this.backgroundContourImage;
+        }
+
+        public void Shutdown()
+        {
+            // do nothing
+        }
+
+        public int YieldNullPercentage
+        {
+            set { /* do nothing */ }
         }
 
         #endregion

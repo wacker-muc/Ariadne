@@ -10,6 +10,7 @@ using SWA.Utilities;
 namespace SWA.Ariadne.Gui.Mazes
 {
     public class ImageLoader
+        : IImageLoader
     {
         const char PathSeparator = ';';
 
