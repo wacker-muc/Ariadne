@@ -131,7 +131,7 @@ namespace SWA.Ariadne.Ctrl
             this.client = client;
             this.solverController = solverController;
 
-            stepsPerSecond = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_STEPS_PER_SECOND, 200);
+            stepsPerSecond = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_STEPS_PER_SECOND);
             stepsPerSecond = Math.Min(40000, Math.Max(1, stepsPerSecond));
         }
 

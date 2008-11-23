@@ -64,11 +64,11 @@ namespace SWA.Ariadne.Gui
             // Initially, the (optinally) displayed controls should be invisible until the maze has been built.
             this.outerInfoPanel.Visible = false;
 
-            if (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_PAINT_ALL_WALLS, false) == false)
+            if (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_PAINT_ALL_WALLS) == false)
             {
                 this.mazeUserControl.RandomizeWallVisibility = true;
             }
-            ContourImage.DisplayProcessedImage = RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_IMAGE_SUBTRACT_BACKGROUND, true);
+            ContourImage.DisplayProcessedImage = RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_IMAGE_SUBTRACT_BACKGROUND);
         }
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace SWA.Ariadne.Gui
             this.outerInfoPanel.BringToFront();
 
             // Load background images.
-            if (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_BACKGROUND_IMAGES, false))
+            if (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_BACKGROUND_IMAGES))
             {
                 string imageFolder = RegisteredOptions.GetStringSetting(RegisteredOptions.OPT_BACKGROUND_IMAGE_FOLDER);
                 if (imageFolder == "")
@@ -300,8 +300,8 @@ namespace SWA.Ariadne.Gui
 
             #region Try to find a Y coordinate that leaves enough room for an image.
 
-            int imgCount = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_NUMBER, 0);
-            int imgSize = 20 + RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_MAX_SIZE, 400);
+            int imgCount = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_NUMBER);
+            int imgSize = 20 + RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_MAX_SIZE);
 
             for (int i = 0; i < 8; i++)
             {
@@ -371,7 +371,7 @@ namespace SWA.Ariadne.Gui
                 }
 
                 // Irregular maze shapes.
-                if (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_IRREGULAR_MAZES, true) && random.Next(100) < 10)
+                if (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_IRREGULAR_MAZES) && random.Next(100) < 10)
                 {
                     maze.Irregular = true;
                     maze.Irregularity = 80;
@@ -399,7 +399,7 @@ namespace SWA.Ariadne.Gui
             }
 
             // TODO: Get the count from the ImageLoader object.
-            int count = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_NUMBER, 0);
+            int count = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_NUMBER);
             mazeUserControl.PrepareImages(count);
         }
 
@@ -408,7 +408,7 @@ namespace SWA.Ariadne.Gui
         /// </summary>
         private bool AddEmbeddedMaze()
         {
-            int percentage = (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_MULTIPLE_MAZES, true) ? 15 : 0);
+            int percentage = (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_MULTIPLE_MAZES) ? 15 : 0);
             if (random.Next(100) < percentage)
             {
                 OutlineShape shape = null;
@@ -447,7 +447,7 @@ namespace SWA.Ariadne.Gui
         /// </summary>
         private bool AddOutlineShape()
         {
-            int percentage = (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_OUTLINE_SHAPES, true) ? 80 : 0);
+            int percentage = (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_OUTLINE_SHAPES) ? 80 : 0);
             if (random.Next(100) < percentage)
             {
                 OutlineShape shape = RandomShape(0.3, 0.7);
