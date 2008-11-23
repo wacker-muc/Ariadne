@@ -369,7 +369,7 @@ namespace SWA.Ariadne.Ctrl
                     mazePainter.DrawRemainingSquares();
                 }
 
-                if (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_LOG_SOLVER_STATISTICS, false))
+                if (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_LOG_SOLVER_STATISTICS))
                 {
                     LogSolverStatistics();
                 }
