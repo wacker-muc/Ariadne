@@ -501,9 +501,7 @@ namespace SWA.Ariadne.Ctrl
 
         private void LogSolverStatistics()
         {
-            string logFileName = "AriadneSolvers.log";
-            string appDir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName);
-            string logFilePath = Path.Combine(appDir, logFileName);
+            string logFilePath = SolverLogPath();
             bool logFileExists = File.Exists(logFilePath);
             StreamWriter logFile = new StreamWriter(logFilePath, true);
             
@@ -526,6 +524,14 @@ namespace SWA.Ariadne.Ctrl
             double value = (double)(steps - minSteps) / (double)(maxSteps - minSteps);
             logFile.WriteLine("{0}: {1} / [{2}..{3}] = {4:0.000}", this.StrategyName, steps, minSteps, maxSteps, value);
             logFile.Close();
+        }
+
+        public static string SolverLogPath()
+        {
+            string logFileName = "AriadneSolvers.log";
+            string appDir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName);
+            string logFilePath = Path.Combine(appDir, logFileName);
+            return logFilePath;
         }
 
         #endregion
