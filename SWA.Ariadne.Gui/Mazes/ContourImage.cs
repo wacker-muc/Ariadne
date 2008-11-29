@@ -600,7 +600,7 @@ namespace SWA.Ariadne.Gui.Mazes
                 this.template = new Bitmap(template);
             }
 
-            float share = GuessBackgroundColor(fuzziness);
+            float share = (DisplayProcessedImage ? GuessBackgroundColor(fuzziness) : 0.0F);
 
             if (share < 0.8F)
             {
