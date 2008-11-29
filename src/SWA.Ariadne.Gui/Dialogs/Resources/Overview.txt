@@ -37,7 +37,7 @@ A plain maze fills the whole area.  However, some regions may be reserved for ad
 
 [Option:] You can specify a folder from which the Screen Saver chooses one or more images (JPG, PNG, GIF) that will be displayed.
 
-[Option] You can select if a background image (from the same or a different image folder) is drawn below the maze.  Even then, only 20% of the mazes will have a background image.
+[Option] You can select if a background image (from the same or a different image folder) is drawn behind the maze.  Even then, only 20% of the mazes will have a background image (unless the number of foreground images is 0).
 
 [Option:] You can select whether the Screen Saver displays a small panel showing the maze dimension, solver name and run-time statistics.
 
