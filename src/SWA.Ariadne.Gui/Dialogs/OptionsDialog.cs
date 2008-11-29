@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using Microsoft.Win32;
+using SWA.Ariadne.Ctrl;
 using SWA.Ariadne.Settings;
 
 namespace SWA.Ariadne.Gui.Dialogs
@@ -15,6 +16,7 @@ namespace SWA.Ariadne.Gui.Dialogs
         public OptionsDialog()
         {
             InitializeComponent();
+            InitializeToolTip();
 
             #region Adjust horizontal alignment of the controls.
 
@@ -24,11 +26,119 @@ namespace SWA.Ariadne.Gui.Dialogs
             #endregion
         }
 
+        /// <summary>
+        /// Add a tool tip text to all controls.
+        /// </summary>
+        private void InitializeToolTip()
+        {
+            #region General
+
+            toolTip.SetToolTip(checkBoxDetailsBox, string.Join("\n", new string[] {
+                "If selected, the screen saver will display a window ",
+                "with information on the current maze solver and ",
+                "run-time statistics."}));
+            toolTip.SetToolTip(checkBoxBlinking, string.Join("\n", new string[] {
+                "If selected, the end point of the solution path is ",
+                "displayed as a blinking square."}));
+            toolTip.SetToolTip(checkBoxEfficientSolvers, string.Join("\n", new string[] {
+                "If selected, the maze solver strategies may detect ",
+                "areas (dead ends) that are completely surrounded ",
+                "and will not lead to the target square."}));
+            toolTip.SetToolTip(textBoxStepsPerSecond, string.Join("\n", new string[] {
+                "Speed of the solver algorithm. Reasonable values are ",
+                "50 (very slow) to 800 (very fast)."}));
+            toolTip.SetToolTip(checkBoxLogSolverStatistics, string.Join("\n", new string[] {
+                "If selected, for each solver run one line of run-time ",
+                "statistics is written to a log file in the application ",
+                "directory:",
+                SolverController.SolverLogPath()}));
+
+            toolTip.SetToolTip(labelStepsPerSecond, toolTip.GetToolTip(textBoxStepsPerSecond));
+
+            #endregion
+
+            #region Images
+
+            toolTip.SetToolTip(imageNumberNumericUpDown, string.Join("\n", new string[] {
+                "Number of (foreground) images that should be displayed ",
+                "in the screen saver (provided there is enough room)."}));
+            toolTip.SetToolTip(imageMinSizeNumericUpDown, string.Join("\n", new string[] {
+                "When an image needs to be reduced in size (because ",
+                "it is larger than " + labelImagesMaxSize.Text + "), this is the minimum size it ",
+                "will be scaled to.",
+                "Note: The images will not be enlarged, even if they ",
+                "are smaller than " + labelImagesMinSize.Text + "."}));
+            toolTip.SetToolTip(imageMaxSizeNumericUpDown, string.Join("\n", new string[] {
+                "Images that are larger than " + labelImagesMaxSize.Text + " (in width or ",
+                "height) will be reduced in size."}));
+            toolTip.SetToolTip(imageFolderTextBox, string.Join("\n", new string[] {
+                "Path to a directory with images (JPG, PNG, GIF) that ",
+                "will be displayed in the screen saver. Images will ",
+                "also be searched in all subdirectories."}));
+
+            toolTip.SetToolTip(labelImagesNumber, toolTip.GetToolTip(imageNumberNumericUpDown));
+            toolTip.SetToolTip(labelImagesMinSize, toolTip.GetToolTip(imageMinSizeNumericUpDown));
+            toolTip.SetToolTip(labelImagesMaxSize, toolTip.GetToolTip(imageMaxSizeNumericUpDown));
+            toolTip.SetToolTip(selectImageFolderButton, toolTip.GetToolTip(imageFolderTextBox));
+
+            #endregion
+
+            #region Background
+
+            toolTip.SetToolTip(checkBoxBackgroundImage, string.Join("\n", new string[] {
+                "If selected, a background image will be displayed ",
+                "behind the maze.  The image is initially hidden and ",
+                "slowly uncovered as the solver passes over it."}));
+            toolTip.SetToolTip(checkBoxDifferentBackgroundImageFolder, string.Join("\n", new string[] {
+                "When selected, you may choose a background image folder. ",
+                "Otherwise, background and foreground images are ",
+                "selected from the same folder."}));
+            toolTip.SetToolTip(backgroundImageFolderTextBox, string.Join("\n", new string[] {
+                "Path to a directory (including its subdirectories) ",
+                "with images (JPG, PNG, GIF) that will be displayed ",
+                "as screen saver background images."}));
+            toolTip.SetToolTip(subtractImagesBackgroundCheckBox, string.Join("\n", new string[] {
+                "If selected and an image has a uniformly colored ",
+                "background (e.g. all white or all black), the area ",
+                "that this image covers on the maze is reduced to ",
+                "an outline shape."}));
+
+            toolTip.SetToolTip(selectBackgroundImageFolderButton, toolTip.GetToolTip(backgroundImageFolderTextBox));
+
+            #endregion
+
+            #region Extras
+
+            toolTip.SetToolTip(checkBoxPaintAllWalls, string.Join("\n", new string[] {
+                "If selected, the screen saver will always paint a complete ",
+                "maze. Otherwise, it may also paint walls only along the ",
+                "examined path or paint no walls at all (which provides ",
+                "for a larger number of squares)."}));
+            toolTip.SetToolTip(checkBoxOutlineShapes, string.Join("\n", new string[] {
+                "If selected, certain continuous walls may be built ",
+                "around the outline of natural or geometrical shapes. ",
+                "Some shapes are easily recognizable and others are not."}));
+            toolTip.SetToolTip(checkBoxIrregularMazes, string.Join("\n", new string[] {
+                "If selected, the maze paths may follow certain ",
+                "preferred patterns. Otherwise, all mazes are ",
+                "uniformly random."}));
+            toolTip.SetToolTip(checkBoxMultipleMazes, string.Join("\n", new string[] {
+                "If selected, an outline shape (see above) may ",
+                "contain a second separate maze that is solved ",
+                "independently of the main maze."}));
+
+            #endregion
+        }
+
         private void OptionsDialog_Load(object sender, EventArgs e)
         {
             #region Set the copyright text.
 
-            labelCopyright.Text = AboutBox.AssemblyCopyright + ", " + AboutBox.AssemblyVersion;
+            try // If running in a UnitTest environment, there will be no usable assembly info.
+            {
+                labelCopyright.Text = AboutBox.AssemblyCopyright + ", " + AboutBox.AssemblyVersion;
+            }
+            catch (NullReferenceException) { }
 
             // Remove the text before the copyright sign: "Copyright "
             int p = Math.Max(labelCopyright.Text.IndexOf('©'),

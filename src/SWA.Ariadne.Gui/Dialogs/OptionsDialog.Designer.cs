@@ -28,11 +28,14 @@ namespace SWA.Ariadne.Gui.Dialogs
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OptionsDialog));
             this.buttonOK = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.labelCopyright = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPageGeneral = new System.Windows.Forms.TabPage();
+            this.checkBoxLogSolverStatistics = new System.Windows.Forms.CheckBox();
             this.checkBoxEfficientSolvers = new System.Windows.Forms.CheckBox();
             this.textBoxStepsPerSecond = new System.Windows.Forms.TextBox();
             this.labelStepsPerSecond = new System.Windows.Forms.Label();
@@ -59,7 +62,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.checkBoxIrregularMazes = new System.Windows.Forms.CheckBox();
             this.checkBoxOutlineShapes = new System.Windows.Forms.CheckBox();
             this.imageFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.checkBoxLogSolverStatistics = new System.Windows.Forms.CheckBox();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.tabControl1.SuspendLayout();
             this.tabPageGeneral.SuspendLayout();
             this.tabPageImages.SuspendLayout();
@@ -136,6 +139,19 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.tabPageGeneral.TabIndex = 0;
             this.tabPageGeneral.Text = "General";
             this.tabPageGeneral.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxLogSolverStatistics
+            // 
+            this.checkBoxLogSolverStatistics.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBoxLogSolverStatistics.AutoSize = true;
+            this.checkBoxLogSolverStatistics.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.checkBoxLogSolverStatistics.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.checkBoxLogSolverStatistics.Location = new System.Drawing.Point(45, 103);
+            this.checkBoxLogSolverStatistics.Name = "checkBoxLogSolverStatistics";
+            this.checkBoxLogSolverStatistics.Size = new System.Drawing.Size(122, 17);
+            this.checkBoxLogSolverStatistics.TabIndex = 5;
+            this.checkBoxLogSolverStatistics.Text = "Log Solver Statistics";
+            this.checkBoxLogSolverStatistics.UseVisualStyleBackColor = true;
             // 
             // checkBoxEfficientSolvers
             // 
@@ -475,18 +491,14 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.checkBoxOutlineShapes.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.checkBoxOutlineShapes.UseVisualStyleBackColor = true;
             // 
-            // checkBoxLogSolverStatistics
+            // toolTip
             // 
-            this.checkBoxLogSolverStatistics.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.checkBoxLogSolverStatistics.AutoSize = true;
-            this.checkBoxLogSolverStatistics.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.checkBoxLogSolverStatistics.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.checkBoxLogSolverStatistics.Location = new System.Drawing.Point(45, 103);
-            this.checkBoxLogSolverStatistics.Name = "checkBoxLogSolverStatistics";
-            this.checkBoxLogSolverStatistics.Size = new System.Drawing.Size(122, 17);
-            this.checkBoxLogSolverStatistics.TabIndex = 5;
-            this.checkBoxLogSolverStatistics.Text = "Log Solver Statistics";
-            this.checkBoxLogSolverStatistics.UseVisualStyleBackColor = true;
+            this.toolTip.AutoPopDelay = 20000;
+            this.toolTip.InitialDelay = 500;
+            this.toolTip.IsBalloon = true;
+            this.toolTip.ReshowDelay = 100;
+            this.toolTip.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            this.toolTip.ToolTipTitle = "Ariadne Screen Saver Settings";
             // 
             // OptionsDialog
             // 
@@ -554,6 +566,7 @@ namespace SWA.Ariadne.Gui.Dialogs
         private System.Windows.Forms.CheckBox checkBoxBackgroundImage;
         private System.Windows.Forms.CheckBox checkBoxDifferentBackgroundImageFolder;
         private System.Windows.Forms.CheckBox checkBoxLogSolverStatistics;
+        private System.Windows.Forms.ToolTip toolTip;
 
     }
 }

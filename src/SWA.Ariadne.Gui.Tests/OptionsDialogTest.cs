@@ -53,7 +53,7 @@ namespace SWA.Ariadne.Gui.Tests
         [TestMethod()]
         public void OD_ConstructorTest_01()
         {
-            string testObject = "SWA.Ariadne.Gui.OptionsDialog.OptionsDialog";
+            string testObject = "OptionsDialog";
 
             OptionsDialog target = new OptionsDialog();
             SWA_Ariadne_Gui_OptionsDialogAccessor accessor = new SWA_Ariadne_Gui_OptionsDialogAccessor(target);
@@ -83,6 +83,22 @@ namespace SWA.Ariadne.Gui.Tests
         private static void AssertEqualRightAlignment(string testObject, Control ctrl1, Control ctrl2)
         {
             Assert.AreEqual(ctrl1.Right, ctrl2.Right, testObject + ": right alignment of " + ctrl1.Name + " and " + ctrl2.Name);
+        }
+
+        /// <summary>
+        /// A test for OptionsDialog ().
+        /// This can be used to debug the OptionsDialog functionality.
+        ///</summary>
+        [DeploymentItem("SWA.Ariadne.Gui.dll")]
+        [TestMethod()]
+        public void OD_ManualTest_01()
+        {
+            string testObject = "OptionsDialog";
+
+            OptionsDialog target = new OptionsDialog();
+            DialogResult result = target.ShowDialog();
+
+            Assert.AreEqual(DialogResult.OK, result, testObject);
         }
 
         #endregion
