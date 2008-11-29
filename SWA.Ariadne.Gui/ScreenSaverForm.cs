@@ -127,7 +127,8 @@ namespace SWA.Ariadne.Gui
                 {
                     imageFolder = RegisteredOptions.GetStringSetting(RegisteredOptions.OPT_IMAGE_FOLDER);
                 }
-                this.mazeUserControl.MazePainter.CreateBackgroundImageLoader(imageFolder, 20);
+                int percentage = ((RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_NUMBER) > 0) ? 20 : 100);
+                this.mazeUserControl.MazePainter.CreateBackgroundImageLoader(imageFolder, percentage);
             }
 
             this.OnNew(null, null);
