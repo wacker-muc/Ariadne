@@ -206,7 +206,6 @@ namespace SWA.Ariadne.Gui
             }
 
             StringBuilder filename = new StringBuilder(200);
-            // TODO: path to directory
             filename.Append("Ariadne_");
             filename.Append(MazeControlProperties.Code.Replace(".", ""));
             filename.Append("_" + mazeWidth.ToString() + "x" + mazeHeigth.ToString());
@@ -229,7 +228,8 @@ namespace SWA.Ariadne.Gui
             }
             filename.Append(".png");
 
-            img.Save(filename.ToString(), imgFormat);
+            string imgPath = System.IO.Path.Combine(CreateScreenshotsDirectory(), filename.ToString());
+            img.Save(imgPath, imgFormat);
         }
 
         #endregion
@@ -623,6 +623,13 @@ namespace SWA.Ariadne.Gui
         {
             // Subclasses may add an implementation.
             return null;
+        }
+
+        private static string CreateScreenshotsDirectory()
+        {
+            string result = System.IO.Path.Combine(SWA.Utilities.Directory.ApplicationDirectory, "Screenshots");
+            System.IO.Directory.CreateDirectory(result);
+            return result;
         }
 
         #endregion

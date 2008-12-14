@@ -188,7 +188,18 @@ namespace SWA.Ariadne.Gui
 
         private void ScreenSaverForm_KeyDown(object sender, KeyEventArgs e)
         {
-            Close();
+            switch (e.KeyCode)
+            {
+                case Keys.P: // Pause
+                case Keys.S: // Save Image
+                    // These keys will be handled in the AriadneFormBase.OnKeyPress() method.
+                    break;
+                
+                default:
+                    Close();
+                    e.Handled = true;
+                    break;
+            }
         }
 
         private void ScreenSaverForm_MouseDown(object sender, MouseEventArgs e)

@@ -529,7 +529,7 @@ namespace SWA.Ariadne.Ctrl
         public static string SolverLogPath()
         {
             string logFileName = "AriadneSolvers.log";
-            string appDir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName);
+            string appDir = SWA.Utilities.Directory.ApplicationDirectory;
             string logFilePath = Path.Combine(appDir, logFileName);
             return logFilePath;
         }

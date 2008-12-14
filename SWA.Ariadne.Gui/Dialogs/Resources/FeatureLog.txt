@@ -11,10 +11,13 @@ Copyright (c) Stephan.Wacker@web.de, 2008
 Version 3.3
 
  * Screen Saver control: during the first few seconds, the screen saver will exit upon mouse movement
+ * Screen Saver control: the keystroke "P" will pause and resume the solver
+ * Screen Saver control: the keystroke "S" will take a screenshot
  * Screen Saver option: display a background image that is uncovered when squares are visited
  * Screen Saver option: write runtime statistics to a log file
  * Outline Shapes: new variant of MazeOutlineShape: represent underlying maze's walls and paths with the same width
  * Strategies: OpposedBacktracker, OpposedFlooder
+ * Strategies: RandomForwardFlooder, RandomBackwardFlooder
 
 -----------------------------------------------------------------------
 
