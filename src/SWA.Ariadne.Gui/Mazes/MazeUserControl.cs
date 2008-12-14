@@ -106,6 +106,34 @@ namespace SWA.Ariadne.Gui.Mazes
         }
         IMazeForm mazeForm;
 
+        #region Saved properties of the previous maze
+
+        // When the current maze is solved and an alternate buffer has been prepared,
+        // we need to remember the former maze properties for saving the currently displayed screen.
+
+        /// <summary>
+        /// If an alternate buffer exists:
+        /// Holds the previous maze's Code property.
+        /// </summary>
+        private string solvedScreenshotMazeCode;
+        
+        /// <summary>
+        /// If an alternate buffer exists:
+        /// Holds the previous maze's XSize and YSize properties.
+        /// </summary>
+
+        private Size solvedScreenshotMazeDimensions;
+        /// <summary>
+        /// If an alternate buffer exists:
+        /// X = xOffset,
+        /// Y = yOffset,
+        /// Width = gridWidth,
+        /// Height = wallWidth
+        /// </summary>
+        private Rectangle solvedScreenshotControlDimensions;
+
+        #endregion
+
         #endregion
 
         #region Constructor and Initialization
@@ -184,7 +212,15 @@ namespace SWA.Ariadne.Gui.Mazes
 
             // Prevent updates of the caption or status line caused by the prepared alternate maze.
             this.allowUpdates = false;
-            
+
+            #region Remember current maze attributes, if a screen shot should be requested.
+
+            this.solvedScreenshotMazeCode = Code;
+            this.solvedScreenshotMazeDimensions = new Size(XSize, YSize);
+            this.solvedScreenshotControlDimensions = new Rectangle(xOffset, yOffset, gridWidth, wallWidth);
+
+            #endregion
+
             this.Setup();
             painter.PrepareAlternateBuffer(this.PaintImages);
             
@@ -380,6 +416,25 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <returns></returns>
         public Image GetImage()
         {
+            // The relevant dimensions should represent what is currently displayed,
+            // not what has been prepared for the next run.
+            //
+            int xOffset, yOffset, gridWidth, wallWidth;
+            if (this.painter.HasBufferAlternate)
+            {
+                xOffset = solvedScreenshotControlDimensions.X;
+                yOffset = solvedScreenshotControlDimensions.Y;
+                gridWidth = solvedScreenshotControlDimensions.Width;
+                wallWidth = solvedScreenshotControlDimensions.Height;
+            }
+            else
+            {
+                xOffset = this.xOffset;
+                yOffset = this.yOffset;
+                gridWidth = this.gridWidth;
+                wallWidth = this.wallWidth;
+            }
+
             int margin = 4;
             margin = Math.Max(margin, wallWidth + 2);
             margin = Math.Max(margin, gridWidth / 2);
@@ -389,6 +444,14 @@ namespace SWA.Ariadne.Gui.Mazes
             Point clientUpperLeft = new Point(xOffset - wallWidth / 2 - 1, yOffset - wallWidth / 2 - 1);
             Size clientSize = new Size(XSize * gridWidth + wallWidth + 2, YSize * gridWidth + wallWidth + 2);
             Size imgSize = new Size(clientSize.Width + 2 * (margin - 1), clientSize.Height + 2 * (margin - 1));
+
+            Size screenSize = Screen.PrimaryScreen.Bounds.Size;
+            //if (imgSize.Width >= screenSize.Width && imgSize.Height >= screenSize.Height)
+            if (this.Width == screenSize.Width && this.Height == screenSize.Height)
+            {
+                clientUpperLeft.X = clientUpperLeft.Y = margin = 0;
+                imgSize = clientSize = screenSize;
+            }
 
             // Create a fitting Bitmap image.
             System.Drawing.Imaging.PixelFormat pxlFormat = System.Drawing.Imaging.PixelFormat.Format16bppRgb555;
@@ -769,19 +832,43 @@ namespace SWA.Ariadne.Gui.Mazes
 
         #region IMazeControl implementation
 
+        /// <summary>
+        /// Gets the XSize of the currently displayed Maze.
+        /// </summary>
         public int XSize
         {
-            get { return (Maze == null ? -1 : Maze.XSize); }
+            get
+            {
+                return (Maze == null ? -1 :
+                    painter != null && painter.HasBufferAlternate ? solvedScreenshotMazeDimensions.Width :
+                    Maze.XSize);
+            }
         }
 
+        /// <summary>
+        /// Gets the YSize of the currently displayed Maze.
+        /// </summary>
         public int YSize
         {
-            get { return (Maze == null ? -1 : Maze.YSize); }
+            get
+            {
+                return (Maze == null ? -1 :
+                    painter != null && painter.HasBufferAlternate ? solvedScreenshotMazeDimensions.Height :
+                    Maze.YSize);
+            }
         }
 
+        /// <summary>
+        /// Gets the Code of the currently displayed Maze.
+        /// </summary>
         public string Code
         {
-            get { return (Maze == null ? "---" : Maze.Code); }
+            get
+            {
+                return (Maze == null ? "---" :
+                    painter != null && painter.HasBufferAlternate ? solvedScreenshotMazeCode :
+                    Maze.Code);
+            }
         }
 
         #endregion

@@ -268,8 +268,16 @@ namespace SWA.Ariadne.Gui.Mazes
         /// </summary>
         private BufferedGraphics gBufferAlternate;
 
-        // TODO: try to remove these properties
+        // TODO: try to remove the HasBuffer... properties
+
+        /// <summary>
+        /// Returns true if a BufferedGraphics object is used for all painting.
+        /// </summary>
         public bool HasBuffer { get { return (gBuffer != null); } }
+
+        /// <summary>
+        /// Returns true if an alternate buffer has been prepared but not yet displayed.
+        /// </summary>
         public bool HasBufferAlternate { get { return (gBufferAlternate != null); } }
 
         /// <summary>

@@ -24,5 +24,17 @@ namespace SWA.Utilities
 
             return result;
         }
+
+        /// <summary>
+        /// Returns the full path to the application directory.
+        /// </summary>
+        /// <returns></returns>
+        public static string ApplicationDirectory
+        {
+            get
+            {
+                return Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName);
+            }
+        }
     }
 }

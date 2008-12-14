@@ -8,9 +8,26 @@ Copyright (c) Stephan.Wacker@web.de, 2008
 
 -----------------------------------------------------------------------
 
-The Ariadne application builds and solves a variety of maze puzzles.  a) When running as a regular application (Ariadne.exe), you can control the maze layout, its shape, additional content etc. via a "Details" panel.  b) The Ariadne.scr file can be installed as a screen saver.  Use the Screen Saver "Settings" panel to configure the options of your screen saver (see the "[Option:]" tags below).
+The Ariadne application builds and solves a variety of maze puzzles.  a) When running as a regular application (Ariadne.exe), you can control the maze layout, its shape, additional content etc. via a "Details" panel.  b) The Ariadne.scr file can be installed as a screen saver.
 
 [Ariadne: Figure from Greek mythology.  Ariadne helped Theseus escape from the maze where the Minotaurus was held.]
+
+-----------------------------------------------------------------------
+
+    Screen Saver Configuration and Control
+    ======================================
+
+Use the Screen Saver "Settings" panel to configure the options of your screen saver (see the "[Option:]" tags below).
+
+The Screen Saver accepts a few keystroke commands:
+
+   * P = Pause / Resume
+   * S = Save a screen shot
+      * image files are put into a subdirectory "Screenshots" of the directory where the screen saver is installed
+
+All other keystrokes and mouse buttons will terminate the screen saver.
+
+-----------------------------------------------------------------------
 
 There are several components for specific responsibilities and most of them have many optional features.
 
@@ -161,7 +178,7 @@ Walkers have no memory of visited squares; they decide solely on their current p
 
 The visited paths are painted in two colors: Forward steps are painted in a bright color, backward steps and areas completely covered by a flooder are painted in a dull color.  Two colors with clearly different hue are selected.  When the solution path is found, it is painted in a brighter variant of the forward color.
 
-[Variants:] There are 19 "normal" maze solver strategies:
+[Variants:] There are 21 "normal" maze solver strategies:
 
    * RandomBacktracker:  The classical backtracker algorithm; it walks forward as long as possible, making random choices at a fork.  When there is no continuation, it walks back to the latest fork and chooses another path that has not yet been visited (this is called "backtracking").
    * ProximityBacktracker: Another backtracker; at a fork, this one prefers the square that is nearest to the target square (measuring the geometric distance).
@@ -179,6 +196,8 @@ The visited paths are painted in two colors: Forward steps are painted in a brig
    * CornerFlooder: This flooder chooses the path farthest away from the center of the maze.
    * ForwardFlooder: This flooder checks all continuations on the open paths and chooses the one with the greatest (relative) distance gain: It chooses the path for which d'/d is minimal, where d is the distance of the current square (on that path) from the target square and d' is the distance of the next square on the same path.
    * BackwardFlooder: This flooder works essentially like the ForwardFlooder, but it chooses the path continuation with maximal d'/d ratio.
+   * RandomForwardFlooder: This variant of the ForwardFlooder may also choose a path other than the best one.  The "bad" path is chosen in one out ouf eight steps.
+   * RandomBackwardFlooder: This variant of the BackwardFlooder may also choose a path other than the best one.  The "bad" path is chosen in one out ouf eight steps.
    * ThickestBranchFlooder: This flooder is based on the maze's tree structure.  Starting with a trunk of thickness 1 and length 0, every step increases the path length by 1 and every fork divides the thickness by the number of branches.  Among the currently thickest branches, the longest one is chosen.
    * ThinnestBranchFlooder: This flooder works like the ThickestBranchFlooder with inverted logic: Among the thinnest branches, the shortest one is chosen.
    * SpreadingFlooder: This flooder selects one of the two path ends closest to each other.
@@ -208,6 +227,8 @@ The ThickestBranchFlooder advances on a chosen branch in one run up to the next 
 
 ForwardFlooder and BackwardFlooder tend to fill the whole maze, just like a HesitatingFlooder.  That is because both solvers assign highest penalties to undesired steps near the target square: the BackwardFlooder assigns an extreme penalty (100%) to the last step onto the target square; the ForwardFlooder assigns very high penalties to backward steps close to the target.  In that situation, both solvers will visit the whole rest of the maze before doing the one highly penalized required step.
 
+RandomForwardFlooder and RandomBackwardFlooder are able to overcome these problematic situations because their choice is not fixed.  Sometimes they may choose the path with higher penalties and thus make the necessary but locally unfavorable step.
+
 In the SpreadingFlooder, the pair of paths closest to each other advances in parallel.  When one path is split or gets closer to a different path, it forms a new partnership with the other closer partner.
 
 Efficient solvers often run for long stretches without error (i.e. without leaving the correct solution path), especially towards the end.  It is not unlikely that such a run spans more than half or two thirds of the solution path.  Even perfect runs without any error at all can be observed.  Considering that an average path may have several dozens or even hundreds of forks, this is quite amazing.
@@ -225,12 +246,12 @@ Efficient solvers often run for long stretches without error (i.e. without leavi
       * [4] Apply two mixed irregular patterns or apply the pattern to part of the maze only.
    * [72] Build a continuous wall around an outline shape.
    * [24] Build a second embedded maze inside the outline shape.
-   * [19] Different solver strategies.
+   * [21] Different solver strategies.
    * [2] Let an efficient solver detect dead end areas.
    
 That gives a very large number of pattern or style combinations:
 
-    3 x (1 + 27x4) x (1+72+24) x 19 x 2  =  1,205,322
+    3 x (1 + 27x4) x (1+72+24) x 21 x 2  =  1,332,198
 
 The exact application of each variant is usually (with a few deterministic exceptions) influenced by random parameter values:  Outline shapes are generated dynamically, solvers choose arbitrary paths and the maze builder generates random patterns of walls.
 
