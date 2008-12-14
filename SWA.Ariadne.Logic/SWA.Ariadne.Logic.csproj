@@ -57,6 +57,7 @@
     <Compile Include="ProximityFlooder.cs" />
     <Compile Include="RandomBacktracker.cs" />
     <Compile Include="RandomFlooder.cs" />
+    <Compile Include="RandomGuidedFlooders.cs" />
     <Compile Include="RandomWalker.cs" />
     <Compile Include="RightHandWalker.cs" />
     <Compile Include="RoundRobinFlooder.cs" />

@@ -25,38 +25,27 @@ namespace SWA.Ariadne.Logic
         #region Runtime methods
 
         /// <summary>
-        /// Select an index within the flooder's list of open paths.
+        /// Returns the value of a given currently open path.
+        /// This value should be minimized.
         /// </summary>
+        /// <param name="i"></param>
         /// <returns></returns>
-        protected override int SelectPathIdx()
+        protected override double PathValue(int i)
         {
-            int bestIdx = 0;
-            double bestDistanceGain = double.MaxValue;
-
-            // Find the pair of squares with the highest (relative) distance gain.
-            for (int i = 0; i < list.Count; i++)
+            MazeSquare sq1 = list[i];
+            List<WallPosition> openWalls = OpenWalls(sq1, true);
+            if (openWalls.Count == 0)
             {
-                MazeSquare sq1 = list[i];
-                List<WallPosition> openWalls = OpenWalls(sq1, true);
-                if (openWalls.Count == 0)
-                {
-                    // Immediately report any dead branch.  Otherwise they would never be detected.
-                    return i;
-                }
-                WallPosition wp = SelectDirection(sq1, openWalls);
-                MazeSquare sq2 = sq1.NeighborSquare(wp);
-
-                double d1 = Maze.Distance(referenceSquare, sq1);
-                double d2 = Maze.Distance(referenceSquare, sq2);
-                double distanceGain = distanceSign * ((d2 - d1) / d1);
-                if (distanceGain < bestDistanceGain)
-                {
-                    bestIdx = i;
-                    bestDistanceGain = distanceGain;
-                }
+                // Immediately report any dead branch.  Otherwise they would never be detected.
+                return double.MinValue;
             }
+            WallPosition wp = SelectDirection(sq1, openWalls);
+            MazeSquare sq2 = sq1.NeighborSquare(wp);
 
-            return bestIdx;
+            double d1 = Maze.Distance(referenceSquare, sq1);
+            double d2 = Maze.Distance(referenceSquare, sq2);
+            double distanceGain = distanceSign * ((d2 - d1) / d1);
+            return distanceGain;
         }
 
         #endregion
