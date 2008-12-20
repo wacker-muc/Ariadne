@@ -18,6 +18,15 @@ namespace SWA.Ariadne.Gui
 
         private bool fullScreenMode = true;
 
+        private enum CaptionInfoEnum : int
+        {
+            Default = 0,
+            ImagePath,
+            Count
+        }
+        private CaptionInfoEnum captionInfoItem;
+        private int captionInfoImageNumber;
+
         /// <summary>
         /// During the first few seconds after the screen saver has been loaded,
         /// a MouseMove event will cause an application exit.
@@ -170,6 +179,9 @@ namespace SWA.Ariadne.Gui
                 PreparePlaceholderControls();
             }
 
+            // Reset the displayed caption info.
+            this.captionInfoItem = 0;
+
             // Build and display the new maze.
             base.OnNew(sender, e);
 
@@ -195,6 +207,19 @@ namespace SWA.Ariadne.Gui
                     // These keys will be handled in the AriadneFormBase.OnKeyPress() method.
                     break;
                 
+                case Keys.I:
+                    if (captionInfoItem == CaptionInfoEnum.ImagePath && captionInfoImageNumber + 1 < mazeUserControl.ImageCount)
+                    {
+                        captionInfoImageNumber++;
+                    }
+                    else
+                    {
+                        captionInfoImageNumber = 0;
+                        captionInfoItem = (CaptionInfoEnum)((int)(captionInfoItem + 1) % (int)CaptionInfoEnum.Count);
+                    }
+                    UpdateCaption();
+                    break;
+
                 default:
                     Close();
                     e.Handled = true;
@@ -522,10 +547,30 @@ namespace SWA.Ariadne.Gui
             {
                 StringBuilder caption = new StringBuilder(80);
 
-                FillCaption(caption);
+                switch (this.captionInfoItem)
+                {
+                    default:
+                    case CaptionInfoEnum.Default:
+                        FillCaption(caption);
 
-                caption.Append(" - ");
-                caption.Append(System.DateTime.Now.ToString("t"));
+                        caption.Append(" - ");
+                        caption.Append(System.DateTime.Now.ToString("t"));
+                        break;
+
+                    case CaptionInfoEnum.ImagePath:
+                        string imagePath = this.mazeUserControl.GetImagePath(this.captionInfoImageNumber);
+                        int maxLength = 72;
+                        if (imagePath.Length > maxLength + 2)
+                        {
+                            caption.Append("...");
+                            caption.Append(imagePath.Substring(imagePath.Length - maxLength));
+                        }
+                        else
+                        {
+                            caption.Append(imagePath);
+                        }
+                        break;
+                }
 
                 this.infoLabelCaption.Text = caption.ToString();
             }
