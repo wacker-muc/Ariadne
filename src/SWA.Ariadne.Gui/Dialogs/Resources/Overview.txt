@@ -196,8 +196,8 @@ The visited paths are painted in two colors: Forward steps are painted in a brig
    * CornerFlooder: This flooder chooses the path farthest away from the center of the maze.
    * ForwardFlooder: This flooder checks all continuations on the open paths and chooses the one with the greatest (relative) distance gain: It chooses the path for which d'/d is minimal, where d is the distance of the current square (on that path) from the target square and d' is the distance of the next square on the same path.
    * BackwardFlooder: This flooder works essentially like the ForwardFlooder, but it chooses the path continuation with maximal d'/d ratio.
-   * RandomForwardFlooder: This variant of the ForwardFlooder may also choose a path other than the best one.  The "bad" path is chosen in one out ouf eight steps.
-   * RandomBackwardFlooder: This variant of the BackwardFlooder may also choose a path other than the best one.  The "bad" path is chosen in one out ouf eight steps.
+   * RandomForwardFlooder: This variant of the ForwardFlooder may also choose a path other than the best one.  The "bad" path is chosen in one out ouf twenty steps.
+   * RandomBackwardFlooder: This variant of the BackwardFlooder may also choose a path other than the best one.  The "bad" path is chosen in one out ouf twenty steps.
    * ThickestBranchFlooder: This flooder is based on the maze's tree structure.  Starting with a trunk of thickness 1 and length 0, every step increases the path length by 1 and every fork divides the thickness by the number of branches.  Among the currently thickest branches, the longest one is chosen.
    * ThinnestBranchFlooder: This flooder works like the ThickestBranchFlooder with inverted logic: Among the thinnest branches, the shortest one is chosen.
    * SpreadingFlooder: This flooder selects one of the two path ends closest to each other.

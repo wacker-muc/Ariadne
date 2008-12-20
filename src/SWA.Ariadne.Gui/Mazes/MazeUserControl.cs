@@ -78,12 +78,10 @@ namespace SWA.Ariadne.Gui.Mazes
         /// </summary>
         private List<Rectangle> imageLocations = new List<Rectangle>();
 
-#if false
         /// <summary>
-        /// A list of recently used images.  We'll try to avoid using the same images in rapid succession.
+        /// A list of locations (in graphics coordinates) where other controls will be painted.
         /// </summary>
-        private List<string> recentlyUsedImages = new List<string>();
-#endif
+        private List<Rectangle> controlLocations = new List<Rectangle>();
 
         /// <summary>
         /// Returns true when the list of prepared images is not empty.
@@ -232,6 +230,9 @@ namespace SWA.Ariadne.Gui.Mazes
         /// </summary>
         private void CreateMaze()
         {
+            this.imageLocations.Clear();
+            this.controlLocations.Clear();
+
             if (this.MazeForm == null)
             {
                 painter.CreateMaze(null);
@@ -396,14 +397,37 @@ namespace SWA.Ariadne.Gui.Mazes
 
             for (int i = 0; i < images.Count; i++)
             {
-                Region r = images[i].BorderRegion.Clone();
-                r.Translate(imageLocations[i].X, imageLocations[i].Y);
-                g.Clip = r;
-                g.DrawImage(images[i].DisplayedImage, imageLocations[i]);
+                ContourImage img = images[i];
+
+                if (img.HasContour)
+                {
+                    // Set a clipping region around the image.
+                    Region r = img.BorderRegion.Clone();
+                    r.Translate(imageLocations[i].X, imageLocations[i].Y);
+                    g.Clip = r;
+                }
+                else
+                {
+                    // Paint a black border around the image, covering any background images.
+                    Rectangle border = imageLocations[i];
+                    border.Inflate(2, 2);
+                    g.Clip = clip;
+                    g.FillRectangle(Brushes.Black, border);
+                }
+
+                g.DrawImage(img.DisplayedImage, imageLocations[i]);
             }
 
             // Restore previous clip region (infinite).
             g.Clip = clip;
+
+            for (int i = 0; i < controlLocations.Count; i++)
+            {
+                // Paint a black border around the control, covering any background images.
+                Rectangle border = controlLocations[i];
+                border.Inflate(2, 2);
+                g.FillRectangle(Brushes.Black, border);
+            }
         }
 
         #endregion
@@ -445,8 +469,8 @@ namespace SWA.Ariadne.Gui.Mazes
             Size clientSize = new Size(XSize * gridWidth + wallWidth + 2, YSize * gridWidth + wallWidth + 2);
             Size imgSize = new Size(clientSize.Width + 2 * (margin - 1), clientSize.Height + 2 * (margin - 1));
 
+            // In full screen mode, copy exactly the whole screen.
             Size screenSize = Screen.PrimaryScreen.Bounds.Size;
-            //if (imgSize.Width >= screenSize.Width && imgSize.Height >= screenSize.Height)
             if (this.Width == screenSize.Width && this.Height == screenSize.Height)
             {
                 clientUpperLeft.X = clientUpperLeft.Y = margin = 0;
@@ -634,66 +658,6 @@ namespace SWA.Ariadne.Gui.Mazes
 
             this.hasPreparedImages = false;
         }
-
-#if false
-        /// <summary>
-        /// Returns a list of file names in or below the given path.
-        /// Only the following image file types are considered: JPG, GIF, PNG.
-        /// </summary>
-        /// <param name="folderPath"></param>
-        /// <param name="count"></param>
-        /// <param name="quickSearch">when true, only JPG files are considered (if there are at least 100 of them)</param>
-        /// <returns></returns>
-        private List<string> FindImages(string folderPath, int count, bool quickSearch)
-        {
-            if (folderPath == null || count < 1)
-            {
-                return new List<string>();
-            }
-
-            List<string> availableImages = new List<string>();
-
-            availableImages.AddRange(SWA.Utilities.Directory.Find(folderPath, "*.jpg", true));
-
-            if (quickSearch == false || availableImages.Count < 100)
-            {
-                availableImages.AddRange(SWA.Utilities.Directory.Find(folderPath, "*.gif", true));
-                availableImages.AddRange(SWA.Utilities.Directory.Find(folderPath, "*.png", true));
-            }
-
-            List<string> result = new List<string>(count);
-            Random r = Maze.Random;
-
-            // Shorten the list of recently used images.
-            // Make sure the list does not get too short.
-            while (this.recentlyUsedImages.Count > 0
-                && this.recentlyUsedImages.Count > availableImages.Count - count
-                && this.recentlyUsedImages.Count > availableImages.Count * 3 / 4
-                )
-            {
-                // Remove an item near the beginning of the list (recently added items are at the end).
-                this.recentlyUsedImages.RemoveAt(r.Next(this.recentlyUsedImages.Count / 3 + 1));
-            }
-
-            // Select the required number of images.
-            // Avoid recently used images.
-            while (result.Count < count && availableImages.Count > 0)
-            {
-                int p = r.Next(availableImages.Count);
-                string imagePath = availableImages[p];
-
-                if (!recentlyUsedImages.Contains(imagePath))
-                {
-                    result.Add(imagePath);
-                    recentlyUsedImages.Add(imagePath);
-                }
-
-                availableImages.RemoveAt(p);
-            }
-
-            return result;
-        }
-#endif
 
         /// <summary>
         /// Reserves a rectangular area for the given image in this.Maze.
