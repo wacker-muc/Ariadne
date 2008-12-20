@@ -21,9 +21,12 @@ Use the Screen Saver "Settings" panel to configure the options of your screen sa
 
 The Screen Saver accepts a few keystroke commands:
 
-   * P = Pause / Resume
-   * S = Save a screen shot
-      * image files are put into a subdirectory "Screenshots" of the directory where the screen saver is installed
+   * I = Switch information displayed in the details box.
+       * Solver strategy, maze dimension, maze ID, current time.
+       * Image path(s).
+   * P = Pause / Resume the solver.
+   * S = Save a screen shot.
+       * Image files are put into a subdirectory "Screenshots" of the directory where the screen saver is installed.
 
 All other keystrokes and mouse buttons will terminate the screen saver.
 

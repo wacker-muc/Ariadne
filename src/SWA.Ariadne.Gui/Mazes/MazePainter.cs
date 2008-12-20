@@ -1260,11 +1260,6 @@ namespace SWA.Ariadne.Gui.Mazes
                     this.backgroundPainted = new bool[maze.XSize, maze.YSize];
                 };
 
-#if false
-                // TODO...
-                System.Drawing.Imaging.ImageAttributes attr = new System.Drawing.Imaging.ImageAttributes();
-#endif
-
                 Graphics bg = Graphics.FromImage(backgroundImage);
                 bg.DrawImage(img, new Rectangle(x, y, img.Width, img.Height));
             }
@@ -1277,6 +1272,23 @@ namespace SWA.Ariadne.Gui.Mazes
             }
 
             return (backgroundImage != null);
+        }
+
+        /// <summary>
+        /// Returns the file path of the current background image
+        /// or null if no background image is displayed.
+        /// </summary>
+        /// <returns></returns>
+        internal string GetBackgroundImagePath()
+        {
+            if (this.backgroundContourImage != null)
+            {
+                return this.backgroundContourImage.Path;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         /// <summary>

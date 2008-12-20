@@ -310,6 +310,7 @@ namespace SWA.Ariadne.Gui.Mazes
                 
                 // Adjust the control's location
                 coveringControl.Location = new Point(cx, cy);
+                controlLocations.Add(coveringControl.Bounds);
             }
 
             return result;
@@ -690,7 +691,45 @@ namespace SWA.Ariadne.Gui.Mazes
             {
                 return false;
             }
+        }
 
+        /// <summary>
+        /// Returns the number of (foreground and background) images displayed in the maze control.
+        /// </summary>
+        public int ImageCount
+        {
+            get
+            {
+                int result = this.images.Count;
+
+                if (painter.GetBackgroundImagePath() != null)
+                {
+                    result++;
+                }
+                
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// Returns the file path of one of the displayed images.
+        /// </summary>
+        /// <param name="i"></param>
+        /// <returns></returns>
+        public string GetImagePath(int i)
+        {
+            if (i < this.images.Count)
+            {
+                return this.images[i].Path;
+            }
+            else if (i == this.images.Count && painter.GetBackgroundImagePath() != null)
+            {
+                return painter.GetBackgroundImagePath();
+            }
+            else
+            {
+                return "(no image)";
+            }
         }
 
         #endregion
