@@ -145,22 +145,7 @@ namespace SWA.Ariadne.Gui
 
             // Now the first maze has been loaded.
             this.loadingFirstMaze = false;
-
-#if false
-            // Exit immediately when the preparations have been finished.
-            Timer t = new Timer();
-            t.Interval = 10;
-            t.Tick += new EventHandler(OnCloseTimer);
-            t.Start();
-#endif
         }
-
-#if false
-        private void OnCloseTimer(object sender, EventArgs e)
-        {
-            Close();
-        }
-#endif
 
         public override void OnNew(object sender, EventArgs e)
         {
@@ -218,6 +203,7 @@ namespace SWA.Ariadne.Gui
                         captionInfoItem = (CaptionInfoEnum)((int)(captionInfoItem + 1) % (int)CaptionInfoEnum.Count);
                     }
                     UpdateCaption();
+                    e.Handled = true;
                     break;
 
                 default:

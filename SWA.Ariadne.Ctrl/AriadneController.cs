@@ -550,6 +550,14 @@ namespace SWA.Ariadne.Ctrl
             }
         }
 
+        public override string ToString()
+        {
+            return string.Format("{0} AriadneController: {1} steps, {2}",
+                StrategyName,
+                this.CountSteps,
+                this.State.ToString());
+        }
+
         #endregion
     }
 }

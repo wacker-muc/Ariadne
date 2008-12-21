@@ -534,6 +534,14 @@ namespace SWA.Ariadne.Ctrl
             return logFilePath;
         }
 
+        public override string ToString()
+        {
+            return string.Format("{0} SolverController: {1} steps{2}",
+                StrategyName,
+                this.CountSteps,
+                this.IsFinished ? " (finished)" : "");
+        }
+
         #endregion
     }
 }
