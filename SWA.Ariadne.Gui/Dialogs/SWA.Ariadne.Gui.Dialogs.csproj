@@ -116,12 +116,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\ButtonAbout.png" />
     <Content Include="Resources\FeatureLog.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\ImageStephan_64x64.jpg" />
-    <Content Include="Resources\Overview.txt">
+    <Content Include="Resources\Overview.htm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Overview.txt">
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

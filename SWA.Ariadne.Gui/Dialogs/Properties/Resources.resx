@@ -121,10 +121,16 @@
   <data name="ImageStephan_64x64" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ImageStephan_64x64.jpg;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="FeatureLog" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="FeatureLogTxt" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\FeatureLog.txt;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="Overview" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="OverviewTxt" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\overview.txt;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="ButtonAbout" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ButtonAbout.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="OverviewHtml" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\overview.htm;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
 </root>

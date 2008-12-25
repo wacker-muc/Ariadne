@@ -167,6 +167,12 @@ namespace SWA.Ariadne.Gui.Dialogs
             Close();
         }
 
+        private void buttonInfo_Click(object sender, EventArgs e)
+        {
+            Form form = new AboutDetailsForm();
+            form.ShowDialog();
+        }
+
         private void selectImageFolderButton_Click(object sender, EventArgs e)
         {
             // Start at the path found in the registered options.
