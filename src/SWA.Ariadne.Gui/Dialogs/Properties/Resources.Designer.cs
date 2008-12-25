@@ -60,6 +60,13 @@ namespace SWA.Ariadne.Gui.Dialogs.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap ButtonAbout {
+            get {
+                object obj = ResourceManager.GetObject("ButtonAbout", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         /// <summary>
         ///   Looks up a localized string similar to -----------------------------------------------------------------------
         ///
@@ -71,16 +78,15 @@ namespace SWA.Ariadne.Gui.Dialogs.Properties {
         ///
         ///-----------------------------------------------------------------------
         ///
-        ///Version 3.3
+        ///Version 3.3 -- r309 -- 2008-12-21
         ///
-        /// * during the first few seconds, the screen saver will exit upon mouse movement
-        /// * new Option: display a background image that is uncovered when squares are visited
-        ///
-        ///-------------------------------------------------------- [rest of string was truncated]&quot;;.
+        /// * Screen Saver control: during the first few seconds, the screen saver will exit upon mouse movement
+        /// * Screen Saver control: the keystroke &quot;P&quot; will pause and resume the solver
+        /// * Screen Saver control [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string FeatureLog {
+        internal static string FeatureLogTxt {
             get {
-                return ResourceManager.GetString("FeatureLog", resourceCulture);
+                return ResourceManager.GetString("FeatureLogTxt", resourceCulture);
             }
         }
         
@@ -88,6 +94,23 @@ namespace SWA.Ariadne.Gui.Dialogs.Properties {
             get {
                 object obj = ResourceManager.GetObject("ImageStephan_64x64", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0 Transitional//EN&quot;&gt;
+        ///&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;
+        ///&lt;head&gt;
+        ///    &lt;title&gt;Ariadne&lt;/title&gt;
+        ///    &lt;style type=&quot;text/css&quot;&gt;
+        ///        H1,H2,H3,H4 { font-family:Arial,Helvetica,sans-serif; color:#0F177C; text-decoration:none }
+        ///        BODY,P,TABLE,OL,UL,BLOCKQUOTE,DD { font-family:Arial,Helvetica,sans-serif; color:#000000; }
+        ///        DT,SPAN.item { font-family:Arial,Helvetica,sans-serif; font-weight:700; font-size:small; color:#000000; }
+        ///        DD { margin-b [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string OverviewHtml {
+            get {
+                return ResourceManager.GetString("OverviewHtml", resourceCulture);
             }
         }
         
@@ -100,13 +123,15 @@ namespace SWA.Ariadne.Gui.Dialogs.Properties {
         ///
         ///Copyright (c) Stephan.Wacker@web.de, 2008
         ///
+        ///Go to http://www.wacker-muc.de/ for downloading the latest release.
+        ///
         ///-----------------------------------------------------------------------
         ///
-        ///The Ariadne application builds and solves a variety of maze puzzles.  a) When running as a regular application (Ariadne.exe), you can control the maze layout, its shape, additional content etc. via a &quot;Details&quot; panel.  b) The Ariadne.scr file can be  [rest of string was truncated]&quot;;.
+        ///The Ariadne application builds and solves a variety of maze puzzles.  a) When running as a regular application (Ariadne.exe), you can control the maze layout, its shape, addition [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string Overview {
+        internal static string OverviewTxt {
             get {
-                return ResourceManager.GetString("Overview", resourceCulture);
+                return ResourceManager.GetString("OverviewTxt", resourceCulture);
             }
         }
     }

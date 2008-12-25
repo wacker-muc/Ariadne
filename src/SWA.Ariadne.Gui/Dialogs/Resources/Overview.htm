@@ -1,0 +1,565 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Ariadne</title>
+    <style type="text/css">
+        H1,H2,H3,H4 { font-family:Arial,Helvetica,sans-serif; color:#0F177C; text-decoration:none }
+        BODY,P,TABLE,OL,UL,BLOCKQUOTE,DD { font-family:Arial,Helvetica,sans-serif; color:#000000; }
+        DT,SPAN.item { font-family:Arial,Helvetica,sans-serif; font-weight:700; font-size:small; color:#000000; }
+        DD { margin-bottom:8px; }
+        EM { font-weight:700; font-size:small; }
+        A:link { color:#0F177C; text-decoration:underline;}
+        A:visited { color:#0F177C; text-decoration:underline; }
+        A.list:link,A.list:visited { text-decoration:none; }
+
+        DIV.box-right {
+          float:right;
+          margin-left:4px; margin-right:0px;
+          margin-bottom:2px;
+          background-color:#DDDDDD;
+          border-color:#AAAAAA; border-width:1pt; border-style:solid;
+          padding:4pt;
+          font-size:smaller;
+          max-width:66%;
+        }
+
+        SPAN.highlight {
+          color:#0F177C;
+          background-color:#ffff88;
+        }
+    </style>
+</head>
+<body>
+    <h2>
+        Ariadne</h2>
+    <p>
+        Copyright &copy; <a href="mailto:Stephan.Wacker@web.de">Stephan.Wacker@web.de</a>,
+        2008</p>
+    <p>
+        Go to <a target="_blank" href="http://www.wacker-muc.de/">http://www.wacker-muc.de/</a>
+        for downloading the latest release.</p>
+    <hr />
+    <div class="box-right">
+        <p style="font-weight: bold; margin-bottom: 4px; font-size: larger;">
+            Contents</p>
+        <b>::</b> <a class="list" href="#ScreenSaverConfiguration">Screen Saver</a><br />
+        <b>::</b> <a class="list" href="#Maze">The Maze</a><br />
+        <b>&nbsp;&nbsp;&nbsp;::</b> <a class="list" href="#Images">Images</a><br />
+        <b>&nbsp;&nbsp;&nbsp;::</b> <a class="list" href="#IrregularMazes">Irregular Mazes</a><br />
+        <b>&nbsp;&nbsp;&nbsp;::</b> <a class="list" href="#OutlineShapes">Outline Shapes</a><br />
+        <b>&nbsp;&nbsp;&nbsp;::</b> <a class="list" href="#EmbeddedMazes">Embedded Mazes</a><br />
+        <b>::</b> <a class="list" href="#SolverStrategies">Solver Strategies</a><br />
+        <b>&nbsp;&nbsp;&nbsp;::</b> <a class="list" href="#EfficientSolvers">Efficient Solvers</a><br />
+        <b>&nbsp;&nbsp;&nbsp;::</b> <a class="list" href="#ExtremeStrategies">Extreme Strategies</a><br />
+        <b>&nbsp;&nbsp;&nbsp;::</b> <a class="list" href="#Observations">Observations</a><br />
+        <b>::</b> <a class="list" href="#Summary">Summary</a>
+        <!-- <br /><b>::</b> <a class="list" href="#FeatureLog">Feature Log</a> -->
+    </div>
+    <p>
+        The Ariadne application builds and solves a variety of maze puzzles. a) When running
+        the regular application <span class="item">Ariadne.exe</span>, you can control the
+        maze layout, its shape, additional content etc. via a "Details" panel. b) The <span
+            class="item">Ariadne.scr</span> file can be installed as a screen saver.</p>
+    <p>
+        [<span class="item">Ariadne:</span> Figure from Greek mythology. Ariadne helped
+        Theseus escape from the maze where the Minotaurus was held.]</p>
+    <hr />
+    <a name="ScreenSaverConfiguration"></a>
+    <h3>
+        Screen Saver Configuration and Control</h3>
+    <p>
+        Use the Screen Saver "Settings" panel to configure the options of your screen saver
+        (see the <em>"[Option:]"</em> tags below).</p>
+    <p>
+        The Screen Saver accepts a few keystroke commands:</p>
+    <ul>
+        <li><b>I</b> = Switch information displayed in the details box.
+            <ul>
+                <li>Solver strategy, maze dimension, maze ID, current time.</li>
+                <li>Image path(s).</li>
+            </ul>
+        </li>
+        <li><b>P</b> = Pause / Resume the solver.</li>
+        <li><b>S</b> = Save a <span class="highlight">screen shot</span>.
+            <ul>
+                <li>Image files are put into a subdirectory "Screenshots" of the directory where the
+                    screen saver is installed.</li>
+            </ul>
+        </li>
+    </ul>
+    <p>
+        All other keystrokes and mouse buttons will terminate the screen saver.</p>
+    <hr />
+    <p>
+        There are several components for specific responsibilities and most of them have
+        many optional features.</p>
+    <hr />
+    <a name="Maze"></a><a name="MazeBuilder"></a>
+    <h3>
+        The Maze</h3>
+    <p>
+        The maze fills a rectangular region in a window. In screen saver mode, the display
+        is filled completely.</p>
+    <p>
+        The maze has a tree-like topological structure. Any <span class="highlight">square</span>
+        can be reached from every other square by exactly one <span class="highlight">path</span>.
+        There are no circles (paths leading from a square to itself).</p>
+    <p>
+        The maze builder algorithm starts at an arbitrary square and adds it to the "visited"
+        region. From then on, <span class="highlight">walls</span> (whose state is initially
+        undecided) between one visited and one not-visited square are opened until all squares
+        have been reached. The remaining walls are closed.</p>
+    <p>
+        Only <span class="highlight">closed walls</span> are painted; <span class="highlight">
+            open walls</span> (also called "doors") are not painted.</p>
+    <p>
+        <em>[Option:]</em> Usually, all walls of the empty maze are painted before the solver
+        starts. There is an option by which two alternative modes can be activated: In one
+        mode, no walls are painted at all (they have zero width); in the other mode, only
+        the walls around visited squares are painted.</p>
+    <a name="Images"></a><a name="ReservedAreas"></a>
+    <h4>
+        Images and other Reserved Areas</h4>
+    <p>
+        A plain maze fills the whole area. However, some regions may be reserved for additional
+        controls or images. These reserved areas do not touch directly and the maze flows
+        closely around them.</p>
+    <p>
+        <em>[Option:]</em> You can specify a folder from which the Screen Saver chooses
+        one or more <span class="highlight">foreground images</span> (JPG, PNG, GIF) that
+        will be displayed.</p>
+    <p>
+        <em>[Option:]</em> You can select if a <span class="highlight">background image</span>
+        (from the same or a different image folder) is drawn behind the maze. Even then,
+        only 20% of the mazes will have a background image (unless the number of foreground
+        images is 0).</p>
+    <p>
+        <em>[Option:]</em> You can select whether the Screen Saver displays a small <span
+            class="highlight">info panel</span> showing the maze dimension, solver name
+        and run-time statistics.</p>
+    <p>
+        <em>Note:</em> When both options for displaying foreground and background images
+        are active, not all mazes will display a foreground image. The chance of having
+        no foreground image is 20% if there is a background image and 5% otherwise.</p>
+    <a name="IrregularMazes"></a>
+    <h4>
+        Irregular Mazes</h4>
+    <p>
+        Usually, the constructed maze is "regular", uniformly random, i.e. the chances that
+        a specific wall between two adjoining squares are evenly distributed.</p>
+    <p>
+        In an <span class="highlight">irregular maze</span>, some directions are preferred
+        over other directions when opening the walls. The choice may depend on the square's
+        location and on the opened/closed state of other walls.</p>
+    <p>
+        <em>[Variants:]</em> There are 20 different methods or patterns of irregular mazes.
+        e.g.:</p>
+    <ul>
+        <li>Prefer <span class="highlight">straight paths</span>: A wall opposite an open wall
+            should also be open.</li>
+        <li>Prefer <span class="highlight">angled paths</span>: A wall opposite an open wall
+            should be closed.</li>
+        <li>Prefer <span class="highlight">undulating paths</span>, e.g. east - north - east
+            - south - east - north - etc.</li>
+        <li>Prefer <span class="highlight">horizontal or diagonal lines</span>.</li>
+        <li>Patterns that form structures relative to one or more reference points (usually
+            the center of all or part of the maze):
+            <ul>
+                <li><span class="highlight">Circles</span> around the reference point.</li>
+                <li><span class="highlight">Squares</span> around the reference point.</li>
+                <li>Squares whose corners (at the four diagonals) are turned inside, like the <span
+                    class="highlight">outline of a cross</span>.</li>
+                <li><span class="highlight">Vertical and horizontal lines</span> towards the reference
+                    point (in four quadrants separated by the diagonals).</li>
+                <li><span class="highlight">Radial lines</span> spreading outwards from the reference
+                    point.</li>
+            </ul>
+        </li>
+        <li>Patterns based on small <span class="highlight">periodically repeated tiles</span>.</li>
+    </ul>
+    <p>
+        <em>[Option:]</em> You can select whether irregular mazes may be built. If so, five
+        percent of the mazes built in screen saver mode will be irregular. The irregular
+        choice will be applied to 80% of the walls.</p>
+    <p>
+        <em>[Variants:]</em> An irregular pattern may also be applied to part of the maze
+        area only; the remainder is regular. That part is defined by the inside (or outside)
+        of an <span class="item">Outline Shape</span> (see <a href="#OutlineShapes">next section</a>).
+        If an outline shape is already used for building the maze, that same shape is used
+        for the irregular pattern, as well. Otherwise, a new outline shape may be used for
+        the irregular pattern only. Another variant is a combination of two different irregular
+        patterns on the inside and outside of the outline shape.</p>
+    <a name="OutlineShapes"></a>
+    <h4>
+        Outline Shapes</h4>
+    <p>
+        This option builds <span class="highlight">continuous closed walls</span> around
+        <span class="highlight">invisible shapes</span>, e.g. a circle or a silhouette bitmap
+        image (black on white). Only one wall will be opened so that a path can run into
+        the shape. When the solver (see <a href="#Solvers">below</a>) reaches the (closed)
+        outline of the shape, it will run around it and the shape's contour will become
+        visible. When the solver finds the entry into the shape, it will be filled from
+        the inside but the solver cannot leave the shape as there is no second exit.</p>
+    <p>
+        Usually, an outline shape is one contiguous shape, like a circle, a square or another
+        polygon. However, an outline shape can also be any pattern that defines an inside
+        and an outside. Separate regions are all treated the same way, i.e. each is surrounded
+        by closed walls with a single entry.</p>
+    <p>
+        <em>[Variants:]</em> There are 72 kinds of outline shapes, most of them with many
+        variants, grouped into twelve mayor types:</p>
+    <ul>
+        <li>A <span class="highlight">circle</span>.&nbsp;[1]</li>
+        <li>A <span class="highlight">diamond</span>, i.e. a square standing on a corner.&nbsp;[1]</li>
+        <li>A set of <span class="highlight">overlapping circles</span>.&nbsp;[1]</li>
+        <li>A set of <span class="highlight">staright lines</span>, dividing the plane.&nbsp;[1]</li>
+        <li>Symmetric <span class="highlight">polygons</span> with three to twelve corners.
+            <ul>
+                <li>In <span class="highlight">regular polygons</span>, each corner is connected to
+                    the two neighboring corners.&nbsp;[1]</li>
+                <li>In <span class="highlight">star shaped polygons</span>, each corner is connected
+                    to its second / third / n-th neighbor.&nbsp;[1]</li>
+                <li>The polygons may be distorted so that straight edges become curved lines.
+                    <ul>
+                        <li>A <span class="highlight">spiral distortion</span> bends the corners to the left
+                            or right.&nbsp;[1]</li>
+                        <li>A <span class="highlight">radial wave distortion</span> indents and rounds the corners.&nbsp;[1]</li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+        <li><span class="highlight">Two-dimensional functions</span>. Unlike other shapes that
+            have a limited size, these fill the whole plane with a certain pattern. Some of
+            these shapes may also be distorted in various ways.
+            <ul>
+                <li>Horizontal and vertical <span class="highlight">stripes</span>.&nbsp;[4]</li>
+                <li>Checkered <span class="highlight">squares</span>.&nbsp;[5]</li>
+                <li>Checkered <span class="highlight">squares that are rounded</span> along the edges
+                    and at the corners. These allow paths along the edges or between the diagonal corners.
+                    &nbsp;[2+3]</li>
+                <li><span class="highlight">Ellipses</span> and <span class="highlight">hyperbolas</span>.
+                    &nbsp;[2]</li>
+                <li><span class="highlight">Concentric circles</span>.&nbsp;[2]</li>
+                <li><span class="highlight">Spirals</span>.&nbsp;[2]</li>
+            </ul>
+        </li>
+        <li>Fractals.
+            <ul>
+                <li>The <span class="highlight">Mandelbrot set</span>.&nbsp;[1]</li>
+                <li><span class="highlight">Julia sets</span> from generating coordinates near the border
+                    of the Mandelbrot set. An attempt is made to avoid disconnected Julia sets that
+                    would be completely indistinguishable.&nbsp;[2]</li>
+            </ul>
+        </li>
+        <li><span class="highlight">Characters</span> and <span class="highlight">symbols</span>
+            from fonts at a very large size.&nbsp;[2]</li>
+        <li>Bitmaps that are stored as black-and-white image resources.
+            <ul>
+                <li>Geographical structures like <span class="highlight">continents and countries</span>.&nbsp;[1]</li>
+                <li><span class="highlight">Picture frames</span> or stamp contours.&nbsp;[1]</li>
+                <li><span class="highlight">Animals</span>.&nbsp;[1]</li>
+                <li><span class="highlight">Traffic signs</span>.&nbsp;[1]</li>
+                <li><span class="highlight">Chess figures</span>.&nbsp;[1]</li>
+            </ul>
+        </li>
+        <li>Tiled patterns. These are formed of <span class="highlight">rectangular tiles</span>
+            with a given pattern that are placed next to each other.
+            <ul>
+                <li>Horizontal, vertical and checkered <span class="highlight">grids</span>.&nbsp;[2]</li>
+                <li>Rectangular <span class="highlight">frames</span> based on a pattern of interwoven
+                    ribbons.&nbsp;[3]</li>
+                <li><span class="highlight">I-beam</span> shaped ribbons.&nbsp;[2]</li>
+                <li><span class="highlight">Pentominoes</span> inside one-line frames.&nbsp;[1]</li>
+                <li>Repetitions of a bitmap pattern.
+                    <ul>
+                        <li><span class="highlight">Puzzle pieces</span>.&nbsp;[1]</li>
+                        <li><span class="highlight">Zigzagged patterns</span>.&nbsp;[2]</li>
+                        <li>Various other patterns.&nbsp;[2]</li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+        <li><span class="highlight">Concentric rectangles</span>, either with one center near
+            the middle of the maze or with one center in each of the four corners.&nbsp;[2]</li>
+        <li>Geometric shapes arranged in a repeating <span class="highlight">grid</span>.
+            <ul>
+                <li>Simple <span class="highlight">checkered squares</span>.&nbsp;[1]</li>
+                <li><span class="highlight">Large circles</span>, slightly smaller than the checkered
+                    squares.&nbsp;[1]</li>
+                <li><span class="highlight">Large and small circles</span>.&nbsp;[1]</li>
+                <li><span class="highlight">Halfed or quartered circles</span>.&nbsp;[2]</li>
+                <li>Large <span class="highlight">overlapping circles</span> almost touching each other
+                    diagonally.&nbsp;[1]</li>
+                <li><span class="highlight">Rectangular lines</span>, tightly boxed.&nbsp;[1]</li>
+                <li>Large <span class="highlight">circles touching each other</span> horizontally or
+                    vertically.&nbsp;[1]</li>
+            </ul>
+        </li>
+        <li>The same <span class="highlight">grid elements</span> may also be enlarged and are
+            then applied only once.&nbsp;[8]</li>
+        <li>The <span class="highlight">walls of another maze</span>.
+            <ul>
+                <li>Walls are represented as one square wide lines, paths as several squares wide ribbons.&nbsp;[1]</li>
+                <li>Walls and paths are represented as lines (or ribbons) of equal width.&nbsp;[1]</li>
+            </ul>
+        </li>
+        <li>The <span class="highlight">contour of an image</span> displayed within the maze,
+            (see <a href="#Images">above</a>) if it has a uniform background color.&nbsp;[1]</li>
+    </ul>
+    <p>
+        While the patterns evoked by an <a href="#IrregularMazes">Irregular Maze Builder</a>
+        come from following preferred directions (if possible), the rules defined by an
+        outline shape are very strict. They take precedence over the irregular preferences.</p>
+    <p>
+        <em>[Option:]</em> You can select whether outline shapes are placed into the maze.
+        If so, 80% of the screen saver mazes will contain an outline shape.</p>
+    <a name="EmbeddedMazes"></a>
+    <h4>
+        Embedded Mazes</h4>
+    <p>
+        The outline shapes described <a href="#OutlineShapes">above</a> can also be used
+        to create <span class="highlight">another maze within the main maze</span>. These
+        embedded mazes need to be totally connected and will include any area that is totally
+        enclosed. Neither the main maze nor the embedded maze must fall apart into separate
+        areas that are not connected. The two mazes are separated by a contiguous wall.</p>
+    <p>
+        The embedded maze has its own <a href="#Solvers">solver</a> (usually with a different
+        strategy than the main maze solver). The paths in an embedded maze will be painted
+        with different colors than in the main maze.</p>
+    <p>
+        <em>[Option:]</em> You can select whether embedded mazes are generated. If so, 15%
+        of the screen saver mazes will contain an embedded maze.</p>
+    <hr />
+    <a name="Solvers"></a><a name="SolverStrategies"></a>
+    <h3>
+        Solver Strategies</h3>
+    <p>
+        The <span class="highlight">solver</span> tries to find a <span class="highlight">solution
+            path</span> between the <span class="highlight">start square</span> and the
+        <span class="highlight">target square</span>. Some <span class="highlight">strategies</span>
+        are deterministic, the others make random choices. Some need to know the location
+        of the target square, some don't. Most keep a memory of the squares they have already
+        visited.</p>
+    <p>
+        There are three general types of strategies: <span class="item">Backtrackers</span>,
+        <span class="item">Flooders</span> and <span class="item">Walkers </span>.</p>
+    <p>
+        <span class="item">Backtrackers</span> go forwards until they are caught in a dead
+        end. Then they go backwards up to a fork with another door they have not yet passed.
+        There the go forwards, then backwards, and so on. A backtracker can solve any maze.</p>
+    <p>
+        <span class="item">Flooders</span> follow several concurrent paths in parallel.
+        For every door at a fork, new open paths are created. A flooder can solve any maze
+        without ever going backwards.</p>
+    <p>
+        <span class="item">Walkers</span> have no memory of visited squares; they decide
+        solely on their current position and direction. Two of these implement a classical
+        maze solver algorithm: "Walk through the maze while always touching the wall at
+        your right/left hand side." This strategy can solve any tree-shaped maze but may
+        be caught in a circle.</p>
+    <p>
+        The visited paths are painted in two colors: <span class="highlight">Forward steps</span>
+        are painted in a bright color, <span class="highlight">backward steps</span> and
+        areas completely covered by a flooder are painted in a dull color. Two colors with
+        clearly different hue are selected. When the <span class="highlight">solution path</span>
+        is found, it is painted in a brighter variant of the forward color.</p>
+    <p>
+        <em>[Variants:]</em> There are 21 "normal" maze solver strategies:</p>
+    <dl>
+        <dt>RandomBacktracker</dt>
+        <dd>
+            The classical backtracker algorithm; it walks forward as long as possible, making
+            random choices at a fork. When there is no continuation, it walks back to the latest
+            fork and chooses another path that has not yet been visited (this is called <span
+                class="highlight">"backtracking"</span>).</dd>
+        <dt>ProximityBacktracker</dt>
+        <dd>
+            Another backtracker; at a fork, this one prefers the square that is nearest to the
+            target square (measuring the geometric distance).</dd>
+        <dt>OppositeBacktracker</dt>
+        <dd>
+            This backtracker tries to get closest to the square directly opposite of the start
+            square.</dd>
+        <dt>RightHandWalker</dt>
+        <dd>
+            Walks through the maze while staying in touch with the right-hand wall.</dd>
+        <dt>LeftHandWalker</dt>
+        <dd>
+            Walks through the maze while staying in touch with the left-hand wall.</dd>
+        <dt>RandomFlooder</dt>
+        <dd>
+            The classical flooder algorithm: For every step, choose an arbitrary open path at
+            random.</dd>
+        <dt>RoundRobinFlooder</dt>
+        <dd>
+            This Flooder chooses to continue the open paths in a round-robin sequence, i.e.
+            between two steps on the same path, all other paths are continued, as well.</dd>
+        <dt>CloseFlooder</dt>
+        <dd>
+            From all currently visited paths, this flooder chooses the path closest to the start
+            square.</dd>
+        <dt>FarFlooder</dt>
+        <dd>
+            This flooder chooses the path farthest away from the start square.</dd>
+        <dt>ProximityFlooder</dt>
+        <dd>
+            This flooder chooses the path closest to the target square.</dd>
+        <dt>OppositeFlooder</dt>
+        <dd>
+            This flooder chooses the path closest to the square directly opposite of the start
+            square.</dd>
+        <dt>HesitatingFlooder</dt>
+        <dd>
+            This flooder chooses the path farthest away from the target square.</dd>
+        <dt>CenterFlooder</dt>
+        <dd>
+            This flooder chooses the path closest to the center of the maze.</dd>
+        <dt>CornerFlooder</dt>
+        <dd>
+            This flooder chooses the path farthest away from the center of the maze.</dd>
+        <dt>ForwardFlooder</dt>
+        <dd>
+            This flooder checks all continuations on the open paths and chooses the one with
+            the greatest (relative) distance gain: It chooses the path for which d'/d is minimal,
+            where d is the distance of the current square (on that path) from the target square
+            and d' is the distance of the next square on the same path.</dd>
+        <dt>BackwardFlooder</dt>
+        <dd>
+            This flooder works essentially like the ForwardFlooder, but it chooses the path
+            continuation with maximal d'/d ratio.</dd>
+        <dt>RandomForwardFlooder</dt>
+        <dd>
+            This variant of the ForwardFlooder may also choose a path other than the best one.
+            The "bad" path is chosen in one out ouf twenty steps.</dd>
+        <dt>RandomBackwardFlooder</dt>
+        <dd>
+            This variant of the BackwardFlooder may also choose a path other than the best one.
+            The "bad" path is chosen in one out ouf twenty steps.</dd>
+        <dt>ThickestBranchFlooder</dt>
+        <dd>
+            This flooder is based on the maze's tree structure. Starting with a trunk of thickness
+            1 and length 0, every step increases the path length by 1 and every fork divides
+            the thickness by the number of branches. Among the currently thickest branches,
+            the longest one is chosen.</dd>
+        <dt>ThinnestBranchFlooder</dt>
+        <dd>
+            This flooder works like the ThickestBranchFlooder with inverted precedence: Among
+            the thinnest branches, the shortest one is chosen.</dd>
+        <dt>SpreadingFlooder</dt>
+        <dd>
+            This flooder selects one of the two path ends closest to each other.</dd>
+    </dl>
+    <a name="EfficientSolvers"></a>
+    <h4>
+        Efficient Solvers</h4>
+    <p>
+        Each of these solvers also has an <span class="item">"efficient"</span> variant.
+        These employ an <span class="highlight">algorithm that detects dead ends</span>
+        and avoids these areas. An area is identified as a dead end if the squares visited
+        by the solver (plus any <a href="#ReservedAreas">reserved areas</a> and the maze
+        boundary) form a closed line around it.</p>
+    <p>
+        <span class="highlight">Dead end squares</span> are painted with dark gray dots.</p>
+    <a name="ExtremeStrategies"></a>
+    <h4>
+        Extreme Strategies</h4>
+    <p>
+        There are two additional "extreme" strategies that are, however, not used in screen
+        saver mode or when "any" solver should be selected.</p>
+    <dl>
+        <dt>RandomWalker</dt>
+        <dd>
+            This "solver" has no memory at all. Every step is chosen randomly. It may take a
+            very long time (several 100,000 steps) until the target square is found by pure
+            chance.</dd>
+        <dt>MasterSolver</dt>
+        <dd>
+            Knows the solution path beforehand. Goes directly from start to target without any
+            error.</dd>
+    </dl>
+    <a name="#Observations"></a>
+    <h4>
+        Observations</h4>
+    <p>
+        The area visited by the <span class="item">RandomBacktracker</span> (in a regular
+        maze) is a good example of a fractal: The border is self-similar at different scales.</p>
+    <p>
+        <span class="item">RightHandWalker</span> and <span class="item">LeftHandWalker</span>
+        produce "inverted" paintings: One visits all areas to the right of the solution
+        path, the other all areas to the left.</p>
+    <p>
+        <span class="item">OppositeBacktracker</span> and <span class="item">OppositeFlooder</span>
+        don't know the location of the target square. But as the start and target squares
+        are always chosen close to opposite borders of the maze, they often produce similar
+        results as the proximity guided solvers.</p>
+    <p>
+        <a href="#OutlineShapes">Outline shapes</a> are completely obliterated when large
+        sections of the maze are visited. An <a href="#EfficientSolvers">efficient solver</a>
+        will not paint all squares in the same color and the shape will still be visible.</p>
+    <p>
+        The <span class="item">ThickestBranchFlooder</span> advances on a chosen branch
+        in one run up to the next fork; then another branch is better than the split branches
+        at the fork. The percieved movement is rather "jumpy", even at moderate speed.</p>
+    <p>
+        <span class="item">ForwardFlooder</span> and <span class="item">BackwardFlooder</span>
+        tend to fill the whole maze, just like a <span class="item">HesitatingFlooder</span>.
+        That is because both solvers assign highest penalties to undesired steps near the
+        target square: the <span class="item">BackwardFlooder</span> assigns an extreme
+        penalty (100%) to the last step onto the target square; the <span class="item">ForwardFlooder</span>
+        assigns very high penalties to backward steps close to the target. In that situation,
+        both solvers will visit the whole rest of the maze before doing the one highly penalized
+        required step.</p>
+    <p>
+        <span class="item">RandomForwardFlooder</span> and <span class="item">RandomBackwardFlooder</span>
+        are able to overcome these problematic situations because their choice is not fixed.
+        Sometimes they may choose the path with higher penalties and thus make the necessary
+        but locally unfavorable step.</p>
+    <p>
+        In the <span class="item">SpreadingFlooder</span>, the pair of paths closest to
+        each other advances in parallel. When one path is split or gets closer to a different
+        path, it forms a new partnership with the other closer partner.</p>
+    <p>
+        <span class="item">Efficient Solvers</span> often run for long stretches without
+        error (i.e. without leaving the correct solution path), especially towards the end.
+        It is not unlikely that such a run spans more than half or two thirds of the solution
+        path. Even perfect runs without any error at all can be observed. Considering that
+        an average path may have several dozens or even hundreds of forks, this is quite
+        amazing.</p>
+    <hr />
+    <a name="Summary"></a>
+    <h3>
+        Summary of Options and Variants</h3>
+    <ul>
+        <li>[3] Paint <a href="#Maze">walls</a> always / never / when visited.</li>
+        <li>Display <a href="#Images">images</a> from a user specified directory.</li>
+        <li>Display a <a href="#Images">background image</a> below the maze.</li>
+        <li>Display a <a href="#ReservedAreas">run-time statistics panel</a>.</li>
+        <li>[27] Build mazes with <a href="#IrregularMazes">irregular wall patterns</a>.
+            <ul>
+                <li>[4] Apply two mixed irregular patterns or apply the pattern to part of the maze
+                    only.</li>
+            </ul>
+        </li>
+        <li>[72] Build a continuous wall around an <a href="#OutlineShapes">outline shape</a>.</li>
+        <li>[24] Build a second <a href="#EmbeddedMazes">embedded maze</a> inside the outline
+            shape.</li>
+        <li>[21] Different <a href="#SolverStrategies">solver strategies</a>.</li>
+        <li>[2] Let an <a href="#EfficientSolvers">efficient solver</a> detect dead end areas.</li>
+    </ul>
+    <p>
+        That gives a very large number of <span class="highlight">pattern or style combinations</span>:</p>
+    <center style="font-size: larger">
+        3 &times; (1 + 27x4) &times; (1+72+24) &times; 21 &times; 2 &nbsp;=&nbsp; <b>1,332,198</b>
+    </center>
+    <p>
+        The exact application of each variant is usually (with a few deterministic exceptions)
+        influenced by random parameter values: <a href="#OutlineShapes">outline shapes</a>
+        are generated dynamically, <a href="#Solvers">solvers</a> choose arbitrary paths
+        and the <a href="#MazeBuilder">maze builder</a> generates random patterns of walls.</p>
+    <hr />
+    <!--
+    <a name="FeatureLog"></a>
+    <h3>Feature Log</h3>
+    FEATURE_LOG -->
+</body>
+</html>

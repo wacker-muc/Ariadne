@@ -28,39 +28,37 @@ namespace SWA.Ariadne.Gui.Dialogs
         /// </summary>
         private void InitializeComponent()
         {
-            this.textBoxFeatureLog = new System.Windows.Forms.TextBox();
+            this.webBrowser = new System.Windows.Forms.WebBrowser();
             this.SuspendLayout();
             // 
-            // textBoxFeatureLog
+            // webBrowser
             // 
-            this.textBoxFeatureLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.webBrowser.AllowWebBrowserDrop = false;
+            this.webBrowser.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxFeatureLog.BackColor = System.Drawing.SystemColors.Window;
-            this.textBoxFeatureLog.Location = new System.Drawing.Point(12, 12);
-            this.textBoxFeatureLog.Multiline = true;
-            this.textBoxFeatureLog.Name = "textBoxFeatureLog";
-            this.textBoxFeatureLog.ReadOnly = true;
-            this.textBoxFeatureLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBoxFeatureLog.Size = new System.Drawing.Size(268, 249);
-            this.textBoxFeatureLog.TabIndex = 0;
-            this.textBoxFeatureLog.TabStop = false;
+            this.webBrowser.IsWebBrowserContextMenuEnabled = false;
+            this.webBrowser.Location = new System.Drawing.Point(1, 2);
+            this.webBrowser.MinimumSize = new System.Drawing.Size(20, 20);
+            this.webBrowser.Name = "webBrowser";
+            this.webBrowser.Size = new System.Drawing.Size(290, 270);
+            this.webBrowser.TabIndex = 1;
+            this.webBrowser.WebBrowserShortcutsEnabled = false;
             // 
             // AboutDetailsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(292, 273);
-            this.Controls.Add(this.textBoxFeatureLog);
+            this.Controls.Add(this.webBrowser);
             this.Name = "AboutDetailsForm";
             this.Text = "Ariadne Info";
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.TextBox textBoxFeatureLog;
+        private System.Windows.Forms.WebBrowser webBrowser;
     }
 }

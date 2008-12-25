@@ -6,6 +6,8 @@
 
 Copyright (c) Stephan.Wacker@web.de, 2008
 
+Go to http://www.wacker-muc.de/ for downloading the latest release.
+
 -----------------------------------------------------------------------
 
 The Ariadne application builds and solves a variety of maze puzzles.  a) When running as a regular application (Ariadne.exe), you can control the maze layout, its shape, additional content etc. via a "Details" panel.  b) The Ariadne.scr file can be installed as a screen saver.
@@ -39,11 +41,11 @@ There are several components for specific responsibilities and most of them have
     The Maze
     ========
 
-The Maze fills a rectangular region in a window.  In screen saver mode, the display is filled completely.
+The maze fills a rectangular region in a window.  In screen saver mode, the display is filled completely.
 
 The maze has a tree-like topological structure.  Any square can be reached from every other square by exactly one solution path.  There are no circles (paths leading from a square to itself).
 
-The maze builder algorithm starts at an arbitrary square and adds it to the "visited" region.  From then on, walls (whose state is initially undecided) beteen one visited and one not-visited square are opened until all squares have been reached.  The remaining walls are closed.
+The maze builder algorithm starts at an arbitrary square and adds it to the "visited" region.  From then on, walls (whose state is initially undecided) between one visited and one not-visited square are opened until all squares have been reached.  The remaining walls are closed.
 
 Only closed walls are painted; open walls (also called "doors") are not painted.
 
@@ -57,7 +59,7 @@ A plain maze fills the whole area.  However, some regions may be reserved for ad
 
 [Option:] You can specify a folder from which the Screen Saver chooses one or more images (JPG, PNG, GIF) that will be displayed.
 
-[Option] You can select if a background image (from the same or a different image folder) is drawn behind the maze.  Even then, only 20% of the mazes will have a background image (unless the number of foreground images is 0).
+[Option:] You can select if a background image (from the same or a different image folder) is drawn behind the maze.  Even then, only 20% of the mazes will have a background image (unless the number of foreground images is 0).
 
 [Option:] You can select whether the Screen Saver displays a small panel showing the maze dimension, solver name and run-time statistics.
 
@@ -87,7 +89,7 @@ In an irregular maze, some directions are preferred over other directions when o
 
 [Option:] You can select whether irregular mazes may be built.  Five percent of the mazes built in screen saver mode will be irregular.  The irregular choice will be applied to 80% of the walls.
 
-[Variants:] An irregular pattern may also be applied to part of the maze area only; the remainder is regular.  That part is defined by the inside (or outside) of an Outline Shape (see next section).  If an Outline Shape is used for building the maze, that same shape is used for the irregular pattern, as well.  Otherwise a new Outline Shaped may be used for the irregular pattern only.  Another variant is a combination of two different irregular patterns on the inside and outside of the Outline Shape.
+[Variants:] An irregular pattern may also be applied to part of the maze area only; the remainder is regular.  That part is defined by the inside (or outside) of an Outline Shape (see next section).  If an Outline Shape is used for building the maze, that same shape is used for the irregular pattern, as well.  Otherwise, a new Outline Shape may be used for the irregular pattern only.  Another variant is a combination of two different irregular patterns on the inside and outside of the Outline Shape.
 
 
     Outline Shapes

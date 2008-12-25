@@ -81,7 +81,7 @@
   -->
   <Target Name="AfterBuild">
     <Copy SourceFiles="$(TargetDir)\$(TargetName).exe" DestinationFiles="$(TargetDir)\$(TargetName).scr" SkipUnchangedFiles="true" />
-    <Copy SourceFiles="$(TargetDir)\Resources\Overview.txt" DestinationFiles="$(TargetDir)\README.TXT" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="$(TargetDir)\Resources\Overview.htm" DestinationFiles="$(TargetDir)\README.HTM" SkipUnchangedFiles="true" />
     <Copy SourceFiles="$(TargetDir)\Resources\FeatureLog.txt" DestinationFiles="$(TargetDir)\LOG.TXT" SkipUnchangedFiles="true" />
   </Target>
 </Project>

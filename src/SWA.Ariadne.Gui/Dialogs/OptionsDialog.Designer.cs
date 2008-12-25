@@ -29,7 +29,6 @@ namespace SWA.Ariadne.Gui.Dialogs
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OptionsDialog));
             this.buttonOK = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.labelCopyright = new System.Windows.Forms.Label();
@@ -63,6 +62,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.checkBoxOutlineShapes = new System.Windows.Forms.CheckBox();
             this.imageFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.buttonInfo = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPageGeneral.SuspendLayout();
             this.tabPageImages.SuspendLayout();
@@ -77,7 +77,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.buttonOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.buttonOK.Location = new System.Drawing.Point(23, 162);
+            this.buttonOK.Location = new System.Drawing.Point(16, 162);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 3;
@@ -89,7 +89,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(114, 162);
+            this.buttonCancel.Location = new System.Drawing.Point(107, 162);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 4;
@@ -500,12 +500,25 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.toolTip.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
             this.toolTip.ToolTipTitle = "Ariadne Screen Saver Settings";
             // 
+            // buttonInfo
+            // 
+            this.buttonInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonInfo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonInfo.Image = global::SWA.Ariadne.Gui.Dialogs.Properties.Resources.ButtonAbout;
+            this.buttonInfo.Location = new System.Drawing.Point(189, 162);
+            this.buttonInfo.Name = "buttonInfo";
+            this.buttonInfo.Size = new System.Drawing.Size(22, 23);
+            this.buttonInfo.TabIndex = 9;
+            this.buttonInfo.UseVisualStyleBackColor = true;
+            this.buttonInfo.Click += new System.EventHandler(this.buttonInfo_Click);
+            // 
             // OptionsDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
             this.ClientSize = new System.Drawing.Size(212, 204);
+            this.Controls.Add(this.buttonInfo);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.labelCopyright);
             this.Controls.Add(this.buttonCancel);
@@ -567,6 +580,7 @@ namespace SWA.Ariadne.Gui.Dialogs
         private System.Windows.Forms.CheckBox checkBoxDifferentBackgroundImageFolder;
         private System.Windows.Forms.CheckBox checkBoxLogSolverStatistics;
         private System.Windows.Forms.ToolTip toolTip;
+        private System.Windows.Forms.Button buttonInfo;
 
     }
 }
