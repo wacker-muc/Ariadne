@@ -8,7 +8,7 @@ Copyright (c) Stephan.Wacker@web.de, 2008
 
 -----------------------------------------------------------------------
 
-Version 3.3 -- r312 -- 2009-01-03
+Version 3.3 -- r314 -- 2009-01-03
 
  * Screen Saver control: during the first few seconds, the screen saver will exit upon mouse movement
  * Screen Saver control: the keystroke "P" will pause and resume the solver
