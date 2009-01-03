@@ -214,7 +214,7 @@ namespace SWA.Ariadne.Logic
 
         #endregion
 
-        #region support methods for the MasterSolver
+        #region Support methods for the MasterSolver
 
         /// <summary>
         /// Given a square (usually, the end square), return the path leading there from the start square.

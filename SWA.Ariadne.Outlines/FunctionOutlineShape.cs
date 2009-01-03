@@ -7,7 +7,7 @@ using SWA.Utilities;
 namespace SWA.Ariadne.Outlines
 {
     /// <summary>
-    /// An OutlineShape defined by a geometrical function in two dimensions: f(x,y).
+    /// An OutlineShape defined by a geometric function in two dimensions: f(x,y).
     /// The division between inside and outside is defined by the function's roots,
     /// i.e. the contour is where the function f(x,y) becomes zero.
     /// </summary>

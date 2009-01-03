@@ -388,7 +388,7 @@ namespace SWA.Ariadne.Model
 
             if (!(nCode == 0))
             {
-                throw new ArgumentOutOfRangeException("remainder(code)", seed, "Must be a zero.");
+                throw new ArgumentOutOfRangeException("remainder(code)", nCode, "Must be a zero.");
             }
             ValidateCodeItemRange("seed", seed, 0, SeedLimit-1);
             ValidateCodeItemRange("xSize", xSize, dimensionsObj.MinSize, dimensionsObj.MaxXSize);
@@ -401,7 +401,7 @@ namespace SWA.Ariadne.Model
         {
             if (!(min <= value && value <= max))
             {
-                throw new ArgumentOutOfRangeException(item + "(code)", value, "Must be between " + min.ToString() + " and " + max.ToString() + ".");
+                throw new ArgumentOutOfRangeException(item + " of code", value, "Must be between " + min.ToString() + " and " + max.ToString() + ".");
             }
         }
 

@@ -36,14 +36,6 @@ namespace SWA.Ariadne.Gui.Mazes
             get { return painter.Maze; }
         }
 
-#if false
-        /// <summary>
-        /// Besides the main maze, there may be other embedded or included mazes.
-        /// Each has its own MazePainter.
-        /// </summary>
-        private List<MazePainter> painters = new List<MazePainter>();
-#endif
-
         private AriadneSettingsData settingsData;
 
         public bool RandomizeWallVisibility
@@ -354,7 +346,7 @@ namespace SWA.Ariadne.Gui.Mazes
             }
 
             // If the window is minimized, there will be no OnPaint() event.
-            // Therefore we Paint the maze directly.
+            // Therefore we paint the maze directly.
             if (this.ParentForm.WindowState == FormWindowState.Minimized)
             {
                 // TODO: Reset() is called twice but should be called only once.
@@ -379,7 +371,7 @@ namespace SWA.Ariadne.Gui.Mazes
                 this.Setup(12, 3, 8);
             }
 
-            painter.OnPaint(this.PaintImages, true);
+            painter.OnPaint(this.PaintImages);
 
             // If a new maze has been painted, the caption needs to be updated.
             if (MazeForm != null)

@@ -5,6 +5,9 @@ using SWA.Ariadne.Model;
 
 namespace SWA.Ariadne.Logic
 {
+    /// <summary>
+    /// A MazeSolver that knows the solution path and follows it without making any error.
+    /// </summary>
     internal class MasterSolver : SolverBase
     {
         #region Member variables

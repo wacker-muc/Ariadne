@@ -76,7 +76,7 @@ namespace SWA.Ariadne.Outlines
         }
 
         /// <summary>
-        /// Returns a DistortedOutlineShape based on the current shape and a SpiralDistortion.
+        /// Returns a DistortedOutlineShape based on the current shape and a RadialWaveDistortion.
         /// A regular polygon with more than six corners is returned unmodified.
         /// </summary>
         /// <param name="r"></param>

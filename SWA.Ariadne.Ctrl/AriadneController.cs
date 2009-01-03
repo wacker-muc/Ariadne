@@ -110,7 +110,11 @@ namespace SWA.Ariadne.Ctrl
         public bool RepeatMode
         {
             get { return repeatMode; }
-            set { repeatMode = value; }
+            set
+            {
+                repeatMode = value;
+                client.NotifyControllerStateChanged();
+            }
         }
         private bool repeatMode = false;
 
@@ -173,6 +177,7 @@ namespace SWA.Ariadne.Ctrl
                 repeatTimer = null;
             }
             solverController.BlinkingCounter = 0;
+            client.NotifyControllerStateChanged();
         }
 
         /// <summary>
@@ -198,6 +203,7 @@ namespace SWA.Ariadne.Ctrl
 
             solverController.Start();
             this.finishedStrategyName = solverController.StrategyName;
+            client.NotifyControllerStateChanged();
 
             lapStartTime = System.DateTime.Now;
             //Log.WriteLine("} Start()");
@@ -217,6 +223,8 @@ namespace SWA.Ariadne.Ctrl
                 lapSeconds = 0;
                 lapStartTime = System.DateTime.Now;
             }
+
+            client.NotifyControllerStateChanged();
         }
 
         /// <summary>
@@ -247,6 +255,7 @@ namespace SWA.Ariadne.Ctrl
             stepTimer = null;
             blinkTimer.Stop();
             blinkTimer = null;
+            client.NotifyControllerStateChanged();
         }
 
         #endregion
@@ -342,6 +351,7 @@ namespace SWA.Ariadne.Ctrl
                         // Perform time consuming preparations for the next start, but first update the display.
                         client.Update();
                         client.PrepareForNextStart();
+                        client.NotifyControllerStateChanged();
                     }
 
                     // This is a good moment to run the garbage collector.
@@ -381,7 +391,7 @@ namespace SWA.Ariadne.Ctrl
                 return;
             }
 
-            if (State == SolverState.Finished && this.repeatMode)
+            if (State == SolverState.FinishedAndScheduled)
             {
                 repeatTimer.Stop();
 
@@ -403,7 +413,7 @@ namespace SWA.Ariadne.Ctrl
                 // 3. Prepare time consuming actions before the SolverController is started.
                 solverController.PrepareForStart();
             }
-            else if (State == SolverState.Ready && this.repeatMode)
+            else if (State == SolverState.ReadyAndScheduled)
             {
                 repeatTimer.Stop();
                 this.Start();
@@ -413,6 +423,8 @@ namespace SWA.Ariadne.Ctrl
                 repeatTimer.Stop();
                 repeatTimer = null;
             }
+
+            client.NotifyControllerStateChanged();
         }
 
         #endregion
@@ -484,7 +496,7 @@ namespace SWA.Ariadne.Ctrl
         /// <returns></returns>
         private bool IsBehindSchedule()
         {
-            if (State == SolverState.Finished)
+            if (State == SolverState.Finished || State == SolverState.FinishedAndScheduled)
             {
                 return false;
             }
@@ -529,13 +541,27 @@ namespace SWA.Ariadne.Ctrl
                 // If the maze is solved, we are Finished.
                 if (solverController != null && solverController.IsFinished)
                 {
-                    return SolverState.Finished;
+                    if (repeatTimer != null && repeatTimer.Enabled == true)
+                    {
+                        return SolverState.FinishedAndScheduled;
+                    }
+                    else
+                    {
+                        return SolverState.Finished;
+                    }
                 }
 
                 // While there is no timer, we are Ready to create one and start it.
                 if (stepTimer == null)
                 {
-                    return SolverState.Ready;
+                    if (repeatTimer != null && repeatTimer.Enabled == true)
+                    {
+                        return SolverState.ReadyAndScheduled;
+                    }
+                    else
+                    {
+                        return SolverState.Ready;
+                    }
                 }
 
                 // So we are either running or paused.

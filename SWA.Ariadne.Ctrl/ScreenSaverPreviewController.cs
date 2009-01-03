@@ -146,6 +146,11 @@ namespace SWA.Ariadne.Ctrl
             }
         }
 
+        public void NotifyControllerStateChanged()
+        {
+            // do nothing
+        }
+
         /// <summary>
         /// Creates a new maze.
         /// </summary>

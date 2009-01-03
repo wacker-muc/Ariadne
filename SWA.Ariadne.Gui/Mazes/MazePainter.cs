@@ -45,7 +45,7 @@ namespace SWA.Ariadne.Gui.Mazes
         public const int MinSquareWidth = 1, MaxSquareWidth = MaxGridWidth - 1;
 
         /// <summary>
-        /// Miniumum and maximum square width.
+        /// Miniumum and maximum path width.
         /// </summary>
         public const int MinPathWidth = 1, MaxPathWidth = MaxSquareWidth;
 
@@ -524,28 +524,6 @@ namespace SWA.Ariadne.Gui.Mazes
             offset = (displaySize - mazeSize * this.gridWidth) / 2;
         }
 
-#if false
-        private int XCoordinate(int xLocation, bool leftBiased)
-        {
-            int result = (xLocation - client.Location.X);
-            result -= xOffset;
-            result += (leftBiased ? -1 : +1) * wallWidth;
-            result /= gridWidth;
-            
-            return result;
-        }
-
-        private int YCoordinate(int yLocation, bool topBiased)
-        {
-            int result = (yLocation - client.Location.Y);
-            result -= yOffset;
-            result += (topBiased ? -1 : +1) * wallWidth;
-            result /= gridWidth;
-
-            return result;
-        }
-#endif
-
         /// <summary>
         /// Reset to the initial state (before the maze is solved).
         /// </summary>
@@ -651,8 +629,8 @@ namespace SWA.Ariadne.Gui.Mazes
         /// On first time, the buffer is created and the maze (without any path) is painted.
         /// </summary>
         /// <param name="painterDelegate"></param>
-        /// <param name="renderBuffer"></param>
-        public void OnPaint(PainterDelegate painterDelegate, bool renderBuffer)
+        /// 
+        public void OnPaint(PainterDelegate painterDelegate)
         {
             // On first time, create a graphics buffer and draw the static maze.
             //
@@ -682,7 +660,7 @@ namespace SWA.Ariadne.Gui.Mazes
                 }
             }
 
-            if (renderBuffer && (client == null || client.Alive))
+            if (client == null || client.Alive)
             {
                 gBuffer.Render();
             }
@@ -965,7 +943,7 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <param name="g"></param>
         private void PaintEndpoints(Graphics g)
         {
-            // Activare the blinkingCounter, if necessary.
+            // Activate the blinkingCounter, if necessary.
             if (BlinkingCounter < 0)
             {
                 BlinkingCounter = 0;
