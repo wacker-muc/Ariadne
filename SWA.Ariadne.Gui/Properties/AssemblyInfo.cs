@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Stephan Wacker")]
 [assembly: AssemblyProduct("Ariadne")]
-[assembly: AssemblyCopyright("Copyright © Stephan Wacker 2008")]
+[assembly: AssemblyCopyright("Copyright © Stephan Wacker 2008-2009")]
 [assembly: AssemblyTrademark("SWA")]
 [assembly: AssemblyCulture("")]
 
@@ -29,5 +29,5 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("3.3.0.312")]
-[assembly: AssemblyFileVersion("3.3.0.312")]
+[assembly: AssemblyVersion("3.3.0.313")]
+[assembly: AssemblyFileVersion("3.3.0.313")]
