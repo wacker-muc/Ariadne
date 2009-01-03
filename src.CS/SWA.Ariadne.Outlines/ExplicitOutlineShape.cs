@@ -7,7 +7,7 @@ namespace SWA.Ariadne.Outlines
 {
     /// <summary>
     /// An OutlineShape that is based on a two dimensional array of boolean values.
-    /// The values can be set and cleared explicitely.
+    /// The values can be set and cleared explicitly.
     /// </summary>
     internal class ExplicitOutlineShape : OutlineShape
     {

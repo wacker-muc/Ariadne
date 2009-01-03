@@ -62,7 +62,7 @@ namespace SWA.Ariadne.Logic
             typeof(MasterSolver),
             typeof(RandomWalker),
         };
-        public static string EfficientPrefix = "Efficient";
+        public const string EfficientPrefix = "Efficient";
 
         private static Type SolverType(string name)
         {

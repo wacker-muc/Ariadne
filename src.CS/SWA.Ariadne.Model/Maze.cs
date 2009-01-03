@@ -9,6 +9,9 @@ using SWA.Utilities;
 
 namespace SWA.Ariadne.Model
 {
+    /// <summary>
+    /// A Maze consists of a rectangular grid of MazeSquares.
+    /// </summary>
     public class Maze
         : IAriadneSettingsSource
     {
@@ -89,11 +92,6 @@ namespace SWA.Ariadne.Model
         /// For every reservedArea: An OutlineShape that defines the area actually covered by the contour image.
         /// </summary>
         private List<OutlineShape> reservedAreaShapes = new List<OutlineShape>();
-
-        /// <summary>
-        /// A reserved area defined by the inside of an OutlineShape.
-        /// </summary>
-        private OutlineShape reservedShape = null;
 
         /// <summary>
         /// The shapes of some EmbeddedMazes (before they are actually created).
@@ -320,12 +318,12 @@ namespace SWA.Ariadne.Model
             clone.seed = this.seed;
             clone.reservedAreas = this.reservedAreas;
             clone.reservedAreaShapes = this.reservedAreaShapes;
-            clone.reservedShape = this.reservedShape;
             clone.embeddedMazeShapes = this.embeddedMazeShapes;
             clone.embeddedMazes = new List<EmbeddedMaze>(embeddedMazes.Count);
             foreach (EmbeddedMaze em in embeddedMazes)
             {
 #if false
+                // Currently not required because the Clone() method is only used by the MasterSolver to get the solution path.
                 // TODO: em.Clone(clone)
                 clone.embeddedMazes.Add((EmbeddedMaze)em.Clone());
 #endif
@@ -459,21 +457,16 @@ namespace SWA.Ariadne.Model
             return false;
         }
 
-        public bool ReserveShape(OutlineShape shape)
-        {
-            // TODO: Test if the remaining area is still connected.
-
-            this.reservedShape = shape;
-
-            return true;
-        }
-
         public bool AddEmbeddedMaze(OutlineShape shape)
         {
             this.embeddedMazeShapes.Add(shape);
             return true;
         }
 
+        /// <summary>
+        /// Create the actual maze data structures.
+        /// Call this after all parameters have been defined.
+        /// </summary>
         public void CreateMaze()
         {
             // Create all MazeSquare objects.
@@ -481,7 +474,6 @@ namespace SWA.Ariadne.Model
 
             // Fix reserved areas.
             FixReservedAreas();
-            FixReservedShape();
             CloseWallsAroundReservedAreas(); // TODO: This might be discarded.
             
             // Divide the area into a main maze and several embedded mazes.
@@ -503,6 +495,10 @@ namespace SWA.Ariadne.Model
             }
         }
 
+        /// <summary>
+        /// Create the grid of MazeSquares.
+        /// All squares are connected to their four neighbor squares in the grid.
+        /// </summary>
         private void CreateSquares()
         {
             #region Create the squares.
@@ -735,6 +731,11 @@ namespace SWA.Ariadne.Model
 
         #region Building a maze
 
+        /// <summary>
+        /// Convert all undecided walls to either closed or open.
+        /// In the resulting maze, there must be a path from every square to every other square.
+        /// There must not be any circles, i.e. the maze must have a tree-like structure.
+        /// </summary>
         private void BuildMaze()
         {
             // We hold a number of active squares in a stack.
@@ -907,38 +908,6 @@ namespace SWA.Ariadne.Model
                         }
                     }
                 }
-
-#if false
-                // Close the walls around the area but open the walls on the border.
-                CloseWalls(rect.Left, rect.Right, rect.Top, rect.Bottom, WallState.WS_OPEN);
-#endif
-            }
-        }
-
-        /// <summary>
-        /// Mark the squares inside the reserved shape.
-        /// </summary>
-        /// Note: This method must not be called before FixReservedAreas().
-        private void FixReservedShape()
-        {
-            if (reservedShape != null)
-            {
-                for (int x = 0; x < this.XSize; x++)
-                {
-                    for (int y = 0; y < this.YSize; y++)
-                    {
-                        if (reservedShape[x, y] == true)
-                        {
-                            this.squares[x, y].isReserved = true;
-                        }
-                    }
-                }
-
-#if false
-                FixOutline(reservedShape, WallState.WS_CLOSED);
-#endif
-
-                // TODO: open the walls on the border if touched by the reserved shape.
             }
         }
 

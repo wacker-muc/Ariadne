@@ -16,6 +16,11 @@ namespace SWA.Ariadne.Ctrl
         bool Alive { get; }
 
         /// <summary>
+        /// Called when the controller's state has changed.
+        /// </summary>
+        void NotifyControllerStateChanged();
+
+        /// <summary>
         /// Called when starting a new run.
         /// </summary>
         /// <param name="sender"></param>

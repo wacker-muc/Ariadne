@@ -4,6 +4,9 @@ using System.Text;
 
 namespace SWA.Ariadne.Outlines
 {
+    /// <summary>
+    /// Applies a continuous transformation to the coordinate system of an underlying shape.
+    /// </summary>
     internal class DistortedOutlineShape : SmoothOutlineShape
     {
         #region Member variables and Properties

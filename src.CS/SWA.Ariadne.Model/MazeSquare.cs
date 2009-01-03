@@ -5,6 +5,10 @@ using SWA.Ariadne.Model.Interfaces;
 
 namespace SWA.Ariadne.Model
 {
+    /// <summary>
+    /// MazeSquares are the building blocks of a Maze.
+    /// They have open or closed walls on all four sides.
+    /// </summary>
     sealed public class MazeSquare
     {
         #region Member variables and Properties

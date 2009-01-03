@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
 
-namespace SWA.Ariadne.Settings
+namespace SWA.Utilities
 {
+    /// <summary>
+    /// Provides methods for defining colors in the HSB color model.
+    /// </summary>
     public static class ColorBuilder
     {
-        public static float MaxHue = 360.0F;
-        public static float MaxSaturation = 1.0F;
-        public static float MaxBrightness = 1.0F;
+        public const float MaxHue = 360.0F;
+        public const float MaxSaturation = 1.0F;
+        public const float MaxBrightness = 1.0F;
 
         /// <summary>
         /// Convert from HSB color coefficients to a .NET Color.
@@ -107,11 +110,11 @@ namespace SWA.Ariadne.Settings
         /// <param name="backwardColor">darker color</param>
         public static void SuggestColors(Color ref1, Color ref2, out Color forwardColor, out Color backwardColor)
         {
-            Random r = new Random();
+            Random r = RandomFactory.CreateRandom();
 
-            float hDist = 0.25F * ColorBuilder.MaxHue;
-            float sDist = 0.50F;
-            float bDist = 0.50F;
+            float hDist = 0.25F * MaxHue;
+            float sDist = 0.50F * MaxSaturation;
+            float bDist = 0.50F * MaxBrightness;
 
             float sMin = Math.Min(ref1.GetSaturation(), ref2.GetSaturation());
             float sMax = Math.Max(ref1.GetSaturation(), ref2.GetSaturation());

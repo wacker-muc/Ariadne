@@ -34,7 +34,7 @@ namespace SWA.Ariadne.Gui
         /// The object that accepts the SolverController commands.
         /// </summary>
         /// TODO: eliminate this property
-        protected virtual SWA.Ariadne.Ctrl.ISolverController SolverController
+        protected virtual ISolverController SolverController
         {
             get { return null; }
         }
@@ -42,7 +42,7 @@ namespace SWA.Ariadne.Gui
         /// <summary>
         /// The object that accepts the AriadneSettingsSource commands.
         /// </summary>
-        protected virtual SWA.Ariadne.Settings.IAriadneSettingsSource AriadneSettingsSource
+        protected virtual IAriadneSettingsSource AriadneSettingsSource
         {
             get { return null; }
         }
@@ -118,7 +118,7 @@ namespace SWA.Ariadne.Gui
         /// <param name="e"></param>
         public virtual void OnNew(object sender, EventArgs e)
         {
-            if (State != SWA.Ariadne.Logic.SolverState.Ready)
+            if (State != SolverState.Ready)
             {
                 OnReset(sender, e);
             }
@@ -134,13 +134,7 @@ namespace SWA.Ariadne.Gui
         private void OnDetails(object sender, EventArgs e)
         {
             // This is not allowed while the Solver is busy.
-            if (State == SolverState.Running || State == SolverState.Paused)
-            {
-                return;
-            }
-
-            // It is also not allowed while we are waiting for an automatic repetition.
-            if (ariadneController.RepeatMode == true && State == SolverState.Finished)
+            if (State != SolverState.Ready && State != SolverState.Finished)
             {
                 return;
             }
@@ -209,14 +203,14 @@ namespace SWA.Ariadne.Gui
             filename.Append("Ariadne_");
             filename.Append(MazeControlProperties.Code.Replace(".", ""));
             filename.Append("_" + mazeWidth.ToString() + "x" + mazeHeigth.ToString());
-            if (State == SolverState.Ready)
+            if (State == SolverState.Ready || State == SolverState.ReadyAndScheduled)
             {
                 filename.Append("_empty");
             }
             else
             {
                 filename.Append("_" + this.StrategyName);
-                if (State == SolverState.Finished)
+                if (State == SolverState.Finished || State == SolverState.FinishedAndScheduled)
                 {
                     filename.Append("_solved");
                 }
@@ -283,7 +277,7 @@ namespace SWA.Ariadne.Gui
         /// <param name="e"></param>
         private void OnStep(object sender, EventArgs e)
         {
-            if (State == SolverState.Ready)
+            if (State == SolverState.Ready || State == SolverState.ReadyAndScheduled)
             {
                 this.OnStart(sender, e);
                 this.OnPause(sender, e);
@@ -592,6 +586,15 @@ namespace SWA.Ariadne.Gui
 
                 return result;
             }
+        }
+
+        /// <summary>
+        /// Called when the controller's state has changed.
+        /// <seealso cref="OnDetails(object, EventArgs)"/>
+        /// </summary>
+        public void NotifyControllerStateChanged()
+        {
+            this.detailsMenuItem.Enabled = (State == SolverState.Ready || State == SolverState.Finished);
         }
 
         #endregion
