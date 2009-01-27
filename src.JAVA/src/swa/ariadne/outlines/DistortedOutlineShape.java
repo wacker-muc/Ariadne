@@ -7,7 +7,7 @@ import swa.util.Point2DPolar;
 
 /**
  * Applies a continuous transformation to the coordinate system of an underlying shape.
- * 
+ *
  * @author Stephan.Wacker@web.de
  */
 public
@@ -23,7 +23,7 @@ extends ContinuousOutlineShape
      * the function's intended operation needs to be "inverted".
      * E.g., if the distorted shape should be like the original shape,
      * turned <em>counterclockwise</em> by a certain angle, the mapping must turn the
-     * given point <em>clockwise</em> by that angle. 
+     * given point <em>clockwise</em> by that angle.
      */
     public static abstract class Distortion
     {
@@ -37,11 +37,11 @@ extends ContinuousOutlineShape
     //--------------------- Member Variables and Properties
 
     /** The underlying shape. */
-    private ContinuousOutlineShape baseShape;
+    private final ContinuousOutlineShape baseShape;
 
     /** The function implementing the desired mapping. */
-    private Distortion distortion;
-    
+    private final Distortion distortion;
+
     //--------------------- IOutlineShape implementation
 
     @Override
@@ -75,9 +75,9 @@ extends ContinuousOutlineShape
      * @param center Center of the distortion; this point is mapped to itself.
      * @param size Radius of the reference circle around the center.
      * @param winding Points on the reference circle are wound by winding*2*PI radians (counterclockwise).
-     * @return A distortion that turns a straight line through the given center into a spiral. 
+     * @return A distortion that turns a straight line through the given center into a spiral.
      */
-    public static Distortion SpiralDistortion(final Point2D center, final double size, final double winding)
+    public static Distortion spiralDistortion(final Point2D center, final double size, final double winding)
     {
         return new Distortion()
         {
@@ -88,7 +88,7 @@ extends ContinuousOutlineShape
                 p0.x -= center.x;
                 p0.y -= center.y;
                 Point2DPolar pp = p0.asPolar();
-                
+
                 pp.phi += pp.r * winding / size * 2.0 * Math.PI;
 
                 Point2D result = pp.asCartesian();
@@ -96,7 +96,7 @@ extends ContinuousOutlineShape
                 result.y += center.y;
                 return result;
             }
-            
+
             @Override
             public String toString()
             {
@@ -114,7 +114,7 @@ extends ContinuousOutlineShape
      * @param minRatio The distance from the center will be multiplied by a value between minRatio and 1.
      * @return A distortion that indents a circle around the given center.
      */
-    public static Distortion RadialWaveDistortion(final Point2D center, final int waveCount, final double waveShift, final double minRatio)
+    public static Distortion radialWaveDistortion(final Point2D center, final int waveCount, final double waveShift, final double minRatio)
     {
         return new Distortion()
         {
@@ -140,7 +140,7 @@ extends ContinuousOutlineShape
                 result.y += center.y;
                 return result;
             }
-            
+
             @Override
             public String toString()
             {

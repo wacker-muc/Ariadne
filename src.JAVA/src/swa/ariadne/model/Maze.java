@@ -3,7 +3,6 @@ package swa.ariadne.model;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.lang.Math;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -11,24 +10,24 @@ import java.util.Stack;
 
 import swa.ariadne.outlines.IOutlineShape;
 import swa.ariadne.outlines.OutlineShape;
-import swa.util.*;
+import swa.util.RandomFactory;
 
 /**
  * A Maze consists of a rectangular grid of {@link MazeSquare MazeSquares}.
  * There is exactly one solution path from the start square to the target square.
- * 
+ *
  * @author Stephan.Wacker@web.de
  */
 public class Maze
 {
-    //--------------------- Member variables and Properties 
-    
+    //--------------------- Member variables and Properties
+
     /** Provides minimum and maximum dimension parameters. */
-    private MazeDimensions dimensionsObj;
-    
+    private final MazeDimensions dimensionsObj;
+
     /** Can encode and decode maze parameters into maze ID strings. */
-    private MazeCode codeObj;
-    
+    private final MazeCode codeObj;
+
     /** @return The ID of this maze: 1 is the primary maze */
     public int getMazeId()
     {
@@ -36,8 +35,8 @@ public class Maze
     }
 
     /** Width and height of the maze. */
-    private Dimension size = new Dimension();
-    
+    private final Dimension size = new Dimension();
+
     /**
      * @return Size of the maze, as a new Dimension object.
      */
@@ -45,13 +44,13 @@ public class Maze
     {
         return new Dimension(this.size);
     }
-    
+
     /** @return Width of the maze. */
     public int getXSize()
     {
         return this.size.width;
     }
-    
+
     /** @return Height of the maze. */
     public int getYSize()
     {
@@ -60,7 +59,7 @@ public class Maze
 
     /** Two-dimensional grid of MazeSquares, the dimensions are size.width x size.height. */
     private MazeSquare[][] squares;
-    
+
     /**
      * @param x A valid X coordinate.
      * @param y A valid Y coordinate.
@@ -70,28 +69,28 @@ public class Maze
     {
         return this.squares[x][y];
     }
-    
+
     /** Coordinates of the start square. */
     private Point startPoint = new Point();
-    
+
     /** Coordinates of the target square. */
     private Point targetPoint = new Point();
-    
+
     /** @return The start square. */
     public MazeSquare getStartSquare()
     {
         return squares[startPoint.x][startPoint.y];
     }
-    
+
     /** @return The target square. */
     public MazeSquare getTargetSquare()
     {
         return squares[targetPoint.x][targetPoint.y];
     }
-    
+
     /** Travel direction. */
     private WallPosition direction;
-    
+
     /**
      * @return The travel direction.
      * The target square is on this side of the maze and the start square on the opposite side.
@@ -102,7 +101,7 @@ public class Maze
     }
 
     /** The source of random numbers specific to this maze. */
-    private Random random;
+    private final Random random;
     /** @return The source of random numbers specific to this maze. */
     public Random getRandom()
     {
@@ -117,7 +116,7 @@ public class Maze
     {
         return seed;
     }
-    
+
     /**
      * @return A string that encodes the maze parameters.
      * This code can be used to construct an identical maze.
@@ -154,7 +153,7 @@ public class Maze
 
         return new Rectangle(xMin, yMin, xMax - xMin + 1, yMax - yMin + 1);
     }
-    
+
     /**
      * @return True if the end point has been visited.
      */
@@ -181,13 +180,13 @@ public class Maze
     }
 
     /** Position and dimensions of some reserved areas. */
-    private List<Rectangle> reservedAreas = new ArrayList<Rectangle>();
-    
+    private final List<Rectangle> reservedAreas = new ArrayList<Rectangle>();
+
     /** For every reservedArea: An OutlineShape that defines the area actually covered by the contour image. */
-    private List<IOutlineShape> reservedAreaShapes = new ArrayList<IOutlineShape>();
+    private final List<IOutlineShape> reservedAreaShapes = new ArrayList<IOutlineShape>();
 
     //--------------------- Constructor.
-    
+
     /**
      * Constructor.
      * Create a maze with the given dimensions.
@@ -198,7 +197,7 @@ public class Maze
     {
         this(width, height, MazeCode.DefaultCodeVersion);
     }
-    
+
     /**
      * Constructor.
      * Create a maze with the given dimensions.
@@ -210,7 +209,7 @@ public class Maze
     {
         this(width, height, codeVersion, -1);
     }
-    
+
     /**
      * Constructor.
      * Create a maze with the given dimensions.
@@ -239,8 +238,9 @@ public class Maze
         //this.seed = 123; // TODO: remove
         this.random = RandomFactory.createRandom(this.seed);
     }
-    
+
     /** @return A copy of this maze. */
+    @Override
     public Maze clone()
     {
         Maze clone = new Maze(size.width, size.height);
@@ -281,7 +281,7 @@ public class Maze
     }
 
     //--------------------- Building a Maze.
-    
+
     /**
      * Create the actual maze data structures.
      * Call this after all parameters have been defined.
@@ -294,10 +294,10 @@ public class Maze
         // Fix reserved areas.
         fixReservedAreas();
         // TODO: CloseWallsAroundReservedAreas(); // TODO: This might be discarded.
-        
+
         // Divide the area into a main maze and several embedded mazes.
         // TODO: FixEmbeddedMazes();
-        
+
         // Put walls around the outline shape and the whole maze.
         // TODO: FixOutlineShape();
         fixBorderWalls();
@@ -322,7 +322,7 @@ public class Maze
     private void createSquares()
     {
         //--------------------- Create the squares.
-        
+
         this.squares = new MazeSquare[size.width][size.height];
         for (int x = 0; x < size.width; x++)
         {
@@ -368,9 +368,9 @@ public class Maze
 
         List<MazeSquare> outlineSquares = new ArrayList<MazeSquare>();
         List<WallPosition> outlineWalls = new ArrayList<WallPosition>();
-        
+
         //--------------------- Start with a single random cell in the stack.
-        
+
         while (true)
         {
             int x = random.nextInt(size.width);
@@ -385,7 +385,7 @@ public class Maze
         }
 
         //--------------------- Extend the maze by visiting the cells next to those in the stack.
-        
+
         while (stack.size() > 0)
         {
             List<WallPosition> unresolvedWalls = new ArrayList<WallPosition>(WallPosition.NUM);
@@ -479,7 +479,7 @@ public class Maze
 
             // Open the wall.
             sq0.setWall(wp0, WallState.WS_OPEN);
-            sq1.setWall(WallPosition.oppositeWall(wp0), WallState.WS_OPEN); 
+            sq1.setWall(WallPosition.oppositeWall(wp0), WallState.WS_OPEN);
 
             // Add the new cell to the stack.
             sq1.isConnected = true;
@@ -674,7 +674,7 @@ public class Maze
 
         return null;
     }
-    
+
     /**
      * @param x X location of the area to be reserved, in Maze coordinates.
      * @param y Y location of the area to be reserved, in Maze coordinates.
@@ -686,7 +686,7 @@ public class Maze
     public boolean reserveRectangle(int x, int y, int width, int height, IOutlineShape shape)
     {
         int x0 = x, y0 = y, w0 = width, h0 = height;
-        
+
         // Restrict to the actual maze area.
         if (x0 < 0)
         {
@@ -732,9 +732,9 @@ public class Maze
 
         return false;
     }
-    
+
     //--------------------- Runtime Methods.
-    
+
     /**
      * Reset to the initial state (before the maze is solved).
      */
@@ -751,10 +751,11 @@ public class Maze
     }
 
     //--------------------- Auxiliary Methods.
-    
+
     /** @return A string representation. */
+    @Override
     public String toString()
     {
-        return getCode() + ": [" + getXSize() + "," + getYSize() + "], (" + startPoint.x + "," + startPoint.y + ") -> (" + targetPoint.x + "," + targetPoint.y + ")";  
+        return getCode() + ": [" + getXSize() + "," + getYSize() + "], (" + startPoint.x + "," + startPoint.y + ") -> (" + targetPoint.x + "," + targetPoint.y + ")";
     }
 }

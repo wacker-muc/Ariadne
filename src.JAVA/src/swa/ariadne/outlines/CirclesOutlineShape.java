@@ -6,17 +6,16 @@ import java.util.Random;
 /**
  * A shape that is formed by covering the plane with a set of overlapping circles.
  * The resulting areas make up the "inside" and "outside" of the shape.
- * 
+ *
  * @author Stephan.Wacker@web.de
  */
-public
 class CirclesOutlineShape
 extends GeometricOutlineShape
 {
     //--------------------- Member Variables and Properties
-    
+
     /** A set of circles. */
-    private CircleOutlineShape[] circles;
+    private final CircleOutlineShape[] circles;
 
     //--------------------- IOutlineShape implementation
 
@@ -41,7 +40,7 @@ extends GeometricOutlineShape
     //--------------------- Constructors
 
     /**
-     * Constructor used by the {@link swa.ariadne.outlines.factory.OutlineShapeFactory OutlineShapeFactory}.
+     * Constructor.
      * @param r A source of random numbers.
      * @param size Nominal size of the shape.
      * @param params Characteristic parameters of the shape: location and size.
@@ -50,27 +49,28 @@ extends GeometricOutlineShape
     {
         super(size, params);
 
+        double sz = params.getSize();
         int n = 3 + r.nextInt(4);
         circles = new CircleOutlineShape[n];
 
-        double xccMin = -0.33 * params.sz, xccMax = XSize() + 0.33 * params.sz;
-        double yccMin = -0.33 * params.sz, yccMax = YSize() + 0.33 * params.sz;
+        double xccMin = -0.33 * sz, xccMax = getWidth() + 0.33 * sz;
+        double yccMin = -0.33 * sz, yccMax = getHeight() + 0.33 * sz;
         double szcRange = 0.5;
-        
+
         for (int i = 0; i < n; i++)
         {
             // Choose the circle parameters: center and radius.
             double xcc = xccMin + r.nextDouble() * (xccMax - xccMin);
             double ycc = yccMin + r.nextDouble() * (yccMax - yccMin);
-            double szc = params.sz * ((1.0 - szcRange) + (2.0 * szcRange));
+            double szc = sz * ((1.0 - szcRange) + (2.0 * szcRange));
 
             // If the center is too far outside of the border, increase the radius.
-            double borderDist = Math.min(Math.min(xcc, XSize() - xcc), Math.min(ycc, YSize() - ycc));
+            double borderDist = Math.min(Math.min(xcc, getWidth() - xcc), Math.min(ycc, getHeight() - ycc));
             if (borderDist + szc < 0.5 * szc)
             {
-                szc = params.sz * (1.0 + 1.0 * szcRange);
+                szc = sz * (1.0 + 1.0 * szcRange);
             }
-            
+
             circles[i] = new CircleOutlineShape(size, new OutlineShapeParameters(xcc, ycc, szc));
         }
     }

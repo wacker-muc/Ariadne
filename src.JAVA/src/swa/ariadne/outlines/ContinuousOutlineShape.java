@@ -48,6 +48,6 @@ extends OutlineShape
      */
     ContinuousOutlineShape makeDistortedCopy(DistortedOutlineShape.Distortion distortion)
     {
-        return new DistortedOutlineShape(new Dimension(XSize(), YSize()), this, distortion);
+        return new DistortedOutlineShape(new Dimension(getWidth(), getHeight()), this, distortion);
     }
 }

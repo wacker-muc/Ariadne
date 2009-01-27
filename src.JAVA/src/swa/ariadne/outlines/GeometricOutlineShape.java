@@ -5,10 +5,10 @@ import java.awt.Dimension;
 /**
  * Base class for {@link OutlineShape OutlineShapes} that are formed of a single geometric shape.
  * E.g. circles, algebraic curves, polygons.
- * 
+ *
  * @author Stephan.Wacker@web.de
  */
-abstract
+public abstract
 class GeometricOutlineShape
 extends ContinuousOutlineShape
 {

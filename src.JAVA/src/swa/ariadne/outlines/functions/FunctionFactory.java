@@ -6,18 +6,19 @@ import swa.util.Picker;
 
 /**
  * Creates {@link Function} objects.
- * 
+ *
  * @author Stephan.Wacker@web.de
  */
 public
 class FunctionFactory
 {
     //--------------------- Static variables
-    
+
     /**
-     *  A collection of all available Function constructors.
+     *  A collection of all available {@linkplain FunctionConstructor Function constructors}.
      */
-    private static FunctionConstructor[] constructors = {
+    private static FunctionConstructor[] constructors =
+    {
         GeometricFunctions.Ellipsis(),
         GeometricFunctions.Hyperbola(),
         GeometricFunctions.ConcentricCircles(),
@@ -33,18 +34,18 @@ class FunctionFactory
     };
 
     //--------------------- Static methods
-    
+
     /**
      * @param r A source of random numbers.
-     * @return Some fully configured Function object.
+     * @return Some fully configured {@link Function} object.
      */
     public static Function createInstance(Random r)
     {
         Function result = new Picker<FunctionConstructor>(constructors).pick(r).create(r);
-        
+
         result.addDistortion(r);
         result.initAdditionalParameters(r);
-        
+
         return result;
     }
 }

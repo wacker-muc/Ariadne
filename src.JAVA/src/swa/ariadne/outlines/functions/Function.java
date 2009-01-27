@@ -8,7 +8,7 @@ import swa.util.Point2D;
 /**
  * A two-dimensional function.
  * Points evaluating to positive values are considered "inside" the resulting
- * {@link swa.ariadne.outlines.FunctionOutlineShape FunctionOutlineShape}.  
+ * {@link swa.ariadne.outlines.functions.FunctionOutlineShape FunctionOutlineShape}.  
  * 
  * @author Stephan.Wacker@web.de
  */

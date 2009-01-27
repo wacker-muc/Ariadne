@@ -8,7 +8,7 @@ import java.util.Random;
  * An OutlineShape defines a contour line dividing the shape's inside and outside.
  * When used by the MazeBuilder, the walls on the contour line should all be closed
  * (with the exception of a single entry).
- * 
+ *
  * @author Stephan.Wacker@web.de
  */
 public abstract
@@ -16,27 +16,23 @@ class OutlineShape
 implements IOutlineShape
 {
     //--------------------- Member Variables and Properties
-    
+
     /** Nominal size of the shape. */
-    private Dimension size;
-    
+    private final Dimension size;
+
     /** @return Nominal width of the shape. */
-    // TODO: rename to width()
-    public final int XSize()
+    public final int getWidth()
     {
         return this.size.width;
     }
 
     /** @return Nominal height of the shape. */
-    // TODO: rename to height()
-    public final int YSize()
+    public final int getHeight()
     {
         return this.size.height;
     }
 
-    /**
-     * @return The shape's nominal size.
-     */
+    /** @return Nominal size of the shape. */
     public Dimension getSize()
     {
         return (Dimension) this.size.clone();
@@ -53,24 +49,11 @@ implements IOutlineShape
         this.size = (Dimension) size.clone();
     }
 
-    /**
-     * Constructor used by the {@link swa.ariadne.outlines.factory.OutlineShapeFactory OutlineShapeFactory}.
-     * @param r A source of random numbers.
-     * @param size Nominal size of the shape.
-     * @param params Characteristic parameters of the shape: location and size.
-     * @throws InstantiationException Subclasses must implement their own version.
-     */
-    public OutlineShape(Random r, Dimension size, OutlineShapeParameters params)
-    throws InstantiationException
-    {
-        throw new InstantiationException("Subclasses of OutlineShape must implement the OutlineShape(Random, Dimension, OutlineShapeParameters) constructor.");
-    }
-    
     //--------------------- OutlineShape implementation
 
     /**
      * @return A rectangle that tightly includes the actual shape, in shape coordinates.
-     * <br>Note: The result is limited to the nominal width and height. 
+     * <br>Note: The result is limited to the nominal width and height.
      */
     public Rectangle getBoundingBox()
     {
@@ -92,10 +75,10 @@ implements IOutlineShape
 
         return new Rectangle(xMin, yMin, xMax - xMin + 1, yMax - yMin + 1);
     }
-    
+
     /**
      * @return The number of points that are inside the shape.
-     * <br>Note: The result is limited to the nominal width and height. 
+     * <br>Note: The result is limited to the nominal width and height.
      */
     public int getArea()
     {
@@ -197,7 +180,7 @@ implements IOutlineShape
     {
         return String.format("%s: [%dx%d], bbox = %s, area = %d",
             this.getClass().toString(),
-            this.XSize(), this.YSize(),
+            this.getWidth(), this.getHeight(),
             this.getBoundingBox().toString(),
             this.getArea());
     }

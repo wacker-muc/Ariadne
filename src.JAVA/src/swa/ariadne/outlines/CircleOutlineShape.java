@@ -7,10 +7,10 @@ import swa.util.Point2DPolar;
 
 /**
  * A simple {@link OutlineShape} in the form of a circle.
- * 
+ *
  * @author Stephan.Wacker@web.de
  */
-public class CircleOutlineShape
+class CircleOutlineShape
 extends GeometricOutlineShape
 {
     //--------------------- IOutlineShape implementation
@@ -20,10 +20,10 @@ extends GeometricOutlineShape
     {
         Point2DPolar pp = params.makePoint2DPolar(x, y);
 
-        return (pp.r <= params.sz);
+        return (pp.r <= params.getSize());
     }
 
-    //--------------------- Constructor
+    //--------------------- Constructors
 
     /**
      * Constructor.
@@ -35,20 +35,9 @@ extends GeometricOutlineShape
         super(size, params);
     }
 
-    /**
-     * Constructor used by the {@link swa.ariadne.outlines.factory.OutlineShapeFactory OutlineShapeFactory}.
-     * @param r A source of random numbers.
-     * @param size Nominal size of the shape.
-     * @param params Characteristic parameters of the shape: location and size.
-     */
-    public CircleOutlineShape(Random r, Dimension size, OutlineShapeParameters params)
-    {
-        this(size, params);
-    }
-    
     //---------------------  OutlineShape implementation
 
-    /** 
+    /**
      * @return The percentage of instances that should be distorted.
      * <br> The simple CircleOutlineShape should be distorted rather often.
      * @see OutlineShape#getDistortedPercentage(int)
@@ -68,7 +57,7 @@ extends GeometricOutlineShape
     /**
      * @param r A source of random numbers.
      * @return A {@link DistortedOutlineShape} based on the current shape
-     * and a {@link DistortedOutlineShape#RadialWaveDistortion RadialWaveDistortion}.
+     * and a {@linkplain DistortedOutlineShape#radialWaveDistortion(swa.util.Point2D, int, double, double) radial wave distortion}.
      */
     private ContinuousOutlineShape makeRadialWaveDistortedCopy(Random r)
     {
@@ -78,7 +67,7 @@ extends GeometricOutlineShape
         double bMax = 0.85 + (n - 2) * 0.0166;      // almost flat sides
         double b = bMin + r.nextDouble() * (bMax - bMin);
 
-        DistortedOutlineShape.Distortion distortion = DistortedOutlineShape.RadialWaveDistortion(params.center, n, a, b);
+        DistortedOutlineShape.Distortion distortion = DistortedOutlineShape.radialWaveDistortion(params.getCenter(), n, a, b);
         return this.makeDistortedCopy(distortion);
     }
 }

@@ -16,8 +16,8 @@ extends GeometricOutlineShape
     //--------------------- Member Variables and Properties
 
     /** Number of corners of the polygon. */
-    private int corners;
-    
+    private final int corners;
+
     /** Numbers greater than 1 result in a star shape. */
     private int windings;
 
@@ -27,7 +27,7 @@ extends GeometricOutlineShape
      */
     private double slant;
 
-    /** 
+    /**
      * One half of the sector angle, spanned from the shape's center to two of its corners.
      * The full angle is 2 * PI * windings / corners.
      */
@@ -71,7 +71,7 @@ extends GeometricOutlineShape
      * Constructor.
      * @param corners Number of corners.
      * @param windings 1 for regular polygons, >1 for star shaped polygons; less than corners/2
-     * @param slant An angle by which the polygon is rotated; 0.0 will put one corner at the top: (0.0, sz). 
+     * @param slant An angle by which the polygon is rotated; 0.0 will put one corner at the top: (0.0, sz).
      * @param size Nominal size of the shape.
      * @param params Characteristic parameters of the shape: location and size.
      */
@@ -88,13 +88,13 @@ extends GeometricOutlineShape
         this.halfSectorAngle = this.sliceAngle * this.windings;
 
         // This is the X coordinate of the two corners of a vertical edge (after an adequate rotation).
-        this.xEdge = params.sz * Math.cos(this.halfSectorAngle);
+        this.xEdge = params.getSize() * Math.cos(this.halfSectorAngle);
 
         buildSliceRotationMap();
     }
 
     /**
-     * Constructor used by the {@link swa.ariadne.outlines.factory.OutlineShapeFactory OutlineShapeFactory}.
+     * Constructor used by the {@link OutlineShapeFactory}.
      * <br> Creates a polygon shape with 3 to 12 corners.
      * @param r A source of random numbers.
      * @param size Nominal size of the shape.
@@ -103,7 +103,7 @@ extends GeometricOutlineShape
     public PolygonOutlineShape(Random r, Dimension size, OutlineShapeParameters params)
     {
         super(size, params);
-        
+
         // We build polygons with up to 12 corners.
         this.corners = 3 + r.nextInt(10);
         this.slant = 0;
@@ -203,7 +203,7 @@ extends GeometricOutlineShape
     /**
      * @param r A source of random numbers.
      * @return A {@link DistortedOutlineShape} based on the current shape
-     * and a {@link DistortedOutlineShape#SpiralDistortion SpiralDistortion}.
+     * and a {@linkplain DistortedOutlineShape#spiralDistortion(swa.util.Point2D, double, double) spiral distortion}.
      * <br> A regular polygon with more than six corners is returned unmodified.
      */
     private ContinuousOutlineShape makeSpiralDistortedCopy(Random r)
@@ -214,10 +214,10 @@ extends GeometricOutlineShape
         }
 
         // d: radial distance between an edge midpoint and a corner
-        double d = params.sz - this.xEdge;
+        double d = params.getSize() - this.xEdge;
 
         // dr: the same, relative to the shape size
-        double dr = d / params.sz;
+        double dr = d / params.getSize();
 
         // this would wind one corner to the following corner (over the full shape size)
         double maxSpiralWinding = (double)this.windings / (double)this.corners;
@@ -237,14 +237,14 @@ extends GeometricOutlineShape
             w *= -1;
         }
 
-        DistortedOutlineShape.Distortion distortion = DistortedOutlineShape.SpiralDistortion(params.center, params.sz, w);
+        DistortedOutlineShape.Distortion distortion = DistortedOutlineShape.spiralDistortion(params.getCenter(), params.getSize(), w);
         return this.makeDistortedCopy(distortion);
     }
 
     /**
      * @param r A source of random numbers.
      * @return A {@link DistortedOutlineShape} based on the current shape
-     * and a {@link DistortedOutlineShape#RadialWaveDistortion RadialWaveDistortion}.
+     * and a {@linkplain DistortedOutlineShape#radialWaveDistortion(swa.util.Point2D, int, double, double) radial wave distortion}.
      * <br> The distortion is exactly aligned with the polygon shape.
      * Only the polygon edges will be bent inwards; the points will not be distorted.
      */
@@ -267,12 +267,12 @@ extends GeometricOutlineShape
             a = -0.25;
         }
         a += this.slant / (2.0 * Math.PI);
-        
+
         double bMin = 0.2 + (n + w - 2) * 0.03;         // strongly bent edges
         double bMax = 0.75 + (n - 2) * 0.01;            // slightly bent edges
         double b = bMin + r.nextDouble() * (bMax - bMin);
 
-        DistortedOutlineShape.Distortion distortion = DistortedOutlineShape.RadialWaveDistortion(params.center, n, a, b);
+        DistortedOutlineShape.Distortion distortion = DistortedOutlineShape.radialWaveDistortion(params.getCenter(), n, a, b);
         return this.makeDistortedCopy(distortion);
     }
 }

@@ -1,6 +1,7 @@
 package swa.ariadne.outlines.tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 
 import swa.ariadne.outlines.DistortedOutlineShape;
@@ -9,8 +10,8 @@ import swa.util.Point2D;
 import swa.util.Point2DPolar;
 
 /**
- * This is a test class for swa.ariadne.outlines.DistortedOutlineShape.
- * 
+ * Test class for swa.ariadne.outlines.DistortedOutlineShape.
+ *
  * @author Stephan.Wacker@web.de
  */
 public class DistortedOutlineShapeTest
@@ -19,11 +20,11 @@ public class DistortedOutlineShapeTest
 
     /** sqrt(2) */
     private static final double s2 = Math.sqrt(2.0);
-    
+
     //--------------------- Unit tests for DistortedOutlineShape.SpiralDistortion
 
     /**
-     * Test method for {@link DistortedOutlineShape#SpiralDistortion(Point2D, double, double)}.
+     * Test method for {@link DistortedOutlineShape#spiralDistortion(Point2D, double, double)}.
      */
     @Test
     public final void DOS_testSpiralDistortion_01()
@@ -31,7 +32,7 @@ public class DistortedOutlineShapeTest
         Point2D center = new Point2D(0, 0);
         double size = 1.0;
         double winding = 0.25;
-        Distortion target = DistortedOutlineShape.SpiralDistortion(center, size, winding);
+        Distortion target = DistortedOutlineShape.spiralDistortion(center, size, winding);
 
         assertDistortionFixpoint(target, center);
         assertDistortion(target, new Point2D(1.0, 0.0), new Point2D(0.0, 1.0));
@@ -40,7 +41,7 @@ public class DistortedOutlineShapeTest
     }
 
     /**
-     * Test method for {@link DistortedOutlineShape#SpiralDistortion(Point2D, double, double)}.
+     * Test method for {@link DistortedOutlineShape#spiralDistortion(Point2D, double, double)}.
      */
     @Test
     public final void DOS_testSpiralDistortion_02()
@@ -48,7 +49,7 @@ public class DistortedOutlineShapeTest
         Point2D center = new Point2D(0, 0);
         double size = 1.0;
         double winding = 0.125;
-        Distortion target = DistortedOutlineShape.SpiralDistortion(center, size, winding);
+        Distortion target = DistortedOutlineShape.spiralDistortion(center, size, winding);
 
         assertDistortionFixpoint(target, center);
         assertDistortion(target, new Point2D(1.0, 0.0), new Point2D(s2/2, s2/2));
@@ -57,7 +58,7 @@ public class DistortedOutlineShapeTest
     }
 
     /**
-     * Test method for {@link DistortedOutlineShape#SpiralDistortion(Point2D, double, double)}.
+     * Test method for {@link DistortedOutlineShape#spiralDistortion(Point2D, double, double)}.
      */
     @Test
     public final void DOS_testSpiralDistortion_03()
@@ -65,7 +66,7 @@ public class DistortedOutlineShapeTest
         Point2D center = new Point2D(0, 0);
         double size = 2.0;
         double winding = 0.25;
-        Distortion target = DistortedOutlineShape.SpiralDistortion(center, size, winding);
+        Distortion target = DistortedOutlineShape.spiralDistortion(center, size, winding);
 
         assertDistortionFixpoint(target, center);
         assertDistortion(target, new Point2D(2.0, 0.0), new Point2D(0.0, 2.0));
@@ -74,7 +75,7 @@ public class DistortedOutlineShapeTest
     }
 
     /**
-     * Test method for {@link DistortedOutlineShape#SpiralDistortion(Point2D, double, double)}.
+     * Test method for {@link DistortedOutlineShape#spiralDistortion(Point2D, double, double)}.
      */
     @Test
     public final void DOS_testSpiralDistortion_04()
@@ -82,7 +83,7 @@ public class DistortedOutlineShapeTest
         Point2D center = new Point2D(1, 1);
         double size = 1.0;
         double winding = 0.25;
-        Distortion target = DistortedOutlineShape.SpiralDistortion(center, size, winding);
+        Distortion target = DistortedOutlineShape.spiralDistortion(center, size, winding);
 
         assertDistortionFixpoint(target, center);
         assertDistortion(target, new Point2D(2.0, 1.0), new Point2D(1.0, 2.0));
@@ -92,7 +93,7 @@ public class DistortedOutlineShapeTest
     //--------------------- Unit tests for DistortedOutlineShape.RadialWaveDistortion
 
     /**
-     * Test method for {@link DistortedOutlineShape#RadialWaveDistortion(Point2D, int, double, double)}.
+     * Test method for {@link DistortedOutlineShape#radialWaveDistortion(Point2D, int, double, double)}.
      */
     @Test
     public void DOS_testRadialWaveDistortion_01()
@@ -104,7 +105,7 @@ public class DistortedOutlineShapeTest
     }
 
     /**
-     * Test method for {@link DistortedOutlineShape#RadialWaveDistortion(Point2D, int, double, double)}.
+     * Test method for {@link DistortedOutlineShape#radialWaveDistortion(Point2D, int, double, double)}.
      */
     @Test
     public void DOS_testRadialWaveDistortion_02()
@@ -116,7 +117,7 @@ public class DistortedOutlineShapeTest
     }
 
     /**
-     * Test method for {@link DistortedOutlineShape#RadialWaveDistortion(Point2D, int, double, double)}.
+     * Test method for {@link DistortedOutlineShape#radialWaveDistortion(Point2D, int, double, double)}.
      */
     @Test
     public void DOS_testRadialWaveDistortion_03()
@@ -128,7 +129,7 @@ public class DistortedOutlineShapeTest
     }
 
     /**
-     * Test method for {@link DistortedOutlineShape#RadialWaveDistortion(Point2D, int, double, double)}.
+     * Test method for {@link DistortedOutlineShape#radialWaveDistortion(Point2D, int, double, double)}.
      */
     @Test
     public void DOS_testRadialWaveDistortion_04()
@@ -140,19 +141,19 @@ public class DistortedOutlineShapeTest
     }
 
     /**
-     * Test method for {@link DistortedOutlineShape#RadialWaveDistortion(Point2D, int, double, double)}.
+     * Test method for {@link DistortedOutlineShape#radialWaveDistortion(Point2D, int, double, double)}.
      */
     @Test
     public void DOS_testRadialWaveDistortion_05()
     {
         Point2D center = new Point2D(0, 0);
         double m = 0.5;
-        
+
         for (int n = 3; n <= 12; n++)
         {
             double s = (n % 2 == 1 ? 0.25 : (n % 4 == 2 ? 0.00 : 0.5 / n));
 
-            Distortion target = DistortedOutlineShape.RadialWaveDistortion(center, n, s, m);
+            Distortion target = DistortedOutlineShape.radialWaveDistortion(center, n, s, m);
 
             assertDistortion(target, new Point2D(0.0, -1.0), new Point2D(0.0, -2.0));
             assertDistortionFixpoint(target, new Point2DPolar(1.0, 2.0 * Math.PI * (0.75 + 0.5 / n)));
@@ -168,7 +169,7 @@ public class DistortedOutlineShapeTest
     private static void testRadialWaveDistortion(int n, double s, double m)
     {
         Point2D center = new Point2D(0, 0);
-        Distortion target = DistortedOutlineShape.RadialWaveDistortion(center, n, s, m);
+        Distortion target = DistortedOutlineShape.radialWaveDistortion(center, n, s, m);
 
         Point2DPolar pp0, pp1;
 
@@ -186,7 +187,7 @@ public class DistortedOutlineShapeTest
         pp1.r /= m;
         assertDistortion(target, pp0, pp1);
     }
-    
+
     //--------------------- Auxiliary methods
 
     /**

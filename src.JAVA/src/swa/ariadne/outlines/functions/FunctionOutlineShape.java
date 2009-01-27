@@ -1,17 +1,18 @@
-package swa.ariadne.outlines;
+package swa.ariadne.outlines.functions;
 
 import java.awt.Dimension;
 import java.util.Random;
 
-import swa.ariadne.outlines.functions.Function;
-import swa.ariadne.outlines.functions.FunctionFactory;
+import swa.ariadne.outlines.GeometricOutlineShape;
+import swa.ariadne.outlines.OutlineShape;
+import swa.ariadne.outlines.OutlineShapeParameters;
 import swa.util.Point2D;
 
 /**
  * An {@link OutlineShape} defined by a geometric function in two dimensions: <em>f(x, y)</em>.
  * <br>The dividing line between "inside" and "outside" is defined by the function's roots,
  * i.e. the contour is where the function <em>f(x, y)</em> becomes zero.
- * 
+ *
  * @author Stephan.Wacker@web.de
  */
 public
@@ -21,7 +22,7 @@ extends GeometricOutlineShape
     //--------------------- Member variables and Properties
 
     /** The function defining the outline shape. */
-    private Function function;
+    private final Function function;
 
     //--------------------- IOutlineShape implementation
 
@@ -29,8 +30,8 @@ extends GeometricOutlineShape
     public boolean get(double x, double y)
     {
         Point2D pc = params.makePoint2D(x, y);
-        pc.x *= params.sz;
-        pc.y *= params.sz;
+        pc.x *= params.getSize();
+        pc.y *= params.getSize();
 
         double z = function.evaluate(pc.x, pc.y);
         return (z > 0);
@@ -41,7 +42,7 @@ extends GeometricOutlineShape
     /**
      * @param size Nominal size of the shape.
      * @param params Characteristic parameters of the shape: location and size.
-     * @param function A method with signature <em>double f(double x, double y)</em>. 
+     * @param function A method with signature <em>double f(double x, double y)</em>.
      * @param symmetryRotation 0 if the function should be called with polar coordinates;
      * <br> 1..4 for a rotation by (r - 1) * 90 degrees
      */
@@ -49,19 +50,21 @@ extends GeometricOutlineShape
     {
         super(size, params);
 
-        // The coordinate system's center is adjusted to an integer value (in shape coordinates).
-        this.params.center.x = Math.round(this.params.center.x);
-        this.params.center.y = Math.round(this.params.center.y);
-
-        // The size parameter will be used for scaling the function arguments.
         double n = 5; // number of units (in function coordinates) that span the shape's size
-        this.params.sz = n / this.params.sz;
-        
+
+        // Adjust the shape parameters.
+        // The coordinate system's center is moved to an integer value (in shape coordinates).
+        // The size parameter will be used for scaling the function arguments.
+        this.params = new OutlineShapeParameters(
+                Math.round(this.params.getCenter().x),
+                Math.round(this.params.getCenter().y),
+                n / this.params.getSize()).convertToShapeCoordinates(null);
+
         this.function = function;
     }
 
     /**
-     * Constructor used by the {@link swa.ariadne.outlines.factory.OutlineShapeFactory OutlineShapeFactory}.
+     * Constructor used by the {@link swa.ariadne.outlines.OutlineShapeFactory OutlineShapeFactory}.
      * @param r A source of random numbers.
      * @param size Nominal size of the shape.
      * @param params Characteristic parameters of the shape: location and size.
