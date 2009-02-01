@@ -9,10 +9,14 @@ using SWA.Utilities;
 
 namespace SWA.Ariadne.Gui.Mazes
 {
+    /// <summary>
+    /// The ImageLoader can be used to pre-fetch several images in a background thread and convert them to ContourImages.
+    /// The GetNext() method will immediately return the next available image, or wait until the next conversion is finished.
+    /// </summary>
     public class ImageLoader
         : IImageLoader
     {
-        const char PathSeparator = ';';
+        private const char PathSeparator = ';';
 
         #region Member variables.
 
@@ -190,7 +194,7 @@ namespace SWA.Ariadne.Gui.Mazes
         {
             Random r = RandomFactory.CreateRandom();
 
-            #region Start with a few images, preferrably without a contour.
+            #region Start with a few images, preferably without a contour.
 
             // The saved image paths are already ordered (see SaveImagePaths()).
             LoadAndEnqueue(r, true, LoadImagePaths());
@@ -462,10 +466,10 @@ namespace SWA.Ariadne.Gui.Mazes
 
         #endregion
 
-        #region Persistant memory of image paths.
+        #region Persistent memory of image paths.
 
         /// <summary>
-        /// Writes the paths of all currently queued images to the registry.
+        /// Writes the paths of all currently queued images to the Windows registry.
         /// These paths will be used to initialize the queue on the following run.
         /// </summary>
         private void SaveImagePaths()

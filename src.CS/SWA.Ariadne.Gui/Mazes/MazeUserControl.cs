@@ -278,14 +278,6 @@ namespace SWA.Ariadne.Gui.Mazes
             // Move the control into the center of the reserved area.
             if (result)
             {
-#if false
-                // Adjust the control's size to make it fit symmetrically into the given space
-                coveringControl.Width += coveringControl.Width % 2;
-                coveringControl.Width -= (w * gridWidth - wallWidth - coveringControl.Width) % 2;
-                coveringControl.Height += coveringControl.Height % 2;
-                coveringControl.Height -= (h * gridWidth - wallWidth - coveringControl.Height) % 2;
-#endif
-
                 int cx = coveringControl.Left;
                 int cy = coveringControl.Top;
 

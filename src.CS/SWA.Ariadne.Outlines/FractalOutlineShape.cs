@@ -134,7 +134,7 @@ namespace SWA.Ariadne.Outlines
             {
                 // Determine whether the interval's midpoint is inside or outside.
                 double cr2 = 0.5 * (cr0 + cr1), ci2 = 0.5 * (ci0 + ci1);
-                double m0 = Mandelbrot(cr0, ci1);
+                double m0 = Mandelbrot(cr0, ci0);
                 double m1 = Mandelbrot(cr1, ci1);
                 double m = Mandelbrot(cr2, ci2);
 

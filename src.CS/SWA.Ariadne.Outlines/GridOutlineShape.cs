@@ -58,11 +58,11 @@ namespace SWA.Ariadne.Outlines
         /// Applies the given tile on the baseShape at the given location.
         /// </summary>
         /// <param name="tile"></param>
-        /// <param name="xRight"></param>
+        /// <param name="xLeft"></param>
         /// <param name="yTop"></param>
-        private void Apply(GridElement tile, int xRight, int yTop)
+        private void Apply(GridElement tile, int xLeft, int yTop)
         {
-            tile.Apply(baseShape, xRight, yTop);
+            tile.Apply(baseShape, xLeft, yTop);
         }
 
         /// <summary>
@@ -135,7 +135,7 @@ namespace SWA.Ariadne.Outlines
             gridTile.Scale = (int)Math.Min(2 * sz / gridTile.Width, 2 * sz / gridTile.Height);
 
             // Render the tile into a shape which has exactly the tile size.
-            // Note: As the bounding box is not restricted to the tile area, a single application would neot suffice.
+            // Note: As the bounding box is not restricted to the tile area, a single application would not suffice.
             result = CreateCheckeredInstance(gridTile.Width, gridTile.Height, gridTile, true);
 
             foreach (TileGridElement overlayTile in overlayTiles)
@@ -195,7 +195,7 @@ namespace SWA.Ariadne.Outlines
                     overlayTiles.Add(new CircleGridElement(width, width, 0.5 * diameter));
                     break;
 
-                case 4 + 1: // halfed or quartered circles
+                case 4 + 1: // halved or quartered circles
                 case 4 + 2:
                 case 4 + 3:
                     width = height = r.Next(12, 24 + 1);
@@ -282,7 +282,7 @@ namespace SWA.Ariadne.Outlines
     #region Base classes
 
     /// <summary>
-    /// A pattern of set and cleared squares that can be applied to an EcplicitOutlineShape.
+    /// A pattern of set and cleared squares that can be applied to an ExplicitOutlineShape.
     /// There are simple and repeated subclasses.
     /// </summary>
     internal abstract class GridElement
@@ -303,9 +303,9 @@ namespace SWA.Ariadne.Outlines
         /// Every set square is inverted.
         /// </summary>
         /// <param name="target"></param>
-        /// <param name="xRight"></param>
+        /// <param name="xLeft"></param>
         /// <param name="yTop"></param>
-        public abstract void Apply(ExplicitOutlineShape target, int xRight, int yTop);
+        public abstract void Apply(ExplicitOutlineShape target, int xLeft, int yTop);
 
         /// <summary>
         /// Returns true when the given square is set.
@@ -335,9 +335,8 @@ namespace SWA.Ariadne.Outlines
     internal abstract class TileGridElement : GridElement
     {
         /// <summary>
-        /// The basic pattern may be enlarged by an positive integer scale factor.
+        /// The basic pattern may be enlarged by a positive integer scale factor.
         /// </summary>
-
         public virtual int Scale
         {
             get { return this.scale; }
@@ -367,9 +366,9 @@ namespace SWA.Ariadne.Outlines
         /// Every set square is inverted.
         /// </summary>
         /// <param name="target"></param>
-        /// <param name="xRight"></param>
+        /// <param name="xLeft"></param>
         /// <param name="yTop"></param>
-        public override void Apply(ExplicitOutlineShape target, int xRight, int yTop)
+        public override void Apply(ExplicitOutlineShape target, int xLeft, int yTop)
         {
             Rectangle bbox = this.BoundingBox;
             for (int x = bbox.Left; x < bbox.Right; x++)
@@ -378,7 +377,7 @@ namespace SWA.Ariadne.Outlines
                 {
                     if (this[x, y] == true)
                     {
-                        this.Invert(target, x + xRight, y + yTop);
+                        this.Invert(target, x + xLeft, y + yTop);
                     }
                 }
             }
@@ -407,15 +406,15 @@ namespace SWA.Ariadne.Outlines
         /// One tile (which will be inverted if invertEveryOtherTile is true) will be placed at the given location.
         /// </summary>
         /// <param name="target"></param>
-        /// <param name="xRight"></param>
+        /// <param name="xLeft"></param>
         /// <param name="yTop"></param>
-        public override void Apply(ExplicitOutlineShape target, int xRight, int yTop)
+        public override void Apply(ExplicitOutlineShape target, int xLeft, int yTop)
         {
-            Apply(target, tile, xRight, yTop, true);
+            Apply(target, tile, xLeft, yTop, true);
 
             if (invertEveryOtherTile)
             {
-                Apply(target, white, xRight, yTop, false);
+                Apply(target, white, xLeft, yTop, false);
             }
         }
 

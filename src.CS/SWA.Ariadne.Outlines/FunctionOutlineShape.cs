@@ -325,7 +325,7 @@ namespace SWA.Ariadne.Outlines
 
         /// <summary>
         /// Cosine of x multiplied by cosine of y, subtracting a small value.
-        /// Creates a sparse array of rounded squares; the other squares are connected yia their diagonals!
+        /// Creates a sparse array of rounded squares; the other squares are connected via their diagonals!
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -550,18 +550,19 @@ namespace SWA.Ariadne.Outlines
         public MethodInfo method;
 
         /// <summary>
-        /// Amplitude range: 0 .. 1.
+        /// Amplitude range, e.g. {0 .. 1}.
         /// </summary>
         public readonly double aMin, aMax;
 
         /// <summary>
-        /// Frequency range: 1/2 .. 2.
-        /// If fStep is not zero, multiples of fStep.
+        /// Frequency range, e.g. {1/2 .. 2}.
+        /// If fStep is positive, multiples of fStep.
         /// </summary>
         public readonly double fMin, fMax;
 
         /// <summary>
-        /// The frequency should be rounded to a multiple of fStep (if positive).
+        /// If fStep is positive, the resulting frequencies are the multiples {fMin*fStep .. fMax*fStep}
+        /// where fMin and fMax should be whole numbers.
         /// </summary>
         public readonly double fStep;
 

@@ -8,6 +8,12 @@ using SWA.Utilities;
 
 namespace SWA.Ariadne.Gui.Mazes
 {
+    /// <summary>
+    /// Represents an image.
+    /// If the image shows an object on a uniformly colored background, two different versions of the image are offered:
+    /// The TemplateImage is the original, complete image.
+    /// The ProcessedImage only shows the object in front of a transparent background.
+    /// </summary>
     public class ContourImage
     {
         #region Constants
@@ -37,7 +43,7 @@ namespace SWA.Ariadne.Gui.Mazes
             /// </summary>
             /// <param name="rx"></param>
             /// <param name="ry"></param>
-            /// <param name="d2"></param>
+            /// <param name="a"></param>
             public RelativePoint(int rx, int ry, int a)
             {
                 this.rx = rx; this.ry = ry; this.a = a;
@@ -267,7 +273,7 @@ namespace SWA.Ariadne.Gui.Mazes
                 }
             }
 
-            #region Special handling of horizonal stretches.
+            #region Special handling of horizontal stretches.
 
             /* On a wide horizontal object border (flat top or bottom),
              * the border points registered above are not sufficient.
@@ -292,7 +298,7 @@ namespace SWA.Ariadne.Gui.Mazes
         #region Member variables and Properties.
 
         /// <summary>
-        /// Fullly qualified filename of the image.
+        /// Fully qualified filename of the image.
         /// </summary>
         public string Path
         {
@@ -436,7 +442,7 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <summary>
         /// Returns the processed template image.
         /// Background areas at a certain distance from the image objects are painted black.
-        /// If no defitive background color was detected, the template is returned unmodified.
+        /// If no definitive background color was detected, the template is returned unmodified.
         /// </summary>
         public Image ProcessedImage
         {
@@ -689,7 +695,6 @@ namespace SWA.Ariadne.Gui.Mazes
             #region Create local variables used in the contour scan.
 
             PrepareInfluenceRegions(contourDist + blurDist);
-            int range2Max = (contourDist + blurDist) * (contourDist + blurDist);
 
             // For every pixel: The alpha value to be used in the mask.
             // Actually, we store (a - 256); thus, the default initial value 0 is like "extremely high".
@@ -1210,7 +1215,6 @@ namespace SWA.Ariadne.Gui.Mazes
             scanLineReferenceGroups.Add(new List<Point>((scanLines[y0].Count - 1) / 2));
             for (int p = 0, q = 1; q < scanLines[y0].Count; p += 2, q += 2)
             {
-                int xp = scanLines[y0][p], xq = scanLines[y0][q];
                 scanLineReferenceGroups[outsideGroupId].Add(new Point(p, y0));
                 scanAreas[saPrev].Add(new Point(p, outsideGroupId));
             }
@@ -1390,7 +1394,7 @@ namespace SWA.Ariadne.Gui.Mazes
                     int xp = scanLines[i][p] + margin, xq = scanLines[i][q] - margin;
                     if (xp <= xq)
                     {
-                        InsertPair(result[i], scanLines[i][p] + margin, scanLines[i][q] - margin);
+                        InsertPair(result[i], xp, xq);
                     }
                 }
             }
@@ -1445,13 +1449,13 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <param name="target"></param>
         private static void UniteScanLines(List<int>[] source, List<int>[] target)
         {
-            // Uniting the regions on two scan lines is like intersecting the gaps inbetween them.  :-)
+            // Uniting the regions on two scan lines is like intersecting the gaps in-between them.  :-)
             IntersectScanLines(source, target, 0, 0, 0);
         }
 
         /// <summary>
         /// Modifies the target, building an intersection of source and target areas.
-        /// Depending on the parameter p0, either the object areas or the gaps inbetween are intersected.
+        /// Depending on the parameter p0, either the object areas or the gaps in-between are intersected.
         /// </summary>
         /// <param name="source"></param>
         /// <param name="target"></param>
@@ -1678,7 +1682,6 @@ namespace SWA.Ariadne.Gui.Mazes
         /// Copies the template image into a Bitmap image that is augmented with a background color frame.
         /// Thus, all image pixels are located at least GetFrameWidth() from the result's border.
         /// </summary>
-        /// <param name="image"></param>
         private void CreateImage()
         {
             int width = template.Width, height = template.Height;

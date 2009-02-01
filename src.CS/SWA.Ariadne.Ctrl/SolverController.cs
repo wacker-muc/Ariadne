@@ -291,7 +291,7 @@ namespace SWA.Ariadne.Ctrl
 
         /// <summary>
         /// Advance a single step.
-        /// The travelled steps are not rendered until FinishPath() is called.
+        /// The traveled steps are not rendered until FinishPath() is called.
         /// Returns the number of steps actually executed.
         /// </summary>
         /// <returns></returns>

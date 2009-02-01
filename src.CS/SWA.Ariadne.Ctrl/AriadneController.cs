@@ -468,7 +468,7 @@ namespace SWA.Ariadne.Ctrl
                 {
                     result = this.solverController.StrategyName;
                 }
-                if (result == null && State == SolverState.Finished)
+                if (result == null && (State == SolverState.Finished || State == SolverState.FinishedAndScheduled))
                 {
                     result = this.finishedStrategyName;
                 }

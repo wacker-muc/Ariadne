@@ -31,12 +31,12 @@ namespace SWA.Ariadne.Logic
         Scheduled = 16,
 
         /// <summary>
-        /// A maze has been created.  The repetat timer is active.
+        /// A maze has been created.  The repeat timer is active.
         /// </summary>
         ReadyAndScheduled = Ready | Scheduled,
 
         /// <summary>
-        /// The current maze is solved.  The repetat timer is active.
+        /// The current maze is solved.  The repeat timer is active.
         /// </summary>
         FinishedAndScheduled = Finished | Scheduled,
     }

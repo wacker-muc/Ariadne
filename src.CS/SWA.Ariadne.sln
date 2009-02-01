@@ -95,6 +95,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWA.Ariadne.Outlines.Tests"
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWA.Utilities.Tests", "SWA.Utilities.Tests\SWA.Utilities.Tests.csproj", "{0D80DC76-86A3-4773-A90A-3E56F176D47A}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = SWA.Ariadne.vsmdi
@@ -160,6 +166,10 @@ Global
 		{83E0712F-C58E-4368-AA45-D0388D283011}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83E0712F-C58E-4368-AA45-D0388D283011}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{83E0712F-C58E-4368-AA45-D0388D283011}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D80DC76-86A3-4773-A90A-3E56F176D47A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D80DC76-86A3-4773-A90A-3E56F176D47A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D80DC76-86A3-4773-A90A-3E56F176D47A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D80DC76-86A3-4773-A90A-3E56F176D47A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
