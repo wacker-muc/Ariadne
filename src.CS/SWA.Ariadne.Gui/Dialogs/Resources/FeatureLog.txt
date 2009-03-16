@@ -4,7 +4,13 @@
    Feature Log: Ariadne
    ====================
 
-Copyright (c) Stephan.Wacker@web.de, 2008
+Copyright (c) Stephan.Wacker@web.de, 2008 - 2009
+
+-----------------------------------------------------------------------
+
+Version 3.4
+
+ * added a Heuristic variant to all Flooder solvers
 
 -----------------------------------------------------------------------
 

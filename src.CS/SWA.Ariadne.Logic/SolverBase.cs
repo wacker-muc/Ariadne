@@ -61,6 +61,24 @@ namespace SWA.Ariadne.Logic
             get { return (deadEndChecker != null); }
         }
 
+        /// <summary>
+        /// Some subclasses may apply a heuristic to guide their decisions.
+        /// As heuristics may be implemented on several levels of the Solver hierarchy,
+        /// overridden versions of this method should call the base version, too.
+        /// </summary>
+        public virtual void UseHeuristic()
+        {
+            // do nothing
+        }
+
+        /// <summary>
+        /// Returns true if this MazeSolver uses some heuristic to guide its decisions.
+        /// </summary>
+        public virtual bool IsHeuristicSolver
+        {
+            get { return false; }
+        }
+
         #endregion
 
         #region Constructor

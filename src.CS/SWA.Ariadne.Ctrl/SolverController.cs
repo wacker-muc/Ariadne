@@ -488,7 +488,10 @@ namespace SWA.Ariadne.Ctrl
 
                 if (this.solver != null)
                 {
-                    result = (this.solver.IsEfficientSolver ? SolverFactory.EfficientPrefix : "") + this.solver.GetType().Name;
+                    result
+                        = (this.solver.IsEfficientSolver ? SolverFactory.EfficientPrefix : "")
+                        + (this.solver.IsHeuristicSolver ? SolverFactory.HeuristicPrefix : "")
+                        + this.solver.GetType().Name;
                 }
 
                 return result;

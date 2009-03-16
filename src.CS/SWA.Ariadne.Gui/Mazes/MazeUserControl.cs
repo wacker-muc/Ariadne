@@ -339,7 +339,7 @@ namespace SWA.Ariadne.Gui.Mazes
 
             // If the window is minimized, there will be no OnPaint() event.
             // Therefore we paint the maze directly.
-            if (this.ParentForm.WindowState == FormWindowState.Minimized)
+            if (this.ParentForm != null && this.ParentForm.WindowState == FormWindowState.Minimized)
             {
                 // TODO: Reset() is called twice but should be called only once.
                 painter.PaintMaze(this.PaintImages);

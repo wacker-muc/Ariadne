@@ -156,7 +156,7 @@ namespace SWA.Ariadne.Model
                     return new PreferPathsRelativeToReferenceSquare(maze, p, q, true, false, true);
                 case 7:
                 case 8:
-                    // Squares with indeted corners
+                    // Squares with indented corners
                     return new PreferPathsRelativeToReferenceSquare(maze, p, q, true, false, false);
                 case 9:
                 case 10:
@@ -207,7 +207,7 @@ namespace SWA.Ariadne.Model
                     return new PreferSimilarGrid(maze, r.Next(2, 4), r.Next(2, 4));
 
                 case 26:
-                    // Periodic tilings.
+                    // A periodic tiling.
                     return new PreferTiledPattern(r);
             }
         }

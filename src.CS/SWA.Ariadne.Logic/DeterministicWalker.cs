@@ -96,7 +96,6 @@ namespace SWA.Ariadne.Logic
         /// <summary>
         /// Set a new (valid) current direction.
         /// </summary>
-        /// <param name="sq1"></param>
         protected abstract void Turn();
 
         /// <summary>
@@ -130,7 +129,7 @@ namespace SWA.Ariadne.Logic
         }
 
         /// <summary>
-        /// Check if a move to the neighbor square in tne current direction would be valid.
+        /// Check if a move to the neighbor square in the current direction would be valid.
         /// </summary>
         /// <returns>true if the move is invalid</returns>
         protected virtual bool CurrentDirectionIsInvalid()

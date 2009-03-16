@@ -24,6 +24,11 @@ namespace SWA.Ariadne.Logic
             /// Predecessor of this square on its path.
             /// </summary>
             public MazeSquare previousSquare;
+
+            /// <summary>
+            /// A penalty assigned when paths stemming from previous forks are marked as dead ends.
+            /// </summary>
+            public double deadRelativesPenalty;
         }
         /// <summary>
         /// For every MazeSquare: a counter of the open paths that lead away from it.
@@ -35,6 +40,29 @@ namespace SWA.Ariadne.Logic
         /// All squares passed in forward direction are collected in a list.
         /// </summary>
         protected List<MazeSquare> list = new List<MazeSquare>();
+
+        #region Members for applying a heuristic based on dead paths on neighboring paths
+
+        /// <summary>
+        /// A delegate for calculating the heuristic value of a dead branch.
+        /// </summary>
+        /// <param name="deadBranch"></param>
+        /// <returns></returns>
+        public delegate double DeadBranchHeuristicDelegate(List<MazeSquare> deadBranch);
+
+        /// <summary>
+        /// The currently installed DeadBranchHeuristicDelegate.
+        /// </summary>
+        private DeadBranchHeuristicDelegate deadBranchHeuristic;
+
+        /// <summary>
+        /// If a DeadBranchHeuristicDelegate is installed, this is
+        /// the lowest penalty value assigned to any of the currently open paths.
+        /// see: IsSelectablePathIdx()
+        /// </summary>
+        double lowestRelativesPenalty;
+
+        #endregion
 
         #endregion
 
@@ -74,6 +102,10 @@ namespace SWA.Ariadne.Logic
 
             // As we may not retract beyond the start square, it needs to have a positive count.
             mazeExtension[sq.XPos, sq.YPos].openPathCount = 1;
+
+            // The start square gets a zero penalty value.
+            mazeExtension[sq.XPos, sq.YPos].deadRelativesPenalty = 0;
+            UpdateLowestPenalty();
         }
 
         #endregion
@@ -98,6 +130,7 @@ namespace SWA.Ariadne.Logic
 
                 // This might also be done in the Reset() method.  But it is not too late here.
                 mazeExtension[sq2.XPos, sq2.YPos].openPathCount = 0;
+                mazeExtension[sq2.XPos, sq2.YPos].deadRelativesPenalty = mazeExtension[sq1.XPos, sq1.YPos].deadRelativesPenalty;
             }
         }
 
@@ -155,6 +188,7 @@ namespace SWA.Ariadne.Logic
 
         /// <summary>
         /// Select an index within the flooder's list of open paths.
+        /// Implementations must consider IsSelectablePathIdx().
         /// </summary>
         /// <returns></returns>
         protected abstract int SelectPathIdx();
@@ -171,7 +205,7 @@ namespace SWA.Ariadne.Logic
         /// Lets the mazeDrawer draw the dead branch ending in the given square.
         /// </summary>
         /// <param name="sq">a MazeSquare in a dead end of the Maze</param>
-        protected void MarkDeadBranch(MazeSquare sq)
+        private void MarkDeadBranch(MazeSquare sq)
         {
             if (OpenWalls(sq, false).Count > 1)
             {
@@ -198,6 +232,13 @@ namespace SWA.Ariadne.Logic
             {
                 mazeDrawer.DrawPath(deadBranch, false);
             }
+
+            if (deadBranchHeuristic != null)
+            {
+                double penalty = deadBranchHeuristic(deadBranch);
+                AddDeadBranchPenalty(sq, penalty);
+                UpdateLowestPenalty();
+            }
         }
 
         /// <summary>
@@ -211,6 +252,103 @@ namespace SWA.Ariadne.Logic
             string paths = (nPaths == 1 ? "path" : "paths");
             message.Append(", " + nPaths.ToString() + " " + paths);
         }
+
+        #region Dead branch heuristic
+
+        /// <summary>
+        /// Returns true if the given index is an acceptable result of SelectPathIdx().
+        /// </summary>
+        /// <param name="i"></param>
+        /// <returns></returns>
+        protected bool IsSelectablePathIdx(int i)
+        {
+            if (deadBranchHeuristic != null)
+            {
+                MazeSquare sq = list[i];
+                bool result = (mazeExtension[sq.XPos, sq.YPos].deadRelativesPenalty <= lowestRelativesPenalty);
+                return result;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// A DeadBranchHeuristic delegate method.
+        /// </summary>
+        /// <param name="deadBranch"></param>
+        /// <returns>The constant 1.</returns>
+        public double DeadBranchHeuristicSimple(List<MazeSquare> deadBranch)
+        {
+            return 1;
+        }
+
+        /// <summary>
+        /// A DeadBranchHeuristic delegate method.
+        /// </summary>
+        /// <param name="deadBranch"></param>
+        /// <returns>The length of the dead branch.</returns>
+        public double DeadBranchHeuristicLength(List<MazeSquare> deadBranch)
+        {
+            return deadBranch.Count - 1;
+        }
+
+        /// <summary>
+        /// Enable some solver-specific heuristic that may guide the solver decicions.
+        /// A Flooder solver will use a dead branch heuristic.
+        /// </summary>
+        public override void UseHeuristic()
+        {
+            base.UseHeuristic();
+            this.deadBranchHeuristic = DeadBranchHeuristicSimple;
+            //this.deadBranchHeuristic = DeadBranchHeuristicLength;
+        }
+
+        /// <summary>
+        /// Returns true if this MazeSolver uses some heuristic to guide its decisions.
+        /// </summary>
+        public override bool IsHeuristicSolver
+        {
+            get { return (this.deadBranchHeuristic != null); }
+        }
+
+        #endregion
+
+        #region Dead branch penalty
+
+        /// <summary>
+        /// Add the given penalty to the given square and all already visited paths beyond.
+        /// </summary>
+        /// <param name="sq"></param>
+        /// <param name="penalty"></param>
+        private void AddDeadBranchPenalty(MazeSquare sq, double penalty)
+        {
+            mazeExtension[sq.XPos, sq.YPos].deadRelativesPenalty += penalty;
+
+            foreach (WallPosition wp in OpenWalls(sq, false))
+            {
+                MazeSquare sq2 = sq.NeighborSquare(wp);
+                if (sq2.isVisited && sq2 != mazeExtension[sq.XPos, sq.YPos].previousSquare)
+                {
+                    AddDeadBranchPenalty(sq2, penalty);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Update the lowestRelativesPenalty member variable.
+        /// Consider all squares in the list of open paths.
+        /// </summary>
+        private void UpdateLowestPenalty()
+        {
+            this.lowestRelativesPenalty = double.MaxValue;
+
+            foreach (MazeSquare sq in list)
+            {
+                MazeSquareExtension sqe = mazeExtension[sq.XPos, sq.YPos];
+                lowestRelativesPenalty = Math.Min(lowestRelativesPenalty, sqe.deadRelativesPenalty);
+            }
+        }
+
+        #endregion
 
         #endregion
 

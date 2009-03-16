@@ -269,7 +269,7 @@ namespace SWA.Ariadne.Ctrl
         /// <param name="e"></param>
         private void OnStepTimer(object sender, EventArgs e)
         {
-            // Ignore the message if the timer has been cancelled in the meantime.
+            // Ignore the message if the timer has been canceled in the meantime.
             if (stepTimer == null || !stepTimer.Enabled || !client.Alive)
             {
                 return;
@@ -369,7 +369,7 @@ namespace SWA.Ariadne.Ctrl
         /// <param name="e"></param>
         private void OnBlinkTimer(object sender, EventArgs e)
         {
-            // Ignore the message if the timer has been cancelled in the meantime.
+            // Ignore the message if the timer has been canceled in the meantime.
             if (blinkTimer == null || !blinkTimer.Enabled || !client.Alive)
             {
                 return;
@@ -385,8 +385,8 @@ namespace SWA.Ariadne.Ctrl
         /// <param name="e"></param>
         private void OnRepeatTimer(object sender, EventArgs e)
         {
-            // Ignore the message if the timer has been cancelled in the meantime.
-            if (repeatTimer == null || !repeatTimer.Enabled || !client.Alive)
+            // Ignore the message if the timer has been canceled in the meantime.
+            if (repeatTimer == null || !repeatTimer.Enabled || !repeatMode || !client.Alive)
             {
                 return;
             }

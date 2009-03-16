@@ -40,6 +40,7 @@ namespace SWA.Ariadne.Logic
 
             for (int i = 0; i < list.Count; i++)
             {
+                if (!IsSelectablePathIdx(i)) continue;
                 MazeSquare sq = list[i];
 
                 for (int j = i+1; j < list.Count; j++)

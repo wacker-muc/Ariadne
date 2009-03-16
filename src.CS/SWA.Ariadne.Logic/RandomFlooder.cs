@@ -34,7 +34,13 @@ namespace SWA.Ariadne.Logic
         /// <returns></returns>
         protected override int SelectPathIdx()
         {
-            return random.Next(list.Count);
+            int result = 0;
+            while (true)
+            {
+                result = random.Next(list.Count);
+                if (IsSelectablePathIdx(result)) break;
+            }
+            return result;
         }
 
         /// <summary>

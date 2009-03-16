@@ -64,6 +64,19 @@ namespace SWA.Ariadne.Logic
         };
         public const string EfficientPrefix = "Efficient";
 
+        /// <summary>
+        /// Returns true if the given solverType can apply some heuristic to guide its decisions.
+        /// </summary>
+        /// <param name="solverType"></param>
+        /// <returns></returns>
+        public static bool HasHeuristicVariant(System.Type solverType)
+        {
+            bool result = (solverType.IsSubclassOf(typeof(SolverBase)));
+            result &= solverType.Name.Contains("Flooder"); // TODO: use a definition that doesn't rely on the name
+            return result;
+        }
+        public const string HeuristicPrefix = "Heuristic";
+
         private static Type SolverType(string name)
         {
             foreach (Type t in SolverTypes)
@@ -108,6 +121,8 @@ namespace SWA.Ariadne.Logic
                 Type t = solverTypes[r.Next(solverTypes.Length)];
                 bool shouldBeEfficient = (r.Next(2) == 0);
                 shouldBeEfficient &= RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_EFFICIENT_SOLVERS);
+                bool shouldUseHeuristic = (r.Next(2) == 0);
+                // TODO: shouldUseHeuristic &= RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_HEURISTIC_SOLVERS);
 
                 if (t == typeof(RandomWalker))
                 {
@@ -127,6 +142,10 @@ namespace SWA.Ariadne.Logic
                 {
                     result.MakeEfficient();
                 }
+                if (shouldUseHeuristic && HasHeuristicVariant(t))
+                {
+                    result.UseHeuristic();
+                }
 
                 return result;
             }
@@ -140,6 +159,7 @@ namespace SWA.Ariadne.Logic
         {
             IMazeSolver result;
             bool isEfficient = false;
+            bool useHeuristic = false;
 
             if (strategyName != null)
             {
@@ -147,6 +167,11 @@ namespace SWA.Ariadne.Logic
                 {
                     strategyName = strategyName.Substring(EfficientPrefix.Length);
                     isEfficient = true;
+                }
+                if (strategyName.StartsWith(HeuristicPrefix))
+                {
+                    strategyName = strategyName.Substring(HeuristicPrefix.Length);
+                    useHeuristic = true;
                 }
             }
 
@@ -158,6 +183,10 @@ namespace SWA.Ariadne.Logic
                 if (isEfficient)
                 {
                     result.MakeEfficient();
+                }
+                if (useHeuristic)
+                {
+                    result.UseHeuristic();
                 }
             }
             else
@@ -186,6 +215,46 @@ namespace SWA.Ariadne.Logic
         public static IMazeSolver CreateDefaultSolver(Maze maze, IMazeDrawer mazeDrawer)
         {
             return CreateSolver(DefaultStrategy, maze, mazeDrawer);
+        }
+
+        /// <summary>
+        /// Adds the names of all solver types and their variants to the given collection.
+        /// </summary>
+        /// <param name="items"></param>
+        public static void FillWithSolverTypes(System.Collections.IList items)
+        {
+            items.Clear();
+
+            foreach (System.Type t in SolverTypes)
+            {
+                // Add the solver's name to the combo box.
+                items.Add(t.Name);
+            }
+            foreach (System.Type t in SolverTypes)
+            {
+                if (HasEfficientVariant(t))
+                {
+                    // Add the solver's name to the combo box.
+                    items.Add(EfficientPrefix + t.Name);
+                }
+            }
+            foreach (System.Type t in SolverTypes)
+            {
+                if (HasHeuristicVariant(t))
+                {
+                    // Add the solver's name to the combo box.
+                    items.Add(HeuristicPrefix + t.Name);
+                }
+            }
+            foreach (System.Type t in SolverTypes)
+            {
+                if (HasEfficientVariant(t) && HasHeuristicVariant(t))
+                {
+                    // Add the solver's name to the combo box.
+                    items.Add(EfficientPrefix + HeuristicPrefix + t.Name);
+                }
+            }
+            items.Add("(any)");
         }
 
         /// <summary>

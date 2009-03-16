@@ -44,9 +44,19 @@ namespace SWA.Ariadne.Logic
         void MakeEfficient();
 
         /// <summary>
-        /// Returns true if this MazeSolver can detect areas unreachable the end square.
+        /// Returns true if this MazeSolver can detect areas unreachable from the end square.
         /// </summary>
         bool IsEfficientSolver { get; }
+
+        /// <summary>
+        /// Enable some solver-specific heuristic that may guide the solver decicions.
+        /// </summary>
+        void UseHeuristic();
+
+        /// <summary>
+        /// Returns true if this MazeSolver uses some heuristic to guide its decisions.
+        /// </summary>
+        bool IsHeuristicSolver { get; }
 
         /// <summary>
         /// Coordinate shared resources of this solver with the master solver.

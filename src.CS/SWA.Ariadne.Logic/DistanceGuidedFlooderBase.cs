@@ -67,6 +67,12 @@ namespace SWA.Ariadne.Logic
             {
                 double value = PathValue(i);
 
+                if (value == double.MinValue)
+                {
+                    return i;
+                }
+                if (!IsSelectablePathIdx(i)) continue;
+
                 if (value < bestValue)
                 {
                     bestIdx = i;
@@ -77,6 +83,11 @@ namespace SWA.Ariadne.Logic
             return bestIdx;
         }
 
+        /// <summary>
+        /// Select an index within the flooder's list of open paths.
+        /// The paths with a low PathValue() are prefered but other paths may be selected, as well.
+        /// </summary>
+        /// <returns></returns>
         private int SelectRandomPathIdx()
         {
             double[] values = new double[list.Count];
@@ -91,6 +102,7 @@ namespace SWA.Ariadne.Logic
                 {
                     return i;
                 }
+                if (!IsSelectablePathIdx(i)) continue;
 
                 if (value < bestValue)
                 {

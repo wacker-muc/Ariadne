@@ -93,6 +93,7 @@ namespace SWA.Ariadne.Logic
 
             for (int i = 0; i < list.Count; i++)
             {
+                if (!IsSelectablePathIdx(i)) continue;
                 MazeSquare sq = list[i];
                 float thickness = branchExtension[sq.XPos, sq.YPos].thickness;
                 int length = branchExtension[sq.XPos, sq.YPos].length;
