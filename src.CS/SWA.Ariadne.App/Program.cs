@@ -34,6 +34,7 @@ namespace SWA.Ariadne.App
                         // Show screensaver form
                         // Create the ImageLoader as early as possible.
                         ImageLoader imageLoader = ImageLoader.GetScreenSaverImageLoader();
+                        BlankSecondaryScreens();
                         Application.Run(new ScreenSaverForm(true, imageLoader));
                         break;
                     default:
@@ -58,6 +59,31 @@ namespace SWA.Ariadne.App
 #if false
                 (new SWA.Ariadne.Gui.Tests.ContourImageTest()).CI_ManualTest_01();
 #endif
+            }
+        }
+
+        /// <summary>
+        /// Displays a blank black window on all screens but the primary screen.
+        /// see: http://stackoverflow.com/questions/1363374/showing-a-windows-form-on-a-secondary-monitor
+        /// </summary>
+        private static void BlankSecondaryScreens()
+        {
+            foreach (Screen screen in Screen.AllScreens)
+            {
+                if (screen.Primary == false)
+                {
+                    System.Drawing.Rectangle bounds = screen.Bounds;
+
+                    Form form = new BlankForm();
+                    form.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+                    form.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
+                    form.TopMost = true;
+                    form.SetBounds(-400, -100, 10, 10);
+                    form.Show();
+                    form.Enabled = false;
+                    form.SetBounds(bounds.X, bounds.Y, bounds.Width, bounds.Height);
+                    form.WindowState = FormWindowState.Maximized;
+                }
             }
         }
     }

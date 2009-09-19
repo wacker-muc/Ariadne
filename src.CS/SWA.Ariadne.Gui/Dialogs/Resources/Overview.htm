@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>Ariadne</title>
@@ -50,6 +50,7 @@
         <b>&nbsp;&nbsp;&nbsp;::</b> <a class="list" href="#EmbeddedMazes">Embedded Mazes</a><br />
         <b>::</b> <a class="list" href="#SolverStrategies">Solver Strategies</a><br />
         <b>&nbsp;&nbsp;&nbsp;::</b> <a class="list" href="#EfficientSolvers">Efficient Solvers</a><br />
+        <b>&nbsp;&nbsp;&nbsp;::</b> <a class="list" href="#HeuristicSolvers">Heuristic Solvers</a><br />
         <b>&nbsp;&nbsp;&nbsp;::</b> <a class="list" href="#ExtremeStrategies">Extreme Strategies</a><br />
         <b>&nbsp;&nbsp;&nbsp;::</b> <a class="list" href="#Observations">Observations</a><br />
         <b>::</b> <a class="list" href="#Summary">Summary</a>
@@ -460,6 +461,16 @@
         boundary) form a closed line around it.</p>
     <p>
         <span class="highlight">Dead end squares</span> are painted with dark gray dots.</p>
+    <a name="HeuristicSolvers"></a>
+    <h4>
+        Heuristic Solvers</h4>
+    <p>
+        There is also a <span class="item">"heuristic"</span> variant of every flooder solver.
+        These try to guess how promising an area examined by any branch is.  Basically, when
+        one path reaches a dead end it gives a signal to every neighboring path.  Paths
+        with less negative signals from their dead siblings will be preferred.  With some
+        strategies, especially those that tend to avoid getting close to the target, this
+        heuristic gives a significant advantage.</p>
     <a name="ExtremeStrategies"></a>
     <h4>
         Extreme Strategies</h4>
@@ -477,7 +488,7 @@
             Knows the solution path beforehand. Goes directly from start to target without any
             error.</dd>
     </dl>
-    <a name="#Observations"></a>
+    <a name="Observations"></a>
     <h4>
         Observations</h4>
     <p>
@@ -544,12 +555,13 @@
         <li>[24] Build a second <a href="#EmbeddedMazes">embedded maze</a> inside the outline
             shape.</li>
         <li>[21] Different <a href="#SolverStrategies">solver strategies</a>.</li>
+        <li>[15] Flooder strategies with an additional <a href="#HeuristicSolvers">heuristic</a> variant.</li>
         <li>[2] Let an <a href="#EfficientSolvers">efficient solver</a> detect dead end areas.</li>
     </ul>
     <p>
         That gives a very large number of <span class="highlight">pattern or style combinations</span>:</p>
     <center style="font-size: larger">
-        3 &times; (1 + 27&times;4) &times; (1+72+24) &times; 21 &times; 2 &nbsp;=&nbsp; <b>1,332,198</b>
+        3 &times; (1 + 27&times;4) &times; (1+72+24) &times; (21+15) &times; 2 &nbsp;=&nbsp; <b>2,283,768</b>
     </center>
     <p>
         The exact application of each variant is usually (with a few deterministic exceptions)
