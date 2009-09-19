@@ -1,6 +1,12 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 9.00
-# Visual Studio 2005
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual C# Express 2008
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{ECFE0FF1-2D3F-4311-B80C-63C5DD1420DF}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWA.Ariadne.App", "SWA.Ariadne.App\SWA.Ariadne.App.csproj", "{A758D7B7-1BDB-496A-A86E-34E7F8EACCAD}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
@@ -19,29 +25,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWA.Ariadne.Logic", "SWA.Ar
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWA.Ariadne.Model.Tests", "SWA.Ariadne.Model.Tests\SWA.Ariadne.Model.Tests.csproj", "{73B77E9A-B30F-4DC6-9F71-A13905F54E16}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{ECFE0FF1-2D3F-4311-B80C-63C5DD1420DF}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-	ProjectSection(SolutionItems) = preProject
-		localtestrun.testrunconfig = localtestrun.testrunconfig
-		SWA.Ariadne.vsmdi = SWA.Ariadne.vsmdi
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWA.Ariadne.Settings", "SWA.Ariadne.Settings\SWA.Ariadne.Settings.csproj", "{30293912-CD50-4ECE-B51A-CD89890186F8}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWA.Ariadne.Logic.Tests", "SWA.Ariadne.Logic.Tests\SWA.Ariadne.Logic.Tests.csproj", "{D15590E9-E1E2-4B57-ACE9-9993283A17C7}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"
@@ -54,12 +38,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWA.Ariadne.Gui", "SWA.Aria
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWA.Utilities", "SWA.Utilities\SWA.Utilities.csproj", "{5947CDF1-FDE4-4B7C-9420-0A4DF039B5AB}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWA.Ariadne.Gui.Tests", "SWA.Ariadne.Gui.Tests\SWA.Ariadne.Gui.Tests.csproj", "{CE03ED2F-A466-4933-8240-3A7F51913974}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"
@@ -89,22 +67,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWA.Ariadne.Ctrl", "SWA.Ari
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWA.Ariadne.Outlines.Tests", "SWA.Ariadne.Outlines.Tests\SWA.Ariadne.Outlines.Tests.csproj", "{83E0712F-C58E-4368-AA45-D0388D283011}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWA.Utilities.Tests", "SWA.Utilities.Tests\SWA.Utilities.Tests.csproj", "{0D80DC76-86A3-4773-A90A-3E56F176D47A}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
 Global
-	GlobalSection(TestCaseManagementSettings) = postSolution
-		CategoryFile = SWA.Ariadne.vsmdi
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -122,18 +85,10 @@ Global
 		{EC6BE5F7-D763-413C-AA2E-2AF5358C5315}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EC6BE5F7-D763-413C-AA2E-2AF5358C5315}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EC6BE5F7-D763-413C-AA2E-2AF5358C5315}.Release|Any CPU.Build.0 = Release|Any CPU
-		{73B77E9A-B30F-4DC6-9F71-A13905F54E16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{73B77E9A-B30F-4DC6-9F71-A13905F54E16}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{73B77E9A-B30F-4DC6-9F71-A13905F54E16}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{73B77E9A-B30F-4DC6-9F71-A13905F54E16}.Release|Any CPU.Build.0 = Release|Any CPU
 		{30293912-CD50-4ECE-B51A-CD89890186F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{30293912-CD50-4ECE-B51A-CD89890186F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{30293912-CD50-4ECE-B51A-CD89890186F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{30293912-CD50-4ECE-B51A-CD89890186F8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D15590E9-E1E2-4B57-ACE9-9993283A17C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D15590E9-E1E2-4B57-ACE9-9993283A17C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D15590E9-E1E2-4B57-ACE9-9993283A17C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D15590E9-E1E2-4B57-ACE9-9993283A17C7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A80F9F95-5756-44BE-96D3-BB1950937A50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A80F9F95-5756-44BE-96D3-BB1950937A50}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A80F9F95-5756-44BE-96D3-BB1950937A50}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -142,10 +97,6 @@ Global
 		{5947CDF1-FDE4-4B7C-9420-0A4DF039B5AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5947CDF1-FDE4-4B7C-9420-0A4DF039B5AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5947CDF1-FDE4-4B7C-9420-0A4DF039B5AB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CE03ED2F-A466-4933-8240-3A7F51913974}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CE03ED2F-A466-4933-8240-3A7F51913974}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CE03ED2F-A466-4933-8240-3A7F51913974}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CE03ED2F-A466-4933-8240-3A7F51913974}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9751AAAE-B751-451E-BA8C-FBD55234FE56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9751AAAE-B751-451E-BA8C-FBD55234FE56}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9751AAAE-B751-451E-BA8C-FBD55234FE56}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -162,16 +113,11 @@ Global
 		{351936CC-5AD5-45DF-AC9C-903964E29DDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{351936CC-5AD5-45DF-AC9C-903964E29DDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{351936CC-5AD5-45DF-AC9C-903964E29DDB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{83E0712F-C58E-4368-AA45-D0388D283011}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{83E0712F-C58E-4368-AA45-D0388D283011}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{83E0712F-C58E-4368-AA45-D0388D283011}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{83E0712F-C58E-4368-AA45-D0388D283011}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0D80DC76-86A3-4773-A90A-3E56F176D47A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0D80DC76-86A3-4773-A90A-3E56F176D47A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0D80DC76-86A3-4773-A90A-3E56F176D47A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0D80DC76-86A3-4773-A90A-3E56F176D47A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = SWA.Ariadne.vsmdi
 	EndGlobalSection
 EndGlobal
