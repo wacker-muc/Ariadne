@@ -166,9 +166,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\FeatureLog.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
     <None Include="Resources\ButtonReset.png">
     </None>
@@ -186,7 +183,6 @@
     <Content Include="Resources\ButtonNew.png" />
     <Content Include="Resources\ButtonRepeat.png">
     </Content>
-    <Content Include="Resources\Overview.txt" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
