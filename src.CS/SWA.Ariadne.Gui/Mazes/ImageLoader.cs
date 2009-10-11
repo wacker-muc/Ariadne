@@ -396,7 +396,7 @@ namespace SWA.Ariadne.Gui.Mazes
         private List<string> FindImages(string folderPath, int count, bool quickSearch, Random r)
         {
             //Log.WriteLine("{ FindImages()");
-            if (folderPath == null || count < 1)
+            if (folderPath == null || folderPath == "" || count < 1)
             {
                 return new List<string>();
             }
@@ -484,7 +484,7 @@ namespace SWA.Ariadne.Gui.Mazes
             {
                 ContourImage img = Dequeue();
 
-                if (img.Path != null)
+                if (img != null && img.Path != null)
                 {
                     if (img.HasContour)
                     {
