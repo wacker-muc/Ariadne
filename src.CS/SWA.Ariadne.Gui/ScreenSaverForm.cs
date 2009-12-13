@@ -518,6 +518,15 @@ namespace SWA.Ariadne.Gui
                 StringBuilder message = new StringBuilder(200);
 
                 ariadneController.FillStatusMessage(message);
+#if true
+                // Append current time to the status line.
+                // Note: With very long solver names, there is more free room here than there.
+                if (message.Length > 0)
+                {
+                    message.Append(" - ");
+                    message.Append(System.DateTime.Now.ToString("t"));
+                }
+#endif
 
                 this.infoLabelStatus.Text = message.ToString();
             }
@@ -539,8 +548,11 @@ namespace SWA.Ariadne.Gui
                     case CaptionInfoEnum.Default:
                         FillCaption(caption);
 
+#if false
+                        // Note: The current time is now displayed in the status line, instead.
                         caption.Append(" - ");
                         caption.Append(System.DateTime.Now.ToString("t"));
+#endif
                         break;
 
                     case CaptionInfoEnum.ImagePath:
