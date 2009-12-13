@@ -9,17 +9,24 @@ namespace SWA.Utilities
     {
         public static List<string> Find(string directoryPath, string filePattern, bool withSubdirectories)
         {
-            // Create a reference to the given directory.
-            DirectoryInfo di = new DirectoryInfo(directoryPath);
-            
-            // Create an array representing the files in the given directory.
-            FileInfo[] fis = di.GetFiles(filePattern, (withSubdirectories ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly));
+            List<string> result = new List<string>();
 
-            List<string> result = new List<string>(fis.Length);
-
-            foreach (FileInfo fi in fis)
+            try
             {
-                result.Add(fi.FullName);
+                // Create a reference to the given directory.
+                DirectoryInfo di = new DirectoryInfo(directoryPath);
+
+                // Create an array representing the files in the given directory.
+                FileInfo[] fis = di.GetFiles(filePattern, (withSubdirectories ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly));
+
+                foreach (FileInfo fi in fis)
+                {
+                    result.Add(fi.FullName);
+                }
+            }
+            catch (DirectoryNotFoundException)
+            {
+                // leave result empty
             }
 
             return result;
