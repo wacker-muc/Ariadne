@@ -41,6 +41,8 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.checkBoxDetailsBox = new System.Windows.Forms.CheckBox();
             this.checkBoxBlinking = new System.Windows.Forms.CheckBox();
             this.tabPageImages = new System.Windows.Forms.TabPage();
+            this.labelImagesMaxSizePct = new System.Windows.Forms.Label();
+            this.labelImagesMinSizePct = new System.Windows.Forms.Label();
             this.subtractImagesBackgroundCheckBox = new System.Windows.Forms.CheckBox();
             this.imageMinSizeNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.labelImagesMinSize = new System.Windows.Forms.Label();
@@ -66,16 +68,16 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.tabControl1.SuspendLayout();
             this.tabPageGeneral.SuspendLayout();
             this.tabPageImages.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.imageMinSizeNumericUpDown)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.imageMaxSizeNumericUpDown)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.imageNumberNumericUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.imageMinSizeNumericUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.imageMaxSizeNumericUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.imageNumberNumericUpDown)).BeginInit();
             this.tabPageBackground.SuspendLayout();
             this.tabPageExtras.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonOK
             // 
-            this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.buttonOK.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.buttonOK.Location = new System.Drawing.Point(16, 162);
             this.buttonOK.Name = "buttonOK";
@@ -87,7 +89,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.buttonCancel.Location = new System.Drawing.Point(107, 162);
             this.buttonCancel.Name = "buttonCancel";
@@ -99,7 +101,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             // labelCopyright
             // 
-            this.labelCopyright.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+            this.labelCopyright.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.labelCopyright.AutoSize = true;
             this.labelCopyright.Location = new System.Drawing.Point(71, 189);
@@ -111,7 +113,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             // tabControl1
             // 
-            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPageGeneral);
@@ -142,7 +144,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             // checkBoxLogSolverStatistics
             // 
-            this.checkBoxLogSolverStatistics.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBoxLogSolverStatistics.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.checkBoxLogSolverStatistics.AutoSize = true;
             this.checkBoxLogSolverStatistics.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.checkBoxLogSolverStatistics.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
@@ -155,7 +157,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             // checkBoxEfficientSolvers
             // 
-            this.checkBoxEfficientSolvers.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBoxEfficientSolvers.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.checkBoxEfficientSolvers.AutoSize = true;
             this.checkBoxEfficientSolvers.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.checkBoxEfficientSolvers.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
@@ -188,7 +190,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             // checkBoxDetailsBox
             // 
-            this.checkBoxDetailsBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBoxDetailsBox.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.checkBoxDetailsBox.AutoSize = true;
             this.checkBoxDetailsBox.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.checkBoxDetailsBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
@@ -202,7 +204,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             // checkBoxBlinking
             // 
-            this.checkBoxBlinking.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBoxBlinking.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.checkBoxBlinking.AutoSize = true;
             this.checkBoxBlinking.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.checkBoxBlinking.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
@@ -215,6 +217,8 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             // tabPageImages
             // 
+            this.tabPageImages.Controls.Add(this.labelImagesMaxSizePct);
+            this.tabPageImages.Controls.Add(this.labelImagesMinSizePct);
             this.tabPageImages.Controls.Add(this.subtractImagesBackgroundCheckBox);
             this.tabPageImages.Controls.Add(this.imageMinSizeNumericUpDown);
             this.tabPageImages.Controls.Add(this.labelImagesMinSize);
@@ -232,6 +236,28 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.tabPageImages.Text = "Images";
             this.tabPageImages.UseVisualStyleBackColor = true;
             // 
+            // labelImagesMaxSizePct
+            // 
+            this.labelImagesMaxSizePct.AutoSize = true;
+            this.labelImagesMaxSizePct.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.labelImagesMaxSizePct.Location = new System.Drawing.Point(139, 56);
+            this.labelImagesMaxSizePct.Name = "labelImagesMaxSizePct";
+            this.labelImagesMaxSizePct.Size = new System.Drawing.Size(15, 13);
+            this.labelImagesMaxSizePct.TabIndex = 121;
+            this.labelImagesMaxSizePct.Text = "%";
+            this.labelImagesMaxSizePct.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // labelImagesMinSizePct
+            // 
+            this.labelImagesMinSizePct.AutoSize = true;
+            this.labelImagesMinSizePct.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.labelImagesMinSizePct.Location = new System.Drawing.Point(139, 33);
+            this.labelImagesMinSizePct.Name = "labelImagesMinSizePct";
+            this.labelImagesMinSizePct.Size = new System.Drawing.Size(15, 13);
+            this.labelImagesMinSizePct.TabIndex = 120;
+            this.labelImagesMinSizePct.Text = "%";
+            this.labelImagesMinSizePct.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // subtractImagesBackgroundCheckBox
             // 
             this.subtractImagesBackgroundCheckBox.AutoSize = true;
@@ -247,12 +273,12 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             this.imageMinSizeNumericUpDown.Location = new System.Drawing.Point(87, 31);
             this.imageMinSizeNumericUpDown.Maximum = new decimal(new int[] {
-            600,
+            80,
             0,
             0,
             0});
             this.imageMinSizeNumericUpDown.Minimum = new decimal(new int[] {
-            40,
+            20,
             0,
             0,
             0});
@@ -261,7 +287,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.imageMinSizeNumericUpDown.TabIndex = 2;
             this.imageMinSizeNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.imageMinSizeNumericUpDown.Value = new decimal(new int[] {
-            300,
+            30,
             0,
             0,
             0});
@@ -281,12 +307,12 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             this.imageMaxSizeNumericUpDown.Location = new System.Drawing.Point(87, 54);
             this.imageMaxSizeNumericUpDown.Maximum = new decimal(new int[] {
-            600,
+            80,
             0,
             0,
             0});
             this.imageMaxSizeNumericUpDown.Minimum = new decimal(new int[] {
-            40,
+            20,
             0,
             0,
             0});
@@ -295,7 +321,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.imageMaxSizeNumericUpDown.TabIndex = 3;
             this.imageMaxSizeNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.imageMaxSizeNumericUpDown.Value = new decimal(new int[] {
-            400,
+            60,
             0,
             0,
             0});
@@ -347,7 +373,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             // imageFolderTextBox
             // 
-            this.imageFolderTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.imageFolderTextBox.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.imageFolderTextBox.Location = new System.Drawing.Point(87, 77);
             this.imageFolderTextBox.MaxLength = 14;
@@ -373,7 +399,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             // checkBoxDifferentBackgroundImageFolder
             // 
-            this.checkBoxDifferentBackgroundImageFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBoxDifferentBackgroundImageFolder.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.checkBoxDifferentBackgroundImageFolder.AutoSize = true;
             this.checkBoxDifferentBackgroundImageFolder.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.checkBoxDifferentBackgroundImageFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
@@ -397,7 +423,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             // backgroundImageFolderTextBox
             // 
-            this.backgroundImageFolderTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.backgroundImageFolderTextBox.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.backgroundImageFolderTextBox.Location = new System.Drawing.Point(87, 77);
             this.backgroundImageFolderTextBox.MaxLength = 14;
@@ -409,7 +435,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             // checkBoxBackgroundImage
             // 
-            this.checkBoxBackgroundImage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBoxBackgroundImage.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.checkBoxBackgroundImage.AutoSize = true;
             this.checkBoxBackgroundImage.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.checkBoxBackgroundImage.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
@@ -437,7 +463,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             // checkBoxMultipleMazes
             // 
-            this.checkBoxMultipleMazes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBoxMultipleMazes.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.checkBoxMultipleMazes.AutoSize = true;
             this.checkBoxMultipleMazes.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.checkBoxMultipleMazes.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
@@ -451,7 +477,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             // checkBoxPaintAllWalls
             // 
-            this.checkBoxPaintAllWalls.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBoxPaintAllWalls.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.checkBoxPaintAllWalls.AutoSize = true;
             this.checkBoxPaintAllWalls.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.checkBoxPaintAllWalls.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
@@ -465,7 +491,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             // checkBoxIrregularMazes
             // 
-            this.checkBoxIrregularMazes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBoxIrregularMazes.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.checkBoxIrregularMazes.AutoSize = true;
             this.checkBoxIrregularMazes.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.checkBoxIrregularMazes.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
@@ -479,7 +505,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             // checkBoxOutlineShapes
             // 
-            this.checkBoxOutlineShapes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBoxOutlineShapes.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.checkBoxOutlineShapes.AutoSize = true;
             this.checkBoxOutlineShapes.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.checkBoxOutlineShapes.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
@@ -502,7 +528,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             // buttonInfo
             // 
-            this.buttonInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonInfo.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonInfo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonInfo.Image = global::SWA.Ariadne.Gui.Dialogs.Properties.Resources.ButtonAbout;
             this.buttonInfo.Location = new System.Drawing.Point(189, 162);
@@ -533,9 +559,9 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.tabPageGeneral.PerformLayout();
             this.tabPageImages.ResumeLayout(false);
             this.tabPageImages.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.imageMinSizeNumericUpDown)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.imageMaxSizeNumericUpDown)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.imageNumberNumericUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.imageMinSizeNumericUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.imageMaxSizeNumericUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.imageNumberNumericUpDown)).EndInit();
             this.tabPageBackground.ResumeLayout(false);
             this.tabPageBackground.PerformLayout();
             this.tabPageExtras.ResumeLayout(false);
@@ -581,6 +607,8 @@ namespace SWA.Ariadne.Gui.Dialogs
         private System.Windows.Forms.CheckBox checkBoxLogSolverStatistics;
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.Button buttonInfo;
+        private System.Windows.Forms.Label labelImagesMinSizePct;
+        private System.Windows.Forms.Label labelImagesMaxSizePct;
 
     }
 }

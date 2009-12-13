@@ -306,19 +306,19 @@ namespace SWA.Ariadne.Settings
         }
         private int imageNumber;
 
-        public int ImageMinSize
+        public int ImageMinSizePct
         {
-            get { return imageMinSize; }
-            set { imageMinSize = value; }
+            get { return imageMinSizePct; }
+            set { imageMinSizePct = value; }
         }
-        private int imageMinSize;
+        private int imageMinSizePct;
 
-        public int ImageMaxSize
+        public int ImageMaxSizePct
         {
-            get { return imageMaxSize; }
-            set { imageMaxSize = value; }
+            get { return imageMaxSizePct; }
+            set { imageMaxSizePct = value; }
         }
-        private int imageMaxSize;
+        private int imageMaxSizePct;
 
         public string ImageFolder
         {
@@ -469,8 +469,8 @@ namespace SWA.Ariadne.Settings
             this.AutoColors = template.AutoColors;
 
             this.ImageNumber = template.ImageNumber;
-            this.ImageMinSize = template.ImageMinSize;
-            this.ImageMaxSize = template.ImageMaxSize;
+            this.ImageMinSizePct = template.ImageMinSizePct;
+            this.ImageMaxSizePct = template.ImageMaxSizePct;
             this.ImageFolder = template.ImageFolder;
             this.ShowBackgroundImage = template.ShowBackgroundImage;
 

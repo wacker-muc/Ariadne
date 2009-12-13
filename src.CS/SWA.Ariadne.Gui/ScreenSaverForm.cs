@@ -417,7 +417,7 @@ namespace SWA.Ariadne.Gui
                 }
                 else
                 {
-                    mazeUserControl.ImageLoader = ImageLoader.GetScreenSaverImageLoader();
+                    mazeUserControl.ImageLoader = ImageLoader.GetScreenSaverImageLoader(this.Bounds);
                 }
             }
 

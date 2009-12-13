@@ -542,8 +542,9 @@ namespace SWA.Ariadne.Gui.Mazes
         private void ReserveAreasForImages(AriadneSettingsData data)
         {
             int count = data.ImageNumber;
-            int minSize = data.ImageMinSize;
-            int maxSize = data.ImageMaxSize;
+            int displaySize = Math.Min(DisplayRectangle.Width, DisplayRectangle.Height);
+            int minSize = data.ImageMinSizePct * displaySize / 100;
+            int maxSize = data.ImageMaxSizePct * displaySize / 100;
             string imageFolder = data.ImageFolder;
 
             ReserveAreaForImages(count, minSize, maxSize, imageFolder);
@@ -600,7 +601,7 @@ namespace SWA.Ariadne.Gui.Mazes
 
             if (nMax > 0)
             {
-                n = r.Next(nMin, nMax);
+                n = r.Next(nMin, nMax + 1);
             }
             else
             {

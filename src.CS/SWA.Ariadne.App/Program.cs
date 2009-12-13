@@ -33,7 +33,7 @@ namespace SWA.Ariadne.App
                     case "/s":
                         // Show screensaver form
                         // Create the ImageLoader as early as possible.
-                        ImageLoader imageLoader = ImageLoader.GetScreenSaverImageLoader();
+                        ImageLoader imageLoader = ImageLoader.GetScreenSaverImageLoader(Screen.PrimaryScreen.Bounds);
                         BlankSecondaryScreens();
                         Application.Run(new ScreenSaverForm(true, imageLoader));
                         break;

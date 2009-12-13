@@ -84,7 +84,7 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <param name="threadName">Unique name of this image loader thread.  Only used for positive queueLength.</param>
         public ImageLoader(int minSize, int maxSize, bool minSizeRequired, string imageFolder, int queueLength, string threadName)
         {
-            this.minSize = minSize;
+            this.minSize = Math.Min(minSize, maxSize); // prevent abnormal behaviour
             this.maxSize = maxSize;
             this.minSizeRequired = minSizeRequired;
             this.imageFolder = imageFolder;
@@ -111,11 +111,11 @@ namespace SWA.Ariadne.Gui.Mazes
         /// or null if the "image number" option is 0.
         /// </summary>
         /// <returns></returns>
-        public static ImageLoader GetScreenSaverImageLoader()
+        public static ImageLoader GetScreenSaverImageLoader(Rectangle screenBounds)
         {
             int count = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_NUMBER);
-            int minSize = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_MIN_SIZE);
-            int maxSize = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_MAX_SIZE);
+            int minSize = ImageSize(screenBounds, RegisteredOptions.OPT_IMAGE_MIN_SIZE, RegisteredOptions.OPT_IMAGE_MIN_SIZE_PCT);
+            int maxSize = ImageSize(screenBounds, RegisteredOptions.OPT_IMAGE_MAX_SIZE, RegisteredOptions.OPT_IMAGE_MAX_SIZE_PCT);
             string imageFolder = RegisteredOptions.GetStringSetting(RegisteredOptions.OPT_IMAGE_FOLDER);
             bool backgroundImages = RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_BACKGROUND_IMAGES);
 
@@ -129,6 +129,22 @@ namespace SWA.Ariadne.Gui.Mazes
             {
                 return null;
             }
+        }
+
+        private static int ImageSize(Rectangle screenBounds, string optNamePx, string optNamePct)
+        {
+            // Before version 3.5: image sizes are given in pixels
+            int result = RegisteredOptions.GetIntSetting(optNamePx);
+
+            // Since version 3.5: image sizes are given as a percentage of the screen size
+            int pct = RegisteredOptions.GetIntSetting(optNamePct);
+            if (pct > 0)
+            {
+                int screenSize = Math.Min(screenBounds.Width, screenBounds.Height);
+                result = pct * screenSize / 100;
+            }
+
+            return result;
         }
 
         /// <summary>

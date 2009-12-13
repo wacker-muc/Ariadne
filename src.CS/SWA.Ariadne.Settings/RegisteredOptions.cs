@@ -16,6 +16,8 @@ namespace SWA.Ariadne.Settings
         public const string OPT_IMAGE_NUMBER = "image number";
         public const string OPT_IMAGE_MIN_SIZE = "image minimum size";
         public const string OPT_IMAGE_MAX_SIZE = "image maximum size";
+        public const string OPT_IMAGE_MIN_SIZE_PCT = "image minimum size percent";
+        public const string OPT_IMAGE_MAX_SIZE_PCT = "image maximum size percent";
         public const string OPT_IMAGE_FOLDER = "image folder";
         public const string OPT_IMAGE_SUBTRACT_BACKGROUND = "subtract uniform image background color";
         public const string OPT_BACKGROUND_IMAGES = "display background images";
@@ -109,11 +111,35 @@ namespace SWA.Ariadne.Settings
                     break;
 
                 case OPT_IMAGE_MIN_SIZE:
-                    defaultValue = 300;
+                    if (GetIntSetting(OPT_IMAGE_MIN_SIZE_PCT, -1) < 0)
+                    {
+                        // only if the new option is not set
+                        defaultValue = 300;
+                    }
                     break;
 
                 case OPT_IMAGE_MAX_SIZE:
-                    defaultValue = 400;
+                    if (GetIntSetting(OPT_IMAGE_MAX_SIZE_PCT, -1) < 0)
+                    {
+                        // only if the new option is not set
+                        defaultValue = 400;
+                    }
+                    break;
+
+                case OPT_IMAGE_MIN_SIZE_PCT:
+                    if (GetIntSetting(OPT_IMAGE_MIN_SIZE, -1) < 0)
+                    {
+                        // only if the now obsolete option is not set
+                        defaultValue = 30;
+                    }
+                    break;
+
+                case OPT_IMAGE_MAX_SIZE_PCT:
+                    if (GetIntSetting(OPT_IMAGE_MAX_SIZE, -1) < 0)
+                    {
+                        // only if the now obsolete option is not set
+                        defaultValue = 60;
+                    }
                     break;
             }
 

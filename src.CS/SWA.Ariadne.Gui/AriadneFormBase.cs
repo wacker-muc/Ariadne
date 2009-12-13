@@ -175,12 +175,19 @@ namespace SWA.Ariadne.Gui
         {
             ScreenSaverForm form = new ScreenSaverForm(false, null);
             form.Icon = this.Icon;
+            form.Bounds = new Rectangle(form.Bounds.Location, this.Bounds.Size);
             form.Show();
         }
 
         private void OnOpenScreenSaverPreview(object sender, EventArgs e)
         {
             ScreenSaverPreviewController.Run();
+        }
+
+        private void OnOpenScreenSaverOptions(object sender, EventArgs e)
+        {
+            Form dialog = new OptionsDialog();
+            dialog.ShowDialog();
         }
 
         /// <summary>

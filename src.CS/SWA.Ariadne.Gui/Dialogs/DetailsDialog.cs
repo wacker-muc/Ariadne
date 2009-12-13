@@ -103,8 +103,8 @@ namespace SWA.Ariadne.Gui.Dialogs
             data.AutoColors = true;
 
             data.ImageNumber = (int) this.imageNumberNumericUpDown.Value;
-            data.ImageMinSize = (int) this.imageMinSizeNumericUpDown.Value;
-            data.ImageMaxSize = (int) this.imageMaxSizeNumericUpDown.Value;
+            data.ImageMinSizePct = (int) this.imageMinSizeNumericUpDown.Value;
+            data.ImageMaxSizePct = (int) this.imageMaxSizeNumericUpDown.Value;
             data.ImageFolder = RegisteredOptions.GetStringSetting(RegisteredOptions.OPT_IMAGE_FOLDER);
             data.ShowBackgroundImage = this.backgroundImageCheckBox.Checked;
 

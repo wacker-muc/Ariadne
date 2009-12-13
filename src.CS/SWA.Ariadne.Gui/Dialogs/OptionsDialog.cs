@@ -71,6 +71,8 @@ namespace SWA.Ariadne.Gui.Dialogs
             toolTip.SetToolTip(imageMaxSizeNumericUpDown, string.Join("\n", new string[] {
                 "Images that are larger than " + labelImagesMaxSize.Text + " (in width or ",
                 "height) will be reduced in size."}));
+            toolTip.SetToolTip(labelImagesMinSizePct, string.Join("\n", new string[] {
+                "Image sizes are specified as a percentage of the screen dimension."}));
             toolTip.SetToolTip(imageFolderTextBox, string.Join("\n", new string[] {
                 "Path to a directory with images (JPG, PNG, GIF) that ",
                 "will be displayed in the screen saver. Images will ",
@@ -79,6 +81,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             toolTip.SetToolTip(labelImagesNumber, toolTip.GetToolTip(imageNumberNumericUpDown));
             toolTip.SetToolTip(labelImagesMinSize, toolTip.GetToolTip(imageMinSizeNumericUpDown));
             toolTip.SetToolTip(labelImagesMaxSize, toolTip.GetToolTip(imageMaxSizeNumericUpDown));
+            toolTip.SetToolTip(labelImagesMaxSizePct, toolTip.GetToolTip(labelImagesMinSizePct));
             toolTip.SetToolTip(selectImageFolderButton, toolTip.GetToolTip(imageFolderTextBox));
 
             #endregion
@@ -211,8 +214,8 @@ namespace SWA.Ariadne.Gui.Dialogs
 
             // Images tab.
             imageNumberNumericUpDown.Value = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_NUMBER);
-            imageMinSizeNumericUpDown.Value = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_MIN_SIZE);
-            imageMaxSizeNumericUpDown.Value = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_MAX_SIZE);
+            InitImageSizeCtrl(imageMinSizeNumericUpDown, RegisteredOptions.OPT_IMAGE_MIN_SIZE, RegisteredOptions.OPT_IMAGE_MIN_SIZE_PCT);
+            InitImageSizeCtrl(imageMaxSizeNumericUpDown, RegisteredOptions.OPT_IMAGE_MAX_SIZE, RegisteredOptions.OPT_IMAGE_MAX_SIZE_PCT);
             imageFolderTextBox.Text = RegisteredOptions.GetStringSetting(RegisteredOptions.OPT_IMAGE_FOLDER);
             subtractImagesBackgroundCheckBox.Checked = RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_IMAGE_SUBTRACT_BACKGROUND);
 
@@ -241,6 +244,23 @@ namespace SWA.Ariadne.Gui.Dialogs
             checkBoxMultipleMazes.Checked = RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_MULTIPLE_MAZES);
         }
 
+        private void InitImageSizeCtrl(NumericUpDown ctrl, string optNamePx, string optNamePct)
+        {
+            // Since version 3.5: image sizes are given as a percentage of the screen size
+            int valuePct = RegisteredOptions.GetIntSetting(optNamePct);
+
+            // Before version 3.5: image sizes are given in pixels
+            int valuePx = RegisteredOptions.GetIntSetting(optNamePx);
+            if (valuePct <= 0 && valuePx > 0)
+            {
+                Rectangle screenBounds = Screen.PrimaryScreen.Bounds;
+                int screenSize = Math.Min(screenBounds.Width, screenBounds.Height);
+                valuePct = 100 * valuePx / screenSize;
+            }
+
+            ctrl.Value = Math.Min(Math.Max(valuePct, ctrl.Minimum), ctrl.Maximum);
+        }
+
         private void SaveSettings()
         {
             RegistryKey key = RegisteredOptions.AppRegistryKey(true);
@@ -254,8 +274,8 @@ namespace SWA.Ariadne.Gui.Dialogs
 
             // Images tab.
             key.SetValue(RegisteredOptions.OPT_IMAGE_NUMBER, (Int32)imageNumberNumericUpDown.Value, RegistryValueKind.DWord);
-            key.SetValue(RegisteredOptions.OPT_IMAGE_MIN_SIZE, (Int32)imageMinSizeNumericUpDown.Value, RegistryValueKind.DWord);
-            key.SetValue(RegisteredOptions.OPT_IMAGE_MAX_SIZE, (Int32)imageMaxSizeNumericUpDown.Value, RegistryValueKind.DWord);
+            key.SetValue(RegisteredOptions.OPT_IMAGE_MIN_SIZE_PCT, (Int32)imageMinSizeNumericUpDown.Value, RegistryValueKind.DWord);
+            key.SetValue(RegisteredOptions.OPT_IMAGE_MAX_SIZE_PCT, (Int32)imageMaxSizeNumericUpDown.Value, RegistryValueKind.DWord);
             key.SetValue(RegisteredOptions.OPT_IMAGE_FOLDER, imageFolderTextBox.Text, RegistryValueKind.String);
             key.SetValue(RegisteredOptions.OPT_IMAGE_SUBTRACT_BACKGROUND, (Int32)(subtractImagesBackgroundCheckBox.Checked ? 1 : 0), RegistryValueKind.DWord);
 
