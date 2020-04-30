@@ -61,13 +61,13 @@
     <Compile Include="AboutBox.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AboutBox.designer.cs">
+    <Compile Include="AboutBox.Designer.cs">
       <DependentUpon>AboutBox.cs</DependentUpon>
     </Compile>
     <Compile Include="AboutDetailsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AboutDetailsForm.designer.cs">
+    <Compile Include="AboutDetailsForm.Designer.cs">
       <DependentUpon>AboutDetailsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="DetailsDialog.cs">
@@ -79,7 +79,7 @@
     <Compile Include="OptionsDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="OptionsDialog.designer.cs">
+    <Compile Include="OptionsDialog.Designer.cs">
       <DependentUpon>OptionsDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />

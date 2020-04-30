@@ -1,0 +1,10 @@
+*~
+\#*#
+.#*
+*.csproj.user
+*.suo
+bin/
+obj/
+/.vs/
+/Releases/
+SWA.Ariadne.App/SWA.Ariadne.App_TemporaryKey.pfx

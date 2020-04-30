@@ -74,7 +74,7 @@
     <Compile Include="AriadneFormBase.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AriadneFormBase.designer.cs">
+    <Compile Include="AriadneFormBase.Designer.cs">
       <DependentUpon>AriadneFormBase.cs</DependentUpon>
     </Compile>
     <Compile Include="BlankForm.cs">

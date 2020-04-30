@@ -70,7 +70,7 @@
     <Compile Include="MazeUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="MazeUserControl.designer.cs">
+    <Compile Include="MazeUserControl.Designer.cs">
       <DependentUpon>MazeUserControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
