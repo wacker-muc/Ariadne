@@ -200,6 +200,11 @@ namespace SWA.Ariadne.Ctrl
 
         #region IMazePainterClient Members
 
+        public Graphics CreateGraphics()
+        {
+            return this.targetGraphics;
+        }
+
         public Rectangle DisplayRectangle
         {
             get { return this.targetRectangle; }

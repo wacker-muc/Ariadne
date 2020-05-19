@@ -455,11 +455,7 @@ namespace SWA.Ariadne.Gui.Mazes
         /// </summary>
         public void CreateMaze(ConfigureMazeLayoutDelegate configureDelegate)
         {
-            // Update the client dimensions, if it was resized.
-            if (client != null)
-            {
-                this.targetRectangle = client.DisplayRectangle;
-            }
+            UpdateClientDimensions();
 
             // Determine dimensions of a maze that fits into the drawing area.
             int xSize, ySize;
@@ -554,6 +550,18 @@ namespace SWA.Ariadne.Gui.Mazes
             {
                 item.gBuffer = null;
                 item.Reset();
+            }
+        }
+
+        /// <summary>
+        /// Update the client dimensions, if it was resized.
+        /// </summary>
+        private void UpdateClientDimensions()
+        {
+            if (client != null)
+            {
+                this.targetGraphics = client.CreateGraphics();
+                this.targetRectangle = client.DisplayRectangle;
             }
         }
 
@@ -1404,11 +1412,7 @@ namespace SWA.Ariadne.Gui.Mazes
         {
             this.settingsData = data;
 
-            // Update the client dimensions, if it was resized.
-            if (client != null)
-            {
-                this.targetRectangle = client.DisplayRectangle;
-            }
+            UpdateClientDimensions();
 
             // The currently installed shared painters are no longer valid.
             // New shared painters may be installed by the caller.
@@ -1466,11 +1470,7 @@ namespace SWA.Ariadne.Gui.Mazes
                 maze = new Maze(data.MazeWidth, data.MazeHeight);
             }
 
-            // Update the client dimensions, if it was resized.
-            if (client != null)
-            {
-                this.targetRectangle = client.DisplayRectangle;
-            }
+            UpdateClientDimensions();
 
             #region Adjust automatic parameters of the underlying Maze
 
@@ -1525,11 +1525,7 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <param name="percentage">when positive: percentage of mazes that will have a background image</param>
         public void CreateBackgroundImageLoader(string imageFolder, int percentage)
         {
-            // Update the client dimensions, if it was resized.
-            if (client != null)
-            {
-                this.targetRectangle = client.DisplayRectangle;
-            }
+            UpdateClientDimensions();
 
             int minSize = Math.Min(targetRectangle.Width, targetRectangle.Height) * 3 / 4;
             int maxSize = Math.Min(targetRectangle.Width, targetRectangle.Height) * 7 / 8;
