@@ -1,0 +1,263 @@
+-----------------------------------------------------------------------
+
+   =================
+   Overview: Ariadne
+   =================
+
+Copyright (c) Stephan.Wacker@web.de, 2008
+
+Go to http://www.wacker-muc.de/ for downloading the latest release.
+
+-----------------------------------------------------------------------
+
+The Ariadne application builds and solves a variety of maze puzzles.  a) When running as a regular application (Ariadne.exe), you can control the maze layout, its shape, additional content etc. via a "Details" panel.  b) The Ariadne.scr file can be installed as a screen saver.
+
+[Ariadne: Figure from Greek mythology.  Ariadne helped Theseus escape from the maze where the Minotaurus was held.]
+
+-----------------------------------------------------------------------
+
+    Screen Saver Configuration and Control
+    ======================================
+
+Use the Screen Saver "Settings" panel to configure the options of your screen saver (see the "[Option:]" tags below).
+
+The Screen Saver accepts a few keystroke commands:
+
+   * I = Switch information displayed in the details box.
+       * Solver strategy, maze dimension, maze ID, current time.
+       * Image path(s).
+   * P = Pause / Resume the solver.
+   * S = Save a screen shot.
+       * Image files are put into a subdirectory "Screenshots" of the directory where the screen saver is installed.
+
+All other keystrokes and mouse buttons will terminate the screen saver.
+
+-----------------------------------------------------------------------
+
+There are several components for specific responsibilities and most of them have many optional features.
+
+-----------------------------------------------------------------------
+
+    The Maze
+    ========
+
+The maze fills a rectangular region in a window.  In screen saver mode, the display is filled completely.
+
+The maze has a tree-like topological structure.  Any square can be reached from every other square by exactly one solution path.  There are no circles (paths leading from a square to itself).
+
+The maze builder algorithm starts at an arbitrary square and adds it to the "visited" region.  From then on, walls (whose state is initially undecided) between one visited and one not-visited square are opened until all squares have been reached.  The remaining walls are closed.
+
+Only closed walls are painted; open walls (also called "doors") are not painted.
+
+[Option:] Usually, all walls of the empty maze are painted before the solver starts.  There is an option by which two alternative modes can be activated: In one mode, no walls are painted at all (they have zero width); in the other mode, only the walls around visited squares are painted.
+
+
+    Additional Contents
+    -------------------
+
+A plain maze fills the whole area.  However, some regions may be reserved for additional controls or images.  These reserved areas do not touch directly and the maze flows closely around them.
+
+[Option:] You can specify a folder from which the Screen Saver chooses one or more images (JPG, PNG, GIF) that will be displayed.
+
+[Option:] You can select if a background image (from the same or a different image folder) is drawn behind the maze.  Even then, only 20% of the mazes will have a background image (unless the number of foreground images is 0).
+
+[Option:] You can select whether the Screen Saver displays a small panel showing the maze dimension, solver name and run-time statistics.
+
+Note: When both options for displaying foreground and background images are active, not all mazes will display a foreground image.  The chance of having no foreground image is 20% if there is a background image and 5% otherwise.
+
+
+    Irregular Mazes
+    ---------------
+
+Usually, the constructed maze is "regular", uniformly random, i.e. the chances that a specific wall between two adjoining squares are evenly distributed.
+
+In an irregular maze, some directions are preferred over other directions when opening the walls.  The choice may depend on the square's location and on other, opened or closed walls.
+
+[Variants:] There are 20 different methods or patterns of irregular mazes. e.g.:
+
+   * Prefer straight paths: A wall opposite an open wall should also be open.
+   * Prefer angled paths: A wall opposite an open wall should be closed.
+   * Prefer undulating paths, e.g. east - north - east - south - east - north - etc.
+   * Prefer horizontal or diagonal lines.
+   * Patterns that form structures relative to one or more reference points (usually the center of all or part of the maze):
+      * Circles around the reference point.
+      * Squares around the reference point.
+      * Squares whose corners (at the four diagonals) are turned inside, like the outline of a cross.
+      * Vertical and horizontal lines towards the reference point (in four quadrants separated by the diagonals).
+      * Radial lines spreading outwards from the reference point.
+   * Patterns based on small periodically repeated tiles.
+
+[Option:] You can select whether irregular mazes may be built.  Five percent of the mazes built in screen saver mode will be irregular.  The irregular choice will be applied to 80% of the walls.
+
+[Variants:] An irregular pattern may also be applied to part of the maze area only; the remainder is regular.  That part is defined by the inside (or outside) of an Outline Shape (see next section).  If an Outline Shape is used for building the maze, that same shape is used for the irregular pattern, as well.  Otherwise, a new Outline Shape may be used for the irregular pattern only.  Another variant is a combination of two different irregular patterns on the inside and outside of the Outline Shape.
+
+
+    Outline Shapes
+    --------------
+
+This option builds continuous closed walls around invisible shapes, e.g. a circle or a silhouette bitmap image (black on white).  Only one wall will be opened so that a path can run into the shape.  When the solver reaches the (closed) outline of the shape, it will run around it and the shape's contour will become visible.  When the solver finds the entry into the shape, it will be filled from the inside but the solver cannot leave the shape as there is no second exit.
+
+Usually, an Outline Shape is one contiguous shape, like a circle, a square or another polygon.  However, an Outline Shape can be any pattern that defines an inside and an outside.  Separate regions are all treated the same way, i.e. they are surrounded by closed walls with a single entry.
+
+[Variants:] There are 72 kinds of Outline Shapes, most of them with many variants, grouped into twelve mayor types:
+
+   * A circle. [1]
+   * A diamond, i.e. a square standing on a corner. [1]
+   * A set of overlapping circles. [1]
+   * A set of staright lines, dividing the plane. [1]
+   * Symmetric polygons with three to twelve corners.
+      * In regular polygons, each corner is connected to the two neighboring corners. [1]
+      * In star shaped polygons, each corner is connected to its second / third / n-th neighbor. [1]
+      * The polygons may be distorted so that straight edges become curved lines.
+        * A spiral distortion bends the corners to the left or right. [1]
+        * A radial wave distortion indents and rounds the corners. [1]
+   * Two-dimensional functions.  Unlike other shapes that have a limited size, these fill the whole plane with a certain pattern.  Some of these shapes may be distorted in various ways.
+      * Horizontal and vertical stripes. [4]
+      * Checkered squares. [5]
+      * Checkered squares that are rounded along the edges and at the corners.  These allow paths along the edges or between the diagonal corners. [2+3]
+      * Ellipses and Hyperbolas. [2]
+      * Concentric circles. [2]
+      * Spirals. [2]
+   * Fractals.
+      * The Mandelbrot set. [1]
+      * Julia sets from generating coordinates near the border of the Mandelbrot set.  An attempt is made to avoid disconnected Julia sets that would be completely indistinguishable. [2]
+   * Characters and Symbols from fonts at a very large size. [2]
+   * Bitmaps that are stored as black-and-white image resources.
+      * Geographical structures like continents and countries. [1]
+      * Picture frames or stamp contours. [1]
+      * Animals. [1]
+      * Traffic Signs. [1]
+      * Chess Figures. [1]
+   * Tiled patterns.  These are formed of rectangular tiles with a given pattern that are placed next to each other.
+      * Horizontal, vertical and checkered grids. [2]
+      * Rectangular frames based on a pattern of interwoven ribbons. [3]
+      * I-beam shaped ribbons. [2]
+      * Pentominoes inside one-line frames. [1]
+      * Repetitions of a bitmap pattern.
+        * Puzzle pieces. [1]
+        * Zigzagged patterns. [2]
+        * Various other patterns. [2]
+   * Concentric Rectangles, either with one center near the middle of the maze or with one center in each of the four corners. [2]
+   * Geometric shapes arranged in a repeating Grid.
+      * Simple checkered squares. [1]
+      * Large circles, slightly smaller than the checkered squares. [1]
+      * Large and small circles. [1]
+      * Halfed or quartered circles. [2]
+      * Large overlapping circles almost touching each other diagonally. [1]
+      * Rectangular lines, tightly boxed. [1]
+      * Large circles touching each other horizontally or vertically. [1]
+   * The same Grid elements may also be enlarged and are then applied only once. [8]
+   * The walls of another maze.
+      * Walls are represented as one square wide lines, paths as several squares wide ribbons. [1]
+      * Walls and paths are represented as lines (or ribbons) of equal width. [1]
+   * The contour of an image displayed within the maze, if it has a uniform background color. [1]
+
+While the patterns evoked by an Irregular Maze Builder come from following preferred directions (if possible), the rules defined by an Outline Shape are very strict.  They take precedence over the irregular preferences.
+
+[Option:] You can select whether Outline Shapes are placed into the maze.  If so, 80% of the screen saver mazes will contain an Outline Shape.
+
+
+    Embedded Mazes
+    --------------
+
+The Outline Shapes described above can also be used to create another maze within the main maze.  These Embedded Mazes need to be totally connected and will include any area that is totally enclosed.  Neither the main maze nor the embedded maze must fall apart into separate areas that are not connected. The two mazes are separated by a contiguous wall.
+
+The Embedded Maze has its own solver (usually with a different strategy than the main maze solver).  The paths in an Embedded Maze will be painted with different colors than in the main maze.
+
+[Option:] You can select whether Embedded Mazes are generated.  If so, 15% of the screen saver mazes will contain an Embedded Maze.
+
+-----------------------------------------------------------------------
+
+    Solver Strategies
+    =================
+
+The Solver tries to find a solution path between the start square and the target square.  Some strategies are deterministic, the others make random choices.  Some need to know the location of the target square, some don't.  Most keep a memory of the squares they have already visited.
+
+There are three general types of strategies: Backtrackers, Flooders and Walkers.
+
+Backtrackers go forwards until they are caught in a dead end.  Then they go backwards up to a fork with another door they have not yet passed.  There the go forwards, then backwards, and so on.  A Backtracker can solve any maze.
+
+Flooders follow several concurrent paths in parallel.  For every door at a fork, new open paths are created.  A Flooder can solve any maze without ever going backwards.
+
+Walkers have no memory of visited squares; they decide solely on their current position and direction.  Two of these implement a classical maze solver algorithm: "Walk through the maze while always touching the wall at your right/left hand side."  This strategy can solve any tree-shaped maze but may be caught in a circle.
+
+The visited paths are painted in two colors: Forward steps are painted in a bright color, backward steps and areas completely covered by a flooder are painted in a dull color.  Two colors with clearly different hue are selected.  When the solution path is found, it is painted in a brighter variant of the forward color.
+
+[Variants:] There are 21 "normal" maze solver strategies:
+
+   * RandomBacktracker:  The classical backtracker algorithm; it walks forward as long as possible, making random choices at a fork.  When there is no continuation, it walks back to the latest fork and chooses another path that has not yet been visited (this is called "backtracking").
+   * ProximityBacktracker: Another backtracker; at a fork, this one prefers the square that is nearest to the target square (measuring the geometric distance).
+   * OppositeBacktracker: This backtracker tries to get closest to the square directly opposite of the start square.
+   * RightHandWalker: Walks through the maze while staying in touch with the right-hand wall.
+   * LeftHandWalker: Walks through the maze while staying in touch with the left-hand wall.
+   * RandomFlooder: The classical flooder algorithm:  For every step, choose an arbitrary open path at random.
+   * RoundRobinFlooder: This Flooder chooses to continue the open paths in a round-robin sequence, i.e. between two steps on the same path, all other paths are continued, as well.
+   * CloseFlooder: From all currently visited paths, this flooder chooses the path closest to the start square.
+   * FarFlooder: This flooder chooses the path farthest away from the start square.
+   * ProximityFlooder: This flooder chooses the path closest to the target square.
+   * OppositeFlooder: This flooder chooses the path closest to the square directly opposite of the start square.
+   * HesitatingFlooder: This flooder chooses the path farthest away from the target square.
+   * CenterFlooder: This flooder chooses the path closest to the center of the maze.
+   * CornerFlooder: This flooder chooses the path farthest away from the center of the maze.
+   * ForwardFlooder: This flooder checks all continuations on the open paths and chooses the one with the greatest (relative) distance gain: It chooses the path for which d'/d is minimal, where d is the distance of the current square (on that path) from the target square and d' is the distance of the next square on the same path.
+   * BackwardFlooder: This flooder works essentially like the ForwardFlooder, but it chooses the path continuation with maximal d'/d ratio.
+   * RandomForwardFlooder: This variant of the ForwardFlooder may also choose a path other than the best one.  The "bad" path is chosen in one out ouf twenty steps.
+   * RandomBackwardFlooder: This variant of the BackwardFlooder may also choose a path other than the best one.  The "bad" path is chosen in one out ouf twenty steps.
+   * ThickestBranchFlooder: This flooder is based on the maze's tree structure.  Starting with a trunk of thickness 1 and length 0, every step increases the path length by 1 and every fork divides the thickness by the number of branches.  Among the currently thickest branches, the longest one is chosen.
+   * ThinnestBranchFlooder: This flooder works like the ThickestBranchFlooder with inverted logic: Among the thinnest branches, the shortest one is chosen.
+   * SpreadingFlooder: This flooder selects one of the two path ends closest to each other.
+   
+[Variants:] Each of these solvers also has an "efficient" variant.  These employ an algorithm that detects dead ends and avoids these areas.  An area is identified as a dead end if the squares visited by the solver (plus any reserved areas and the maze boundary) form a closed line around it.
+
+Dead end squares are painted with dark gray dots.
+
+There are two additional "extreme" strategies that are, however, not used in screen saver mode or when "any" solver should be selected.
+
+   * RandomWalker: This "solver" has no memory at all.  Every step is chosen randomly.  It may take a very long time (several 100,000 steps) until the target square is found by pure chance.
+   * MasterSolver: Knows the solution path beforehand.  Goes directly from start to target without any error.
+
+
+    Observations
+    ------------
+
+The area visited by the RandomBacktracker (in a regular maze) is a good example of a fractal: The border is self-similar at different scales.
+
+RightHandWalker and LeftHandWalker produce "inverted" paintings: One visits all areas to the right of the solution path, the other all areas to the left.
+
+OppositeBacktracker and OppositeFlooder don't know the location of the target square.  But as the start and target squares are always chosen close to opposite borders of the maze, they often produce similar results as the proximity guided solvers.
+
+Outline Shapes are completely obliterated when large sections of the maze are visited.  An efficient solver will not paint all squares in the same color and the shape will still be visible.
+
+The ThickestBranchFlooder advances on a chosen branch in one run up to the next fork; then another branch is better than the split branches at the fork.  The percieved movement is rather "jumpy", even at moderate speed.
+
+ForwardFlooder and BackwardFlooder tend to fill the whole maze, just like a HesitatingFlooder.  That is because both solvers assign highest penalties to undesired steps near the target square: the BackwardFlooder assigns an extreme penalty (100%) to the last step onto the target square; the ForwardFlooder assigns very high penalties to backward steps close to the target.  In that situation, both solvers will visit the whole rest of the maze before doing the one highly penalized required step.
+
+RandomForwardFlooder and RandomBackwardFlooder are able to overcome these problematic situations because their choice is not fixed.  Sometimes they may choose the path with higher penalties and thus make the necessary but locally unfavorable step.
+
+In the SpreadingFlooder, the pair of paths closest to each other advances in parallel.  When one path is split or gets closer to a different path, it forms a new partnership with the other closer partner.
+
+Efficient solvers often run for long stretches without error (i.e. without leaving the correct solution path), especially towards the end.  It is not unlikely that such a run spans more than half or two thirds of the solution path.  Even perfect runs without any error at all can be observed.  Considering that an average path may have several dozens or even hundreds of forks, this is quite amazing.
+
+-----------------------------------------------------------------------
+
+    Summary of Options and Variants
+    ===============================
+    
+   * [3] Paint walls always / never / when visited.
+   * Display images from a user specified directory.
+   * Display a background image below the maze.
+   * Display a run-time statistics panel.
+   * [27] Build mazes with irregular wall patterns.
+      * [4] Apply two mixed irregular patterns or apply the pattern to part of the maze only.
+   * [72] Build a continuous wall around an outline shape.
+   * [24] Build a second embedded maze inside the outline shape.
+   * [21] Different solver strategies.
+   * [2] Let an efficient solver detect dead end areas.
+   
+That gives a very large number of pattern or style combinations:
+
+    3 x (1 + 27x4) x (1+72+24) x 21 x 2  =  1,332,198
+
+The exact application of each variant is usually (with a few deterministic exceptions) influenced by random parameter values:  Outline shapes are generated dynamically, solvers choose arbitrary paths and the maze builder generates random patterns of walls.
+
+-----------------------------------------------------------------------
