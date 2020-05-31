@@ -67,7 +67,7 @@ namespace SWA.Ariadne.Gui
 
             this.fullScreenMode = fullScreenMode;
             this.imageLoader = imageLoader;
-            this.ShowInTaskbar = false;
+            this.ShowInTaskbar = ! this.fullScreenMode;
             this.DoubleBuffered = false;
 
             // Initially, the (optinally) displayed controls should be invisible until the maze has been built.

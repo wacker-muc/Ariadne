@@ -213,6 +213,15 @@ namespace SWA.Ariadne.Gui.Mazes
             }
         }
 
+        /// <summary>
+        /// True if the MazePainter has been initialized completely and ready to
+        /// receive Draw...() requests.
+        /// </summary>
+        /// <remarks>
+        /// This is the case after the OnPaint() method has created its gBuffer.
+        /// </remarks>
+        public bool IsReady { get { return (gBuffer != null); } }
+
         #region Background Image
 
         /// <summary>
@@ -1364,7 +1373,7 @@ namespace SWA.Ariadne.Gui.Mazes
         /// Returns the maze Y coordinate corresponding to the given canvas coordinate.
         /// </summary>
         /// <param name="yCanvas"></param>
-        /// <param name="leftBiased"></param>
+        /// <param name="topBiased"></param>
         /// <returns></returns>
         internal int YCoordinate(int yCanvas, bool topBiased)
         {

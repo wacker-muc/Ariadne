@@ -41,6 +41,21 @@ namespace SWA.Ariadne.Ctrl
             }
         }
 
+        public bool IsActive
+        {
+            get
+            {
+                foreach (ISolverController item in list)
+                {
+                    if (item.IsActive)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
+
         #endregion
 
         #region Constructor

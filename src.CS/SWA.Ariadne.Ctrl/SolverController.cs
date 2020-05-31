@@ -140,7 +140,11 @@ namespace SWA.Ariadne.Ctrl
         /// </summary>
         public virtual bool IsActive
         {
-            get { return (this.Maze.IsSolved == false); }
+            get
+            {
+                if (!this.mazePainter.IsReady) return false;
+                return (this.Maze.IsSolved == false);
+            }
         }
 
         #endregion

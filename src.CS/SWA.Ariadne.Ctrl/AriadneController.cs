@@ -270,7 +270,7 @@ namespace SWA.Ariadne.Ctrl
         private void OnStepTimer(object sender, EventArgs e)
         {
             // Ignore the message if the timer has been canceled in the meantime.
-            if (stepTimer == null || !stepTimer.Enabled || !client.Alive)
+            if (stepTimer == null || !stepTimer.Enabled || !client.Alive || !solverController.IsActive)
             {
                 return;
             }
@@ -370,7 +370,7 @@ namespace SWA.Ariadne.Ctrl
         private void OnBlinkTimer(object sender, EventArgs e)
         {
             // Ignore the message if the timer has been canceled in the meantime.
-            if (blinkTimer == null || !blinkTimer.Enabled || !client.Alive)
+            if (blinkTimer == null || !blinkTimer.Enabled || !client.Alive || !solverController.IsActive)
             {
                 return;
             }
