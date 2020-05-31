@@ -183,16 +183,16 @@ namespace SWA.Ariadne.Gui
             }
         }
 
-        private void ScreenSaverForm_KeyDown(object sender, KeyEventArgs e)
+        private void OnKeyPress(object sender, KeyPressEventArgs e)
         {
-            switch (e.KeyCode)
+            switch (char.ToUpper(e.KeyChar))
             {
-                case Keys.P: // Pause
-                case Keys.S: // Save Image
+                case (char)Keys.P: // Pause
+                case (char)Keys.S: // Save Image
                     // These keys will be handled in the AriadneFormBase.OnKeyPress() method.
                     break;
                 
-                case Keys.I:
+                case (char)Keys.I:
                     if (captionInfoItem == CaptionInfoEnum.ImagePath && captionInfoImageNumber + 1 < mazeUserControl.ImageCount)
                     {
                         captionInfoImageNumber++;
