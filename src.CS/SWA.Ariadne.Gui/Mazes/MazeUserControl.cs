@@ -135,6 +135,26 @@ namespace SWA.Ariadne.Gui.Mazes
         }
 
         /// <summary>
+        /// Scales the control by the given factor.
+        /// </summary>
+        /// <param name="factor">Factor.</param>
+        /// <param name="specified">Specified.</param>
+        /// <remarks>
+        /// This is called from the designer code's ResumeLayout() method,
+        /// first from MazeUserControl's own designer, when the current size is still irrelevant,
+        /// and second from the containing Form's designer, when the desired size has been set.
+        /// </remarks>
+        protected override void ScaleControl(SizeF factor, BoundsSpecified specified)
+        {
+            // Reset AutoScaleDimensions to the designer's value.
+            // This assures that the base method doesn't assume that scaling is not necessary.
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+
+            // Now, apply the desired scaling.
+            base.ScaleControl(factor, specified);
+        }
+
+        /// <summary>
         /// Set the graphics context in screen saver preview mode.
         /// </summary>
         /// <param name="g"></param>
