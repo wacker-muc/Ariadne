@@ -26,6 +26,22 @@ namespace SWA.Ariadne.Gui.Dialogs
         {
             InitializeComponent();
 
+            // Adjust color label widths (not scaled properly by ResumeLayout())
+            int colorLabelWidth = (this.autoColorsCheckBox.Location.X + this.autoColorsCheckBox.Width)
+                - this.refAColorLabel.Location.X;
+            this.refAColorLabel.Width = colorLabelWidth;
+            this.refBColorLabel.Width = colorLabelWidth;
+            this.forwardColorLabel.Width = colorLabelWidth;
+            this.backwardColorLabel.Width = colorLabelWidth;
+
+            // Adjust radio button widths (wider than required)
+            int radioButtonWidth = this.wallVisibilityGroupBox.Width
+                - 2 * this.wallVisibilityGroupBox.Margin.Left
+                - this.wallVisibilityRadioButtonAlways.Location.X;
+            this.wallVisibilityRadioButtonAlways.Width = radioButtonWidth;
+            this.wallVisibilityRadioButtonNever.Width = radioButtonWidth;
+            this.wallVisibilityRadioButtonWhenVisited.Width = radioButtonWidth;
+
             // Give every radio button its specific Tag value.
             this.outlineRadioButtonNone.Tag = AriadneSettingsData.OutlineKindEnum.None;
             this.outlineRadioButtonRandom.Tag = AriadneSettingsData.OutlineKindEnum.Random;

@@ -256,7 +256,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.squareWidthNumericUpDown.Name = "squareWidthNumericUpDown";
             this.squareWidthNumericUpDown.Size = new System.Drawing.Size(46, 20);
             this.squareWidthNumericUpDown.TabIndex = 1;
-            this.squareWidthNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.squareWidthNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.squareWidthNumericUpDown.Value = new decimal(new int[] {
             25,
             0,
@@ -286,7 +286,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.pathWidthNumericUpDown.Name = "pathWidthNumericUpDown";
             this.pathWidthNumericUpDown.Size = new System.Drawing.Size(46, 20);
             this.pathWidthNumericUpDown.TabIndex = 2;
-            this.pathWidthNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.pathWidthNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.pathWidthNumericUpDown.Value = new decimal(new int[] {
             25,
             0,
@@ -306,7 +306,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.wallWidthNumericUpDown.Name = "wallWidthNumericUpDown";
             this.wallWidthNumericUpDown.Size = new System.Drawing.Size(46, 20);
             this.wallWidthNumericUpDown.TabIndex = 3;
-            this.wallWidthNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.wallWidthNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.wallWidthNumericUpDown.Value = new decimal(new int[] {
             20,
             0,
@@ -331,7 +331,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.gridWidthNumericUpDown.Name = "gridWidthNumericUpDown";
             this.gridWidthNumericUpDown.Size = new System.Drawing.Size(46, 20);
             this.gridWidthNumericUpDown.TabIndex = 4;
-            this.gridWidthNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.gridWidthNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.gridWidthNumericUpDown.Value = new decimal(new int[] {
             25,
             0,
@@ -667,7 +667,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.irregularityNumericUpDown.Name = "irregularityNumericUpDown";
             this.irregularityNumericUpDown.Size = new System.Drawing.Size(46, 20);
             this.irregularityNumericUpDown.TabIndex = 22;
-            this.irregularityNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.irregularityNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.irregularityNumericUpDown.Value = new decimal(new int[] {
             80,
             0,
@@ -912,7 +912,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.imageMinSizeNumericUpDown.Name = "imageMinSizeNumericUpDown";
             this.imageMinSizeNumericUpDown.Size = new System.Drawing.Size(46, 20);
             this.imageMinSizeNumericUpDown.TabIndex = 2;
-            this.imageMinSizeNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.imageMinSizeNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.imageMinSizeNumericUpDown.Value = new decimal(new int[] {
             30,
             0,
@@ -946,7 +946,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.imageMaxSizeNumericUpDown.Name = "imageMaxSizeNumericUpDown";
             this.imageMaxSizeNumericUpDown.Size = new System.Drawing.Size(46, 20);
             this.imageMaxSizeNumericUpDown.TabIndex = 3;
-            this.imageMaxSizeNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.imageMaxSizeNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.imageMaxSizeNumericUpDown.Value = new decimal(new int[] {
             60,
             0,
@@ -975,7 +975,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.imageNumberNumericUpDown.Name = "imageNumberNumericUpDown";
             this.imageNumberNumericUpDown.Size = new System.Drawing.Size(46, 20);
             this.imageNumberNumericUpDown.TabIndex = 1;
-            this.imageNumberNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.imageNumberNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             // 
             // label17
             // 
@@ -1331,7 +1331,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.offCenterNumericUpDown.Name = "offCenterNumericUpDown";
             this.offCenterNumericUpDown.Size = new System.Drawing.Size(46, 20);
             this.offCenterNumericUpDown.TabIndex = 81;
-            this.offCenterNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.offCenterNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             // 
             // sizeNumericUpDown
             // 
@@ -1351,7 +1351,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.sizeNumericUpDown.Name = "sizeNumericUpDown";
             this.sizeNumericUpDown.Size = new System.Drawing.Size(46, 20);
             this.sizeNumericUpDown.TabIndex = 82;
-            this.sizeNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.sizeNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.sizeNumericUpDown.Value = new decimal(new int[] {
             80,
             0,
@@ -1407,7 +1407,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.ClientSize = new System.Drawing.Size(294, 298);
             this.Controls.Add(this.tabControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.MaximumSize = new System.Drawing.Size(300, 322);
+            //this.MaximumSize = new System.Drawing.Size(300, 322);
             this.MinimumSize = new System.Drawing.Size(300, 322);
             this.Name = "DetailsDialog";
             this.ShowInTaskbar = false;

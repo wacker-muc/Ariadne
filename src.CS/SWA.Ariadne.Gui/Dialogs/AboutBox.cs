@@ -45,6 +45,19 @@ namespace SWA.Ariadne.Gui.Dialogs
         private void InitializeComponent2()
         {
             this.mazeUserControl.MazeForm = this as IMazeForm;
+
+            // Set all anchors to top-left only (so that height adjustment does not affect inner controls)
+            AnchorStyles anchorStyle = AnchorStyles.Top | AnchorStyles.Left;
+            this.mazeUserControl.Anchor = anchorStyle;
+            this.moreButton.Anchor = anchorStyle;
+            this.okButton.Anchor = anchorStyle;
+            this.outerAboutPanel.Anchor = anchorStyle;
+
+            // Adjust form height (far too low after ResumeLayout())
+            int topMargin = this.mazeUserControl.Location.Y;
+            int bottomMargin = this.ClientSize.Height
+                - (this.mazeUserControl.Location.Y + this.mazeUserControl.Height);
+            this.Height += (topMargin - bottomMargin);
         }
 
         #endregion
