@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Text;
 using SWA.Ariadne.Model;
 using SWA.Ariadne.Model.Interfaces;
 using SWA.Ariadne.Outlines;
@@ -151,7 +148,9 @@ namespace SWA.Ariadne.Gui.Mazes
         private Pen wallPen;
         private Pen forwardPen;
         private Pen backwardPen;
-        private Brush deadEndBrush = new SolidBrush(deadEndColor);
+        private Pen deadEndPen;
+        private Pen startSquarePen;
+        private Pen blackSquarePen;
 
         /// <summary>
         /// A counter that switches the end square between two states:
@@ -198,18 +197,18 @@ namespace SWA.Ariadne.Gui.Mazes
         }
         private int blinkingCounter = 0;
 
-        private Brush StartSquareBrush
+        private Pen StartSquarePen
         {
-            get { return Brushes.Red; }
+            get { return startSquarePen; }
         }
 
-        private Brush EndSquareBrush
+        private Pen EndSquarePen
         {
             get
             {
-                if (Maze.IsSolved)                 return StartSquareBrush;
-                if (this.BlinkingCounter % 2 == 0) return StartSquareBrush;
-                return Brushes.Black;
+                if (Maze.IsSolved)                 return StartSquarePen;
+                if (this.BlinkingCounter % 2 == 0) return StartSquarePen;
+                return blackSquarePen;
             }
         }
 
@@ -488,45 +487,45 @@ namespace SWA.Ariadne.Gui.Mazes
         /// Calculate width and xOffset.
         /// </summary>
         /// <param name="width"></param>
-        /// <param name="yOffset"></param>
+        /// <param name="xOffset"></param>
         private void FitMazeWidth(out int width, out int xOffset)
         {
-            FitMazeSize(targetRectangle.Width, out width, out xOffset);
+            FitMazeSize(this, targetRectangle.Width, out width, out xOffset);
         }
 
         /// <summary>
         /// Calculate height and yOffset.
         /// </summary>
         /// <param name="height"></param>
-        /// <param name="xOffset"></param>
+        /// <param name="yOffset"></param>
         private void FitMazeHeight(out int height, out int yOffset)
         {
-            FitMazeSize(targetRectangle.Height, out height, out yOffset);
+            FitMazeSize(this, targetRectangle.Height, out height, out yOffset);
         }
 
         /// <summary>
         /// Calculate a maze size (width or height) and its offset from the given displaySize.
         /// </summary>
         /// <param name="displaySize"></param>
-        /// <param name="width"></param>
-        /// <param name="yOffset"></param>
-        private void FitMazeSize(int displaySize, out int mazeSize, out int offset)
+        /// <param name="mazeSize"></param>
+        /// <param name="offset"></param>
+        private void FitMazeSize(MazePainter instance, int displaySize, out int mazeSize, out int offset)
         {
-            int usableSize = displaySize - 2 * padding;
+            int usableSize = displaySize - 2 * instance.padding;
             
-            if (this.wallWidth > 0)
+            if (instance.wallWidth > 0)
             {
-                usableSize -= this.wallWidth;
+                usableSize -= instance.wallWidth;
             }
             else
             {
                 // Add the unused space between the painted path and the not painted wall.
                 // Note: The start or target square may be slightly cut off if it is directly on the border.
-                usableSize += (this.squareWidth - this.pathWidth);
+                usableSize += (instance.squareWidth - instance.pathWidth);
             }
 
-            mazeSize = usableSize / this.gridWidth;
-            offset = (displaySize - mazeSize * this.gridWidth) / 2;
+            mazeSize = usableSize / instance.gridWidth;
+            offset = (displaySize - mazeSize * instance.gridWidth) / 2;
         }
 
         /// <summary>
@@ -542,10 +541,16 @@ namespace SWA.Ariadne.Gui.Mazes
             this.wallPen = new Pen(wallColor, wallWidth);
             this.forwardPen = new Pen(forwardColor, pathWidth);
             this.backwardPen = new Pen(backwardColor, pathWidth);
+            this.deadEndPen = new Pen(backwardColor, pathWidth);
+            this.startSquarePen = new Pen(Color.Red, squareWidth);
+            this.blackSquarePen = new Pen(Color.Black, squareWidth);
 
             wallPen.StartCap = wallPen.EndCap = System.Drawing.Drawing2D.LineCap.Square;
             forwardPen.StartCap = forwardPen.EndCap = System.Drawing.Drawing2D.LineCap.Square;
             backwardPen.StartCap = backwardPen.EndCap = System.Drawing.Drawing2D.LineCap.Square;
+            deadEndPen.StartCap = deadEndPen.EndCap = System.Drawing.Drawing2D.LineCap.Square;
+            startSquarePen.StartCap = startSquarePen.EndCap = System.Drawing.Drawing2D.LineCap.Square;
+            blackSquarePen.StartCap = blackSquarePen.EndCap = System.Drawing.Drawing2D.LineCap.Square;
 
             // Destroy the current buffer; it will be re-created in the OnPaint() method.
             if (gBuffer != null)
@@ -822,16 +827,13 @@ namespace SWA.Ariadne.Gui.Mazes
         /// Paint the shape as defined by the insideShapeTest delegate with the given color.
         /// </summary>
         /// <param name="g"></param>
-        /// <param name="test"></param>
-        /// <param name="shapeBrush"></param>
+        /// <param name="insideShapeTest"></param>
+        /// <param name="shapeColor"></param>
         private void PaintShape(Graphics g, OutlineShape.InsideShapeDelegate insideShapeTest, Color shapeColor)
         {
-            // Temporarily set zero width walls; thus, the squares will be drawn seamlessly.
-            int savedWallWidth = wallWidth;
-            wallWidth = 0;
-            squareWidth = gridWidth;
-
             Brush shapeBrush = new SolidBrush(shapeColor);
+            Pen shapePen = new Pen(shapeBrush, gridWidth);
+            shapePen.StartCap = shapePen.EndCap = System.Drawing.Drawing2D.LineCap.Square;
 
             for (int x = 0; x < maze.XSize; x++)
             {
@@ -839,13 +841,10 @@ namespace SWA.Ariadne.Gui.Mazes
                 {
                     if (insideShapeTest(x, y) == true && ! Maze[x, y].isReserved)
                     {
-                        this.PaintSquare(g, shapeBrush, x, y);
+                        this.PaintSquare(g, shapePen, x, y);
                     }
                 }
             }
-
-            wallWidth = savedWallWidth;
-            squareWidth = gridWidth - wallWidth;
         }
 
         /// <summary>
@@ -966,22 +965,29 @@ namespace SWA.Ariadne.Gui.Mazes
                 BlinkingCounter = 0;
             }
 
-            PaintSquare(g, this.StartSquareBrush, maze.StartSquare.XPos, maze.StartSquare.YPos);
-            PaintSquare(g, this.EndSquareBrush, maze.EndSquare.XPos, maze.EndSquare.YPos);
+            PaintSquare(g, this.StartSquarePen, maze.StartSquare.XPos, maze.StartSquare.YPos);
+            PaintSquare(g, this.EndSquarePen, maze.EndSquare.XPos, maze.EndSquare.YPos);
         }
 
         /// <summary>
-        /// Fills one square with the given color.
+        /// Fills one square using the given pen.
         /// </summary>
         /// <param name="g"></param>
-        /// <param name="b"></param>
+        /// <param name="pen"></param>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        private void PaintSquare(Graphics g, Brush b, int x, int y)
+        /// <remarks>
+        /// The pen should have square caps and an appropriate width.
+        /// </remarks>
+        private void PaintSquare(Graphics g, Pen pen, int x, int y)
         {
-            float cx = xOffset + wallWidth/2.0F + x * gridWidth;
-            float cy = yOffset + wallWidth/2.0F + y * gridWidth;
-            g.FillRectangle(b, cx, cy, squareWidth, squareWidth);
+            float cx = xOffset + gridWidth/2.0F + x * gridWidth;
+            float cy = yOffset + gridWidth/2.0F + y * gridWidth;
+
+            // Drawing from cx to cx has no result at all.
+            // Drawing from cx to cx+0.01 paints one pixel too many.
+            // Drawing from cx-0.01 to cx seems to do the right thing.
+            g.DrawLine(pen, cx-0.01F, cy, cx, cy);
         }
 
         /// <summary>
@@ -1062,15 +1068,21 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <param name="sq"></param>
         private void PaintPathDot(MazeSquare sq)
         {
-            PaintPathDot(sq, this.forwardPen.Brush);
+            PaintPathDot(sq, this.forwardPen);
         }
 
         /// <summary>
-        /// Paints a dot with the given brush in the given square.
+        /// Paints a dot with the given pen in the given square.
         /// </summary>
         /// <param name="sq"></param>
-        /// <param name="brush"></param>
-        private void PaintPathDot(MazeSquare sq, Brush brush)
+        /// <param name="pen"></param>
+        /// <remarks>
+        /// Previous versions used to fill a rectangle but that proved to be
+        /// incompatible with the lines drawn for the path and the maze walls.
+        /// Sometimes the dots were one pixel off and left small strokes in the
+        /// wrong color. 
+        /// </remarks>
+        private void PaintPathDot(MazeSquare sq, Pen pen)
         {
             Graphics g = gBuffer.Graphics;
 
@@ -1080,10 +1092,7 @@ namespace SWA.Ariadne.Gui.Mazes
                 return;
             }
 
-            float cx = xOffset + gridWidth / 2.0F + sq.XPos * gridWidth;
-            float cy = yOffset + gridWidth / 2.0F + sq.YPos * gridWidth;
-
-            g.FillRectangle(brush, cx - pathWidth / 2.0F, cy - pathWidth / 2.0F, pathWidth, pathWidth);
+            this.PaintSquare(g, pen, sq.XPos, sq.YPos);
         }
 
         /// <summary>
@@ -1159,7 +1168,7 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <param name="sq"></param>
         public void DrawDeadSquare(MazeSquare sq)
         {
-            PaintPathDot(sq, deadEndBrush);
+            PaintPathDot(sq, deadEndPen);
         }
 
         /// <summary>
@@ -1167,17 +1176,13 @@ namespace SWA.Ariadne.Gui.Mazes
         /// </summary>
         public void DrawRemainingSquares()
         {
-            Color color = ColorBuilder.ConvertHSBToColor(backwardColor.GetHue(), backwardColor.GetSaturation(), deadEndColor.GetBrightness());
-            Brush brush = new SolidBrush(color);
-            brush = new SolidBrush(backwardColor);
-
             for (int x = 0; x < maze.XSize; x++)
             {
                 for (int y = 0; y < maze.YSize; y++)
                 {
                     if (maze[x, y].MazeId == maze.MazeId && !maze[x, y].isVisited)
                     {
-                        PaintPathDot(maze[x, y], brush);
+                        PaintPathDot(maze[x, y], backwardPen);
                     }
                 }
             }
