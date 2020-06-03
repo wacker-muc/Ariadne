@@ -35,14 +35,14 @@ namespace SWA.Ariadne.Gui
             // 
             this.arenaItem1.Location = new System.Drawing.Point(6, 6);
             this.arenaItem1.Name = "arenaItem1";
-            this.arenaItem1.Size = new System.Drawing.Size(269, 179);
+            this.arenaItem1.Size = new System.Drawing.Size(289, 179);
             this.arenaItem1.TabIndex = 2;
             // 
             // ArenaForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(635, 273);
+            this.ClientSize = new System.Drawing.Size(675, 273);
             this.Controls.Add(this.arenaItem1);
             this.Name = "ArenaForm";
             this.Controls.SetChildIndex(this.arenaItem1, 0);
