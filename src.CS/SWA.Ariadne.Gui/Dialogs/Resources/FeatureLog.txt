@@ -4,7 +4,15 @@
    Feature Log: Ariadne
    ====================
 
-Copyright (c) Stephan.Wacker@web.de, 2008 - 2009
+Copyright (c) Stephan.Wacker@web.de, 2008 - 2020
+
+-----------------------------------------------------------------------
+
+Version 4.0 -- r340 -- 2020-06-04
+
+ * Migrated to a MonoDevelop solution
+ * Fixed several Bugs caused by running on a non-Windows platform
+ * Fix: Avoid specks on the maze path
 
 -----------------------------------------------------------------------
 

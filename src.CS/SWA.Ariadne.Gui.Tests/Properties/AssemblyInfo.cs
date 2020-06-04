@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("T-Systems GEI GmbH")]
 [assembly: AssemblyProduct("SWA.Ariadne.Gui.Tests")]
-[assembly: AssemblyCopyright("Copyright © T-Systems GEI GmbH 2008")]
+[assembly: AssemblyCopyright("Copyright © Stephan Wacker, 2008")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

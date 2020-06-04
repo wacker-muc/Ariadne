@@ -82,7 +82,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.labelCopyright.Cursor = System.Windows.Forms.Cursors.Hand;
             this.labelCopyright.Location = new System.Drawing.Point(2, 33);
             this.labelCopyright.Margin = new System.Windows.Forms.Padding(0);
-            this.labelCopyright.MaximumSize = new System.Drawing.Size(186, 17);
+            //this.labelCopyright.MaximumSize = new System.Drawing.Size(186, 17);
             this.labelCopyright.Name = "labelCopyright";
             this.labelCopyright.Size = new System.Drawing.Size(179, 17);
             this.labelCopyright.TabIndex = 22;
@@ -96,7 +96,7 @@ namespace SWA.Ariadne.Gui.Dialogs
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.labelVersion.Location = new System.Drawing.Point(2, 17);
             this.labelVersion.Margin = new System.Windows.Forms.Padding(0);
-            this.labelVersion.MaximumSize = new System.Drawing.Size(186, 17);
+            //this.labelVersion.MaximumSize = new System.Drawing.Size(186, 17);
             this.labelVersion.Name = "labelVersion";
             this.labelVersion.Size = new System.Drawing.Size(179, 17);
             this.labelVersion.TabIndex = 21;
@@ -110,7 +110,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.labelProductName.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelProductName.Location = new System.Drawing.Point(2, 1);
             this.labelProductName.Margin = new System.Windows.Forms.Padding(0);
-            this.labelProductName.MaximumSize = new System.Drawing.Size(186, 17);
+            //this.labelProductName.MaximumSize = new System.Drawing.Size(186, 17);
             this.labelProductName.Name = "labelProductName";
             this.labelProductName.Size = new System.Drawing.Size(179, 17);
             this.labelProductName.TabIndex = 20;

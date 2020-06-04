@@ -41,7 +41,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.webBrowser.Location = new System.Drawing.Point(1, 2);
             this.webBrowser.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser.Name = "webBrowser";
-            this.webBrowser.Size = new System.Drawing.Size(290, 270);
+            this.webBrowser.Size = new System.Drawing.Size(500, 460);
             this.webBrowser.TabIndex = 1;
             this.webBrowser.WebBrowserShortcutsEnabled = false;
             // 
@@ -49,7 +49,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(292, 273);
+            this.ClientSize = new System.Drawing.Size(502, 463);
             this.Controls.Add(this.webBrowser);
             this.Name = "AboutDetailsForm";
             this.Text = "Ariadne Info";

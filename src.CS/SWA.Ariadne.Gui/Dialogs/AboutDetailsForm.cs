@@ -15,8 +15,38 @@ namespace SWA.Ariadne.Gui.Dialogs
         {
             InitializeComponent();
 
-            this.Size = new Size(500, 480);
-            this.webBrowser.DocumentText = InsertFeatureLog(Properties.Resources.OverviewHtml, Properties.Resources.FeatureLogTxt);
+            if (Environment.NewLine.Length == 2) // test for "\r\n"
+            {
+                // Seems like we are on a Windows system -- everything OK
+                this.webBrowser.DocumentText = InsertFeatureLog(Properties.Resources.OverviewHtml, Properties.Resources.FeatureLogTxt);
+            }
+            else
+            {
+                // System.Windows.Forms.WebBrowser doesn't work on Linux or Mac-OS :-(
+                // Let's replace it with a simple TextBox.
+                TextBox textBox = new TextBox();
+
+                textBox.Anchor = this.webBrowser.Anchor;
+                textBox.Location = this.webBrowser.Location;
+                textBox.Name = "textBox1";
+                textBox.Size = this.webBrowser.Size;
+                textBox.TabIndex = this.webBrowser.TabIndex;
+                textBox.Text = Properties.Resources.OverviewTxt
+                    + Environment.NewLine
+                    + Environment.NewLine
+                    + Properties.Resources.FeatureLogTxt
+                    ;
+                textBox.Multiline = true;
+                textBox.WordWrap = true;
+                textBox.ReadOnly = true;
+                textBox.ScrollBars = ScrollBars.Vertical;
+
+                this.Controls.Remove(this.webBrowser);
+                this.Controls.Add(textBox);
+
+                textBox.Select(0, 1);
+                textBox.DeselectAll();
+            }
         }
 
         private string InsertFeatureLog(string html, string txt)
