@@ -96,6 +96,7 @@ namespace SWA.Ariadne.Gui
             this.Name = "ScreenSaverForm";
             this.Text = "ScreenSaverForm";
             this.Load += new System.EventHandler(this.ScreenSaverForm_Load);
+            this.Shown += new System.EventHandler(ScreenSaverForm_Shown);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ScreenSaverForm_MouseDown);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ScreenSaverForm_MouseMove);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ScreenSaverForm_FormClosing);

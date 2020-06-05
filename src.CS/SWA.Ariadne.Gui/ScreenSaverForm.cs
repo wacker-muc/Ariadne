@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
@@ -65,6 +66,11 @@ namespace SWA.Ariadne.Gui
         {
             InitializeComponent();
 
+            if (fullScreenMode)
+            {
+                this.Text += "/" + Process.GetCurrentProcess().Id; // make it unique
+            }
+
             this.fullScreenMode = fullScreenMode;
             this.imageLoader = imageLoader;
             this.ShowInTaskbar = ! this.fullScreenMode;
@@ -98,6 +104,34 @@ namespace SWA.Ariadne.Gui
             // Make this the active Form and capture the mouse.
             this.Activate();
             this.Capture = true;
+        }
+
+        /// <summary>
+        /// Make the Form really cover the whole screen, including Panels.
+        /// </summary>
+        /// <remarks>
+        /// This code is taken from
+        /// https://stackoverflow.com/questions/2823299/mono-winforms-app-fullscreen-in-ubuntu
+        /// We need an external program (wmctrl).
+        /// </remarks>
+        private void SetupScreenSaverUnix()
+        {
+            Process process = new Process
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = "wmctrl",
+                    Arguments = $"-r " + this.Text + " -b add,fullscreen",
+                    CreateNoWindow = true
+                }
+            };
+            process.Start();
+            process.WaitForExit();
+
+            if (process.ExitCode != 0)
+            {
+                // TODO: Tell the user to install wmctrl.
+            }
         }
 
         #endregion
@@ -145,6 +179,16 @@ namespace SWA.Ariadne.Gui
 
             // Now the first maze has been loaded.
             this.loadingFirstMaze = false;
+        }
+
+        void ScreenSaverForm_Shown(object sender, EventArgs e)
+        {
+            switch (Environment.OSVersion.Platform)
+            {
+                case PlatformID.Unix:
+                    this.SetupScreenSaverUnix();
+                    break;
+            }
         }
 
         public override void OnNew(object sender, EventArgs e)

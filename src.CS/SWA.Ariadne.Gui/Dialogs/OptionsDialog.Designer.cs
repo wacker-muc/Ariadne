@@ -175,7 +175,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.textBoxStepsPerSecond.Size = new System.Drawing.Size(46, 20);
             this.textBoxStepsPerSecond.TabIndex = 4;
             this.textBoxStepsPerSecond.Text = "200";
-            this.textBoxStepsPerSecond.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxStepsPerSecond.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             // 
             // labelStepsPerSecond
             // 
@@ -285,7 +285,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.imageMinSizeNumericUpDown.Name = "imageMinSizeNumericUpDown";
             this.imageMinSizeNumericUpDown.Size = new System.Drawing.Size(46, 20);
             this.imageMinSizeNumericUpDown.TabIndex = 2;
-            this.imageMinSizeNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.imageMinSizeNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.imageMinSizeNumericUpDown.Value = new decimal(new int[] {
             30,
             0,
@@ -319,7 +319,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.imageMaxSizeNumericUpDown.Name = "imageMaxSizeNumericUpDown";
             this.imageMaxSizeNumericUpDown.Size = new System.Drawing.Size(46, 20);
             this.imageMaxSizeNumericUpDown.TabIndex = 3;
-            this.imageMaxSizeNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.imageMaxSizeNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.imageMaxSizeNumericUpDown.Value = new decimal(new int[] {
             60,
             0,
@@ -348,7 +348,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.imageNumberNumericUpDown.Name = "imageNumberNumericUpDown";
             this.imageNumberNumericUpDown.Size = new System.Drawing.Size(46, 20);
             this.imageNumberNumericUpDown.TabIndex = 1;
-            this.imageNumberNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.imageNumberNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             // 
             // labelImagesNumber
             // 
