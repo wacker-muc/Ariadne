@@ -41,18 +41,18 @@ namespace SWA.Ariadne.Ctrl
             }
         }
 
-        public bool IsActive
+        public bool IsReady
         {
             get
             {
                 foreach (ISolverController item in list)
                 {
-                    if (item.IsActive)
+                    if (!item.IsReady)
                     {
-                        return true;
+                        return false;
                     }
                 }
-                return false;
+                return true;
             }
         }
 

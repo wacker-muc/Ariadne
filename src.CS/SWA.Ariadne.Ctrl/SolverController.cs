@@ -136,15 +136,19 @@ namespace SWA.Ariadne.Ctrl
 
         /// <summary>
         /// Returns true if this controller is ready to execute another step.
-        /// Doesn't consider the embedded controllers' state.
+        /// Cannot consider the embedded controllers' state because that would result in a loop.
         /// </summary>
         public virtual bool IsActive
         {
-            get
-            {
-                if (!this.mazePainter.IsReady) return false;
-                return (this.Maze.IsSolved == false);
-            }
+            get { return (this.Maze.IsSolved == false); }
+        }
+
+        /// <summary>
+        /// Returns true if this controller is ready to execute the first step.
+        /// </summary>
+        public bool IsReady
+        {
+            get { return this.mazePainter.IsReady; }
         }
 
         #endregion
