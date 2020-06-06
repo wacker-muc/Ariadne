@@ -343,6 +343,7 @@ namespace SWA.Ariadne.Gui
                     e.Handled = true;
                     break;
                 case (char)Keys.Enter:
+                case (char)Keys.R:
                     OnStart(sender, e);
                     e.Handled = true;
                     break;
@@ -382,6 +383,10 @@ namespace SWA.Ariadne.Gui
                     e.Handled = true;
                     break;
 #endif
+                case (char)Keys.Q:
+                    this.Close();
+                    e.Handled = true;
+                    break;
             }
         }
 

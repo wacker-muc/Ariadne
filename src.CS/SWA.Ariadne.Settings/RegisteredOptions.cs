@@ -205,7 +205,6 @@ namespace SWA.Ariadne.Settings
         /// <summary>
         /// Returns our RegistryKey or null if it does not exist in the Windows registry.
         /// </summary>
-        /// <param name="initialize"></param>
         /// <returns></returns>
         public static RegistryKey AppRegistryKey()
         {

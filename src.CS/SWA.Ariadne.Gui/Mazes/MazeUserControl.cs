@@ -483,7 +483,7 @@ namespace SWA.Ariadne.Gui.Mazes
             }
 
             // Create a fitting Bitmap image.
-            System.Drawing.Imaging.PixelFormat pxlFormat = System.Drawing.Imaging.PixelFormat.Format16bppRgb555;
+            System.Drawing.Imaging.PixelFormat pxlFormat = System.Drawing.Imaging.PixelFormat.Format24bppRgb;
             Bitmap result = new Bitmap(imgSize.Width, imgSize.Height, pxlFormat);
 
             // Make sure the end square is painted solid.
