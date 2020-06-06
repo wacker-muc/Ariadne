@@ -240,9 +240,10 @@ namespace SWA.Ariadne.Gui.Mazes
 
         /// <summary>
         /// A bitmap of the size of the targetRectangle with black (or transparent) background.
-        /// One of the available packground images is painted at a random location.
+        /// One of the available background images is painted at a random location.
         /// Over that image, all (visible) walls are painted, as well.
-        /// Only the parts under visited squares are actually displayed.
+        /// Initially, this image will not be visible.
+        /// Only when a square is visited, the part of the image in that square will be displayed.
         /// </summary>
         private Bitmap backgroundImage;
 

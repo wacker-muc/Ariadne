@@ -1005,7 +1005,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.imageFolderTextBox.Name = "imageFolderTextBox";
             this.imageFolderTextBox.Size = new System.Drawing.Size(154, 20);
             this.imageFolderTextBox.TabIndex = 5;
-            this.imageFolderTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.imageFolderTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.imageFolderTextBox.WordWrap = false;
             // 
             // setContentsButton

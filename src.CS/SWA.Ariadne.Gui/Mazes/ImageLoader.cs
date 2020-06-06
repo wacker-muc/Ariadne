@@ -67,7 +67,12 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <summary>
         /// A list of recently used images.  We'll try to avoid using the same images in rapid succession.
         /// </summary>
-        private List<string> recentlyUsedImages = new List<string>();
+        private static List<string> recentlyUsedImages = new List<string>();
+
+        /// <summary>
+        /// Image paths that failed to load.
+        /// </summary>
+        private static Dictionary<string, bool> badImages = new Dictionary<string, bool>();
 
         #endregion
 
@@ -192,6 +197,7 @@ namespace SWA.Ariadne.Gui.Mazes
                 }
                 string imagePath = imagePaths[0];
                 result = LoadImage(imagePath, r);
+                if (result == null) { return result; }
                 result.ProcessImage();
             }
 
@@ -277,7 +283,7 @@ namespace SWA.Ariadne.Gui.Mazes
                 }
                 if (img == null)
                 {
-                    // continue;
+                    continue;
                 }
                 else if (!preserveOrder && img.HasContour)
                 {
@@ -354,6 +360,7 @@ namespace SWA.Ariadne.Gui.Mazes
             catch (Exception e)
             {
                 System.Console.Out.WriteLine("failed loading image [{0}]: {1}", imagePath, e.ToString());
+                badImages[imagePath] = true;
                 return null;
             }
         }
@@ -435,13 +442,12 @@ namespace SWA.Ariadne.Gui.Mazes
 
             // Shorten the list of recently used images.
             // Make sure the list does not get too short.
-            while (this.recentlyUsedImages.Count > 0
-                && this.recentlyUsedImages.Count > availableImages.Count - count
-                && this.recentlyUsedImages.Count > availableImages.Count * 3 / 4
+            while (recentlyUsedImages.Count > 0
+                && recentlyUsedImages.Count > Math.Min(availableImages.Count - count, availableImages.Count * 3 / 4)
                 )
             {
                 // Remove an item near the beginning of the list (recently added items are at the end).
-                this.recentlyUsedImages.RemoveAt(r.Next(this.recentlyUsedImages.Count / 3 + 1));
+                recentlyUsedImages.RemoveAt(r.Next(recentlyUsedImages.Count / 3 + 1));
             }
 
             // Select the required number of images.
@@ -451,7 +457,7 @@ namespace SWA.Ariadne.Gui.Mazes
                 int p = r.Next(availableImages.Count);
                 string imagePath = availableImages[p];
 
-                if (!recentlyUsedImages.Contains(imagePath))
+                if (!recentlyUsedImages.Contains(imagePath) && !badImages.ContainsKey(imagePath))
                 {
                     result.Add(imagePath);
                     recentlyUsedImages.Add(imagePath);
@@ -542,6 +548,8 @@ namespace SWA.Ariadne.Gui.Mazes
         {
             //Log.WriteLine("{ LoadImagePaths()");
             string s = RegisteredOptions.GetStringSetting(thread.Name + " " + RegisteredOptions.SAVE_IMAGE_PATHS);
+            if (s.Length == 0) { return new List<string>(); }
+
             string[] result = s.Split(new char[] { PathSeparator });
 
             for (int i = 0; i < result.Length; i++)
