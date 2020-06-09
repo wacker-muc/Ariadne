@@ -10,7 +10,11 @@ namespace SWA.Utilities
     {
         #region Static members.
 
-        private static bool enabled = false;
+#if DEBUG
+        private static readonly bool enabled = true;
+#else
+        private static readonly bool enabled = false;
+#endif
 
         private static string logFileName = "Ariadne.log";
         private static Log instance;

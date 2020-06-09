@@ -628,7 +628,18 @@ namespace SWA.Ariadne.Gui.Mazes
             }
 
             //Log.WriteLine("{ ProcessImage()");
-            CreateImage();
+            try
+            {
+                CreateImage();
+            }
+            catch (Exception ex)
+            {
+                string msg = string.Format("cannot create ContourImage [{0}]: {1}", this.path, ex.Message);
+                System.Console.Out.WriteLine(msg);
+                Log.WriteLine(msg);
+                this.image = this.template;
+                return;
+            }
 
             int fuzziness = (int)(0.03 * MaxColorDistance);
             CreateMask(fuzziness);
