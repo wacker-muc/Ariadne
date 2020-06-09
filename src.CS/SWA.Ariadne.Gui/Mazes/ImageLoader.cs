@@ -66,8 +66,26 @@ namespace SWA.Ariadne.Gui.Mazes
 
         /// <summary>
         /// A list of recently used images.  We'll try to avoid using the same images in rapid succession.
+        /// This static list is shared among all instances.
         /// </summary>
-        private static List<string> recentlyUsedImages = new List<string>();
+        private static readonly List<string> sharedRecentlyUsedImages = new List<string>();
+
+        /// <summary>
+        /// A private copy of the shared list, used in an ArenaForm context, when all
+        /// ArenaItems shall use the same images.
+        /// </summary>
+        private readonly List<string> privateRecentlyUsedImages;
+
+        /// <summary>
+        /// A list of recently used images.  We'll try to avoid using the same images in rapid succession.
+        /// </summary>
+        private List<string> RecentlyUsedImages {
+            get
+            {
+                if (privateRecentlyUsedImages != null) { return privateRecentlyUsedImages; }
+                return sharedRecentlyUsedImages;
+            }
+        }
 
         /// <summary>
         /// Image paths that failed to load.
@@ -87,13 +105,21 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <param name="imageFolder"></param>
         /// <param name="queueLength">Number of images to be pre-loaded into a queue.  If positive, the loader uses a background thread.</param>
         /// <param name="threadName">Unique name of this image loader thread.  Only used for positive queueLength.</param>
-        public ImageLoader(int minSize, int maxSize, bool minSizeRequired, string imageFolder, int queueLength, string threadName)
+        /// <param name="isArena">If true, this ImageLoader will use a <see cref="privateRecentlyUsedImages"/>.</param>
+        public ImageLoader(int minSize, int maxSize, bool minSizeRequired, string imageFolder, int queueLength,
+            string threadName, bool isArena = false)
         {
             this.minSize = Math.Min(minSize, maxSize); // prevent abnormal behaviour
             this.maxSize = maxSize;
             this.minSizeRequired = minSizeRequired;
             this.imageFolder = imageFolder;
             this.queueLength = queueLength;
+
+            if (isArena)
+            {
+                // Create a private copy of the current shared List.
+                privateRecentlyUsedImages = new List<string>(sharedRecentlyUsedImages);
+            }
 
             if (queueLength > 0)
             {
@@ -357,9 +383,11 @@ namespace SWA.Ariadne.Gui.Mazes
                 //Log.WriteLine("} LoadImage()");
                 return result;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                System.Console.Out.WriteLine("failed loading image [{0}]: {1}", imagePath, e.ToString());
+                string msg = string.Format("cannot load image [{0}]: {1}", imagePath, ex.Message);
+                System.Console.Out.WriteLine(msg);
+                Log.WriteLine(msg);
                 badImages[imagePath] = true;
                 return null;
             }
@@ -442,12 +470,12 @@ namespace SWA.Ariadne.Gui.Mazes
 
             // Shorten the list of recently used images.
             // Make sure the list does not get too short.
-            while (recentlyUsedImages.Count > 0
-                && recentlyUsedImages.Count > Math.Min(availableImages.Count - count, availableImages.Count * 3 / 4)
+            while (this.RecentlyUsedImages.Count > 0
+                && RecentlyUsedImages.Count > Math.Min(availableImages.Count - count, availableImages.Count * 3 / 4)
                 )
             {
                 // Remove an item near the beginning of the list (recently added items are at the end).
-                recentlyUsedImages.RemoveAt(r.Next(recentlyUsedImages.Count / 3 + 1));
+                RecentlyUsedImages.RemoveAt(r.Next(RecentlyUsedImages.Count / 3 + 1));
             }
 
             // Select the required number of images.
@@ -457,10 +485,10 @@ namespace SWA.Ariadne.Gui.Mazes
                 int p = r.Next(availableImages.Count);
                 string imagePath = availableImages[p];
 
-                if (!recentlyUsedImages.Contains(imagePath) && !badImages.ContainsKey(imagePath))
+                if (!RecentlyUsedImages.Contains(imagePath) && !badImages.ContainsKey(imagePath))
                 {
                     result.Add(imagePath);
-                    recentlyUsedImages.Add(imagePath);
+                    RecentlyUsedImages.Add(imagePath);
                 }
 
                 availableImages.RemoveAt(p);
@@ -557,7 +585,7 @@ namespace SWA.Ariadne.Gui.Mazes
                 result[i] = imageFolder + result[i];
             }
 
-            recentlyUsedImages.AddRange(result);
+            RecentlyUsedImages.AddRange(result);
 
             //Log.WriteLine("} LoadImagePaths()");
             return result;

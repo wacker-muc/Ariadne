@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 using SWA.Ariadne.Model;
 using SWA.Ariadne.Settings;
@@ -218,9 +215,14 @@ namespace SWA.Ariadne.Gui
 
             // The other MazePainters should not have a local ImageLoader.
             data.LeaveCurrentBackgroundImageLoader = true;
+            data.IsArena = true;
 
-            foreach (ArenaItem item in Items)
+            for (int i = 0; i < Items.Count; i++)
             {
+                // The last item may use the shared list of recently used images.
+                if (i == Items.Count-1) { data.IsArena = false; }
+
+                ArenaItem item = Items[i];
                 if (item != TemplateItem)
                 {
                     item.MazeUserControl.MazePainter.BackgroundImageLoader = TemplateItem.MazeUserControl.MazePainter;
@@ -262,7 +264,7 @@ namespace SWA.Ariadne.Gui
         /// Fill all modifyable parameters into the given data object.
         /// </summary>
         /// <param name="data"></param>
-        public void FillParametersInto(SWA.Ariadne.Settings.AriadneSettingsData data)
+        public void FillParametersInto(AriadneSettingsData data)
         {
             TemplateMazeUserControl.FillParametersInto(data);
         }
@@ -271,8 +273,9 @@ namespace SWA.Ariadne.Gui
         /// Take all modifyable parameters from the given data object.
         /// </summary>
         /// <param name="data"></param>
-        public void TakeParametersFrom(SWA.Ariadne.Settings.AriadneSettingsData data)
+        public void TakeParametersFrom(AriadneSettingsData data)
         {
+            data.IsArena = true;
             TemplateMazeUserControl.TakeParametersFrom(data);
             DistributeTemplateParameters();
             UpdateCaption();

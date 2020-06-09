@@ -268,22 +268,6 @@ namespace SWA.Ariadne.Settings
         }
         private WallVisibilityEnum wallVisibility;
 
-#if false
-        public List<string> CapStyleList
-        {
-            get { return capStyleList; }
-            set { capStyleList = value; }
-        }
-        private List<string> capStyleList;
-
-        public string CapStyle
-        {
-            get { return capStyle; }
-            set { capStyle = value; }
-        }
-        private string capStyle;
-#endif
-
         public System.Drawing.Drawing2D.LineCap PathCapStyle
         {
             get { return pathCapStyle[M]; }
@@ -299,51 +283,26 @@ namespace SWA.Ariadne.Settings
 
         #region Images tab
 
-        public int ImageNumber
-        {
-            get { return imageNumber; }
-            set { imageNumber = value; }
-        }
-        private int imageNumber;
+        public int ImageNumber { get; set; }
 
-        public int ImageMinSizePct
-        {
-            get { return imageMinSizePct; }
-            set { imageMinSizePct = value; }
-        }
-        private int imageMinSizePct;
+        public int ImageMinSizePct { get; set; }
 
-        public int ImageMaxSizePct
-        {
-            get { return imageMaxSizePct; }
-            set { imageMaxSizePct = value; }
-        }
-        private int imageMaxSizePct;
+        public int ImageMaxSizePct { get; set; }
 
-        public string ImageFolder
-        {
-            get { return imageFolder; }
-            set { imageFolder = value; }
-        }
-        private string imageFolder;
+        public string ImageFolder { get; set; }
 
-        public bool ShowBackgroundImage
-        {
-            get { return showBackgroundImage; }
-            set { showBackgroundImage = value; }
-        }
-        private bool showBackgroundImage;
+        public bool ShowBackgroundImage { get; set; }
 
         /// <summary>
         /// When true, the MazePainter will not clear the current ImageLoader.
         /// This setting is only used when the ArenaForm distributes the parameters from a template maze to subsidiary mazes.
         /// </summary>
-        public bool LeaveCurrentBackgroundImageLoader
-        {
-            get { return leaveCurrentBackgroundImageLoader; }
-            set { leaveCurrentBackgroundImageLoader = value; }
-        }
-        private bool leaveCurrentBackgroundImageLoader = false;
+        public bool LeaveCurrentBackgroundImageLoader { get; set; }
+
+        /// <summary>
+        /// When true, all ArenaItems should take care to show the same images.
+        /// </summary>
+        public bool IsArena { get; set; }
 
         #endregion
 
@@ -473,6 +432,9 @@ namespace SWA.Ariadne.Settings
             this.ImageMaxSizePct = template.ImageMaxSizePct;
             this.ImageFolder = template.ImageFolder;
             this.ShowBackgroundImage = template.ShowBackgroundImage;
+
+            this.LeaveCurrentBackgroundImageLoader = template.LeaveCurrentBackgroundImageLoader;
+            this.IsArena = template.IsArena;
 
             this.OutlineKind = template.OutlineKind;
             this.OutlineOffCenter = template.OutlineOffCenter;

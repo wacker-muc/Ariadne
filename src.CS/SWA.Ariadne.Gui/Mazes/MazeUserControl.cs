@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
 using SWA.Ariadne.Model;
 using SWA.Ariadne.Outlines;
@@ -508,6 +505,7 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <param name="data"></param>
         public void FillParametersInto(AriadneSettingsData data)
         {
+
             painter.FillParametersInto(data);
         }
 
@@ -567,7 +565,7 @@ namespace SWA.Ariadne.Gui.Mazes
             int maxSize = data.ImageMaxSizePct * displaySize / 100;
             string imageFolder = data.ImageFolder;
 
-            ReserveAreaForImages(count, minSize, maxSize, imageFolder);
+            ReserveAreaForImages(count, minSize, maxSize, imageFolder, data.IsArena);
         }
 
         /// <summary>
@@ -577,11 +575,12 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <param name="minSize"></param>
         /// <param name="maxSize"></param>
         /// <param name="imageFolder"></param>
-        private void ReserveAreaForImages(int count, int minSize, int maxSize, string imageFolder)
+        /// <param name="isArena"></param>
+        private void ReserveAreaForImages(int count, int minSize, int maxSize, string imageFolder, bool isArena)
         {
             if (this.imageLoader == null)
             {
-                this.imageLoader = new ImageLoader(minSize, maxSize, false, imageFolder, 0, null);
+                this.imageLoader = new ImageLoader(minSize, maxSize, false, imageFolder, 0, null, isArena);
             }
 
             PrepareImages(count);

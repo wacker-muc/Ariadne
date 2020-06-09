@@ -1,11 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using SWA.Ariadne.Model;
 using SWA.Ariadne.Logic;
 using SWA.Ariadne.Settings;
 using SWA.Ariadne.Gui.Mazes;

@@ -1,14 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Text;
 using System.Windows.Forms; // for the Timer; TODO: use System.Threading.Timer
-using SWA.Ariadne.Model;
 using SWA.Ariadne.Logic;
 using SWA.Ariadne.Settings;
-using SWA.Utilities;
 
 namespace SWA.Ariadne.Ctrl
 {
