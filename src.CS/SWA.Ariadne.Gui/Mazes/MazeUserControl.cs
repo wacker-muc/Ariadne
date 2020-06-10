@@ -505,7 +505,6 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <param name="data"></param>
         public void FillParametersInto(AriadneSettingsData data)
         {
-
             painter.FillParametersInto(data);
         }
 

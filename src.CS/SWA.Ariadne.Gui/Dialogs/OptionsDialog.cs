@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using Microsoft.Win32;
 using SWA.Ariadne.Ctrl;
 using SWA.Ariadne.Settings;
+using SWA.Utilities;
 
 namespace SWA.Ariadne.Gui.Dialogs
 {
@@ -153,7 +154,15 @@ namespace SWA.Ariadne.Gui.Dialogs
 
             #endregion
 
-            LoadSettings();
+            try // bad options might cause an exception
+            {
+                LoadSettings();
+            }
+            catch (Exception ex)
+            {
+                string msg = "cannot load saved options: " + ex.Message;
+                Log.WriteLine(msg, true);
+            }
         }
 
         private void buttonOK_Click(object sender, EventArgs e)

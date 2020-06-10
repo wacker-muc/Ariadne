@@ -375,8 +375,16 @@ namespace SWA.Ariadne.Settings
 
         #region Constructor
 
+        /// <summary>
+        /// Constructor.
+        /// Some fields are initialized with their registered options, or their default values.
+        /// </summary>
         public AriadneSettingsData()
         {
+            this.ImageNumber = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_NUMBER);
+            this.ImageMinSizePct = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_MIN_SIZE_PCT);
+            this.ImageMaxSizePct = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_MAX_SIZE_PCT);
+            this.ImageFolder = RegisteredOptions.GetStringSetting(RegisteredOptions.OPT_IMAGE_FOLDER);
         }
 
         #endregion

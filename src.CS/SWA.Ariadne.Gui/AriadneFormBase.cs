@@ -80,6 +80,11 @@ namespace SWA.Ariadne.Gui
 
             // Create a new maze.
             this.OnNew(null, null);
+
+            // Apply default values from the registered options.
+            // This works best by making a DetailsDialog apply its default settings.
+            DetailsDialog d = new DetailsDialog(this.AriadneSettingsSource);
+            d.OnSet(null, null);
         }
 
         private void AriadneFormBase_FormClosing(object sender, FormClosingEventArgs e)

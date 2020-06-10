@@ -386,8 +386,7 @@ namespace SWA.Ariadne.Gui.Mazes
             catch (Exception ex)
             {
                 string msg = string.Format("cannot load image [{0}]: {1}", imagePath, ex.Message);
-                System.Console.Out.WriteLine(msg);
-                Log.WriteLine(msg);
+                Log.WriteLine(msg, true);
                 badImages[imagePath] = true;
                 return null;
             }

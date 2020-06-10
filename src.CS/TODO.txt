@@ -1,0 +1,11 @@
+
+* on Windows, the saved image is too small (only approx. 2/3 in location and size) 
+
+* examine CreateImage() exception
+* advance DLL version numbers
+
+* ArenaForm doesn't show any background images
+* bad images make ArenaItems show different images
+
+* DetalsDialog: Suggest colors has no effect
+* DetalsDialog: Background image has no effect

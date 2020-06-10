@@ -48,8 +48,12 @@ namespace SWA.Utilities
 
         #region Public methods
 
-        public static void WriteLine(string text)
+        public static void WriteLine(string text, bool alsoOnConsole = false)
         {
+            if (alsoOnConsole)
+            {
+                System.Console.Out.WriteLine(text);
+            }
             if (enabled)
             {
                 string threadName = Thread.CurrentThread.Name;

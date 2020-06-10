@@ -635,8 +635,7 @@ namespace SWA.Ariadne.Gui.Mazes
             catch (Exception ex)
             {
                 string msg = string.Format("cannot create ContourImage [{0}]: {1}", this.path, ex.Message);
-                System.Console.Out.WriteLine(msg);
-                Log.WriteLine(msg);
+                Log.WriteLine(msg, true);
                 this.image = this.template;
                 return;
             }

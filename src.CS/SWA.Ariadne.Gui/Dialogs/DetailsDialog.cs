@@ -106,7 +106,7 @@ namespace SWA.Ariadne.Gui.Dialogs
 
             this.data = new AriadneSettingsData();
 
-            #region Put the panel settings into the data object.
+            #region Put the designer's panel settings into the data object.
 
             data.IrregularMaze = this.irregularMazeCheckBox.Checked;
             data.Irregularity = (int)this.irregularityNumericUpDown.Value;
@@ -115,10 +115,11 @@ namespace SWA.Ariadne.Gui.Dialogs
 
             data.AutoColors = true;
 
-            data.ImageNumber = (int) this.imageNumberNumericUpDown.Value;
-            data.ImageMinSizePct = (int) this.imageMinSizeNumericUpDown.Value;
-            data.ImageMaxSizePct = (int) this.imageMaxSizeNumericUpDown.Value;
-            data.ImageFolder = RegisteredOptions.GetStringSetting(RegisteredOptions.OPT_IMAGE_FOLDER);
+            // The following settings are already initialized in AriadneSettingsData
+            //data.ImageNumber = (int) this.imageNumberNumericUpDown.Value;
+            //data.ImageMinSizePct = (int) this.imageMinSizeNumericUpDown.Value;
+            //data.ImageMaxSizePct = (int) this.imageMaxSizeNumericUpDown.Value;
+            //data.ImageFolder = RegisteredOptions.GetStringSetting(RegisteredOptions.OPT_IMAGE_FOLDER);
             data.ShowBackgroundImage = this.backgroundImageCheckBox.Checked;
 
             data.OutlineKind = AriadneSettingsData.OutlineKindEnum.None;
@@ -173,7 +174,7 @@ namespace SWA.Ariadne.Gui.Dialogs
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OnSet(object sender, EventArgs e)
+        public void OnSet(object sender, EventArgs e)
         {
             // Pass the modified data to the target.
             target.TakeParametersFrom(data);
