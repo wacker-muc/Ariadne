@@ -101,6 +101,7 @@ namespace SWA.Ariadne.Gui
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ScreenSaverForm_MouseMove);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ScreenSaverForm_FormClosing);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.OnKeyPress);
+            this.ResizeEnd += new System.EventHandler(this.ScreenSaverForm_ResizeEnd);
             this.Controls.SetChildIndex(this.outerInfoPanel, 0);
             this.Controls.SetChildIndex(this.mazeUserControl, 0);
             this.outerInfoPanel.ResumeLayout(false);

@@ -81,6 +81,11 @@ namespace SWA.Ariadne.Gui
             // Create a new maze.
             this.OnNew(null, null);
 
+            this.ApplyDefaultSettings();
+        }
+
+        protected virtual void ApplyDefaultSettings()
+        {
             // Apply default values from the registered options.
             // This works best by making a DetailsDialog apply its default settings.
             DetailsDialog d = new DetailsDialog(this.AriadneSettingsSource);

@@ -8,6 +8,7 @@ using SWA.Ariadne.Gui.Mazes;
 using SWA.Ariadne.Model;
 using SWA.Ariadne.Outlines;
 using SWA.Ariadne.Settings;
+using SWA.Utilities;
 
 namespace SWA.Ariadne.Gui
 {
@@ -87,8 +88,10 @@ namespace SWA.Ariadne.Gui
         /// <summary>
         /// Set up the main form as a full screen screensaver.
         /// </summary>
-        private void SetupScreenSaver()
+        private void SetupFullscreenScreenSaver()
         {
+            if (!fullScreenMode) return;
+
             // Set the application to full screen mode and hide the mouse cursor.
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.TopMost = true;
@@ -112,8 +115,10 @@ namespace SWA.Ariadne.Gui
         /// https://stackoverflow.com/questions/2823299/mono-winforms-app-fullscreen-in-ubuntu
         /// We need an external program (wmctrl).
         /// </remarks>
-        private void SetupScreenSaverUnix()
+        private void SetupFullscreenUnix()
         {
+            if (!fullScreenMode) return;
+
             Process process = new Process
             {
                 StartInfo = new ProcessStartInfo
@@ -128,7 +133,7 @@ namespace SWA.Ariadne.Gui
 
             if (process.ExitCode != 0)
             {
-                // TODO: Tell the user to install wmctrl.
+                Log.WriteLine("Cannot set proper full screen mode. Please install the 'wmctrl' program.", true);
             }
         }
 
@@ -143,7 +148,7 @@ namespace SWA.Ariadne.Gui
 
             if (fullScreenMode)
             {
-                SetupScreenSaver();
+                SetupFullscreenScreenSaver();
 
                 // Let the MazeUserControl cover the whole form.
                 this.mazeUserControl.Location = new Point(0, 0);
@@ -184,7 +189,7 @@ namespace SWA.Ariadne.Gui
             switch (Environment.OSVersion.Platform)
             {
                 case PlatformID.Unix:
-                    this.SetupScreenSaverUnix();
+                    this.SetupFullscreenUnix();
                     break;
             }
         }
@@ -282,6 +287,12 @@ namespace SWA.Ariadne.Gui
                 return;
             }
             Close();
+        }
+
+        private void ScreenSaverForm_ResizeEnd(object sender, EventArgs e)
+        {
+            // The ImageLoader should adjust its image size limits, as well.
+            mazeUserControl.ImageLoader.UpdateImageSize(mazeUserControl.DisplayRectangle);
         }
 
         private void ScreenSaverForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -385,6 +396,12 @@ namespace SWA.Ariadne.Gui
             // Add the invisible placeholder control to this form.
             placeholder.Visible = false;
             this.Controls.Add(placeholder);
+        }
+
+        protected override void ApplyDefaultSettings()
+        {
+            // The ScreenSaverForm doesn't take its settings from a DetailsDialog.
+            //base.ApplyDefaultSettings();
         }
 
         #endregion

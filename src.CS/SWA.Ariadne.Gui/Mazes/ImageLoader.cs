@@ -28,7 +28,7 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <summary>
         /// Minimum and maximum size (in each dimension) the images should be scaled to.
         /// </summary>
-        private readonly int minSize, maxSize;
+        private int minSize, maxSize;
 
         /// <summary>
         /// When true, small images are enlarged to the defined size range.
@@ -179,6 +179,28 @@ namespace SWA.Ariadne.Gui.Mazes
         }
 
         /// <summary>
+        /// Sets new limits on the desired image size.
+        /// </summary>
+        /// <param name="bounds">The current maze size.</param>
+        /// <remarks>
+        /// The currently enqueued images need to be filtered in the GetNext() method.
+        /// </remarks>
+        public void UpdateImageSize(Rectangle bounds)
+        {
+            this.minSize = ImageSize(bounds, RegisteredOptions.OPT_IMAGE_MIN_SIZE, RegisteredOptions.OPT_IMAGE_MIN_SIZE_PCT);
+            this.maxSize = ImageSize(bounds, RegisteredOptions.OPT_IMAGE_MAX_SIZE, RegisteredOptions.OPT_IMAGE_MAX_SIZE_PCT);
+
+            try // this might fail on queue.Peek()
+            {
+                // If the size has changed considerably, many/all queued images will be discarded.
+                while (this.queue.Count > 0 && ImageHasImproperSize(this.queue.Peek() as ContourImage, true))
+                {
+                    this.Dequeue();
+                }
+            } catch { }
+        }
+
+        /// <summary>
         /// Call this method when the application is going to terminate.
         /// </summary>
         public void Shutdown()
@@ -213,6 +235,10 @@ namespace SWA.Ariadne.Gui.Mazes
             if (queueLength > 0)
             {
                 result = Dequeue();
+
+                // Check if the actual image size still fits the desired limits.
+                // See UpdateImageSize().
+                if (ImageHasImproperSize(result, minSizeRequired)) return null;
             }
             else
             {
@@ -228,6 +254,24 @@ namespace SWA.Ariadne.Gui.Mazes
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Compares the given image's dimensions to the desired limits.
+        /// Returns true if the image should be discarded.
+        /// </summary>
+        /// <param name="img">Image.</param>
+        /// <param name="testMinSize">May be this.minSizeRequired</param>
+        private bool ImageHasImproperSize(ContourImage img, bool testMinSize)
+        {
+            if (img == null) return false; 
+
+            int h = img.DisplayedImage.Height;
+            int w = img.DisplayedImage.Width;
+            if (h > maxSize || w > maxSize) return true;
+            if (testMinSize && (h < minSize || w < minSize)) return true;
+
+            return false;
         }
 
         #endregion
