@@ -378,6 +378,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.imageFolderTextBox.Location = new System.Drawing.Point(87, 77);
             this.imageFolderTextBox.MaxLength = 14;
             this.imageFolderTextBox.Name = "imageFolderTextBox";
+            this.imageFolderTextBox.ReadOnly = true;
             this.imageFolderTextBox.Size = new System.Drawing.Size(114, 20);
             this.imageFolderTextBox.TabIndex = 5;
             this.imageFolderTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;

@@ -469,7 +469,7 @@ namespace SWA.Ariadne.Gui.Mazes
             // Determine the dimensions of the image.
             Point clientUpperLeft = new Point(xOffset - wallWidth / 2 - 1, yOffset - wallWidth / 2 - 1);
             Size clientSize = new Size(XSize * gridWidth + wallWidth + 2, YSize * gridWidth + wallWidth + 2);
-            Size imgSize = new Size(clientSize.Width + 2 * (margin - 1), clientSize.Height + 2 * (margin - 1));
+            Size imgSize = new Size(clientSize.Width + 2 * margin, clientSize.Height + 2 * margin);
 
             // In full screen mode, copy exactly the whole screen.
             Size screenSize = Screen.PrimaryScreen.Bounds.Size;
@@ -486,11 +486,19 @@ namespace SWA.Ariadne.Gui.Mazes
             // Make sure the end square is painted solid.
             painter.BlinkingCounter = 0;
 
-            // Grab the painted maze from the screen.
-            // Note: I've found no way to get access to the contents of the BufferedGraphics.
             Graphics g = Graphics.FromImage(result);
             g.FillRectangle(Brushes.Black, new Rectangle(new Point(0, 0), imgSize));
+#if false
+            // Grab the painted maze from the screen.
+            // This doesn't work well on high DPI devices and we don't get a complete image.
+            // see https://www.telerik.com/blogs/winforms-scaling-at-large-dpi-settings-is-it-even-possible-
             g.CopyFromScreen(PointToScreen(clientUpperLeft), new Point(margin, margin), clientSize);
+#else
+            if (! this.MazePainter.DrawImage(result, clientUpperLeft, new Point(margin, margin), clientSize))
+            {
+                return null; 
+            }
+#endif
 
             return result;
         }

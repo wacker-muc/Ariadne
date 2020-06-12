@@ -270,19 +270,34 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <summary>
         /// This buffer holds the graphics and is rendered in the control.
         /// </summary>
-        private BufferedGraphics gBuffer;
+        private BufferedGraphics gBuffer
+        {
+            get { return _gBuffer; }
+            set
+            {
+                // move the current _gBuffer to gBufferPrevious
+                if (gBufferPrevious != null)
+                {
+                    gBufferPrevious.Dispose();
+                }
+                gBufferPrevious = _gBuffer;
+
+                _gBuffer = value;
+            }
+        }
+        private BufferedGraphics _gBuffer;
 
         /// <summary>
         /// This buffer is used to prepare a new maze in Repeat Mode.
         /// </summary>
         private BufferedGraphics gBufferAlternate;
 
-        // TODO: try to remove the HasBuffer... properties
-
         /// <summary>
-        /// Returns true if a BufferedGraphics object is used for all painting.
+        /// This buffer is used to draw and save the solved maze in Repeat Mode.
         /// </summary>
-        public bool HasBuffer { get { return (gBuffer != null); } }
+        private BufferedGraphics gBufferPrevious;
+
+        // TODO: try to remove the HasBufferAlternate property
 
         /// <summary>
         /// Returns true if an alternate buffer has been prepared but not yet displayed.
@@ -556,7 +571,6 @@ namespace SWA.Ariadne.Gui.Mazes
             // Destroy the current buffer; it will be re-created in the OnPaint() method.
             if (gBuffer != null)
             {
-                gBuffer.Dispose();
                 gBuffer = null;
             }
 
@@ -1187,6 +1201,27 @@ namespace SWA.Ariadne.Gui.Mazes
                     }
                 }
             }
+        }
+
+        #endregion
+
+        #region Support for saving the painted image
+
+        public bool DrawImage (Bitmap targetBitmap, Point sourceUpperLeft, Point targetUpperLeft, Size size)
+        {
+            BufferedGraphics b = gBuffer;
+            if (b == null) { b = gBufferPrevious; }
+            if (b == null) { return false; }
+
+            Bitmap sourceBitmap = Reflection.GetPrivateField<BufferedGraphics, Bitmap>(b, "membmp");
+            if (sourceBitmap == null)
+            {
+                Log.WriteLine("DrawImage() failed -- cannot access private field BufferedGraphics.membmp", true);
+                return false;
+            }
+            Graphics g = Graphics.FromImage(targetBitmap);
+            g.DrawImage(sourceBitmap, new Rectangle(targetUpperLeft, size), new Rectangle(sourceUpperLeft, size), GraphicsUnit.Pixel);
+            return true;
         }
 
         #endregion

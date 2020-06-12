@@ -119,6 +119,9 @@ namespace SWA.Ariadne.Gui
         {
             if (!fullScreenMode) return;
 
+            int exitCode;
+            string msg = null;
+
             Process process = new Process
             {
                 StartInfo = new ProcessStartInfo
@@ -128,12 +131,26 @@ namespace SWA.Ariadne.Gui
                     CreateNoWindow = true
                 }
             };
-            process.Start();
-            process.WaitForExit();
+            try
+            {
+                process.Start();
+                process.WaitForExit();
 
-            if (process.ExitCode != 0)
+                exitCode = process.ExitCode;
+            }
+            catch(Exception ex)
+            {
+                exitCode = -999;
+                msg = ex.Message;
+            }
+
+            if (exitCode != 0)
             {
                 Log.WriteLine("Cannot set proper full screen mode. Please install the 'wmctrl' program.", true);
+                if (msg != null && msg != "")
+                {
+                    Log.WriteLine(msg, true);
+                }
             }
         }
 
