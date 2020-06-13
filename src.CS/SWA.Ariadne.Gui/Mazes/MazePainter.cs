@@ -1207,6 +1207,16 @@ namespace SWA.Ariadne.Gui.Mazes
 
         #region Support for saving the painted image
 
+        /// <summary>
+        /// Tries to copy the image from the BufferedGraphics's private Bitmap field.
+        /// This works OK with the Mono version of BufferedGraphic but a
+        /// Microsoft BufferedGraphics object has no such member.
+        /// </summary>
+        /// <returns><c>true</c>, if an image was drawn, <c>false</c> otherwise.</returns>
+        /// <param name="targetBitmap"></param>
+        /// <param name="sourceUpperLeft"></param>
+        /// <param name="targetUpperLeft"></param>
+        /// <param name="size"></param>
         public bool DrawImage (Bitmap targetBitmap, Point sourceUpperLeft, Point targetUpperLeft, Size size)
         {
             BufferedGraphics b = gBuffer;

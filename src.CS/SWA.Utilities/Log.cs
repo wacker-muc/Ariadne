@@ -41,7 +41,8 @@ namespace SWA.Utilities
 
         private Log()
         {
-            this.logFile = new StreamWriter(logFileName, false);
+            string path = Path.Combine(Directory.ApplicationDirectory, logFileName);
+            this.logFile = new StreamWriter(path, false);
         }
 
         #endregion

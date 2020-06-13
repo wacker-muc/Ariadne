@@ -32,6 +32,7 @@ namespace SWA.Ariadne.App
                         break;
                     case "/s":
                         // Show screensaver form
+                        SWA.Utilities.Display.EnableDpiAwareness();
                         // Create the ImageLoader as early as possible.
                         ImageLoader imageLoader = ImageLoader.GetScreenSaverImageLoader(Screen.PrimaryScreen.Bounds);
                         BlankSecondaryScreens();
@@ -50,6 +51,7 @@ namespace SWA.Ariadne.App
 #endif
 #if true
                 // If no arguments were passed in, run as a regular application.
+                SWA.Utilities.Display.EnableDpiAwareness();
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Form form = new MazeForm();

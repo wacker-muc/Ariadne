@@ -62,6 +62,7 @@
     <Compile Include="RandomFactory.cs" />
     <Compile Include="Resources.cs" />
     <Compile Include="Reflection.cs" />
+    <Compile Include="Display.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

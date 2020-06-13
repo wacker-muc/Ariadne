@@ -486,19 +486,33 @@ namespace SWA.Ariadne.Gui.Mazes
             // Make sure the end square is painted solid.
             painter.BlinkingCounter = 0;
 
+            string msg = "";
+            msg += string.Format(", ssz={0}x{1} @ {2}dpi", screenSize.Width, screenSize.Height, this.CreateGraphics().DpiX);
+            msg += string.Format(", asf={0}x{1}", this.AutoScaleDimensions.Width, this.AutoScaleDimensions.Height);
+            msg += string.Format(", csz={0}x{1}", clientSize.Width, clientSize.Height);
+            msg += string.Format(", isz={0}x{1}", imgSize.Width, imgSize.Height);
+
             Graphics g = Graphics.FromImage(result);
             g.FillRectangle(Brushes.Black, new Rectangle(new Point(0, 0), imgSize));
-#if false
-            // Grab the painted maze from the screen.
-            // This doesn't work well on high DPI devices and we don't get a complete image.
-            // see https://www.telerik.com/blogs/winforms-scaling-at-large-dpi-settings-is-it-even-possible-
-            g.CopyFromScreen(PointToScreen(clientUpperLeft), new Point(margin, margin), clientSize);
-#else
-            if (! this.MazePainter.DrawImage(result, clientUpperLeft, new Point(margin, margin), clientSize))
+
+            // First, try to copy the image from the MazePainter's BufferedGraphics.
+            if (this.MazePainter.DrawImage(result, clientUpperLeft, new Point(margin, margin), clientSize))
             {
-                return null; 
+                msg += ", from buffer";
             }
-#endif
+            else
+            {
+                // If that fails...
+                // Grab the painted maze from the screen.
+                // This may not work well on high DPI devices, and we won't get a complete image.
+                // see https://www.telerik.com/blogs/winforms-scaling-at-large-dpi-settings-is-it-even-possible-
+                // If the Main program has enabled the application's DPI awareness, we may be successful.
+                // See SWA.Utilities.Display.EnableDpiAwareness()
+                g.CopyFromScreen(PointToScreen(clientUpperLeft), new Point(margin, margin), clientSize);
+                msg += ", from screen";
+            }
+
+            Log.WriteLine(msg.Substring(2), true);
 
             return result;
         }
