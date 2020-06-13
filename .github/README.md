@@ -1,3 +1,5 @@
+![A sample Ariadne screenshot](http://wacker-muc.de/Ariadne/Galerie/Ariadne_80eet5_99x74_ProximityFlooder_solved.png)
+
 -----------------------------------------------------------------------
 
    ------------------
