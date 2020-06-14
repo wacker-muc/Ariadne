@@ -24,37 +24,71 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <summary>
         /// Minimum and maximum grid width.
         /// </summary>
-        public const int MinGridWidth = 2, MaxGridWidth = 40;
+        public static readonly int MinGridWidth = 2, MaxGridWidth = 40;
 
         /// <summary>
         /// Minimum and maximum grid width when using automatic settings.
         /// </summary>
-        private const int MinAutoGridWidth = 6, MaxAutoGridWidth = 12;
+        private static readonly int MinAutoGridWidth = 6, MaxAutoGridWidth = 12;
 
         /// <summary>
         /// Minimum and maximum grid width when using automatic settings without walls.
         /// </summary>
-        private const int MinAutoGridWidthWithoutWalls = 4, MaxAutoGridWidthWithoutWalls = 9;
+        private static readonly int MinAutoGridWidthWithoutWalls = 4, MaxAutoGridWidthWithoutWalls = 9;
 
         /// <summary>
         /// Miniumum and maximum square width.
         /// </summary>
-        public const int MinSquareWidth = 1, MaxSquareWidth = MaxGridWidth - 1;
+        public static readonly int MinSquareWidth = 1, MaxSquareWidth = MaxGridWidth - 1;
 
         /// <summary>
         /// Miniumum and maximum path width.
         /// </summary>
-        public const int MinPathWidth = 1, MaxPathWidth = MaxSquareWidth;
+        public static readonly int MinPathWidth = 1, MaxPathWidth = MaxSquareWidth;
 
         /// <summary>
         /// Miniumum and maximum wall width.
         /// </summary>
-        public const int MinWallWidth = 1, MaxWallWidth = MaxGridWidth / 2;
+        public static readonly int MinWallWidth = 1, MaxWallWidth = MaxGridWidth / 2;
 
         /// <summary>
         /// Two reference Colors for deriving forward and backward path colors.
         /// </summary>
         private static readonly Color MinColor = Color.DarkSlateBlue, MaxColor = Color.Gold;
+
+        public static readonly int Dpi = 96;
+
+        /// <summary>
+        /// Static initializer.
+        /// All the '...Width' range "constants" are multiplied by a scaling factor.
+        /// The scaling compensates for the visual size reduction on high resolution screens.
+        /// </summary>
+        static MazePainter()
+        {
+            float scale = 1.0F;
+            try
+            {
+                Graphics graphics = Graphics.FromHwnd(IntPtr.Zero);
+                scale = Math.Max (scale, graphics.DpiX / 96.0F); // never < 1
+                Dpi = (int) graphics.DpiX;
+            }
+            catch (Exception ex)
+            {
+                Log.WriteLine("cannot get DPI value from Graphics object. " + ex.Message, true);
+            }
+
+            MinGridWidth = (int)(MinGridWidth * scale);
+            MaxGridWidth = (int)(MaxGridWidth * scale);
+            MinAutoGridWidth = (int)(MinAutoGridWidth * scale);
+            MaxAutoGridWidth = (int)(MaxAutoGridWidth * scale);
+            MinAutoGridWidthWithoutWalls = (int)(MinAutoGridWidthWithoutWalls * scale);
+            MaxAutoGridWidthWithoutWalls = (int)(MaxAutoGridWidthWithoutWalls * scale);
+
+            // derived from the above
+            MinWallWidth = 1; MaxWallWidth = MaxGridWidth / 2;
+            MinSquareWidth = 1; MaxSquareWidth = MaxGridWidth - MinWallWidth;
+            MinPathWidth = 1; MaxPathWidth = MaxSquareWidth;
+        }
 
         #endregion
 

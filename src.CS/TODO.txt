@@ -1,4 +1,8 @@
 
+* Dialog's Set button does not change settings, yet
+  all the DataBinding doesn't work
+  it happens only upon DetailsDialog.Close()
+
 * examine CreateImage() exception
 * advance DLL version numbers
 

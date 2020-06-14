@@ -487,7 +487,7 @@ namespace SWA.Ariadne.Gui.Mazes
             painter.BlinkingCounter = 0;
 
             string msg = "";
-            msg += string.Format(", ssz={0}x{1} @ {2}dpi", screenSize.Width, screenSize.Height, this.CreateGraphics().DpiX);
+            msg += string.Format(", ssz={0}x{1} @ {2}dpi", screenSize.Width, screenSize.Height, MazePainter.Dpi);
             msg += string.Format(", asf={0}x{1}", this.AutoScaleDimensions.Width, this.AutoScaleDimensions.Height);
             msg += string.Format(", csz={0}x{1}", clientSize.Width, clientSize.Height);
             msg += string.Format(", isz={0}x{1}", imgSize.Width, imgSize.Height);
