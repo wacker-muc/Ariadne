@@ -63,6 +63,9 @@
     <Compile Include="MazeSquare.cs" />
     <Compile Include="IrregularMazeShape.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="..\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SWA.Ariadne.Outlines\SWA.Ariadne.Outlines.csproj">

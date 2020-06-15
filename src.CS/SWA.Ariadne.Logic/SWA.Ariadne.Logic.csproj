@@ -87,6 +87,9 @@
     <Compile Include="SpreadingFlooder.cs" />
     <Compile Include="ThickestBranchFlooder.cs" />
     <Compile Include="ThinnestBranchFlooder.cs" />
+    <Compile Include="..\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SWA.Ariadne.Model\SWA.Ariadne.Model.csproj">

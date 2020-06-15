@@ -9,7 +9,6 @@
 * bad images make ArenaItems show different images
 
 * DetalsDialog: Suggest colors has no effect
-* DetalsDialog: Background image has no effect
 
 * .exclude file with excluded image paths
 

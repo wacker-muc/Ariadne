@@ -63,6 +63,9 @@
     <Compile Include="Resources.cs" />
     <Compile Include="Reflection.cs" />
     <Compile Include="Display.cs" />
+    <Compile Include="..\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

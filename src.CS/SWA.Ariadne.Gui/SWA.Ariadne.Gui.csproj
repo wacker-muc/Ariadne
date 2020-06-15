@@ -126,6 +126,9 @@
     <Compile Include="ScreenSaverForm.Designer.cs">
       <DependentUpon>ScreenSaverForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="..\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SWA.Ariadne.Ctrl\SWA.Ariadne.Ctrl.csproj">

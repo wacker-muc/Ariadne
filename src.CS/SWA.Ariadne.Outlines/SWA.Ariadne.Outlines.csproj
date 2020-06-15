@@ -93,6 +93,9 @@
     </Compile>
     <Compile Include="SmoothOutlineShape.cs" />
     <Compile Include="TilesOutlineShape.cs" />
+    <Compile Include="..\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Bitmaps.resx">
