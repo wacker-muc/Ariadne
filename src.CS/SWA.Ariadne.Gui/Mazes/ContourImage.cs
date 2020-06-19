@@ -1708,8 +1708,8 @@ namespace SWA.Ariadne.Gui.Mazes
             width += 2;
             height += 2;
 
-            // Create a new Bitmap with the same resolution as the original image.
-            this.image = new Bitmap(width, height, Graphics.FromImage(template));
+            // Create a new Bitmap with the desired size.
+            this.image = new Bitmap(width, height);
             Graphics g = Graphics.FromImage(image);
             g.FillRectangle(new SolidBrush(backgroundColor), new Rectangle(0, 0, image.Width, image.Height));
             g.DrawImageUnscaled(template, frameWidth, frameWidth);
