@@ -646,8 +646,8 @@ namespace SWA.Ariadne.Gui.Mazes
             ApplyMask();
 
             this.bbox = BoundingBox(border);
-            this.image = Crop(image, bbox);
-            this.mask = Crop(mask, bbox);
+            this.image = Crop(image, bbox, path + ":image");
+            this.mask = Crop(mask, bbox, path + ":mask");
 
             #region Discard processed image if it fills the enclosing rectangle (almost) completely.
 
@@ -695,9 +695,9 @@ namespace SWA.Ariadne.Gui.Mazes
             //black = Color.Magenta; // TODO: delete this line
             Color transparent = Color.FromArgb(0, black);
 
-            // Create a new Bitmap with the same resolution as the original image.
+            // Create a new Bitmap with the same size as the original image.
             int width = image.Width, height = image.Height;
-            this.mask = new Bitmap(width, height, Graphics.FromImage(image));
+            this.mask = new Bitmap(width, height);
             this.gMask = Graphics.FromImage(mask);
             gMask.FillRectangle(new SolidBrush(transparent), 0, 0, width, height);
 
@@ -1125,7 +1125,7 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <summary>
         /// Inserts the given points into the given border scan line.
         /// </summary>
-        /// <param name="borderX">scan line of alternating R-LR-LR-...-L border points</param>
+        /// <param name="scanLine">scan line of alternating R-LR-LR-...-L border points</param>
         /// <param name="xL">left border point</param>
         /// <param name="xR">right border point</param>
         /// Note: This method is called very often and reasonably optimized.
@@ -1731,16 +1731,28 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <param name="image"></param>
         /// <param name="srcRect"></param>
         /// <returns></returns>
-        private static Bitmap Crop(Bitmap image, Rectangle srcRect)
+        private static Bitmap Crop(Bitmap image, Rectangle srcRect, string imageName)
         {
             if (srcRect.Width < image.Width - 2 || srcRect.Height < image.Height - 2)
             {
-                // Create a new Bitmap with the same resolution as the original image.
-                Bitmap result = new Bitmap(srcRect.Width, srcRect.Height, Graphics.FromImage(image));
+                // Create a new Bitmap with the desired size.
+                Bitmap result = new Bitmap(srcRect.Width, srcRect.Height);
                 Graphics g = Graphics.FromImage(result);
                 Rectangle destRect = new Rectangle(0, 0, result.Width, result.Height);
 
-                g.DrawImage(image, destRect, srcRect, GraphicsUnit.Pixel);
+                try
+                {
+                    g.DrawImage(image, destRect, srcRect, GraphicsUnit.Pixel);
+                }
+                catch (Exception ex)
+                {
+                    Log.WriteLine(string.Format(
+                        "ContourImage.Crop({0}, {1}) -> DrawImage() failed: ",
+                        string.Format("{0} [{1}x{2}]", imageName, image.Width, image.Height),
+                        string.Format("({0},{1})+({2},{3})", srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height)
+                        ) + ex.Message, true);
+                    return image;
+                }
 
                 return result;
             }
