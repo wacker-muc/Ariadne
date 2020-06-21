@@ -280,15 +280,15 @@ namespace SWA.Ariadne.Gui.Mazes
             w = 1 + XCoordinate(coveringControl.Right - 1, false) - x;
             h = 1 + YCoordinate(coveringControl.Bottom - 1, false) - y;
 
+            int padding = wallWidth + MazePainter.ApplyScaleFactor(6);
             if (0 < x && x + w < Maze.XSize)
             {
-                w = 1 + (coveringControl.Width + wallWidth + 6) / gridWidth;
+                w = 1 + (coveringControl.Width + padding) / gridWidth;
             }
             if (0 < y && y + h < Maze.YSize)
             {
-                h = 1 + (coveringControl.Height + wallWidth + 6) / gridWidth;
+                h = 1 + (coveringControl.Height + padding) / gridWidth;
             }
-
 
             bool result = Maze.ReserveRectangle(x, y, w, h, null);
 
@@ -695,8 +695,9 @@ namespace SWA.Ariadne.Gui.Mazes
         private bool AddImage(ContourImage contourImage)
         {
             Image img = contourImage.DisplayedImage;
-            int sqW = (img.Width + 8 + this.wallWidth) / this.gridWidth + 1;
-            int sqH = (img.Height + 8 + this.wallWidth) / this.gridWidth + 1;
+            int padding = MazePainter.ApplyScaleFactor(8) + this.wallWidth;
+            int sqW = (img.Width + padding) / this.gridWidth + 1;
+            int sqH = (img.Height + padding) / this.gridWidth + 1;
 
             int xOffsetImg = (sqW * gridWidth - img.Width) / 2;
             int yOffsetImg = (sqH * gridWidth - img.Height) / 2;

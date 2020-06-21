@@ -478,7 +478,7 @@ namespace SWA.Ariadne.Gui.Mazes
         private static bool displayProcessedImage = true;
 
         /// <summary>
-        /// Returns an OutlineShape that defines the area occupied by the image objects' border.
+        /// Returns an OutlineShape that defines the area occupied by the image object's border.
         /// </summary>
         /// <param name="gridWidth"></param>
         /// <param name="xOffset"></param>
@@ -541,8 +541,9 @@ namespace SWA.Ariadne.Gui.Mazes
 
             #region Build a closed OutlineShape.
 
-            int shapeWidth = image.Width / gridWidth + 2;
-            int shapeHeight = image.Height / gridWidth + 2;
+            // The shape needs to be large enough to contain the shifted(!) image.
+            int shapeWidth = (image.Width + xOffset) / gridWidth + 2;
+            int shapeHeight = (image.Height + yOffset) / gridWidth + 2;
             OutlineShape shape = new DelegateOutlineShape(shapeWidth, shapeHeight, insideBorderTest);
             OutlineShape result = shape.Closure();
 
@@ -552,7 +553,7 @@ namespace SWA.Ariadne.Gui.Mazes
         }
 
         /// <summary>
-        /// Returns an OutlineShape that defines the area occupied by the image objects' border.
+        /// Returns an OutlineShape that defines the area occupied by the image object's border.
         /// </summary>
         /// <param name="r"></param>
         /// <param name="xSize"></param>

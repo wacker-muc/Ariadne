@@ -56,7 +56,20 @@ namespace SWA.Ariadne.Gui.Mazes
         /// </summary>
         private static readonly Color MinColor = Color.DarkSlateBlue, MaxColor = Color.Gold;
 
+        /// <summary>
+        /// The primary screen's resolution, DPI = dots per inch.
+        /// Higher values mean smaller pixels.
+        /// </summary>
         public static readonly int Dpi = 96;
+        private const float DesignedForDpi = 96.0F;
+
+        /// <summary>
+        /// Converts design pixel numbers to properly scaled pixel numbers.
+        /// </summary>
+        public static int ApplyScaleFactor(int numPixels)
+        {
+            return (int)(0.5F + numPixels * (Dpi / DesignedForDpi));
+        }
 
         /// <summary>
         /// Static initializer.
@@ -1260,7 +1273,7 @@ namespace SWA.Ariadne.Gui.Mazes
             Bitmap sourceBitmap = Reflection.GetPrivateField<BufferedGraphics, Bitmap>(b, "membmp");
             if (sourceBitmap == null)
             {
-                Log.WriteLine("DrawImage() failed -- cannot access private field BufferedGraphics.membmp", true);
+                //Log.WriteLine("DrawImage() failed -- cannot access private field BufferedGraphics.membmp", true);
                 return false;
             }
             Graphics g = Graphics.FromImage(targetBitmap);

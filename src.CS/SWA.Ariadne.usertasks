@@ -1,0 +1,7 @@
+<ListOfTaskListEntry>
+  <TaskListEntry file="" description="algorithm in GuessBackgroundColor is not very logical" />
+  <TaskListEntry file="" description="Directory.Find could use EnumerateFiles  instead of GetFiles" />
+  <TaskListEntry file="" description="Directory.Find should also find &quot;.JPG&quot; when &quot;.jpg&quot; is requested" />
+  <TaskListEntry file="" description="At high DPI and small grid width, the maze does not cover the whole form width" priority="High" />
+  <TaskListEntry file="" description="OverflowException in Graphics.DrawImage &lt;- ContourImage.Crop" />
+</ListOfTaskListEntry>
