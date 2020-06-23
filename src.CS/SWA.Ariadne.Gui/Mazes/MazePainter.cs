@@ -72,30 +72,36 @@ namespace SWA.Ariadne.Gui.Mazes
         }
 
         /// <summary>
+        /// Converts design pixel numbers to properly scaled pixel numbers.
+        /// </summary>
+        public static void ApplyScaleFactor(ref int numPixels)
+        {
+            numPixels = ApplyScaleFactor(numPixels);
+        }
+
+        /// <summary>
         /// Static initializer.
         /// All the '...Width' range "constants" are multiplied by a scaling factor.
         /// The scaling compensates for the visual size reduction on high resolution screens.
         /// </summary>
         static MazePainter()
         {
-            float scale = 1.0F;
             try
             {
                 Graphics graphics = Graphics.FromHwnd(IntPtr.Zero);
-                scale = Math.Max (scale, graphics.DpiX / 96.0F); // never < 1
-                Dpi = (int) graphics.DpiX;
+                Dpi = (int)Math.Max(graphics.DpiX, DesignedForDpi);
             }
             catch (Exception ex)
             {
                 Log.WriteLine("cannot get DPI value from Graphics object. " + ex.Message, true);
             }
 
-            MinGridWidth = (int)(MinGridWidth * scale);
-            MaxGridWidth = (int)(MaxGridWidth * scale);
-            MinAutoGridWidth = (int)(MinAutoGridWidth * scale);
-            MaxAutoGridWidth = (int)(MaxAutoGridWidth * scale);
-            MinAutoGridWidthWithoutWalls = (int)(MinAutoGridWidthWithoutWalls * scale);
-            MaxAutoGridWidthWithoutWalls = (int)(MaxAutoGridWidthWithoutWalls * scale);
+            ApplyScaleFactor(ref MinGridWidth);
+            ApplyScaleFactor(ref MaxGridWidth);
+            ApplyScaleFactor(ref MinAutoGridWidth);
+            ApplyScaleFactor(ref MaxAutoGridWidth);
+            ApplyScaleFactor(ref MinAutoGridWidthWithoutWalls);
+            ApplyScaleFactor(ref MaxAutoGridWidthWithoutWalls);
 
             // derived from the above
             MinWallWidth = 1; MaxWallWidth = MaxGridWidth / 2;
@@ -180,12 +186,7 @@ namespace SWA.Ariadne.Gui.Mazes
         /// Space left around the painted maze inside the client's DisplayRectangle.
         /// In ScreenSaver mode, this should be 0.
         /// </summary>
-        public int Padding
-        {
-            get { return padding; }
-            set { padding = value; }
-        }
-        private int padding = 2;
+        public int Padding { get; set; } = 3;
 
         private static Color wallColor = Color.Gray;
         private Color forwardColor = Color.GreenYellow;
@@ -574,7 +575,7 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <param name="offset"></param>
         private void FitMazeSize(MazePainter instance, int displaySize, out int mazeSize, out int offset)
         {
-            int usableSize = displaySize - 2 * instance.padding;
+            int usableSize = displaySize - 2 * ApplyScaleFactor(instance.Padding);
             
             if (instance.wallWidth > 0)
             {

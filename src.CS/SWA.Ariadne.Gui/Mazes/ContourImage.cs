@@ -20,9 +20,33 @@ namespace SWA.Ariadne.Gui.Mazes
     {
         #region Constants
 
-        private const int ContourDistance =  8;
-        private const int BlurDistanceMax = 16;
+        /// <summary>
+        /// Distance from the image contour's border up to which the background
+        /// is fully preserved (not transparent at all).
+        /// Number of pixels.
+        /// </summary>
+        private static readonly int ContourDistance =  8;
+
+        /// <summary>
+        /// Width of an area of increasing transparency around the image,
+        /// in addition to <see cref="ContourDistance"/>.
+        /// This maximum width is adjusted for darker colors,
+        /// <see cref="BlurDistance"/>.
+        /// Number of pixels.
+        /// </summary>
+        private static readonly int BlurDistanceMax = 16;
+
+        /// <summary>
+        /// Maximum return value of the <see cref="ColorDistance(Color)"/>
+        /// function.
+        /// </summary>
         private const int MaxColorDistance = 255;
+
+        static ContourImage()
+        {
+            MazePainter.ApplyScaleFactor(ref ContourDistance);
+            MazePainter.ApplyScaleFactor(ref BlurDistanceMax);
+        }
 
         #endregion
 
@@ -1714,7 +1738,8 @@ namespace SWA.Ariadne.Gui.Mazes
 
         /// <summary>
         /// Compares the given color with the backgroundColor.
-        /// Returns a value between 0 (identical colors) and 255 (opposite colors).
+        /// Returns a value between 0 (identical colors) and
+        /// <see cref="MaxColorDistance"/> (opposite colors).
         /// </summary>
         /// <param name="color"></param>
         /// <returns></returns>
