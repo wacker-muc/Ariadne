@@ -2,6 +2,6 @@
   <TaskListEntry file="" description="algorithm in GuessBackgroundColor is not very logical" />
   <TaskListEntry file="" description="Directory.Find could use EnumerateFiles  instead of GetFiles" />
   <TaskListEntry file="" description="Directory.Find should also find &quot;.JPG&quot; when &quot;.jpg&quot; is requested" />
-  <TaskListEntry file="" description="Increase max maze sizes supported by MazeCode" />
+  <TaskListEntry file="" description="Increase max maze sizes supported by MazeCode, up to 3840 x 2160 /3" />
   <TaskListEntry file="" description="OverflowException in Graphics.DrawImage &lt;- ContourImage.Crop" />
 </ListOfTaskListEntry>

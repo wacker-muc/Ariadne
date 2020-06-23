@@ -62,6 +62,8 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.checkBoxPaintAllWalls = new System.Windows.Forms.CheckBox();
             this.checkBoxIrregularMazes = new System.Windows.Forms.CheckBox();
             this.checkBoxOutlineShapes = new System.Windows.Forms.CheckBox();
+            this.imageBackgroundFuzzinessNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.labelImageFuzziness = new System.Windows.Forms.Label();
             this.imageFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.buttonInfo = new System.Windows.Forms.Button();
@@ -71,6 +73,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             ((System.ComponentModel.ISupportInitialize) (this.imageMinSizeNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize) (this.imageMaxSizeNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize) (this.imageNumberNumericUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.imageBackgroundFuzzinessNumericUpDown)).BeginInit();
             this.tabPageBackground.SuspendLayout();
             this.tabPageExtras.SuspendLayout();
             this.SuspendLayout();
@@ -454,6 +457,8 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.tabPageExtras.Controls.Add(this.checkBoxPaintAllWalls);
             this.tabPageExtras.Controls.Add(this.checkBoxIrregularMazes);
             this.tabPageExtras.Controls.Add(this.checkBoxOutlineShapes);
+            this.tabPageExtras.Controls.Add(this.imageBackgroundFuzzinessNumericUpDown);
+            this.tabPageExtras.Controls.Add(this.labelImageFuzziness);
             this.tabPageExtras.Location = new System.Drawing.Point(4, 22);
             this.tabPageExtras.Name = "tabPageExtras";
             this.tabPageExtras.Padding = new System.Windows.Forms.Padding(3);
@@ -518,6 +523,40 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.checkBoxOutlineShapes.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.checkBoxOutlineShapes.UseVisualStyleBackColor = true;
             // 
+            // imageFuzzinessNumericUpDown
+            // 
+            this.imageBackgroundFuzzinessNumericUpDown.Location = new System.Drawing.Point(154, 105);
+            this.imageBackgroundFuzzinessNumericUpDown.Maximum = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            this.imageBackgroundFuzzinessNumericUpDown.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.imageBackgroundFuzzinessNumericUpDown.Name = "imageBackgroundFuzzinessNumericUpDown";
+            this.imageBackgroundFuzzinessNumericUpDown.Size = new System.Drawing.Size(46, 20);
+            this.imageBackgroundFuzzinessNumericUpDown.TabIndex = 5;
+            this.imageBackgroundFuzzinessNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.imageBackgroundFuzzinessNumericUpDown.Value = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            // 
+            // labelImagesMaxSize
+            // 
+            this.labelImageFuzziness.AutoSize = true;
+            this.labelImageFuzziness.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.labelImageFuzziness.Location = new System.Drawing.Point(10, 105);
+            this.labelImageFuzziness.Name = "labelImageFuzziness";
+            this.labelImageFuzziness.Size = new System.Drawing.Size(90, 13);
+            this.labelImageFuzziness.TabIndex = 116;
+            this.labelImageFuzziness.Text = "Uniform background fuzziness";
+            this.labelImagesMaxSize.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // toolTip
             // 
             this.toolTip.AutoPopDelay = 20000;
@@ -567,6 +606,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             this.tabPageBackground.PerformLayout();
             this.tabPageExtras.ResumeLayout(false);
             this.tabPageExtras.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.imageBackgroundFuzzinessNumericUpDown)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -600,6 +640,8 @@ namespace SWA.Ariadne.Gui.Dialogs
         private System.Windows.Forms.CheckBox checkBoxPaintAllWalls;
         private System.Windows.Forms.CheckBox checkBoxMultipleMazes;
         private System.Windows.Forms.CheckBox subtractImagesBackgroundCheckBox;
+        private System.Windows.Forms.Label labelImageFuzziness;
+        private System.Windows.Forms.NumericUpDown imageBackgroundFuzzinessNumericUpDown;
         private System.Windows.Forms.TabPage tabPageBackground;
         private System.Windows.Forms.Button selectBackgroundImageFolderButton;
         private System.Windows.Forms.TextBox backgroundImageFolderTextBox;

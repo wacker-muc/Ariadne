@@ -127,6 +127,12 @@ namespace SWA.Ariadne.Gui.Dialogs
                 "If selected, an outline shape (see above) may ",
                 "contain a second separate maze that is solved ",
                 "independently of the main maze."}));
+            toolTip.SetToolTip(imageBackgroundFuzzinessNumericUpDown, string.Join("\n", new string[] {
+                "Determines how much of a uniform background ",
+                "is substracted from an image. Higher values ",
+                "result in a smaller remaining image area."}));
+
+            toolTip.SetToolTip(labelImageFuzziness, toolTip.GetToolTip(imageBackgroundFuzzinessNumericUpDown));
 
             #endregion
         }
@@ -248,6 +254,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             checkBoxOutlineShapes.Checked = RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_OUTLINE_SHAPES);
             checkBoxIrregularMazes.Checked = RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_IRREGULAR_MAZES);
             checkBoxMultipleMazes.Checked = RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_MULTIPLE_MAZES);
+            imageBackgroundFuzzinessNumericUpDown.Value = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_BACKGROUND_FUZZINESS);
         }
 
         private void InitImageSizeCtrl(NumericUpDown ctrl, string optNamePx, string optNamePct)
@@ -294,6 +301,7 @@ namespace SWA.Ariadne.Gui.Dialogs
             key.SetValue(RegisteredOptions.OPT_OUTLINE_SHAPES, (Int32)(checkBoxOutlineShapes.Checked ? 1 : 0), RegistryValueKind.DWord);
             key.SetValue(RegisteredOptions.OPT_IRREGULAR_MAZES, (Int32)(checkBoxIrregularMazes.Checked ? 1 : 0), RegistryValueKind.DWord);
             key.SetValue(RegisteredOptions.OPT_MULTIPLE_MAZES, (Int32)(checkBoxMultipleMazes.Checked ? 1 : 0), RegistryValueKind.DWord);
+            key.SetValue(RegisteredOptions.OPT_IMAGE_BACKGROUND_FUZZINESS, (Int32)(imageBackgroundFuzzinessNumericUpDown.Value), RegistryValueKind.DWord);
         }
     }
 }

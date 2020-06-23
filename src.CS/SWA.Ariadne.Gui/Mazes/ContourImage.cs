@@ -5,6 +5,8 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using SWA.Ariadne.Outlines;
 using SWA.Utilities;
+using SWA.Ariadne.Settings;
+using System.Linq;
 
 namespace SWA.Ariadne.Gui.Mazes
 {
@@ -250,7 +252,7 @@ namespace SWA.Ariadne.Gui.Mazes
 
                     #endregion
 
-                    #region Transfer information from the locally collected left and right limits to the static variables.
+                    #region Transfer information from the locally collected left and right limits to the member variables.
 
                     for (int i = 0; i < 2 * influenceRange; i++)
                     {
@@ -291,6 +293,22 @@ namespace SWA.Ariadne.Gui.Mazes
             contourLimits[NbE, NbW].Add(new RelativePoint(0, dyS));
 
             #endregion
+        }
+
+        private struct CoordinateRange
+        {
+            public readonly int x0, y0, dx, dy, count;
+
+            public CoordinateRange(int xFirst, int yFirst, int xLast, int yLast) : this()
+            {
+                x0 = xFirst;
+                y0 = yFirst;
+                dx = (xLast == xFirst ? 0 : (xLast > xFirst ? 1 : -1));
+                dy = (yLast == yFirst ? 0 : (yLast > yFirst ? 1 : -1));
+                int nx = (dx == 0 ? 0 : (xLast - xFirst) / dx);
+                int ny = (dy == 0 ? 0 : (yLast - yFirst) / dy);
+                count = Math.Max(nx, ny);
+            }
         }
 
         #endregion
@@ -598,7 +616,8 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <returns></returns>
         public ContourImage(Image template, string path)
         {
-            int fuzziness = (int)(0.05 * MaxColorDistance);
+            int fuzziness = (int)(0.005 * RegisteredOptions.GetIntSetting(
+                RegisteredOptions.OPT_IMAGE_BACKGROUND_FUZZINESS) * MaxColorDistance);
 
             this.path = path;
             this.template = template as Bitmap;
@@ -641,7 +660,8 @@ namespace SWA.Ariadne.Gui.Mazes
                 return;
             }
 
-            int fuzziness = (int)(0.03 * MaxColorDistance);
+            int fuzziness = (int)(0.003 * RegisteredOptions.GetIntSetting(
+                RegisteredOptions.OPT_IMAGE_BACKGROUND_FUZZINESS) * MaxColorDistance);
             CreateMask(fuzziness);
             ApplyMask();
 
@@ -1605,45 +1625,70 @@ namespace SWA.Ariadne.Gui.Mazes
             int xMin = 0, xMax = template.Width - 1;
             int yMin = 0, yMax = template.Height - 1;
 
-            // Some circular shapes touch the four borders in the middle region.
-            int xMid0 = template.Width * 9 / 20, xMid1 = template.Width * 11 / 20;
-            int yMid0 = template.Height * 9 / 20, yMid1 = template.Height * 11 / 20;
-
             #region Collect a sample of pixels near the image border.
+
+            // These pixel coordinate ranges cover exactly all relevant pixels for the given borderWidth:
+            var ranges = new List<CoordinateRange>();
+            for (int b = 0; b < borderWidth; b++)
+            {
+                ranges.Add(new CoordinateRange(xMin + b + 1, yMin + b + 0, xMax - b - 0, yMin + b + 0)); // right
+                ranges.Add(new CoordinateRange(xMax - b - 0, yMin + b + 1, xMax - b - 0, yMax - b - 0)); // down
+                ranges.Add(new CoordinateRange(xMax - b - 1, yMax - b - 0, xMin + b + 0, yMax - b - 0)); // left
+                ranges.Add(new CoordinateRange(xMin + b + 0, yMax - b - 1, xMin + b + 0, yMin + b + 0)); // up
+            }
 
             List<Color> pixels = new List<Color>(borderWidth * (template.Width + template.Height));
 
-            for (int x = 0; x < template.Width; x += 1 + x % 7)
+            // Select a fixed number of sample pixels at well distributed locations.
+            int nTotal = ranges.Sum(r => r.count);
+            double phi = (Math.Sqrt(5) - 1) / 2; // the golden ratio
+            double z = 0;
+            for (int i = 0; i < 100; i++)
             {
-                if (xMid0 <= x && x <= xMid1) { continue; }
-                pixels.Add(template.GetPixel(x, yMin + (x + 0) % borderWidth));
-                pixels.Add(template.GetPixel(x, yMax - (x + 1) % borderWidth));
-            }
-            for (int y = 0 + borderWidth; y < template.Height - borderWidth; y += 1 + y % 5)
-            {
-                if (yMid0 <= y && y <= yMid1) { continue; }
-                pixels.Add(template.GetPixel(xMin + (y + 0) % borderWidth, y));
-                pixels.Add(template.GetPixel(xMax - (y + 1) % borderWidth, y));
+                z += phi;
+                int k = (int)(z * nTotal) % nTotal;
+                foreach (var r in ranges)
+                {
+                    if (k < r.count)
+                    {
+                        int x = r.x0 + k * r.dx, y = r.y0 + k * r.dy;
+                        // string info = string.Format("i={0}, z={1}, x={2}, y={3}", i, z, x, y);
+                        pixels.Add(template.GetPixel(x, y));
+                        break; // from foreach(r)
+                    }
+                    k -= r.count;
+                }
             }
 
             #endregion
 
-            #region Determine average color of the pixels on the border.
+            #region Discard 1/3 of the darkest and lighest colors
+
+            int n = pixels.Count;
+            var subsetPixels = pixels
+                .OrderBy(pxl => pxl.GetBrightness())
+                .Skip(n / 3)
+                .Take(n / 3)
+                .ToList();
+
+            #endregion
+
+            #region Determine average color of the remaining pixels.
 
             // Sum of RGB pixel values.
             int rSum = 0, gSum = 0, bSum = 0;
 
-            foreach (Color px in pixels)
+            foreach (Color px in subsetPixels)
             {
                 rSum += px.R;
                 gSum += px.G;
                 bSum += px.B;
             }
 
-            int n = pixels.Count;
-            this.bgR = rSum / n;
-            this.bgG = gSum / n;
-            this.bgB = bSum / n;
+            int nSubset = subsetPixels.Count;
+            this.bgR = rSum / nSubset;
+            this.bgG = gSum / nSubset;
+            this.bgB = bSum / nSubset;
             this.backgroundColor = Color.FromArgb(bgR, bgG, bgB);
 
             #endregion

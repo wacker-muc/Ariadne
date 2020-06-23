@@ -20,6 +20,7 @@ namespace SWA.Ariadne.Settings
         public const string OPT_IMAGE_MAX_SIZE_PCT = "image maximum size percent";
         public const string OPT_IMAGE_FOLDER = "image folder";
         public const string OPT_IMAGE_SUBTRACT_BACKGROUND = "subtract uniform image background color";
+        public const string OPT_IMAGE_BACKGROUND_FUZZINESS = "image background fuzziness";
         public const string OPT_BACKGROUND_IMAGES = "display background images";
         public const string OPT_BACKGROUND_IMAGE_FOLDER = "background image folder";
         public const string OPT_OUTLINE_SHAPES = "add outline shapes";
@@ -140,6 +141,10 @@ namespace SWA.Ariadne.Settings
                         // only if the now obsolete option is not set
                         defaultValue = 60;
                     }
+                    break;
+
+                case OPT_IMAGE_BACKGROUND_FUZZINESS:
+                    defaultValue = 20;
                     break;
             }
 
