@@ -15,6 +15,8 @@ namespace SWA.Ariadne.Model
     {
         #region Member variables
 
+        public readonly string Description;
+
         /// <summary>
         /// Range of the initial seed value: v0: 2^13, v1: 2^14.
         /// This value and the MazeDimension.Max... values are chosen so that the maze Code
@@ -25,9 +27,16 @@ namespace SWA.Ariadne.Model
         public readonly int CodeLength = 12;
         public readonly int CodeDigitRange = 26; // 'A' .. 'Z'
 
+        private readonly string CodeDigits; // 'A' .. 'Z'
+
+        public readonly string Separator = ".";
+
         // Version 0: [A-Z]{12}
         // Version 1: [0-9a-z]{6}
-        public const int DefaultCodeVersion = 1;
+        // Version 2: [0-9a-zA..Z]{6} // except some similar letters: 'l', 'I', '0', 'O'
+        public const int DefaultCodeVersion = 2;
+
+        public const int MaxCodeVersion = 2;
 
         /// <summary>
         /// Maze encoding version.
@@ -49,16 +58,42 @@ namespace SWA.Ariadne.Model
             switch (version)
             {
                 case 0:
+                    Description = "v0: 12 uppercase letters";
                     CodeLength = 12;
                     CodeDigitRange = 26; // 'A' .. 'Z'
+                    Separator = ".";
                     SeedLimit = 8 * 1024;
                     break;
                 case 1:
+                    Description = "v1: 6 lowercase letters or digits";
                     CodeLength = 6;
                     CodeDigitRange = 36; // '0' .. '9', 'a' .. 'z'
+                    Separator = ".";
                     SeedLimit = 16 * 1024;
                     break;
+                case 2:
+                    Description = "v2: 6 letters or digits, but not 'I', 'O', 'l' or '0'";
+                    CodeLength = 6;
+                    CodeDigitRange = 9 + 25 + 24; // digits and letters with a few exceptions
+                    Separator = "-";
+                    SeedLimit = 32 * 1024;
+                    break;
             }
+
+            #region Calculate the valid CodeDigits
+            StringBuilder s = new StringBuilder(CodeDigitRange);
+            int v = this.codeVersion;
+
+            for (char c = '0'; c <= 'z'; c++)
+            {
+                if (v == 0 && !char.IsUpper(c)) continue;
+                if (v == 1 && !char.IsDigit(c) && !char.IsLower(c)) continue;
+                if (v == 2 && !char.IsDigit(c) && !char.IsLetter(c)) continue;
+                if (v == 2 && "IOl0".IndexOf(c) >= 0) continue;
+                s.Append(c);
+            }
+            this.CodeDigits = s.ToString();
+            #endregion
         }
 
         #endregion
@@ -163,34 +198,21 @@ namespace SWA.Ariadne.Model
             {
                 int digit = (int)(nCode % CodeDigitRange);
                 nCode /= CodeDigitRange;
-                char c = '?';
-                switch (CodeDigitRange)
-                {
-                    case 26:
-                        c = (char)(digit + 'A');
-                        break;
-                    case 36:
-                        if (digit < 10)
-                        {
-                            c = (char)(digit + '0');
-                        }
-                        else
-                        {
-                            c = (char)(digit - 10 + 'a');
-                        }
-                        break;
-                }
+                char c = CodeDigits[digit];
                 result.Insert(0, c);
             }
 
-            switch (CodeLength)
+            switch (codeVersion)
             {
-                case 12:
-                    result.Insert(8, '.');
-                    result.Insert(4, '.');
+                case 0:
+                    result.Insert(8, this.Separator);
+                    result.Insert(4, this.Separator);
                     break;
-                case 6:
-                    result.Insert(3, '.');
+                case 1:
+                    result.Insert(3, this.Separator);
+                    break;
+                case 2:
+                    result.Insert(3, this.Separator);
                     break;
             }
 
@@ -210,13 +232,17 @@ namespace SWA.Ariadne.Model
         /// <returns></returns>
         public static int GetCodeVersion(string code)
         {
-            char[] a = code.Replace(".", "").ToCharArray();
+            string separator = "?";
+            if (code.Contains(".")) separator = ".";
+            if (code.Contains("-")) separator = "-";
+
+            char[] a = code.Replace(separator.ToString(), "").ToCharArray();
             int result = -1;
             int nVersions = instance.Length;
 
             for (int v = 0; v < nVersions; v++)
             {
-                if (Instance(v).CodeLength == a.Length)
+                if (Instance(v).CodeLength == a.Length && Instance(v).Separator == separator)
                 {
                     result = v;
                 }
@@ -228,10 +254,10 @@ namespace SWA.Ariadne.Model
                 s.Append(Instance(0).CodeLength);
                 for (int v = 1; v < nVersions; v++)
                 {
-                    s.Append(" or ");
-                    s.Append(Instance(v).CodeLength);
+                    s.Append(Environment.NewLine);
+                    s.Append(Instance(v).Description);
                 }
-                throw new ArgumentOutOfRangeException("code", code, "Must be " + s.ToString() + " characters long.");
+                throw new ArgumentOutOfRangeException("code", code, "Can only be one of the following:" + s);
             }
 
             return result;
@@ -242,8 +268,8 @@ namespace SWA.Ariadne.Model
         /// </summary>
         /// <param name="code"></param>
         /// <param name="seed"></param>
-        /// <param name="maze.XSize"></param>
-        /// <param name="maze.YSize"></param>
+        /// <param name="xSize"></param>
+        /// <param name="ySize"></param>
         /// <exception cref="ArgumentOutOfRangeException">decoded parameters are invalid</exception>
         public void Decode(string code
             , out int seed
@@ -255,44 +281,23 @@ namespace SWA.Ariadne.Model
 
             #region Convert the character code (base 26) into a numeric code
 
-            char[] a = code.Replace(".","").ToCharArray();
+            char[] a = code.Replace(this.Separator,"").ToCharArray();
 
             if (!(a.Length == CodeLength))
             {
-                throw new ArgumentOutOfRangeException("code", code, "Must be " + CodeLength.ToString() + " characters.");
+                throw new ArgumentOutOfRangeException("code", code,
+                    "length = " + a.Length + " / Must be " + Description);
             }
 
             for (int p = 0; p < a.Length; p++)
             {
                 int digit = 0;
+                digit = CodeDigits.ToString().IndexOf(a[p]);
 
-                switch (CodeDigitRange)
+                if (digit < 0)
                 {
-                    case 26:
-                        digit = a[p] - 'A';
-                        break;
-                    case 36:
-                        digit = a[p] - '0';
-                        if (digit >= 10)
-                        {
-                            digit = 10 + a[p] - 'a';
-                        }
-                        break;
-                }
-
-                if (!(0 <= digit && digit < CodeDigitRange))
-                {
-                    string allowed = "???";
-                    switch (CodeDigitRange)
-                    {
-                        case 26:
-                            allowed = "'A'..'Z'";
-                            break;
-                        case 36:
-                            allowed = "'0'..'9' and 'a'..'z'";
-                            break;
-                    }
-                    throw new ArgumentOutOfRangeException("code", code, "Allowed characters are " + allowed + " only.");
+                    throw new ArgumentOutOfRangeException("code", code,
+                        "c = '" + a[p] + "' / Must be " + Description);
                 }
 
                 nCode *= CodeDigitRange;
@@ -422,7 +427,7 @@ namespace SWA.Ariadne.Model
             return instance[version];
         }
 
-        private static MazeCode[] instance = new MazeCode[2];
+        private static MazeCode[] instance = new MazeCode[MaxCodeVersion+1];
 
         #endregion
     }

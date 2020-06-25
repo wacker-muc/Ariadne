@@ -24,7 +24,7 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <summary>
         /// Minimum and maximum grid width.
         /// </summary>
-        public static readonly int MinGridWidth = 2, MaxGridWidth = 40;
+        public static readonly int MinGridWidth = 3, MaxGridWidth = 40;
 
         /// <summary>
         /// Minimum and maximum grid width when using automatic settings.
@@ -96,7 +96,7 @@ namespace SWA.Ariadne.Gui.Mazes
                 Log.WriteLine("cannot get DPI value from Graphics object. " + ex.Message, true);
             }
 
-            ApplyScaleFactor(ref MinGridWidth);
+            //ApplyScaleFactor(ref MinGridWidth);
             ApplyScaleFactor(ref MaxGridWidth);
             ApplyScaleFactor(ref MinAutoGridWidth);
             ApplyScaleFactor(ref MaxAutoGridWidth);
@@ -1271,7 +1271,7 @@ namespace SWA.Ariadne.Gui.Mazes
             if (b == null) { b = gBufferPrevious; }
             if (b == null) { return false; }
 
-            Bitmap sourceBitmap = Reflection.GetPrivateField<BufferedGraphics, Bitmap>(b, "membmp");
+            Bitmap sourceBitmap = Reflection.GetPrivateField<Bitmap>(b, "membmp");
             if (sourceBitmap == null)
             {
                 //Log.WriteLine("DrawImage() failed -- cannot access private field BufferedGraphics.membmp", true);

@@ -133,6 +133,10 @@ namespace SWA.Ariadne.Gui.Dialogs
 
             target.FillParametersInto(data);
 
+            // When no walls are drawn, the wall width is zero, which would be
+            // an invalid setting.
+            data.WallWidth = Math.Max(data.WallWidth, MazePainter.MinWallWidth);
+
             // Select the current OutlineKind radio button.
             foreach (Control control in this.outlineKindPanel.Controls)
             {

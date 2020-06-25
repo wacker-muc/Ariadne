@@ -12,7 +12,7 @@ namespace SWA.Ariadne.Model
     {
         #region Member variables and Properties
 
-        private const double XYRatio = (4.0 / 3.0); // e.g. 1024x768
+        private readonly double XYRatio = (4.0 / 3.0); // e.g. 1024x768
 
         /// <summary>
         /// Minimum width or height: number of squares.
@@ -29,7 +29,7 @@ namespace SWA.Ariadne.Model
                 return MinSize + xRange;
             }
         }
-        private readonly int xRange = 337; // expected value, manually calculated
+        private readonly int xRange = 337; // expected value (verson 1), manually calculated
 
         /// <summary>
         /// Maximum height: number of squares.
@@ -41,7 +41,7 @@ namespace SWA.Ariadne.Model
                 return MinSize + yRange;
             }
         }
-        private readonly int yRange = 251; // expected value, manually calculated
+        private readonly int yRange = 251; // expected value (verson 1), manually calculated
 
         /// <summary>
         /// Maximum distance of start/end point from border.
@@ -63,6 +63,10 @@ namespace SWA.Ariadne.Model
         private MazeDimensions(int version)
         {
             this.codeVersion = version;
+            if (version >= 2)
+            {
+                this.XYRatio = 16.0 / 9.0;
+            }
             this.CalculateDimensions(out this.xRange, out this.yRange);
         }
 
@@ -170,7 +174,7 @@ namespace SWA.Ariadne.Model
             return instance[version];
         }
 
-        private static MazeDimensions[] instance = new MazeDimensions[2];
+        private static MazeDimensions[] instance = new MazeDimensions[MazeCode.MaxCodeVersion+1];
 
         #endregion
     }
