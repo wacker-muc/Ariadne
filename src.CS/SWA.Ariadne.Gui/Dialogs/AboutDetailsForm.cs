@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using SWA.Utilities;
 
 namespace SWA.Ariadne.Gui.Dialogs
 {
@@ -11,10 +12,11 @@ namespace SWA.Ariadne.Gui.Dialogs
         {
             InitializeComponent();
 
-            if (Environment.NewLine.Length == 2) // test for "\r\n"
+            if (Platform.IsWindows)
             {
-                // Seems like we are on a Windows system -- everything OK
-                this.webBrowser.DocumentText = InsertFeatureLog(Properties.Resources.OverviewHtml, Properties.Resources.FeatureLogTxt);
+                this.webBrowser.DocumentText = InsertFeatureLog(
+                    Properties.Resources.OverviewHtml,
+                    Properties.Resources.FeatureLogTxt);
             }
             else
             {
@@ -49,13 +51,13 @@ namespace SWA.Ariadne.Gui.Dialogs
         {
             #region Convert txt to HTML syntax
 
-            string[] patterns = new string[] {
+            string[] patterns = {
                 @"^(Version.*)$",
                 @"^----.*$",
                 @"^ \* (.*)$",
                 @"--",
             };
-            string[] replacements = new string[] {
+            string[] replacements = {
                 @"<h4>$1</h4><ul>",
                 @"</ul><hr />",
                 @"<li>$1</li>",

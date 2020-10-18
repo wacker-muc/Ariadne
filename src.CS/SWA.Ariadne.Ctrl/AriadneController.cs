@@ -179,7 +179,6 @@ namespace SWA.Ariadne.Ctrl
         /// </summary>
         public void Start()
         {
-            //Log.WriteLine("{ Start()");
             stepTimer = new Timer();
             stepTimer.Interval = (1000/60); // 60 frames per second
             stepTimer.Tick += new EventHandler(this.OnStepTimer);
@@ -200,7 +199,6 @@ namespace SWA.Ariadne.Ctrl
             client.NotifyControllerStateChanged();
 
             lapStartTime = System.DateTime.Now;
-            //Log.WriteLine("} Start()");
         }
 
         /// <summary>

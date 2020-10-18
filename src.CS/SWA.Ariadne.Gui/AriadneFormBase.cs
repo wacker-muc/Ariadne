@@ -107,8 +107,6 @@ namespace SWA.Ariadne.Gui
         /// <summary>
         /// Stops the solver and returns the maze to its original (unsolved) state.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         protected virtual void OnReset(object sender, EventArgs e)
         {
             if (State == SolverState.Paused)
@@ -122,8 +120,6 @@ namespace SWA.Ariadne.Gui
         /// <summary>
         /// Creates a new (different) maze.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         public virtual void OnNew(object sender, EventArgs e)
         {
             if (State != SolverState.Ready)
@@ -137,8 +133,6 @@ namespace SWA.Ariadne.Gui
         /// <summary>
         /// Opens a Details dialog.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void OnDetails(object sender, EventArgs e)
         {
             // This is not allowed while the Solver is busy.
@@ -154,8 +148,6 @@ namespace SWA.Ariadne.Gui
         /// <summary>
         /// Opens an About box.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void OnAbout(object sender, EventArgs e)
         {
             Form form = new AboutBox();
@@ -165,8 +157,6 @@ namespace SWA.Ariadne.Gui
         /// <summary>
         /// Opens an Arena form.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void OnOpenArena(object sender, EventArgs e)
         {
             ArenaForm form = new ArenaForm();
@@ -175,10 +165,9 @@ namespace SWA.Ariadne.Gui
         }
 
         /// <summary>
-        /// Opens a form that behaves like in screen saver mode.
+        /// Opens a form that behaves like in screen saver mode
+        /// on a Windows platform.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void OnOpenScreenSaver(object sender, EventArgs e)
         {
             ScreenSaverForm form = new ScreenSaverForm(false, null);
@@ -187,6 +176,19 @@ namespace SWA.Ariadne.Gui
             form.Show();
         }
 
+        /// <summary>
+        /// Starts a ScreenSaverController that behaves like in screen saver mode
+        /// on a Linux platform under control of xscreensaver(1).
+        /// </summary>
+        private void OnOpenScreenSaverHack(object sender, EventArgs e)
+        {
+            ScreenSaverController.Run();
+        }
+
+        /// <summary>
+        /// Starts a ScreenSaverPreviewController as would be used
+        /// on a Windows or Linux platform.
+        /// </summary>
         private void OnOpenScreenSaverPreview(object sender, EventArgs e)
         {
             ScreenSaverPreviewController.Run();
@@ -201,8 +203,6 @@ namespace SWA.Ariadne.Gui
         /// <summary>
         /// Saves the currently displayed maze to a PNG file.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void OnSaveImage(object sender, EventArgs e)
         {
             System.Drawing.Imaging.ImageFormat imgFormat = System.Drawing.Imaging.ImageFormat.Png;
@@ -248,8 +248,6 @@ namespace SWA.Ariadne.Gui
         /// <summary>
         /// Start a solver.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         protected void OnStart(object sender, EventArgs e)
         {
             ariadneController.Start();
@@ -288,8 +286,6 @@ namespace SWA.Ariadne.Gui
         /// <summary>
         /// Execute a single solver step.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void OnStep(object sender, EventArgs e)
         {
             if (State == SolverState.Ready || State == SolverState.ReadyAndScheduled)
@@ -309,8 +305,6 @@ namespace SWA.Ariadne.Gui
         /// <summary>
         /// Toggle the repeat mode.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void OnRepeat(object sender, EventArgs e)
         {
             // Switch between Running and Paused.
@@ -331,8 +325,6 @@ namespace SWA.Ariadne.Gui
         /// <summary>
         /// Display the drop down menu (when pressing the split button).
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void OnShowDropDownMenu(object sender, EventArgs e)
         {
             this.menuButton.ShowDropDown();
@@ -381,13 +373,17 @@ namespace SWA.Ariadne.Gui
                     OnSaveImage(sender, e);
                     e.Handled = true;
                     break;
-#if true
+#if true // used for debugging purposes
                 case (char)Keys.D8:
                     OnOpenScreenSaver(sender, e);
                     e.Handled = true;
                     break;
                 case (char)Keys.D9:
                     OnOpenScreenSaverPreview(sender, e);
+                    e.Handled = true;
+                    break;
+                case (char)Keys.D0:
+                    OnOpenScreenSaverHack(sender, e);
                     e.Handled = true;
                     break;
 #endif

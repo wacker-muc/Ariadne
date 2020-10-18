@@ -1,10 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using SWA.Ariadne.Gui.Mazes;
+using SWA.Utilities;
 
 namespace SWA.Ariadne.Ctrl
 {
@@ -16,20 +14,6 @@ namespace SWA.Ariadne.Ctrl
         : IAriadneEventHandler
         , IMazePainterClient
     {
-        #region  Use Win32 API functions for dealing with preview dialog box
-
-        private struct RECT
-        {
-            public int left, top, right, bottom;
-        }
-
-        [DllImport("user32.dll")]
-        private static extern bool GetClientRect(IntPtr hWnd, ref RECT rect);
-        [DllImport("user32.DLL", EntryPoint = "IsWindowVisible")]
-        private static extern bool IsWindowVisible(IntPtr hWnd);
-
-        #endregion
-
         #region Member variables
 
         /// <summary>
@@ -61,18 +45,13 @@ namespace SWA.Ariadne.Ctrl
         /// <param name="windowHandleArg"></param>
         private ScreenSaverPreviewController(string windowHandleArg)
         {
+            // Get the window in which we are supposed to paint.
             this.parentHwnd = (IntPtr)UInt32.Parse(windowHandleArg);
-
-            // Get the parent window's graphics rectangle.
-            RECT rect = new RECT();
-            if (GetClientRect(parentHwnd, ref rect) == false)
-            {
-                throw new Exception("Cannot get a client rectangle.");
-            }
+            this.targetRectangle = Platform.GetClientRectangle(parentHwnd);
+            //Log.WriteLine("targetRectangle = " + targetRectangle);
 
             // Create a MazePainter.
             this.targetGraphics = Graphics.FromHwnd(parentHwnd);
-            this.targetRectangle = new Rectangle(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
             this.painter = new MazePainter(targetGraphics, targetRectangle, this as IMazePainterClient, true);
 
             // Create and display the first maze.
@@ -132,7 +111,10 @@ namespace SWA.Ariadne.Ctrl
             get
             {
                 // Quit if the preview dialog is dismissed.  Check this periodically.
-                if (!IsWindowVisible(parentHwnd))
+                // Note: There is no relevant equivalent on Linux. There, the
+                // xscreensaver(1) driver program will kill this program when
+                // it is no longer needed.
+                if (Platform.IsWindows && !Platform.Windows.IsWindowVisible(parentHwnd))
                 {
                     painter.Reset();
                     ariadneController.Stop();
@@ -154,8 +136,6 @@ namespace SWA.Ariadne.Ctrl
         /// <summary>
         /// Creates a new maze.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         public void OnNew(object sender, EventArgs e)
         {
             #region Set up the painter.
@@ -216,7 +196,8 @@ namespace SWA.Ariadne.Ctrl
 
         public static void Run(string windowHandleArg)
         {
-            ScreenSaverPreviewController ctrl = new ScreenSaverPreviewController(windowHandleArg);
+            ScreenSaverPreviewController ctrl
+                = new ScreenSaverPreviewController(windowHandleArg);
 
             // Start a main application loop.
             Application.Run();
@@ -232,11 +213,13 @@ namespace SWA.Ariadne.Ctrl
         /// </summary>
         public static void Run()
         {
-            Form form = CreatePreviewWindow();
+            Form form = CreateTargetWindow();
             form.Show();
             string windowHandleArg = form.Handle.ToString();
-            ScreenSaverPreviewController ctrl = new ScreenSaverPreviewController(windowHandleArg);
-            form.FormClosing += new FormClosingEventHandler(ctrl.PreviewFormClosing);
+
+            ScreenSaverPreviewController ctrl = new ScreenSaverPreviewController(
+                windowHandleArg);
+            form.FormClosing += ctrl.TargetWindowClosing;
 
             // Now, the controller runs within the existing main application loop.
         }
@@ -244,8 +227,7 @@ namespace SWA.Ariadne.Ctrl
         /// <summary>
         /// Create a small window for simulating the Screen Saver Preview environment.
         /// </summary>
-        /// <returns></returns>
-        private static Form CreatePreviewWindow()
+        private static Form CreateTargetWindow()
         {
             Form result = new Form();
             result.Name = result.Text = "Ariadne Preview";
@@ -262,9 +244,7 @@ namespace SWA.Ariadne.Ctrl
         /// <summary>
         /// Will stop the AriadneController and de-construct this object.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void PreviewFormClosing(object sender, FormClosingEventArgs e)
+        private void TargetWindowClosing(object sender, FormClosingEventArgs e)
         {
             // When the form is closed, stop the controller.
             ariadneController.Stop();

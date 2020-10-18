@@ -1,7 +1,15 @@
 <ListOfTaskListEntry>
-  <TaskListEntry file="" description="algorithm in GuessBackgroundColor is not very logical" completed="True" />
   <TaskListEntry file="" description="Directory.Find could use EnumerateFiles  instead of GetFiles" />
   <TaskListEntry file="" description="Directory.Find should also find &quot;.JPG&quot; when &quot;.jpg&quot; is requested" />
-  <TaskListEntry file="" description="Increase max maze sizes supported by MazeCode, up to 3840 x 2160 /3" completed="True" />
   <TaskListEntry file="" description="OverflowException in Graphics.DrawImage &lt;- ContourImage.Crop" />
+  <TaskListEntry file="" description="Include controls in screenshot from buffer" completed="True" />
+  <TaskListEntry file="" description="Fix databinding in DetalsDialog" />
+  <TaskListEntry file="" description="Make reference colors selectable" />
+  <TaskListEntry file="" description="Make ScreenSaverForm draw on XSCREENSAVER_WINDOW" completed="True" />
+  <TaskListEntry file="" description="Centralize Platform detection" completed="True" />
+  <TaskListEntry file="" description="Update saved image paths when using ScreenSaverController" />
+  <TaskListEntry file="" description="Use wider maze paths for first Screensaver Maze" />
+  <TaskListEntry file="" description="Support xscreensaver's method of opening a settings/options dialog" />
+  <TaskListEntry file="" description="Support xscreensaver on multiplle screens (evaluate $DISPLAY)" />
+  <TaskListEntry file="" description="Smoothen xscreensaver preview painting" />
 </ListOfTaskListEntry>

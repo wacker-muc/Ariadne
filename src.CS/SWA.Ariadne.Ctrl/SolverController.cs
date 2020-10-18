@@ -156,7 +156,9 @@ namespace SWA.Ariadne.Ctrl
         /// <summary>
         /// Constructor.
         /// </summary>
-        public SolverController(IMazeForm mazeForm, MazePainter mazePainter, ProgressBar visitedProgressBar)
+        public SolverController(
+            IMazeForm mazeForm, MazePainter mazePainter,
+            ProgressBar visitedProgressBar)
         {
             this.mazeForm = mazeForm;
             this.mazePainter = mazePainter;
@@ -178,7 +180,8 @@ namespace SWA.Ariadne.Ctrl
         }
 
         /// <summary>
-        /// When the controller is Ready or Finished, memory consuming resources should be deallocated.
+        /// When the controller is Ready or Finished, memory consuming
+        /// resources should be deallocated.
         /// </summary>
         public void ReleaseResources()
         {

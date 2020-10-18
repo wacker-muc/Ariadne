@@ -75,7 +75,7 @@ namespace SWA.Ariadne.Gui
             this.ShowInTaskbar = ! this.fullScreenMode;
             this.DoubleBuffered = false;
 
-            // Initially, the (optinally) displayed controls should be invisible until the maze has been built.
+            // Initially, the (optionally) displayed controls should be invisible until the maze has been built.
             this.outerInfoPanel.Visible = false;
 
             if (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_PAINT_ALL_WALLS) == false)
@@ -110,15 +110,25 @@ namespace SWA.Ariadne.Gui
         /// <summary>
         /// Make the Form really cover the whole screen, including Panels.
         /// </summary>
+        private void SetupFullscreenLinux()
+        {
+            if (!fullScreenMode) return;
+
+            CallWmctrl("-r " + this.Text + " -b add,above,fullscreen", "set proper full screen mode");
+
+        }
+
+        /// <summary>
+        /// Call the wmctrl(1) program with the given arguments.
+        /// In case of an error, write a message to the Log.
+        /// </summary>
         /// <remarks>
         /// This code is taken from
         /// https://stackoverflow.com/questions/2823299/mono-winforms-app-fullscreen-in-ubuntu
         /// We need an external program (wmctrl).
         /// </remarks>
-        private void SetupFullscreenUnix()
+        private static void CallWmctrl(string wmctrlArgs, string actionText)
         {
-            if (!fullScreenMode) return;
-
             int exitCode;
             string msg = null;
 
@@ -127,7 +137,7 @@ namespace SWA.Ariadne.Gui
                 StartInfo = new ProcessStartInfo
                 {
                     FileName = "wmctrl",
-                    Arguments = $"-r " + this.Text + " -b add,fullscreen",
+                    Arguments = wmctrlArgs,
                     CreateNoWindow = true
                 }
             };
@@ -138,7 +148,7 @@ namespace SWA.Ariadne.Gui
 
                 exitCode = process.ExitCode;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 exitCode = -999;
                 msg = ex.Message;
@@ -146,7 +156,7 @@ namespace SWA.Ariadne.Gui
 
             if (exitCode != 0)
             {
-                Log.WriteLine("Cannot set proper full screen mode. Please install the 'wmctrl' program.", true);
+                Log.WriteLine("Cannot " + actionText + ". Please install the 'wmctrl' program.", true);
                 if (msg != null && msg != "")
                 {
                     Log.WriteLine(msg, true);
@@ -203,11 +213,9 @@ namespace SWA.Ariadne.Gui
 
         void ScreenSaverForm_Shown(object sender, EventArgs e)
         {
-            switch (Environment.OSVersion.Platform)
+            if (Platform.IsLinux)
             {
-                case PlatformID.Unix:
-                    this.SetupFullscreenUnix();
-                    break;
+                this.SetupFullscreenLinux();
             }
         }
 

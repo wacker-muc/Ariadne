@@ -30,7 +30,7 @@ namespace SWA.Utilities
         public static void EnableDpiAwareness()
         {
             // Don't try this unless we're on a MS Windows system.
-            if (Environment.NewLine.Length < 2) { return; }
+            if (!Platform.IsWindows) { return; }
 
             try
             {

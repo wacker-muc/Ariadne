@@ -67,6 +67,7 @@
     <Compile Include="..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="ScreenSaverController.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SWA.Ariadne.Gui\Mazes\SWA.Ariadne.Gui.Mazes.csproj">
@@ -88,6 +89,10 @@
     <ProjectReference Include="..\SWA.Utilities\SWA.Utilities.csproj">
       <Project>{5947CDF1-FDE4-4B7C-9420-0A4DF039B5AB}</Project>
       <Name>SWA.Utilities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SWA.Ariadne.Outlines\SWA.Ariadne.Outlines.csproj">
+      <Project>{9751AAAE-B751-451E-BA8C-FBD55234FE56}</Project>
+      <Name>SWA.Ariadne.Outlines</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -132,6 +132,17 @@ namespace SWA.Ariadne.Gui.Mazes
         }
 
         /// <summary>
+        /// Create an object that provides useful functionality to a ScreenSaverController.
+        /// Note: This object will not be displayed on any form.
+        /// </summary>
+        public MazeUserControl(MazePainter painter, Size size)
+        {
+            this.painter = painter;
+            this.Location = new Point(0, 0);
+            this.Size = size;
+        }
+
+        /// <summary>
         /// Scales the control by the given factor.
         /// </summary>
         /// <param name="factor">Factor.</param>
@@ -332,7 +343,7 @@ namespace SWA.Ariadne.Gui.Mazes
         /// Returns the maze Y coordinate corresponding to the given control coordinate.
         /// </summary>
         /// <param name="yLocation"></param>
-        /// <param name="leftBiased"></param>
+        /// <param name="topBiased"></param>
         /// <returns></returns>
         private int YCoordinate(int yLocation, bool topBiased)
         {
@@ -356,7 +367,8 @@ namespace SWA.Ariadne.Gui.Mazes
 
             // If the window is minimized, there will be no OnPaint() event.
             // Therefore we paint the maze directly.
-            if (this.ParentForm != null && this.ParentForm.WindowState == FormWindowState.Minimized)
+            // Note: When used by a ScreenSaverController, ParentForm will be null.
+            if (this.ParentForm == null || this.ParentForm.WindowState == FormWindowState.Minimized)
             {
                 // TODO: Reset() is called twice but should be called only once.
                 painter.PaintMaze(this.PaintImages);
@@ -495,19 +507,18 @@ namespace SWA.Ariadne.Gui.Mazes
             Graphics g = Graphics.FromImage(result);
             g.FillRectangle(Brushes.Black, new Rectangle(new Point(0, 0), imgSize));
 
+#if false // This works on Linux but doesn't include the ScreenSaverForm's info panel
             // First, try to copy the image from the MazePainter's BufferedGraphics.
             if (this.MazePainter.DrawImage(result, clientUpperLeft, new Point(margin, margin), clientSize))
             {
                 msg += ", from buffer";
             }
             else
+#endif
             {
                 // If that fails...
                 // Grab the painted maze from the screen.
-                // This may not work well on high DPI devices, and we won't get a complete image.
-                // see https://www.telerik.com/blogs/winforms-scaling-at-large-dpi-settings-is-it-even-possible-
-                // If the Main program has enabled the application's DPI awareness, we may be successful.
-                // See SWA.Utilities.Display.EnableDpiAwareness()
+                // See SWA.Utilities.Display.EnableDpiAwareness() for high-res Windows devices
                 g.CopyFromScreen(PointToScreen(clientUpperLeft), new Point(margin, margin), clientSize);
                 msg += ", from screen";
             }

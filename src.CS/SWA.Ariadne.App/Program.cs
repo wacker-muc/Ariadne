@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 using SWA.Ariadne.Gui;
 using SWA.Ariadne.Gui.Dialogs;
@@ -16,6 +15,34 @@ namespace SWA.Ariadne.App
         [STAThread]
         static void Main(string[] args)
         {
+            #region Check if we have been started by the Linux xscreensaver(1)
+            // The protocol is like this:
+            // * A fullscreen screensaver is called without parameters
+            // * A preview screensaver is called with "-window-id 0xXXXX" arguments
+            //   see: xscreensaver-5.44/driver/demo-Gtk.c : launch_preview_subproc()
+
+            string windowHandleStr = Environment.GetEnvironmentVariable("XSCREENSAVER_WINDOW");
+            if (!String.IsNullOrEmpty(windowHandleStr))
+            {
+                // Convert "0xXXXX" (hex) to "NNNN" (decimal)
+                windowHandleStr = UInt32.Parse(windowHandleStr.Substring(2),
+                    System.Globalization.NumberStyles.AllowHexSpecifier).ToString();
+
+                if (args.Length > 0 && args[0] == "-window-id")
+                {
+                    ScreenSaverPreviewController.Run(windowHandleStr);
+                }
+                else
+                {
+                    // Create the ImageLoader as early as possible.
+                    ImageLoader imageLoader = ImageLoader.GetScreenSaverImageLoader(Screen.PrimaryScreen.Bounds);
+                    BlankSecondaryScreens(); // TODO: consider Linux behavior...
+                    ScreenSaverController.Run(windowHandleStr, imageLoader);
+                }
+            }
+            #endregion
+            else
+            #region Check if we have been started as a Windows screensaver
             if (args.Length > 0)
             {
                 // Get the 2 character command line argument.
@@ -43,25 +70,18 @@ namespace SWA.Ariadne.App
                         break;
                 }
             }
+            #endregion
             else
+            #region Run as a regular, standalone application
             {
-#if false
-                ImageLoader imageLoader = ImageLoader.GetScreenSaverImageLoader();
-                Application.Run(new ScreenSaverForm(true, imageLoader));
-#endif
-#if true
-                // If no arguments were passed in, run as a regular application.
                 SWA.Utilities.Display.EnableDpiAwareness();
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Form form = new MazeForm();
                 form.Icon = Properties.Resources.AriadneIcon_32x32;
                 Application.Run(form);
-#endif
-#if false
-                (new SWA.Ariadne.Gui.Tests.ContourImageTest()).CI_ManualTest_01();
-#endif
             }
+            #endregion
         }
 
         /// <summary>
