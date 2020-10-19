@@ -55,6 +55,13 @@ namespace SWA.Ariadne.Gui.Mazes
         private readonly int queueLength;
 
         /// <summary>
+        /// Similar to queue; contains the paths of all currently queued images.
+        /// Will regularly be written to the Windows Registry.
+        /// Note: This will be null in all but the ScreenSaver's ImageLoader(s).
+        /// </summary>
+        private readonly List<string> queuedImagePaths;
+
+        /// <summary>
         /// Background thread responsible for filling the queue.
         /// </summary>
         private readonly Thread thread;
@@ -127,6 +134,11 @@ namespace SWA.Ariadne.Gui.Mazes
                 this.thread = new Thread(new ThreadStart(LoadImages));
                 this.queueEmptySemaphore = new Semaphore(0, queueLength);
                 this.queueFullSemaphore = new Semaphore(queueLength, queueLength);
+
+                if (threadName != null)
+                {
+                    this.queuedImagePaths = new List<string>(queueLength);
+                }
 
                 // The background thread should run with high priority until a list of image filenames
                 // has been loaded (see FindImages()).
@@ -208,7 +220,7 @@ namespace SWA.Ariadne.Gui.Mazes
             if (this.thread != null)
             {
                 thread.Abort();
-                SaveImagePaths();
+                //SaveImagePaths(); // this now happens in the Enqueue() method
                 thread.Join();
             }
         }
@@ -455,6 +467,33 @@ namespace SWA.Ariadne.Gui.Mazes
             // Enqueue the processed image.
             //Log.WriteLine("- Enqueue() Enqueue");
             queue.Enqueue(img);
+
+            #region Add the image path to a separate list; save that list to the Registry
+
+            if (queuedImagePaths != null)
+            {
+                lock (queuedImagePaths)
+                {
+                    if (img.HasContour)
+                    {
+                        // True contour images should be loaded last.
+                        queuedImagePaths.Add(img.Path);
+                    }
+                    else
+                    {
+                        // Images without a contour should be loaded first.
+                        queuedImagePaths.Insert(0, img.Path);
+                    }
+
+                    if (queuedImagePaths.Count >= queueLength)
+                    {
+                        SaveImagePaths();
+                    }
+                }
+            }
+
+            #endregion
+
             queueEmptySemaphore.Release();
 
 #if true
@@ -474,6 +513,13 @@ namespace SWA.Ariadne.Gui.Mazes
             queueEmptySemaphore.WaitOne();
             //Log.WriteLine("- Dequeue() Dequeue");
             ContourImage result = queue.Dequeue() as ContourImage;
+            if (queuedImagePaths != null)
+            {
+                lock (queuedImagePaths)
+                {
+                    queuedImagePaths.Remove(result.Path);
+                }
+            }
             queueFullSemaphore.Release();
             //Log.WriteLine("} Dequeue()");
             return result;
@@ -567,32 +613,8 @@ namespace SWA.Ariadne.Gui.Mazes
         /// </summary>
         private void SaveImagePaths()
         {
-            //Log.WriteLine("{ SaveImagePaths()");
-
-            #region Get the paths of all currently queued images.
-
-            List<string> paths = new List<string>(queue.Count);
-
-            while (queue.Count > 0)
-            {
-                ContourImage img = Dequeue();
-
-                if (img != null && img.Path != null)
-                {
-                    if (img.HasContour)
-                    {
-                        // True contour images should be loaded last.
-                        paths.Add(img.Path);
-                    }
-                    else
-                    {
-                        // Images without a contour should be loaded first.
-                        paths.Insert(0, img.Path);
-                    }
-                }
-            }
-
-            #endregion
+            var paths = this.queuedImagePaths;
+            if (paths == null) return;
 
             #region Concatenate all paths.
 
@@ -611,13 +633,12 @@ namespace SWA.Ariadne.Gui.Mazes
             if (key != null)
             {
                 key.SetValue(thread.Name + " " + RegisteredOptions.SAVE_IMAGE_PATHS, s.ToString(), Microsoft.Win32.RegistryValueKind.String);
+                //Log.WriteLine("SaveImagePaths[" + this.thread.Name + "]: " + s, true);
             }
-            //Log.WriteLine("} SaveImagePaths()");
         }
 
         private IEnumerable<string> LoadImagePaths()
         {
-            //Log.WriteLine("{ LoadImagePaths()");
             string s = RegisteredOptions.GetStringSetting(thread.Name + " " + RegisteredOptions.SAVE_IMAGE_PATHS);
             if (s.Length == 0) { return new List<string>(); }
 
@@ -630,7 +651,6 @@ namespace SWA.Ariadne.Gui.Mazes
 
             RecentlyUsedImages.AddRange(result);
 
-            //Log.WriteLine("} LoadImagePaths()");
             return result;
         }
 

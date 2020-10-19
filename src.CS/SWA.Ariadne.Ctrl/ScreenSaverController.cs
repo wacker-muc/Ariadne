@@ -194,7 +194,7 @@ namespace SWA.Ariadne.Ctrl
             var windowHandle = (IntPtr)UInt32.Parse(windowHandleArg);
             var targetGraphics = Graphics.FromHwnd(windowHandle);
             var targetRectangle = Platform.GetClientRectangle(windowHandle);
-            Log.WriteLine("targetRectangle = " + targetRectangle, true); // {X=0,Y=0,Width=1366,Height=768}
+            //Log.WriteLine("targetRectangle = " + targetRectangle, true); // {X=0,Y=0,Width=1366,Height=768}
             this.painter = new MazePainter(targetGraphics, targetRectangle, this as IMazePainterClient, true);
             #endregion
 
@@ -311,14 +311,16 @@ namespace SWA.Ariadne.Ctrl
         public static void Run()
         {
             Form form = CreateTargetWindow();
+            var control = new Control { Size = form.ClientSize, Location = new Point(0, 0) };
+            form.Controls.Add(control);
             form.Show();
-            string windowHandleArg = form.Handle.ToString();
+
+            string windowHandleArg = control.Handle.ToString();
 
             ImageLoader imageLoader = ImageLoader.GetScreenSaverImageLoader(
                 new Rectangle(new Point(0,0), form.ClientSize));
 
-            var ctrl = new ScreenSaverController(
-                windowHandleArg, imageLoader/*, form.ClientSize.Width, form.ClientSize.Height*/);
+            var ctrl = new ScreenSaverController(windowHandleArg, imageLoader);
             form.FormClosing += ctrl.TargetWindowClosing;
 
             // Now the first maze has been loaded.
@@ -340,7 +342,7 @@ namespace SWA.Ariadne.Ctrl
             result.ControlBox = true;
             result.MaximizeBox = false;
             result.MinimizeBox = false;
-            result.ShowInTaskbar = false;
+            //result.ShowInTaskbar = false;
 
             // TODO: make the Form handle keystrokes, e.g. Save, Pause
 

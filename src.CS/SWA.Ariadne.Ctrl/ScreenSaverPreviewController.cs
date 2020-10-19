@@ -214,11 +214,12 @@ namespace SWA.Ariadne.Ctrl
         public static void Run()
         {
             Form form = CreateTargetWindow();
+            var control = new Control { Size = form.ClientSize, Location = new Point(0, 0) };
+            form.Controls.Add(control);
             form.Show();
-            string windowHandleArg = form.Handle.ToString();
+            string windowHandleArg = control.Handle.ToString();
 
-            ScreenSaverPreviewController ctrl = new ScreenSaverPreviewController(
-                windowHandleArg);
+            var ctrl = new ScreenSaverPreviewController(windowHandleArg);
             form.FormClosing += ctrl.TargetWindowClosing;
 
             // Now, the controller runs within the existing main application loop.
@@ -236,7 +237,7 @@ namespace SWA.Ariadne.Ctrl
             result.ControlBox = true;
             result.MaximizeBox = false;
             result.MinimizeBox = false;
-            result.ShowInTaskbar = false;
+            //result.ShowInTaskbar = false;
 
             return result;
         }
