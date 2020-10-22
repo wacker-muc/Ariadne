@@ -549,6 +549,13 @@ namespace SWA.Ariadne.Gui.Mazes
             {
                 availableImages.AddRange(SWA.Utilities.Directory.Find(folderPath, "*.gif", true));
                 availableImages.AddRange(SWA.Utilities.Directory.Find(folderPath, "*.png", true));
+
+                if (!Platform.IsWindows)
+                {
+                    availableImages.AddRange(SWA.Utilities.Directory.Find(folderPath, "*.JPG", true));
+                    availableImages.AddRange(SWA.Utilities.Directory.Find(folderPath, "*.GIF", true));
+                    availableImages.AddRange(SWA.Utilities.Directory.Find(folderPath, "*.PNG", true));
+                }
             }
 
             // Initially, the thread was started with high priority (see the Constructor).

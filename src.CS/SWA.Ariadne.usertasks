@@ -8,8 +8,8 @@
   <TaskListEntry file="" description="Make ScreenSaverForm draw on XSCREENSAVER_WINDOW" completed="True" />
   <TaskListEntry file="" description="Centralize Platform detection" completed="True" />
   <TaskListEntry file="" description="Update saved image paths when using ScreenSaverController" completed="True" />
-  <TaskListEntry file="" description="Use wider maze paths for first Screensaver Maze" />
+  <TaskListEntry file="" description="Use wider maze paths for first Screensaver Maze" completed="True" />
   <TaskListEntry file="" description="Support xscreensaver's method of opening a settings/options dialog" />
-  <TaskListEntry file="" description="Support xscreensaver on multiplle screens (evaluate $DISPLAY)" />
+  <TaskListEntry file="" description="Support xscreensaver on multiple screens (evaluate $DISPLAY)" />
   <TaskListEntry file="" description="Smoothen xscreensaver preview painting" completed="True" />
 </ListOfTaskListEntry>

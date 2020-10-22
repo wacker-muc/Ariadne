@@ -195,7 +195,7 @@ namespace SWA.Ariadne.Ctrl
             var targetGraphics = Graphics.FromHwnd(windowHandle);
             var targetRectangle = Platform.GetClientRectangle(windowHandle);
             //Log.WriteLine("targetRectangle = " + targetRectangle, true); // {X=0,Y=0,Width=1366,Height=768}
-            this.painter = new MazePainter(targetGraphics, targetRectangle, this as IMazePainterClient, true);
+            this.painter = new MazePainter(targetGraphics, targetRectangle, this as IMazePainterClient, false);
             #endregion
 
             #region Create a MazeUserControl.

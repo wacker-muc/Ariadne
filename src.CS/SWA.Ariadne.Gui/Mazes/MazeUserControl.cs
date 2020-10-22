@@ -387,6 +387,7 @@ namespace SWA.Ariadne.Gui.Mazes
         {
             base.OnPaint(e);
 
+            // Use a larger grid width for the first maze.
             if (this.wallWidth < 0)
             {
                 this.Setup(12, 3, 8);

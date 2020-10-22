@@ -167,7 +167,7 @@ namespace SWA.Ariadne.Gui.Mazes
         private bool randomizeWallVisibility = false;
 
         private int squareWidth;
-        private int wallWidth = -1;
+        private int wallWidth = -1; // i.e.: this is the first maze to be painted
         private int gridWidth;
         private int pathWidth;
 

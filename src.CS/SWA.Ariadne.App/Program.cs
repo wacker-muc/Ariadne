@@ -15,6 +15,10 @@ namespace SWA.Ariadne.App
         [STAThread]
         static void Main(string[] args)
         {
+            // Don't scan the image directory all too often.
+            // In true screensaver mode, this will be set to -1 (infinity).
+            SWA.Utilities.Directory.ResultValidForSeconds = 30;
+
             #region Check if we have been started by the Linux xscreensaver(1)
             // The protocol is like this:
             // * A fullscreen screensaver is called without parameters
@@ -35,6 +39,7 @@ namespace SWA.Ariadne.App
                 else
                 {
                     // Create the ImageLoader as early as possible.
+                    SWA.Utilities.Directory.ResultValidForSeconds = -1;
                     ImageLoader imageLoader = ImageLoader.GetScreenSaverImageLoader(Screen.PrimaryScreen.Bounds);
                     BlankSecondaryScreens(); // TODO: consider Linux behavior...
                     ScreenSaverController.Run(windowHandleStr, imageLoader);
@@ -60,6 +65,7 @@ namespace SWA.Ariadne.App
                     case "/s":
                         // Show screensaver form
                         SWA.Utilities.Display.EnableDpiAwareness();
+                        SWA.Utilities.Directory.ResultValidForSeconds = -1;
                         // Create the ImageLoader as early as possible.
                         ImageLoader imageLoader = ImageLoader.GetScreenSaverImageLoader(Screen.PrimaryScreen.Bounds);
                         BlankSecondaryScreens();
