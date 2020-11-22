@@ -229,12 +229,12 @@ namespace SWA.Ariadne.Gui.Mazes
 
                 blinkingCounter = value;
 
-                if (blinkingCounter >= 0 && gBuffer != null)
+                if (blinkingCounter >= 0 && Buffer != null)
                 {
-                    PaintEndpoints(gBuffer.Graphics);
+                    PaintEndpoints(Buffer.Graphics);
                     if (client == null || client.Alive)
                     {
-                        gBuffer.Render();
+                        Buffer.Render();
                     }
                     if (client != null)
                     {
@@ -267,7 +267,7 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <remarks>
         /// This is the case after the OnPaint() method has created its gBuffer.
         /// </remarks>
-        public bool IsReady { get { return (gBuffer != null); } }
+        public bool IsReady { get { return (Buffer != null); } }
 
         #region Background Image
 
@@ -318,10 +318,14 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <summary>
         /// This buffer holds the graphics and is rendered in the control.
         /// </summary>
-        private BufferedGraphics gBuffer
+        /// <remarks>
+        /// The ScreenSaverControler's InfoPanelPainter has access to this property
+        /// and will draw on the buffer's Graphics object.
+        /// </remarks>
+        internal BufferedGraphics Buffer
         {
             get { return _gBuffer; }
-            set
+            private set
             {
                 // move the current _gBuffer to gBufferPrevious
                 if (gBufferPrevious != null)
@@ -548,23 +552,19 @@ namespace SWA.Ariadne.Gui.Mazes
         }
 
         /// <summary>
-        /// Calculate width and xOffset.
+        /// Calculate width and horizontal offset.
         /// </summary>
-        /// <param name="width"></param>
-        /// <param name="xOffset"></param>
-        private void FitMazeWidth(out int width, out int xOffset)
+        private void FitMazeWidth(out int width, out int offset)
         {
-            FitMazeSize(this, targetRectangle.Width, out width, out xOffset);
+            FitMazeSize(this, targetRectangle.Width, out width, out offset);
         }
 
         /// <summary>
         /// Calculate height and yOffset.
         /// </summary>
-        /// <param name="height"></param>
-        /// <param name="yOffset"></param>
-        private void FitMazeHeight(out int height, out int yOffset)
+        private void FitMazeHeight(out int height, out int offset)
         {
-            FitMazeSize(this, targetRectangle.Height, out height, out yOffset);
+            FitMazeSize(this, targetRectangle.Height, out height, out offset);
         }
 
         /// <summary>
@@ -617,15 +617,15 @@ namespace SWA.Ariadne.Gui.Mazes
             blackSquarePen.StartCap = blackSquarePen.EndCap = System.Drawing.Drawing2D.LineCap.Square;
 
             // Destroy the current buffer; it will be re-created in the OnPaint() method.
-            if (gBuffer != null)
+            if (Buffer != null)
             {
-                gBuffer = null;
+                Buffer = null;
             }
 
             // Forward this message to the shared painters.
             foreach (MazePainter item in sharedPainters)
             {
-                item.gBuffer = null;
+                item.Buffer = null;
                 item.Reset();
             }
         }
@@ -637,8 +637,12 @@ namespace SWA.Ariadne.Gui.Mazes
         {
             if (client != null)
             {
-                this.targetGraphics = client.CreateGraphics();
-                this.targetRectangle = client.DisplayRectangle;
+                try // TODO: We may encounter an X11 error / consume error message
+                {
+                    this.targetRectangle = client.DisplayRectangle;
+                    this.targetGraphics = client.CreateGraphics();
+                }
+                catch { }
             }
         }
 
@@ -695,7 +699,7 @@ namespace SWA.Ariadne.Gui.Mazes
 
             // Add the shared painter to our list and let it share our BufferedGraphics.
             this.sharedPainters.Add(result);
-            result.gBuffer = this.gBuffer;
+            result.Buffer = this.Buffer;
 
             return result;
         }
@@ -719,7 +723,7 @@ namespace SWA.Ariadne.Gui.Mazes
         {
             // On first time, create a graphics buffer and draw the static maze.
             //
-            if (gBuffer == null)
+            if (Buffer == null)
             {
                 // Use the previously prepared alternate buffer, if possible.
                 if (gBufferAlternate != null)
@@ -729,13 +733,13 @@ namespace SWA.Ariadne.Gui.Mazes
                     targetGraphics.Flush();
                     System.Threading.Thread.Sleep(120); // milliseconds
 
-                    gBuffer = gBufferAlternate;
+                    Buffer = gBufferAlternate;
                     gBufferAlternate = null;
 
                     // Let all shared painters use the new graphics object.
                     foreach (MazePainter item in sharedPainters)
                     {
-                        item.gBuffer = this.gBuffer;
+                        item.Buffer = this.Buffer;
                         item.gBufferAlternate = null;
                     }
                 }
@@ -747,7 +751,7 @@ namespace SWA.Ariadne.Gui.Mazes
 
             if (client == null || client.Alive)
             {
-                gBuffer.Render();
+                Buffer.Render();
             }
         }
 
@@ -757,15 +761,15 @@ namespace SWA.Ariadne.Gui.Mazes
         public void PaintMaze(PainterDelegate painterDelegate)
         {
             //Log.WriteLine("{ PaintMaze()");
-            gBuffer = CreateGraphicsBuffer();
-            Graphics g = gBuffer.Graphics;
+            Buffer = CreateGraphicsBuffer();
+            Graphics g = Buffer.Graphics;
             g.FillRectangle(Brushes.Black, targetRectangle);
             PaintMaze(g, painterDelegate);
 
             // Let all shared painters use the new graphics object.
             foreach (MazePainter item in sharedPainters)
             {
-                item.gBuffer = this.gBuffer;
+                item.Buffer = this.Buffer;
                 item.gBufferAlternate = null;
             }
             //Log.WriteLine("} PaintMaze()");
@@ -1066,7 +1070,7 @@ namespace SWA.Ariadne.Gui.Mazes
             float cx2 = xOffset + gridWidth / 2.0F + sq2.XPos * gridWidth;
             float cy2 = yOffset + gridWidth / 2.0F + sq2.YPos * gridWidth;
 
-            Graphics g = gBuffer.Graphics;
+            Graphics g = Buffer.Graphics;
 
             // Draw the background image in newly visited squares.
             if (backgroundImage != null)
@@ -1114,7 +1118,7 @@ namespace SWA.Ariadne.Gui.Mazes
             // Render the buffered graphics to the display.
             if (client == null || client.Alive)
             {
-                gBuffer.Render();
+                Buffer.Render();
             }
 
             // Finally, update the display.
@@ -1147,7 +1151,7 @@ namespace SWA.Ariadne.Gui.Mazes
         /// </remarks>
         private void PaintPathDot(MazeSquare sq, Pen pen)
         {
-            Graphics g = gBuffer.Graphics;
+            Graphics g = Buffer.Graphics;
 
             if (PaintBackgroundSquare(g, sq))
             {
@@ -1174,7 +1178,7 @@ namespace SWA.Ariadne.Gui.Mazes
             MazeSquare sq = path[path.Count - 1];
             if (sq == maze.StartSquare)
             {
-                this.PaintEndpoints(gBuffer.Graphics);
+                this.PaintEndpoints(Buffer.Graphics);
             }
             else
             {
@@ -1219,7 +1223,7 @@ namespace SWA.Ariadne.Gui.Mazes
                 points[i] = new PointF(cx, cy);
             }
 
-            Graphics g = gBuffer.Graphics;
+            Graphics g = Buffer.Graphics;
             g.DrawLines(p, points);
 
             this.PaintEndpoints(g);
@@ -1267,7 +1271,7 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <param name="size"></param>
         public bool DrawImage (Bitmap targetBitmap, Point sourceUpperLeft, Point targetUpperLeft, Size size)
         {
-            BufferedGraphics b = gBuffer;
+            BufferedGraphics b = Buffer;
             if (b == null) { b = gBufferPrevious; }
             if (b == null) { return false; }
 
@@ -1290,7 +1294,6 @@ namespace SWA.Ariadne.Gui.Mazes
         /// Tries to create a background image that will be used in the current iteration.
         /// Returns true if an image was created.
         /// </summary>
-        /// <returns></returns>
         internal bool PrepareBackgroundImage()
         {
             // We need a Graphics object defining the resolution of the image to be created.
@@ -1303,7 +1306,6 @@ namespace SWA.Ariadne.Gui.Mazes
         /// The backgroundImage has the same size as the targetRectangle.
         /// Returns true if an image was created.
         /// </summary>
-        /// <returns></returns>
         private bool CreateBackgroundImage(Graphics g)
         {
             this.backgroundContourImage = null;
@@ -1372,7 +1374,6 @@ namespace SWA.Ariadne.Gui.Mazes
         /// Returns the file path of the current background image
         /// or null if no background image is displayed.
         /// </summary>
-        /// <returns></returns>
         internal string GetBackgroundImagePath()
         {
             if (this.backgroundContourImage != null)
@@ -1389,10 +1390,9 @@ namespace SWA.Ariadne.Gui.Mazes
         /// Draws the background image in all squares having the given mazeId.
         /// Squares that have already been drawn will be skipped.
         /// </summary>
-        /// <param name="mazeId"></param>
         public void DrawRemainingBackgroundSquares(int mazeId)
         {
-            Graphics g = gBuffer.Graphics;
+            Graphics g = Buffer.Graphics;
 
             for (int x = backgroundImageRange.Left; x < backgroundImageRange.Right; x++)
             {
@@ -1667,7 +1667,9 @@ namespace SWA.Ariadne.Gui.Mazes
 
         public int YieldNullPercentage
         {
+#pragma warning disable RECS0029 // Warns about property or indexer setters and event adders or removers that do not use the value parameter
             set { /* do nothing */ }
+#pragma warning restore RECS0029 // Warns about property or indexer setters and event adders or removers that do not use the value parameter
         }
 
         #endregion

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Text;
 using System.Windows.Forms;
 using SWA.Ariadne.Gui.Mazes;
 using SWA.Ariadne.Model;
@@ -13,7 +14,7 @@ namespace SWA.Ariadne.Ctrl
     /// Supports running an Ariadne application in a window provided by
     /// the Linux xscreensaver(1) program, much like ScreenSaverForm
     /// works on a Windows platform.
-    /// Except: We don't have access to the mouse or keyboard, that is
+    /// Except: We don't have access to the mouse or keyboard; those are
     /// managed exclusively by xscreensaver.
     /// </summary>
     public class ScreenSaverController : IAriadneEventHandler, IMazeForm
@@ -23,7 +24,7 @@ namespace SWA.Ariadne.Ctrl
         /// <summary>
         /// An ImageLoader supplied by the main program.
         /// </summary>
-        private ImageLoader imageLoader;
+        private readonly ImageLoader imageLoader;
 
         /// <summary>
         /// When true, the built maze should not be too complicated.
@@ -39,15 +40,11 @@ namespace SWA.Ariadne.Ctrl
         /// <param name="maze"></param>
         public void MakeReservedAreas(Maze maze)
         {
-#if false // TODO: here we need a different approach
-            #region Info Panel (and other controls)
-
-            for (int i = 0; i < placeholderControls.Count; i++)
+            if (infoPanelPainter != null)
             {
-                mazeUserControl.ReserveArea(placeholderControls[i]);
+                infoPanelPainter.ChooseLocation(mazeUserControl.Size, this.random);
+                mazeUserControl.ReserveArea(infoPanelPainter.Panel);
             }
-            #endregion
-#endif
 
             #region Images and other adornments
 
@@ -183,6 +180,7 @@ namespace SWA.Ariadne.Ctrl
         private MazePainter painter;
         private AriadneController ariadneController;
         private MazeUserControl mazeUserControl;
+        private InfoPanelPainter infoPanelPainter;
 
         public ScreenSaverController(
             string windowHandleArg,
@@ -222,13 +220,18 @@ namespace SWA.Ariadne.Ctrl
                 int percentage = ((RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_NUMBER) > 0) ? 20 : 100);
                 painter.CreateBackgroundImageLoader(imageFolder, percentage);
             }
+
+            if (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_SHOW_DETAILS_BOX))
+            {
+                this.infoPanelPainter = new InfoPanelPainter(painter);
+            }
             #endregion
 
             // Create and display the first maze.
             this.OnNew(null, null);
 
             #region Create and start an AriadneController.
-            SolverController controller = new SolverController(null, painter, null);
+            SolverController controller = new SolverController(this, painter, null);
             this.ariadneController = new AriadneController(this, controller);
             ariadneController.RepeatMode = true;
             ariadneController.Start();
@@ -258,7 +261,12 @@ namespace SWA.Ariadne.Ctrl
 
         public void NotifyControllerStateChanged()
         {
-            // do nothing
+            if (ariadneController.State == Logic.SolverState.Finished)
+            {
+                // Draw the final state of the info panel.
+                // Note: It may have been covered by MazePainter.DrawRemainingBackgroundSquares()
+                infoPanelPainter.Paint();
+            }
         }
 
         /// <summary>
@@ -292,12 +300,49 @@ namespace SWA.Ariadne.Ctrl
 
         public void UpdateStatusLine()
         {
-            // do nothing
+            if (infoPanelPainter == null) return;
+
+            var text = new StringBuilder();
+            if (ariadneController != null)
+            {
+                ariadneController.FillStatusMessage(text);
+            }
+
+            infoPanelPainter.SetStatus(text.ToString());
         }
 
         public void UpdateCaption()
         {
-            // do nothing
+            if (infoPanelPainter == null) return;
+
+            var text = new StringBuilder();
+            text.Append("Ariadne");
+
+            if (ariadneController != null)
+            {
+                text.Append(" - ");
+                text.Append(this.StrategyName);
+            }
+
+            if (mazeUserControl != null)
+            {
+                text.Append(" - ");
+                text.Append(mazeUserControl.XSize.ToString() + "x" + mazeUserControl.YSize.ToString());
+            }
+
+            if (ariadneController != null)
+            {
+                text.Append(" - ");
+                text.Append(ariadneController.StepsPerSecond.ToString());
+            }
+
+            if (mazeUserControl != null)
+            {
+                text.Append(" - ");
+                text.Append("ID: " + mazeUserControl.Code);
+            }
+
+            infoPanelPainter.SetCaption(text.ToString());
         }
 
         #endregion

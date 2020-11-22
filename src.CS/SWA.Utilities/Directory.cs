@@ -33,7 +33,6 @@ namespace SWA.Utilities
                     TimeSpan age = System.DateTime.Now - Cache[key].Key;
                     if (age.TotalSeconds <= ResultValidForSeconds || ResultValidForSeconds < 0)
                     {
-                        Console.WriteLine("{0} {1} -- {2}", DateTime.Now.ToLongTimeString(), filePattern, "using cached result");
                         return Cache[key].Value;
                     }
                 }
@@ -64,7 +63,6 @@ namespace SWA.Utilities
             {
                 lock (Cache)
                 {
-                    Console.WriteLine("{0} {1} -- {2}", DateTime.Now.ToLongTimeString(), filePattern, "adding to cache");
                     Cache[key] = new KeyValuePair<DateTime, List<string>>(DateTime.Now, result);
                 }
             }

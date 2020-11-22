@@ -8,15 +8,21 @@ Copyright (c) Stephan.Wacker@web.de, 2008 - 2020
 
 -----------------------------------------------------------------------
 
+Version 4.1 -- r364 -- 2020-11-22
+
+ * Support running an Ariadne app under xscreensaver(1) control
+
+-----------------------------------------------------------------------
+
 Version 4.0 -- r360 -- 2020-06-25
 
  * Migrated to a MonoDevelop solution, .NET 4.0
  * Fixed several Bugs caused by running on a non-Windows platform
  * Standard MazeForm starts with images, as configured for the ScreenSaver
- * Support for higher resolution displays (> 96 DPI)
- * Fix: Avoid specks on the maze path
+ * Support for higher resolution displays (> 96 DPI) (i.e. DPI awareness)
+ * Fix: Prevent specks on the maze path
  * Fix: Failed to mask a uniform background on GIF images.
- * New option to to control the calculation of uniform background areas
+ * New option to control the calculation of uniform background areas
 
 -----------------------------------------------------------------------
 

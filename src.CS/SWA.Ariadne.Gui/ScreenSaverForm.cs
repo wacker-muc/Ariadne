@@ -18,7 +18,7 @@ namespace SWA.Ariadne.Gui
 
         private bool fullScreenMode = true;
 
-        private enum CaptionInfoEnum : int
+        private enum CaptionInfoEnum
         {
             Default = 0,
             ImagePath,
@@ -392,31 +392,7 @@ namespace SWA.Ariadne.Gui
             placeholderControls.Add(placeholder);
 
             // Place the placeholder at a random location.
-            int xMin = this.Size.Width / 20;
-            int yMin = this.Size.Height / 20;
-            int xMax = this.Size.Width - xMin - control.Size.Width;
-            int yMax = this.Size.Height - yMin - control.Size.Height;
-            int x = this.random.Next(xMin, xMax);
-            int y = this.random.Next(yMin, yMax);
-
-            #region Try to find a Y coordinate that leaves enough room for an image.
-
-            int imgCount = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_NUMBER);
-            int imgSize = 20 + RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_MAX_SIZE);
-
-            for (int i = 0; i < 8; i++)
-            {
-                if (imgCount < 1 || y > imgSize || y < this.Size.Height - imgSize - control.Size.Height)
-                {
-                    break;
-                }
-
-                y = this.random.Next(yMin, yMax);
-            }
-
-            #endregion
-
-            placeholder.Location = new Point(x, y);
+            placeholder.Location = InfoPanelPainter.SuggestLocation(control.Size, this.Size, this.random);
 
             // Add the invisible placeholder control to this form.
             placeholder.Visible = false;
