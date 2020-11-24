@@ -1,0 +1,60 @@
+.\" -*- mode: nroff; -*-
+
+.\" Manpage for ariadne.
+.\" Contact stephan@wacker-muc.de to correct errors or typos.
+
+.TH man 1 "30 Oct 2020" "1.0" "ariadne man page"
+.SH NAME
+ariadne \- a versatile and aesthetic maze creator and solver
+.SH SYNOPSIS
+ariadne [OPTION]
+.SH DESCRIPTION
+ariadne is a shell script that starts a mono(1) application
+Ariadne.exe (located at <LIB>/Ariadne).
+The Ariadne application builds and solves a variety of maze puzzles.
+
+When started without command line arguments, you can control the maze
+layout, its shape, additional content etc. via a "Details" panel.
+
+Most people will, however, prefer the fullscreen mode (-f), which
+displays new mazes automatically, much like a screensaver.
+
+Actually, you can choose it as a xscreensaver(1) module, as well.
+(Open Settings > Screensaver from the application menu or call
+xscreensaver-demo(1) from the command line.)
+
+See the About > More dialog in the application for more information.
+
+.SH OPTIONS
+.IP -o
+Show an options dialog. Here you can change the options used in
+fullscreen/screensaver mode.
+.IP -f
+Start in fullscreen mode.
+.IP --uninstall
+Uninstall the Ariadne application.
+
+.SH KEYSTROKE COMMANDS
+There are a few keystroke commands that you can issue in interactive and
+fullscreen mode (but not when the app is used as a screensaver).
+.IP I
+Switch information displayed in the details box.
+.IP P
+Pause / Resume the solver.
+.IP S
+Save a screen shot.
+Image files are put into a subdirectory "Screenshots" of the directory
+where the screen saver is installed, i.e.
+<LIB>/Ariadne/Screenshots.
+
+.IP Q
+(or any other keystroke) will quit the fullscreen mode application.
+
+.SH SEE ALSO
+xscreensaver(1), mono(1)
+
+.SH BUGS
+No known bugs.
+
+.SH AUTHOR
+Stephan Wacker (stephan at wacker-muc dot de)

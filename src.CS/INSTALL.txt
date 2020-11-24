@@ -1,0 +1,22 @@
+
+    Windows
+    =======
+
+Copy this directory to where you keep your personal applications.
+
+Choose Ariadne.scr as your Screensaver module.
+
+------------------------------------------------------------------------
+
+    Linux
+    =====
+
+Open a Terminal window, go to the Install directory and run the
+
+    INSTALL.sh
+
+script. It will offer you several options for where to install the
+application.
+
+If you are using xscreensaver(1), you will find Ariadne as a new
+module in its Settings dialog.

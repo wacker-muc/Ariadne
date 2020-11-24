@@ -42,7 +42,14 @@ namespace SWA.Utilities
         private Log()
         {
             string path = Path.Combine(Directory.ApplicationDirectory, logFileName);
-            this.logFile = new StreamWriter(path, false);
+            try
+            {
+                this.logFile = new StreamWriter(path, false);
+            }
+            catch (Exception)
+            {
+                this.logFile = null;
+            }
         }
 
         #endregion
@@ -51,23 +58,31 @@ namespace SWA.Utilities
 
         public static void WriteLine(string text, bool alsoOnConsole = false)
         {
-            if (alsoOnConsole)
-            {
-                System.Console.Out.WriteLine(text);
-            }
             if (enabled)
             {
                 string threadName = Thread.CurrentThread.Name;
                 if (threadName == null) { threadName = "MAIN"; }
 
                 sema.WaitOne();
-                Instance.logFile.Write(threadName);
-                Instance.logFile.Write(" | ");
-                Instance.logFile.Write(DateTime.Now.ToString("HH:mm:ss.fff"));
-                Instance.logFile.Write(" | ");
-                Instance.logFile.WriteLine(text);
-                Instance.logFile.Flush();
+                var f = Instance.logFile;
+                if (f == null) // i.e., the logfile is not writable
+                {
+                    alsoOnConsole = true;
+                }
+                else
+                {
+                    f.Write(threadName);
+                    f.Write(" | ");
+                    f.Write(DateTime.Now.ToString("HH:mm:ss.fff"));
+                    f.Write(" | ");
+                    f.WriteLine(text);
+                    f.Flush();
+                }
                 sema.Release();
+            }
+            if (alsoOnConsole)
+            {
+                System.Console.Out.WriteLine(text);
             }
         }
 

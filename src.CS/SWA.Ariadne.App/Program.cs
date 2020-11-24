@@ -32,6 +32,16 @@ namespace SWA.Ariadne.App
                 windowHandleStr = UInt32.Parse(windowHandleStr.Substring(2),
                     System.Globalization.NumberStyles.AllowHexSpecifier).ToString();
 
+                // https://github.com/mono/mono/blob/master/mcs/class/System.Windows.Forms/System.Windows.Forms/XplatUIX11.cs
+                // When the MONO_XEXCEPTIONS environment variable is set,
+                // an Exception will be thrown when a X11 error is encountered;
+                // by default a message is displayed but execution continues.
+                //
+                // We prefer the Exception. Otherwise the app would continue running
+                // even when the connection to the XSCREENSAVER_WINDOW has been lost.
+                //
+                Environment.SetEnvironmentVariable("MONO_XEXCEPTIONS", "1");
+
                 if (args.Length > 0 && args[0] == "-window-id")
                 {
                     ScreenSaverPreviewController.Run(windowHandleStr);
@@ -47,11 +57,16 @@ namespace SWA.Ariadne.App
             }
             #endregion
             else
-            #region Check if we have been started as a Windows screensaver
+            #region Evaluate the command line options
             if (args.Length > 0)
             {
                 // Get the 2 character command line argument.
                 string arg = args[0].ToLowerInvariant().Trim().Substring(0, 2);
+
+                // Convert Linux style argument to Windows style.
+                if (arg == "-o") { arg = "/c"; } // options
+                if (arg == "-f") { arg = "/s"; } // fullscreen
+
                 switch (arg)
                 {
                     case "/c":
@@ -72,7 +87,9 @@ namespace SWA.Ariadne.App
                         Application.Run(new ScreenSaverForm(true, imageLoader));
                         break;
                     default:
-                        MessageBox.Show("Invalid command line argument: " + arg, "Invalid Command Line Argument", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Invalid command line argument: " + args[0],
+                            "Invalid Command Line Argument",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
                         break;
                 }
             }
