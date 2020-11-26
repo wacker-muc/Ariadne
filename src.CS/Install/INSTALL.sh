@@ -122,6 +122,11 @@ cp_file "./ariadne-interactive.desktop.tmpl" "$APP/ariadne-interactive.desktop" 
 cp_file "./ariadne-fullscreen.desktop.tmpl" "$APP/ariadne-fullscreen.desktop" 644
 cp_file "./ariadne-options.desktop.tmpl" "$APP/ariadne-options.desktop" 644
 cp_file "./ariadne.1.tmpl" "$MAN/man1/ariadne.1" 644
+if [ -n "$SUDO" ] ; then
+    cp_file "./ariadne.xml.tmpl" "/usr/share/xscreensaver/config/ariadne.xml" 644
+fi
+
+# /usr/share/xscreensaver/config/ariadne.xml
 
 # Patch a user file, will not use sudo.
 # Parameters: file, pattern, awk-program
@@ -147,7 +152,7 @@ patch_file() {
 }
 
 # Patch xscreensaver configuration.
-# Find the first empty line after the 'programs:' section
+# Find the first empty line at the end of the 'programs:' section
 # and insert one additional program line.
 prog=`cat <<EOF
 /^programs:/ { state = "prog" }

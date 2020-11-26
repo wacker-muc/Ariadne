@@ -46,7 +46,7 @@ namespace SWA.Utilities
             {
                 this.logFile = new StreamWriter(path, false);
             }
-            catch (Exception)
+            catch (Exception) // access violation
             {
                 this.logFile = null;
             }

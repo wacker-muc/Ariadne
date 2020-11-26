@@ -224,6 +224,11 @@ namespace SWA.Ariadne.Gui.Dialogs
             textBoxStepsPerSecond.Text = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_STEPS_PER_SECOND).ToString();
             checkBoxLogSolverStatistics.Checked = RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_LOG_SOLVER_STATISTICS);
 
+#if ! DEBUG
+            // No logging in Release version
+            checkBoxLogSolverStatistics.Visible = false;
+#endif
+
             // Images tab.
             imageNumberNumericUpDown.Value = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_NUMBER);
             InitImageSizeCtrl(imageMinSizeNumericUpDown, RegisteredOptions.OPT_IMAGE_MIN_SIZE, RegisteredOptions.OPT_IMAGE_MIN_SIZE_PCT);

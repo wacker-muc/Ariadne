@@ -122,8 +122,8 @@ namespace SWA.Ariadne.Ctrl
         /// <summary>
         /// Determines which controller will do the next step.
         /// 0: this controller;
-        /// >0: one of the embedded controllers
-        /// <0: all controllers in parallel
+        /// &gt;0: one of the embedded controllers
+        /// &lt;0: all controllers in parallel
         /// </summary>
         private int doStepTurn = 0;
 
@@ -256,7 +256,7 @@ namespace SWA.Ariadne.Ctrl
                 EmbeddedSolverController embeddedController = new EmbeddedSolverController(this, embeddedPainter);
                 this.embeddedControllers.Add(embeddedController);
 
-                embeddedController.StartDelayRelativeDistance = 0.2 + 0.4 * Maze.Random.NextDouble(); ;
+                embeddedController.StartDelayRelativeDistance = 0.2 + 0.4 * Maze.Random.NextDouble();
             }
         }
 
@@ -378,10 +378,12 @@ namespace SWA.Ariadne.Ctrl
                     mazePainter.DrawRemainingSquares();
                 }
 
+#if DEBUG
                 if (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_LOG_SOLVER_STATISTICS))
                 {
                     LogSolverStatistics();
                 }
+#endif
             }
 
             // Draw the background image inside the reserved areas.
@@ -438,9 +440,9 @@ namespace SWA.Ariadne.Ctrl
             currentBackwardSquare = null;
         }
 
-        #endregion
+#endregion
 
-        #region Status methods
+#region Status methods
 
         /// <summary>
         /// Displays information about the running MazeSolver in the status line.
@@ -507,16 +509,24 @@ namespace SWA.Ariadne.Ctrl
             }
         }
 
-        #endregion
+#endregion
 
-        #region Auxiliary methods
+#region Auxiliary methods
 
         private void LogSolverStatistics()
         {
             string logFilePath = SolverLogPath();
             bool logFileExists = File.Exists(logFilePath);
-            StreamWriter logFile = new StreamWriter(logFilePath, true);
-            
+            StreamWriter logFile;
+            try
+            {
+                logFile = new StreamWriter(logFilePath, true);
+            }
+            catch (Exception) // access violation
+            {
+                return;
+            }
+
             if (!logFileExists)
             {
                 logFile.WriteLine("# This file contains runtime statistics of the results achieved by the Ariadne solver strategies.");
@@ -554,6 +564,6 @@ namespace SWA.Ariadne.Ctrl
                 this.IsFinished ? " (finished)" : "");
         }
 
-        #endregion
+#endregion
     }
 }
