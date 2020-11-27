@@ -17,4 +17,6 @@ EOF
     exit
 fi
 
-mono <LIB>/Ariadne/Ariadne.exe "$@"
+# With exec, the mono application will inherit the shell script's PID
+# so that it (instead of the script) will receive xscreensaver's TERM signal.
+exec mono <LIB>/Ariadne/Ariadne.exe "$@"
