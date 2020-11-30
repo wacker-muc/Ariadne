@@ -205,40 +205,7 @@ namespace SWA.Ariadne.Gui
         /// </summary>
         private void OnSaveImage(object sender, EventArgs e)
         {
-            System.Drawing.Imaging.ImageFormat imgFormat = System.Drawing.Imaging.ImageFormat.Png;
-            int mazeWidth = MazeControlProperties.XSize, mazeHeigth = MazeControlProperties.YSize;
-
-            Image img = GetImage();
-            if (img == null)
-            {
-                return;
-            }
-
-            StringBuilder filename = new StringBuilder(200);
-            filename.Append("Ariadne_");
-            filename.Append(MazeControlProperties.Code.Replace(".", ""));
-            filename.Append("_" + mazeWidth.ToString() + "x" + mazeHeigth.ToString());
-            if (State == SolverState.Ready || State == SolverState.ReadyAndScheduled)
-            {
-                filename.Append("_empty");
-            }
-            else
-            {
-                filename.Append("_" + this.StrategyName);
-                if (State == SolverState.Finished || State == SolverState.FinishedAndScheduled)
-                {
-                    filename.Append("_solved");
-                }
-                else
-                {
-                    filename.Append("_partial-");
-                    filename.Append(SolverController.CountSteps);
-                }
-            }
-            filename.Append(".png");
-
-            string imgPath = System.IO.Path.Combine(CreateScreenshotsDirectory(), filename.ToString());
-            img.Save(imgPath, imgFormat);
+            ariadneController.SaveImage(MazeControlProperties);
         }
 
         #endregion
@@ -292,11 +259,6 @@ namespace SWA.Ariadne.Gui
             {
                 this.OnStart(sender, e);
                 this.OnPause(sender, e);
-            }
-
-            if (State != SolverState.Paused)
-            {
-                return;
             }
 
             ariadneController.SingleStep();
@@ -456,15 +418,8 @@ namespace SWA.Ariadne.Gui
 
         private void stepsPerSec_TextChanged(object sender, EventArgs e)
         {
-            int value = ariadneController.StepsPerSecond;
-
-            try
-            {
-                value = Int32.Parse(stepsPerSecTextBox.Text);
-            }
-            catch (Exception) { }
-
-            ariadneController.StepsPerSecond = value;
+            if (String.IsNullOrEmpty(stepsPerSecTextBox.Text)) return;
+            ariadneController.StepsPerSecond = int.Parse(stepsPerSecTextBox.Text);
             UpdateCaption();
         }
 
@@ -638,17 +593,10 @@ namespace SWA.Ariadne.Gui
         /// Returns an image of the current maze, without the Form border.
         /// </summary>
         /// <returns></returns>
-        protected virtual Image GetImage()
+        public virtual Image GetImage()
         {
             // Subclasses may add an implementation.
             return null;
-        }
-
-        private static string CreateScreenshotsDirectory()
-        {
-            string result = System.IO.Path.Combine(SWA.Utilities.Directory.ApplicationDirectory, "Screenshots");
-            System.IO.Directory.CreateDirectory(result);
-            return result;
         }
 
         #endregion

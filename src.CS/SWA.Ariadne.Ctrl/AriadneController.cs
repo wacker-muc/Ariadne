@@ -206,6 +206,11 @@ namespace SWA.Ariadne.Ctrl
         /// </summary>
         public void Pause()
         {
+            if (State != SolverState.Running && State != SolverState.Paused)
+            {
+                return;
+            }
+
             // Switch between Running and Paused.
             stepTimer.Enabled = !stepTimer.Enabled;
 
@@ -224,6 +229,11 @@ namespace SWA.Ariadne.Ctrl
         /// </summary>
         public void SingleStep()
         {
+            if (State != SolverState.Paused)
+            {
+                return;
+            }
+
             solverController.DoStep();
             solverController.FinishPath();
 
@@ -248,6 +258,54 @@ namespace SWA.Ariadne.Ctrl
             blinkTimer.Stop();
             blinkTimer = null;
             client.NotifyControllerStateChanged();
+        }
+
+        /// <summary>
+        /// Saves the currently displayed maze to a PNG file.
+        /// </summary>
+        public void SaveImage(Gui.Mazes.IMazeControlProperties MazeControlProperties)
+        {
+            System.Drawing.Imaging.ImageFormat imgFormat = System.Drawing.Imaging.ImageFormat.Png;
+            int mazeWidth = MazeControlProperties.XSize, mazeHeigth = MazeControlProperties.YSize;
+
+            System.Drawing.Image img = MazeControlProperties.GetImage();
+            if (img == null)
+            {
+                return;
+            }
+
+            StringBuilder filename = new StringBuilder(200);
+            filename.Append("Ariadne_");
+            filename.Append(MazeControlProperties.Code.Replace(".", ""));
+            filename.Append("_" + mazeWidth.ToString() + "x" + mazeHeigth.ToString());
+            if (State == SolverState.Ready || State == SolverState.ReadyAndScheduled)
+            {
+                filename.Append("_empty");
+            }
+            else
+            {
+                filename.Append("_" + this.StrategyName);
+                if (State == SolverState.Finished || State == SolverState.FinishedAndScheduled)
+                {
+                    filename.Append("_solved");
+                }
+                else
+                {
+                    filename.Append("_partial-");
+                    filename.Append(solverController.CountSteps);
+                }
+            }
+            filename.Append(".png");
+
+            string imgPath = System.IO.Path.Combine(CreateScreenshotsDirectory(), filename.ToString());
+            img.Save(imgPath, imgFormat);
+        }
+
+        private static string CreateScreenshotsDirectory()
+        {
+            string result = System.IO.Path.Combine(SWA.Utilities.Directory.ApplicationDirectory, "Screenshots");
+            System.IO.Directory.CreateDirectory(result);
+            return result;
         }
 
         #endregion

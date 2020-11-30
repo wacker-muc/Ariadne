@@ -642,7 +642,10 @@ namespace SWA.Ariadne.Gui.Mazes
                     this.targetRectangle = client.DisplayRectangle;
                     this.targetGraphics = client.CreateGraphics();
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    Log.WriteLine(ex.GetType() + " in CreateGraphics()");
+                }
             }
         }
 

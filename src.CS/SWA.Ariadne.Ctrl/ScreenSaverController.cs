@@ -33,6 +33,16 @@ namespace SWA.Ariadne.Ctrl
 
         private readonly Random random = SWA.Utilities.RandomFactory.CreateRandom();
 
+        private enum CaptionInfoEnum
+        {
+            Default = 0,
+            ImagePath,
+            Help,
+            Count // number of relevant entries
+        }
+        private CaptionInfoEnum captionInfoItem;
+        private int captionInfoImageNumber;
+
         /// <summary>
         /// Place reserved areas into the maze.
         /// This method is called from the MazeUserControl before actually building the maze.
@@ -175,6 +185,59 @@ namespace SWA.Ariadne.Ctrl
             return result;
         }
 
+        /// <summary>
+        /// Process the keystrokes sent to the targetWindow.
+        /// </summary>
+        /// <param name="sender">The target window (a Form).</param>
+        /// <param name="e"></param>
+        private void OnKeyPress(object sender, KeyPressEventArgs e)
+        {
+            switch (char.ToUpper(e.KeyChar))
+            {
+                case (char)Keys.P:
+                    ariadneController.Pause();
+                    e.Handled = true;
+                    break;
+
+                case (char)Keys.OemPeriod:
+                case '.':
+                    ariadneController.SingleStep();
+                    e.Handled = true;
+                    break;
+
+                case (char)Keys.S:
+                    ariadneController.SaveImage(this.mazeUserControl);
+                    e.Handled = true;
+                    break;
+
+                case (char)Keys.I:
+                    if (captionInfoItem == CaptionInfoEnum.ImagePath && captionInfoImageNumber + 1 < mazeUserControl.ImageCount)
+                    {
+                        captionInfoImageNumber++;
+                    }
+                    else
+                    {
+                        captionInfoImageNumber = 0;
+                        captionInfoItem = (CaptionInfoEnum)((int)(captionInfoItem + 1) % (int)CaptionInfoEnum.Count);
+                    }
+                    UpdateCaption();
+                    e.Handled = true;
+                    break;
+
+                case (char)Keys.OemQuestion:
+                case '?':
+                    captionInfoItem = CaptionInfoEnum.Help;
+                    UpdateCaption();
+                    e.Handled = true;
+                    break;
+
+                default:
+                    (sender as Form).Close();
+                    e.Handled = true;
+                    break;
+            }
+        }
+
         #endregion
 
         private MazePainter painter;
@@ -182,6 +245,15 @@ namespace SWA.Ariadne.Ctrl
         private MazeUserControl mazeUserControl;
         private InfoPanelPainter infoPanelPainter;
 
+        #region Constructor
+
+        /// <summary>
+        /// Creates a ScreenSaverController instance,
+        /// draws an initial maze
+        /// and starts an AriadneController.
+        /// </summary>
+        /// <param name="windowHandleArg">The MazePainter will draw on this window.</param>
+        /// <param name="imageLoader">Image loader.</param>
         public ScreenSaverController(
             string windowHandleArg,
             ImageLoader imageLoader)
@@ -237,6 +309,8 @@ namespace SWA.Ariadne.Ctrl
             ariadneController.Start();
             #endregion
         }
+
+        #endregion
 
         #region Static class methods
 
@@ -315,7 +389,41 @@ namespace SWA.Ariadne.Ctrl
         {
             if (infoPanelPainter == null) return;
 
-            var text = new StringBuilder();
+            var caption = new StringBuilder();
+            switch (captionInfoItem)
+            {
+                default:
+                case CaptionInfoEnum.Default:
+                    FillCaption(caption);
+                    break;
+
+                case CaptionInfoEnum.Help:
+                    caption.Append("[P]: pause/resume");
+                    caption.Append("  [.]: single step");
+                    caption.Append("  [S]: screenshot");
+                    caption.Append("  [I]: switch info");
+                    break;
+
+                case CaptionInfoEnum.ImagePath:
+                    string imagePath = mazeUserControl.GetImagePath(captionInfoImageNumber);
+                    int maxLength = 65;
+                    if (imagePath.Length > maxLength + 2)
+                    {
+                        caption.Append("...");
+                        caption.Append(imagePath.Substring(imagePath.Length - maxLength));
+                    }
+                    else
+                    {
+                        caption.Append(imagePath);
+                    }
+                    break;
+            }
+
+            infoPanelPainter.SetCaption(caption.ToString());
+        }
+
+        private void FillCaption (StringBuilder text)
+        {
             text.Append("Ariadne");
 
             if (ariadneController != null)
@@ -341,8 +449,6 @@ namespace SWA.Ariadne.Ctrl
                 text.Append(" - ");
                 text.Append("ID: " + mazeUserControl.Code);
             }
-
-            infoPanelPainter.SetCaption(text.ToString());
         }
 
         #endregion
@@ -355,20 +461,29 @@ namespace SWA.Ariadne.Ctrl
         /// </summary>
         public static void Run()
         {
-            Form form = CreateTargetWindow();
-            var control = new Control { Size = form.ClientSize, Location = new Point(0, 0) };
+            var form = CreateTargetWindow();
+            var control = new Control // will provide the drawing area
+            {
+                Size = form.ClientSize,
+                Location = new Point(0, 0),
+                Enabled = false, // so that it doesn't consume keystrokes
+            };
             form.Controls.Add(control);
             form.Show();
 
             string windowHandleArg = control.Handle.ToString();
 
             ImageLoader imageLoader = ImageLoader.GetScreenSaverImageLoader(
-                new Rectangle(new Point(0,0), form.ClientSize));
+                new Rectangle(new Point(0, 0), form.ClientSize));
 
             var ctrl = new ScreenSaverController(windowHandleArg, imageLoader);
+
+            // Send the form's events to the controller.
+            form.KeyPress += ctrl.OnKeyPress;
             form.FormClosing += ctrl.TargetWindowClosing;
 
-            // Now the first maze has been loaded.
+            // The first maze has already been loaded
+            // when the ScreenSaverController was constructed.
             loadingFirstMaze = false;
 
             // Now, the controller runs within the existing main application loop.
@@ -388,8 +503,6 @@ namespace SWA.Ariadne.Ctrl
             result.MaximizeBox = false;
             result.MinimizeBox = false;
             //result.ShowInTaskbar = false;
-
-            // TODO: make the Form handle keystrokes, e.g. Save, Pause
 
             return result;
         }

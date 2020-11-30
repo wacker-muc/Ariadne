@@ -671,7 +671,7 @@ namespace SWA.Ariadne.Gui.Mazes
                 }
             }
 
-            this.hasPreparedImages = true;
+            this.hasPreparedImages = true; // even if images.Count = 0
             //Log.WriteLine("} PrepareImages()");
         }
 

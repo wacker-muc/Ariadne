@@ -1,13 +1,11 @@
 <ListOfTaskListEntry>
   <TaskListEntry file="" description="Directory.Find could use EnumerateFiles  instead of GetFiles" />
-  <TaskListEntry file="" description="Directory.Find should also find &quot;.JPG&quot; when &quot;.jpg&quot; is requested" completed="True" />
   <TaskListEntry file="" description="OverflowException in Graphics.DrawImage &lt;- ContourImage.Crop" />
   <TaskListEntry file="" description="Include controls in screenshot from buffer" completed="True" />
   <TaskListEntry file="" description="Fix databinding in DetalsDialog" />
   <TaskListEntry file="" description="Make reference colors selectable" />
-  <TaskListEntry file="" description="Update saved image paths when using ScreenSaverController" completed="True" />
-  <TaskListEntry file="" description="Support xscreensaver's method of opening a settings/options dialog -- no way!" completed="True" />
   <TaskListEntry file="" description="Support xscreensaver on multiple screens (evaluate $DISPLAY)" />
   <TaskListEntry file="" description="Smoothen xscreensaver preview painting" completed="True" />
-  <TaskListEntry file="" description="Add remaining ScreenSaverForm behavior to ScreenSaverController" />
+  <TaskListEntry file="" description="Add remaining ScreenSaverForm behavior to ScreenSaverController" completed="True" />
+  <TaskListEntry file="" description="Let ScreenSaverForm use a ScreenSaverController" />
 </ListOfTaskListEntry>

@@ -8,3 +8,5 @@ obj/
 /.vs/
 /Releases/
 SWA.Ariadne.App/SWA.Ariadne.App_TemporaryKey.pfx
+/packages/NUnit.*/
+*.NUnit/

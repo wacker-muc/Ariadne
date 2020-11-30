@@ -9,5 +9,6 @@ namespace SWA.Ariadne.Gui.Mazes
         Maze Maze { get; }
         int XSize { get; }
         int YSize { get; }
+        System.Drawing.Image GetImage();
     }
 }
