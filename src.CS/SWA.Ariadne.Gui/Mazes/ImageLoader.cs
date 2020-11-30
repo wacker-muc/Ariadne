@@ -84,8 +84,13 @@ namespace SWA.Ariadne.Gui.Mazes
         private readonly List<string> privateRecentlyUsedImages;
 
         /// <summary>
-        /// A list of recently used images.  We'll try to avoid using the same images in rapid succession.
+        /// A list of recently used images.
+        /// We'll try to avoid using the same images in rapid succession.
         /// </summary>
+        /// <remarks>
+        /// Access to the static List sharedRecentlyUsedImages needs to be synchronized
+        /// using lock() statements.
+        /// </remarks>
         private List<string> RecentlyUsedImages {
             get
             {
@@ -174,6 +179,16 @@ namespace SWA.Ariadne.Gui.Mazes
             }
         }
 
+        /// <summary>
+        /// Returns a desired image size (minimum or maximum size in pixels, width or height)
+        /// corresponding to the given option names.
+        /// If the option for showing a details box is active, this will be considered by
+        /// reducing the given screenBounds height.
+        /// </summary>
+        /// <returns>The size.</returns>
+        /// <param name="screenBounds">Contains the screen (or drawing area) size.</param>
+        /// <param name="optNamePx">Opt name for a Pixel parameter.</param>
+        /// <param name="optNamePct">Opt name for a Percentage parameter.</param>
         private static int ImageSize(Rectangle screenBounds, string optNamePx, string optNamePct)
         {
             // Before version 3.5: image sizes are given in pixels
@@ -183,8 +198,13 @@ namespace SWA.Ariadne.Gui.Mazes
             int pct = RegisteredOptions.GetIntSetting(optNamePct);
             if (pct > 0)
             {
+                int detailsBoxMargin = 0;
+                if (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_SHOW_DETAILS_BOX))
+                {
+                    detailsBoxMargin = 60;
+                }
                 int screenSize = Math.Min(screenBounds.Width, screenBounds.Height);
-                result = pct * screenSize / 100;
+                result = pct * (screenSize - detailsBoxMargin) / 100;
             }
 
             return result;
@@ -566,12 +586,15 @@ namespace SWA.Ariadne.Gui.Mazes
 
             // Shorten the list of recently used images.
             // Make sure the list does not get too short.
-            while (this.RecentlyUsedImages.Count > 0
-                && RecentlyUsedImages.Count > Math.Min(availableImages.Count - count, availableImages.Count * 3 / 4)
-                )
+            lock (RecentlyUsedImages)
             {
-                // Remove an item near the beginning of the list (recently added items are at the end).
-                RecentlyUsedImages.RemoveAt(r.Next(RecentlyUsedImages.Count / 3 + 1));
+                while (RecentlyUsedImages.Count > 0
+                    && RecentlyUsedImages.Count > Math.Min(availableImages.Count - count, availableImages.Count * 3 / 4)
+                    )
+                {
+                    // Remove an item near the beginning of the list (recently added items are at the end).
+                    RecentlyUsedImages.RemoveAt(r.Next(RecentlyUsedImages.Count / 3 + 1));
+                }
             }
 
             // Select the required number of images.
@@ -581,10 +604,13 @@ namespace SWA.Ariadne.Gui.Mazes
                 int p = r.Next(availableImages.Count);
                 string imagePath = availableImages[p];
 
-                if (!RecentlyUsedImages.Contains(imagePath) && !badImages.ContainsKey(imagePath))
+                lock (RecentlyUsedImages)
                 {
-                    result.Add(imagePath);
-                    RecentlyUsedImages.Add(imagePath);
+                    if (!RecentlyUsedImages.Contains(imagePath) && !badImages.ContainsKey(imagePath))
+                    {
+                        result.Add(imagePath);
+                        RecentlyUsedImages.Add(imagePath);
+                    }
                 }
 
                 availableImages.RemoveAt(p);
@@ -656,7 +682,10 @@ namespace SWA.Ariadne.Gui.Mazes
                 result[i] = imageFolder + result[i];
             }
 
-            RecentlyUsedImages.AddRange(result);
+            lock (RecentlyUsedImages)
+            {
+                RecentlyUsedImages.AddRange(result);
+            }
 
             return result;
         }
