@@ -142,8 +142,6 @@ namespace SWA.Ariadne.Ctrl
 
             painter.Setup();
 
-            // TODO: Move the remaining code to painter.Setup()
-
             int squareWidth;
             int pathWidth;
             int wallWidth;

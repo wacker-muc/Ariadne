@@ -481,7 +481,6 @@ namespace SWA.Ariadne.Gui
                 }
             }
 
-            // TODO: Get the count from the ImageLoader object.
             int count = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_NUMBER);
             mazeUserControl.PrepareImages(count);
         }
@@ -500,7 +499,7 @@ namespace SWA.Ariadne.Gui
 
                 while (true)
                 {
-                    shape = RandomShape(0.2, 1.0);
+                    shape = mazeUserControl.RandomShape(0.2, 1.0, random);
 
                     // Discard shapes that are too small or too large.
                     if (minArea > shape.Area || shape.Area > maxArea)
@@ -533,39 +532,13 @@ namespace SWA.Ariadne.Gui
             int percentage = (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_OUTLINE_SHAPES) ? 80 : 0);
             if (random.Next(100) < percentage)
             {
-                OutlineShape shape = RandomShape(0.3, 0.7);
+                OutlineShape shape = mazeUserControl.RandomShape(0.3, 0.7, random);
                 mazeUserControl.Maze.OutlineShape = shape;
 
                 return true;
             }
 
             return false;
-        }
-
-        /// <summary>
-        /// Returns an OutlineShape for the given location and size.
-        /// If the image displayed in the maze control has a defined contour,
-        /// the shape is preferrably derived from that contour.
-        /// </summary>
-        /// <param name="offCenter"></param>
-        /// <param name="size"></param>
-        /// <returns></returns>
-        private OutlineShape RandomShape(double offCenter, double size)
-        {
-            OutlineShape result = null;
-
-            // The mazeUserControl may suggest a shape based on the displayed ContourImage.
-            if (random.Next(100) < (ContourImage.DisplayProcessedImage ? 12 : 25))
-            {
-                result = mazeUserControl.SuggestOutlineShape(random, offCenter, size);
-            }
-
-            if (result == null)
-            {
-                result = OutlineShape.RandomInstance(random, mazeUserControl.Maze.XSize, mazeUserControl.Maze.YSize, offCenter, size);
-            }
-
-            return result;
         }
 
         /// <summary>
@@ -580,7 +553,6 @@ namespace SWA.Ariadne.Gui
                 ariadneController.FillStatusMessage(message);
 #if true
                 // Append current time to the status line.
-                // Note: With very long solver names, there is more free room here than there.
                 if (message.Length > 0)
                 {
                     message.Append(" - ");
@@ -608,11 +580,6 @@ namespace SWA.Ariadne.Gui
                     case CaptionInfoEnum.Default:
                         FillCaption(caption);
 
-#if false
-                        // Note: The current time is now displayed in the status line, instead.
-                        caption.Append(" - ");
-                        caption.Append(System.DateTime.Now.ToString("t"));
-#endif
                         break;
 
                     case CaptionInfoEnum.ImagePath:

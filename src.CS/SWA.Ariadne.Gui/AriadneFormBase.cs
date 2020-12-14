@@ -31,7 +31,6 @@ namespace SWA.Ariadne.Gui
         /// <summary>
         /// The object that accepts the SolverController commands.
         /// </summary>
-        /// TODO: eliminate this property
         protected virtual ISolverController SolverController
         {
             get { return null; }
@@ -583,7 +582,6 @@ namespace SWA.Ariadne.Gui
         /// <summary>
         /// Gets the current SolverState.
         /// </summary>
-        /// TODO: use ariadneController.State directly
         protected SolverState State
         {
             get { return ariadneController.State; }
@@ -592,7 +590,6 @@ namespace SWA.Ariadne.Gui
         /// <summary>
         /// Returns an image of the current maze, without the Form border.
         /// </summary>
-        /// <returns></returns>
         public virtual Image GetImage()
         {
             // Subclasses may add an implementation.

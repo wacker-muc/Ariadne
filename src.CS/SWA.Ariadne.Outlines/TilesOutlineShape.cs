@@ -132,7 +132,6 @@ namespace SWA.Ariadne.Outlines
             return Ribbons(r, xSize, ySize);
 #endif
 
-            // TODO: more patterns
             switch (r.Next(12))
             {
                 default:

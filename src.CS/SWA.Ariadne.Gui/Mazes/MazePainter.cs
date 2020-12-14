@@ -129,10 +129,9 @@ namespace SWA.Ariadne.Gui.Mazes
 
         #region Member variables
 
-        // TODO: remove this variable
         private IMazePainterClient client;
 
-        public /* TODO: readonly */ bool screenSaverPreviewMode = false;
+        public readonly bool screenSaverPreviewMode;
         private Graphics targetGraphics;
         private Rectangle targetRectangle;
 
@@ -176,7 +175,6 @@ namespace SWA.Ariadne.Gui.Mazes
         /// </summary>
         private int xOffset, yOffset;
 
-        // TODO: Collect the public dimension attributes in a single structure.
         public int WallWidth { get { return this.wallWidth; } }
         public int GridWidth { get { return this.gridWidth; } }
         public int XOffset { get { return this.xOffset; } }
@@ -349,8 +347,6 @@ namespace SWA.Ariadne.Gui.Mazes
         /// </summary>
         private BufferedGraphics gBufferPrevious;
 
-        // TODO: try to remove the HasBufferAlternate property
-
         /// <summary>
         /// Returns true if an alternate buffer has been prepared but not yet displayed.
         /// </summary>
@@ -368,27 +364,17 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <summary>
         /// Create a MazePainter that paints into the given Graphics.
         /// </summary>
-        /// <param name="client"></param>
-        public MazePainter(Graphics graphics, Rectangle rectangle, IMazePainterClient client, bool screenSaverPreviewMode)
+        public MazePainter(
+            Graphics graphics,
+            Rectangle rectangle,
+            IMazePainterClient client,
+            bool screenSaverPreviewMode = false
+        )
         {
             this.client = client;
             this.targetGraphics = graphics;
             this.targetRectangle = rectangle;
             this.screenSaverPreviewMode = screenSaverPreviewMode;
-        }
-
-        /// <summary>
-        /// Replaces the parameters passed to the constructor with new values.
-        /// </summary>
-        /// <param name="g"></param>
-        /// <param name="rect"></param>
-        /// TODO: Try to call the constructor with correct values in the first place.
-        internal void Reconfigure(Graphics g, Rectangle rect)
-        {
-            this.client = null;
-            this.targetGraphics = g;
-            this.targetRectangle = rect;
-            this.screenSaverPreviewMode = true;
         }
 
         /// <summary>
@@ -417,8 +403,10 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <param name="squareWidth"></param>
         /// <param name="pathWidth"></param>
         /// <param name="wallWidth"></param>
-        /// TODO: Move this code into a MazeDimension class.
-        public static void SuggestWidths(int gridWidth, bool visibleWalls, out int squareWidth, out int pathWidth, out int wallWidth)
+        public static void SuggestWidths(
+            int gridWidth, bool visibleWalls,
+            out int squareWidth, out int pathWidth, out int wallWidth
+        )
         {
             if (visibleWalls)
             {
@@ -513,7 +501,6 @@ namespace SWA.Ariadne.Gui.Mazes
         /// Make (squareWidth - pathWidth) an even number.
         /// That will make sure that the path is centered nicely between the walls.
         /// </summary>
-        /// <returns></returns>
         private static void AdjustPathWidth(int squareWidth, int wallWidth, ref int pathWidth)
         {
             if (wallWidth > 0 && (squareWidth - pathWidth) % 2 != 0)
@@ -573,7 +560,10 @@ namespace SWA.Ariadne.Gui.Mazes
         /// <param name="displaySize"></param>
         /// <param name="mazeSize"></param>
         /// <param name="offset"></param>
-        private void FitMazeSize(MazePainter instance, int displaySize, out int mazeSize, out int offset)
+        private void FitMazeSize(
+            MazePainter instance, int displaySize,
+            out int mazeSize, out int offset
+        )
         {
             int usableSize = displaySize - 2 * ApplyScaleFactor(instance.Padding);
             
@@ -637,7 +627,13 @@ namespace SWA.Ariadne.Gui.Mazes
         {
             if (client != null)
             {
-                try // TODO: We may encounter an X11 error / consume error message
+                // We may encounter an X11 error in client.CreateGraphics().
+                // In order to catch that error, we would like to activate the
+                // MONO_XEXCEPTIONS environment variable. However, doing that
+                // unconditionally led to other errors and worked only in the
+                // xscreensaver context.
+                // So this try-catch block is quite useless.  :-(
+                try
                 {
                     this.targetRectangle = client.DisplayRectangle;
                     this.targetGraphics = client.CreateGraphics();
@@ -657,7 +653,7 @@ namespace SWA.Ariadne.Gui.Mazes
         {
             // The new MazePainter should not have a client.
             // The client related behavior is a task of the main MazePainter.
-            MazePainter result = new MazePainter(this.targetGraphics, this.targetRectangle, null, false);
+            MazePainter result = new MazePainter(this.targetGraphics, this.targetRectangle, null);
 
             // The maze should have the same layout.
             result.Setup(this.squareWidth, this.wallWidth, this.pathWidth);
@@ -1281,11 +1277,11 @@ namespace SWA.Ariadne.Gui.Mazes
             Bitmap sourceBitmap = Reflection.GetPrivateField<Bitmap>(b, "membmp");
             if (sourceBitmap == null)
             {
-                //Log.WriteLine("DrawImage() failed -- cannot access private field BufferedGraphics.membmp", true);
                 return false;
             }
             Graphics g = Graphics.FromImage(targetBitmap);
-            g.DrawImage(sourceBitmap, new Rectangle(targetUpperLeft, size), new Rectangle(sourceUpperLeft, size), GraphicsUnit.Pixel);
+            g.DrawImage(sourceBitmap, new Rectangle(targetUpperLeft, size),
+                new Rectangle(sourceUpperLeft, size), GraphicsUnit.Pixel);
             return true;
         }
 
@@ -1433,7 +1429,8 @@ namespace SWA.Ariadne.Gui.Mazes
             {
                 return true;
             }
-            if (xSq < backgroundImageRange.Left || xSq >= backgroundImageRange.Right || ySq < backgroundImageRange.Top || ySq >= backgroundImageRange.Bottom)
+            if (xSq < backgroundImageRange.Left || xSq >= backgroundImageRange.Right ||
+                ySq < backgroundImageRange.Top || ySq >= backgroundImageRange.Bottom)
             {
                 return false;
             }

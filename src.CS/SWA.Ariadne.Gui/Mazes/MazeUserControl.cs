@@ -128,7 +128,7 @@ namespace SWA.Ariadne.Gui.Mazes
         public MazeUserControl()
         {
             InitializeComponent();
-            this.painter = new MazePainter(this.CreateGraphics(), this.DisplayRectangle, this as IMazePainterClient, false);
+            this.painter = new MazePainter(this.CreateGraphics(), this.DisplayRectangle, this as IMazePainterClient);
         }
 
         /// <summary>
@@ -163,16 +163,11 @@ namespace SWA.Ariadne.Gui.Mazes
         }
 
         /// <summary>
-        /// Set the graphics context in screen saver preview mode.
+        /// Create a maze with the given specific dimensions.
         /// </summary>
-        /// <param name="g"></param>
-        /// <param name="rect"></param>
-        public void SetGraphics(Graphics g, Rectangle rect)
-        {
-            this.painter.Reconfigure(g, rect);
-        }
-
-        // TODO: Make this method private, then unite painter.Setup() and painter.Setup(s,w,p).
+        /// <remarks>
+        /// This method is also called from the AboutBox Dialog.
+        /// </remarks>
         public void Setup(int squareWidth, int wallWidth, int pathWidth)
         {
             painter.Setup(squareWidth, wallWidth, pathWidth);
@@ -199,12 +194,7 @@ namespace SWA.Ariadne.Gui.Mazes
 
             painter.Setup();
 
-            // TODO: Move the remaining code to painter.Setup()
-
-            int wallWidth;
-            int squareWidth;
-            int pathWidth;
-            MazePainter.SuggestWidths(painter.GridWidth, painter.VisibleWalls, out squareWidth, out pathWidth, out wallWidth);
+            MazePainter.SuggestWidths(painter.GridWidth, painter.VisibleWalls, out int squareWidth, out int pathWidth, out int wallWidth);
 
             this.Setup(squareWidth, wallWidth, pathWidth);
 
@@ -280,7 +270,7 @@ namespace SWA.Ariadne.Gui.Mazes
         {
             if (coveringControl.Parent != this.Parent)
             {
-                throw new ArgumentException("Must have the same Parent.", "coveringControl");
+                throw new ArgumentException("Must have the same Parent.", nameof(coveringControl));
             }
 
             // Dimensions of the control in square coordinates.
@@ -458,7 +448,9 @@ namespace SWA.Ariadne.Gui.Mazes
             // The relevant dimensions should represent what is currently displayed,
             // not what has been prepared for the next run.
             //
+#pragma warning disable RECS0117 // Local variable has the same name as a member and hides it
             int xOffset, yOffset, gridWidth, wallWidth;
+#pragma warning restore RECS0117 // Local variable has the same name as a member and hides it
             if (this.painter.HasBufferAlternate)
             {
                 xOffset = solvedScreenshotControlDimensions.X;
@@ -775,9 +767,33 @@ namespace SWA.Ariadne.Gui.Mazes
         #region Placement of outline shapes
 
         /// <summary>
+        /// Returns an OutlineShape for the given location and size.
+        /// If one of the displayed images has a defined contour,
+        /// the shape is preferrably derived from that contour.
+        /// </summary>
+        /// <param name="offCenter">A fraction of the control's size.</param>
+        /// <param name="size">A fraction of the control's size.</param>
+        public OutlineShape RandomShape(double offCenter, double size, Random random)
+        {
+            OutlineShape result = null;
+
+            // We may suggest a shape based on the displayed ContourImage.
+            if (random.Next(100) < (ContourImage.DisplayProcessedImage ? 12 : 25))
+            {
+                result = SuggestOutlineShape(random, offCenter, size);
+            }
+
+            if (result == null)
+            {
+                result = OutlineShape.RandomInstance(random, Maze.XSize, Maze.YSize, offCenter, size);
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Returns the shape of a ContourImage or null if none of the images has a real contour.
         /// </summary>
-        /// <returns></returns>
         public OutlineShape SuggestOutlineShape(Random r, double offCenter, double size)
         {
             foreach (ContourImage img in this.images)

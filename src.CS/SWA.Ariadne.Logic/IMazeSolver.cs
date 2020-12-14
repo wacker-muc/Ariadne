@@ -57,11 +57,5 @@ namespace SWA.Ariadne.Logic
         /// Returns true if this MazeSolver uses some heuristic to guide its decisions.
         /// </summary>
         bool IsHeuristicSolver { get; }
-
-        /// <summary>
-        /// Coordinate shared resources of this solver with the master solver.
-        /// </summary>
-        /// <param name="iMazeSolver"></param>
-        void CoordinateWithMaster(IMazeSolver masterSolver);
     }
 }

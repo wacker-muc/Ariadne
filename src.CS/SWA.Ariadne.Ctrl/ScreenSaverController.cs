@@ -98,7 +98,6 @@ namespace SWA.Ariadne.Ctrl
         /// </summary>
         private void PrepareImages()
         {
-            // TODO: Get the count from the ImageLoader object.
             int count = RegisteredOptions.GetIntSetting(RegisteredOptions.OPT_IMAGE_NUMBER);
             mazeUserControl.PrepareImages(count);
         }
@@ -117,7 +116,7 @@ namespace SWA.Ariadne.Ctrl
 
                 while (true)
                 {
-                    shape = RandomShape(0.2, 1.0);
+                    shape = mazeUserControl.RandomShape(0.2, 1.0, random);
 
                     // Discard shapes that are too small or too large.
                     if (minArea > shape.Area || shape.Area > maxArea)
@@ -150,39 +149,13 @@ namespace SWA.Ariadne.Ctrl
             int percentage = (RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_OUTLINE_SHAPES) ? 80 : 0);
             if (random.Next(100) < percentage)
             {
-                OutlineShape shape = RandomShape(0.3, 0.7);
+                OutlineShape shape = mazeUserControl.RandomShape(0.3, 0.7, random);
                 mazeUserControl.Maze.OutlineShape = shape;
 
                 return true;
             }
 
             return false;
-        }
-
-        /// <summary>
-        /// Returns an OutlineShape for the given location and size.
-        /// If the image displayed in the maze control has a defined contour,
-        /// the shape is preferrably derived from that contour.
-        /// </summary>
-        /// <param name="offCenter"></param>
-        /// <param name="size"></param>
-        /// <returns></returns>
-        private OutlineShape RandomShape(double offCenter, double size)
-        {
-            OutlineShape result = null;
-
-            // The mazeUserControl may suggest a shape based on the displayed ContourImage.
-            if (random.Next(100) < (ContourImage.DisplayProcessedImage ? 12 : 25))
-            {
-                result = mazeUserControl.SuggestOutlineShape(random, offCenter, size);
-            }
-
-            if (result == null)
-            {
-                result = OutlineShape.RandomInstance(random, mazeUserControl.Maze.XSize, mazeUserControl.Maze.YSize, offCenter, size);
-            }
-
-            return result;
         }
 
         /// <summary>
@@ -265,7 +238,7 @@ namespace SWA.Ariadne.Ctrl
             var targetGraphics = Graphics.FromHwnd(windowHandle);
             var targetRectangle = Platform.GetClientRectangle(windowHandle);
             //Log.WriteLine("targetRectangle = " + targetRectangle, true); // {X=0,Y=0,Width=1366,Height=768}
-            this.painter = new MazePainter(targetGraphics, targetRectangle, this as IMazePainterClient, false);
+            this.painter = new MazePainter(targetGraphics, targetRectangle, this as IMazePainterClient);
             #endregion
 
             #region Create a MazeUserControl.
@@ -353,7 +326,16 @@ namespace SWA.Ariadne.Ctrl
 
         public void PrepareForNextStart()
         {
-            // TODO: add ScreenSaverForm behavior
+            // The ScreenSaverForm behavior is as follows:
+#if false
+            this.PrepareImages();
+            this.PreparePlaceholderControls(); // i.e. place the info panel
+            this.mazeUserControl.PrepareAlternateBuffer();
+#endif
+            // I don't know if the alternate buffer method would work in a
+            // xscreensaver context. As I also don't experience any unwanted
+            // delays between successive mazes (anyway, there is an intentional
+            // 3 second delay), no special preparations are implemented here.
         }
 
         public void ResetCounters()
@@ -380,6 +362,14 @@ namespace SWA.Ariadne.Ctrl
             if (ariadneController != null)
             {
                 ariadneController.FillStatusMessage(text);
+#if true
+                // Append current time to the status line.
+                if (text.Length > 0)
+                {
+                    text.Append(" - ");
+                    text.Append(System.DateTime.Now.ToString("t"));
+                }
+#endif
             }
 
             infoPanelPainter.SetStatus(text.ToString());

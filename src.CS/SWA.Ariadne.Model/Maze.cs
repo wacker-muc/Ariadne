@@ -474,7 +474,7 @@ namespace SWA.Ariadne.Model
 
             // Fix reserved areas.
             FixReservedAreas();
-            CloseWallsAroundReservedAreas(); // TODO: This might be discarded.
+            CloseWallsAroundReservedAreas();
             
             // Divide the area into a main maze and several embedded mazes.
             FixEmbeddedMazes();
@@ -972,10 +972,6 @@ namespace SWA.Ariadne.Model
         /// Apply the border of the given shape (where neighboring entries have opposite values) to the maze.
         /// The corresponding walls are switched from WS_MAYBE to WS_OUTLINE.
         /// </summary>
-        /// <param name="shape">
-        /// A two dimensional array.  The dimensions must not be greater than the maze itself.
-        /// true means "inside", false means "outside".
-        /// </param>
         private void FixOutline(OutlineShape.InsideShapeDelegate shapeTest, WallState wallState)
         {
             for (int x = 0; x < xSize; x++)
@@ -1034,7 +1030,6 @@ namespace SWA.Ariadne.Model
                 // This test ensures that the border of the main maze must also not be covered.
                 OutlineShape.InsideShapeDelegate conservativeTest = delegate(int x, int y)
                 {
-                    // TODO: This should not always be necessary.
                     if (x - 2 < 0 || x + 2 >= this.XSize || y - 2 < 0 || y + 2 >= this.YSize)
                     {
                         return true;

@@ -18,7 +18,7 @@ namespace SWA.Ariadne.Logic
         {
             get { return solverTypes; }
         }
-        private static System.Type[] solverTypes = new System.Type[] {
+        private static System.Type[] solverTypes = {
             typeof(OpposedBacktracker),
             typeof(ProximityBacktracker),
             typeof(RandomBacktracker),
@@ -58,7 +58,7 @@ namespace SWA.Ariadne.Logic
             }
             return result;
         }
-        private static System.Type[] noEfficientSolverTypes = new System.Type[] {
+        private static System.Type[] noEfficientSolverTypes = {
             typeof(MasterSolver),
             typeof(RandomWalker),
         };
@@ -66,14 +66,13 @@ namespace SWA.Ariadne.Logic
 
         /// <summary>
         /// Returns true if the given solverType can apply some heuristic to guide its decisions.
+        /// Currently, these are all the flooder types.
         /// </summary>
         /// <param name="solverType"></param>
         /// <returns></returns>
         public static bool HasHeuristicVariant(System.Type solverType)
         {
-            bool result = (solverType.IsSubclassOf(typeof(SolverBase)));
-            result &= solverType.Name.Contains("Flooder"); // TODO: use a definition that doesn't rely on the name
-            return result;
+            return solverType.IsSubclassOf(typeof(FlooderBase));
         }
         public const string HeuristicPrefix = "Heuristic";
 
@@ -122,7 +121,7 @@ namespace SWA.Ariadne.Logic
                 bool shouldBeEfficient = (r.Next(2) == 0);
                 shouldBeEfficient &= RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_EFFICIENT_SOLVERS);
                 bool shouldUseHeuristic = (r.Next(2) == 0);
-                // TODO: shouldUseHeuristic &= RegisteredOptions.GetBoolSetting(RegisteredOptions.OPT_HEURISTIC_SOLVERS);
+                // Note: There is currently no equivaelnt OPT_HEURISTIC_SOLVERS option.
 
                 if (t == typeof(RandomWalker))
                 {
@@ -163,12 +162,12 @@ namespace SWA.Ariadne.Logic
 
             if (strategyName != null)
             {
-                if (strategyName.StartsWith(EfficientPrefix))
+                if (strategyName.StartsWith(EfficientPrefix, StringComparison.Ordinal))
                 {
                     strategyName = strategyName.Substring(EfficientPrefix.Length);
                     isEfficient = true;
                 }
-                if (strategyName.StartsWith(HeuristicPrefix))
+                if (strategyName.StartsWith(HeuristicPrefix, StringComparison.Ordinal))
                 {
                     strategyName = strategyName.Substring(HeuristicPrefix.Length);
                     useHeuristic = true;

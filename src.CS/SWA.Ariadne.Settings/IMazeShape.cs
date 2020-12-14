@@ -66,7 +66,6 @@ namespace SWA.Ariadne.Model.Interfaces
     /// <summary>
     /// Comprises the methods required to build an outline shape from a Maze.
     /// </summary>
-    /// TODO: Consider underlying maze's reserved areas.
     public interface IMazeShape
     {
         int XSize { get; }

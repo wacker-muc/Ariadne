@@ -123,21 +123,21 @@ namespace SWA.Ariadne.Gui.Mazes
         /// and not by one of the neighbors.
         /// Pixels closer than ContourDistance-sqrt(2) are not recorded.
         /// </summary>
-        private List<RelativePoint>[,] influenceRegions = new List<RelativePoint>[8, 8];
+        private readonly List<RelativePoint>[,] influenceRegions = new List<RelativePoint>[8, 8];
 
         /// <summary>
         /// For each combination of a next left and next right neighbor of a pixel,
         /// the borderLimit is the set of points on the left and/or right (outside) edge of the influenceRegion.
         /// </summary>
         /// Note: As these points are applied symmetrically on the left and right, only non-negative values are stored.
-        private List<RelativePoint>[,] borderLimits = new List<RelativePoint>[8, 8];
+        private readonly List<RelativePoint>[,] borderLimits = new List<RelativePoint>[8, 8];
 
         /// <summary>
         /// For each combination of a next left and next right neighbor of a pixel,
         /// the contourLimit is the set of points on the left and/or right (inside) edge of the influenceRegion.
         /// </summary>
         /// Note: As these points are applied symmetrically on the left and right, only non-negative values are stored.
-        private List<RelativePoint>[,] contourLimits = new List<RelativePoint>[8, 8];
+        private readonly List<RelativePoint>[,] contourLimits = new List<RelativePoint>[8, 8];
 
         /// <summary>
         /// Set up the influenceRegions and associated data for a given influence range.
@@ -212,13 +212,13 @@ namespace SWA.Ariadne.Gui.Mazes
                     {
                         // 0, 1, -1, 2, -2, ..., r-1, -(r-1)
                         int dx = (i / 2) * (i % 2 == 0 ? +1 : -1);
-                        int dxAbs = Math.Abs(dx) + influenceRange; // TODO: rename
+                        int dxAbs = Math.Abs(dx) + influenceRange;
 
                         for (int j = 1; j < 2 * influenceRange; j++)
                         {
                             // 0, 1, -1, 2, -2, ..., r-1, -(r-1)
                             int dy = (j / 2) * (j % 2 == 0 ? +1 : -1);
-                            int dyAbs = dy + influenceRange; // TODO: rename
+                            int dyAbs = dy + influenceRange;
 
                             // Get the distance to the three points.
                             int d2 = dx * dx + dy * dy;
@@ -1957,13 +1957,16 @@ namespace SWA.Ariadne.Gui.Mazes
         }
 
         /// <summary>
-        /// Paints into the mask the pixels marked by points on the given scanLines in the given color.
+        /// Paints into the mask the pixels marked by points on the given scanLines
+        /// in the given color.
+        /// Note: Actually this method will not paint anything because its body
+        ///       should be only activated for debugging purposes.
         /// </summary>
         /// <param name="scanLines"></param>
         /// <param name="color"></param>
         private void DrawContour(List<int>[] scanLines, Color color)
         {
-#if false // TODO: false; used for debugging only
+#if false // used for debugging only
             for (int y = 0; y < scanLines.Length; y++)
             {
                 for (int p = 1; p < scanLines[y].Count - 1; p++)

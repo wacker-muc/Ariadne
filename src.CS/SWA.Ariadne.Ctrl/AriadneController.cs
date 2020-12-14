@@ -332,10 +332,9 @@ namespace SWA.Ariadne.Ctrl
 
             try
             {
-                // Stop the timer to prevent additional events while the solver is busy.
-                // TODO: Leave the timer enabled; further events should be handled or ignored, as appropriate.
+                // Disable the timer to prevent additional events while the solver is busy.
                 stepTimer.Enabled = false;
-                // State looks like Paused but this will be changed back at the end.
+                // Now, State looks like Paused but this will be changed back at the end.
 
                 if (!solverController.IsFinished)
                 {

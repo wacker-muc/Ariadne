@@ -88,8 +88,9 @@ namespace SWA.Ariadne.Ctrl
             {
                 if (mazePainter.HasBufferAlternate)
                 {
-                    // When the mazePainter has prepared an alternate buffer, its maze is already the new maze.
-                    // TODO: Avoid this quirk.
+                    // When the mazePainter has prepared an alternate buffer,
+                    // its maze is already the new maze and the previous one
+                    // has been solved.
                     return true;
                 }
                 else if (Maze != null)
@@ -271,9 +272,6 @@ namespace SWA.Ariadne.Ctrl
             {
                 // Use the same progress bar.
                 this.visitedProgressBar = masterCtrl.visitedProgressBar;
-
-                // Coordinate our solver with the master solver.
-                this.solver.CoordinateWithMaster(masterCtrl.solver);
             }
 
             foreach (SolverController ctrl in embeddedControllers)

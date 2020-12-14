@@ -100,29 +100,6 @@ namespace SWA.Ariadne.Model
         }
 
         /// <summary>
-        /// When true, all embedded mazes should share one DeadEndChecker.
-        /// When false, each maze should have its own DeadEndChecker.
-        /// </summary>
-        public bool IncludeEmbeddedMazes
-        {
-            get { return includeEmbeddedMazes; }
-            set { includeEmbeddedMazes = value; }
-        }
-        private bool includeEmbeddedMazes = false; // TODO: true; (will break the checker algorithm!)
-
-        /// <summary>
-        /// When true, the areas of other mazes are considered dead ends from the beginning.
-        /// When false, they are handled as possible trajectories (but never painted as dead).
-        /// </summary>
-        /// Note: The combination (IncludeEmbeddedMazes == true) && (ConsiderOtherMazesDeadEnds == true) is invalid.
-        public bool ConsiderOtherMazesDeadEnds
-        {
-            get { return (considerOtherMazesDeadEnds && !includeEmbeddedMazes); }
-            set { considerOtherMazesDeadEnds = value; }
-        }
-        private bool considerOtherMazesDeadEnds = false;
-
-        /// <summary>
         /// Returns true if the given square is marked as dead.
         /// A square is dead if
         ///  a) it is a reserved area in the maze
@@ -194,7 +171,7 @@ namespace SWA.Ariadne.Model
                     // extendedSquare:
                     sqe.extendedSquare = sq;
 
-                    if (ConsiderOtherMazesDeadEnds ? sq.MazeId != maze.MazeId : sq.isReserved)
+                    if (sq.isReserved)
                     {
                         // isDeadEnd:
                         sqe.isDeadEnd = true;
@@ -231,13 +208,6 @@ namespace SWA.Ariadne.Model
             List<MazeSquareExtension> list = new List<MazeSquareExtension>();
 
             InitializeEndpoints(maze, list);
-            if (IncludeEmbeddedMazes)
-            {
-                foreach (Maze item in maze.EmbeddedMazes)
-                {
-                    InitializeEndpoints(item, list);
-                }
-            }
 
             while (list.Count > 0)
             {
@@ -323,7 +293,6 @@ namespace SWA.Ariadne.Model
             }
 
             // The visited square is marked as dead.
-            // TODO: Remove sqe from all its neighbors' neighbor lists.  Further tests for dead neighbors are obsolete.
             sqe.isDeadEnd = true;
             int d = sqe.trajectoryDistance;
             if (d > 0)
@@ -371,7 +340,7 @@ namespace SWA.Ariadne.Model
                 if (sqe2.trajectoryDistance < 0 && !sqe2.isDeadEnd)
                 {
                     sqe2.isDeadEnd = true;
-                    if (IncludeEmbeddedMazes || sqe2.extendedSquare.MazeId == sq.MazeId)
+                    if (sqe2.extendedSquare.MazeId == sq.MazeId)
                     {
                         result.Add(sqe2.extendedSquare);
                     }
