@@ -48,11 +48,7 @@ namespace SWA.Ariadne.App
                 }
                 else
                 {
-                    // Create the ImageLoader as early as possible.
-                    SWA.Utilities.Directory.ResultValidForSeconds = -1;
-                    ImageLoader imageLoader = ImageLoader.GetScreenSaverImageLoader(Screen.PrimaryScreen.Bounds);
-                    BlankSecondaryScreens(); // TODO: consider Linux behavior...
-                    ScreenSaverController.Run(windowHandleStr, imageLoader);
+                    ScreenSaverController.Run(windowHandleStr);
                 }
             }
             #endregion
@@ -118,6 +114,7 @@ namespace SWA.Ariadne.App
                 if (screen.Primary == false)
                 {
                     System.Drawing.Rectangle bounds = screen.Bounds;
+                    Utilities.Log.WriteLine("Secondary screen: " + bounds);
 
                     Form form = new BlankForm();
                     form.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;

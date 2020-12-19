@@ -8,9 +8,17 @@ Copyright (c) Stephan.Wacker@web.de, 2008 - 2020
 
 -----------------------------------------------------------------------
 
-Version 4.1 -- r364 -- 2020-11-22
+Version 4.2 -- r371 -- 2020-12-19
+
+ * Secondary screens will stay blank on Linux, too
+ * Addressed most of the remaining TODO-s
+
+-----------------------------------------------------------------------
+
+Version 4.1 -- r366 -- 2020-11-26
 
  * Support running an Ariadne app under xscreensaver(1) control
+ * Installation script for Linux
 
 -----------------------------------------------------------------------
 

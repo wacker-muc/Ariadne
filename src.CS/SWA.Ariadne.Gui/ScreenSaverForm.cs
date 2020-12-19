@@ -260,6 +260,8 @@ namespace SWA.Ariadne.Gui
             switch (char.ToUpper(e.KeyChar))
             {
                 case (char)Keys.P: // Pause
+                case (char)Keys.OemPeriod:
+                case '.':          // Single Step
                 case (char)Keys.S: // Save Image
                     // These keys will be handled in the AriadneFormBase.OnKeyPress() method.
                     break;

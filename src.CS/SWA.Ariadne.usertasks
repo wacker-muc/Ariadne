@@ -4,7 +4,7 @@
   <TaskListEntry file="" description="Include controls in screenshot from buffer" completed="True" />
   <TaskListEntry file="" description="Fix databinding in DetalsDialog" />
   <TaskListEntry file="" description="Make reference colors selectable" />
-  <TaskListEntry file="" description="Support xscreensaver on multiple screens (evaluate $DISPLAY)" />
+  <TaskListEntry file="" description="Support xscreensaver on multiple screens (evaluate $DISPLAY)" completed="True" />
   <TaskListEntry file="" description="Smoothen xscreensaver preview painting" completed="True" />
   <TaskListEntry file="" description="Add remaining ScreenSaverForm behavior to ScreenSaverController" completed="True" />
   <TaskListEntry file="" description="Let ScreenSaverForm use a ScreenSaverController" />

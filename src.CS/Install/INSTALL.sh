@@ -49,7 +49,7 @@ CP="cp -a"
 MKDIR="mkdir -p"
 CHMOD="chmod -R"
 case "$1" in
-    /* )
+    ^/* )
 	echo "[I] An installation in $1 requires sudo persission."
 	SUDO="sudo"
 	RM="sudo $RM"
@@ -94,6 +94,8 @@ fi
 if [ ! -f "$BINSRC/Ariadne.exe" ] ; then
     BINSRC="../SWA.Ariadne.App/bin/Debug"
 fi
+
+echo "[I] Installing from $BINSRC"
 
 # Make shared Screenshots directory writable for all users
 cp_dir "$BINSRC" "$LIB/Ariadne"

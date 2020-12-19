@@ -51,14 +51,14 @@ namespace SWA.Utilities
         /// <summary>
         /// Returns the size of a window, given its window handle.
         /// </summary>
-        public static Rectangle GetClientRectangle(IntPtr windowHandle)
+        public static Rectangle GetClientRectangle(IntPtr windowHandle, bool sizeOnly = true)
         {
             switch (PlatformId)
             {
                 case PlatformIdSubset.Windows:
                     return Windows.GetClientRect(windowHandle);
                 case PlatformIdSubset.Linux:
-                    return Linux.GetClientRect(windowHandle);
+                    return Linux.GetClientRect(windowHandle, sizeOnly);
                 default:
                     return new Rectangle(0, 0, 300, 300);
             }
@@ -149,16 +149,25 @@ namespace SWA.Utilities
             /// <summary>
             /// Returns the size of a window, given its window handle.
             /// </summary>
-            public static Rectangle GetClientRect(IntPtr windowHandle)
+            /// <param name="sizeOnly">If true, the X and Y coordinates are set to 0.</param>
+            public static Rectangle GetClientRect(IntPtr windowHandle, bool sizeOnly = true)
             {
                 XWindowAttributes xwa = new XWindowAttributes();
                 string displayStr = Environment.GetEnvironmentVariable("DISPLAY");
                 if (String.IsNullOrEmpty(displayStr)) displayStr = ":0";
+                //Log.WriteLine("DISPLAY = " + displayStr);
                 IntPtr display = XOpenDisplay(displayStr);
                 XGetWindowAttributes(display, windowHandle, ref xwa);
+                //Log.WriteLine("X = " + xwa.x + ", Y = " + xwa.y);
+
+                var result = new Rectangle(xwa.x, xwa.y, xwa.width, xwa.height);
 
                 // We don't want to use the x and y coordinates -- these need to be 0.
-                return new Rectangle(0, 0, xwa.width, xwa.height);
+                if (sizeOnly)
+                {
+                    result.X = result.Y = 0; 
+                }
+                return result;
             }
         }
     }

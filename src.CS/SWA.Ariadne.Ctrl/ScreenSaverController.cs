@@ -22,11 +22,6 @@ namespace SWA.Ariadne.Ctrl
         #region Code taken from ScreenSaverForm
 
         /// <summary>
-        /// An ImageLoader supplied by the main program.
-        /// </summary>
-        private readonly ImageLoader imageLoader;
-
-        /// <summary>
         /// When true, the built maze should not be too complicated.
         /// </summary>
         private static bool loadingFirstMaze = true;
@@ -226,24 +221,45 @@ namespace SWA.Ariadne.Ctrl
         /// and starts an AriadneController.
         /// </summary>
         /// <param name="windowHandleArg">The MazePainter will draw on this window.</param>
-        /// <param name="imageLoader">Image loader.</param>
-        public ScreenSaverController(
-            string windowHandleArg,
-            ImageLoader imageLoader)
+        /// <remarks>
+        /// If this is not the primary screen, no cotroller is started,
+        /// the application will terminate and the screen will stay blank.
+        /// </remarks>
+        public ScreenSaverController(string windowHandleArg)
         {
-            this.imageLoader = imageLoader;
-
-            #region Create a MazePainter.
+            #region Evaluate the given window's properties.
             var windowHandle = (IntPtr)UInt32.Parse(windowHandleArg);
             var targetGraphics = Graphics.FromHwnd(windowHandle);
             var targetRectangle = Platform.GetClientRectangle(windowHandle);
             //Log.WriteLine("targetRectangle = " + targetRectangle, true); // {X=0,Y=0,Width=1366,Height=768}
+            #endregion
+
+#if true
+            #region Blank secondary screen(s).
+            // ... because more than one of these mazes is just too distracting.  :-)
+            if (!IsOnPrimaryScreen(windowHandle))
+            {
+                // We don't have to do anything, really.
+                // xscreensaver has given us a blank (black) window and we may
+                // terminate the application
+                //Log.WriteLine("Goodbye on " + targetRectangle, true);
+                //Application.Run();
+                Application.Exit();
+            }
+            #endregion
+#endif
+
+            // Create an ImageLoader, now that it is clear that we will need it.
+            Directory.ResultValidForSeconds = -1;
+            var imageLoader = ImageLoader.GetScreenSaverImageLoader(Screen.PrimaryScreen.Bounds);
+
+            #region Create a MazePainter.
             this.painter = new MazePainter(targetGraphics, targetRectangle, this as IMazePainterClient);
             #endregion
 
             #region Create a MazeUserControl.
             this.mazeUserControl = new MazeUserControl(painter, targetRectangle.Size);
-            this.mazeUserControl.ImageLoader = this.imageLoader;
+            this.mazeUserControl.ImageLoader = imageLoader;
             this.mazeUserControl.MazeForm = this;
             #endregion
 
@@ -287,17 +303,42 @@ namespace SWA.Ariadne.Ctrl
 
         #region Static class methods
 
-        public static void Run(
-            string windowHandleArg,
-            ImageLoader imageLoader)
+        /// <summary>
+        /// Run as a xscreenscerver(1) plugin.
+        /// </summary>
+        /// <param name="windowHandleArg">Provided by xscreensaver..</param>
+        public static void Run(string windowHandleArg)
         {
-            var ctrl = new ScreenSaverController(windowHandleArg, imageLoader);
+            var ctrl = new ScreenSaverController(windowHandleArg);
 
             // Now the first maze has been loaded.
             loadingFirstMaze = false;
 
             // Start a main application loop.
             Application.Run();
+        }
+
+        /// <summary>
+        /// Returns true if the given window is located on the primary screen.
+        /// </summary>
+        public static bool IsOnPrimaryScreen(IntPtr windowHandle)
+        {
+            if (!Screen.FromHandle(windowHandle).Primary)
+            {
+                return false;
+            }
+
+            // As the above test does not work (at least for me), let's do it manually.
+            var windowRect = Platform.GetClientRectangle(windowHandle, false);
+            var primaryRect = Screen.PrimaryScreen.Bounds;
+            //Log.WriteLine("Testing: " + windowRect + " | " + primaryRect, true);
+            if (windowRect.Left < primaryRect.Left || windowRect.Right > primaryRect.Right ||
+                windowRect.Top < primaryRect.Top || windowRect.Bottom > primaryRect.Bottom)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         #endregion
@@ -461,12 +502,7 @@ namespace SWA.Ariadne.Ctrl
             form.Controls.Add(control);
             form.Show();
 
-            string windowHandleArg = control.Handle.ToString();
-
-            ImageLoader imageLoader = ImageLoader.GetScreenSaverImageLoader(
-                new Rectangle(new Point(0, 0), form.ClientSize));
-
-            var ctrl = new ScreenSaverController(windowHandleArg, imageLoader);
+            var ctrl = new ScreenSaverController(control.Handle.ToString());
 
             // Send the form's events to the controller.
             form.KeyPress += ctrl.OnKeyPress;
